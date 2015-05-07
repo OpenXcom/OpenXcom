@@ -30,7 +30,7 @@
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "../Resource/ResourcePack.h"
-#include "../Geoscape/SlideshowState.h"
+#include "../Menu/CutsceneState.h"
 #include "../Menu/MainMenuState.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/SavedGame.h"
@@ -332,7 +332,7 @@ void Game::quit()
 	_quit = true;
 }
 
-static void _endGame(Game *game)
+static void endGame(Game *game)
 {
 	if (game->getSavedGame() && game->getSavedGame()->isIronman() && !game->getSavedGame()->getName().empty())
 	{
@@ -342,39 +342,18 @@ static void _endGame(Game *game)
 	game->setSavedGame(0);
 }
 
-class _GoToMainMenuState : public State
-{
-public: void think() { _game->setState(new MainMenuState); }
-};
-
 void Game::win()
 {
-	_endGame(this);
-	setState(new _GoToMainMenuState);
-
-	const std::map<std::string, RuleVideo*> *videoRulesets = _rules->getVideos();
-	std::map<std::string, RuleVideo*>::const_iterator videoRuleIt = videoRulesets->find("wingame");
-
-	if (videoRuleIt != videoRulesets->end())
-	{
-		const RuleVideo *videoRule = videoRuleIt->second;
-		pushState(new SlideshowState(videoRule->getSlides()));
-	}
+	endGame(this);
+	setState(new GoToMainMenuState);
+	pushState(new CutsceneState("wingame"));
 }
 
 void Game::lose()
 {
-	_endGame(this);
-	setState(new _GoToMainMenuState);
-
-	const std::map<std::string, RuleVideo*> *videoRulesets = _rules->getVideos();
-	std::map<std::string, RuleVideo*>::const_iterator videoRuleIt = videoRulesets->find("losegame");
-
-	if (videoRuleIt != videoRulesets->end())
-	{
-		const RuleVideo *videoRule = videoRuleIt->second;
-		pushState(new SlideshowState(videoRule->getSlides()));
-	}
+	endGame(this);
+	setState(new GoToMainMenuState);
+	pushState(new CutsceneState("losegame"));
 }
 
 /**

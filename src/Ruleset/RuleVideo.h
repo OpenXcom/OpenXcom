@@ -40,12 +40,16 @@ class RuleVideo
 {
 private:
 	std::string _id;
+	bool _useUfoAudioSequence;
 	std::vector<std::string> _videos;
 	std::vector<SlideshowSlide> _slides;
 public:
 	RuleVideo(const std::string &type);
 	~RuleVideo();
 	void load(const YAML::Node &node);
+	/// returns whether to use the UFO audio sequence.  in general, this
+	/// should only ever be true for the vanilla UFO intro cutscene
+	bool useUfoAudioSequence() const;
 	const std::vector<std::string> * getVideos() const;
 	const std::vector<SlideshowSlide> * getSlides() const;
 };

@@ -16,32 +16,42 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_INTROSTATE_H
-#define OPENXCOM_INTROSTATE_H
+#ifndef OPENXCOM_SLIDESHOWSTATE_H
+#define OPENXCOM_SLIDESHOWSTATE_H
 
 #include "../Engine/State.h"
+#include "../Ruleset/RuleVideo.h"
 
 namespace OpenXcom
 {
-class FlcPlayer;
+
+class InteractiveSurface;
+class Text;
+class Timer;
+
 /**
- * Shows the intro cinematic.
+ * Shows slideshow sequences.
  */
-class IntroState : public State
+class SlideshowState : public State
 {
 private:
-	std::vector<std::string> _introFiles;
-	std::string _introSoundFileDOS, _introSoundFileWin;
-	bool _wasLetterBoxed;
-	int _oldMusic, _oldSound;
+	const std::vector<SlideshowSlide> *_slideshowSlides;
+	bool _wasLetterboxed;
+	std::vector<InteractiveSurface *> _slides;
+	std::vector<Text *>_captions;
+	int _curScreen;
+	Timer *_transitionTimer;
 public:
-	/// Creates the Intro state.
-	IntroState(bool wasLetterBoxed);
-	/// Cleans up the Intro state.
-	~IntroState();
-	/// Starts the intro.
-	void init();
-  void end();
+	/// Creates the Slideshow state.
+	SlideshowState(const std::vector<SlideshowSlide> *slideshowRule);
+	/// Cleans up the Slideshow state.
+	~SlideshowState();
+	/// Handle timers.
+	void think();
+	/// Handler for waiting the screen.
+	void screenTimer();
+	/// Handler for clicking the screen.
+	void screenClick(Action *action);
 };
 
 }

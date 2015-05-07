@@ -41,6 +41,8 @@ static void _loadSlide(SlideshowSlide &slide, const YAML::Node &node, const Slid
 
 void RuleVideo::load(const YAML::Node &node)
 {
+	_useUfoAudioSequence = node["useUfoAudioSequence"].as<bool>(false);
+
 	if (const YAML::Node &videos = node["videos"])
 	{
 		for (YAML::const_iterator i = videos.begin(); i != videos.end(); ++i)
@@ -65,6 +67,11 @@ void RuleVideo::load(const YAML::Node &node)
 			_slides.push_back(slide);
 		}
 	}
+}
+
+bool RuleVideo::useUfoAudioSequence() const
+{
+	return _useUfoAudioSequence;
 }
 
 const std::vector<std::string> * RuleVideo::getVideos() const

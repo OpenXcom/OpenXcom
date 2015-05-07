@@ -362,8 +362,6 @@ openxcom_SOURCES = \
 	src/Geoscape/ResearchRequiredState.h \
 	src/Geoscape/SelectDestinationState.cpp \
 	src/Geoscape/SelectDestinationState.h \
-	src/Geoscape/SlideshowState.cpp \
-	src/Geoscape/SlideshowState.h \
 	src/Geoscape/TargetInfoState.cpp \
 	src/Geoscape/TargetInfoState.h \
 	src/Geoscape/UfoDetectedState.cpp \
@@ -408,12 +406,12 @@ openxcom_SOURCES = \
 	src/Menu/AbandonGameState.h \
 	src/Menu/ConfirmLoadState.cpp \
 	src/Menu/ConfirmLoadState.h \
+	src/Menu/CutsceneState.cpp \
+	src/Menu/CutsceneState.h \
 	src/Menu/DeleteGameState.cpp \
 	src/Menu/DeleteGameState.h \
 	src/Menu/ErrorMessageState.cpp \
 	src/Menu/ErrorMessageState.h \
-	src/Menu/IntroState.cpp \
-	src/Menu/IntroState.h \
 	src/Menu/ListGamesState.cpp \
 	src/Menu/ListGamesState.h \
 	src/Menu/ListLoadOriginalState.cpp \
@@ -456,10 +454,14 @@ openxcom_SOURCES = \
 	src/Menu/PauseState.h \
 	src/Menu/SaveGameState.cpp \
 	src/Menu/SaveGameState.h \
+	src/Menu/SlideshowState.cpp \
+	src/Menu/SlideshowState.h \
 	src/Menu/StartState.cpp \
 	src/Menu/StartState.h \
 	src/Menu/TestState.cpp \
 	src/Menu/TestState.h \
+	src/Menu/VideoState.cpp \
+	src/Menu/VideoState.h \
 	src/Resource/ResourcePack.cpp \
 	src/Resource/ResourcePack.h \
 	src/Resource/XcomResourcePack.cpp \

@@ -17,34 +17,26 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SlideshowState.h"
-#include <sstream>
-#include "../Engine/Game.h"
+#include "CutsceneState.h"
 #include "../Engine/FileMap.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/Text.h"
+#include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
-#include "../Savegame/SavedGame.h"
-#include "../Menu/MainMenuState.h"
-#include "../Engine/Music.h"
-#include "../Engine/Timer.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Options.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Screen.h"
+#include "../Engine/Timer.h"
+#include "../Interface/Text.h"
+#include "../Resource/ResourcePack.h"
 
 namespace OpenXcom
 {
 
-SlideshowState::SlideshowState(const std::vector<SlideshowSlide> *slideshowRule)
-		: _slideshowRule(slideshowRule), _curScreen(-1)
+SlideshowState::SlideshowState(const std::vector<SlideshowSlide> *slideshowSlides)
+		: _slideshowSlides(slideshowSlides), _curScreen(-1)
 {
-	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
-	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
-	_game->getScreen()->resetDisplay(false);
+	_wasLetterboxed = CutsceneState::initDisplay();
 
 	// pre-render and queue up all the frames
-	for (std::vector<SlideshowSlide>::const_iterator it = _slideshowRule->begin(); it != _slideshowRule->end(); ++it)
+	for (std::vector<SlideshowSlide>::const_iterator it = _slideshowSlides->begin(); it != _slideshowSlides->end(); ++it)
 	{
 		InteractiveSurface *slide =
 			new InteractiveSurface(Screen::ORIGINAL_WIDTH, Screen::ORIGINAL_HEIGHT, 0, 0);
@@ -108,18 +100,18 @@ void SlideshowState::screenClick(Action *)
 	++_curScreen;
 
 	// next screen
-	if (_curScreen < _slideshowRule->size())
+	if (_curScreen < _slideshowSlides->size())
 	{
-		_transitionTimer->setInterval(_slideshowRule->at(_curScreen).durationSeconds * 1000);
+		_transitionTimer->setInterval(_slideshowSlides->at(_curScreen).durationSeconds * 1000);
 		_transitionTimer->start();
 
 		// if music same as previous slide, music keeps playing uninterrupted
 		// otherwise start playing new music
 		bool playNewMusic = true;
-		std::string curMusicFile = _slideshowRule->at(_curScreen).musicId;
+		std::string curMusicFile = _slideshowSlides->at(_curScreen).musicId;
 		if (_curScreen > 0)
 		{
-			std::string prevMusicFile = _slideshowRule->at(_curScreen - 1).musicId;
+			std::string prevMusicFile = _slideshowSlides->at(_curScreen - 1).musicId;
 			playNewMusic = (prevMusicFile != curMusicFile);
 		}
 		if (playNewMusic)
@@ -135,8 +127,7 @@ void SlideshowState::screenClick(Action *)
 	else
 	{
 		// slideshow is over.  restore the screen scale and pop the state
-		Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
-		_game->getScreen()->resetDisplay(false);
+		CutsceneState::resetDisplay(_wasLetterboxed);
 		_game->popState();
 	}
 }

@@ -1,5 +1,6 @@
 cutscenes:
   - type: intro
+    useUfoAudioSequence: true
     videos:
       - UFOINTRO/UFOINT.FLI
   - type: wingame

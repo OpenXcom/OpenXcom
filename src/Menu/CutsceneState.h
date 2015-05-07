@@ -16,41 +16,35 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_SLIDESHOWSTATE_H
-#define OPENXCOM_SLIDESHOWSTATE_H
+#ifndef OPENXCOM_CUTSCENESTATE_H
+#define OPENXCOM_CUTSCENESTATE_H
 
 #include "../Engine/State.h"
-#include "../Ruleset/RuleVideo.h"
 
 namespace OpenXcom
 {
 
-class InteractiveSurface;
-class Text;
-class Timer;
-
 /**
- * Shows slideshow sequences.
+ * Shows cutscenes: inspects the relevant rules and loads the appropriate state
+ * for showing slideshows or videos.
  */
-class SlideshowState : public State
+class CutsceneState : public State
 {
 private:
-	const std::vector<SlideshowSlide> *_slideshowRule;
-	std::vector<InteractiveSurface *> _slides;
-	std::vector<Text *>_captions;
-	int _curScreen;
-	Timer *_transitionTimer;
+	std::string _cutsceneId;
 public:
-	/// Creates the Slideshow state.
-	SlideshowState(const std::vector<SlideshowSlide> *slideshowRule);
-	/// Cleans up the Slideshow state.
-	~SlideshowState();
-	/// Handle timers.
-	void think();
-	/// Handler for waiting the screen.
-	void screenTimer();
-	/// Handler for clicking the screen.
-	void screenClick(Action *action);
+	/// Creates the CutsceneState.
+	CutsceneState(const std::string &cutsceneId);
+	/// Cleans up the CutsceneState.
+	~CutsceneState();
+	/// Replace this state on the stack with the real player state.
+	void init();
+
+	// shared utility methods for SlideshowState and VideoState
+	/// returns whether the display was letterboxed (for restoration in resetDisplay)
+	static bool initDisplay();
+	/// restores the screen to its original state
+	static void resetDisplay(bool wasLetterboxed);
 };
 
 }

@@ -344,8 +344,6 @@ set ( geoscape_src
   Geoscape/MissionDetectedState.cpp
   Geoscape/NewPossibleManufactureState.h
   Geoscape/NewPossibleManufactureState.cpp
-  Geoscape/SlideshowState.h
-  Geoscape/SlideshowState.cpp
   Geoscape/ResearchRequiredState.h
   Geoscape/ResearchRequiredState.cpp
 )
@@ -390,8 +388,10 @@ set ( interface_src
 set ( menu_src
   Menu/StartState.cpp
   Menu/StartState.h
-  Menu/IntroState.cpp
-  Menu/IntroState.h
+  Menu/CutsceneState.h
+  Menu/CutsceneState.cpp
+  Menu/SlideshowState.h
+  Menu/SlideshowState.cpp
   Menu/MainMenuState.cpp
   Menu/MainMenuState.h
   Menu/TestState.h
@@ -444,6 +444,8 @@ set ( menu_src
   Menu/SaveGameState.h
   Menu/ListLoadOriginalState.cpp
   Menu/ListLoadOriginalState.h
+  Menu/VideoState.cpp
+  Menu/VideoState.h
 )
 
 set ( resource_src

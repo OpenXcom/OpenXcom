@@ -658,9 +658,9 @@ void GeoscapeState::timeAdvance()
 	_globe->draw();
 }
 
-class _LoseGameState : public State
+class LoseGameState : public State
 {
-public:	void think() { _game->lose(); }
+public:	void init() { _game->lose(); }
 };
 
 /**
@@ -672,7 +672,7 @@ void GeoscapeState::time5Seconds()
 	// Game over if there are no more bases.
 	if (_game->getSavedGame()->getBases()->empty())
 	{
-		popup(new _LoseGameState);
+		popup(new LoseGameState);
 		return;
 	}
 
