@@ -46,14 +46,7 @@ OptionsDefaultsState::OptionsDefaultsState(OptionsOrigin origin, OptionsBaseStat
 	_txtTitle = new Text(246, 32, 37, 70);
 
 	// Set palette
-	if (_origin == OPT_BATTLESCAPE)
-	{
-		setPalette("PAL_BATTLESCAPE");
-	}
-	else
-	{
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("mainMenu")->getElement("palette")->color);
-	}
+	setInterface("mainMenu", false, _origin == OPT_BATTLESCAPE);
 
 	add(_window, "confirmDefaults", "mainMenu");
 	add(_btnYes, "confirmDefaults", "mainMenu");
@@ -98,12 +91,15 @@ OptionsDefaultsState::~OptionsDefaultsState()
  */
 void OptionsDefaultsState::btnYesClick(Action *action)
 {
-	if (_origin == OPT_MENU && Options::rulesets.size() > 1)
+	std::vector< std::pair<std::string, bool> > prevMods(Options::mods);
+	Options::resetDefault();
+	_game->defaultLanguage();
+
+	if (_origin == OPT_MENU && prevMods != Options::mods)
 	{
 		Options::reload = true;
 	}
-	Options::resetDefault();
-	_game->defaultLanguage();
+
 	_game->popState();
 	_state->btnOkClick(action);
 }

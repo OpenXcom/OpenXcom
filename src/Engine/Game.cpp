@@ -38,6 +38,7 @@
 #include "InteractiveSurface.h"
 #include "Options.h"
 #include "CrossPlatform.h"
+#include "FileMap.h"
 #include "../Menu/TestState.h"
 
 namespace OpenXcom
@@ -78,7 +79,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _res(0)
 	SDL_WM_GrabInput(Options::captureMouse);
 	
 	// Set the window icon
-	CrossPlatform::setWindowIcon(103, "openxcom.png");
+	CrossPlatform::setWindowIcon(103, FileMap::getFilePath("openxcom.png"));
 
 	// Set the window caption
 	SDL_WM_SetCaption(title.c_str(), 0);
@@ -473,7 +474,7 @@ void Game::loadLanguage(const std::string &filename)
 		}
 	}
 
-	_lang->load(CrossPlatform::getDataFile(ss.str()), strings);
+	_lang->load(FileMap::getFilePath(ss.str()), strings);
 
 	Options::language = filename;
 }
@@ -528,32 +529,22 @@ Ruleset *Game::getRuleset() const
 /**
  * Loads the rulesets specified in the game options.
  */
-void Game::loadRuleset()
+void Game::loadRulesets()
 {
-	Options::badMods.clear();
+	Ruleset::resetGlobalStatics();
+	delete _rules;
 	_rules = new Ruleset();
-	if (Options::rulesets.empty())
-	{
-		Options::rulesets.push_back("Xcom1Ruleset");
-	}
-	for (std::vector<std::string>::iterator i = Options::rulesets.begin(); i != Options::rulesets.end();)
+	const std::vector< std::vector<std::string> > &rulesets(FileMap::getRulesets());
+	for (int i = 0; rulesets.size() > i; ++i)
 	{
 		try
 		{
-			_rules->load(*i);
-			++i;
+			_rules->loadModRulesets(rulesets[i], i);
 		}
 		catch (YAML::Exception &e)
 		{
-			Log(LOG_WARNING) << e.what();
-			Options::badMods.push_back(*i);
-			Options::badMods.push_back(e.what());
-			i = Options::rulesets.erase(i);
+			throw Exception("failed to load ruleset: " + std::string(e.what()));
 		}
-	}
-	if (Options::rulesets.empty())
-	{
-		throw Exception("Failed to load ruleset");
 	}
 	_rules->sortLists();
 }

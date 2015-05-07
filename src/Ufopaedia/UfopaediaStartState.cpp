@@ -55,7 +55,7 @@ namespace OpenXcom
 		_txtTitle = new Text(224, 17, 48, 33);
 
 		// Set palette
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("ufopaedia")->getElement("palette")->color);
+		setInterface("ufopaedia");
 
 
 		add(_window, "window", "ufopaedia");

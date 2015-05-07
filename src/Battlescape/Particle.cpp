@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "../Engine/RNG.h"
 #include "Particle.h"
 #include "Position.h"
 
@@ -61,8 +62,9 @@ Particle::~Particle()
  */
 bool Particle::animate()
 {
-	_yOffset -= 2*(_density/128.0);
+	_yOffset -= ((320-_density)/256.0);
 	_opacity--;
+	_xOffset += (RNG::seedless(0,1)*2 -1)* (0.25 + (float)RNG::seedless(0,9)/30);
 	if ( _opacity == 0 )
 	{
 		return false;

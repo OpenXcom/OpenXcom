@@ -68,7 +68,7 @@ SoldiersState::SoldiersState(Base *base) : _base(base)
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("soldierList")->getElement("palette")->color);
+	setInterface("soldierList");
 
 	add(_window, "window", "soldierList");
 	add(_btnOk, "button", "soldierList");

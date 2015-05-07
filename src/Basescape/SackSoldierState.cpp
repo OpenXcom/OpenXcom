@@ -53,7 +53,7 @@ SackSoldierState::SackSoldierState(Base *base, size_t soldierId) : _base(base), 
 	_txtSoldier = new Text(142, 9, 89, 85);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("sackSoldier")->getElement("palette")->color);
+	setInterface("sackSoldier");
 
 	add(_window, "window", "sackSoldier");
 	add(_btnOk, "button", "sackSoldier");

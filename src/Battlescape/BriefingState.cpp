@@ -63,10 +63,14 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 
 	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
 	AlienDeployment *deployment = _game->getRuleset()->getDeployment(mission);
-	Ufo * ufo = dynamic_cast <Ufo*> (craft->getDestination());
-	if (!deployment && ufo) // landing site or crash site.
+	Ufo * ufo = 0;
+	if (!deployment && craft)
 	{
+		ufo = dynamic_cast <Ufo*> (craft->getDestination());
+		if (ufo) // landing site or crash site.
+		{
 			deployment = _game->getRuleset()->getDeployment(ufo->getRules()->getType());
+		}
 	}
 
 	if (!deployment) // none defined - should never happen, but better safe than sorry i guess.
@@ -87,32 +91,25 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 		_txtCraft->setVisible(data.showCraft);
 	}
 
-	add(_window);
-	add(_btnOk);
-	add(_txtTitle);
-	add(_txtTarget);
-	add(_txtCraft);
-	add(_txtBriefing);
+	add(_window, "window", "briefing");
+	add(_btnOk, "button", "briefing");
+	add(_txtTitle, "text", "briefing");
+	add(_txtTarget, "text", "briefing");
+	add(_txtCraft, "text", "briefing");
+	add(_txtBriefing, "text", "briefing");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
-
-	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BriefingState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, Options::keyOk);
 	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
-
-	_txtTarget->setColor(Palette::blockOffset(8)+5);
 	_txtTarget->setBig();
-
-	_txtCraft->setColor(Palette::blockOffset(8)+5);
 	_txtCraft->setBig();
+
 	std::wstring s;
 	if (craft)
 	{
@@ -129,26 +126,19 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 	}
 	_txtCraft->setText(s);
 
-	_txtBriefing->setColor(Palette::blockOffset(8)+5);
 	_txtBriefing->setWordWrap(true);
-	
+
 	_txtTitle->setText(tr(mission));
 	std::ostringstream briefingtext;
 	briefingtext << mission.c_str() << "_BRIEFING";
 	_txtBriefing->setText(tr(briefingtext.str()));
 
 	// if this UFO has a specific briefing, use that instead
-	if (ufo)
+	if (ufo && ufo->getRules()->getBriefingString() != "")
 	{
 		briefingtext.str("");
-		briefingtext << ufo->getRules()->getType() << "_BRIEFING";
-		// this is not a great check, if the string isn't defined
-		// for the selected language, it will revert to the default
-		// briefing text instead. this will make it harder to notice missing strings in mods.
-		if (tr(briefingtext.str()).asUTF8() != briefingtext.str())
-		{
-			_txtBriefing->setText(tr(briefingtext.str()));
-		}
+		briefingtext << ufo->getRules()->getBriefingString();
+		_txtBriefing->setText(tr(briefingtext.str()));
 	}
 
 	if (mission == "STR_BASE_DEFENSE")

@@ -95,7 +95,7 @@ void ManufactureInfoState::buildUi()
 	_surfaceUnits->onMouseClick((ActionHandler)&ManufactureInfoState::handleWheelUnit, 0);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color);
+	setInterface("manufactureInfo");
 
 	add(_surfaceEngineers);
 	add(_surfaceUnits);

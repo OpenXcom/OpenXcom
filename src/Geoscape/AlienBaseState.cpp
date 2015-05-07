@@ -51,7 +51,7 @@ AlienBaseState::AlienBaseState(AlienBase *base, GeoscapeState *state) : _state(s
 	_btnOk = new TextButton(50, 12, 135, 180);
 	_txtTitle = new Text(308, 60, 6, 60);
 
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("alienBase")->getElement("palette")->color);
+	setInterface("alienBase");
 
 	add(_window, "window", "alienBase");
 	add(_btnOk, "text", "alienBase");
@@ -62,7 +62,7 @@ AlienBaseState::AlienBaseState(AlienBase *base, GeoscapeState *state) : _state(s
 
 	// Set up objects
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
-	
+
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&AlienBaseState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&AlienBaseState::btnOkClick, Options::keyOk);
@@ -76,7 +76,7 @@ AlienBaseState::AlienBaseState(AlienBase *base, GeoscapeState *state) : _state(s
 	std::wstring region, country;
 	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
 	{
-		if ((*i)->getRules()->insideCountry(_base->getLongitude(), _base->getLatitude())) 
+		if ((*i)->getRules()->insideCountry(_base->getLongitude(), _base->getLatitude()))
 		{
 			country = tr((*i)->getRules()->getType());
 			break;
@@ -84,7 +84,7 @@ AlienBaseState::AlienBaseState(AlienBase *base, GeoscapeState *state) : _state(s
 	}
 	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
 	{
-		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude())) 
+		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
 			region = tr((*i)->getRules()->getType());
 			break;

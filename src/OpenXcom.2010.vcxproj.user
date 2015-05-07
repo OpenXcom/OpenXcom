@@ -3,21 +3,21 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LocalDebuggerWorkingDirectory>$(ProjectDir)..\bin\$(Platform)\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-data "$(ProjectDir)..\bin\data"</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-data "$(ProjectDir)..\bin"</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerWorkingDirectory>$(ProjectDir)..\bin\$(Platform)\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-data "$(ProjectDir)..\bin\data"</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-data "$(ProjectDir)..\bin"</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LocalDebuggerWorkingDirectory>$(ProjectDir)..\bin\$(Platform)\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-data "$(ProjectDir)..\bin\data"</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-data "$(ProjectDir)..\bin"</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LocalDebuggerWorkingDirectory>$(ProjectDir)..\bin\$(Platform)\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-data "$(ProjectDir)..\bin\data"</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-data "$(ProjectDir)..\bin"</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>

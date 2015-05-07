@@ -1,0 +1,9 @@
+#
+# metadata.yaml for UFOextender Psionic Line Of Fire
+
+name: "UFOextender: Psionic Line Of Fire"
+version: 1.0
+description: "Psionic weapons (both X-COM and aliens) can only be used with direct line-of-sight to the target."
+author: the OpenXcom team
+
+master: xcom1

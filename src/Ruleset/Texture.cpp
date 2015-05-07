@@ -45,7 +45,7 @@ Texture::~Texture()
 void Texture::load(const YAML::Node &node)
 {
 	_id = node["id"].as<int>(_id);
-	_deployment = node["deployment"].as<std::string>(_deployment);
+	_deployments = node["deployments"].as<std::map<std::string, int> >(_deployments);
 	_terrain = node["terrain"].as< std::vector<TerrainCriteria> >(_terrain);
 }
 
@@ -62,7 +62,8 @@ std::vector<TerrainCriteria> *Texture::getTerrain()
 /**
  * Calculates a random terrain for a mission target based
  * on the texture's available terrain criteria.
- * @target Pointer to the mission target.
+ * @param target Pointer to the mission target.
+ * @return the name of the picked terrain.
  */
 std::string Texture::getRandomTerrain(Target *target) const
 {
@@ -89,9 +90,57 @@ std::string Texture::getRandomTerrain(Target *target) const
 	return "";
 }
 
-std::string Texture::getDeployment() const
+/**
+ * Returns the list of deployments associated
+ * with this texture.
+ * @return List of deployments.
+ */
+const std::map<std::string, int> &Texture::getDeployments()
 {
-	return _deployment;
+	return _deployments;
 }
 
+/**
+ * Calculates a random deployment for a mission target based
+ * on the texture's available deployments.
+ * @return the name of the picked deployment.
+ */
+std::string Texture::getRandomDeployment() const
+{
+	if (_deployments.empty())
+	{
+		return "";
+	}
+
+	std::map<std::string, int>::const_iterator i = _deployments.begin();
+
+	if (_deployments.size() == 1)
+	{
+		return i->first;
+	}
+	int totalWeight = 0;
+
+	for (; i != _deployments.end(); ++i)
+	{
+		totalWeight += i->second;
+	}
+
+	if (totalWeight >= 1)
+	{
+		int pick = RNG::generate(1, totalWeight);
+		for (i = _deployments.begin(); i != _deployments.end(); ++i)
+		{
+			if (pick <= i->second)
+			{
+				return i->first;
+			}
+			else
+			{
+				pick -= i->second;
+			}
+		}
+	}
+
+	return "";
+}
 }

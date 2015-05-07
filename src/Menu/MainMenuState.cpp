@@ -54,7 +54,7 @@ MainMenuState::MainMenuState()
 	_txtTitle = new Text(256, 30, 32, 45);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("mainMenu")->getElement("palette")->color);
+	setInterface("mainMenu");
 
 	add(_window, "window", "mainMenu");
 	add(_btnNewGame, "button", "mainMenu");

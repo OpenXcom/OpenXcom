@@ -76,7 +76,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrig
 	_lstAliens = new TextList(280, 112, 8, 53);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("manageContainment")->getElement("palette")->color);
+	setInterface("manageContainment");
 
 	add(_window, "window", "manageContainment");
 	add(_btnOk, "button", "manageContainment");
@@ -197,7 +197,7 @@ void ManageAlienContainmentState::btnOkClick(Action *)
 				_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getRuleset()->getItem(_aliens[i])->getSellCost() * _qtys[i]);
 			}
 			else
-			{				
+			{
 				// add the corpses
 				_base->getItems()->addItem(
 					_game->getRuleset()->getArmor(

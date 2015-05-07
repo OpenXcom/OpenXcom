@@ -71,8 +71,8 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 	_txtYears = new TextList(200, 8, 121, 191);
 
 	// Set palette
-	setPalette("PAL_GRAPHS");
-	
+	setInterface("graphs");
+
 	//add all our elements
 	add(_bg);
 	add(_btnUfoRegion);
@@ -99,13 +99,13 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 	for (std::vector<Region *>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
 	{
 		// always save in toggles all the regions
-		_regionToggles.push_back(new GraphButInfo(tr((*iter)->getRules()->getType()) , -42 + (4*offset)));
+		_regionToggles.push_back(new GraphButInfo(tr((*iter)->getRules()->getType()) , 13 + (8*offset)));
 		// initially add the GRAPH_MAX_BUTTONS having the first regions information
 		if (offset < GRAPH_MAX_BUTTONS)
 		{
 			_btnRegions.push_back(new ToggleTextButton(80, 11, 0, offset*11));
-			_btnRegions.at(offset)->setInvertColor(-42 + (4*offset));
 			_btnRegions.at(offset)->setText(tr((*iter)->getRules()->getType()));
+			_btnRegions.at(offset)->setInvertColor(13 + (8*offset));
 			_btnRegions.at(offset)->onMousePress((ActionHandler)&GraphsState::btnRegionListClick);
 			_btnRegions.at(offset)->onMousePress((ActionHandler)&GraphsState::shiftButtons, SDL_BUTTON_WHEELUP);
 			_btnRegions.at(offset)->onMousePress((ActionHandler)&GraphsState::shiftButtons, SDL_BUTTON_WHEELDOWN);
@@ -132,17 +132,17 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 	_xcomRegionLines.push_back(new Surface(320,200,0,0));
 	add(_xcomRegionLines.at(offset));
 	add(_btnRegionTotal, "button", "graphs");
-	
+
 	offset = 0;
 	for (std::vector<Country *>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
 	{
 		// always save in toggles all the countries
-		_countryToggles.push_back(new GraphButInfo(tr((*iter)->getRules()->getType()) , -42 + (4*offset)));
+		_countryToggles.push_back(new GraphButInfo(tr((*iter)->getRules()->getType()) , 13 + (8*offset)));
 		// initially add the GRAPH_MAX_BUTTONS having the first countries information
 		if (offset < GRAPH_MAX_BUTTONS)
 		{
 			_btnCountries.push_back(new ToggleTextButton(80, 11, 0, offset*11));
-			_btnCountries.at(offset)->setInvertColor(-42 + (4*offset));
+			_btnCountries.at(offset)->setInvertColor(13 + (8*offset));
 			_btnCountries.at(offset)->setText(tr((*iter)->getRules()->getType()));
 			_btnCountries.at(offset)->onMousePress((ActionHandler)&GraphsState::btnCountryListClick);
 			_btnCountries.at(offset)->onMousePress((ActionHandler)&GraphsState::shiftButtons, SDL_BUTTON_WHEELUP);
@@ -158,7 +158,7 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 
 		++offset;
 	}
-	
+
 	if (_countryToggles.size() < GRAPH_MAX_BUTTONS)
 		_btnCountryTotal = new ToggleTextButton(80, 11, 0, _countryToggles.size()*11);
 	else
@@ -174,14 +174,14 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 	_incomeLines.push_back(new Surface(320,200,0,0));
 	add(_incomeLines.at(offset));
 	add(_btnCountryTotal, "button", "graphs");
-	
+
 
 	for (int iter = 0; iter != 5; ++iter)
 	{
 		offset = iter;
 		_btnFinances.push_back(new ToggleTextButton(80, 11, 0, offset*11));
 		_financeToggles.push_back(false);
-		_btnFinances.at(offset)->setInvertColor(-42 + (4*offset));
+		_btnFinances.at(offset)->setInvertColor(13 + (8*offset));
 		_btnFinances.at(offset)->onMousePress((ActionHandler)&GraphsState::btnFinanceListClick);
 		add(_btnFinances.at(offset), "button", "graphs");
 		_financeLines.push_back(new Surface(320,200,0,0));
@@ -206,7 +206,7 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 		_regionToggles[i]->_pushed = ('0'==graphRegionToggles[i]) ? false : true;
 		if (_regionToggles.size()-1 == i)
 			_btnRegionTotal->setPressed(_regionToggles[i]->_pushed);
-		else if (i < GRAPH_MAX_BUTTONS) 
+		else if (i < GRAPH_MAX_BUTTONS)
 			_btnRegions.at(i)->setPressed(_regionToggles[i]->_pushed);
 	}
 	for (size_t i = 0; i < _countryToggles.size(); ++i)
@@ -236,7 +236,7 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 				if (grid == 4)
 				{
 					color = 0;
-				} 
+				}
 				_bg->drawRect(x, y, 16 - (grid*2), 13 - (grid*2), color);
 			}
 		}
@@ -279,9 +279,17 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 	btnUfoRegionClick(0);
 
 	// Set up objects
-	_game->getResourcePack()->getSurface("GRAPHS.SPK")->blit(_bg);
+	if (_game->getResourcePack()->getSurface("GRAPH.BDY"))
+	{
+		_game->getResourcePack()->getSurface("GRAPH.BDY")->blit(_bg);
+	}
+	else
+	{
+		_game->getResourcePack()->getSurface("GRAPHS.SPK")->blit(_bg);
+	}
+
 	_txtTitle->setAlign(ALIGN_CENTER);
-	
+
 	_txtFactor->setText(L"$1000's");
 
 	// Set up buttons
@@ -481,7 +489,7 @@ void GraphsState::btnRegionListClick(Action * action)
 	}
 
 	_regionToggles.at(number+_butRegionsOffset)->_pushed = button->getPressed();
-	
+
 	drawLines();
 }
 
@@ -516,7 +524,7 @@ void GraphsState::btnFinanceListClick(Action *action)
 {
 	size_t number = (action->getSender()->getY()-_game->getScreen()->getDY())/11;
 	ToggleTextButton *button = _btnFinances.at(number);
-	
+
 	_financeLines.at(number)->setVisible(!_financeToggles.at(number));
 	_financeToggles.at(number) = button->getPressed();
 
@@ -1014,7 +1022,7 @@ void GraphsState::drawFinanceLines()
 	{
 		expendTotals[entry] = _game->getSavedGame()->getExpenditures().at(_game->getSavedGame()->getExpenditures().size() - (entry + 1)) / 1000;
 		incomeTotals[entry] = _game->getSavedGame()->getIncomes().at(_game->getSavedGame()->getIncomes().size() - (entry + 1)) / 1000;
-		
+
 		if (_financeToggles.at(0) && incomeTotals[entry] > upperLimit)
 		{
 			upperLimit = incomeTotals[entry];

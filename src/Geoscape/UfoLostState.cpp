@@ -44,7 +44,7 @@ UfoLostState::UfoLostState(const std::wstring &id) : _id(id)
 	_txtTitle = new Text(160, 32, 48, 72);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color);
+	setInterface("UFOInfo");
 
 	add(_window, "window", "UFOInfo");
 	add(_btnOk, "button", "UFOInfo");

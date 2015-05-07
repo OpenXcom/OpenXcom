@@ -98,6 +98,8 @@ public:
 	void setSecondaryColor(Uint8 color);
 	/// Gets the text's secondary color.
 	Uint8 getSecondaryColor() const;
+	/// Gets the number of lines in the (wrapped, if wrapping is enabled) text
+	int getNumLines() const;
 	/// Gets the rendered text's width.
 	int getTextWidth(int line = -1) const;
 	/// Gets the rendered text's height.

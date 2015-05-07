@@ -52,7 +52,7 @@ FundingState::FundingState()
 	_lstCountries = new TextList(260, 136, 32, 40);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("fundingWindow")->getElement("palette")->color);
+	setInterface("fundingWindow");
 
 	add(_window, "window", "fundingWindow");
 	add(_btnOk, "button", "fundingWindow");

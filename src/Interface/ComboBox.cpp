@@ -235,6 +235,20 @@ size_t ComboBox::getSelected() const
 	return _sel;
 }
 
+size_t ComboBox::getHoveredListIdx() const
+{
+	size_t ret = -1;
+	if (_list->getVisible())
+	{
+		ret = _list->getSelectedRow();
+	}
+	if (-1 == ret)
+	{
+		ret = _sel;
+	}
+	return ret;
+}
+
 /**
  * Changes the currently selected option.
  * @param sel Selected row.
@@ -385,6 +399,33 @@ void ComboBox::toggle(bool first)
 void ComboBox::onChange(ActionHandler handler)
 {
 	_change = handler;
+}
+
+/**
+ * Sets a function to be called every time the mouse moves in to the listbox surface.
+ * @param handler Action handler.
+ */
+void ComboBox::onListMouseIn(ActionHandler handler)
+{
+	_list->onMouseIn(handler);
+}
+
+/**
+ * Sets a function to be called every time the mouse moves out of the listbox surface.
+ * @param handler Action handler.
+ */
+void ComboBox::onListMouseOut(ActionHandler handler)
+{
+	_list->onMouseOut(handler);
+}
+
+/**
+ * Sets a function to be called every time the mouse moves over the listbox surface.
+ * @param handler Action handler.
+ */
+void ComboBox::onListMouseOver(ActionHandler handler)
+{
+	_list->onMouseOver(handler);
 }
 
 }

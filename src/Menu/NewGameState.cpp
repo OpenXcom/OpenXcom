@@ -54,7 +54,7 @@ NewGameState::NewGameState()
 	_difficulty = _btnBeginner;
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("newGameMenu")->getElement("palette")->color);
+	setInterface("newGameMenu");
 
 	add(_window, "window", "newGameMenu");
 	add(_btnBeginner, "button", "newGameMenu");
