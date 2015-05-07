@@ -128,7 +128,7 @@ static void _mapFiles(const std::string &basePath, const std::string &relPath, b
 	{
 		std::string fullpath = fullDir + "/" + *i;
 		
-		if (_canonicalize(*i) == "metadata.yaml" || rulesetFiles.find(*i) != rulesetFiles.end())
+		if (_canonicalize(*i) == "metadata.yml" || rulesetFiles.find(*i) != rulesetFiles.end())
 		{
 			// no need to map mod metadata files or ruleset files
 			Log(LOG_DEBUG) << "  ignoring non-resource file: " << fullpath;
