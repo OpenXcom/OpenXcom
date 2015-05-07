@@ -68,7 +68,7 @@ BaseDefenseState::BaseDefenseState(Base *base, Ufo *ufo, GeoscapeState *state) :
 	_btnOk = new TextButton(120, 18, 100, 170);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("baseDefense")->getElement("palette")->color);
+	setInterface("baseDefense");
 
 	add(_window, "window", "baseDefense");
 	add(_btnOk, "button", "baseDefense");
@@ -119,7 +119,7 @@ void BaseDefenseState::nextStep()
 {
 	if (_thinkcycles == -1)
 		return;
-	
+
 	++_thinkcycles;
 
 	if (_thinkcycles == 1)
@@ -172,11 +172,11 @@ void BaseDefenseState::nextStep()
 			_attacks = 0;
 			return;
 		}
-		
-	
+
+
 
 		BaseFacility* def = _base->getDefenses()->at(_attacks);
-		
+
 		switch (_action)
 		{
 		case  BDA_NONE:

@@ -54,10 +54,10 @@ namespace OpenXcom
 {
 
 // UFO blobs graphics ...
-const int DogfightState::_ufoBlobs[8][13][13] = 
+const int DogfightState::_ufoBlobs[8][13][13] =
 {
-		/*0 STR_VERY_SMALL */ 
-	{ 
+		/*0 STR_VERY_SMALL */
+	{
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -187,7 +187,7 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 };
 
 // Projectile blobs
-const int DogfightState::_projectileBlobs[4][6][3] = 
+const int DogfightState::_projectileBlobs[4][6][3] =
 {
 		/*0 STR_STINGRAY_MISSILE ?*/
 	{
@@ -247,7 +247,7 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	_weapon2 = new InteractiveSurface(15, 17, _x + 64, _y + 52);
 	_range2 = new Surface(21, 74, _x + 43, _y + 3);
 	_damage = new Surface(22, 25, _x + 93, _y + 40);
-	
+
 	_btnMinimize = new InteractiveSurface(12, 12, _x, _y);
 	_preview = new InteractiveSurface(160, 96, _x, _y);
 	_btnStandoff = new ImageButton(36, 15, _x + 83, _y + 4);
@@ -267,7 +267,7 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	_craftDamageAnimTimer = new Timer(500);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE");
+	setInterface("dogfight");
 
 	add(_window);
 	add(_battle);
@@ -277,25 +277,27 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	add(_range2);
 	add(_damage);
 	add(_btnMinimize);
-	add(_btnStandoff, "button", "dogfight");
-	add(_btnCautious, "button", "dogfight");
-	add(_btnStandard, "button", "dogfight");
-	add(_btnAggressive, "button", "dogfight");
-	add(_btnDisengage, "button", "dogfight");
-	add(_btnUfo, "button", "dogfight");
-	add(_txtAmmo1, "numbers", "dogfight");
-	add(_txtAmmo2, "numbers", "dogfight");
-	add(_txtDistance, "numbers", "dogfight");
+	add(_btnStandoff, "standoffButton", "dogfight", _window);
+	add(_btnCautious, "cautiousButton", "dogfight", _window);
+	add(_btnStandard, "standardButton", "dogfight", _window);
+	add(_btnAggressive, "aggressiveButton", "dogfight", _window);
+	add(_btnDisengage, "disengageButton", "dogfight", _window);
+	add(_btnUfo, "ufoButton", "dogfight", _window);
+	add(_txtAmmo1, "numbers", "dogfight", _window);
+	add(_txtAmmo2, "numbers", "dogfight", _window);
+	add(_txtDistance, "distance", "dogfight", _window);
 	add(_preview);
-	add(_txtStatus, "text", "dogfight");
+	add(_txtStatus, "text", "dogfight", _window);
 	add(_btnMinimizedIcon);
 	add(_txtInterceptionNumber, "minimizedNumber", "dogfight");
 
-	if (_txtDistance->isTFTDMode())
-	{
-		_txtDistance->setY(_txtDistance->getY() + 1);
-		_txtDistance->setX(_txtDistance->getX() + 7);
-	}
+	_btnStandoff->invalidate(false);
+	_btnCautious->invalidate(false);
+	_btnStandard->invalidate(false);
+	_btnAggressive->invalidate(false);
+	_btnDisengage->invalidate(false);
+	_btnUfo->invalidate(false);
+
 	// Set up objects
 	Surface *graphic;
 	graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
@@ -377,15 +379,19 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	_txtInterceptionNumber->setText(ss1.str());
 	_txtInterceptionNumber->setVisible(false);
 
+	RuleInterface *dogfightInterface = _game->getRuleset()->getInterface("dogfight");
 	// define the colors to be used
-	_colors[CRAFT_MIN] = _game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color;
-	_colors[CRAFT_MAX] = _game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color2;
-	_colors[RADAR_MIN] = _game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color;
-	_colors[RADAR_MAX] = _game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color2;
-	_colors[DAMAGE_MIN] = _game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color;
-	_colors[DAMAGE_MAX] = _game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color2;
-	_colors[BLOB_MIN] = _game->getRuleset()->getInterface("dogfight")->getElement("radarDetail")->color;
-	_colors[RANGE_METER] = _game->getRuleset()->getInterface("dogfight")->getElement("radarDetail")->color2;
+	_colors[CRAFT_MIN] = dogfightInterface->getElement("craftRange")->color;
+	_colors[CRAFT_MAX] = dogfightInterface->getElement("craftRange")->color2;
+	_colors[RADAR_MIN] = dogfightInterface->getElement("radarRange")->color;
+	_colors[RADAR_MAX] = dogfightInterface->getElement("radarRange")->color2;
+	_colors[DAMAGE_MIN] = dogfightInterface->getElement("damageRange")->color;
+	_colors[DAMAGE_MAX] = dogfightInterface->getElement("damageRange")->color2;
+	_colors[BLOB_MIN] = dogfightInterface->getElement("radarDetail")->color;
+	_colors[RANGE_METER] = dogfightInterface->getElement("radarDetail")->color2;
+	_colors[DISABLED_WEAPON] = dogfightInterface->getElement("disabledWeapon")->color;
+	_colors[DISABLED_RANGE] = dogfightInterface->getElement("disabledWeapon")->color2;
+	_colors[DISABLED_AMMO] = dogfightInterface->getElement("disabledAmmo")->color;
 
 	for (unsigned int i = 0; i < _craft->getRules()->getWeapons(); ++i)
 	{
@@ -415,7 +421,7 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 
 		// Draw weapon icon
 		frame = set->getFrame(w->getRules()->getSprite() + 5);
-		
+
 		frame->setX(0);
 		frame->setY(0);
 		frame->blit(weapon);
@@ -675,7 +681,7 @@ void DogfightState::animate()
 	{
 		drawProjectile((*it));
 	}
-	
+
 	// Clears text after a while
 	if (_timeout == 0)
 	{
@@ -793,7 +799,7 @@ void DogfightState::update()
 			// If UFOs ever fire anything but beams, those positions need to be adjust here though.
 		}
 
-		_currentDist += distanceChange; 
+		_currentDist += distanceChange;
 
 		std::wostringstream ss;
 		ss << _currentDist;
@@ -883,7 +889,7 @@ void DogfightState::update()
 				}
 			}
 		}
-		
+
 		// Remove projectiles that hit or missed their target.
 		for (std::vector<CraftWeaponProjectile*>::iterator it = _projectiles.begin(); it != _projectiles.end();)
 		{
@@ -917,7 +923,7 @@ void DogfightState::update()
 			}
 
 			// Handle weapon firing
-			if (wTimer == 0 && _currentDist <= w->getRules()->getRange() * 8 && w->getAmmo() > 0 && _mode != _btnStandoff 
+			if (wTimer == 0 && _currentDist <= w->getRules()->getRange() * 8 && w->getAmmo() > 0 && _mode != _btnStandoff
 				&& _mode != _btnDisengage && !_ufo->isCrashed() && !_craft->isDestroyed())
 			{
 				if (i == 0)
@@ -1008,7 +1014,7 @@ void DogfightState::update()
 			_destroyCraft = true;
 			_ufo->setShootingAt(0);
 		}
-	
+
 		// End dogfight if UFO is crashed or destroyed.
 		if (_ufo->isCrashed())
 		{
@@ -1484,7 +1490,7 @@ void DogfightState::drawUfo()
 /*
  * Draws projectiles on the radar screen.
  * Depending on what type of projectile it is, it's
- * shape will be different. Currently works for 
+ * shape will be different. Currently works for
  * original sized blobs 3 x 6 pixels.
  */
 void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
@@ -1566,7 +1572,6 @@ void DogfightState::recolor(const int weaponNo, const bool currentState)
 	InteractiveSurface *weapon = 0;
 	Text *ammo = 0;
 	Surface *range = 0;
-	int weaponAndAmmoOffset = 24, rangeOffset = 7;
 	if (weaponNo == 0)
 	{
 		weapon = _weapon1;
@@ -1586,15 +1591,15 @@ void DogfightState::recolor(const int weaponNo, const bool currentState)
 
 	if (currentState)
 	{
-		weapon->offset(-weaponAndAmmoOffset);
-		ammo->offset(-weaponAndAmmoOffset);
-		range->offset(-rangeOffset);
+		weapon->offset(-_colors[DISABLED_WEAPON]);
+		ammo->offset(-_colors[DISABLED_AMMO]);
+		range->offset(-_colors[DISABLED_RANGE]);
 	}
 	else
 	{
-		weapon->offset(weaponAndAmmoOffset);
-		ammo->offset(weaponAndAmmoOffset);
-		range->offset(rangeOffset);
+		weapon->offset(_colors[DISABLED_WEAPON]);
+		ammo->offset(_colors[DISABLED_AMMO]);
+		range->offset(_colors[DISABLED_RANGE]);
 	}
 }
 
@@ -1675,7 +1680,7 @@ void DogfightState::calculateWindowPosition()
 
 	_minimizedIconX = 5;
 	_minimizedIconY = (5 * _interceptionNumber) + (16 * (_interceptionNumber - 1));
-	
+
 	if (_interceptionsCount == 1)
 	{
 		_x = 80;

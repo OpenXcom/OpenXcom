@@ -54,7 +54,7 @@ MissionDetectedState::MissionDetectedState(MissionSite *mission, GeoscapeState *
 	_txtCity = new Text(246, 17, 5, 80);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("terrorSite")->getElement("palette")->color);
+	setInterface("terrorSite");
 
 	add(_window, "window", "terrorSite");
 	add(_btnIntercept, "button", "terrorSite");

@@ -48,7 +48,7 @@ ConfirmCydoniaState::ConfirmCydoniaState(Craft *craft) : _craft(craft)
 	_txtMessage = new Text(224, 48, 48, 76);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("confirmCydonia")->getElement("palette")->color);
+	setInterface("confirmCydonia");
 
 	add(_window, "window", "confirmCydonia");
 	add(_btnYes, "button", "confirmCydonia");
@@ -89,7 +89,7 @@ void ConfirmCydoniaState::btnYesClick(Action *)
 {
 	_game->popState();
 	_game->popState();
-	
+
 	SavedBattleGame *bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);

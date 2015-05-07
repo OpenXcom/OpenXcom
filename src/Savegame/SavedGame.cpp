@@ -30,6 +30,7 @@
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/FileMap.h"
 #include "SavedBattleGame.h"
 #include "SerializationHelper.h"
 #include "GameTime.h"
@@ -154,6 +155,29 @@ SavedGame::~SavedGame()
 	delete _battleGame;
 }
 
+static bool _isCurrentGameType(const SaveInfo &saveInfo, const std::string &curMaster)
+{
+	std::string gameMaster;
+	if (saveInfo.mods.empty())
+	{
+		// if no mods listed in the savegame, this is an old-style
+		// savegame.  assume "xcom1" as the game type.
+		gameMaster = "xcom1";
+	}
+	else
+	{
+		gameMaster = saveInfo.mods[0];
+	}
+
+	if (gameMaster != curMaster)
+	{
+		Log(LOG_DEBUG) << "skipping save from inactive master: " << saveInfo.fileName;
+		return false;
+	}
+
+	return true;
+}
+
 /**
  * Gets all the info of the saves found in the user folder.
  * @param lang Loaded language.
@@ -163,6 +187,7 @@ SavedGame::~SavedGame()
 std::vector<SaveInfo> SavedGame::getList(Language *lang, bool autoquick)
 {
 	std::vector<SaveInfo> info;
+	std::string curMaster = Options::getActiveMaster();
 
 	if (autoquick)
 	{
@@ -171,7 +196,12 @@ std::vector<SaveInfo> SavedGame::getList(Language *lang, bool autoquick)
 		{
 			try
 			{
-				info.push_back(getSaveInfo(*i, lang));
+				SaveInfo saveInfo = getSaveInfo(*i, lang);
+				if (!_isCurrentGameType(saveInfo, curMaster))
+				{
+					continue;
+				}
+				info.push_back(saveInfo);
 			}
 			catch (Exception &e)
 			{
@@ -191,7 +221,12 @@ std::vector<SaveInfo> SavedGame::getList(Language *lang, bool autoquick)
 	{
 		try
 		{
-			info.push_back(getSaveInfo(*i, lang));
+			SaveInfo saveInfo = getSaveInfo(*i, lang);
+			if (!_isCurrentGameType(saveInfo, curMaster))
+			{
+				continue;
+			}
+			info.push_back(saveInfo);
 		}
 		catch (Exception &e)
 		{
@@ -253,8 +288,13 @@ SaveInfo SavedGame::getSaveInfo(const std::string &file, Language *lang)
 	std::pair<std::wstring, std::wstring> str = CrossPlatform::timeToString(save.timestamp);
 	save.isoDate = str.first;
 	save.isoTime = str.second;
+        save.mods = doc["mods"].as<std::vector< std::string> >(std::vector<std::string>());
 
 	std::wostringstream details;
+	if (!save.mods.empty())
+	{
+		details << Language::utf8ToWstr(save.mods[0]) << L" ";
+	}
 	if (doc["turn"])
 	{
 		details << lang->getString("STR_BATTLESCAPE") << L": " << lang->getString(doc["mission"].as<std::string>()) << L", ";
@@ -273,11 +313,6 @@ SaveInfo SavedGame::getSaveInfo(const std::string &file, Language *lang)
 		details << L" (" << lang->getString("STR_IRONMAN") << L")";
 	}
 	save.details = details.str();
-
-	if (doc["rulesets"])
-	{
-		save.rulesets = doc["rulesets"].as<std::vector<std::string> >();
-	}
 
 	return save;
 }
@@ -481,7 +516,16 @@ void SavedGame::save(const std::string &filename) const
 		brief["mission"] = _battleGame->getMissionType();
 		brief["turn"] = _battleGame->getTurn();
 	}
-	brief["rulesets"] = Options::rulesets;
+
+	std::vector<std::string> activeMods;
+	for (std::vector< std::pair<std::string, bool> >::iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
+	{
+		if (i->second)
+		{
+			activeMods.push_back(i->first);
+		}
+	}
+	brief["mods"] = activeMods;
 	if (_ironman)
 		brief["ironman"] = _ironman;
 	out << brief;

@@ -190,6 +190,8 @@ set ( battlescape_src
 )
 
 set ( engine_src
+  Engine/FileMap.h
+  Engine/FileMap.cpp
   Engine/State.h
   Engine/State.cpp
   Engine/CatFile.cpp
@@ -206,6 +208,8 @@ set ( engine_src
   Engine/Language.h
   Engine/LanguagePlurality.cpp
   Engine/LanguagePlurality.h
+  Engine/ModInfo.cpp
+  Engine/ModInfo.h
   Engine/Game.cpp
   Engine/Game.h
   Engine/Action.cpp
@@ -760,10 +764,13 @@ if ( WIN32 )
 endif ()
 target_link_libraries ( openxcom ${system_libs} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${SDL_LIBRARY} ${YAMLCPP_LIBRARY} ${OPENGL_gl_LIBRARY} )
 
-add_custom_command ( TARGET openxcom
-  POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/data ${EXECUTABLE_OUTPUT_PATH}/data )
-install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/data DESTINATION ${data_install_dir} )
+set ( bin_data_dirs TFTD UFO common standard )
+foreach ( binpath ${bin_data_dirs} )
+  add_custom_command ( TARGET openxcom
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/${binpath} ${EXECUTABLE_OUTPUT_PATH}/${binpath} )
+  install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${binpath} DESTINATION ${data_install_dir} )
+endforeach()
 
 # Copy Windows DLLs to bin folder
 if ( WIN32 )

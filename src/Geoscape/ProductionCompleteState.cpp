@@ -53,7 +53,7 @@ ProductionCompleteState::ProductionCompleteState(Base *base, const std::wstring 
 	_txtMessage = new Text(246, 110, 37, 35);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoManufacture")->getElement("palette")->color);
+	setInterface("geoManufacture");
 
 	add(_window, "window", "geoManufacture");
 	add(_btnOk, "button", "geoManufacture");

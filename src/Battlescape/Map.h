@@ -68,7 +68,7 @@ private:
 	Camera *_camera;
 	int _visibleMapHeight;
 	std::vector<Position> _waypoints;
-	bool _unitDying, _smoothCamera, _smoothingEngaged;
+	bool _unitDying, _smoothCamera, _smoothingEngaged, _flashScreen;
 	PathPreview _previewSetting;
 	Text *_txtAccuracy;
 	SurfaceSet *_projectileSet;
@@ -150,6 +150,10 @@ public:
 	const int getSoundAngle(Position pos);
 	/// Reset the camera smoothing bool.
 	void resetCameraSmoothing();
+	/// Set whether the screen should "flash" or not.
+	void setBlastFlash(bool flash);
+	/// Check if the screen is flashing this.
+	bool getBlastFlash();
 };
 
 }

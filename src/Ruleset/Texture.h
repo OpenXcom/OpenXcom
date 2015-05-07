@@ -46,7 +46,7 @@ class Texture
 {
 private:
 	int _id;
-	std::string _deployment;
+	std::map<std::string, int> _deployments;
 	std::vector<TerrainCriteria> _terrain;
 public:
 	/// Creates a new texture with mission data.
@@ -60,7 +60,9 @@ public:
 	/// Gets a random texture terrain for a given target.
 	std::string getRandomTerrain(Target *target) const;
 	/// Gets the alien deployment for this texture.
-	std::string getDeployment() const;
+	const std::map<std::string, int> &getDeployments();
+	/// Gets a random deployment.
+	std::string getRandomDeployment() const;
 };
 
 }

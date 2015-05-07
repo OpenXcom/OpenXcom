@@ -68,7 +68,8 @@ TransferItemsState::TransferItemsState(Base *baseFrom, Base *baseTo) : _baseFrom
 	_lstItems = new TextList(287, 120, 8, 44);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("transferMenu")->getElement("palette")->color);
+	setInterface("transferMenu");
+
 	_ammoColor = _game->getRuleset()->getInterface("transferMenu")->getElement("ammoColor")->color;
 
 	add(_window, "window", "transferMenu");

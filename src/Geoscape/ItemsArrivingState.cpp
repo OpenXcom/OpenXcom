@@ -63,7 +63,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState *state) : _state(state), _b
 	_lstTransfers = new TextList(271, 112, 14, 50);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("itemsArriving")->getElement("palette")->color);
+	setInterface("itemsArriving");
 
 	add(_window, "window", "itemsArriving");
 	add(_btnOk, "button", "itemsArriving");

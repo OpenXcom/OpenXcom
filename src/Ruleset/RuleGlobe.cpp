@@ -27,7 +27,7 @@
 #include "Texture.h"
 #include "../Engine/Palette.h"
 #include "../Geoscape/Globe.h"
-#include "../Engine/CrossPlatform.h"
+#include "../Engine/FileMap.h"
 
 namespace OpenXcom
 {
@@ -71,7 +71,7 @@ void RuleGlobe::load(const YAML::Node &node)
 			delete *i;
 		}
 		_polygons.clear();
-		loadDat(CrossPlatform::getDataFile(node["data"].as<std::string>()));
+		loadDat(FileMap::getFilePath(node["data"].as<std::string>()));
 	}
 	if (node["polygons"])
 	{
@@ -225,7 +225,7 @@ std::vector<std::string> RuleGlobe::getTerrains(const std::string &deployment) c
 	std::vector<std::string> terrains;
 	for (std::map<int, Texture*>::const_iterator i = _textures.begin(); i != _textures.end(); ++i)
 	{
-		if (i->second->getDeployment() == deployment)
+		if ((deployment == "" && i->second->getDeployments().empty()) || i->second->getDeployments().find(deployment) != i->second->getDeployments().end())
 		{
 			for (std::vector<TerrainCriteria>::const_iterator j = i->second->getTerrain()->begin(); j != i->second->getTerrain()->end(); ++j)
 			{

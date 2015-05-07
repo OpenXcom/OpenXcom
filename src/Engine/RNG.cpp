@@ -19,6 +19,7 @@
 #include "RNG.h"
 #include <math.h>
 #include <time.h>
+#include <stdlib.h>
 #ifndef UINT64_MAX
 #define UINT64_MAX 0xffffffffffffffffULL
 #endif
@@ -91,6 +92,19 @@ double generate(double min, double max)
 	double num = next();
 	return (double)(num / ((double)UINT64_MAX / (max - min)) + min);
 }
+
+/**
+ * Generates a random integer number within a certain range.
+ * Distinct from "generate" in that it doesn't touch the seed.
+ * @param min Minimum number, inclusive.
+ * @param max Maximum number, inclusive.
+ * @return Generated number.
+ */
+int seedless(int min, int max)
+{
+	return (int)(rand() % (max - min + 1) + min);
+}
+
 
 /**
  * Normal random variate generator

@@ -293,6 +293,11 @@ Uint8 Text::getSecondaryColor() const
 	return _color2;
 }
 
+int Text::getNumLines() const
+{
+	return _wrap ? _lineHeight.size() : 1;
+}
+
 /**
  * Returns the rendered text's height. Useful to check if wordwrap applies.
  * @param line Line to get the height, or -1 to get whole text height.

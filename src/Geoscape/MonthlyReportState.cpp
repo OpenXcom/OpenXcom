@@ -65,7 +65,7 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 	_txtFailure = new Text(290, 160, 15, 10);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("monthlyReport")->getElement("palette")->color);
+	setInterface("monthlyReport");
 
 	add(_window, "window", "monthlyReport");
 	add(_btnOk, "button", "monthlyReport");
@@ -88,7 +88,7 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 	_btnOk->onMouseClick((ActionHandler)&MonthlyReportState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&MonthlyReportState::btnOkClick, Options::keyOk);
 	_btnOk->onKeyboardPress((ActionHandler)&MonthlyReportState::btnOkClick, Options::keyCancel);
-	
+
 	_btnBigOk->setText(tr("STR_OK"));
 	_btnBigOk->onMouseClick((ActionHandler)&MonthlyReportState::btnOkClick);
 	_btnBigOk->onKeyboardPress((ActionHandler)&MonthlyReportState::btnOkClick, Options::keyOk);
@@ -223,7 +223,7 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 	ss5 << countryList(_happyList, "STR_COUNTRY_IS_PARTICULARLY_PLEASED", "STR_COUNTRIES_ARE_PARTICULARLY_HAPPY");
 	ss5 << countryList(_sadList, "STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY", "STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY");
 	ss5 << countryList(_pactList, "STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT", "STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT");
-	
+
 	_txtDesc->setText(ss5.str());
 }
 
@@ -285,7 +285,7 @@ void MonthlyReportState::btnOkClick(Action *)
 }
 
 /**
- * Update all our activity counters, gather all our scores, 
+ * Update all our activity counters, gather all our scores,
  * get our countries to make sign pacts, adjust their fundings,
  * assess their satisfaction, and finally calculate our overall
  * total score, with thanks to Volutar for the formulas.
@@ -331,7 +331,7 @@ void MonthlyReportState::calculateChanges()
 	// and have them make their decisions weighted on the council's perspective.
 	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 	{
-		// add them to the list of new pact members 
+		// add them to the list of new pact members
 		// this is done BEFORE initiating a new month
 		// because the _newPact flag will be reset in the
 		// process

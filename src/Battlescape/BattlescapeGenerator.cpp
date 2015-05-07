@@ -36,7 +36,7 @@
 #include "../Savegame/Node.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/CrossPlatform.h"
+#include "../Engine/FileMap.h"
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Exception.h"
@@ -711,6 +711,20 @@ BattleUnit *BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 	BattleUnit *unit = addXCOMUnit(new BattleUnit(rule, FACTION_PLAYER, _unitSequence++, _game->getRuleset()->getArmor(rule->getArmor()), 0, _save->getDepth()));
 	if (unit)
 	{
+		BattleItem *item = new BattleItem(_game->getRuleset()->getItem(vehicle), _save->getCurrentItemId());
+		if (!addItem(item, unit))
+		{
+			delete item;
+		}
+		if (!v->getRules()->getCompatibleAmmo()->empty())
+		{
+			std::string ammo = v->getRules()->getCompatibleAmmo()->front();
+			BattleItem *ammoItem = new BattleItem(_game->getRuleset()->getItem(ammo), _save->getCurrentItemId());
+			addItem(ammoItem, unit);
+			ammoItem->setAmmoQuantity(v->getAmmo());
+		}
+		unit->setTurretType(v->getRules()->getTurretType());
+
 		if (!rule->getBuiltInWeapons().empty())
 		{
 			for (std::vector<std::string>::const_iterator i = rule->getBuiltInWeapons().begin(); i != rule->getBuiltInWeapons().end(); ++i)
@@ -726,19 +740,6 @@ BattleUnit *BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 				}
 			}
 		}
-		BattleItem *item = new BattleItem(_game->getRuleset()->getItem(vehicle), _save->getCurrentItemId());
-		if (!addItem(item, unit))
-		{
-			delete item;
-		}
-		if (!v->getRules()->getCompatibleAmmo()->empty())
-		{
-			std::string ammo = v->getRules()->getCompatibleAmmo()->front();
-			BattleItem *ammoItem = new BattleItem(_game->getRuleset()->getItem(ammo), _save->getCurrentItemId());
-			addItem(ammoItem, unit);
-			ammoItem->setAmmoQuantity(v->getAmmo());
-		}
-		unit->setTurretType(v->getRules()->getTurretType());
 	}
 	return unit;
 }
@@ -905,7 +906,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment *deployment)
 				outside = false;
 			Unit *rule = _game->getRuleset()->getUnit(alienName);
 			BattleUnit *unit = addAlien(rule, (*d).alienRank, outside);
-			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9));
+			size_t itemLevel = (size_t)(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
 			if (unit)
 			{
 				// Built in weapons: the unit has this weapon regardless of loadout or what have you.
@@ -946,11 +947,13 @@ void BattlescapeGenerator::deployAliens(AlienDeployment *deployment)
 				}
 				else
 				{
+					if ((*d).itemSets.size() == 0)
+					{
+						throw Exception("Unit generator encountered an error: item set not defined");
+					}
 					if (itemLevel >= (*d).itemSets.size())
 					{
-						std::stringstream ss;
-						ss << "Unit generator encountered an error: not enough item sets defined, expected: " << itemLevel + 1 << " found: " << (*d).itemSets.size();
-						throw Exception(ss.str());
+						itemLevel = (*d).itemSets.size() - 1;
 					}
 					for (std::vector<std::string>::iterator it = (*d).itemSets.at(itemLevel).items.begin(); it != (*d).itemSets.at(itemLevel).items.end(); ++it)
 					{
@@ -1343,7 +1346,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	unsigned int terrainObjectID;
 
 	// Load file
-	std::ifstream mapFile (CrossPlatform::getDataFile(filename.str()).c_str(), std::ios::in| std::ios::binary);
+	std::ifstream mapFile (FileMap::getFilePath(filename.str()).c_str(), std::ios::in| std::ios::binary);
 	if (!mapFile)
 	{
 		throw Exception(filename.str() + " not found");
@@ -1466,7 +1469,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 	filename << "ROUTES/" << mapblock->getName() << ".RMP";
 
 	// Load file
-	std::ifstream mapFile (CrossPlatform::getDataFile(filename.str()).c_str(), std::ios::in| std::ios::binary);
+	std::ifstream mapFile (FileMap::getFilePath(filename.str()).c_str(), std::ios::in| std::ios::binary);
 	if (!mapFile)
 	{
 		throw Exception(filename.str() + " not found");

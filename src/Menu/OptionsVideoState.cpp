@@ -30,7 +30,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
 #include "../Interface/ArrowButton.h"
-#include "../Engine/CrossPlatform.h"
+#include "../Engine/FileMap.h"
 #include "../Engine/Logger.h"
 #include "../Interface/ComboBox.h"
 
@@ -210,8 +210,8 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_filters.push_back("");
 	
 #ifndef __NO_OPENGL
-	std::vector<std::string> filters = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder(GL_FOLDER), GL_EXT);
-	for (std::vector<std::string>::iterator i = filters.begin(); i != filters.end(); ++i)
+	std::set<std::string> filters = FileMap::filterFiles(FileMap::getVFolderContents(GL_FOLDER), GL_EXT);
+	for (std::set<std::string>::iterator i = filters.begin(); i != filters.end(); ++i)
 	{
 		std::string file = (*i);
 		std::string path = GL_FOLDER + file;

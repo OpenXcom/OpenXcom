@@ -127,7 +127,7 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 	_txtCraft->setText(s);
 
 	_txtBriefing->setWordWrap(true);
-	
+
 	_txtTitle->setText(tr(mission));
 	std::ostringstream briefingtext;
 	briefingtext << mission.c_str() << "_BRIEFING";

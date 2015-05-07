@@ -48,7 +48,7 @@ PsiTrainingState::PsiTrainingState()
 	_btnOk = new TextButton(160, 14, 80, 174);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("psiTraining")->getElement("palette")->color);
+	setInterface("psiTraining");
 
 	add(_window, "window", "psiTraining");
 	add(_btnOk, "button2", "psiTraining");

@@ -104,7 +104,7 @@ NewBattleState::NewBattleState() : _craft(0)
 	_btnRandom = new TextButton(100, 16, 212, 176);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("newBattleMenu")->getElement("palette")->color);
+	setInterface("newBattleMenu");
 
 	add(_window, "window", "newBattleMenu");
 	add(_txtTitle, "heading", "newBattleMenu");
@@ -259,9 +259,9 @@ void NewBattleState::init()
  * Loads new battle data from a YAML file.
  * @param filename YAML filename.
  */
-void NewBattleState::load(const std::string &filename)
+void NewBattleState::load()
 {
-	std::string s = Options::getConfigFolder() + filename + ".cfg";
+	std::string s = Options::getConfigFolder() + "battle-" + Options::getActiveMaster() + ".cfg";
 	if (!CrossPlatform::fileExists(s))
 	{
 		initSave();
@@ -347,13 +347,13 @@ void NewBattleState::load(const std::string &filename)
  * Saves new battle data to a YAML file.
  * @param filename YAML filename.
  */
-void NewBattleState::save(const std::string &filename)
+void NewBattleState::save()
 {
-	std::string s = Options::getConfigFolder() + filename + ".cfg";
+	std::string s = Options::getConfigFolder() + "battle-" + Options::getActiveMaster() + ".cfg";
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
-		Log(LOG_WARNING) << "Failed to save " << filename << ".cfg";
+		Log(LOG_WARNING) << "Failed to save " << s;
 		return;
 	}
 	YAML::Emitter out;

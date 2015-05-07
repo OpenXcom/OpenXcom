@@ -71,18 +71,17 @@ bool BattlescapeGame::_debugPlay = false;
  * @param save Pointer to the save game.
  * @param parentState Pointer to the parent battlescape state.
  */
-BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState) : _save(save), _parentState(parentState), _playedAggroSound(false), _endTurnRequested(false), _endTurnProcessed(false)
+BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState) : _save(save), _parentState(parentState), _playerPanicHandled(true), _AIActionCounter(0), _AISecondMove(false), _playedAggroSound(false), _endTurnRequested(false), _endTurnProcessed(false)
 {
-	_debugPlay = false;
-	_playerPanicHandled = true;
-	_AIActionCounter = 0;
-	_AISecondMove = false;
+	
 	_currentAction.actor = 0;
+	_currentAction.targeting = false;
+	_currentAction.type = BA_NONE;
+
+	_debugPlay = false;
 
 	checkForCasualties(0, 0, true);
 	cancelCurrentAction();
-	_currentAction.targeting = false;
-	_currentAction.type = BA_NONE;
 }
 
 

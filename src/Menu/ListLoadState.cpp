@@ -88,9 +88,10 @@ void ListLoadState::lstSavesPress(Action *action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		bool confirm = false;
-		for (std::vector<std::string>::const_iterator i = _saves[_lstSaves->getSelectedRow()].rulesets.begin(); i != _saves[_lstSaves->getSelectedRow()].rulesets.end(); ++i)
+		const SaveInfo &saveInfo(_saves[_lstSaves->getSelectedRow()]);
+		for (std::vector<std::string>::const_iterator i = saveInfo.mods.begin(); i != saveInfo.mods.end(); ++i)
 		{
-			if (std::find(Options::rulesets.begin(), Options::rulesets.end(), *i) == Options::rulesets.end())
+			if (std::find(Options::mods.begin(), Options::mods.end(), std::pair<std::string, bool>(*i, true)) == Options::mods.end())
 			{
 				confirm = true;
 				break;
@@ -98,11 +99,11 @@ void ListLoadState::lstSavesPress(Action *action)
 		}
 		if (confirm)
 		{
-			_game->pushState(new ConfirmLoadState(_origin, _saves[_lstSaves->getSelectedRow()].fileName));
+			_game->pushState(new ConfirmLoadState(_origin, saveInfo.fileName));
 		}
 		else
 		{
-			_game->pushState(new LoadGameState(_origin, _saves[_lstSaves->getSelectedRow()].fileName, _palette));
+			_game->pushState(new LoadGameState(_origin, saveInfo.fileName, _palette));
 		}
 	}
 }

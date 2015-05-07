@@ -178,7 +178,7 @@ GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomO
 	_txtDebug = new Text(200, 18, 0, 0);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE");
+	setInterface("geoscape");
 
 	add(_bg);
 	add(_sideLine);
@@ -309,6 +309,9 @@ GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomO
 	_btn1Day->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, Options::keyGeoSpeed6);
 	_btn1Day->setGeoscapeButton(true);
 
+	_sideBottom->setGeoscapeButton(true);
+	_sideTop->setGeoscapeButton(true);
+
 	_btnRotateLeft->onMousePress((ActionHandler)&GeoscapeState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)&GeoscapeState::btnRotateLeftRelease);
 	_btnRotateLeft->onKeyboardPress((ActionHandler)&GeoscapeState::btnRotateLeftPress, Options::keyGeoLeft);
@@ -394,7 +397,7 @@ GeoscapeState::~GeoscapeState()
 	delete _zoomOutEffectTimer;
 	delete _dogfightStartTimer;
 	delete _dogfightTimer;
-	
+
 	std::list<DogfightState*>::iterator it = _dogfights.begin();
 	for (; it != _dogfights.end();)
 	{
@@ -819,6 +822,13 @@ void GeoscapeState::time5Seconds()
 			}
 			if ((*j)->reachedDestination())
 			{
+				if ((*j)->getDestination()->getSiteDepth() > (*j)->getRules()->getMaxDepth())
+				{
+					std::wstring msg = tr("STR_SITE_TOO_DEEP").arg((*j)->getName(_game->getLanguage()));
+					(*j)->returnToBase();
+					popup(new CraftErrorState(this, msg));
+					continue;
+				}
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
 				MissionSite* m = dynamic_cast<MissionSite*>((*j)->getDestination());
@@ -1563,7 +1573,7 @@ void GeoscapeState::time1Day()
 			{
 				for (std::vector<ResearchProject*>::const_iterator iter2 = (*j)->getResearch().begin(); iter2 != (*j)->getResearch().end(); ++iter2)
 				{
-					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName() && 
+					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName() &&
 						_game->getRuleset()->getUnit((*iter2)->getRules()->getName()) == 0)
 					{
 						(*j)->removeResearch(*iter2);
@@ -2195,7 +2205,7 @@ void GeoscapeState::setupLandMission()
 	for (int counter = 0; counter < 40 && !picked; ++counter)
 	{
 		region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size()-1)]);
-		if (region->getMissionZones().size() > missionRules.getSpawnZone() &&
+		if (region->getMissionZones().size() > (size_t)(missionRules.getSpawnZone()) &&
 			_game->getSavedGame()->findAlienMission(region->getType(), OBJECTIVE_SITE) == 0)
 		{
 			const MissionZone &zone = region->getMissionZones().at(missionRules.getSpawnZone());
@@ -2264,7 +2274,7 @@ void GeoscapeState::resize(int &dX, int &dY)
 		dY = 0;
 		return;
 	}
-	
+
 	Options::baseXResolution = std::max(Screen::ORIGINAL_WIDTH, Options::displayWidth / divisor);
 	Options::baseYResolution = std::max(Screen::ORIGINAL_HEIGHT, (int)(Options::displayHeight / pixelRatioY / divisor));
 

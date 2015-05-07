@@ -86,7 +86,7 @@ void ResearchInfoState::buildUi()
 	_surfaceScientists->onMouseClick((ActionHandler)&ResearchInfoState::handleWheel, 0);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color);
+	setInterface("allocateResearch");
 
 	add(_surfaceScientists);
 	add(_window, "window", "allocateResearch");

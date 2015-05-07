@@ -20,6 +20,7 @@
 #define OPENXCOM_PARTICLE_H
 
 #include <SDL_types.h>
+#include <algorithm>
 
 namespace OpenXcom
 {
@@ -41,7 +42,7 @@ public:
 	/// Get the color.
 	Uint8 getColor() { return _color; }
 	/// Get the opacity.
-	Uint8 getOpacity() {return _opacity / 5; }
+	Uint8 getOpacity() {return std::min((_opacity + 7) / 10, 3); }
 	/// Get the horizontal shift.
 	float getX() { return _xOffset; }
 	/// Get the vertical shift.

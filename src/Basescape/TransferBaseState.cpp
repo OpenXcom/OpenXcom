@@ -53,7 +53,7 @@ TransferBaseState::TransferBaseState(Base *base) : _base(base)
 	_lstBases = new TextList(248, 64, 28, 80);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("transferBaseSelect")->getElement("palette")->color);
+	setInterface("transferBaseSelect");
 
 	add(_window, "window", "transferBaseSelect");
 	add(_btnCancel, "button", "transferBaseSelect");

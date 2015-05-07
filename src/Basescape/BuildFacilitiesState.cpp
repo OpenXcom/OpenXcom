@@ -50,7 +50,7 @@ BuildFacilitiesState::BuildFacilitiesState(Base *base, State *state) : _base(bas
 	_txtTitle = new Text(118, 17, 197, 48);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("selectFacility")->getElement("palette")->color);
+	setInterface("selectFacility");
 
 	add(_window, "window", "selectFacility");
 	add(_btnOk, "button", "selectFacility");

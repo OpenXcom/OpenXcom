@@ -21,7 +21,6 @@
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/CrossPlatform.h"
 #include "../Engine/Action.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Text.h"

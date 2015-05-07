@@ -32,6 +32,7 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "CrossPlatform.h"
+#include "FileMap.h"
 #include "Screen.h"
 
 namespace OpenXcom
@@ -50,6 +51,7 @@ std::string _configFolder;
 std::vector<std::string> _userList;
 std::map<std::string, std::string> _commandLine;
 std::vector<OptionInfo> _info;
+std::map<std::string, ModInfo> _modInfos;
 
 /**
  * Sets up the options by creating their OptionInfo metadata.
@@ -278,6 +280,42 @@ void create()
 	_info.push_back(OptionInfo("FPS", &FPS, 60, "STR_FPS_LIMIT", "STR_GENERAL"));
 	_info.push_back(OptionInfo("FPSInactive", &FPSInactive, 30, "STR_FPS_INACTIVE_LIMIT", "STR_GENERAL"));
 #endif
+
+}
+
+// we can get fancier with these detection routines, but for now just look for
+// files that exist in one game but not the other
+static bool _ufoIsInstalled()
+{
+	return CrossPlatform::fileExists(CrossPlatform::searchDataFile("UFO/TERRAIN/UFO1.PCK"));
+}
+
+static bool _tftdIsInstalled()
+{
+	// ensure both the resource data and the mod data is in place
+	return CrossPlatform::fileExists(CrossPlatform::searchDataFile("TFTD/TERRAIN/SEA.PCK"))
+		&& CrossPlatform::fileExists(CrossPlatform::searchDataFile("standard/xcom2/Language/en-US.yml"));
+}
+
+static void _setDefaultMods()
+{
+	// try to find xcom1
+	bool haveUfo = _ufoIsInstalled();
+	if (haveUfo)
+	{
+		Log(LOG_DEBUG) << "detected UFO";
+		mods.push_back(std::pair<std::string, bool>("xcom1", true));
+	}
+
+	if (_tftdIsInstalled())
+	{
+		Log(LOG_DEBUG) << "detected TFTD";
+		mods.push_back(std::pair<std::string, bool>("xcom2", !haveUfo));
+	}
+	else if (!haveUfo)
+	{
+		Log(LOG_ERROR) << "neither UFO or TFTD data was detected";
+	}
 }
 
 /**
@@ -291,8 +329,11 @@ void resetDefault()
 	}
 	backupDisplay();
 
-	rulesets.clear();
-	rulesets.push_back("Xcom1Ruleset");
+	mods.clear();
+	if (!_dataList.empty())
+	{
+		_setDefaultMods();
+	}
 
 	purchaseExclusions.clear();
 }
@@ -318,22 +359,24 @@ void loadArgs(int argc, char *argv[])
 			std::transform(argname.begin(), argname.end(), argname.begin(), ::tolower);
 			if (argc > i + 1)
 			{
+				++i; // we'll be consuming the next argument too
+
 				if (argname == "data")
 				{
-					_dataFolder = CrossPlatform::endPath(argv[i+1]);
+					_dataFolder = CrossPlatform::endPath(argv[i]);
 				}
 				else if (argname == "user")
 				{
-					_userFolder = CrossPlatform::endPath(argv[i+1]);
+					_userFolder = CrossPlatform::endPath(argv[i]);
 				}
 				else if (argname == "cfg")
 				{
-					_configFolder = CrossPlatform::endPath(argv[i+1]);
+					_configFolder = CrossPlatform::endPath(argv[i]);
 				}
 				else
 				{
 					//save this command line option for now, we will apply it later
-					_commandLine[argname] = argv[i+1];
+					_commandLine[argname] = argv[i];
 				}
 			}
 			else
@@ -386,6 +429,64 @@ bool showHelp(int argc, char *argv[])
 	return false;
 }
 
+const std::map<std::string, ModInfo> &getModInfos() { return _modInfos; }
+
+static void _scanMods(const std::string &modsDir)
+{
+	if (!CrossPlatform::folderExists(modsDir))
+	{
+		Log(LOG_INFO) << "skipping non-existent mod directory: '" << modsDir << "'";
+		return;
+	}
+
+	std::vector<std::string> contents = CrossPlatform::getFolderContents(modsDir);
+	for (std::vector<std::string>::iterator i = contents.begin(); i != contents.end(); ++i)
+	{
+		std::string modPath = modsDir + "/" + *i;
+		if (!CrossPlatform::folderExists(modPath))
+		{
+			// skip non-directories (e.g. README.txt)
+			continue;
+		}
+
+		Log(LOG_INFO) << "- " << modPath;
+		ModInfo modInfo(modPath);
+
+		std::string metadataPath = modPath + "/metadata.yml";
+		if (!CrossPlatform::fileExists(metadataPath))
+		{
+			Log(LOG_WARNING) << metadataPath << " not found; using default values for mod: " << *i;
+		}
+		else
+		{
+			modInfo.load(metadataPath);
+		}
+
+		Log(LOG_DEBUG) << "  id: " << modInfo.getId();
+		Log(LOG_DEBUG) << "  name: " << modInfo.getName();
+		Log(LOG_DEBUG) << "  version: " << modInfo.getVersion();
+		Log(LOG_DEBUG) << "  description: " << modInfo.getDescription();
+		Log(LOG_DEBUG) << "  author: " << modInfo.getAuthor();
+		Log(LOG_DEBUG) << "  master: " << modInfo.getMaster();
+		Log(LOG_DEBUG) << "  isMaster: " << modInfo.isMaster();
+		Log(LOG_DEBUG) << "  loadResources:";
+		std::vector<std::string> externals = modInfo.getExternalResourceDirs();
+		for (std::vector<std::string>::iterator j = externals.begin(); j != externals.end(); ++j)
+		{
+			Log(LOG_DEBUG) << "    " << *j;
+		}
+
+		if (("xcom1" == modInfo.getId() && !_ufoIsInstalled())
+		 || ("xcom2" == modInfo.getId() && !_tftdIsInstalled()))
+		{
+			Log(LOG_DEBUG) << "skipping " << modInfo.getId() << " since related game data isn't installed";
+			continue;
+		}
+
+		_modInfos.insert(std::pair<std::string, ModInfo>(modInfo.getId(), modInfo));
+	}
+}
+
 /**
  * Handles the initialization of setting up default options
  * and finding and loading any existing ones.
@@ -401,6 +502,7 @@ bool init(int argc, char *argv[])
 	resetDefault();
 	loadArgs(argc, argv);
 	setFolders();
+	_setDefaultMods();
 	updateOptions();
 
 	std::string s = getUserFolder();
@@ -422,7 +524,188 @@ bool init(int argc, char *argv[])
 	Log(LOG_INFO) << "User folder is: " << _userFolder;
 	Log(LOG_INFO) << "Config folder is: " << _configFolder;
 	Log(LOG_INFO) << "Options loaded successfully.";
+
+	std::string modPath = CrossPlatform::searchDataFolder("standard");
+	Log(LOG_INFO) << "Scanning standard mods in '" << modPath << "'...";
+	_scanMods(modPath);
+	modPath = _userFolder + "mods";
+	Log(LOG_INFO) << "Scanning user mods in '" << modPath << "'...";
+	_scanMods(modPath);
+
+	// remove mods from list that no longer exist
+	for (std::vector< std::pair<std::string, bool> >::iterator i = mods.begin(); i != mods.end(); )
+	{
+		std::map<std::string, ModInfo>::const_iterator modIt = _modInfos.find(i->first);
+		if (_modInfos.end() == modIt
+		 || (i->first == "xcom1" && !_ufoIsInstalled())
+		 || (i->first == "xcom2" && !_tftdIsInstalled()))
+		{
+			Log(LOG_INFO) << "removing references to missing mod: " << i->first;
+			i = mods.erase(i);
+			continue;
+		}
+		++i;
+	}
+
+	// add in any new mods picked up from the scan and ensure there is but a single
+	// master active
+	std::string activeMaster;
+	std::string inactiveMaster;
+	for (std::map<std::string, ModInfo>::const_iterator i = _modInfos.begin(); i != _modInfos.end(); ++i)
+	{
+		bool found = false;
+		for (std::vector< std::pair<std::string, bool> >::iterator j = mods.begin(); j != mods.end(); ++j)
+		{
+			if (i->first == j->first)
+			{
+				found = true;
+				if (i->second.isMaster())
+				{
+					if (j->second)
+					{
+						if (!activeMaster.empty())
+						{
+							Log(LOG_WARNING) << "too many active masters detected; turning off " << j->first;
+							j->second = false;
+						}
+						else
+						{
+							activeMaster = j->first;
+						}
+					}
+					else
+					{
+						if (inactiveMaster.empty())
+						{
+							inactiveMaster = j->first;
+						}
+					}
+				}
+
+				break;
+			}
+		}
+		if (found)
+		{
+			continue;
+		}
+
+		// not active by default
+		std::pair<std::string, bool> newMod(i->first, false);
+		if (i->second.isMaster())
+		{
+			// it doesn't matter what order the masters are in since
+			// only one can be active at a time anyway
+			mods.insert(mods.begin(), newMod);
+
+			if (inactiveMaster.empty())
+			{
+				inactiveMaster = i->first;
+			}
+		}
+		else
+		{
+			mods.push_back(newMod);
+		}
+	}
+
+	if (activeMaster.empty())
+	{
+		if (inactiveMaster.empty())
+		{
+			Log(LOG_ERROR) << "no mod masters available";
+		}
+		else
+		{
+			Log(LOG_INFO) << "no master already active; activating " << inactiveMaster;
+			std::find(mods.begin(), mods.end(), std::pair<std::string, bool>(inactiveMaster, false))->second = true;
+		}
+	}
+
+	mapResources();
+
 	return true;
+}
+
+std::string getActiveMaster()
+{
+	std::string curMaster;
+	for (std::vector< std::pair<std::string, bool> >::const_iterator i = mods.begin(); i != mods.end(); ++i)
+	{
+		if (!i->second)
+		{
+			// we're only looking for active mods
+			continue;
+		}
+
+		ModInfo modInfo = _modInfos.find(i->first)->second;
+		if (!modInfo.isMaster())
+		{
+			continue;
+		}
+
+		curMaster = modInfo.getId();
+		break;
+	}
+	if (curMaster.empty())
+	{
+		Log(LOG_ERROR) << "cannot determine current active master";
+	}
+	return curMaster;
+}
+
+static void _loadMod(const ModInfo &modInfo, std::set<std::string> circDepCheck)
+{
+	if (circDepCheck.end() != circDepCheck.find(modInfo.getId()))
+	{
+		Log(LOG_WARNING) << "circular dependency found in master chain: " << modInfo.getId();
+		return;
+	}
+	
+	FileMap::load(modInfo.getPath());
+	for (std::vector<std::string>::const_iterator i = modInfo.getExternalResourceDirs().begin(); i != modInfo.getExternalResourceDirs().end(); ++i)
+	{
+		// always ignore ruleset files in external resource dirs
+		FileMap::load(CrossPlatform::searchDataFolder(*i), true);
+	}
+
+	// if this is a master but it has a master of its own, allow it to
+	// chainload the "super" master, including its rulesets
+	if (modInfo.isMaster() && !modInfo.getMaster().empty())
+	{
+		// add self to circDepCheck so we can avoid circular dependencies
+		circDepCheck.insert(modInfo.getId());
+		const ModInfo &masterInfo = _modInfos.find(modInfo.getMaster())->second;
+		_loadMod(masterInfo, circDepCheck);
+	}
+}
+
+void mapResources()
+{
+	Log(LOG_INFO) << "Mapping resource files...";
+	FileMap::clear();
+
+	std::string curMaster = getActiveMaster();
+	for (std::vector< std::pair<std::string, bool> >::reverse_iterator i = mods.rbegin(); i != mods.rend(); ++i)
+	{
+		if (!i->second)
+		{
+			Log(LOG_DEBUG) << "skipping inactive mod: " << i->first;
+			continue;
+		}
+
+		const ModInfo &modInfo = _modInfos.find(i->first)->second;
+		if (!modInfo.isMaster() && !modInfo.getMaster().empty() && modInfo.getMaster() != curMaster)
+		{
+			Log(LOG_DEBUG) << "skipping mod for non-current master: " << i->first << "(" << modInfo.getMaster() << " != " << curMaster << ")";
+			continue;
+		}
+
+		std::set<std::string> circDepCheck;
+		_loadMod(modInfo, circDepCheck);
+	}
+	// pick up stuff in common
+	FileMap::load(CrossPlatform::searchDataFolder("common"), true);
 }
 
 /**
@@ -433,17 +716,17 @@ bool init(int argc, char *argv[])
 void setFolders()
 {
 	_dataList = CrossPlatform::findDataFolders();
-    if (!_dataFolder.empty())
-    {
+	if (!_dataFolder.empty())
+	{
 		_dataList.insert(_dataList.begin(), _dataFolder);
-    }
-    if (_userFolder.empty())
-    {
-        std::vector<std::string> user = CrossPlatform::findUserFolders();
-        _configFolder = CrossPlatform::findConfigFolder();
+	}
+	if (_userFolder.empty())
+	{
+		std::vector<std::string> user = CrossPlatform::findUserFolders();
+		_configFolder = CrossPlatform::findConfigFolder();
 
 		// Look for an existing user folder
-        for (std::vector<std::string>::reverse_iterator i = user.rbegin(); i != user.rend(); ++i)
+		for (std::vector<std::string>::reverse_iterator i = user.rbegin(); i != user.rend(); ++i)
 		{
 			if (CrossPlatform::folderExists(*i))
 			{
@@ -462,6 +745,22 @@ void setFolders()
 					_userFolder = *i;
 					break;
 				}
+			}
+		}
+	}
+	if (!_userFolder.empty())
+	{
+		// create mods subfolder if it doesn't already exist
+		std::string modsFolder = _userFolder + "mods";
+		if (!CrossPlatform::folderExists(modsFolder))
+		{
+			if (CrossPlatform::createFolder(modsFolder))
+			{
+				Log(LOG_INFO) << "created mods folder: '" << modsFolder << "'";
+			}
+			else
+			{
+				Log(LOG_WARNING) << "failed to create mods folder: '" << modsFolder << "'";
 			}
 		}
 	}
@@ -525,7 +824,18 @@ void load(const std::string &filename)
 			i->load(doc["options"]);
 		}
 		purchaseExclusions = doc["purchaseexclusions"].as< std::vector<std::string> >(purchaseExclusions);
-		rulesets = doc["rulesets"].as< std::vector<std::string> >(rulesets);
+
+		mods.clear();
+		for (YAML::const_iterator i = doc["mods"].begin(); i != doc["mods"].end(); ++i)
+		{
+			std::string id = (*i)["id"].as<std::string>();
+			bool active = (*i)["active"].as<bool>(false);
+			mods.push_back(std::pair<std::string, bool>(id, active));
+		}
+		if (mods.empty())
+		{
+			_setDefaultMods();
+		}
 	}
 	catch (YAML::Exception e)
 	{
@@ -557,7 +867,15 @@ void save(const std::string &filename)
 		}
 		doc["options"] = node;
 		doc["purchaseexclusions"] = purchaseExclusions;
-		doc["rulesets"] = rulesets;
+
+		for (std::vector< std::pair<std::string, bool> >::iterator i = mods.begin(); i != mods.end(); ++i)
+		{
+			YAML::Node mod;
+			mod["id"] = i->first;
+			mod["active"] = i->second;
+			doc["mods"].push_back(mod);
+		}
+
 		out << doc;
 
 		sav << out.c_str();

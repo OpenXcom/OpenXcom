@@ -59,11 +59,10 @@ public:
 	// Argument substitution.
 	/// Replace next argument.
 	LocalizedText arg(const std::wstring &) const OX_REQUIRED_RESULT;
-	/// Replace next argument.
 	LocalizedText &arg(const std::wstring &) OX_REQUIRED_RESULT;
-	/// Replace next argument.
+	LocalizedText arg(const std::string &) const OX_REQUIRED_RESULT;
+	LocalizedText &arg(const std::string &) OX_REQUIRED_RESULT;
 	template <typename T> LocalizedText arg(T) const OX_REQUIRED_RESULT;
-	/// Replace next argument.
 	template <typename T> LocalizedText &arg(T) OX_REQUIRED_RESULT;
 private:
 	std::wstring _text; ///< The actual localized text.

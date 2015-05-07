@@ -57,7 +57,7 @@ ListLoadOriginalState::ListLoadOriginalState()
 	_txtDate = new Text(90, 9, 225, 24);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 6);
+	setInterface("saveMenus");
 
 	add(_window, "window", "saveMenus");
 	add(_btnNew, "button", "saveMenus");
@@ -114,7 +114,7 @@ ListLoadOriginalState::ListLoadOriginalState()
 		ss << (i + 1);
 		_btnSlot[i]->setText(ss.str());
 		_btnSlot[i]->onMouseClick((ActionHandler)&ListLoadOriginalState::btnSlotClick);
-		
+
 		_txtSlotName[i]->setText(_saves[i].name + dots);
 		_txtSlotTime[i]->setText(_saves[i].time);
 		_txtSlotDate[i]->setText(_saves[i].date);

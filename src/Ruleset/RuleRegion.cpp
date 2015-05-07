@@ -152,6 +152,15 @@ size_t RuleRegion::getWeight() const
 }
 
 /**
+ * Gets a list of all the missionZones in the region.
+ * @return A list of missionZones.
+ */
+const std::vector<MissionZone> &RuleRegion::getMissionZones() const
+{
+	return _missionZones;
+}
+
+/**
  * Gets a random point that is guaranteed to be inside the given zone.
  * @param zone The target zone.
  * @return A pair of longitude and latitude.
@@ -187,7 +196,7 @@ std::pair<double, double> RuleRegion::getRandomPoint(size_t zone) const
  * Gets the area data for the mission point in the specified zone and coordinates.
  * @param zone The target zone.
  * @param target The target coordinates.
- * @return A pair of longitude and latitude.
+ * @return A MissionArea from which to extract coordinates, textures, or any other pertinent information.
  */
 MissionArea RuleRegion::getMissionPoint(size_t zone, Target *target) const
 {
@@ -205,8 +214,33 @@ MissionArea RuleRegion::getMissionPoint(size_t zone, Target *target) const
 	return MissionArea();
 }
 
-const std::vector<MissionZone> &RuleRegion::getMissionZones() const
+/**
+ * Gets the area data for the random mission point in the region.
+ * @return A MissionArea from which to extract coordinates, textures, or any other pertinent information.
+ */
+MissionArea RuleRegion::getRandomMissionPoint(size_t zone) const
 {
-	return _missionZones;
+	if (zone < _missionZones.size())
+	{
+		std::vector<MissionArea> randomSelection = _missionZones[zone].areas;
+		for (std::vector<MissionArea>::iterator i = randomSelection.begin(); i != randomSelection.end();)
+		{
+			if (!i->isPoint())
+			{
+				i = randomSelection.erase(i);
+			}
+			else
+			{
+				++i;
+			}
+		}
+		if (!randomSelection.empty())
+		{
+			return randomSelection.at(RNG::generate(0, randomSelection.size() - 1));
+		}
+	}
+	assert(0 && "Invalid zone number");
+	return MissionArea();
 }
+
 }

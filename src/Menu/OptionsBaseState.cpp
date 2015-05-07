@@ -65,7 +65,7 @@ OptionsBaseState::OptionsBaseState(OptionsOrigin origin) : _origin(origin)
 	_btnBattlescape = new TextButton(80, 16, 8, 88);
 	_btnAdvanced = new TextButton(80, 16, 8, 108);
 	_btnMods = new TextButton(80, 16, 8, 128);
-	
+
 	_btnOk = new TextButton(100, 16, 8, 176);
 	_btnCancel = new TextButton(100, 16, 110, 176);
 	_btnDefault = new TextButton(100, 16, 212, 176);
@@ -73,14 +73,7 @@ OptionsBaseState::OptionsBaseState(OptionsOrigin origin) : _origin(origin)
 	_txtTooltip = new Text(305, 25, 8, 148);
 
 	// Set palette
-	if (_origin == OPT_BATTLESCAPE)
-	{
-		setPalette("PAL_BATTLESCAPE");
-	}
-	else
-	{
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("optionsMenu")->getElement("palette")->color);
-	}
+	setInterface("optionsMenu", false, _origin == OPT_BATTLESCAPE);
 
 	add(_window, "window", "optionsMenu");
 
@@ -207,6 +200,10 @@ void OptionsBaseState::btnOkClick(Action *)
 	recenter(dX, dY);
 	Options::switchDisplay();
 	Options::save();
+	if (Options::reload && _origin == OPT_MENU)
+	{
+		Options::mapResources();
+	}
 	_game->loadLanguage(Options::language);
 	SDL_WM_GrabInput(Options::captureMouse);
 	_game->getScreen()->resetDisplay();

@@ -115,6 +115,7 @@ void ExplosionBState::init()
 			}
 			int frameDelay = 0;
 			int counter = std::max(1, (_power/5) / 5);
+			_parent->getMap()->setBlastFlash(true);
 			for (int i = 0; i < _power/5; i++)
 			{
 				int X = RNG::generate(-_power/2,_power/2);
@@ -176,21 +177,24 @@ void ExplosionBState::init()
  */
 void ExplosionBState::think()
 {
-	for (std::list<Explosion*>::iterator i = _parent->getMap()->getExplosions()->begin(); i != _parent->getMap()->getExplosions()->end();)
+	if (!_parent->getMap()->getBlastFlash())
 	{
-		if (!(*i)->animate())
+		for (std::list<Explosion*>::iterator i = _parent->getMap()->getExplosions()->begin(); i != _parent->getMap()->getExplosions()->end();)
 		{
-			delete (*i);
-			i = _parent->getMap()->getExplosions()->erase(i);
-			if (_parent->getMap()->getExplosions()->empty())
+			if (!(*i)->animate())
 			{
-				explode();
-				return;
+				delete (*i);
+				i = _parent->getMap()->getExplosions()->erase(i);
+				if (_parent->getMap()->getExplosions()->empty())
+				{
+					explode();
+					return;
+				}
 			}
-		}
-		else
-		{
-			++i;
+			else
+			{
+				++i;
+			}
 		}
 	}
 }

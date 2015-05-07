@@ -50,7 +50,7 @@ ResearchCompleteState::ResearchCompleteState(const RuleResearch * research, cons
 	_txtResearch = new Text(230, 32, 45, 96);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoResearch")->getElement("palette")->color);
+	setInterface("geoResearch");
 
 	add(_window, "window", "geoResearch");
 	add(_btnOk, "button", "geoResearch");

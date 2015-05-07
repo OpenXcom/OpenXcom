@@ -21,6 +21,7 @@
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/FileMap.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Screen.h"
@@ -139,7 +140,7 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	centerAllSurfaces();
 
 
-	
+
 	_txtName->setBig();
 	_txtName->setHighContrast(true);
 
@@ -340,7 +341,7 @@ void InventoryState::init()
 		if (s->getLook() == LOOK_AFRICAN)
 			look += "3";
 		look += ".SPK";
-		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)) && !_game->getResourcePack()->getSurface(look))
+		if (!CrossPlatform::fileExists(FileMap::getFilePath("UFOGRAPH/" + look)) && !_game->getResourcePack()->getSurface(look))
 		{
 			look = s->getArmor()->getSpriteInventory() + ".SPK";
 		}
@@ -735,7 +736,7 @@ void InventoryState::_refreshMouse()
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 	SDL_WarpMouse(x+1, y);
-	
+
 	// move the mouse back to avoid cursor creep
 	SDL_WarpMouse(x, y);
 }

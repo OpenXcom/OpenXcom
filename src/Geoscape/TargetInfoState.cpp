@@ -50,7 +50,7 @@ TargetInfoState::TargetInfoState(Target *target, Globe *globe) : _target(target)
 	_txtFollowers = new Text(182, 40, 37, 88);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("targetInfo")->getElement("palette")->color);
+	setInterface("targetInfo");
 
 	add(_window, "window", "targetInfo");
 	add(_btnIntercept, "button", "targetInfo");

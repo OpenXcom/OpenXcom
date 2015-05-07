@@ -100,14 +100,7 @@ ListGamesState::ListGamesState(OptionsOrigin origin, int firstValidRow, bool aut
 	_sortDate = new ArrowButton(ARROW_NONE, 11, 8, 204, 32);
 
 	// Set palette
-	if (_origin == OPT_BATTLESCAPE)
-	{
-		setPalette("PAL_BATTLESCAPE");
-	}
-	else
-	{
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoscape")->getElement("loadPalette")->color);
-	}
+	setInterface("geoscape", true, _origin == OPT_BATTLESCAPE);
 
 	add(_window, "window", "saveMenus");
 	add(_btnCancel, "button", "saveMenus");

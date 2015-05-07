@@ -50,7 +50,7 @@ NewResearchListState::NewResearchListState(Base *base) : _base(base)
 	_lstResearch = new TextList(198, 88, 53, 54);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color);
+	setInterface("selectNewResearch");
 
 	add(_window, "window", "selectNewResearch");
 	add(_btnOK, "button", "selectNewResearch");
