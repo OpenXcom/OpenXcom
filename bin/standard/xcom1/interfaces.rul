@@ -534,10 +534,34 @@ interfaces:
         color: 241   # pink
   - type: gameOver
     elements:
-      - id: defeatText
+      - id: defeatText1
         color: 249
-      - id: victoryText
+        size: [190, 104]
+        pos: [0, 0]
+      - id: defeatText2
         color: 249
+        size: [200, 34]
+        pos: [32, 0]
+      - id: victoryText1
+        color: 249
+        size: [195, 56]
+        pos: [5, 0]
+      - id: victoryText2
+        color: 249
+        size: [232, 64]
+        pos: [88, 136]
+      - id: victoryText3
+        color: 249
+        size: [254, 48]
+        pos: [66, 152]
+      - id: victoryText4
+        color: 249
+        size: [300, 200]
+        pos: [5, 0]
+      - id: victoryText5
+        color: 249
+        size: [310, 42]
+        pos: [5, 158]
   - type: sellMenu
     palette: PAL_BASESCAPE
     elements:

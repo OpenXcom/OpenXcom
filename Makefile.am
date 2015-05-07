@@ -324,8 +324,6 @@ openxcom_SOURCES = \
 	src/Geoscape/CraftErrorState.h \
 	src/Geoscape/CraftPatrolState.cpp \
 	src/Geoscape/CraftPatrolState.h \
-	src/Geoscape/DefeatState.cpp \
-	src/Geoscape/DefeatState.h \
 	src/Geoscape/DogfightState.cpp \
 	src/Geoscape/DogfightState.h \
 	src/Geoscape/FundingState.cpp \
@@ -364,14 +362,14 @@ openxcom_SOURCES = \
 	src/Geoscape/ResearchRequiredState.h \
 	src/Geoscape/SelectDestinationState.cpp \
 	src/Geoscape/SelectDestinationState.h \
+	src/Geoscape/SlideshowState.cpp \
+	src/Geoscape/SlideshowState.h \
 	src/Geoscape/TargetInfoState.cpp \
 	src/Geoscape/TargetInfoState.h \
 	src/Geoscape/UfoDetectedState.cpp \
 	src/Geoscape/UfoDetectedState.h \
 	src/Geoscape/UfoLostState.cpp \
 	src/Geoscape/UfoLostState.h \
-	src/Geoscape/VictoryState.cpp \
-	src/Geoscape/VictoryState.h \
 	src/Interface/ArrowButton.cpp \
 	src/Interface/ArrowButton.h \
 	src/Interface/Bar.cpp \

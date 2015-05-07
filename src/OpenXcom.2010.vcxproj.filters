@@ -657,10 +657,7 @@
     <ClCompile Include="Geoscape\BaseDefenseState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Geoscape\VictoryState.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
-    <ClCompile Include="Geoscape\DefeatState.cpp">
+    <ClCompile Include="Geoscape\SlideshowState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
     <ClCompile Include="Menu\DeleteGameState.cpp">
@@ -1587,10 +1584,7 @@
     <ClInclude Include="Geoscape\BaseDefenseState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="Geoscape\VictoryState.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="Geoscape\DefeatState.h">
+    <ClInclude Include="Geoscape\SlideshowState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
     <ClInclude Include="Menu\DeleteGameState.h">

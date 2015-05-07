@@ -2,3 +2,38 @@ cutscenes:
   - type: intro
     videos:
       - UFOINTRO/UFOINT.FLI
+  - type: wingame
+    slideshow:
+      defaults:
+        durationSeconds: 30
+        captionCategory: "gameOver"
+        musicId: "GMWIN"
+      slides:
+        - imagePath: "UFOINTRO/PICT1.LBM"
+          captionId: "victoryText1"
+          caption: STR_VICTORY_1
+        - imagePath: "UFOINTRO/PICT2.LBM"
+          captionId: "victoryText2"
+          caption: STR_VICTORY_2
+        - imagePath: "UFOINTRO/PICT3.LBM"
+          captionId: "victoryText3"
+          caption: STR_VICTORY_3
+        - imagePath: "UFOINTRO/PICT6.LBM"
+          captionId: "victoryText4"
+          caption: STR_VICTORY_4
+        - imagePath: "UFOINTRO/PICT7.LBM"
+          captionId: "victoryText5"
+          caption: STR_VICTORY_5
+  - type: losegame
+    slideshow:
+      defaults:
+        durationSeconds: 30
+        captionCategory: "gameOver"
+        musicId: "GMLOSE"
+      slides:
+        - imagePath: "UFOINTRO/PICT4.LBM"
+          captionId: "defeatText1"
+          caption: STR_GAME_OVER_1
+        - imagePath: "UFOINTRO/PICT5.LBM"
+          captionId: "defeatText2"
+          caption: STR_GAME_OVER_2

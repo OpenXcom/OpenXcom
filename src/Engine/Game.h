@@ -69,6 +69,10 @@ public:
 	void run();
 	/// Quits the game.
 	void quit();
+	/// Show final win sequence.
+	void win();
+	/// Show final lose sequence.
+	void lose();
 	/// Sets the game's audio volume.
 	void setVolume(int sound, int music, int ui);
 	/// Adjusts a linear volume level to an exponential one.

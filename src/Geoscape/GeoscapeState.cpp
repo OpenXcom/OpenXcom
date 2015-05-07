@@ -102,7 +102,6 @@
 #include "../Ruleset/Armor.h"
 #include "BaseDefenseState.h"
 #include "BaseDestroyedState.h"
-#include "DefeatState.h"
 #include "../Menu/LoadGameState.h"
 #include "../Menu/SaveGameState.h"
 #include "../Menu/ListSaveState.h"
@@ -659,6 +658,11 @@ void GeoscapeState::timeAdvance()
 	_globe->draw();
 }
 
+class _LoseGameState : public State
+{
+public:	void think() { _game->lose(); }
+};
+
 /**
  * Takes care of any game logic that has to
  * run every game second, like craft movement.
@@ -668,7 +672,7 @@ void GeoscapeState::time5Seconds()
 	// Game over if there are no more bases.
 	if (_game->getSavedGame()->getBases()->empty())
 	{
-		popup(new DefeatState);
+		popup(new _LoseGameState);
 		return;
 	}
 

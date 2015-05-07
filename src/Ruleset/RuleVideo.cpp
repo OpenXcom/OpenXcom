@@ -29,25 +29,52 @@ RuleVideo::~RuleVideo()
 {
 }
 
+static void _loadSlide(SlideshowSlide &slide, const YAML::Node &node, const SlideshowSlide &defaults)
+{
+	slide.caption = node["caption"].as<std::string>(defaults.caption);
+	slide.captionCategory = node["captionCategory"].as<std::string>(defaults.captionCategory);
+	slide.captionId = node["captionId"].as<std::string>(defaults.captionId);
+	slide.durationSeconds = node["durationSeconds"].as<int>(defaults.durationSeconds);
+	slide.imagePath = node["imagePath"].as<std::string>(defaults.imagePath);
+	slide.musicId = node["musicId"].as<std::string>(defaults.musicId);
+}
+
 void RuleVideo::load(const YAML::Node &node)
 {
-	if(const YAML::Node &videos = node["videos"])
+	if (const YAML::Node &videos = node["videos"])
 	{
-		for(YAML::const_iterator i = videos.begin(); i != videos.end(); ++i)
+		for (YAML::const_iterator i = videos.begin(); i != videos.end(); ++i)
 			_videos.push_back((*i).as<std::string>());
 	}
 
-	// Slides
-	/*if(const YAML::Node &slides = node["slides"])
+	if (const YAML::Node &slideshow = node["slideshow"])
 	{
-	for(YAML::const_iterator i = slides.begin(); i != slides.end(); ++i)
-			_slides.push_back(*i).as<std::string>());
-	}*/
+		SlideshowSlide def;
+		def.durationSeconds = 30;
+
+		if (slideshow["defaults"].IsDefined())
+		{
+			_loadSlide(def, slideshow["defaults"], def);
+		}
+
+		const YAML::Node &slides = slideshow["slides"];
+		for (YAML::const_iterator i = slides.begin(); i != slides.end(); ++i)
+		{
+			SlideshowSlide slide;
+			_loadSlide(slide, *i, def);
+			_slides.push_back(slide);
+		}
+	}
 }
 
 const std::vector<std::string> * RuleVideo::getVideos() const
 {
 	return &_videos;
+}
+
+const std::vector<SlideshowSlide> * RuleVideo::getSlides() const
+{
+	return &_slides;
 }
 
 }

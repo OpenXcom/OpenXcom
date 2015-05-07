@@ -26,18 +26,28 @@
 
 namespace OpenXcom
 {
+struct SlideshowSlide
+{
+	std::string imagePath; // relative path
+	std::string musicId; // just the extension-less filename, like "GMWIN"
+	int durationSeconds; // number of seconds to show the slide
+	std::string caption; // STR id of caption text
+	std::string captionId; // styling id
+	std::string captionCategory; // styling category
+};
+
 class RuleVideo
 {
 private:
 	std::string _id;
 	std::vector<std::string> _videos;
-	//std::vector<std::string> _slides;
+	std::vector<SlideshowSlide> _slides;
 public:
 	RuleVideo(const std::string &type);
 	~RuleVideo();
 	void load(const YAML::Node &node);
 	const std::vector<std::string> * getVideos() const;
-
+	const std::vector<SlideshowSlide> * getSlides() const;
 };
 
 }

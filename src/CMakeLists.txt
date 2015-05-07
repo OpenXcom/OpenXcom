@@ -344,10 +344,8 @@ set ( geoscape_src
   Geoscape/MissionDetectedState.cpp
   Geoscape/NewPossibleManufactureState.h
   Geoscape/NewPossibleManufactureState.cpp
-  Geoscape/VictoryState.h
-  Geoscape/VictoryState.cpp
-  Geoscape/DefeatState.h
-  Geoscape/DefeatState.cpp
+  Geoscape/SlideshowState.h
+  Geoscape/SlideshowState.cpp
   Geoscape/ResearchRequiredState.h
   Geoscape/ResearchRequiredState.cpp
 )

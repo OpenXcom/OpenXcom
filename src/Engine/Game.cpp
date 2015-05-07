@@ -30,6 +30,8 @@
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "../Resource/ResourcePack.h"
+#include "../Geoscape/SlideshowState.h"
+#include "../Menu/MainMenuState.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/SavedGame.h"
 #include "Palette.h"
@@ -328,6 +330,51 @@ void Game::quit()
 		_save->save(filename);
 	}
 	_quit = true;
+}
+
+static void _endGame(Game *game)
+{
+	if (game->getSavedGame() && game->getSavedGame()->isIronman() && !game->getSavedGame()->getName().empty())
+	{
+		std::string filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(game->getSavedGame()->getName())) + ".sav";
+		CrossPlatform::deleteFile(Options::getUserFolder() + filename);
+	}
+	game->setSavedGame(0);
+}
+
+class _GoToMainMenuState : public State
+{
+public: void think() { _game->setState(new MainMenuState); }
+};
+
+void Game::win()
+{
+	_endGame(this);
+	setState(new _GoToMainMenuState);
+
+	const std::map<std::string, RuleVideo*> *videoRulesets = _rules->getVideos();
+	std::map<std::string, RuleVideo*>::const_iterator videoRuleIt = videoRulesets->find("wingame");
+
+	if (videoRuleIt != videoRulesets->end())
+	{
+		const RuleVideo *videoRule = videoRuleIt->second;
+		pushState(new SlideshowState(videoRule->getSlides()));
+	}
+}
+
+void Game::lose()
+{
+	_endGame(this);
+	setState(new _GoToMainMenuState);
+
+	const std::map<std::string, RuleVideo*> *videoRulesets = _rules->getVideos();
+	std::map<std::string, RuleVideo*>::const_iterator videoRuleIt = videoRulesets->find("losegame");
+
+	if (videoRuleIt != videoRulesets->end())
+	{
+		const RuleVideo *videoRule = videoRuleIt->second;
+		pushState(new SlideshowState(videoRule->getSlides()));
+	}
 }
 
 /**
