@@ -276,7 +276,7 @@ Ruleset::~Ruleset()
 
 void Ruleset::loadModRulesets(const std::vector<std::string> &rulesetFiles, size_t modIdx)
 {
-	size_t spriteOffset = 1000000 * modIdx;
+	size_t spriteOffset = 1000 * modIdx;
 
 	for (std::vector<std::string>::const_iterator i = rulesetFiles.begin(); i != rulesetFiles.end(); ++i)
 	{
