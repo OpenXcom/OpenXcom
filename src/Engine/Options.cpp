@@ -654,6 +654,32 @@ std::string getActiveMaster()
 	return curMaster;
 }
 
+static void _loadMod(const ModInfo &modInfo, std::set<std::string> circDepCheck)
+{
+	if (circDepCheck.end() != circDepCheck.find(modInfo.getId()))
+	{
+		Log(LOG_WARNING) << "circular dependency found in master chain: " << modInfo.getId();
+		return;
+	}
+	
+	FileMap::load(modInfo.getPath());
+	for (std::vector<std::string>::const_iterator i = modInfo.getExternalResourceDirs().begin(); i != modInfo.getExternalResourceDirs().end(); ++i)
+	{
+		// always ignore ruleset files in external resource dirs
+		FileMap::load(CrossPlatform::searchDataFolder(*i), true);
+	}
+
+	// if this is a master but it has a master of its own, allow it to
+	// chainload the "super" master, including its rulesets
+	if (modInfo.isMaster() && !modInfo.getMaster().empty())
+	{
+		// add self to circDepCheck so we can avoid circular dependencies
+		circDepCheck.insert(modInfo.getId());
+		const ModInfo &masterInfo = _modInfos.find(modInfo.getMaster())->second;
+		_loadMod(masterInfo, circDepCheck);
+	}
+}
+
 void mapResources()
 {
 	Log(LOG_INFO) << "Mapping resource files...";
@@ -668,19 +694,15 @@ void mapResources()
 			continue;
 		}
 
-		ModInfo modInfo = _modInfos.find(i->first)->second;
+		const ModInfo &modInfo = _modInfos.find(i->first)->second;
 		if (!modInfo.isMaster() && !modInfo.getMaster().empty() && modInfo.getMaster() != curMaster)
 		{
 			Log(LOG_DEBUG) << "skipping mod for non-current master: " << i->first << "(" << modInfo.getMaster() << " != " << curMaster << ")";
 			continue;
 		}
 
-		FileMap::load(modInfo.getPath());
-		for (std::vector<std::string>::const_iterator j = modInfo.getExternalResourceDirs().begin(); j != modInfo.getExternalResourceDirs().end(); ++j)
-		{
-			// always ignore ruleset files in external resource dirs
-			FileMap::load(CrossPlatform::searchDataFolder(*j), true);
-		}
+		std::set<std::string> circDepCheck;
+		_loadMod(modInfo, circDepCheck);
 	}
 	// pick up stuff in common
 	FileMap::load(CrossPlatform::searchDataFolder("common"), true);
