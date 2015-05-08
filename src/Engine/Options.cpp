@@ -575,7 +575,9 @@ bool init(int argc, char *argv[])
 					}
 					else
 					{
-						if (inactiveMaster.empty())
+						// prefer activating standard masters over a possibly broken
+						// third party master
+						if (inactiveMaster.empty() || j->first == "xcom1" || j->first == "xcom2")
 						{
 							inactiveMaster = j->first;
 						}
