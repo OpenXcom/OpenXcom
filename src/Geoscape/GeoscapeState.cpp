@@ -105,6 +105,7 @@
 #include "../Menu/LoadGameState.h"
 #include "../Menu/SaveGameState.h"
 #include "../Menu/ListSaveState.h"
+#include "../Menu/CutsceneState.h"
 #include "../Ruleset/AlienRace.h"
 #include "../Ruleset/RuleGlobe.h"
 
@@ -1499,7 +1500,7 @@ void GeoscapeState::time1Day()
 							research->getName()
 						)->getArmor()
 					)->getCorpseGeoscape()
-				); // ;)
+				);
 			}
 			if (!(*iter)->getRules()->getGetOneFree().empty())
 			{
@@ -1541,6 +1542,14 @@ void GeoscapeState::time1Day()
 			if (!research->getLookup().empty())
 			{
 				_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset());
+			}
+			if (!research->getCutscene().empty())
+			{
+				popup(new CutsceneState(research->getCutscene()));
+			}
+			if (bonus && !bonus->getCutscene().empty())
+			{
+				popup(new CutsceneState(bonus->getCutscene()));
 			}
 			popup(new ResearchCompleteState(newResearch, bonus));
 			std::vector<RuleResearch *> newPossibleResearch;
