@@ -664,7 +664,7 @@ openxcom_SOURCES = \
 	src/pch.cpp \
 	src/pch.h \
 	src/resource.h \
-	src/version.h \
+	src/version.h
 
 EXTRA_DIST = \
 	autogen.sh \
