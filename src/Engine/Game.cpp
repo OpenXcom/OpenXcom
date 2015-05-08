@@ -560,8 +560,9 @@ void Game::loadRulesets()
 			}
 			Options::save();
 
-			throw Exception("failed to load ruleset from mod " +
-				modId + " (" + std::string(e.what()) +
+			throw Exception("failed to load ruleset from mod '" +
+				Options::getModInfos().at(modId).getName() +
+				"' (" + std::string(e.what()) +
 				"); disabling mod for next startup");
 		}
 	}
