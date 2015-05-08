@@ -662,11 +662,11 @@ static void _loadMod(const ModInfo &modInfo, std::set<std::string> circDepCheck)
 		return;
 	}
 	
-	FileMap::load(modInfo.getPath());
+	FileMap::load(modInfo.getId(), modInfo.getPath(), false);
 	for (std::vector<std::string>::const_iterator i = modInfo.getExternalResourceDirs().begin(); i != modInfo.getExternalResourceDirs().end(); ++i)
 	{
 		// always ignore ruleset files in external resource dirs
-		FileMap::load(CrossPlatform::searchDataFolder(*i), true);
+		FileMap::load(modInfo.getId(), CrossPlatform::searchDataFolder(*i), true);
 	}
 
 	// if this is a master but it has a master of its own, allow it to
@@ -705,7 +705,7 @@ void mapResources()
 		_loadMod(modInfo, circDepCheck);
 	}
 	// pick up stuff in common
-	FileMap::load(CrossPlatform::searchDataFolder("common"), true);
+	FileMap::load("", CrossPlatform::searchDataFolder("common"), true);
 }
 
 /**
