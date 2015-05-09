@@ -142,7 +142,7 @@ static void _mapFiles(const std::string &modId, const std::string &basePath,
 			// allow old mod directory format -- if the top-level subdir
 			// is named "Ruleset" and no top-level ruleset files were found,
 			// record ruleset files in that subdirectory, otherwise ignore them
-			bool ignoreRulesetsRecurse =
+			bool ignoreRulesetsRecurse = ignoreRulesets ||
 				!rulesetFiles.empty() || !relPath.empty() || _canonicalize(*i) != "ruleset";
 			_mapFiles(modId, basePath, _combinePath(relPath, *i), ignoreRulesetsRecurse);
 			continue;
