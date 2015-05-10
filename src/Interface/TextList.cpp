@@ -997,9 +997,9 @@ void TextList::handle(Action *action, State *state)
 			// arrows for first partially-visible line of text are off-screen; don't process them
 			++startArrowIdx;
 		}
-		size_t endArrowIdx = startArrowIdx + 1;
-		size_t endRow = std::min(_rows.size(), _scroll + _visibleRows - 1);
-		for (size_t i = std::max((size_t)1, _scroll + 1); i < endRow; ++i)
+		size_t endArrowIdx = _rows[_scroll] + 1;
+		size_t endRow = std::min(_rows.size(), _scroll + _visibleRows);
+		for (size_t i = _scroll + 1; i < endRow; ++i)
 		{
 			if (_rows[i] != _rows[i - 1])
 			{
