@@ -294,7 +294,7 @@ static bool _tftdIsInstalled()
 {
 	// ensure both the resource data and the mod data is in place
 	return CrossPlatform::fileExists(CrossPlatform::searchDataFile("TFTD/TERRAIN/SEA.PCK"))
-		&& CrossPlatform::fileExists(CrossPlatform::searchDataFile("standard/xcom2/Language/en-US.yml"));
+		&& CrossPlatform::fileExists(CrossPlatform::searchDataFile("standard/xcom2/Xcom2Ruleset.rul"));
 }
 
 static void _setDefaultMods()
