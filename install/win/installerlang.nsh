@@ -20,7 +20,7 @@ LangString DESC_SecPatch ${LANG_ENGLISH} "Fixes errors in the X-COM 1 data. Reco
 LangString NAME_SecPortable ${LANG_ENGLISH} "Portable Installation"
 LangString DESC_SecPortable ${LANG_ENGLISH} "Puts all ${GAME_NAME} files in the same folder, making a portable installation."
 LangString NAME_SecSteam ${LANG_ENGLISH} "Launch from Steam"
-LangString DESC_SecSteam ${LANG_ENGLISH} "Replaces your Steam X-COM 1 installation with ${GAME_NAME}. Uninstall restores it."
+LangString DESC_SecSteam ${LANG_ENGLISH} "Replaces your Steam X-COM 1 installation with ${GAME_NAME}. Uninstalling restores it."
 LangString NAME_SecDesktop ${LANG_ENGLISH} "Desktop Shortcut"
 LangString DESC_SecDesktop ${LANG_ENGLISH} "Creates a shortcut in the desktop to play ${GAME_NAME}."
 
@@ -28,9 +28,9 @@ LangString DESC_SecDesktop ${LANG_ENGLISH} "Creates a shortcut in the desktop to
 ;Uninstaller Descriptions
 
 LangString NAME_UnData ${LANG_ENGLISH} "Delete X-COM Data"
-LangString DESC_UnData ${LANG_ENGLISH} "Deletes all ${GAME_NAME} data, including mods and X-COM resources. Recommended for a clean reinstall."
+LangString DESC_UnData ${LANG_ENGLISH} "Deletes all ${GAME_NAME} data, including X-COM resources. Recommended for a clean reinstall."
 LangString NAME_UnUser ${LANG_ENGLISH} "Delete User Data"
-LangString DESC_UnUser ${LANG_ENGLISH} "Deletes all ${GAME_NAME} user data, including savegames, screenshots and options. Recommended for a complete wipe."
+LangString DESC_UnUser ${LANG_ENGLISH} "Deletes all ${GAME_NAME} user data, including mods, savegames, screenshots and options. Only use this for a complete wipe."
 
 ;--------------------------------
 ;Shortcuts
