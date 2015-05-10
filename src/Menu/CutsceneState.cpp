@@ -62,7 +62,7 @@ void CutsceneState::init()
 	}
 	else if (!videoRule->getSlides()->empty())
 	{
-		_game->pushState(new SlideshowState(videoRule->getSlides()));
+		_game->pushState(new SlideshowState(videoRule->getSlideshowHeader(), videoRule->getSlides()));
 	}
 	else
 	{

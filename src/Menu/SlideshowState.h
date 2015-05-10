@@ -35,6 +35,7 @@ class Timer;
 class SlideshowState : public State
 {
 private:
+	const SlideshowHeader &_slideshowHeader;
 	const std::vector<SlideshowSlide> *_slideshowSlides;
 	bool _wasLetterboxed;
 	std::vector<InteractiveSurface *> _slides;
@@ -43,7 +44,7 @@ private:
 	Timer *_transitionTimer;
 public:
 	/// Creates the Slideshow state.
-	SlideshowState(const std::vector<SlideshowSlide> *slideshowRule);
+	SlideshowState(const SlideshowHeader &slideshowHeader, const std::vector<SlideshowSlide> *slideshowRule);
 	/// Cleans up the Slideshow state.
 	~SlideshowState();
 	/// Handle timers.

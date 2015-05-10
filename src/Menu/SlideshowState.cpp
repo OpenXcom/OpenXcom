@@ -30,8 +30,9 @@
 namespace OpenXcom
 {
 
-SlideshowState::SlideshowState(const std::vector<SlideshowSlide> *slideshowSlides)
-		: _slideshowSlides(slideshowSlides), _curScreen(-1)
+SlideshowState::SlideshowState(const SlideshowHeader &slideshowHeader,
+			       const std::vector<SlideshowSlide> *slideshowSlides)
+		: _slideshowHeader(slideshowHeader), _slideshowSlides(slideshowSlides), _curScreen(-1)
 {
 	_wasLetterboxed = CutsceneState::initDisplay();
 
@@ -49,18 +50,21 @@ SlideshowState::SlideshowState(const std::vector<SlideshowSlide> *slideshowSlide
 
 		// initialize with default rect; may get overridden by
 		// category/id definition
-		Text *caption = new Text(Screen::ORIGINAL_WIDTH - 10, 18, 5, Screen::ORIGINAL_HEIGHT - 27);
+		Text *caption = new Text(it->w, it->h, it->x, it->y);
+		caption->setColor(it->color);
 		caption->setText(tr(it->caption));
 		caption->setWordWrap(true);
 		caption->setVisible(false);
 		_captions.push_back(caption);
-		add(caption, it->captionId, it->captionCategory, slide);
+		add(caption);
 	}
 
 	centerAllSurfaces();
 
-	_transitionTimer = new Timer(0);
+	_transitionTimer = new Timer(slideshowHeader.transitionSeconds * 1000);
 	_transitionTimer->onTimer((StateHandler)&SlideshowState::screenTimer);
+
+	_game->getResourcePack()->playMusic(slideshowHeader.musicId);
 
 	screenClick(0);
 }
@@ -102,23 +106,7 @@ void SlideshowState::screenClick(Action *)
 	// next screen
 	if (_curScreen < _slideshowSlides->size())
 	{
-		_transitionTimer->setInterval(_slideshowSlides->at(_curScreen).durationSeconds * 1000);
 		_transitionTimer->start();
-
-		// if music same as previous slide, music keeps playing uninterrupted
-		// otherwise start playing new music
-		bool playNewMusic = true;
-		std::string curMusicFile = _slideshowSlides->at(_curScreen).musicId;
-		if (_curScreen > 0)
-		{
-			std::string prevMusicFile = _slideshowSlides->at(_curScreen - 1).musicId;
-			playNewMusic = (prevMusicFile != curMusicFile);
-		}
-		if (playNewMusic)
-		{
-			_game->getResourcePack()->playMusic(curMusicFile);
-		}
-
 		setPalette(_slides[_curScreen]->getPalette());
 		_slides[_curScreen]->setVisible(true);
 		_captions[_curScreen]->setVisible(true);

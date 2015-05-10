@@ -26,14 +26,17 @@
 
 namespace OpenXcom
 {
+struct SlideshowHeader
+{
+	std::string musicId; // just the extension-less filename, like "GMWIN"
+	int transitionSeconds; // number of seconds to show each slide
+};
+
 struct SlideshowSlide
 {
-	std::string imagePath; // relative path
-	std::string musicId; // just the extension-less filename, like "GMWIN"
-	int durationSeconds; // number of seconds to show the slide
+	std::string imagePath; // relative path to slide image
 	std::string caption; // STR id of caption text
-	std::string captionId; // styling id
-	std::string captionCategory; // styling category
+	int w, h, x, y, color; // caption rect and color info
 };
 
 class RuleVideo
@@ -42,6 +45,7 @@ private:
 	std::string _id;
 	bool _useUfoAudioSequence;
 	std::vector<std::string> _videos;
+	SlideshowHeader _slideshowHeader;
 	std::vector<SlideshowSlide> _slides;
 public:
 	RuleVideo(const std::string &type);
@@ -51,6 +55,7 @@ public:
 	/// should only ever be true for the vanilla UFO intro cutscene
 	bool useUfoAudioSequence() const;
 	const std::vector<std::string> * getVideos() const;
+	const SlideshowHeader & getSlideshowHeader() const;
 	const std::vector<SlideshowSlide> * getSlides() const;
 };
 

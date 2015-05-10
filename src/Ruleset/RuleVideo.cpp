@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleVideo.h"
+#include "../Engine/Screen.h"
 
 namespace OpenXcom
 {
@@ -29,14 +30,21 @@ RuleVideo::~RuleVideo()
 {
 }
 
-static void _loadSlide(SlideshowSlide &slide, const YAML::Node &node, const SlideshowSlide &defaults)
+static void _loadSlide(SlideshowSlide &slide, const YAML::Node &node)
 {
-	slide.caption = node["caption"].as<std::string>(defaults.caption);
-	slide.captionCategory = node["captionCategory"].as<std::string>(defaults.captionCategory);
-	slide.captionId = node["captionId"].as<std::string>(defaults.captionId);
-	slide.durationSeconds = node["durationSeconds"].as<int>(defaults.durationSeconds);
-	slide.imagePath = node["imagePath"].as<std::string>(defaults.imagePath);
-	slide.musicId = node["musicId"].as<std::string>(defaults.musicId);
+	slide.imagePath = node["imagePath"].as<std::string>("");
+	slide.caption = node["caption"].as<std::string>("");
+
+	std::pair<int, int> size = node["captionSize"].as<std::pair<int, int> >(
+		std::pair<int, int>(Screen::ORIGINAL_WIDTH, Screen::ORIGINAL_HEIGHT));
+	slide.w = size.first;
+	slide.h = size.second;
+
+	std::pair<int, int> pos = node["captionPos"].as<std::pair<int, int> >(std::pair<int, int>(0, 0));
+	slide.x = pos.first;
+	slide.y = pos.second;
+
+	slide.color = node["captionColor"].as<int>(INT_MAX);
 }
 
 void RuleVideo::load(const YAML::Node &node)
@@ -51,19 +59,14 @@ void RuleVideo::load(const YAML::Node &node)
 
 	if (const YAML::Node &slideshow = node["slideshow"])
 	{
-		SlideshowSlide def;
-		def.durationSeconds = 30;
-
-		if (slideshow["defaults"].IsDefined())
-		{
-			_loadSlide(def, slideshow["defaults"], def);
-		}
+		_slideshowHeader.musicId = slideshow["musicId"].as<std::string>("");
+		_slideshowHeader.transitionSeconds = slideshow["transitionSeconds"].as<int>(30);
 
 		const YAML::Node &slides = slideshow["slides"];
 		for (YAML::const_iterator i = slides.begin(); i != slides.end(); ++i)
 		{
 			SlideshowSlide slide;
-			_loadSlide(slide, *i, def);
+			_loadSlide(slide, *i);
 			_slides.push_back(slide);
 		}
 	}
@@ -77,6 +80,11 @@ bool RuleVideo::useUfoAudioSequence() const
 const std::vector<std::string> * RuleVideo::getVideos() const
 {
 	return &_videos;
+}
+
+const SlideshowHeader & RuleVideo::getSlideshowHeader() const
+{
+	return _slideshowHeader;
 }
 
 const std::vector<SlideshowSlide> * RuleVideo::getSlides() const
