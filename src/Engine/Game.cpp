@@ -560,16 +560,36 @@ void Game::loadRulesets()
 	Ruleset::resetGlobalStatics();
 	delete _rules;
 	_rules = new Ruleset();
-	const std::vector< std::vector<std::string> > &rulesets(FileMap::getRulesets());
-	for (int i = 0; rulesets.size() > i; ++i)
+	const std::vector<std::pair<std::string, std::vector<std::string> > > &rulesets(FileMap::getRulesets());
+	for (size_t i = 0; rulesets.size() > i; ++i)
 	{
 		try
 		{
-			_rules->loadModRulesets(rulesets[i], i);
+			_rules->loadModRulesets(rulesets[i].second, i);
 		}
 		catch (YAML::Exception &e)
 		{
-			throw Exception("failed to load ruleset: " + std::string(e.what()));
+			const std::string &modId = rulesets[i].first;
+			Log(LOG_WARNING) << "disabling mod with invalid ruleset: " << modId;
+			std::vector<std::pair<std::string, bool> >::iterator it =
+				std::find(Options::mods.begin(), Options::mods.end(),
+					  std::pair<std::string, bool>(modId, true));
+			if (it == Options::mods.end())
+			{
+				Log(LOG_ERROR) << "cannot find broken mod in mods list: " << modId;
+				Log(LOG_ERROR) << "clearing mods list";
+				Options::mods.clear();
+			}
+			else
+			{
+				it->second = false;
+			}
+			Options::save();
+
+			throw Exception("failed to load ruleset from mod '" +
+				Options::getModInfos().at(modId).getName() +
+				"' (" + std::string(e.what()) +
+				"); disabling mod for next startup");
 		}
 	}
 	_rules->sortLists();

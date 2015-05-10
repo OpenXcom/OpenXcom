@@ -1069,12 +1069,12 @@ bool XcomResourcePack::isImageFile(std::string extension)
 Music *XcomResourcePack::loadMusic(MusicFormat fmt, const std::string &file, int track, float volume, CatFile *adlibcat, CatFile *aintrocat, GMCatFile *gmcat)
 {
 	/* MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI */
-	static const std::string exts[] = {"", "flac", "ogg", "mp3", "mod", "wav", "", "mid"};
+	static const std::string exts[] = {"", ".flac", ".ogg", ".mp3", ".mod", ".wav", "", ".mid"};
 	Music *music = 0;
 	std::set<std::string> soundContents = FileMap::getVFolderContents("SOUND");
 	try
 	{
-		std::string fname = file + "." + exts[fmt];
+		std::string fname = file + exts[fmt];
 		std::transform(fname.begin(), fname.end(), fname.begin(), tolower);
 
 		// Try Adlib music

@@ -28,10 +28,10 @@ namespace OpenXcom
 namespace FileMap
 {
 
-static std::vector< std::vector<std::string> >        _rulesets;
-static std::map<std::string, std::string>             _resources;
+static std::vector<std::pair<std::string, std::vector<std::string> > > _rulesets;
+static std::map<std::string, std::string> _resources;
 static std::map< std::string, std::set<std::string> > _vdirs;
-static std::set<std::string>                          _emptySet;
+static std::set<std::string> _emptySet;
 
 static std::string _canonicalize(const std::string &in)
 {
@@ -91,7 +91,7 @@ std::set<std::string> _filterFiles(const T &files, const std::string &ext)
 std::set<std::string> filterFiles(const std::vector<std::string> &files, const std::string &ext) { return _filterFiles(files, ext); }
 std::set<std::string> filterFiles(const std::set<std::string>    &files, const std::string &ext) { return _filterFiles(files, ext); }
 
-const std::vector< std::vector<std::string> > &getRulesets()
+const std::vector<std::pair<std::string, std::vector<std::string> > > &getRulesets()
 {
 	return _rulesets;
 }
@@ -107,7 +107,8 @@ static std::string _combinePath(const std::string &prefixPath, const std::string
 	return ret;
 }
 
-static void _mapFiles(const std::string &basePath, const std::string &relPath, bool ignoreRulesets)
+static void _mapFiles(const std::string &modId, const std::string &basePath,
+		      const std::string &relPath, bool ignoreRulesets)
 {
 	std::string fullDir = basePath + (relPath.length() ? "/" + relPath : "");
 	std::vector<std::string> files = CrossPlatform::getFolderContents(fullDir);
@@ -115,12 +116,12 @@ static void _mapFiles(const std::string &basePath, const std::string &relPath, b
 
 	if (!ignoreRulesets && rulesetFiles.size())
 	{
-		_rulesets.insert(_rulesets.begin(), std::vector<std::string>());
+		_rulesets.insert(_rulesets.begin(), std::pair<std::string, std::vector<std::string> >(modId, std::vector<std::string>()));
 		for (std::set<std::string>::iterator i = rulesetFiles.begin(); i != rulesetFiles.end(); ++i)
 		{
 			std::string fullpath = fullDir + "/" + *i;
 			Log(LOG_DEBUG) << "  recording ruleset: " << fullpath;
-			_rulesets.front().push_back(fullpath);
+			_rulesets.front().second.push_back(fullpath);
 		}
 	}
 
@@ -141,9 +142,9 @@ static void _mapFiles(const std::string &basePath, const std::string &relPath, b
 			// allow old mod directory format -- if the top-level subdir
 			// is named "Ruleset" and no top-level ruleset files were found,
 			// record ruleset files in that subdirectory, otherwise ignore them
-			bool ignoreRulesetsRecurse =
+			bool ignoreRulesetsRecurse = ignoreRulesets ||
 				!rulesetFiles.empty() || !relPath.empty() || _canonicalize(*i) != "ruleset";
-			_mapFiles(basePath, _combinePath(relPath, *i), ignoreRulesetsRecurse);
+			_mapFiles(modId, basePath, _combinePath(relPath, *i), ignoreRulesetsRecurse);
 			continue;
 		}
 
@@ -179,10 +180,10 @@ void clear()
 	_vdirs.clear();
 }
 
-void load(const std::string &path, bool ignoreRulesets)
+void load(const std::string &modId, const std::string &path, bool ignoreRulesets)
 {
 	Log(LOG_INFO) << "  mapping resources in: " << path;
-	_mapFiles(path, "", ignoreRulesets);
+	_mapFiles(modId, path, "", ignoreRulesets);
 }
 
 }

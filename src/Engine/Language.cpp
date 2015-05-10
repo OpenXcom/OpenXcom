@@ -21,6 +21,7 @@
 #include <locale>
 #include <fstream>
 #include <cassert>
+#include <set>
 #include "CrossPlatform.h"
 #include "FileMap.h"
 #include "Logger.h"
@@ -469,12 +470,18 @@ std::wstring Language::getName() const
 const LocalizedText &Language::getString(const std::string &id) const
 {
 	static LocalizedText hack(L"");
+	static std::set<std::string> notFoundIds;
 	if (id.empty())
 		return hack;
 	std::map<std::string, LocalizedText>::const_iterator s = _strings.find(id);
 	if (s == _strings.end())
 	{
-		Log(LOG_WARNING) << id << " not found in " << Options::language;
+		// only output the warning once so as not to spam the logs
+		if (notFoundIds.end() == notFoundIds.find(id))
+		{
+			notFoundIds.insert(id);
+			Log(LOG_WARNING) << id << " not found in " << Options::language;
+		}
 		hack = LocalizedText(utf8ToWstr(id));
 		return hack;
 	}
