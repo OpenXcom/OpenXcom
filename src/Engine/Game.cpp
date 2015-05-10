@@ -535,7 +535,7 @@ void Game::loadRulesets()
 	delete _rules;
 	_rules = new Ruleset();
 	const std::vector<std::pair<std::string, std::vector<std::string> > > &rulesets(FileMap::getRulesets());
-	for (int i = 0; rulesets.size() > i; ++i)
+	for (size_t i = 0; rulesets.size() > i; ++i)
 	{
 		try
 		{
