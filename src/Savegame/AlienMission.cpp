@@ -444,11 +444,19 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 		}
 		else
 		{
-			// Set timer for UFO on the ground.
-			ufo.setSecondsRemaining(trajectory.groundTimer()*5);
-			if (ufo.getDetected() && ufo.getLandId() == 0)
+			if (globe.insideLand(ufo.getLongitude(), ufo.getLatitude()))
 			{
-				ufo.setLandId(engine.getSavedGame()->getId("STR_LANDING_SITE"));
+				// Set timer for UFO on the ground.
+				ufo.setSecondsRemaining(trajectory.groundTimer() * 5);
+				if (ufo.getDetected() && ufo.getLandId() == 0)
+				{
+					ufo.setLandId(engine.getSavedGame()->getId("STR_LANDING_SITE"));
+				}
+			}
+			else
+			{
+				// There's nothing to land on
+				ufo.setSecondsRemaining(5);
 			}
 		}
 	}
