@@ -26,6 +26,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Options.h"
+#include "../Interface/ComboBox.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -33,6 +34,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/SavedGame.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Engine/LocalizedText.h"
 #include "SoldierInfoState.h"
@@ -40,24 +42,73 @@
 namespace OpenXcom
 {
 
+typedef int (*getStatFn_t)(Game *, Soldier *);
+
+struct SortFunctor : public std::binary_function<Soldier *, Soldier *, bool>
+{
+	Game *_game;
+	getStatFn_t _getStatFn;
+	SortFunctor(Game *game, getStatFn_t getStatFn)
+		: _game(game), _getStatFn(getStatFn) { }
+	bool operator()(Soldier *a, Soldier *b)
+	{
+		bool ret = _getStatFn(_game, a) < _getStatFn(_game, b);
+		return ret;
+	}
+};
+
+#define GET_ATTRIB_STAT_FN(attrib) \
+	int attrib##Stat(Game *game, Soldier *s) { return s->getCurrentStats()->attrib; }
+GET_ATTRIB_STAT_FN(tu)
+GET_ATTRIB_STAT_FN(stamina)
+GET_ATTRIB_STAT_FN(health)
+GET_ATTRIB_STAT_FN(bravery)
+GET_ATTRIB_STAT_FN(reactions)
+GET_ATTRIB_STAT_FN(firing)
+GET_ATTRIB_STAT_FN(throwing)
+GET_ATTRIB_STAT_FN(strength)
+int psiStrengthStat(Game *game, Soldier *s)
+{
+	// don't reveal psi strength before it would otherwise be known
+	if (s->getCurrentStats()->psiSkill > 0
+	 || (Options::psiStrengthEval
+	     && game->getSavedGame()->isResearched(game->getRuleset()->getPsiRequirements())))
+	{
+		return s->getCurrentStats()->psiStrength;
+	}
+	return 0;
+}
+GET_ATTRIB_STAT_FN(psiSkill)
+GET_ATTRIB_STAT_FN(melee)
+#undef GET_ATTRIB_STAT_FN
+#define GET_SOLDIER_STAT_FN(attrib, camelCaseAttrib) \
+	int attrib##Stat(Game *game, Soldier *s) { return s->get##camelCaseAttrib(); }
+GET_SOLDIER_STAT_FN(rank, Rank)
+GET_SOLDIER_STAT_FN(missions, Missions)
+GET_SOLDIER_STAT_FN(kills, Kills)
+GET_SOLDIER_STAT_FN(woundRecovery, WoundRecovery)
+#undef GET_SOLDIER_STAT_FN
+
 /**
  * Initializes all the elements in the Craft Soldiers screen.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  * @param craft ID of the selected craft.
  */
-CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft) :  _base(base), _craft(craft), _otherCraftColor(0)
+CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft)
+		:  _base(base), _craft(craft), _otherCraftColor(0), _origSoldierOrder(*_base->getSoldiers())
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(288, 16, 16, 176);
 	_txtTitle = new Text(300, 17, 16, 7);
-	_txtName = new Text(114, 9, 16, 32);
-	_txtRank = new Text(102, 9, 122, 32);
-	_txtCraft = new Text(84, 9, 224, 32);
-	_txtAvailable = new Text(110, 9, 16, 24);
-	_txtUsed = new Text(110, 9, 122, 24);
-	_lstSoldiers = new TextList(288, 128, 8, 40);
+	_txtName = new Text(114, 9, 16, 52);
+	_txtRank = new Text(102, 9, 122, 52);
+	_txtCraft = new Text(84, 9, 224, 52);
+	_txtAvailable = new Text(110, 9, 16, 44);
+	_txtUsed = new Text(110, 9, 122, 44);
+	_cbxSortBy = new ComboBox(this, 148, 16, 16, 24);
+	_lstSoldiers = new TextList(288, 112, 8, 60);
 
 	// Set palette
 	setInterface("craftSoldiers");
@@ -71,6 +122,7 @@ CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft) :  _base(base),
 	add(_txtAvailable, "text", "craftSoldiers");
 	add(_txtUsed, "text", "craftSoldiers");
 	add(_lstSoldiers, "list", "craftSoldiers");
+	add(_cbxSortBy, "button", "craftSoldiers");
 
 	_otherCraftColor = _game->getRuleset()->getInterface("craftSoldiers")->getElement("otherCraft")->color;
 
@@ -93,6 +145,38 @@ CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft) :  _base(base),
 
 	_txtCraft->setText(tr("STR_CRAFT"));
 
+	// populate sort options
+	std::vector<std::wstring> sortOptions;
+	sortOptions.push_back(tr("STR_ORIGINAL_ORDER"));
+	_sortFunctors.push_back(NULL);
+
+#define PUSH_IN(strId, functor) \
+	sortOptions.push_back(tr(strId)); \
+	_sortFunctors.push_back(new SortFunctor(_game, functor));
+	
+	PUSH_IN("STR_RANK", rankStat);
+	PUSH_IN("STR_MISSIONS2", missionsStat);
+	PUSH_IN("STR_KILLS2", killsStat);
+	PUSH_IN("STR_WOUND_RECOVERY2", woundRecoveryStat);
+	PUSH_IN("STR_TIME_UNITS", tuStat);
+	PUSH_IN("STR_STAMINA", staminaStat);
+	PUSH_IN("STR_HEALTH", healthStat);
+	PUSH_IN("STR_BRAVERY", braveryStat);
+	PUSH_IN("STR_REACTIONS", reactionsStat);
+	PUSH_IN("STR_FIRING_ACCURACY", firingStat);
+	PUSH_IN("STR_THROWING_ACCURACY", throwingStat);
+	PUSH_IN("STR_STRENGTH", strengthStat);
+	PUSH_IN("STR_PSIONIC_STRENGTH", psiStrengthStat);
+	PUSH_IN("STR_PSIONIC_SKILL", psiSkillStat);
+	PUSH_IN("STR_MELEE_ACCURACY", meleeStat);
+
+#undef PUSH_IN
+
+	_cbxSortBy->setOptions(sortOptions);
+	_cbxSortBy->setSelected(0);
+	_cbxSortBy->onChange((ActionHandler)&CraftSoldiersState::cbxSortByChange);
+	_cbxSortBy->setText(tr("STR_SORT_BY"));
+
 	_lstSoldiers->setArrowColumn(192, ARROW_VERTICAL);
 	_lstSoldiers->setColumns(3, 106, 102, 72);
 	_lstSoldiers->setSelectable(true);
@@ -105,10 +189,48 @@ CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft) :  _base(base),
 }
 
 /**
- *
+ * cleans up dynamic state
  */
 CraftSoldiersState::~CraftSoldiersState()
 {
+	for (std::vector<SortFunctor *>::iterator it = _sortFunctors.begin();
+		it != _sortFunctors.end(); ++it)
+	{
+		delete(*it);
+	}
+}
+
+/**
+ * Sorts the soldiers list by the selected criterion
+ * @param action Pointer to an action.
+ */
+void CraftSoldiersState::cbxSortByChange(Action *action)
+{
+	SortFunctor *compFunc = _sortFunctors[_cbxSortBy->getSelected()];
+
+	if (compFunc)
+	{
+		std::stable_sort(_base->getSoldiers()->begin(), _base->getSoldiers()->end(), *compFunc);
+	}
+	else
+	{
+		// restore original ordering, ignoring (of course) those
+		// soldiers that have been sacked since this state started
+		for (std::vector<Soldier *>::const_iterator it = _origSoldierOrder.begin();
+			it != _origSoldierOrder.end(); ++it)
+		{
+			std::vector<Soldier *>::iterator soldierIt =
+				std::find(_base->getSoldiers()->begin(), _base->getSoldiers()->end(), *it);
+			if (soldierIt != _base->getSoldiers()->end())
+			{
+				Soldier *s = *soldierIt;
+				_base->getSoldiers()->erase(soldierIt);
+				_base->getSoldiers()->insert(_base->getSoldiers()->end(), s);
+			}
+		}
+	}
+
+	initList();
 }
 
 /**
@@ -121,9 +243,9 @@ void CraftSoldiersState::btnOkClick(Action *)
 }
 
 /**
- * Shows the soldiers in a list at specified offset/scroll.
+ * Shows the soldiers in a list
  */
-void CraftSoldiersState::initList(size_t scrl)
+void CraftSoldiersState::initList()
 {
 	int row = 0;
 	_lstSoldiers->clearList();
@@ -148,8 +270,7 @@ void CraftSoldiersState::initList(size_t scrl)
 		_lstSoldiers->setRowColor(row, color);
 		row++;
 	}
-	if (scrl)
-		_lstSoldiers->scrollTo(scrl);
+
 	_lstSoldiers->draw();
 
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
@@ -161,7 +282,7 @@ void CraftSoldiersState::initList(size_t scrl)
 void CraftSoldiersState::init()
 {
 	State::init();
-	initList(0);
+	initList();
 
 }
 
@@ -183,6 +304,7 @@ void CraftSoldiersState::lstItemsLeftArrowClick(Action *action)
 			moveSoldierUp(action, row, true);
 		}
 	}
+	_cbxSortBy->setText(tr("STR_SORT_BY"));
 }
 
 /**
@@ -198,7 +320,7 @@ void CraftSoldiersState::moveSoldierUp(Action *action, unsigned int row, bool ma
 	{
 		_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 		_base->getSoldiers()->insert(_base->getSoldiers()->begin(), s);
-		initList(0);
+		initList();
 	}
 	else
 	{
@@ -212,7 +334,7 @@ void CraftSoldiersState::moveSoldierUp(Action *action, unsigned int row, bool ma
 		{
 			_lstSoldiers->scrollUp(false);
 		}
-		initList(_lstSoldiers->getScroll());
+		initList();
 	}
 }
 
@@ -235,6 +357,7 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
 			moveSoldierDown(action, row, true);
 		}
 	}
+	_cbxSortBy->setText(tr("STR_SORT_BY"));
 }
 
 /**
@@ -250,7 +373,7 @@ void CraftSoldiersState::moveSoldierDown(Action *action, unsigned int row, bool 
 	{
 		_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 		_base->getSoldiers()->insert(_base->getSoldiers()->end(), s);
-		initList(std::max(0, (int)(_lstSoldiers->getRows() - _lstSoldiers->getVisibleRows())));
+		initList();
 	}
 	else
 	{
@@ -264,7 +387,7 @@ void CraftSoldiersState::moveSoldierDown(Action *action, unsigned int row, bool 
 		{
 			_lstSoldiers->scrollDown(false);
 		}
-		initList(_lstSoldiers->getScroll());
+		initList();
 	}
 }
 

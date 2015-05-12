@@ -86,6 +86,8 @@ public:
 	/// Gets the item that is currently hovered over in the popup list, or the current
 	/// selected item if no item is hovered over.
 	size_t getHoveredListIdx() const;
+	/// Sets the button text without changing the selected option
+	void setText(const std::wstring &text);
 	/// Sets the selected option in the list.
 	void setSelected(size_t sel);
 	/// Sets the list of options.
