@@ -814,6 +814,15 @@ int Base::getFreePsiLabs() const
 }
 
 /**
+ * Return containment space not in use
+ * @return containment space not in use
+*/
+int Base::getFreeContainment() const
+{
+	return getAvailableContainment() - getUsedContainment();
+}
+
+/**
  * Returns the amount of scientists currently in use.
  * @return Amount of scientists.
 */
@@ -1123,15 +1132,12 @@ int Base::getUsedContainment() const
 			}
 		}
 	}
-	if (Options::storageLimitsEnforced)
+	for (std::vector<ResearchProject*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
 	{
-		for (std::vector<ResearchProject*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
+		const RuleResearch *projRules = (*i)->getRules();
+		if (projRules->needItem() && _rule->getUnit(projRules->getName()))
 		{
-			const RuleResearch *projRules = (*i)->getRules();
-			if (projRules->needItem() && _rule->getUnit(projRules->getName()))
-			{
-				++total;
-			}
+			++total;
 		}
 	}
 	return total;

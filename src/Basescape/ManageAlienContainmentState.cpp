@@ -50,30 +50,31 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param origin Game section that originated this state.
  */
-ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrigin origin) : _base(base), _origin(origin), _sel(0), _aliensSold(0), _researchedAliens(0)
+ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrigin origin) : _base(base), _origin(origin), _sel(0), _aliensSold(0)
 {
-	_overCrowded = Options::storageLimitsEnforced && _base->getAvailableContainment() < _base->getUsedContainment();
-
+	bool overCrowded = Options::storageLimitsEnforced && _base->getFreeContainment() < 0;
+	std::vector<std::string> researchList;
 	for (std::vector<ResearchProject*>::const_iterator iter = _base->getResearch().begin(); iter != _base->getResearch().end(); ++iter)
 	{
 		const RuleResearch *research = (*iter)->getRules();
 		if (_game->getRuleset()->getUnit(research->getName()))
 		{
-			++_researchedAliens;
+			researchList.push_back(research->getName());
 		}
 	}
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(_overCrowded? 288:148, 16, _overCrowded? 16:8, 176);
+	_btnOk = new TextButton(overCrowded ? 288:148, 16, overCrowded ? 16:8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
 	_txtTitle = new Text(310, 17, 5, 8);
 	_txtAvailable =  new Text(190, 9, 10, 24);
 	_txtUsed = new Text(110, 9, 136, 24);
 	_txtItem = new Text(120, 9, 10, 41);
-	_txtLiveAliens = new Text(54, 18, 136, 32);
-	_txtDeadAliens = new Text(54, 18, 220, 32);
-	_lstAliens = new TextList(280, 112, 8, 53);
+	_txtLiveAliens = new Text(54, 18, 153, 32);
+	_txtDeadAliens = new Text(54, 18, 207, 32);
+	_txtInterrogatedAliens = new Text(54, 18, 261, 32);
+	_lstAliens = new TextList(286, 112, 8, 53);
 
 	// Set palette
 	setInterface("manageContainment");
@@ -87,6 +88,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrig
 	add(_txtItem, "text", "manageContainment");
 	add(_txtLiveAliens, "text", "manageContainment");
 	add(_txtDeadAliens, "text", "manageContainment");
+	add(_txtInterrogatedAliens, "text", "manageContainment");
 	add(_lstAliens, "list", "manageContainment");
 
 	centerAllSurfaces();
@@ -102,7 +104,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrig
 	_btnCancel->onMouseClick((ActionHandler)&ManageAlienContainmentState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&ManageAlienContainmentState::btnCancelClick, Options::keyCancel);
 
-	if (_overCrowded)
+	if (overCrowded)
 	{
 		_btnCancel->setVisible(false);
 		_btnOk->setVisible(false);
@@ -122,12 +124,16 @@ ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrig
 	_txtDeadAliens->setWordWrap(true);
 	_txtDeadAliens->setVerticalAlign(ALIGN_BOTTOM);
 
-	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(_base->getAvailableContainment() - _base->getUsedContainment() - _researchedAliens));
+	_txtInterrogatedAliens->setText(tr("STR_UNDER_INTERROGATION"));
+	_txtInterrogatedAliens->setWordWrap(true);
+	_txtInterrogatedAliens->setVerticalAlign(ALIGN_BOTTOM);
 
-	_txtUsed->setText(tr("STR_SPACE_USED").arg( _base->getUsedContainment() + _researchedAliens));
+	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(_base->getFreeContainment()));
+
+	_txtUsed->setText(tr("STR_SPACE_USED").arg( _base->getUsedContainment()));
 
 	_lstAliens->setArrowColumn(184, ARROW_HORIZONTAL);
-	_lstAliens->setColumns(3, 150, 84, 46);
+	_lstAliens->setColumns(4, 160, 64, 46, 46);
 	_lstAliens->setSelectable(true);
 	_lstAliens->setBackground(_window);
 	_lstAliens->setMargin(2);
@@ -149,10 +155,28 @@ ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrig
 			_aliens.push_back(*i);
 			std::wostringstream ss;
 			ss << qty;
-			_lstAliens->addRow(3, tr(*i).c_str(), ss.str().c_str(), L"0");
+			std::wstring rqty;
+			std::vector<std::string>::iterator research = std::find(researchList.begin(), researchList.end(), *i);
+			if (research != researchList.end())
+			{
+				rqty = L"1";
+				researchList.erase(research);
+			}
+			else
+			{
+				rqty = L"0";
+			}
+			_lstAliens->addRow(4, tr(*i).c_str(), ss.str().c_str(), L"0", rqty.c_str());
 		}
 	}
 
+	for (std::vector<std::string>::const_iterator i = researchList.begin(); i != researchList.end(); ++i)
+	{
+		_aliens.push_back(*i);
+		_qtys.push_back(0);
+		_lstAliens->addRow(4, tr(*i).c_str(), L"0", L"0", L"1");
+		_lstAliens->setRowColor(_qtys.size() -1, _lstAliens->getSecondaryColor());
+	}
 	_timerInc = new Timer(250);
 	_timerInc->onTimer((StateHandler)&ManageAlienContainmentState::increase);
 	_timerDec = new Timer(250);
@@ -361,7 +385,7 @@ void ManageAlienContainmentState::increase()
 void ManageAlienContainmentState::increaseByValue(int change)
 {
 	int qty = getQuantity() - _qtys[_sel];
-	if (0 >= change || qty <= 0) return;
+	if (change <= 0 || qty <= 0) return;
 
 	change = std::min(qty, change);
 	_qtys[_sel] += change;
@@ -385,7 +409,7 @@ void ManageAlienContainmentState::decrease()
  */
 void ManageAlienContainmentState::decreaseByValue(int change)
 {
-	if (0 >= change || 0 >= _qtys[_sel]) return;
+	if (change <= 0 || _qtys[_sel] <= 0) return;
 	change = std::min(_qtys[_sel], change);
 	_qtys[_sel] -= change;
 	_aliensSold -= change;
@@ -406,12 +430,12 @@ void ManageAlienContainmentState::updateStrings()
 	_lstAliens->setCellText(_sel, 1, ss.str());
 	_lstAliens->setCellText(_sel, 2, ss2.str());
 
-	int aliens = _base->getUsedContainment() - (_aliensSold - _researchedAliens);
+	int aliens = _base->getUsedContainment() - _aliensSold;
 	int spaces = _base->getAvailableContainment() - aliens;
-	bool enoughSpace = Options::storageLimitsEnforced ? spaces >= 0 : true;
-
-	_btnCancel->setVisible(!_overCrowded);
-	_btnOk->setVisible(enoughSpace);
+	if (Options::storageLimitsEnforced)
+	{
+		_btnOk->setVisible(spaces >= 0);
+	}
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(spaces));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(aliens));
 }
