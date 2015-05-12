@@ -247,6 +247,7 @@ void CraftSoldiersState::btnOkClick(Action *)
  */
 void CraftSoldiersState::initList()
 {
+	size_t originalScrollPos = _lstSoldiers->getScroll();
 	int row = 0;
 	_lstSoldiers->clearList();
 	Craft *c = _base->getCrafts()->at(_craft);
@@ -272,6 +273,7 @@ void CraftSoldiersState::initList()
 	}
 
 	_lstSoldiers->draw();
+	_lstSoldiers->scrollTo(originalScrollPos);
 
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
