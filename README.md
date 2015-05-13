@@ -87,6 +87,10 @@ passing a commandline argument when running OpenXcom.  For example:
 
     openxcom -data "$HOME/bin/OpenXcom/usr/share/openxcom"
 
+or, if you have a fully self-contained installation:
+
+    openxcom -data "$HOME/games/openxcom/data" -user "$HOME/games/openxcom/user" -config "$HOME/games/openxcom/config"
+
 ### Windows
 
 User and Config folder:
