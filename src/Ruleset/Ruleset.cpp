@@ -136,14 +136,6 @@ void Ruleset::resetGlobalStatics()
 Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _turnAIUseGrenade(3), _turnAIUseBlaster(3), _startingTime(6, 1, 1, 1999, 12, 0, 0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
 {
 	_globe = new RuleGlobe();
-
-	std::set<std::string> names = FileMap::filterFiles(FileMap::getVFolderContents("SoldierName"), "nam");
-	for (std::set<std::string>::iterator i = names.begin(); i != names.end(); ++i)
-	{
-		SoldierNamePool *pool = new SoldierNamePool();
-		pool->load(FileMap::getFilePath("SoldierName/" + *i));
-		_names.push_back(pool);
-	}
 }
 
 /**
@@ -378,6 +370,7 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 			rule->load(*i);
 		}
 	}
+	_soldierNames = doc["soldierNames"].as<std::vector<std::string> >(_soldierNames);
 	for (YAML::const_iterator i = doc["soldiers"].begin(); i != doc["soldiers"].end(); ++i)
 	{
 		RuleSoldier *rule = loadRule(*i, &_soldiers);
@@ -1516,6 +1509,13 @@ void Ruleset::sortLists()
 	std::sort(_craftWeaponsIndex.begin(), _craftWeaponsIndex.end(), compareRule<RuleCraftWeapon>(this));
 	std::sort(_armorsIndex.begin(), _armorsIndex.end(), compareRule<Armor>(this));
 	std::sort(_ufopaediaIndex.begin(), _ufopaediaIndex.end(), compareRule<ArticleDefinition>(this));
+
+	for (std::vector<std::string>::iterator i = _soldierNames.begin(); i != _soldierNames.end(); ++i)
+	{
+		SoldierNamePool *pool = new SoldierNamePool();
+		pool->load(FileMap::getFilePath(*i));
+		_names.push_back(pool);
+	}
 }
 
 /**
