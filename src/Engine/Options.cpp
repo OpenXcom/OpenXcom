@@ -369,7 +369,7 @@ void loadArgs(int argc, char *argv[])
 				{
 					_userFolder = CrossPlatform::endPath(argv[i]);
 				}
-				else if (argname == "cfg")
+				else if (argname == "cfg" || argname == "config")
 				{
 					_configFolder = CrossPlatform::endPath(argv[i]);
 				}
@@ -401,7 +401,7 @@ bool showHelp(int argc, char *argv[])
 	help << "        use PATH as the default Data Folder instead of auto-detecting" << std::endl << std::endl;
 	help << "-user PATH" << std::endl;
 	help << "        use PATH as the default User Folder instead of auto-detecting" << std::endl << std::endl;
-	help << "-cfg PATH" << std::endl;
+	help << "-cfg PATH  or  -config PATH" << std::endl;
 	help << "        use PATH as the default Config Folder instead of auto-detecting" << std::endl << std::endl;
 	help << "-KEY VALUE" << std::endl;
 	help << "        set option KEY to VALUE instead of default/loaded value (eg. -displayWidth 640)" << std::endl << std::endl;
@@ -798,9 +798,9 @@ void updateOptions()
 		save();
 	}
 
-    // now apply options set on the command line, overriding defaults and those loaded from config file
+	// now apply options set on the command line, overriding defaults and those loaded from config file
 	//if (!_commandLine.empty())
-    for (std::vector<OptionInfo>::iterator i = _info.begin(); i != _info.end(); ++i)
+	for (std::vector<OptionInfo>::iterator i = _info.begin(); i != _info.end(); ++i)
 	{
 		i->load(_commandLine);
 	}
