@@ -341,7 +341,10 @@ void InventoryState::init()
 		if (s->getLook() == LOOK_AFRICAN)
 			look += "3";
 		look += ".SPK";
-		if (!CrossPlatform::fileExists(FileMap::getFilePath("UFOGRAPH/" + look)) && !_game->getResourcePack()->getSurface(look))
+		const std::set<std::string> &ufographContents = FileMap::getVFolderContents("UFOGRAPH");
+		std::string lcaseLook = look;
+		std::transform(lcaseLook.begin(), lcaseLook.end(), lcaseLook.begin(), tolower);
+		if (ufographContents.find("lcaseLook") == ufographContents.end() && !_game->getResourcePack()->getSurface(look))
 		{
 			look = s->getArmor()->getSpriteInventory() + ".SPK";
 		}
