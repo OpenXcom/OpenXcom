@@ -30,8 +30,6 @@
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "../Resource/ResourcePack.h"
-#include "../Menu/CutsceneState.h"
-#include "../Menu/MainMenuState.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/SavedGame.h"
 #include "Palette.h"
@@ -330,30 +328,6 @@ void Game::quit()
 		_save->save(filename);
 	}
 	_quit = true;
-}
-
-static void endGame(Game *game)
-{
-	if (game->getSavedGame() && game->getSavedGame()->isIronman() && !game->getSavedGame()->getName().empty())
-	{
-		std::string filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(game->getSavedGame()->getName())) + ".sav";
-		CrossPlatform::deleteFile(Options::getUserFolder() + filename);
-	}
-	game->setSavedGame(0);
-}
-
-void Game::win()
-{
-	endGame(this);
-	setState(new GoToMainMenuState);
-	pushState(new CutsceneState("wingame"));
-}
-
-void Game::lose()
-{
-	endGame(this);
-	setState(new GoToMainMenuState);
-	pushState(new CutsceneState("losegame"));
 }
 
 /**

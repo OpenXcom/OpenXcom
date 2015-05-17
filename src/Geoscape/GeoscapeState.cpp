@@ -58,6 +58,7 @@
 #include "InterceptState.h"
 #include "../Basescape/BasescapeState.h"
 #include "../Basescape/SellState.h"
+#include "../Menu/CutsceneState.h"
 #include "../Menu/ErrorMessageState.h"
 #include "GraphsState.h"
 #include "FundingState.h"
@@ -661,7 +662,7 @@ void GeoscapeState::timeAdvance()
 
 class LoseGameState : public State
 {
-public:	void init() { _game->lose(); }
+public:	void init() { _game->pushState(new CutsceneState("wingame")); }
 };
 
 /**

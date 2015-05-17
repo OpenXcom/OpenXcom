@@ -18,12 +18,16 @@
  */
 
 #include "CutsceneState.h"
+#include "MainMenuState.h"
 #include "SlideshowState.h"
 #include "VideoState.h"
+#include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
+#include "../Engine/Language.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
@@ -53,6 +57,19 @@ void CutsceneState::init()
 	{
 		Log(LOG_WARNING) << "cutscene definition not found: " << _cutsceneId;
 		return;
+	}
+
+	if (_cutsceneId == "wingame" || _cutsceneId == "losegame")
+	{
+		if (_game->getSavedGame() && _game->getSavedGame()->isIronman()
+		    && !_game->getSavedGame()->getName().empty())
+		{
+			std::string filename = CrossPlatform::sanitizeFilename(
+				Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
+			CrossPlatform::deleteFile(Options::getUserFolder() + filename);
+		}
+		_game->setSavedGame(0);
+		_game->setState(new GoToMainMenuState);
 	}
 
 	const RuleVideo *videoRule = videoRuleIt->second;
