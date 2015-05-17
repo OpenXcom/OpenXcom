@@ -284,16 +284,28 @@ void create()
 }
 
 // we can get fancier with these detection routines, but for now just look for
-// files that exist in one game but not the other
+// *something* in the data folders.  case sensitivity can make actually verifying
+// that the *correct* files are there complex.
+static bool _gameIsInstalled(const std::string &gameName)
+{
+	// look for game data in either the data or user directories
+	std::string dataGameFolder = CrossPlatform::searchDataFolder(gameName);
+	std::string userGameFolder = _userFolder + gameName;
+	return (CrossPlatform::folderExists(dataGameFolder)
+		&& CrossPlatform::getFolderContents(dataGameFolder).size() > 8)
+	    || (CrossPlatform::folderExists(userGameFolder)
+		&& CrossPlatform::getFolderContents(userGameFolder).size() > 8);
+}
+
 static bool _ufoIsInstalled()
 {
-	return CrossPlatform::fileExists(CrossPlatform::searchDataFile("UFO/TERRAIN/UFO1.PCK"));
+	return _gameIsInstalled("UFO");
 }
 
 static bool _tftdIsInstalled()
 {
 	// ensure both the resource data and the mod data is in place
-	return CrossPlatform::fileExists(CrossPlatform::searchDataFile("TFTD/TERRAIN/SEA.PCK"))
+	return _gameIsInstalled("TFTD")
 		&& CrossPlatform::fileExists(CrossPlatform::searchDataFile("standard/xcom2/Xcom2Ruleset.rul"));
 }
 
@@ -667,8 +679,16 @@ static void _loadMod(const ModInfo &modInfo, std::set<std::string> circDepCheck)
 	FileMap::load(modInfo.getId(), modInfo.getPath(), false);
 	for (std::vector<std::string>::const_iterator i = modInfo.getExternalResourceDirs().begin(); i != modInfo.getExternalResourceDirs().end(); ++i)
 	{
+		// use external resource folders from the user dir if they exist
+		// and if not, fall back to searching the data dirs
+		std::string extResourceFolder = _userFolder + *i;
+		if (!CrossPlatform::folderExists(extResourceFolder))
+		{
+			extResourceFolder = CrossPlatform::searchDataFolder(*i);
+		}
+
 		// always ignore ruleset files in external resource dirs
-		FileMap::load(modInfo.getId(), CrossPlatform::searchDataFolder(*i), true);
+		FileMap::load(modInfo.getId(), extResourceFolder, true);
 	}
 
 	// if this is a master but it has a master of its own, allow it to

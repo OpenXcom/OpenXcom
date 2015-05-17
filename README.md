@@ -23,8 +23,8 @@ at:
 
 Do not use modded versions (e.g. with XcomUtil) as they may cause bugs and
 crashes.  Copy the UFO subfolders to the UFO subdirectory in OpenXcom's data
-folder and/or the TFTD subfolders to the TFTD subdirectory in OpenXcom's data
-folder (see below for data folder locations).
+or user folder and/or the TFTD subfolders to the TFTD subdirectory in OpenXcom's
+data or user folder (see below for folder locations).
 
 ## Mods
 
