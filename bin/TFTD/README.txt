@@ -1,6 +1,7 @@
 Copy all the X-COM: Terror From the Deep subfolders to this directory!
 
 After the copy, this directory should contain at least the following items:
+  ANIMS (optional -- not all TFTD versions have this directory)
   FLOP_INT
   GEODATA
   GEOGRAPH
