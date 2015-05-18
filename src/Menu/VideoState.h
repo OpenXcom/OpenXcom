@@ -16,32 +16,29 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_INTROSTATE_H
-#define OPENXCOM_INTROSTATE_H
+#ifndef OPENXCOM_VIDEOSTATE_H
+#define OPENXCOM_VIDEOSTATE_H
 
 #include "../Engine/State.h"
 
 namespace OpenXcom
 {
-class FlcPlayer;
+
 /**
- * Shows the intro cinematic.
+ * Shows video cinematics.
  */
-class IntroState : public State
+class VideoState : public State
 {
 private:
-	std::vector<std::string> _introFiles;
-	std::string _introSoundFileDOS, _introSoundFileWin;
-	bool _wasLetterBoxed;
-	int _oldMusic, _oldSound;
+	const std::vector<std::string> *_videos;
+	bool _useUfoAudioSequence;
 public:
 	/// Creates the Intro state.
-	IntroState(bool wasLetterBoxed);
+	VideoState(const std::vector<std::string> *videos, bool useUfoAudioSequence);
 	/// Cleans up the Intro state.
-	~IntroState();
-	/// Starts the intro.
+	~VideoState();
+	/// Plays the video
 	void init();
-  void end();
 };
 
 }

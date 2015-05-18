@@ -1,4 +1,50 @@
 cutscenes:
   - type: intro
+    useUfoAudioSequence: true
     videos:
       - UFOINTRO/UFOINT.FLI
+  - type: wingame
+    slideshow:
+      transitionSeconds: 30
+      musicId: "GMWIN"
+      slides:
+        - imagePath: "UFOINTRO/PICT1.LBM"
+          caption: STR_VICTORY_1
+          captionSize: [195, 56]
+          captionPos: [5, 0]
+          captionColor: 249
+        - imagePath: "UFOINTRO/PICT2.LBM"
+          caption: STR_VICTORY_2
+          captionSize: [232, 64]
+          captionPos: [88, 136]
+          captionColor: 249
+        - imagePath: "UFOINTRO/PICT3.LBM"
+          caption: STR_VICTORY_3
+          captionSize: [254, 48]
+          captionPos: [66, 152]
+          captionColor: 249
+        - imagePath: "UFOINTRO/PICT6.LBM"
+          caption: STR_VICTORY_4
+          captionSize: [300, 200]
+          captionPos: [5, 0]
+          captionColor: 249
+        - imagePath: "UFOINTRO/PICT7.LBM"
+          caption: STR_VICTORY_5
+          captionSize: [310, 42]
+          captionPos: [5, 158]
+          captionColor: 249
+  - type: losegame
+    slideshow:
+      transitionSeconds: 30
+      musicId: "GMLOSE"
+      slides:
+        - imagePath: "UFOINTRO/PICT4.LBM"
+          caption: STR_GAME_OVER_1
+          captionSize: [190, 104]
+          captionPos: [0, 0]
+          captionColor: 249
+        - imagePath: "UFOINTRO/PICT5.LBM"
+          caption: STR_GAME_OVER_2
+          captionSize: [200, 34]
+          captionPos: [32, 0]
+          captionColor: 249

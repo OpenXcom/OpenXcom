@@ -213,7 +213,9 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 	}
 
 	// Load fonts
-	YAML::Node doc = YAML::LoadFile(FileMap::getFilePath("Language/Font.dat"));
+	std::string fontname = rules->getFontName();
+	YAML::Node doc = YAML::LoadFile(FileMap::getFilePath("Language/" + fontname));
+	Log(LOG_INFO) << "Loading font... " << fontname;
 	Font::setIndex(Language::utf8ToWstr(doc["chars"].as<std::string>()));
 	for (YAML::const_iterator i = doc["fonts"].begin(); i != doc["fonts"].end(); ++i)
 	{
@@ -292,17 +294,6 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 		std::transform(i->begin(), i->end(), fname.begin(), toupper);
 		_surfaces[fname] = new Surface(320, 200);
 		_surfaces[fname]->loadSpk(FileMap::getFilePath("GEOGRAPH/" + fname));
-	}
-
-	// Load intro
-	const std::set<std::string> &introFiles(FileMap::getVFolderContents("UFOINTRO"));
-	std::set<std::string> lbms = FileMap::filterFiles(introFiles, "LBM");
-	for (std::set<std::string>::iterator i = lbms.begin(); i != lbms.end(); ++i)
-	{
-		std::string fname = *i;
-		std::transform(i->begin(), i->end(), fname.begin(), toupper);
-		_surfaces[fname] = new Surface(320, 200);
-		_surfaces[fname]->loadImage(FileMap::getFilePath("UFOINTRO/" + fname));
 	}
 
 	// Load surface sets

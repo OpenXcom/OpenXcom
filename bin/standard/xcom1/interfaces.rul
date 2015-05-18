@@ -532,12 +532,6 @@ interfaces:
         color: 6     # brown
       - id: errorMessage
         color: 241   # pink
-  - type: gameOver
-    elements:
-      - id: defeatText
-        color: 249
-      - id: victoryText
-        color: 249
   - type: sellMenu
     palette: PAL_BASESCAPE
     elements:

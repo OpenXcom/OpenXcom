@@ -324,8 +324,6 @@ openxcom_SOURCES = \
 	src/Geoscape/CraftErrorState.h \
 	src/Geoscape/CraftPatrolState.cpp \
 	src/Geoscape/CraftPatrolState.h \
-	src/Geoscape/DefeatState.cpp \
-	src/Geoscape/DefeatState.h \
 	src/Geoscape/DogfightState.cpp \
 	src/Geoscape/DogfightState.h \
 	src/Geoscape/FundingState.cpp \
@@ -370,8 +368,6 @@ openxcom_SOURCES = \
 	src/Geoscape/UfoDetectedState.h \
 	src/Geoscape/UfoLostState.cpp \
 	src/Geoscape/UfoLostState.h \
-	src/Geoscape/VictoryState.cpp \
-	src/Geoscape/VictoryState.h \
 	src/Interface/ArrowButton.cpp \
 	src/Interface/ArrowButton.h \
 	src/Interface/Bar.cpp \
@@ -410,12 +406,12 @@ openxcom_SOURCES = \
 	src/Menu/AbandonGameState.h \
 	src/Menu/ConfirmLoadState.cpp \
 	src/Menu/ConfirmLoadState.h \
+	src/Menu/CutsceneState.cpp \
+	src/Menu/CutsceneState.h \
 	src/Menu/DeleteGameState.cpp \
 	src/Menu/DeleteGameState.h \
 	src/Menu/ErrorMessageState.cpp \
 	src/Menu/ErrorMessageState.h \
-	src/Menu/IntroState.cpp \
-	src/Menu/IntroState.h \
 	src/Menu/ListGamesState.cpp \
 	src/Menu/ListGamesState.h \
 	src/Menu/ListLoadOriginalState.cpp \
@@ -458,10 +454,14 @@ openxcom_SOURCES = \
 	src/Menu/PauseState.h \
 	src/Menu/SaveGameState.cpp \
 	src/Menu/SaveGameState.h \
+	src/Menu/SlideshowState.cpp \
+	src/Menu/SlideshowState.h \
 	src/Menu/StartState.cpp \
 	src/Menu/StartState.h \
 	src/Menu/TestState.cpp \
 	src/Menu/TestState.h \
+	src/Menu/VideoState.cpp \
+	src/Menu/VideoState.h \
 	src/Resource/ResourcePack.cpp \
 	src/Resource/ResourcePack.h \
 	src/Resource/XcomResourcePack.cpp \

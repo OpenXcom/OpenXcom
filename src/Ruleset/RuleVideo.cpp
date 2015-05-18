@@ -17,6 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleVideo.h"
+#include <climits>
+#include "../Engine/Screen.h"
 
 namespace OpenXcom
 {
@@ -29,25 +31,66 @@ RuleVideo::~RuleVideo()
 {
 }
 
+static void _loadSlide(SlideshowSlide &slide, const YAML::Node &node)
+{
+	slide.imagePath = node["imagePath"].as<std::string>("");
+	slide.caption = node["caption"].as<std::string>("");
+
+	std::pair<int, int> size = node["captionSize"].as<std::pair<int, int> >(
+		std::pair<int, int>(Screen::ORIGINAL_WIDTH, Screen::ORIGINAL_HEIGHT));
+	slide.w = size.first;
+	slide.h = size.second;
+
+	std::pair<int, int> pos = node["captionPos"].as<std::pair<int, int> >(std::pair<int, int>(0, 0));
+	slide.x = pos.first;
+	slide.y = pos.second;
+
+	slide.color = node["captionColor"].as<int>(INT_MAX);
+}
+
 void RuleVideo::load(const YAML::Node &node)
 {
-	if(const YAML::Node &videos = node["videos"])
+	_useUfoAudioSequence = node["useUfoAudioSequence"].as<bool>(false);
+
+	if (const YAML::Node &videos = node["videos"])
 	{
-		for(YAML::const_iterator i = videos.begin(); i != videos.end(); ++i)
+		for (YAML::const_iterator i = videos.begin(); i != videos.end(); ++i)
 			_videos.push_back((*i).as<std::string>());
 	}
 
-	// Slides
-	/*if(const YAML::Node &slides = node["slides"])
+	if (const YAML::Node &slideshow = node["slideshow"])
 	{
-	for(YAML::const_iterator i = slides.begin(); i != slides.end(); ++i)
-			_slides.push_back(*i).as<std::string>());
-	}*/
+		_slideshowHeader.musicId = slideshow["musicId"].as<std::string>("");
+		_slideshowHeader.transitionSeconds = slideshow["transitionSeconds"].as<int>(30);
+
+		const YAML::Node &slides = slideshow["slides"];
+		for (YAML::const_iterator i = slides.begin(); i != slides.end(); ++i)
+		{
+			SlideshowSlide slide;
+			_loadSlide(slide, *i);
+			_slides.push_back(slide);
+		}
+	}
+}
+
+bool RuleVideo::useUfoAudioSequence() const
+{
+	return _useUfoAudioSequence;
 }
 
 const std::vector<std::string> * RuleVideo::getVideos() const
 {
 	return &_videos;
+}
+
+const SlideshowHeader & RuleVideo::getSlideshowHeader() const
+{
+	return _slideshowHeader;
+}
+
+const std::vector<SlideshowSlide> * RuleVideo::getSlides() const
+{
+	return &_slides;
 }
 
 }

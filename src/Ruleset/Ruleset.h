@@ -76,6 +76,7 @@ class RuleMusic;
 class Ruleset
 {
 protected:
+	std::vector<std::string> _soldierNames;
 	std::vector<SoldierNamePool*> _names;
 	std::map<std::string, RuleCountry*> _countries;
 	std::map<std::string, RuleRegion*> _regions;
@@ -110,6 +111,7 @@ protected:
 	RuleGlobe *_globe;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding, _turnAIUseGrenade, _turnAIUseBlaster;
 	std::string _alienFuel;
+	std::string _fontName;
 	YAML::Node _startingBase;
 	GameTime _startingTime;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _invsIndex, _ufosIndex;
@@ -248,6 +250,8 @@ public:
 	Soldier *genSoldier(SavedGame *save) const;
 	/// Gets the item to be used as fuel for ships.
 	const std::string getAlienFuel() const;
+	/// Gets the font name.
+	const std::string getFontName() const;
 	/// Gets first turn when AI can use grenade.
 	int getTurnAIUseGrenade() const {return _turnAIUseGrenade;}
 	/// Gets first turn when AI can use Blaster launcher.

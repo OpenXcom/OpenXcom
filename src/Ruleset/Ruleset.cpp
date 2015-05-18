@@ -136,14 +136,6 @@ void Ruleset::resetGlobalStatics()
 Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _turnAIUseGrenade(3), _turnAIUseBlaster(3), _startingTime(6, 1, 1, 1999, 12, 0, 0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
 {
 	_globe = new RuleGlobe();
-
-	std::set<std::string> names = FileMap::filterFiles(FileMap::getVFolderContents("SoldierName"), "nam");
-	for (std::set<std::string>::iterator i = names.begin(); i != names.end(); ++i)
-	{
-		SoldierNamePool *pool = new SoldierNamePool();
-		pool->load(FileMap::getFilePath("SoldierName/" + *i));
-		_names.push_back(pool);
-	}
 }
 
 /**
@@ -378,6 +370,7 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 			rule->load(*i);
 		}
 	}
+	_soldierNames = doc["soldierNames"].as<std::vector<std::string> >(_soldierNames);
 	for (YAML::const_iterator i = doc["soldiers"].begin(); i != doc["soldiers"].end(); ++i)
 	{
 		RuleSoldier *rule = loadRule(*i, &_soldiers);
@@ -506,6 +499,7 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 	_timePersonnel = doc["timePersonnel"].as<int>(_timePersonnel);
 	_initialFunding = doc["initialFunding"].as<int>(_initialFunding);
 	_alienFuel = doc["alienFuel"].as<std::string>(_alienFuel);
+	_fontName = doc["fontName"].as<std::string>(_fontName);
 	_turnAIUseGrenade = doc["turnAIUseGrenade"].as<int>(_turnAIUseGrenade);
 	_turnAIUseBlaster = doc["turnAIUseBlaster"].as<int>(_turnAIUseBlaster);
 	for (YAML::const_iterator i = doc["ufoTrajectories"].begin(); i != doc["ufoTrajectories"].end(); ++i)
@@ -1501,6 +1495,13 @@ struct compareRule<ArticleDefinition> : public std::binary_function<const std::s
 };
 std::map<std::string, int> compareRule<ArticleDefinition>::_sections;
 
+static void addSoldierNamePool(std::vector<SoldierNamePool*> &names, const std::string &namFile)
+{
+	SoldierNamePool *pool = new SoldierNamePool();
+	pool->load(FileMap::getFilePath(namFile));
+	names.push_back(pool);
+}
+
 /**
  * Sorts all our lists according to their weight.
  */
@@ -1516,6 +1517,24 @@ void Ruleset::sortLists()
 	std::sort(_craftWeaponsIndex.begin(), _craftWeaponsIndex.end(), compareRule<RuleCraftWeapon>(this));
 	std::sort(_armorsIndex.begin(), _armorsIndex.end(), compareRule<Armor>(this));
 	std::sort(_ufopaediaIndex.begin(), _ufopaediaIndex.end(), compareRule<ArticleDefinition>(this));
+
+	for (std::vector<std::string>::iterator i = _soldierNames.begin(); i != _soldierNames.end(); ++i)
+	{
+		if (i->substr(i->length() - 1, 1) == "/")
+		{
+			// load all *.nam files in given directory
+			std::set<std::string> names = FileMap::filterFiles(FileMap::getVFolderContents(*i), "nam");
+			for (std::set<std::string>::iterator j = names.begin(); j != names.end(); ++j)
+			{
+				addSoldierNamePool(_names, *i + *j);
+			}
+		}
+		else
+		{
+			// load given file
+			addSoldierNamePool(_names, *i);
+		}
+	}
 }
 
 /**
@@ -1576,6 +1595,15 @@ Soldier *Ruleset::genSoldier(SavedGame *save) const
 const std::string Ruleset::getAlienFuel() const
 {
 	return _alienFuel;
+}
+
+/**
+ * Gets name of font collection.
+ * @return the name of YAML-file with font data
+ */
+const std::string Ruleset::getFontName() const
+{
+	return _fontName;
 }
 
 /**

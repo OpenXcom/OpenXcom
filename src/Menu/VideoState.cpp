@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "IntroState.h"
+#include "VideoState.h"
 #include <SDL_mixer.h>
 #include "../Engine/Adlib/adlplayer.h"
 #include "../Engine/Logger.h"
@@ -32,6 +32,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleVideo.h"
 #include "MainMenuState.h"
+#include "CutsceneState.h"
 
 namespace OpenXcom
 {
@@ -41,41 +42,15 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param wasLetterBoxed Was the game letterboxed?
  */
-IntroState::IntroState(bool wasLetterBoxed) : _wasLetterBoxed(wasLetterBoxed)
+VideoState::VideoState(const std::vector<std::string> *videos, bool useUfoAudioSequence)
+		: _videos(videos), _useUfoAudioSequence(useUfoAudioSequence)
 {
-	_oldMusic = Options::musicVolume;
-	_oldSound = Options::soundVolume;
-	//music volume is the main, and sound volume as a fallback
-	Options::musicVolume = Options::soundVolume = std::max(_oldMusic, _oldSound/8);
-	_game->setVolume(Options::soundVolume, Options::musicVolume, -1);
-
-	const Ruleset *rules = _game->getRuleset();
-	const std::map<std::string, RuleVideo*> *videoRulesets = rules->getVideos();
-
-
-	std::map<std::string, RuleVideo*>::const_iterator videoRuleIt = videoRulesets->find("intro");
-
-	if(videoRuleIt != videoRulesets->end())
-	{
-		const RuleVideo *videoRule = videoRuleIt->second;
-
-		const std::vector<std::string> *videos = videoRule->getVideos();
-
-		std::vector<std::string>::const_iterator it;
-		for(it = videos->begin(); it != videos->end(); ++it)
-		{
-			_introFiles.push_back(*it);
-		}
-	}
-
-	_introSoundFileDOS = FileMap::getFilePath("SOUND/INTRO.CAT");
-	_introSoundFileWin = FileMap::getFilePath("SOUND/SAMPLE3.CAT");
 }
 
 /**
  *
  */
-IntroState::~IntroState()
+VideoState::~VideoState()
 {
 }
 
@@ -349,8 +324,7 @@ static struct AudioSequence
 	FlcPlayer *_flcPlayer;
 
 	AudioSequence(ResourcePack *resources, FlcPlayer *flcPlayer) : rp(resources), m(0), s(0), trackPosition(0), _flcPlayer(flcPlayer)
-	{
-	}
+	{ }
 
 	void operator()()
 	{
@@ -410,7 +384,7 @@ static struct AudioSequence
 		}
 
 	}
-} *audioSequence;
+} *audioSequence = NULL;
 
 
 static void audioHandler()
@@ -418,91 +392,95 @@ static void audioHandler()
 	(*audioSequence)();
 }
 
-/**
- * Play the intro.
- */
-void IntroState::init()
+void VideoState::init()
 {
 	State::init();
-	Options::keepAspectRatio = _wasLetterBoxed;
-	int videoFilesNum = _introFiles.size();
 
-	bool oldVideoFile = false;
-	if(videoFilesNum > 0)
+	bool wasLetterboxed = CutsceneState::initDisplay();
+
+	bool ufoIntroSoundFileDosExists = false;
+	bool ufoIntroSoundFileWinExists = false;
+	int prevMusicVol = Options::musicVolume;
+	int prevSoundVol = Options::soundVolume;
+	if (_useUfoAudioSequence)
 	{
-		// Might be old video file
-		if (videoFilesNum == 1 && (CrossPlatform::fileExists(_introSoundFileDOS) || CrossPlatform::fileExists(_introSoundFileWin)))
-			oldVideoFile = true;
+		const std::set<std::string> &soundDir = FileMap::getVFolderContents("SOUND");
+		ufoIntroSoundFileDosExists = soundDir.end() != soundDir.find("intro.cat");
+		ufoIntroSoundFileWinExists = soundDir.end() != soundDir.find("sample3.cat");
 
-		int dx = (Options::baseXResolution - Screen::ORIGINAL_WIDTH) / 2;
-		int dy = (Options::baseYResolution - Screen::ORIGINAL_HEIGHT) / 2;
-
-		if(oldVideoFile)
+		if (!ufoIntroSoundFileDosExists && !ufoIntroSoundFileWinExists)
 		{
-			std::string videoFileName = FileMap::getFilePath(_introFiles[0]);
-			if (CrossPlatform::fileExists(videoFileName))
-			{
-				FlcPlayer *flcPlayer = new FlcPlayer();
-				audioSequence = new AudioSequence(_game->getResourcePack(), flcPlayer);
-				flcPlayer->init(videoFileName.c_str(), &audioHandler, _game, dx, dy);
-				flcPlayer->play(true);
-				flcPlayer->delay(10000);
-				delete flcPlayer;
-				delete audioSequence;
-				end();
-			}
+			_useUfoAudioSequence = false;
 		}
 		else
 		{
-			std::vector<std::string>::const_iterator it;
-			FlcPlayer *flcPlayer = NULL;
-			for (it = _introFiles.begin(); it != _introFiles.end(); ++it)
-			{
-				std::string videoFileName = FileMap::getFilePath(*it);
-
-				if (!CrossPlatform::fileExists(videoFileName))
-				{
-					continue;
-				}
-
-				if (!flcPlayer)
-				{
-					flcPlayer = new FlcPlayer();
-				}
-
-				flcPlayer->init(videoFileName.c_str(), 0, _game, dx, dy);
-				flcPlayer->play(false);
-				flcPlayer->deInit();
-
-				if (flcPlayer->wasSkipped())
-				{
-					break;
-				}
-			}
-
-			if (flcPlayer)
-			{
-				delete flcPlayer;
-			}
-			
-			end();
+			// ensure user can hear both music and sound effects for the
+			// vanilla intro sequence
+			Options::musicVolume = Options::soundVolume = std::max(prevMusicVol, prevSoundVol/8);
+			_game->setVolume(Options::soundVolume, Options::musicVolume, -1);
 		}
 	}
-	else // TODO: slides
-	{
-	}
-	Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
-	_game->getScreen()->resetDisplay(false);
-	_game->setState(new MainMenuState);
-}
 
-void IntroState::end()
-{
+	int dx = (Options::baseXResolution - Screen::ORIGINAL_WIDTH) / 2;
+	int dy = (Options::baseYResolution - Screen::ORIGINAL_HEIGHT) / 2;
+
+	FlcPlayer *flcPlayer = NULL;
+	for (std::vector<std::string>::const_iterator it = _videos->begin(); it != _videos->end(); ++it)
+	{
+		std::string videoFileName = FileMap::getFilePath(*it);
+
+		if (!CrossPlatform::fileExists(videoFileName))
+		{
+			continue;
+		}
+
+		if (!flcPlayer)
+		{
+			flcPlayer = new FlcPlayer();
+		}
+
+		if (_useUfoAudioSequence)
+		{
+			audioSequence = new AudioSequence(_game->getResourcePack(), flcPlayer);
+		}
+
+		flcPlayer->init(videoFileName.c_str(),
+			 _useUfoAudioSequence ? &audioHandler : NULL,
+			 _game, dx, dy);
+		flcPlayer->play(_useUfoAudioSequence);
+		if (_useUfoAudioSequence)
+		{
+			flcPlayer->delay(10000);
+			delete audioSequence;
+			audioSequence = NULL;
+		}
+		flcPlayer->deInit();
+
+		if (flcPlayer->wasSkipped())
+		{
+			break;
+		}
+	}
+
+	if (flcPlayer)
+	{
+		delete flcPlayer;
+	}
+
 #ifndef __NO_MUSIC
 	// fade out!
 	Mix_FadeOutChannel(-1, 45 * 20);
-	if (Mix_GetMusicType(0) != MUS_MID) { Mix_FadeOutMusic(45 * 20); func_fade(); } // SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
-	else { Mix_HaltMusic(); }
+	if (Mix_GetMusicType(0) != MUS_MID)
+	{
+		// SDL_Mixer has trouble with native midi and volume on windows,
+		// which is the most likely use case, so f@%# it.
+		Mix_FadeOutMusic(45 * 20);
+		func_fade();
+	}
+	else
+	{
+		Mix_HaltMusic();
+	}
 #endif
 
 	SDL_Color pal[256];
@@ -525,13 +503,21 @@ void IntroState::end()
 	}
 	_game->getScreen()->clear();
 	_game->getScreen()->flip();
-	Options::musicVolume = _oldMusic;
-	Options::soundVolume = _oldSound;
-	_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
+
+	if (_useUfoAudioSequence)
+	{
+		Options::musicVolume = prevMusicVol;
+		Options::soundVolume = prevSoundVol;
+		_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
+	}
 
 #ifndef __NO_MUSIC
 	Sound::stop();
 	Music::stop();
 #endif
+
+	CutsceneState::resetDisplay(wasLetterboxed);
+	_game->popState();
 }
+
 }
