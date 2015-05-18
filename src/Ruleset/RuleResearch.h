@@ -40,7 +40,7 @@ namespace OpenXcom
 class RuleResearch
 {
  private:
-	std::string _name, _lookup;
+	std::string _name, _lookup, _cutscene;
 	int _cost, _points;
 	std::vector<std::string> _dependencies, _unlocks, _getOneFree, _requires;
 	bool _needItem;
@@ -69,6 +69,8 @@ public:
 	const std::vector<std::string> & getRequirements() const;
 	/// Gets the list weight for this research item.
 	int getListOrder() const;
+	/// Gets the cutscene to play when this item is researched
+	const std::string & getCutscene() const;
 };
 }
 
