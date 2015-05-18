@@ -76,6 +76,7 @@ class RuleMusic;
 class Ruleset
 {
 protected:
+	std::vector<std::string> _soldierNames;
 	std::vector<SoldierNamePool*> _names;
 	std::map<std::string, RuleCountry*> _countries;
 	std::map<std::string, RuleRegion*> _regions;
