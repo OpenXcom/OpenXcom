@@ -1062,54 +1062,57 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 		}
 		else
 		{
-			if ((*it)->getRules()->getRecoveryPoints() && !(*it)->getXCOMProperty())
+			if ((*it)->getRules()->isRecoverable())
 			{
-				if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_DEAD)
+				if (!(*it)->getXCOMProperty())
 				{
-					addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getUnit()->getValue());
-					base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape(), 1);
-				}
-				else if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
-				{
-					if ((*it)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
+					if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_DEAD)
 					{
-						recoverAlien((*it)->getUnit(), base);
+						addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getUnit()->getValue());
+						base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape(), 1);
 					}
-					else if ((*it)->getUnit()->getOriginalFaction() == FACTION_NEUTRAL)
+					else if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 					{
-						addStat("STR_CIVILIANS_SAVED", 1, (*it)->getUnit()->getValue());
-					}
-				}
-				// only "recover" unresearched items
-				else if (!_game->getSavedGame()->isResearched((*it)->getRules()->getType()))
-				{
-					addStat("STR_ALIEN_ARTIFACTS_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
-				}
-			}
-			// put items back in the base
-			if ((*it)->getRules()->isRecoverable() && !(*it)->getRules()->isFixed())
-			{
-				switch ((*it)->getRules()->getBattleType())
-				{
-					case BT_CORPSE:
-						break;
-					case BT_AMMO:
-						// It's a clip, count any rounds left.
-						_rounds[(*it)->getRules()] += (*it)->getAmmoQuantity();
-						break;
-					case BT_FIREARM:
-					case BT_MELEE:
-						// It's a weapon, count any rounds left in the clip.
+						if ((*it)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
 						{
-							BattleItem *clip = (*it)->getAmmoItem();
-							if (clip && clip->getRules()->getClipSize() > 0 && clip != *it)
-							{
-								_rounds[clip->getRules()] += clip->getAmmoQuantity();
-							}
+							recoverAlien((*it)->getUnit(), base);
 						}
-						// Fall-through, to recover the weapon itself.
-					default:
-						base->getItems()->addItem((*it)->getRules()->getType(), 1);
+						else if ((*it)->getUnit()->getOriginalFaction() == FACTION_NEUTRAL)
+						{
+							addStat("STR_CIVILIANS_SAVED", 1, (*it)->getUnit()->getValue());
+						}
+					}
+					// only "recover" unresearched items
+					else if (!_game->getSavedGame()->isResearched((*it)->getRules()->getType()))
+					{
+						addStat("STR_ALIEN_ARTIFACTS_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
+					}
+				}
+				// put items back in the base
+				if (!(*it)->getRules()->isFixed())
+				{
+					switch ((*it)->getRules()->getBattleType())
+					{
+						case BT_CORPSE:
+							break;
+						case BT_AMMO:
+							// It's a clip, count any rounds left.
+							_rounds[(*it)->getRules()] += (*it)->getAmmoQuantity();
+							break;
+						case BT_FIREARM:
+						case BT_MELEE:
+							// It's a weapon, count any rounds left in the clip.
+							{
+								BattleItem *clip = (*it)->getAmmoItem();
+								if (clip && clip->getRules()->getClipSize() > 0 && clip != *it)
+								{
+									_rounds[clip->getRules()] += clip->getAmmoQuantity();
+								}
+							}
+							// Fall-through, to recover the weapon itself.
+						default:
+							base->getItems()->addItem((*it)->getRules()->getType(), 1);
+					}
 				}
 			}
 		}
