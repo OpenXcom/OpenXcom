@@ -63,8 +63,6 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Exception.h"
-#include "../Geoscape/DefeatState.h"
-#include "../Geoscape/VictoryState.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Text.h"
@@ -72,6 +70,7 @@
 #include "../Interface/ImageButton.h"
 #include "../Interface/BattlescapeButton.h"
 #include "../Interface/NumberText.h"
+#include "../Menu/CutsceneState.h"
 #include "../Menu/PauseState.h"
 #include "../Menu/LoadGameState.h"
 #include "../Menu/SaveGameState.h"
@@ -1945,7 +1944,7 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 				_game->getRuleset()->getDeployment(_save->getMissionType())->isNoRetreat() &&
 				_game->getSavedGame()->getMonthsPassed() > -1)
 			{
-				_game->pushState (new DefeatState);
+				_game->pushState(new CutsceneState("losegame"));
 			}
 			else
 			{
@@ -1960,7 +1959,7 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 				_game->getRuleset()->getDeployment(_save->getMissionType())->isFinalMission() &&
 				_game->getSavedGame()->getMonthsPassed() > -1)
 			{
-				_game->pushState (new VictoryState);
+				_game->pushState(new CutsceneState("wingame"));
 			}
 			else
 			{

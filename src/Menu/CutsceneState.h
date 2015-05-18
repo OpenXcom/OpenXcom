@@ -16,40 +16,35 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_DEFEATSTATE_H
-#define OPENXCOM_DEFEATSTATE_H
+#ifndef OPENXCOM_CUTSCENESTATE_H
+#define OPENXCOM_CUTSCENESTATE_H
 
 #include "../Engine/State.h"
 
 namespace OpenXcom
 {
 
-class InteractiveSurface;
-class Text;
-class Timer;
-
 /**
- * Game Over Screens.
+ * Shows cutscenes: inspects the relevant rules and loads the appropriate state
+ * for showing slideshows or videos.
  */
-class DefeatState : public State
+class CutsceneState : public State
 {
 private:
-	static const int SCREENS = 2;
-	InteractiveSurface *_bg[SCREENS];
-	Text *_text[SCREENS];
-	int _screen;
-	Timer *_timer;
+	std::string _cutsceneId;
 public:
-	/// Creates the Defeat state.
-	DefeatState();
-	/// Cleans up the Defeat state.
-	~DefeatState();
-	/// Handle timers.
-	void think();
-	/// Handler for waiting the screen.
-	void screenTimer();
-	/// Handler for clicking the screen.
-	void screenClick(Action *action);
+	/// Creates the CutsceneState.
+	CutsceneState(const std::string &cutsceneId);
+	/// Cleans up the CutsceneState.
+	~CutsceneState();
+	/// Replace this state on the stack with the real player state.
+	void init();
+
+	// shared utility methods for SlideshowState and VideoState
+	/// returns whether the display was letterboxed (for restoration in resetDisplay)
+	static bool initDisplay();
+	/// restores the screen to its original state
+	static void resetDisplay(bool wasLetterboxed);
 };
 
 }

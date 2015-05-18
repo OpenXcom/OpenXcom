@@ -58,6 +58,7 @@
 #include "InterceptState.h"
 #include "../Basescape/BasescapeState.h"
 #include "../Basescape/SellState.h"
+#include "../Menu/CutsceneState.h"
 #include "../Menu/ErrorMessageState.h"
 #include "GraphsState.h"
 #include "FundingState.h"
@@ -102,10 +103,10 @@
 #include "../Ruleset/Armor.h"
 #include "BaseDefenseState.h"
 #include "BaseDestroyedState.h"
-#include "DefeatState.h"
 #include "../Menu/LoadGameState.h"
 #include "../Menu/SaveGameState.h"
 #include "../Menu/ListSaveState.h"
+#include "../Menu/CutsceneState.h"
 #include "../Ruleset/AlienRace.h"
 #include "../Ruleset/RuleGlobe.h"
 
@@ -659,6 +660,11 @@ void GeoscapeState::timeAdvance()
 	_globe->draw();
 }
 
+class LoseGameState : public State
+{
+public:	void init() { _game->pushState(new CutsceneState("wingame")); }
+};
+
 /**
  * Takes care of any game logic that has to
  * run every game second, like craft movement.
@@ -668,7 +674,7 @@ void GeoscapeState::time5Seconds()
 	// Game over if there are no more bases.
 	if (_game->getSavedGame()->getBases()->empty())
 	{
-		popup(new DefeatState);
+		popup(new LoseGameState);
 		return;
 	}
 
@@ -1495,7 +1501,7 @@ void GeoscapeState::time1Day()
 							research->getName()
 						)->getArmor()
 					)->getCorpseGeoscape()
-				); // ;)
+				);
 			}
 			if (!(*iter)->getRules()->getGetOneFree().empty())
 			{
@@ -1537,6 +1543,14 @@ void GeoscapeState::time1Day()
 			if (!research->getLookup().empty())
 			{
 				_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset());
+			}
+			if (!research->getCutscene().empty())
+			{
+				popup(new CutsceneState(research->getCutscene()));
+			}
+			if (bonus && !bonus->getCutscene().empty())
+			{
+				popup(new CutsceneState(bonus->getCutscene()));
 			}
 			popup(new ResearchCompleteState(newResearch, bonus));
 			std::vector<RuleResearch *> newPossibleResearch;

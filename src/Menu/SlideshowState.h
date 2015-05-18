@@ -16,10 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_VICTORYSTATE_H
-#define OPENXCOM_VICTORYSTATE_H
+#ifndef OPENXCOM_SLIDESHOWSTATE_H
+#define OPENXCOM_SLIDESHOWSTATE_H
 
 #include "../Engine/State.h"
+#include "../Ruleset/RuleVideo.h"
 
 namespace OpenXcom
 {
@@ -29,21 +30,23 @@ class Text;
 class Timer;
 
 /**
- * Game Over Screens.
+ * Shows slideshow sequences.
  */
-class VictoryState : public State
+class SlideshowState : public State
 {
 private:
-	static const int SCREENS = 5;
-	InteractiveSurface *_bg[SCREENS];
-	Text *_text[SCREENS];
-	int _screen;
-	Timer *_timer;
+	const SlideshowHeader &_slideshowHeader;
+	const std::vector<SlideshowSlide> *_slideshowSlides;
+	bool _wasLetterboxed;
+	std::vector<InteractiveSurface *> _slides;
+	std::vector<Text *>_captions;
+	int _curScreen;
+	Timer *_transitionTimer;
 public:
-	/// Creates the Victory state.
-	VictoryState();
-	/// Cleans up the Victory state.
-	~VictoryState();
+	/// Creates the Slideshow state.
+	SlideshowState(const SlideshowHeader &slideshowHeader, const std::vector<SlideshowSlide> *slideshowRule);
+	/// Cleans up the Slideshow state.
+	~SlideshowState();
 	/// Handle timers.
 	void think();
 	/// Handler for waiting the screen.

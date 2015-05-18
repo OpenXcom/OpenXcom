@@ -37,8 +37,9 @@
 #include "../Interface/Text.h"
 #include "../Resource/XcomResourcePack.h"
 #include "MainMenuState.h"
-#include "IntroState.h"
+#include "VideoState.h"
 #include "ErrorMessageState.h"
+#include "CutsceneState.h"
 #include <SDL_mixer.h>
 #include <SDL_thread.h>
 
@@ -172,19 +173,14 @@ void StartState::think()
 		Log(LOG_INFO) << "OpenXcom started successfully!";
 		if (!Options::reload && Options::playIntro)
 		{
-			bool letterbox = Options::keepAspectRatio;
-			Options::keepAspectRatio = true;
-			Options::baseXResolution = Screen::ORIGINAL_WIDTH;
-			Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
-			_game->getScreen()->resetDisplay(false);
-			_game->setState(new IntroState(letterbox));
+			_game->setState(new GoToMainMenuState);
+			_game->pushState(new CutsceneState("intro"));
 		}
 		else
 		{
 			Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 			_game->getScreen()->resetDisplay(false);
-			State *state = new MainMenuState;
-			_game->setState(state);
+			_game->setState(new MainMenuState);
 			Options::reload = false;
 		}
 		_game->getCursor()->setVisible(true);
