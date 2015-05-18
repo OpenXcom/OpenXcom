@@ -1495,6 +1495,13 @@ struct compareRule<ArticleDefinition> : public std::binary_function<const std::s
 };
 std::map<std::string, int> compareRule<ArticleDefinition>::_sections;
 
+static void addSoldierNamePool(std::vector<SoldierNamePool*> &names, const std::string &namFile)
+{
+	SoldierNamePool *pool = new SoldierNamePool();
+	pool->load(FileMap::getFilePath(namFile));
+	names.push_back(pool);
+}
+
 /**
  * Sorts all our lists according to their weight.
  */
@@ -1513,9 +1520,20 @@ void Ruleset::sortLists()
 
 	for (std::vector<std::string>::iterator i = _soldierNames.begin(); i != _soldierNames.end(); ++i)
 	{
-		SoldierNamePool *pool = new SoldierNamePool();
-		pool->load(FileMap::getFilePath(*i));
-		_names.push_back(pool);
+		if (i->substr(i->length() - 1, 1) == "/")
+		{
+			// load all *.nam files in given directory
+			std::set<std::string> names = FileMap::filterFiles(FileMap::getVFolderContents(*i), "nam");
+			for (std::set<std::string>::iterator j = names.begin(); j != names.end(); ++j)
+			{
+				addSoldierNamePool(_names, *i + *j);
+			}
+		}
+		else
+		{
+			// load given file
+			addSoldierNamePool(_names, *i);
+		}
 	}
 }
 
