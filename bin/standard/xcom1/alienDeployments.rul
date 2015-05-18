@@ -1223,8 +1223,8 @@ alienDeployments:
     shade: 15
     race: STR_SECTOID
     nextStage: STR_MARS_THE_FINAL_ASSAULT
-    noRetreat: true
     finalDestination: true
+    loseCutscene: losegame
     briefing:
       textOffset: -16
       palette: 6
@@ -1380,8 +1380,8 @@ alienDeployments:
       - UBASE
     shade: 5
     race: STR_MIXED
-    noRetreat: true
-    finalMission: true
+    winCutscene: wingame
+    loseCutscene: losegame
     briefing:
       textOffset: -16
       palette: 6
