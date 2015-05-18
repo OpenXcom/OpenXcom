@@ -100,15 +100,15 @@ CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(288, 16, 16, 176);
+	_btnOk = new TextButton(148, 16, 164, 176);
 	_txtTitle = new Text(300, 17, 16, 7);
-	_txtName = new Text(114, 9, 16, 52);
-	_txtRank = new Text(102, 9, 122, 52);
-	_txtCraft = new Text(84, 9, 224, 52);
-	_txtAvailable = new Text(110, 9, 16, 44);
-	_txtUsed = new Text(110, 9, 122, 44);
-	_cbxSortBy = new ComboBox(this, 148, 16, 16, 24);
-	_lstSoldiers = new TextList(288, 112, 8, 60);
+	_txtName = new Text(114, 9, 16, 32);
+	_txtRank = new Text(102, 9, 122, 32);
+	_txtCraft = new Text(84, 9, 224, 32);
+	_txtAvailable = new Text(110, 9, 16, 24);
+	_txtUsed = new Text(110, 9, 122, 24);
+	_cbxSortBy = new ComboBox(this, 148, 16, 8, 176);
+	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
 	setInterface("craftSoldiers");
