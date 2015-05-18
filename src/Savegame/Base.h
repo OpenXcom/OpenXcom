@@ -181,9 +181,11 @@ public:
 	int getAvailablePsiLabs() const;
 	/// Gets the base's total free psi lab space.
 	int getFreePsiLabs() const;
-	/// Gets the total amount of Containment Space
+	/// Gets the amount of free Containment space.
+	int getFreeContainment() const;
+	/// Gets the total amount of Containment space.
 	int getAvailableContainment() const;
-	/// Gets the total amount of used Containment Space
+	/// Gets the total amount of used Containment space.
 	int getUsedContainment() const;
 	/// Sets the craft's battlescape status.
 	void setInBattlescape(bool inbattle);

@@ -284,16 +284,28 @@ void create()
 }
 
 // we can get fancier with these detection routines, but for now just look for
-// files that exist in one game but not the other
+// *something* in the data folders.  case sensitivity can make actually verifying
+// that the *correct* files are there complex.
+static bool _gameIsInstalled(const std::string &gameName)
+{
+	// look for game data in either the data or user directories
+	std::string dataGameFolder = CrossPlatform::searchDataFolder(gameName);
+	std::string userGameFolder = _userFolder + gameName;
+	return (CrossPlatform::folderExists(dataGameFolder)
+		&& CrossPlatform::getFolderContents(dataGameFolder).size() > 8)
+	    || (CrossPlatform::folderExists(userGameFolder)
+		&& CrossPlatform::getFolderContents(userGameFolder).size() > 8);
+}
+
 static bool _ufoIsInstalled()
 {
-	return CrossPlatform::fileExists(CrossPlatform::searchDataFile("UFO/TERRAIN/UFO1.PCK"));
+	return _gameIsInstalled("UFO");
 }
 
 static bool _tftdIsInstalled()
 {
 	// ensure both the resource data and the mod data is in place
-	return CrossPlatform::fileExists(CrossPlatform::searchDataFile("TFTD/TERRAIN/SEA.PCK"))
+	return _gameIsInstalled("TFTD")
 		&& CrossPlatform::fileExists(CrossPlatform::searchDataFile("standard/xcom2/Xcom2Ruleset.rul"));
 }
 
@@ -369,7 +381,7 @@ void loadArgs(int argc, char *argv[])
 				{
 					_userFolder = CrossPlatform::endPath(argv[i]);
 				}
-				else if (argname == "cfg")
+				else if (argname == "cfg" || argname == "config")
 				{
 					_configFolder = CrossPlatform::endPath(argv[i]);
 				}
@@ -401,7 +413,7 @@ bool showHelp(int argc, char *argv[])
 	help << "        use PATH as the default Data Folder instead of auto-detecting" << std::endl << std::endl;
 	help << "-user PATH" << std::endl;
 	help << "        use PATH as the default User Folder instead of auto-detecting" << std::endl << std::endl;
-	help << "-cfg PATH" << std::endl;
+	help << "-cfg PATH  or  -config PATH" << std::endl;
 	help << "        use PATH as the default Config Folder instead of auto-detecting" << std::endl << std::endl;
 	help << "-KEY VALUE" << std::endl;
 	help << "        set option KEY to VALUE instead of default/loaded value (eg. -displayWidth 640)" << std::endl << std::endl;
@@ -667,8 +679,16 @@ static void _loadMod(const ModInfo &modInfo, std::set<std::string> circDepCheck)
 	FileMap::load(modInfo.getId(), modInfo.getPath(), false);
 	for (std::vector<std::string>::const_iterator i = modInfo.getExternalResourceDirs().begin(); i != modInfo.getExternalResourceDirs().end(); ++i)
 	{
+		// use external resource folders from the user dir if they exist
+		// and if not, fall back to searching the data dirs
+		std::string extResourceFolder = _userFolder + *i;
+		if (!CrossPlatform::folderExists(extResourceFolder))
+		{
+			extResourceFolder = CrossPlatform::searchDataFolder(*i);
+		}
+
 		// always ignore ruleset files in external resource dirs
-		FileMap::load(modInfo.getId(), CrossPlatform::searchDataFolder(*i), true);
+		FileMap::load(modInfo.getId(), extResourceFolder, true);
 	}
 
 	// if this is a master but it has a master of its own, allow it to
@@ -798,9 +818,9 @@ void updateOptions()
 		save();
 	}
 
-    // now apply options set on the command line, overriding defaults and those loaded from config file
+	// now apply options set on the command line, overriding defaults and those loaded from config file
 	//if (!_commandLine.empty())
-    for (std::vector<OptionInfo>::iterator i = _info.begin(); i != _info.end(); ++i)
+	for (std::vector<OptionInfo>::iterator i = _info.begin(); i != _info.end(); ++i)
 	{
 		i->load(_commandLine);
 	}
