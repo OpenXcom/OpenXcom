@@ -1380,17 +1380,17 @@ void BattlescapeState::blinkHealthBar()
 {
 	static Uint8 color = _barHealth->getColor(), maxcolor = color + 3, step = 0;
 
+	step ^= 1;	// 1, 0, 1, 0, ...
 	BattleUnit *bu = _save->getSelectedUnit();
-	if (bu == 0 || !_barHealth->getVisible()) return;
+	if (step == 0 || bu == 0 || !_barHealth->getVisible()) return;
+
+	if (++color > maxcolor) color = maxcolor - 3;
 
 	for (int i = 0; i < 6; i++)
 	{
 		if (bu->getFatalWound(i) > 0)
 		{
 			_barHealth->setColor(color);
-			color += step ^= 1;		// +1, +0, +1, +0, ...
-			if (color > maxcolor)
-				color = maxcolor - 3;
 			break;
 		}
 	}
