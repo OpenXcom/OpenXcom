@@ -52,14 +52,15 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 	// maps don't have initializers :(
 	if (_names.empty())
 	{
-		_names["en-US"] = utf8ToWstr("English (US)");
-		_names["en-GB"] = utf8ToWstr("English (UK)");
+		// names are in all lower case to support case insensitivity
+		_names["en-us"] = utf8ToWstr("English (US)");
+		_names["en-gb"] = utf8ToWstr("English (UK)");
 		_names["bg"] = utf8ToWstr("Български");
 		_names["cs"] = utf8ToWstr("Česky");
 		_names["da"] = utf8ToWstr("Dansk");
 		_names["de"] = utf8ToWstr("Deutsch");
 		_names["el"] = utf8ToWstr("Ελληνικά");
-		_names["es-ES"] = utf8ToWstr("Español (ES)");
+		_names["es-es"] = utf8ToWstr("Español (ES)");
 		_names["es-419"] = utf8ToWstr("Español (AL)");
 		_names["fr"] = utf8ToWstr("Français");
 		_names["fi"] = utf8ToWstr("Suomi");
@@ -71,8 +72,8 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 		_names["nl"] = utf8ToWstr("Nederlands");
 		_names["no"] = utf8ToWstr("Norsk");
 		_names["pl"] = utf8ToWstr("Polski");
-		_names["pt-BR"] = utf8ToWstr("Português (BR)");
-		_names["pt-PT"] = utf8ToWstr("Português (PT)");
+		_names["pt-br"] = utf8ToWstr("Português (BR)");
+		_names["pt-pt"] = utf8ToWstr("Português (PT)");
 		_names["ro"] = utf8ToWstr("Română");
 		_names["ru"] = utf8ToWstr("Русский");
 		_names["sk"] = utf8ToWstr("Slovenčina");
@@ -80,8 +81,8 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 		_names["th"] = utf8ToWstr("ไทย");
 		_names["tr"] = utf8ToWstr("Türkçe");
 		_names["uk"] = utf8ToWstr("Українська");
-		_names["zh-CN"] = utf8ToWstr("中文");
-		_names["zh-TW"] = utf8ToWstr("文言");
+		_names["zh-cn"] = utf8ToWstr("中文");
+		_names["zh-tw"] = utf8ToWstr("文言");
 	}
 	if (_rtl.empty())
 	{
@@ -91,8 +92,8 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 	{
 		_cjk.push_back("ja");
 		//_cjk.push_back("ko");  has spacing between words
-		_cjk.push_back("zh-CN");
-		_cjk.push_back("zh-TW");
+		_cjk.push_back("zh-cn");
+		_cjk.push_back("zh-tw");
 	}
 }
 
