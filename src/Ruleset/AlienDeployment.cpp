@@ -80,6 +80,7 @@ namespace YAML
 			node["palette"] = rhs.palette;
 			node["textOffset"] = rhs.textOffset;
 			node["music"] = rhs.music;
+			node["cutscene"] = rhs.cutscene;
 			node["background"] = rhs.background;
 			node["showCraft"] = rhs.showCraft;
 			node["showTarget"] = rhs.showTarget;
@@ -92,6 +93,7 @@ namespace YAML
 			rhs.palette = node["palette"].as<int>(rhs.palette);
 			rhs.textOffset = node["textOffset"].as<int>(rhs.textOffset);
 			rhs.music = node["music"].as<std::string>(rhs.music);
+			rhs.cutscene = node["cutscene"].as<std::string>(rhs.cutscene);
 			rhs.background = node["background"].as<std::string>(rhs.background);
 			rhs.showCraft = node["showCraft"].as<bool>(rhs.showCraft);
 			rhs.showTarget = node["showTarget"].as<bool>(rhs.showTarget);
