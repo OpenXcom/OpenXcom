@@ -23,6 +23,7 @@
 #include "../Engine/State.h"
 #include "../Engine/Language.h"
 #include "../Engine/Font.h"
+#include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
@@ -36,10 +37,10 @@ const int ComboBox::MAX_ITEMS = 10;
 const int ComboBox::BUTTON_WIDTH = 14;
 const int ComboBox::TEXT_HEIGHT = 8;
 
-static int getPopupWindowY(int buttonHeight, int buttonY, int popupHeight)
+static int getPopupWindowY(Game *game, int buttonHeight, int buttonY, int popupHeight)
 {
 	int belowButtonY = buttonY + buttonHeight;
-	if (belowButtonY + popupHeight > Screen::ORIGINAL_HEIGHT)
+	if (belowButtonY + popupHeight > Screen::ORIGINAL_HEIGHT + game->getScreen()->getDY())
 	{
 		// popup list won't fit below the button; display it above
 		return buttonY - popupHeight;
@@ -63,7 +64,7 @@ ComboBox::ComboBox(State *state, int width, int height, int x, int y) : Interact
 	_arrow = new Surface(11, 8, x + width - BUTTON_WIDTH, y + 4);
 
 	int popupHeight = MAX_ITEMS * TEXT_HEIGHT + VERTICAL_MARGIN * 2;
-	int popupY = getPopupWindowY(height, y, popupHeight);
+	int popupY = getPopupWindowY(State::_game, height, y, popupHeight);
 	_window = new Window(state, width, popupHeight, x, popupY);
 	_window->setThinBorder();
 
@@ -116,7 +117,7 @@ void ComboBox::setY(int y)
 	_arrow->setY(y + 4);
 
 	int popupHeight = _window->getHeight();
-	int popupY = getPopupWindowY(getHeight(), y, popupHeight);
+	int popupY = getPopupWindowY(State::_game, getHeight(), y, popupHeight);
 	_window->setY(popupY);
 	_list->setY(popupY + VERTICAL_MARGIN);
 }
@@ -304,7 +305,7 @@ void ComboBox::setDropdown(int options)
 	}
 
 	int popupHeight = items * h + VERTICAL_MARGIN * 2;
-	int popupY = getPopupWindowY(getHeight(), getY(), popupHeight);
+	int popupY = getPopupWindowY(State::_game, getHeight(), getY(), popupHeight);
 	_window->setY(popupY);
 	_window->setHeight(popupHeight);
 	_list->setY(popupY + VERTICAL_MARGIN);

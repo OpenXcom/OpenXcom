@@ -47,6 +47,7 @@ class LocalizedText;
 class State
 {
 	friend class Timer;
+	friend class ComboBox;
 
 protected:
 	static Game *_game;
