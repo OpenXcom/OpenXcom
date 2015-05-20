@@ -173,7 +173,7 @@ CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft)
 #undef PUSH_IN
 
 	_cbxSortBy->setOptions(sortOptions);
-	_cbxSortBy->setSelected(0);
+	_cbxSortBy->setSelected(-1);
 	_cbxSortBy->onChange((ActionHandler)&CraftSoldiersState::cbxSortByChange);
 	_cbxSortBy->setText(tr("STR_SORT_BY"));
 
@@ -206,8 +206,13 @@ CraftSoldiersState::~CraftSoldiersState()
  */
 void CraftSoldiersState::cbxSortByChange(Action *action)
 {
-	SortFunctor *compFunc = _sortFunctors[_cbxSortBy->getSelected()];
+	size_t selIdx = _cbxSortBy->getSelected();
+	if (selIdx == (size_t)-1)
+	{
+		return;
+	}
 
+	SortFunctor *compFunc = _sortFunctors[selIdx];
 	if (compFunc)
 	{
 		std::stable_sort(_base->getSoldiers()->begin(), _base->getSoldiers()->end(), *compFunc);
@@ -307,6 +312,7 @@ void CraftSoldiersState::lstItemsLeftArrowClick(Action *action)
 		}
 	}
 	_cbxSortBy->setText(tr("STR_SORT_BY"));
+	_cbxSortBy->setSelected(-1);
 }
 
 /**
@@ -360,6 +366,7 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
 		}
 	}
 	_cbxSortBy->setText(tr("STR_SORT_BY"));
+	_cbxSortBy->setSelected(-1);
 }
 
 /**

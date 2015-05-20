@@ -376,6 +376,7 @@ void ComboBox::handle(Action *action, State *state)
 		 action->getAbsoluteYMouse() < topY || action->getAbsoluteYMouse() >= topY + getHeight() + _window->getHeight()))
 	{
 		toggle();
+		_toggled = false;
 	}
 	if (_toggled)
 	{
