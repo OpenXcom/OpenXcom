@@ -657,7 +657,7 @@ set ( data_install_dir bin )
 if ( CMAKE_COMPILER_IS_GNUCXX AND "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" )
   add_definitions ( -D_DEBUG )
 endif ()
-if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR ENABLE_WARNING) )
+if ( ( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" ) AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR ENABLE_WARNING ) )
     # Enable more GCC warnings if requested or we are doing a Debug build.
     add_definitions ( -Wall
       -Winit-self
@@ -667,10 +667,9 @@ if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR EN
       -Wredundant-decls
       -Wformat-security
       -Wtype-limits
-      -Wclobbered
       -Wempty-body
-      -Wlogical-op
       -Wuninitialized
+      -Wno-unused-function
 # These warning options actually generate way too many warnings. Should be enabled later.
 #      -Wignored-qualifiers
 #      -Weffc++
@@ -678,12 +677,20 @@ if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR EN
 #      -Winline
 #      -Wshadow
       )
+    if ( CMAKE_COMPILER_IS_GNUCXX )
+      # add warning flags recognized by g++ but not by clang
+      add_definitions ( -Wclobbered -Wlogical-op )
+    endif ()
+    if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+      # add warning flags recognized by clang but not by g++
+      add_definitions ( -Wno-overloaded-virtual )
+    endif ()
     if ( FATAL_WARNING )
       add_definitions ( -Werror )
-    endif ( FATAL_WARNING )
-endif()
+    endif ()
+endif ()
 
-if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" )
+if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
   add_definitions ( -Qunused-arguments -pipe )
   if ( ENABLE_CLANG_ANALYSIS )
     add_definitions ( --analyze )
