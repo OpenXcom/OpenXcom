@@ -33,7 +33,7 @@ class ComboBox;
 class Base;
 class Craft;
 class Soldier;
-class SortFunctor;
+struct SortFunctor;
 
 /**
  * Select Squad screen that lets the player
