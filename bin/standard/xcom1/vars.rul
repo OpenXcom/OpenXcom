@@ -16,3 +16,4 @@ initialFunding: 6000
 alienFuel: STR_ELERIUM_115
 turnAIUseGrenade: 3
 turnAIUseBlaster: 3
+fontName: Font.dat

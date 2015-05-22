@@ -370,13 +370,24 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 			rule->load(*i);
 		}
 	}
-	_soldierNames = doc["soldierNames"].as<std::vector<std::string> >(_soldierNames);
 	for (YAML::const_iterator i = doc["soldiers"].begin(); i != doc["soldiers"].end(); ++i)
 	{
 		RuleSoldier *rule = loadRule(*i, &_soldiers);
 		if (rule != 0)
 		{
 			rule->load(*i);
+		}
+		for (YAML::const_iterator j = (*i)["soldierNames"].begin(); j != (*i)["soldierNames"].end(); ++j)
+		{
+			std::string fileName = (*j).as<std::string>();
+			if (fileName == "delete")
+			{
+				_soldierNames.clear();
+			}
+			else
+			{
+				_soldierNames.push_back(fileName);
+			}
 		}
 	}
 	for (YAML::const_iterator i = doc["units"].begin(); i != doc["units"].end(); ++i)

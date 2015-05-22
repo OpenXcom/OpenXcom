@@ -727,7 +727,7 @@ void mapResources()
 		_loadMod(modInfo, circDepCheck);
 	}
 	// pick up stuff in common
-	FileMap::load("common", CrossPlatform::searchDataFolder("common"), false);
+	FileMap::load("common", CrossPlatform::searchDataFolder("common"), true);
 }
 
 /**

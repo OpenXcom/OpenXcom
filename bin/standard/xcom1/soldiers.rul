@@ -40,3 +40,5 @@ soldiers:
     standHeight: 22
     kneelHeight: 14
     femaleFrequency: 25
+    soldierNames:
+      - SoldierName/
