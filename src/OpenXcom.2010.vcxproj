@@ -450,8 +450,6 @@
     <ClCompile Include="Ruleset\AlienDeployment.cpp" />
     <ClCompile Include="Ruleset\AlienRace.cpp" />
     <ClCompile Include="Ruleset\RuleCommendations.cpp" />
-    <ClCompile Include="Ruleset\StatString.cpp" />
-    <ClCompile Include="Ruleset\StatStringCondition.cpp" />
     <ClCompile Include="Ruleset\RuleGlobe.cpp" />
     <ClCompile Include="Ruleset\RuleMusic.cpp" />
     <ClCompile Include="Ruleset\RuleVideo.cpp" />
