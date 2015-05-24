@@ -34,6 +34,7 @@ void RuleResearch::load(const YAML::Node &node, int listOrder)
 {
 	_name = node["name"].as<std::string>(_name);
 	_lookup = node["lookup"].as<std::string>(_lookup);
+	_cutscene = node["cutscene"].as<std::string>(_cutscene);
 	_cost = node["cost"].as<int>(_cost);
 	_points = node["points"].as<int>(_points);
 	_dependencies = node["dependencies"].as< std::vector<std::string> >(_dependencies);
@@ -136,6 +137,15 @@ const std::vector<std::string> & RuleResearch::getRequirements() const
 int RuleResearch::getListOrder() const
 {
 	return _listOrder;
+}
+
+/**
+ * Gets the cutscene to play when this research item is completed.
+ * @return The cutscene id.
+ */
+const std::string & RuleResearch::getCutscene() const
+{
+	return _cutscene;
 }
 
 }

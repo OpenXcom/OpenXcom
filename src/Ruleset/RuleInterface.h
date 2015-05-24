@@ -44,7 +44,7 @@ private:
 
 	std::map <std::string, Element> _elements;
 public:
-	/// Consructor.
+	/// Constructor.
 	RuleInterface(const std::string & type);
 	/// Destructor.
 	~RuleInterface();

@@ -28,6 +28,13 @@ class TextButton;
 class Window;
 class Text;
 
+// Utility class for enqueueing a state in the stack that goes to the main menu
+class GoToMainMenuState : public State
+{
+public:
+	void init();
+};
+
 /**
  * Main Menu window displayed when first
  * starting the game.

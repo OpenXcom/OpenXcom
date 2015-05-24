@@ -80,6 +80,7 @@ namespace YAML
 			node["palette"] = rhs.palette;
 			node["textOffset"] = rhs.textOffset;
 			node["music"] = rhs.music;
+			node["cutscene"] = rhs.cutscene;
 			node["background"] = rhs.background;
 			node["showCraft"] = rhs.showCraft;
 			node["showTarget"] = rhs.showTarget;
@@ -92,6 +93,7 @@ namespace YAML
 			rhs.palette = node["palette"].as<int>(rhs.palette);
 			rhs.textOffset = node["textOffset"].as<int>(rhs.textOffset);
 			rhs.music = node["music"].as<std::string>(rhs.music);
+			rhs.cutscene = node["cutscene"].as<std::string>(rhs.cutscene);
 			rhs.background = node["background"].as<std::string>(rhs.background);
 			rhs.showCraft = node["showCraft"].as<bool>(rhs.showCraft);
 			rhs.showTarget = node["showTarget"].as<bool>(rhs.showTarget);
@@ -108,7 +110,7 @@ namespace OpenXcom
  * type of deployment data.
  * @param type String defining the type.
  */
-AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _width(0), _length(0), _height(0), _civilians(0), _shade(-1), _noRetreat(false), _finalDestination(false), _finalMission(false), _markerIcon(-1), _durationMin(0), _durationMax(0), _minDepth(0), _maxDepth(0), _minSiteDepth(0), _maxSiteDepth(0)
+AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _width(0), _length(0), _height(0), _civilians(0), _shade(-1), _finalDestination(false), _markerIcon(-1), _durationMin(0), _durationMax(0), _minDepth(0), _maxDepth(0), _minSiteDepth(0), _maxSiteDepth(0)
 {
 }
 
@@ -135,9 +137,9 @@ void AlienDeployment::load(const YAML::Node &node)
 	_shade = node["shade"].as<int>(_shade);
 	_nextStage = node["nextStage"].as<std::string>(_nextStage);
 	_race = node["race"].as<std::string>(_race);
-	_noRetreat = node["noRetreat"].as<bool>(_noRetreat);
 	_finalDestination = node["finalDestination"].as<bool>(_finalDestination);
-	_finalMission = node["finalMission"].as<bool>(_finalMission);
+	_winCutscene = node["winCutscene"].as<std::string>(_winCutscene);
+	_loseCutscene = node["loseCutscene"].as<std::string>(_loseCutscene);
 	_script = node["script"].as<std::string>(_script);
 	_alert = node["alert"].as<std::string>(_alert);
 	_briefingData = node["briefing"].as<BriefingData>(_briefingData);
@@ -251,15 +253,6 @@ std::string AlienDeployment::getScript() const
 }
 
 /**
- * Gets if aborting this mission will fail the game.
- * @return if aborting this mission will fail the game.
- */
-bool AlienDeployment::isNoRetreat() const
-{
-	return _noRetreat;
-}
-
-/**
  * Gets if winning this mission completes the game.
  * @return if winning this mission completes the game.
  */
@@ -269,12 +262,21 @@ bool AlienDeployment::isFinalDestination() const
 }
 
 /**
- * Gets if winning this mission completes the game.
- * @return if winning this mission completes the game.
+ * Gets the cutscene to play when the mission is won.
+ * @return the cutscene to play when the mission is won.
  */
-bool AlienDeployment::isFinalMission() const
+std::string AlienDeployment::getWinCutscene() const
 {
-	return _finalMission;
+	return _winCutscene;
+}
+
+/**
+ * Gets the cutscene to play when the mission is lost.
+ * @return the cutscene to play when the mission is lost.
+ */
+std::string AlienDeployment::getLoseCutscene() const
+{
+	return _loseCutscene;
 }
 
 /**

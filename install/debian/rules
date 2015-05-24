@@ -9,7 +9,7 @@ override_dh_install:
 	mkdir -p debian/openxcom/usr/bin
 	cp bin/openxcom debian/openxcom/usr/bin/
 	mkdir -p debian/openxcom/usr/share/openxcom
-	cp -r bin/data/ debian/openxcom/usr/share/openxcom/
+	cp -r bin/{TFTD,UFO,common,standard}/ debian/openxcom/usr/share/openxcom/
 	mkdir -p debian/openxcom/usr/share/applications
 	cp res/linux/openxcom.desktop debian/openxcom/usr/share/applications/
 	mkdir -p debian/openxcom/usr/share/icons/hicolor/48x48/apps

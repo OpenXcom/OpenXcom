@@ -44,7 +44,7 @@ struct DeploymentData
 struct BriefingData
 {
 	int palette, textOffset;
-	std::string music, background;
+	std::string music, background, cutscene;
 	bool showCraft, showTarget;
 	BriefingData() : palette(0), textOffset(0), music("GMDEFEND"), background("BACK16.SCR"), showCraft(true), showTarget(true) { /*Empty by Design*/ };
 };
@@ -67,7 +67,8 @@ private:
 	std::vector<std::string> _terrains, _music;
 	int _shade;
 	std::string _nextStage, _race, _script;
-	bool _noRetreat, _finalDestination, _finalMission;
+	bool _finalDestination;
+	std::string _winCutscene, _loseCutscene;
 	std::string _alert;
 	BriefingData _briefingData;
 	std::string _markerName;
@@ -97,12 +98,12 @@ public:
 	std::string getRace() const;
 	/// Gets the script to use for this deployment.
 	std::string getScript() const;
-	/// Checks if aborting this mission will fail the game (all mars and t'leth stages).
-	bool isNoRetreat() const;
 	/// Checks if this is the destination for the final mission (mars stage 1, t'leth stage 1).
 	bool isFinalDestination() const;
-	/// Checks if winning this mission will complete the game (mars stage 2, t'leth stage 3).
-	bool isFinalMission() const;
+	/// Gets the cutscene to play when this mission is won.
+	std::string getWinCutscene() const;
+	/// Gets the cutscene to play when this mission is lost.
+	std::string getLoseCutscene() const;
 	/// Gets the alert message for this mission type.
 	std::string getAlertMessage() const;
 	/// Gets the briefing data for this mission type.

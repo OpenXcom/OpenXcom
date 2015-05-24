@@ -28,6 +28,7 @@
 #include "Action.h"
 #include "Options.h"
 #include "CrossPlatform.h"
+#include "FileMap.h"
 #include "Zoom.h"
 #include "Timer.h"
 #include <SDL.h>
@@ -449,7 +450,7 @@ void Screen::resetDisplay(bool resetVideo)
 #ifndef __NO_OPENGL
 		glOutput.init(_baseWidth, _baseHeight);
 		glOutput.linear = Options::useOpenGLSmoothing; // setting from shader file will override this, though
-		glOutput.set_shader(CrossPlatform::getDataFile(Options::useOpenGLShader).c_str());
+		glOutput.set_shader(FileMap::getFilePath(Options::useOpenGLShader).c_str());
 		glOutput.setVSync(Options::vSyncForOpenGL);
 		OpenGL::checkErrors = Options::checkOpenGLErrors;
 #endif

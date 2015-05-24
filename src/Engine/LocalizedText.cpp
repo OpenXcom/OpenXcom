@@ -65,6 +65,16 @@ LocalizedText &LocalizedText::arg(const std::wstring &val)
 	return *this;
 }
 
+LocalizedText LocalizedText::arg(const std::string &val) const
+{
+	return arg(Language::utf8ToWstr(val));
+}
+
+LocalizedText &LocalizedText::arg(const std::string &val)
+{
+	return arg(Language::utf8ToWstr(val));
+}
+
 /**
  * Return the UTF-8 representation of this string.
  * @return A UTF-8 string.

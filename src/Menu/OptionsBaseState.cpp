@@ -200,6 +200,10 @@ void OptionsBaseState::btnOkClick(Action *)
 	recenter(dX, dY);
 	Options::switchDisplay();
 	Options::save();
+	if (Options::reload && _origin == OPT_MENU)
+	{
+		Options::mapResources();
+	}
 	_game->loadLanguage(Options::language);
 	SDL_WM_GrabInput(Options::captureMouse);
 	_game->getScreen()->resetDisplay();

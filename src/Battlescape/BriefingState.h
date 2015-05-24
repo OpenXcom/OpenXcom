@@ -40,11 +40,14 @@ private:
 	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtTitle, *_txtTarget, *_txtCraft, *_txtBriefing;
+	std::string _cutsceneId, _musicId;
 public:
 	/// Creates the Briefing state.
 	BriefingState(Craft *craft = 0, Base *base = 0);
 	/// Cleans up the Briefing state.
 	~BriefingState();
+	/// Initialization
+	void init();
 	/// Handler for clicking the Ok button.
 	void btnOkClick(Action *action);
 };

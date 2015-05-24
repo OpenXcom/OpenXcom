@@ -393,11 +393,18 @@ int Base::detect(Target *target) const
 	{
 		if ((*i)->getRules()->getRadarRange() >= distance && (*i)->getBuildTime() == 0)
 		{
+			int radarChance = (*i)->getRules()->getRadarChance();
 			if ((*i)->getRules()->isHyperwave())
 			{
-				return 2;
+				if (radarChance == 100 || RNG::percent(radarChance))
+				{
+					return 2;
+				}
 			}
-			chance += (*i)->getRules()->getRadarChance();
+			else
+			{
+				chance += radarChance;
+			}
 		}
 	}
 	if (chance == 0) return 0;
@@ -814,6 +821,15 @@ int Base::getFreePsiLabs() const
 }
 
 /**
+ * Return containment space not in use
+ * @return containment space not in use
+*/
+int Base::getFreeContainment() const
+{
+	return getAvailableContainment() - getUsedContainment();
+}
+
+/**
  * Returns the amount of scientists currently in use.
  * @return Amount of scientists.
 */
@@ -1123,15 +1139,12 @@ int Base::getUsedContainment() const
 			}
 		}
 	}
-	if (Options::storageLimitsEnforced)
+	for (std::vector<ResearchProject*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
 	{
-		for (std::vector<ResearchProject*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
+		const RuleResearch *projRules = (*i)->getRules();
+		if (projRules->needItem() && _rule->getUnit(projRules->getName()))
 		{
-			const RuleResearch *projRules = (*i)->getRules();
-			if (projRules->needItem() && _rule->getUnit(projRules->getName()))
-			{
-				++total;
-			}
+			++total;
 		}
 	}
 	return total;

@@ -908,15 +908,17 @@ bool Pathfinding::previewPath(bool bRemove)
 	{
 		int dir = *i;
 		int tu = getTUCost(pos, dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
+		int energyUse = tu;
 		if (running)
 		{
 			tu *= 0.75;
+			energyUse *= 1.5;
 		}
-		if (dir < Pathfinding::DIR_UP)
+		if (dir >= Pathfinding::DIR_UP)
 		{
-			energy -= tu / 2;
+			energyUse = 0;
 		}
-
+		energy -= energyUse / 2;
 		tus -= tu;
 		total += tu;
 		bool reserve = _save->getBattleGame()->checkReservedTU(_unit, total, true);
