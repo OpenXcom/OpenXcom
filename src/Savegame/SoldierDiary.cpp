@@ -229,6 +229,10 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
             _loneSurvivorTotal++;
         if (unitStatistics->ironMan)
             _ironManTotal++;
+        if (unitStatistics->nikeCross)
+            _allAliensKilledTotal++;
+        if (unitStatistics->mercyCross)
+            _allAliensStunnedTotal++;
     }
     _daysWoundedTotal += unitStatistics->daysWounded;
     if (unitStatistics->daysWounded)
@@ -259,10 +263,6 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 		_KIA++;
     if (unitStatistics->MIA)
         _MIA++;
-	if (unitStatistics->nikeCross)
-		_allAliensKilledTotal++;
-    if (unitStatistics->nikeCross)
-		_allAliensStunnedTotal++;
 	_woundsHealedTotal = unitStatistics->woundsHealed++;
 	if (_UFOTotal.size() >= rules->getUfosList().size())
 		_allUFOs = 1;
