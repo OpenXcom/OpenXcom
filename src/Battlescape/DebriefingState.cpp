@@ -293,7 +293,9 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 			{
 				// Find the best soldier per rank by comparing score
 				int score = (*deadUnit)->getDiary()->getScoreTotal();
-				SoldierRank rank = (*deadUnit)->getRank();				
+				SoldierRank rank = (*deadUnit)->getRank();		
+				// Rookies don't get this award. No one likes them.
+				if (rank == 0) continue;
 				
 				if (score > bestScore[rank])
 				{
