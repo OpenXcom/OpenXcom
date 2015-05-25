@@ -662,7 +662,7 @@ void GeoscapeState::timeAdvance()
 
 class LoseGameState : public State
 {
-public:	void init() { _game->pushState(new CutsceneState("losegame")); }
+public:	void init() { _game->pushState(new CutsceneState("loseGame")); }
 };
 
 /**
