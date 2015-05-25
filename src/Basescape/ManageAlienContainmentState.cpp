@@ -57,7 +57,8 @@ ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrig
 	for (std::vector<ResearchProject*>::const_iterator iter = _base->getResearch().begin(); iter != _base->getResearch().end(); ++iter)
 	{
 		const RuleResearch *research = (*iter)->getRules();
-		if (_game->getRuleset()->getUnit(research->getName()))
+		RuleItem *item = _game->getRuleset()->getItem(research->getName());
+		if (item && item->isAlien())
 		{
 			researchList.push_back(research->getName());
 		}
