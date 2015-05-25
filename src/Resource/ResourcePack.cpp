@@ -31,36 +31,37 @@
 namespace OpenXcom
 {
 
-int ResourcePack::DOOR_OPEN = 3;
-int ResourcePack::SLIDING_DOOR_OPEN = 20;
-int ResourcePack::SLIDING_DOOR_CLOSE = 21;
-int ResourcePack::SMALL_EXPLOSION = 2;
-int ResourcePack::LARGE_EXPLOSION = 5;
-int ResourcePack::EXPLOSION_OFFSET = 0;
-int ResourcePack::SMOKE_OFFSET = 8;
-int ResourcePack::UNDERWATER_SMOKE_OFFSET = 0;
-int ResourcePack::ITEM_DROP = 38;
-int ResourcePack::ITEM_THROW = 39;
-int ResourcePack::ITEM_RELOAD = 17;
-int ResourcePack::WALK_OFFSET = 22;
-int ResourcePack::FLYING_SOUND = 15;
-int ResourcePack::MALE_SCREAM[3] = {41, 42, 43};
-int ResourcePack::FEMALE_SCREAM[3] = {44, 45, 46};
-int ResourcePack::BUTTON_PRESS = 0;
-int ResourcePack::WINDOW_POPUP[3] = {1, 2, 3};
-int ResourcePack::UFO_FIRE = 8;
-int ResourcePack::UFO_HIT = 12;
-int ResourcePack::UFO_CRASH = 10;
-int ResourcePack::UFO_EXPLODE = 11;
-int ResourcePack::INTERCEPTOR_HIT = 10;
-int ResourcePack::INTERCEPTOR_EXPLODE = 13;
-int ResourcePack::GEOSCAPE_CURSOR = 252;
-int ResourcePack::BASESCAPE_CURSOR = 252;
-int ResourcePack::BATTLESCAPE_CURSOR = 144;
-int ResourcePack::UFOPAEDIA_CURSOR = 252;
-int ResourcePack::GRAPHS_CURSOR = 252;
-std::string ResourcePack::DEBRIEF_MUSIC_GOOD = "GMMARS";
-std::string ResourcePack::DEBRIEF_MUSIC_BAD = "GMMARS";
+int ResourcePack::DOOR_OPEN;
+int ResourcePack::SLIDING_DOOR_OPEN;
+int ResourcePack::SLIDING_DOOR_CLOSE;
+int ResourcePack::SMALL_EXPLOSION;
+int ResourcePack::LARGE_EXPLOSION;
+int ResourcePack::EXPLOSION_OFFSET;
+int ResourcePack::SMOKE_OFFSET;
+int ResourcePack::UNDERWATER_SMOKE_OFFSET;
+int ResourcePack::ITEM_DROP;
+int ResourcePack::ITEM_THROW;
+int ResourcePack::ITEM_RELOAD;
+int ResourcePack::WALK_OFFSET;
+int ResourcePack::FLYING_SOUND;
+int ResourcePack::MALE_SCREAM[3];
+int ResourcePack::FEMALE_SCREAM[3];
+int ResourcePack::BUTTON_PRESS;
+int ResourcePack::WINDOW_POPUP[3];
+int ResourcePack::UFO_FIRE;
+int ResourcePack::UFO_HIT;
+int ResourcePack::UFO_CRASH;
+int ResourcePack::UFO_EXPLODE;
+int ResourcePack::INTERCEPTOR_HIT;
+int ResourcePack::INTERCEPTOR_EXPLODE;
+int ResourcePack::GEOSCAPE_CURSOR;
+int ResourcePack::BASESCAPE_CURSOR;
+int ResourcePack::BATTLESCAPE_CURSOR;
+int ResourcePack::UFOPAEDIA_CURSOR;
+int ResourcePack::GRAPHS_CURSOR;
+std::string ResourcePack::DEBRIEF_MUSIC_GOOD;
+std::string ResourcePack::DEBRIEF_MUSIC_BAD;
+
 /**
  * Initializes a blank resource set pointing to a folder.
  */

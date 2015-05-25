@@ -40,6 +40,7 @@
 #include <sstream>
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
+#include "../Menu/CutsceneState.h"
 
 namespace OpenXcom
 {
@@ -76,19 +77,21 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 	if (!deployment) // none defined - should never happen, but better safe than sorry i guess.
 	{
 		setPalette("PAL_GEOSCAPE", 0);
-		_game->getResourcePack()->playMusic("GMDEFEND");
+		_musicId = "GMDEFEND";
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK16.SCR"));
 	}
 	else
 	{
 		BriefingData data = deployment->getBriefingData();
 		setPalette("PAL_GEOSCAPE", data.palette);
-		_game->getResourcePack()->playMusic(data.music);
 		_window->setBackground(_game->getResourcePack()->getSurface(data.background));
 		_txtCraft->setY(56 + data.textOffset);
 		_txtBriefing->setY(72 + data.textOffset);
 		_txtTarget->setVisible(data.showTarget);
 		_txtCraft->setVisible(data.showCraft);
+
+		_cutsceneId = data.cutscene;
+		_musicId = data.music;
 	}
 
 	add(_window, "window", "briefing");
@@ -154,6 +157,23 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 BriefingState::~BriefingState()
 {
 
+}
+
+void BriefingState::init()
+{
+	State::init();
+
+	if (!_cutsceneId.empty())
+	{
+		_game->pushState(new CutsceneState(_cutsceneId));
+
+		// don't play the cutscene again when we return to this state
+		_cutsceneId = "";
+	}
+	else
+	{
+		_game->getResourcePack()->playMusic(_musicId);
+	}
 }
 
 /**

@@ -37,8 +37,9 @@
 #include "../Interface/Text.h"
 #include "../Resource/XcomResourcePack.h"
 #include "MainMenuState.h"
-#include "IntroState.h"
+#include "VideoState.h"
 #include "ErrorMessageState.h"
+#include "CutsceneState.h"
 #include <SDL_mixer.h>
 #include <SDL_thread.h>
 
@@ -172,31 +173,14 @@ void StartState::think()
 		Log(LOG_INFO) << "OpenXcom started successfully!";
 		if (!Options::reload && Options::playIntro)
 		{
-			bool letterbox = Options::keepAspectRatio;
-			Options::keepAspectRatio = true;
-			Options::baseXResolution = Screen::ORIGINAL_WIDTH;
-			Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
-			_game->getScreen()->resetDisplay(false);
-			_game->setState(new IntroState(letterbox));
+			_game->setState(new GoToMainMenuState);
+			_game->pushState(new CutsceneState("intro"));
 		}
 		else
 		{
 			Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 			_game->getScreen()->resetDisplay(false);
-			State *state = new MainMenuState;
-			_game->setState(state);
-			// Check for mod loading errors
-			if (!Options::badMods.empty())
-			{
-				std::wostringstream error;
-				error << tr("STR_MOD_UNSUCCESSFUL") << L'\x02';
-				for (std::vector<std::string>::iterator i = Options::badMods.begin(); i != Options::badMods.end(); ++i)
-				{
-					error << Language::fsToWstr(*i) << L'\n';
-				}
-				Options::badMods.clear();
-				_game->pushState(new ErrorMessageState(error.str(), state->getPalette(), _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
-			}
+			_game->setState(new MainMenuState);
 			Options::reload = false;
 		}
 		_game->getCursor()->setVisible(true);
@@ -303,9 +287,9 @@ int StartState::load(void *game_ptr)
 	Game *game = (Game*)game_ptr;
 	try
 	{
-		Log(LOG_INFO) << "Loading ruleset...";
-		game->loadRuleset();
-		Log(LOG_INFO) << "Ruleset loaded successfully.";
+		Log(LOG_INFO) << "Loading rulesets...";
+		game->loadRulesets();
+		Log(LOG_INFO) << "Rulesets loaded successfully.";
 		Log(LOG_INFO) << "Loading resources...";
 		game->setResourcePack(new XcomResourcePack(game->getRuleset()));
 		Log(LOG_INFO) << "Resources loaded successfully.";
@@ -314,13 +298,7 @@ int StartState::load(void *game_ptr)
 		Log(LOG_INFO) << "Language loaded successfully.";
 		loading = LOADING_SUCCESSFUL;
 	}
-	catch (Exception &e)
-	{
-		error = e.what();
-		Log(LOG_ERROR) << error;
-		loading = LOADING_FAILED;
-	}
-	catch (YAML::Exception &e)
+	catch (std::exception &e)
 	{
 		error = e.what();
 		Log(LOG_ERROR) << error;

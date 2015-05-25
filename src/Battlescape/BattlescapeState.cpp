@@ -63,8 +63,6 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Exception.h"
-#include "../Geoscape/DefeatState.h"
-#include "../Geoscape/VictoryState.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Text.h"
@@ -72,6 +70,7 @@
 #include "../Interface/ImageButton.h"
 #include "../Interface/BattlescapeButton.h"
 #include "../Interface/NumberText.h"
+#include "../Menu/CutsceneState.h"
 #include "../Menu/PauseState.h"
 #include "../Menu/LoadGameState.h"
 #include "../Menu/SaveGameState.h"
@@ -1937,35 +1936,25 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		_animTimer->stop();
 		_gameTimer->stop();
 		_game->popState();
-		if (abort || (!abort  && inExitArea == 0))
+		_game->pushState(new DebriefingState);
+		std::string cutscene;
+		if (_game->getRuleset()->getDeployment(_save->getMissionType()))
 		{
-			// abort was done or no player is still alive
-			// this concludes to defeat when in mars or mars landing mission
-			if (_game->getRuleset()->getDeployment(_save->getMissionType()) &&
-				_game->getRuleset()->getDeployment(_save->getMissionType())->isNoRetreat() &&
-				_game->getSavedGame()->getMonthsPassed() > -1)
+			if (abort || inExitArea == 0)
 			{
-				_game->pushState (new DefeatState);
+				cutscene = _game->getRuleset()->getDeployment(_save->getMissionType())->getLoseCutscene();
 			}
 			else
 			{
-				_game->pushState(new DebriefingState);
+				cutscene = _game->getRuleset()->getDeployment(_save->getMissionType())->getWinCutscene();
 			}
 		}
-		else
+		if (!cutscene.empty())
 		{
-			// no abort was done and at least a player is still alive
-			// this concludes to victory when in mars mission
-			if (_game->getRuleset()->getDeployment(_save->getMissionType()) &&
-				_game->getRuleset()->getDeployment(_save->getMissionType())->isFinalMission() &&
-				_game->getSavedGame()->getMonthsPassed() > -1)
-			{
-				_game->pushState (new VictoryState);
-			}
-			else
-			{
-				_game->pushState(new DebriefingState);
-			}
+			// if cutscene is "wingame" or "losegame", then the DebriefingState
+			// pushed above will get popped without being shown.  otherwise
+			// it will get shown after the cutscene.
+			_game->pushState(new CutsceneState(cutscene));
 		}
 	}
 }

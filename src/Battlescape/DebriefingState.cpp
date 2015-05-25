@@ -1086,8 +1086,9 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 					addStat("STR_ALIEN_ARTIFACTS_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
 				}
 			}
+
 			// put items back in the base
-			if ((*it)->getRules()->isRecoverable() && !(*it)->getRules()->isFixed())
+			if (!(*it)->getRules()->isFixed() && (*it)->getRules()->isRecoverable())
 			{
 				switch ((*it)->getRules()->getBattleType())
 				{

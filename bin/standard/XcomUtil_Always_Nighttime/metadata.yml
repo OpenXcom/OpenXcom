@@ -1,0 +1,9 @@
+#
+# metadata.yaml for XcomUtil Always Nighttime
+
+name: "XcomUtil: Always Nighttime"
+version: 1.0
+description: "Forces all ground missions to nighttime."
+author: the OpenXcom team
+
+master: xcom1

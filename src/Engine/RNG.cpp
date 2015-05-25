@@ -19,6 +19,7 @@
 #include "RNG.h"
 #include <math.h>
 #include <time.h>
+#include <stdlib.h>
 #ifndef UINT64_MAX
 #define UINT64_MAX 0xffffffffffffffffULL
 #endif

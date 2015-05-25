@@ -66,11 +66,11 @@ namespace OpenXcom
 const double Globe::ROTATE_LONGITUDE = 0.10;
 const double Globe::ROTATE_LATITUDE = 0.06;
 
-Uint8 Globe::OCEAN_COLOR = Palette::blockOffset(12);
-Uint8 Globe::COUNTRY_LABEL_COLOR = 239;
-Uint8 Globe::LINE_COLOR = 162;
-Uint8 Globe::CITY_LABEL_COLOR = 138;
-Uint8 Globe::BASE_LABEL_COLOR = 133;
+Uint8 Globe::OCEAN_COLOR;
+Uint8 Globe::COUNTRY_LABEL_COLOR;
+Uint8 Globe::LINE_COLOR;
+Uint8 Globe::CITY_LABEL_COLOR;
+Uint8 Globe::BASE_LABEL_COLOR;
 
 namespace
 {

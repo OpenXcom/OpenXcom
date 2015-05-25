@@ -27,7 +27,7 @@
 #include "Texture.h"
 #include "../Engine/Palette.h"
 #include "../Geoscape/Globe.h"
-#include "../Engine/CrossPlatform.h"
+#include "../Engine/FileMap.h"
 
 namespace OpenXcom
 {
@@ -71,7 +71,7 @@ void RuleGlobe::load(const YAML::Node &node)
 			delete *i;
 		}
 		_polygons.clear();
-		loadDat(CrossPlatform::getDataFile(node["data"].as<std::string>()));
+		loadDat(FileMap::getFilePath(node["data"].as<std::string>()));
 	}
 	if (node["polygons"])
 	{

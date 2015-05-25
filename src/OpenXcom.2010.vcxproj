@@ -305,6 +305,7 @@
     <ClCompile Include="Engine\CrossPlatform.cpp" />
     <ClCompile Include="Engine\Exception.cpp" />
     <ClCompile Include="Engine\FastLineClip.cpp" />
+    <ClCompile Include="Engine\FileMap.cpp" />
     <ClCompile Include="Engine\FlcPlayer.cpp" />
     <ClCompile Include="Engine\Font.cpp" />
     <ClCompile Include="Engine\Game.cpp" />
@@ -313,6 +314,7 @@
     <ClCompile Include="Engine\Language.cpp" />
     <ClCompile Include="Engine\LanguagePlurality.cpp" />
     <ClCompile Include="Engine\LocalizedText.cpp" />
+    <ClCompile Include="Engine\ModInfo.cpp" />
     <ClCompile Include="Engine\Music.cpp" />
     <ClCompile Include="Engine\OpenGL.cpp" />
     <ClCompile Include="Engine\OptionInfo.cpp" />
@@ -348,10 +350,8 @@
     <ClCompile Include="Geoscape\ConfirmLandingState.cpp" />
     <ClCompile Include="Geoscape\ConfirmNewBaseState.cpp" />
     <ClCompile Include="Geoscape\CraftPatrolState.cpp" />
-    <ClCompile Include="Geoscape\DefeatState.cpp" />
     <ClCompile Include="Geoscape\DogfightState.cpp" />
     <ClCompile Include="Geoscape\ResearchRequiredState.cpp" />
-    <ClCompile Include="Geoscape\VictoryState.cpp" />
     <ClCompile Include="Geoscape\NewPossibleManufactureState.cpp" />
     <ClCompile Include="Geoscape\PsiTrainingState.cpp" />
     <ClCompile Include="Geoscape\ResearchCompleteState.cpp" />
@@ -392,7 +392,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu\AbandonGameState.cpp" />
     <ClCompile Include="Menu\ConfirmLoadState.cpp" />
-    <ClCompile Include="Menu\IntroState.cpp" />
+    <ClCompile Include="Menu\CutsceneState.cpp" />
     <ClCompile Include="Menu\ListGamesState.cpp" />
     <ClCompile Include="Menu\ListLoadOriginalState.cpp" />
     <ClCompile Include="Menu\ListLoadState.cpp" />
@@ -416,8 +416,10 @@
     <ClCompile Include="Menu\OptionsVideoState.cpp" />
     <ClCompile Include="Menu\PauseState.cpp" />
     <ClCompile Include="Menu\SaveGameState.cpp" />
+    <ClCompile Include="Menu\SlideshowState.cpp" />
     <ClCompile Include="Menu\StartState.cpp" />
     <ClCompile Include="Menu\TestState.cpp" />
+    <ClCompile Include="Menu\VideoState.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -620,6 +622,7 @@
     <ClInclude Include="Engine\DosFont.h" />
     <ClInclude Include="Engine\Exception.h" />
     <ClInclude Include="Engine\FastLineClip.h" />
+    <ClInclude Include="Engine\FileMap.h" />
     <ClInclude Include="Engine\FlcPlayer.h" />
     <ClInclude Include="Engine\Font.h" />
     <ClInclude Include="Engine\Game.h" />
@@ -630,6 +633,7 @@
     <ClInclude Include="Engine\LanguagePlurality.h" />
     <ClInclude Include="Engine\LocalizedText.h" />
     <ClInclude Include="Engine\Logger.h" />
+    <ClInclude Include="Engine\ModInfo.h" />
     <ClInclude Include="Engine\Music.h" />
     <ClInclude Include="Engine\OpenGL.h" />
     <ClInclude Include="Engine\OptionInfo.h" />
@@ -670,11 +674,9 @@
     <ClInclude Include="Geoscape\ConfirmLandingState.h" />
     <ClInclude Include="Geoscape\ConfirmNewBaseState.h" />
     <ClInclude Include="Geoscape\CraftPatrolState.h" />
-    <ClInclude Include="Geoscape\DefeatState.h" />
     <ClInclude Include="Geoscape\DogfightState.h" />
     <ClInclude Include="Geoscape\FundingState.h" />
     <ClInclude Include="Geoscape\ResearchRequiredState.h" />
-    <ClInclude Include="Geoscape\VictoryState.h" />
     <ClInclude Include="Geoscape\GeoscapeCraftState.h" />
     <ClInclude Include="Geoscape\NewPossibleManufactureState.h" />
     <ClInclude Include="Geoscape\NewPossibleResearchState.h" />
@@ -713,7 +715,7 @@
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="Menu\AbandonGameState.h" />
     <ClInclude Include="Menu\ConfirmLoadState.h" />
-    <ClInclude Include="Menu\IntroState.h" />
+    <ClInclude Include="Menu\CutsceneState.h" />
     <ClInclude Include="Menu\ListGamesState.h" />
     <ClInclude Include="Menu\ListLoadOriginalState.h" />
     <ClInclude Include="Menu\ListLoadState.h" />
@@ -737,8 +739,10 @@
     <ClInclude Include="Menu\OptionsVideoState.h" />
     <ClInclude Include="Menu\PauseState.h" />
     <ClInclude Include="Menu\SaveGameState.h" />
+    <ClInclude Include="Menu\SlideshowState.h" />
     <ClInclude Include="Menu\StartState.h" />
     <ClInclude Include="Menu\TestState.h" />
+    <ClInclude Include="Menu\VideoState.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource\ResourcePack.h" />
     <ClInclude Include="Resource\XcomResourcePack.h" />
