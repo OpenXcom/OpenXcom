@@ -263,7 +263,7 @@ void MonthlyReportState::btnOkClick(Action *)
 	{
 		if (_txtFailure->getVisible())
 		{
-			_game->pushState(new CutsceneState("wingame"));
+			_game->pushState(new CutsceneState("losegame"));
 		}
 		else
 		{
