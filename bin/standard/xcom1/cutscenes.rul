@@ -3,7 +3,7 @@ cutscenes:
     useUfoAudioSequence: true
     videos:
       - UFOINTRO/UFOINT.FLI
-  - type: wingame
+  - type: winGame
     slideshow:
       transitionSeconds: 30
       musicId: "GMWIN"
@@ -33,7 +33,7 @@ cutscenes:
           captionSize: [310, 42]
           captionPos: [5, 158]
           captionColor: 249
-  - type: losegame
+  - type: loseGame
     slideshow:
       transitionSeconds: 30
       musicId: "GMLOSE"
