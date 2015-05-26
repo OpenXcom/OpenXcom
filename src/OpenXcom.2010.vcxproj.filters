@@ -916,15 +916,33 @@
     <ClCompile Include="Geoscape\MissionDetectedState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Basescape\SoldierDiaryMissionState.cpp" />
-    <ClCompile Include="Basescape\SoldierDiaryOverviewState.cpp" />
-    <ClCompile Include="Basescape\SoldierDiaryPerformanceState.cpp" />
-    <ClCompile Include="Battlescape\CommendationState.cpp" />
-    <ClCompile Include="Ruleset\RuleCommendations.cpp" />
-    <ClCompile Include="Ruleset\StatString.cpp" />
-    <ClCompile Include="Ruleset\StatStringCondition.cpp" />
-    <ClCompile Include="Savegame\SoldierDiary.cpp" />
-    <ClCompile Include="Battlescape\CommendationLateState.cpp" />
+    <ClCompile Include="Basescape\SoldierDiaryMissionState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\SoldierDiaryOverviewState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\SoldierDiaryPerformanceState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\CommendationState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleCommendations.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\StatString.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\StatStringCondition.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\SoldierDiary.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\CommendationLateState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
     <ClCompile Include="Ruleset\Texture.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
@@ -934,8 +952,12 @@
     <ClCompile Include="Battlescape\PsiAttackBState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
-    <ClCompile Include="Ruleset\StatString.cpp" />
-    <ClCompile Include="Ruleset\StatStringCondition.cpp" />
+    <ClCompile Include="Ruleset\StatString.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\StatStringCondition.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1880,13 +1902,27 @@
     <ClInclude Include="Geoscape\MissionDetectedState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="Basescape\SoldierDiaryMissionState.h" />
-    <ClInclude Include="Basescape\SoldierDiaryOverviewState.h" />
-    <ClInclude Include="Basescape\SoldierDiaryPerformanceState.h" />
-    <ClInclude Include="Battlescape\CommendationState.h" />
-    <ClInclude Include="Ruleset\RuleCommendations.h" />
-    <ClInclude Include="Savegame\SoldierDiary.h" />
-    <ClInclude Include="Battlescape\CommendationLateState.h" />
+    <ClInclude Include="Basescape\SoldierDiaryMissionState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\SoldierDiaryOverviewState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\SoldierDiaryPerformanceState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\CommendationState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleCommendations.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\SoldierDiary.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\CommendationLateState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
     <ClInclude Include="Ruleset\Texture.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
