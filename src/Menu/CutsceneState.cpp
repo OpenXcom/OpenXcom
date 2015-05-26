@@ -59,7 +59,7 @@ void CutsceneState::init()
 		return;
 	}
 
-	if (_cutsceneId == "wingame" || _cutsceneId == "losegame")
+	if (_cutsceneId == "winGame" || _cutsceneId == "loseGame")
 	{
 		if (_game->getSavedGame() && _game->getSavedGame()->isIronman()
 		    && !_game->getSavedGame()->getName().empty())
