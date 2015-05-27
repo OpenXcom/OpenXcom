@@ -317,42 +317,38 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 			(*j)->getStatistics()->daysWounded = (*j)->getGeoscapeSoldier()->getWoundRecovery();
 			_missionStatistics->injuryList[(*j)->getGeoscapeSoldier()->getId()] = (*j)->getGeoscapeSoldier()->getWoundRecovery();
 
-			// Set the UnitStats delta
-			(*j)->getStatistics()->delta = *(*j)->getGeoscapeSoldier()->getCurrentStats() - *(*j)->getGeoscapeSoldier()->getInitStats();
-
-			std::map<SoldierRank, Soldier*> bestSoldierCandidates;
-			int bestScore[7] = {0, 0, 0, 0, 0, 0, 0};
-			int bestOverallScore = 0;
-			// Check to see if any of the dead soldiers were exceptional.
-			for (std::vector<Soldier*>::iterator deadUnit = _game->getSavedGame()->getDeadSoldiers()->begin(); deadUnit != _game->getSavedGame()->getDeadSoldiers()->end(); ++deadUnit)
+			// Award Martyr Medal
+			if ((*j)->getMurdererId() == (*j)->getId() && (*j)->getStatistics()->kills.size() != 0)
 			{
-				// Find the best soldier per rank by comparing score
-				int score = (*deadUnit)->getDiary()->getScoreTotal();
-				SoldierRank rank = (*deadUnit)->getRank();		
-				// Rookies don't get this award. No one likes them.
-				if (rank == 0) continue;
-				
-				if (score > bestScore[rank])
+				int martyrKills = 0; // How many aliens were killed on the same turn?
+				int martyrTurn = -1;
+				for (std::vector<BattleUnitKills*>::iterator unitKill = (*j)->getStatistics()->kills.begin(); unitKill != (*j)->getStatistics()->kills.end(); ++unitKill)
 				{
-					bestSoldierCandidates[rank] = (*deadUnit);
-					bestScore[rank] = score;
-					if (score > bestOverallScore)
+					if ( (*unitKill)->id == (*j)->getId() )
 					{
-						bestOverallScore = score;
+						martyrTurn = (*unitKill)->turn;
+						break;
 					}
 				}
-				// Look for a kill on the same turn as death, award martyr
-			}
-			// Now award those soldiers commendations!
-			for (std::map<SoldierRank, Soldier*>::iterator bestSoldier = bestSoldierCandidates.begin(); bestSoldier != bestSoldierCandidates.end(); ++bestSoldier)
-			{
-				(*bestSoldier).second->getDiary()->awardBestOfRank((*bestSoldier).second->getRank());
-				if ((*bestSoldier).second->getDiary()->getScoreTotal() == bestOverallScore)
+				for (std::vector<BattleUnitKills*>::iterator unitKill = (*j)->getStatistics()->kills.begin(); unitKill != (*j)->getStatistics()->kills.end(); ++unitKill)
 				{
-					(*bestSoldier).second->getDiary()->awardBestOverall();
-					bestOverallScore++; // If there is a tie, first come first serve!
+					if ((*unitKill)->turn == martyrTurn && (*unitKill)->faction == FACTION_HOSTILE)
+					{
+						martyrKills++;
+					}
+				}
+				if (martyrKills > 0) 
+				{
+					if (martyrKills > 10) 
+					{
+						martyrKills = 10;
+					}
+					(*j)->getStatistics()->martyr = martyrKills;
 				}
 			}
+
+			// Set the UnitStats delta
+			(*j)->getStatistics()->delta = *(*j)->getGeoscapeSoldier()->getCurrentStats() - *(*j)->getGeoscapeSoldier()->getInitStats();
 
             (*j)->getGeoscapeSoldier()->getDiary()->updateDiary((*j)->getStatistics(), _missionStatistics, _game->getRuleset());
 			if (!(*j)->getStatistics()->MIA && !(*j)->getStatistics()->KIA && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))

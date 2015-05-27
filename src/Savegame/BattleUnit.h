@@ -61,7 +61,7 @@ struct BattleUnitKills
     std::string rank, race, weapon, weaponAmmo;
 	UnitFaction faction;
 	UnitStatus status;
-    int mission, turn;
+    int mission, turn, id;
     UnitSide side;
     UnitBodyPart bodypart;
 
@@ -90,6 +90,7 @@ struct BattleUnitKills
         turn = node["turn"].as<int>(turn);
         side = (UnitSide)node["side"].as<int>();
         bodypart = (UnitBodyPart)node["bodypart"].as<int>();
+        id = node["id"].as<int>(id);
     }
     // Save
     YAML::Node save() const
@@ -105,6 +106,7 @@ struct BattleUnitKills
         node["turn"] = turn;
         node["side"] = (int)side;
         node["bodypart"] = (int)bodypart;
+        node["id"] = id;
         return node;
     }
     // Convert victim State to string.
@@ -156,8 +158,8 @@ struct BattleUnitKills
         }
     }
     BattleUnitKills(const YAML::Node& node) { load(node); }
-    BattleUnitKills(std::string Rank, std::string Race, std::string Weapon, std::string WeaponAmmo, UnitFaction Faction, UnitStatus Status, int Mission, int Turn, UnitSide Side, UnitBodyPart BodyPart) : 
-						rank(Rank), race(Race), weapon(Weapon), weaponAmmo(WeaponAmmo), faction(Faction), status(Status), mission(Mission), turn(Turn), side(Side), bodypart(BodyPart) { }
+    BattleUnitKills(std::string Rank, std::string Race, std::string Weapon, std::string WeaponAmmo, UnitFaction Faction, UnitStatus Status, int Mission, int Turn, UnitSide Side, UnitBodyPart BodyPart, int Id) : 
+						rank(Rank), race(Race), weapon(Weapon), weaponAmmo(WeaponAmmo), faction(Faction), status(Status), mission(Mission), turn(Turn), side(Side), bodypart(BodyPart), id(Id) { }
     ~BattleUnitKills() { }
 };
 
@@ -189,7 +191,7 @@ struct BattleUnitStatistics
     int appliedPainKill;                    // Tracks how many times this soldier applied pain killers
     int revivedSoldier;                     // Tracks how many times this soldier revived another unit
 	bool MIA;								// Tracks if the soldier was left behind :(
-	bool martyr;							// Tracks if the soldier killed himself in order to kill an alien
+	int martyr;								// Tracks how many kills the soldier landed on the turn of his death
 
 	/// Functions
 	// Friendly fire check
@@ -227,7 +229,7 @@ struct BattleUnitStatistics
         appliedStimulant = node["appliedStimulant"].as<int>(appliedStimulant);
         appliedPainKill = node["appliedPainKill"].as<int>(appliedPainKill);
         revivedSoldier = node["revivedSoldier"].as<int>(revivedSoldier);
-		martyr = node["martyr"].as<bool>(martyr);
+		martyr = node["martyr"].as<int>(martyr);
 	}
 	// Save function
 	YAML::Node save() const
@@ -259,7 +261,7 @@ struct BattleUnitStatistics
 		return node;
 	}
 	BattleUnitStatistics(const YAML::Node& node) { load(node); }
-	BattleUnitStatistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0), KIA(false), nikeCross(false), mercyCross(false), woundsHealed(0), appliedStimulant(0), appliedPainKill(0), revivedSoldier(0), MIA(false), martyr(false) { }
+	BattleUnitStatistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0), KIA(false), nikeCross(false), mercyCross(false), woundsHealed(0), appliedStimulant(0), appliedPainKill(0), revivedSoldier(0), MIA(false), martyr(0) { }
 	~BattleUnitStatistics() { }
 };
 
