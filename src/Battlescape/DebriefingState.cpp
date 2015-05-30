@@ -267,8 +267,39 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 		{
 			continue;
 		}
+
+		/// Post-mortem kill award
+		int killTurn = -1;
+		for (std::vector<BattleUnit*>::iterator killerUnit = battle->getUnits()->begin(); killerUnit != battle->getUnits()->end(); ++killerUnit)
+		{
+			for(std::vector<BattleUnitKills*>::iterator kill = (*killerUnit)->getStatistics()->kills.begin(); kill != (*killerUnit)->getStatistics()->kills.end(); ++kill)
+			{
+				if ((*kill)->id == (*deadUnit)->getId())
+				{
+					killTurn = (*kill)->turn;
+					break;
+				}
+			}
+			if (killTurn != -1)
+			{
+				break;
+			}
+		}
+		int postMortemKills = 0;
+		if (killTurn != -1)
+		{
+			for(std::vector<BattleUnitKills*>::iterator deadUnitKill = (*deadUnit)->getStatistics()->kills.begin(); deadUnitKill != (*deadUnit)->getStatistics()->kills.end(); ++deadUnitKill)
+			{
+				if ((*deadUnitKill)->turn > killTurn && (*deadUnitKill)->faction == FACTION_HOSTILE)
+				{
+					postMortemKills++;
+				}
+			}
+		}
+		(*deadUnit)->getGeoscapeSoldier()->getDiary()->awardPostMortemKill(postMortemKills);
+
 		SoldierRank rank = (*deadUnit)->getGeoscapeSoldier()->getRank();
-		// Rookies don't get this award. No one likes them.
+		// Rookies don't get this next award. No one likes them.
 		if (rank == 0) 
 		{
 			continue;
