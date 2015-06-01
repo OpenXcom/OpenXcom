@@ -263,7 +263,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 	// Check to see if any of the dead soldiers were exceptional.
 	for (std::vector<BattleUnit*>::iterator deadUnit = battle->getUnits()->begin(); deadUnit != battle->getUnits()->end(); ++deadUnit)
 	{
-		if (!(*deadUnit)->getGeoscapeSoldier() || !(*deadUnit)->getStatus() == STATUS_DEAD) 
+		if (!(*deadUnit)->getGeoscapeSoldier() || (*deadUnit)->getStatus() != STATUS_DEAD) 
 		{
 			continue;
 		}
@@ -332,7 +332,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 	// Now award those soldiers commendations!
 	for (std::vector<BattleUnit*>::iterator deadUnit = battle->getUnits()->begin(); deadUnit != battle->getUnits()->end(); ++deadUnit)
 	{
-		if (!(*deadUnit)->getGeoscapeSoldier() || !(*deadUnit)->getStatus() == STATUS_DEAD) 
+		if (!(*deadUnit)->getGeoscapeSoldier() || (*deadUnit)->getStatus() != STATUS_DEAD) 
 		{
 			continue;
 		}
