@@ -63,7 +63,8 @@ void RuleRegion::load(const YAML::Node &node)
 		_latMin.push_back(areas[i][2] * M_PI / 180.0);
 		_latMax.push_back(areas[i][3] * M_PI / 180.0);
 	}
-	_missionZones = node["missionZones"].as< std::vector<MissionZone> >(_missionZones);
+	std::vector<MissionZone> misZones = node["missionZones"].as< std::vector<MissionZone> >(misZones);
+	_missionZones.insert(_missionZones.end(), misZones.begin(), misZones.end());
 	if (const YAML::Node &weights = node["missionWeights"])
 	{
 		_missionWeights.load(weights);
