@@ -149,6 +149,7 @@ void PsiAttackBState::psiAttack()
 		_action.actor->addPsiSkillExp();
 		if (_action.type == BA_PANIC)
 		{
+			_unit->getStatistics()->panicAttackCounter++;
 			int moraleLoss = (110-_target->getBaseStats()->bravery);
 			if (moraleLoss > 0)
 			_target->moraleChange(-moraleLoss);
@@ -165,6 +166,7 @@ void PsiAttackBState::psiAttack()
 			_target->setTimeUnits(_target->getBaseStats()->tu);
 			_target->allowReselect();
 			_target->abortTurn(); // resets unit status to STANDING
+			_unit->getStatistics()->mindControlCounter++;
 			// if all units from either faction are mind controlled - auto-end the mission.
 			if (_parent->getSave()->getSide() == FACTION_PLAYER)
 			{

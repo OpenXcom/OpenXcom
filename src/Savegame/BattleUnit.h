@@ -192,6 +192,8 @@ struct BattleUnitStatistics
     int revivedSoldier;                     // Tracks how many times this soldier revived another unit
 	bool MIA;								// Tracks if the soldier was left behind :(
 	int martyr;								// Tracks how many kills the soldier landed on the turn of his death
+    int mindControlCounter;                 // Tracks how many times the unit mind controlled another unit
+	int panicAttackCounter;					// Tracks how many times the unit psi panicked another unit
 
 	/// Functions
 	// Friendly fire check
@@ -230,6 +232,8 @@ struct BattleUnitStatistics
         appliedPainKill = node["appliedPainKill"].as<int>(appliedPainKill);
         revivedSoldier = node["revivedSoldier"].as<int>(revivedSoldier);
 		martyr = node["martyr"].as<int>(martyr);
+        mindControlCounter = node["mindControlCounter"].as<int>(mindControlCounter);
+		panicAttackCounter = node["panicAttackCounter"].as<int>(panicAttackCounter);
 	}
 	// Save function
 	YAML::Node save() const
@@ -258,10 +262,12 @@ struct BattleUnitStatistics
         if (appliedPainKill) node["appliedPainKill"] = appliedPainKill;
         if (revivedSoldier) node["revivedSoldier"] = revivedSoldier;
 		if (martyr) node["martyr"] = martyr;
+        if (mindControlCounter) node["mindControlCounter"] = mindControlCounter;
+		if (panicAttackCounter) node["panicAttackCounter"] = panicAttackCounter;
 		return node;
 	}
 	BattleUnitStatistics(const YAML::Node& node) { load(node); }
-	BattleUnitStatistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0), KIA(false), nikeCross(false), mercyCross(false), woundsHealed(0), appliedStimulant(0), appliedPainKill(0), revivedSoldier(0), MIA(false), martyr(0) { }
+	BattleUnitStatistics() : wasUnconcious(false), kills(), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0), KIA(false), nikeCross(false), mercyCross(false), woundsHealed(0), appliedStimulant(0), appliedPainKill(0), revivedSoldier(0), MIA(false), martyr(0), mindControlCounter(0), panicAttackCounter(0) { }
 	~BattleUnitStatistics() { }
 };
 
