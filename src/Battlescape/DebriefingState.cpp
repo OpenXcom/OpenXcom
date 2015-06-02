@@ -412,8 +412,9 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 			{
 				_soldiersCommended.push_back((*j)->getGeoscapeSoldier());
 			}
-            else if ((*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
+            else if ((*j)->getStatistics()->MIA || (*j)->getStatistics()->KIA)
             {
+                (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset());
                 _deadSoldiersCommended.push_back((*j)->getGeoscapeSoldier());
             }
 		}
