@@ -466,6 +466,8 @@ extraStrings:
      STR_MEDAL_MARTYR_DESCRIPTION: "Given posthumously to a soldier who would not go down alone."
      STR_MEDAL_POSTMORTEM_KILL_NAME: "Order of the Reaper"
      STR_MEDAL_POSTMORTEM_KILL_DESCRIPTION: "Given posthumously to a soldier who maintained a presence on the battlefield in spite of death."
+     STR_MEDAL_GLOBETROTTER_NAME: "Globetrotter"
+     STR_MEDAL_GLOBETROTTER_DESCRIPTION: "Given to a soldier who has defended every last country on Earth from the alien threat."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -547,6 +549,7 @@ extraStrings:
      STR_MEDAL_MIA_MEDAL_UFOPEDIA: " '...we pay tribute to the men and women who have not returned from the battlefield... we will never forget the sacrifices they made... we will forever honor their memory.'  {NEWLINE}- Barack Obama {NEWLINE} {NEWLINE} The terrible expedience of the necessity of leaving a fallen comrade cannot be denied.  XCOM honors those who have given their all in such a fashion.{NEWLINE} {NEWLINE}This order is awarded to soldiers who have gone missing in action.  We honor the ones who didn't make it home."
      STR_MEDAL_MARTYR_MEDAL_UFOPEDIA: "Given posthumously to a soldier who would not go down alone."
      STR_MEDAL_POSTMORTEM_KILL_UFOPEDIA: "Given posthumously to a soldier who maintained a presence on the battlefield in spite of death."
+     STR_MEDAL_GLOBETROTTER_UFOPEDIA: "Given to a soldier who has defended every last country on Earth from the alien threat."
      
   - type: en-GB
     strings:
@@ -675,6 +678,8 @@ extraStrings:
      STR_MEDAL_MARTYR_DESCRIPTION: "Given posthumously to a soldier who would not go down alone."
      STR_MEDAL_POSTMORTEM_KILL_NAME: "Order of the Reaper"
      STR_MEDAL_POSTMORTEM_KILL_DESCRIPTION: "Given posthumously to a soldier who maintained a presence on the battlefield in spite of death."
+     STR_MEDAL_GLOBETROTTER_NAME: "Globetrotter"
+     STR_MEDAL_GLOBETROTTER_DESCRIPTION: "Given to a soldier who has defended every last country on Earth from the alien threat."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -757,6 +762,7 @@ extraStrings:
      STR_MEDAL_MIA_MEDAL_UFOPEDIA: " '...we pay tribute to the men and women who have not returned from the battlefield... we will never forget the sacrifices they made... we will forever honor their memory.'  {NEWLINE}- Barack Obama {NEWLINE} {NEWLINE} The terrible expedience of the necessity of leaving a fallen comrade cannot be denied.  XCOM honors those who have given their all in such a fashion.{NEWLINE} {NEWLINE}This order is awarded to soldiers who have gone missing in action.  We honor the ones who didn't make it home." 
      STR_MEDAL_MARTYR_MEDAL_UFOPEDIA: "Given posthumously to a soldier who would not go down alone."
      STR_MEDAL_POSTMORTEM_KILL_UFOPEDIA: "Given posthumously to a soldier who maintained a presence on the battlefield in spite of death."
+     STR_MEDAL_GLOBETROTTER_UFOPEDIA: "Given to a soldier who has defended every last country on Earth from the alien threat."
   - type: fr
     strings:
      STR_DIARY: "DOSSIER"
@@ -1587,6 +1593,11 @@ commendations:
     sprite: 00
     criteria:
       totalPostMortemKills: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  - type: STR_MEDAL_GLOBETROTTER_NAME
+    description: STR_MEDAL_GLOBETROTTER_DESCRIPTION
+    sprite: 00
+    criteria:
+      globeTrotter: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ufopaedia:
   - id: STR_MEDAL_MILITARY_CROSS_NAME
     type_id: 7
@@ -1980,6 +1991,13 @@ ufopaedia:
     text: STR_MEDAL_POSTMORTEM_KILL_UFOPEDIA
     text_width: 164
     listOrder: 6056
+  - id: STR_MEDAL_GLOBETROTTER_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: PLACEHOLDER
+    text: STR_MEDAL_GLOBETROTTER_UFOPEDIA
+    text_width: 164
+    listOrder: 6057
 # entries below move the HWPs to the Craft Section of the UFOPedia
   - id: STR_TANK_CANNON
     section: STR_XCOM_CRAFT_ARMAMENT
