@@ -146,7 +146,7 @@ SaveConverter::SaveConverter(int save, Ruleset *rule) : _rule(rule)
 					_idAlienRaces.push_back(race);
 				}
 				std::string rank = i->substr(n);
-				if (std::find(_idAlienRanks.begin(), _idAlienRanks.end(), race) == _idAlienRanks.end())
+				if (std::find(_idAlienRanks.begin(), _idAlienRanks.end(), rank) == _idAlienRanks.end())
 				{
 					_idAlienRanks.push_back(rank);
 				}
