@@ -24,6 +24,7 @@
 #include "InfoboxState.h"
 #include "Map.h"
 #include "Camera.h"
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Engine/Game.h"
@@ -135,6 +136,20 @@ void PsiAttackBState::psiAttack()
 	attackStrength -= dist;
 	attackStrength += RNG::generate(0,55);
 
+	int turn = 0;
+	if (_parent->getSave()->getSide() == FACTION_PLAYER)
+	{
+		turn = _parent->getSave()->getSide()*3 + 0;
+	}
+	else if (_parent->getSave()->getSide() == FACTION_HOSTILE)
+	{
+		turn = _parent->getSave()->getSide()*3 + 1;
+	}
+	else if (_parent->getSave()->getSide() == FACTION_NEUTRAL)
+	{
+		turn = _parent->getSave()->getSide()*3 + 2;
+	}
+
 	if (_action.type == BA_MINDCONTROL)
 	{
 		defenseStrength += 20;
@@ -149,10 +164,11 @@ void PsiAttackBState::psiAttack()
 		_action.actor->addPsiSkillExp();
 		if (_action.type == BA_PANIC)
 		{
-			_unit->getStatistics()->panicAttackCounter++;
 			int moraleLoss = (110-_target->getBaseStats()->bravery);
 			if (moraleLoss > 0)
 			_target->moraleChange(-moraleLoss);
+			// Award Panic battle unit kill
+			_unit->getStatistics()->kills.push_back(new BattleUnitKills(_target->getRankString(), _target->getUnitRules()->getRace(), "Panic", "Panic", _target->getFaction(), STATUS_PANICKING, _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size(), turn, SIDE_FRONT, BODYPART_HEAD, _target->getId()));
 			if (_parent->getSave()->getSide() == FACTION_PLAYER)
 			{
 				game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
@@ -166,7 +182,8 @@ void PsiAttackBState::psiAttack()
 			_target->setTimeUnits(_target->getBaseStats()->tu);
 			_target->allowReselect();
 			_target->abortTurn(); // resets unit status to STANDING
-			_unit->getStatistics()->mindControlCounter++;
+			// Award MC battle unit kill
+			_unit->getStatistics()->kills.push_back(new BattleUnitKills(_target->getRankString(), _target->getUnitRules()->getRace(), "MindControl", "MindControl", _target->getFaction(), STATUS_TURNING, _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size(), turn, SIDE_FRONT, BODYPART_HEAD, _target->getId()));
 			// if all units from either faction are mind controlled - auto-end the mission.
 			if (_parent->getSave()->getSide() == FACTION_PLAYER)
 			{

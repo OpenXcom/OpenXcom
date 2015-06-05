@@ -205,7 +205,7 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
             else if ((*kill)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
             {
                 _stunTotal++;
-            }		
+            }
             if ((*kill)->hostileTurn())
             {
                 if (rules->getItem((*kill)->weapon)->getBattleType() == BT_GRENADE || rules->getItem((*kill)->weapon)->getBattleType() == BT_PROXIMITYGRENADE)
@@ -296,7 +296,7 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 
 	if (_countryTotal.size() == rules->getCountriesList().size())
 	{
-		_globeTrotter == true;
+		_globeTrotter = true;
 	}
 }
 /**
