@@ -136,6 +136,7 @@ void PsiAttackBState::psiAttack()
 	attackStrength -= dist;
 	attackStrength += RNG::generate(0,55);
 
+	// Determine turn of the attack
 	int turn = 0;
 	if (_parent->getSave()->getSide() == FACTION_PLAYER)
 	{
@@ -168,7 +169,10 @@ void PsiAttackBState::psiAttack()
 			if (moraleLoss > 0)
 			_target->moraleChange(-moraleLoss);
 			// Award Panic battle unit kill
-			_unit->getStatistics()->kills.push_back(new BattleUnitKills(_target->getRankString(), _target->getUnitRules()->getRace(), "Panic", "Panic", _target->getFaction(), STATUS_PANICKING, _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size(), turn, SIDE_FRONT, BODYPART_HEAD, _target->getId()));
+			if (!_unit->getStatistics()->duplicateEntry(STATUS_PANICKING, _target->getId()))
+			{
+				_unit->getStatistics()->kills.push_back(new BattleUnitKills(_target->getRankString(), _target->getUnitRules()->getRace(), _action.weapon->getRules()->getName(), _action.weapon->getRules()->getName(), _target->getFaction(), STATUS_PANICKING, _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size(), turn, SIDE_FRONT, BODYPART_HEAD, _target->getId()));
+			}
 			if (_parent->getSave()->getSide() == FACTION_PLAYER)
 			{
 				game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
@@ -176,14 +180,17 @@ void PsiAttackBState::psiAttack()
 		}
 		else if (_action.type == BA_MINDCONTROL)
 		{
+			// Award MC battle unit kill
+			if (!_unit->getStatistics()->duplicateEntry(STATUS_TURNING, _target->getId()))
+			{
+				_unit->getStatistics()->kills.push_back(new BattleUnitKills(_target->getRankString(), _target->getUnitRules()->getRace(), _action.weapon->getRules()->getName(), _action.weapon->getRules()->getName(), _target->getFaction(), STATUS_TURNING, _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size(), turn, SIDE_FRONT, BODYPART_HEAD, _target->getId()));
+			}
 			_target->convertToFaction(_unit->getFaction());
 			_parent->getTileEngine()->calculateFOV(_target->getPosition());
 			_parent->getTileEngine()->calculateUnitLighting();
 			_target->setTimeUnits(_target->getBaseStats()->tu);
 			_target->allowReselect();
 			_target->abortTurn(); // resets unit status to STANDING
-			// Award MC battle unit kill
-			_unit->getStatistics()->kills.push_back(new BattleUnitKills(_target->getRankString(), _target->getUnitRules()->getRace(), "MindControl", "MindControl", _target->getFaction(), STATUS_TURNING, _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size(), turn, SIDE_FRONT, BODYPART_HEAD, _target->getId()));
 			// if all units from either faction are mind controlled - auto-end the mission.
 			if (_parent->getSave()->getSide() == FACTION_PLAYER)
 			{

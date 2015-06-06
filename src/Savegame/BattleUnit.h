@@ -196,6 +196,18 @@ struct BattleUnitStatistics
 	int martyr;								// Tracks how many kills the soldier landed on the turn of his death
 
 	/// Functions
+	// Duplicate entry check
+	bool duplicateEntry(UnitStatus status, int id)
+	{
+		for (std::vector<BattleUnitKills*>::const_iterator i = kills.begin(); i != kills.end(); ++i)
+		{
+			if ((*i)->id == id && (*i)->status == status)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 	// Friendly fire check
 	bool hasFriendlyFired()
 	{
