@@ -1616,7 +1616,7 @@ commendations:
     description: STR_MEDAL_MINDCONTROL_DESCRIPTION
     sprite: 00
     criteria:
-      killsWithCriteriaCareer: [0, 1, 1, 2, 3, 3, 4, 4, 4, 4]
+      killsWithCriteriaCareer: [1, 2, 3, 3, 3, 3, 4, 4, 4, 4]
     killCriteria:
       -
         1: ["FACTION_HOSTILE", "STATUS_TURNING"]
@@ -1624,7 +1624,7 @@ commendations:
     description: STR_MEDAL_PSIPANIC_DESCRIPTION
     sprite: 00
     criteria:
-      killsWithCriteriaCareer: [0, 1, 1, 2, 3, 3, 4, 4, 4, 4]
+      killsWithCriteriaCareer: [1, 2, 3, 3, 3, 3, 4, 4, 4, 4]
     killCriteria:
       -
         1: ["FACTION_HOSTILE", "STATUS_PANICKING"]
