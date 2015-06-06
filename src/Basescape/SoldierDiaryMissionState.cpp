@@ -182,11 +182,21 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Base *base, size_t soldierId,
             count++;
             stunOrKill = true;
 		}
-		else
+		else if ((*j)->getUnitStatusString() == "STATUS_STUNNED")
 		{
 			wssStatus << tr("STR_STUNNED").c_str();
             stunOrKill = true;
 		}
+        else if ((*j)->getUnitStatusString() == "STATUS_PANICKED")
+		{
+            wssStatus << tr("STR_PANICKED").c_str();
+            stunOrKill = true;
+        }
+        else if ((*j)->getUnitStatusString() == "STATUS_TURNING")
+        {
+            wssStatus << tr("STR_MINDCONTROLLED").c_str();
+            stunOrKill = true;
+        }
 
 		_lstKills->addRow(3, wssStatus.str().c_str(), wssUnit.str().c_str(), wssWeapon.str().c_str());
 	}
