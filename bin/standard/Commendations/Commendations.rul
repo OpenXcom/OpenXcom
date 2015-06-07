@@ -468,10 +468,12 @@ extraStrings:
      STR_MEDAL_POSTMORTEM_KILL_DESCRIPTION: "Given posthumously to a soldier who maintained a presence on the battlefield in spite of death."
      STR_MEDAL_GLOBETROTTER_NAME: "Globetrotter"
      STR_MEDAL_GLOBETROTTER_DESCRIPTION: "Given to a soldier who has defended every last country on Earth from the alien threat."
-     STR_MEDAL_MINDCONTROL_NAME: "Master of Puppets"
+     STR_MEDAL_MINDCONTROL_NAME: "Imperio"
      STR_MEDAL_MINDCONTROL_DESCRIPTION: "Given to a soldier who has mastered the mind of the enemy."
-     STR_MEDAL_PSIPANIC_NAME: "Master of Fear"
-     STR_MEDAL_PSIPANIC_DESCRIPTION: "Given to a soldier who has destroyed the mind of the enemy."
+     STR_MEDAL_PSIPANIC_NAME: "Crucio"
+     STR_MEDAL_PSIPANIC_DESCRIPTION: "Given to a soldier who has broken the mind of the enemy."
+     STR_MEDAL_SLAVEKILLS_NAME: "Master of Puppets"
+     STR_MEDAL_SLAVEKILLS_DESCRIPTION: "Given to a soldier who has used aliens against one another."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -555,7 +557,8 @@ extraStrings:
      STR_MEDAL_POSTMORTEM_KILL_UFOPEDIA: "Given posthumously to a soldier who maintained a presence on the battlefield in spite of death."
      STR_MEDAL_GLOBETROTTER_UFOPEDIA: "Given to a soldier who has defended every last country on Earth from the alien threat."
      STR_MEDAL_MINDCONTROL_UFOPEDIA: "Given to a soldier who has mastered the mind of the enemy."
-     STR_MEDAL_PSIPANIC_DESCRIPTION: "Given to a soldier who has destroyed the mind of the enemy."
+     STR_MEDAL_PSIPANIC_UFOPEDIA: "Given to a soldier who has broken the mind of the enemy."
+     STR_MEDAL_SLAVEKILLS_UFOPEDIA: "Given to a soldier who has turned aliens against one another."
      
   - type: en-GB
     strings:
@@ -686,10 +689,12 @@ extraStrings:
      STR_MEDAL_POSTMORTEM_KILL_DESCRIPTION: "Given posthumously to a soldier who maintained a presence on the battlefield in spite of death."
      STR_MEDAL_GLOBETROTTER_NAME: "Globetrotter"
      STR_MEDAL_GLOBETROTTER_DESCRIPTION: "Given to a soldier who has defended every last country on Earth from the alien threat."
-     STR_MEDAL_MINDCONTROL_NAME: "Master of Puppets"
+     STR_MEDAL_MINDCONTROL_NAME: "Imperio"
      STR_MEDAL_MINDCONTROL_DESCRIPTION: "Given to a soldier who has mastered the mind of the enemy."
-     STR_MEDAL_PSIPANIC_NAME: "Master of Fear"
-     STR_MEDAL_PSIPANIC_DESCRIPTION: "Given to a soldier who has destroyed the mind of the enemy."
+     STR_MEDAL_PSIPANIC_NAME: "Crucio"
+     STR_MEDAL_PSIPANIC_DESCRIPTION: "Given to a soldier who has broken the mind of the enemy."
+     STR_MEDAL_SLAVEKILLS_NAME: "Master of Puppets"
+     STR_MEDAL_SLAVEKILLS_DESCRIPTION: "Given to a soldier who has used aliens against one another."
      STR_AWARD_0: "First award"
      STR_AWARD_1: "Second award"
      STR_AWARD_2: "Third award"
@@ -774,7 +779,8 @@ extraStrings:
      STR_MEDAL_POSTMORTEM_KILL_UFOPEDIA: "Given posthumously to a soldier who maintained a presence on the battlefield in spite of death."
      STR_MEDAL_GLOBETROTTER_UFOPEDIA: "Given to a soldier who has defended every last country on Earth from the alien threat."
      STR_MEDAL_MINDCONTROL_UFOPEDIA: "Given to a soldier who has mastered the mind of the enemy."     
-     STR_MEDAL_PSIPANIC_DESCRIPTION: "Given to a soldier who has destroyed the mind of the enemy."
+     STR_MEDAL_PSIPANIC_UFOPEDIA: "Given to a soldier who has broken the mind of the enemy."
+     STR_MEDAL_SLAVEKILLS_UFOPEDIA: "Given to a soldier who has turned aliens against one another."
   - type: fr
     strings:
      STR_DIARY: "DOSSIER"
@@ -1530,7 +1536,7 @@ commendations:
     description: STR_MEDAL_ALLBATTLETYPES_DESCRIPTION
     sprite: 40
     criteria:
-      killsWithCriteriaCareer: [1, 2, 3, 4, 5, 6, 7, 8, 8, 9]
+      killsWithCriteriaCareer: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     killCriteria:
       -
         1: ["BT_FIREARM", "FACTION_HOSTILE", "STATUS_DEAD"]
@@ -1566,7 +1572,7 @@ commendations:
     description: STR_MEDAL_STATGAIN_DESCRIPTION
     sprite: 41
     criteria:
-      totalStatGain: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+      totalStatGain: [50, 50, 150, 150, 150, 150, 300, 300, 300, 300]
   - type: STR_MEDAL_REVIVE_NAME
     description: STR_MEDAL_REVIVE_DESCRIPTION
     sprite: 47
@@ -1628,6 +1634,11 @@ commendations:
     killCriteria:
       -
         1: ["FACTION_HOSTILE", "STATUS_PANICKING"]
+  - type: STR_MEDAL_SLAVEKILLS_NAME
+    description: STR_MEDAL_SLAVEKILLS_DESCRIPTION
+    sprite: 00
+    criteria:
+      totalSlaveKills: [1, 6, 9, 9, 9, 9, 12, 12, 12, 12]
 ufopaedia:
   - id: STR_MEDAL_MILITARY_CROSS_NAME
     type_id: 7
@@ -2042,6 +2053,13 @@ ufopaedia:
     text: STR_MEDAL_PSIPANIC_UFOPEDIA
     text_width: 164
     listOrder: 6059
+  - id: STR_MEDAL_SLAVEKILLS_NAME
+    type_id: 7
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: PLACEHOLDER
+    text: STR_MEDAL_SLAVEKILLS_UFOPEDIA
+    text_width: 164
+    listOrder: 6070
 # entries below move the HWPs to the Craft Section of the UFOPedia
   - id: STR_TANK_CANNON
     section: STR_XCOM_CRAFT_ARMAMENT

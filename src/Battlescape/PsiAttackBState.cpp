@@ -172,6 +172,7 @@ void PsiAttackBState::psiAttack()
 			if (!_unit->getStatistics()->duplicateEntry(STATUS_PANICKING, _target->getId()))
 			{
 				_unit->getStatistics()->kills.push_back(new BattleUnitKills(_target->getRankString(), _target->getUnitRules()->getRace(), _action.weapon->getRules()->getName(), _action.weapon->getRules()->getName(), _target->getFaction(), STATUS_PANICKING, _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size(), turn, SIDE_FRONT, BODYPART_HEAD, _target->getId()));
+				_target->setMurdererId(_unit->getId());
 			}
 			if (_parent->getSave()->getSide() == FACTION_PLAYER)
 			{
@@ -184,6 +185,7 @@ void PsiAttackBState::psiAttack()
 			if (!_unit->getStatistics()->duplicateEntry(STATUS_TURNING, _target->getId()))
 			{
 				_unit->getStatistics()->kills.push_back(new BattleUnitKills(_target->getRankString(), _target->getUnitRules()->getRace(), _action.weapon->getRules()->getName(), _action.weapon->getRules()->getName(), _target->getFaction(), STATUS_TURNING, _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size(), turn, SIDE_FRONT, BODYPART_HEAD, _target->getId()));
+				_target->setMurdererId(_unit->getId());
 			}
 			_target->convertToFaction(_unit->getFaction());
 			_parent->getTileEngine()->calculateFOV(_target->getPosition());

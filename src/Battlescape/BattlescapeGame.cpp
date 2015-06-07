@@ -527,7 +527,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	}
 
 	// Fetch the murder weapon
-	if (murderer && murderer->getGeoscapeSoldier())
+	if (murderer)
 	{
 		if (murderweapon)
 		{
@@ -697,7 +697,21 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 
 			if (murderer)
 			{
-				if (!murderer->getStatistics()->duplicateEntry(STATUS_DEAD, victim->getId()))
+				if (murderer->getFaction() == FACTION_PLAYER && murderer->getOriginalFaction() != FACTION_PLAYER)
+				{
+					// This must be a mind controlled unit. Find out who mind controlled him and award the kill to that unit.
+					for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+					{
+						if ((*j)->getId() == murderer->getMurdererId() && (*j)->getGeoscapeSoldier())
+						{
+							(*j)->getStatistics()->kills.push_back(new BattleUnitKills(killStatRank, killStatRace, killStatWeapon, killStatWeaponAmmo, victim->getFaction(), STATUS_DEAD, killStatMission, killStatTurn, victim->getFatalShotSide(), victim->getFatalShotBodyPart(), victim->getId() ));
+							(*j)->getStatistics()->slaveKills++;
+							victim->setMurdererId((*j)->getId());
+							break;
+						}
+					}
+				}
+				else if (!murderer->getStatistics()->duplicateEntry(STATUS_DEAD, victim->getId()))
 				{
 					murderer->getStatistics()->kills.push_back(new BattleUnitKills(killStatRank, killStatRace, killStatWeapon, killStatWeaponAmmo, victim->getFaction(), STATUS_DEAD, killStatMission, killStatTurn, victim->getFatalShotSide(), victim->getFatalShotBodyPart(), victim->getId() ));
 					victim->setMurdererId(murderer->getId());
@@ -786,11 +800,25 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
 		{
-			if (murderer && !murderer->getStatistics()->duplicateEntry(STATUS_UNCONSCIOUS, victim->getId())) 
+			if (murderer && murderer->getFaction() == FACTION_PLAYER && murderer->getOriginalFaction() != FACTION_PLAYER)
+			{
+				// This must be a mind controlled unit. Find out who mind controlled him and award the stun to that unit.
+				for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+				{
+					if ((*j)->getId() == murderer->getMurdererId() && (*j)->getGeoscapeSoldier())
+					{
+						(*j)->getStatistics()->kills.push_back(new BattleUnitKills(killStatRank, killStatRace, killStatWeapon, killStatWeaponAmmo, victim->getFaction(), STATUS_UNCONSCIOUS, killStatMission, killStatTurn, victim->getFatalShotSide(), victim->getFatalShotBodyPart(), victim->getId() ));
+						(*j)->getStatistics()->slaveKills++;
+						victim->setMurdererId((*j)->getId());
+						break;
+					}
+				}
+			}
+			else if (!murderer->getStatistics()->duplicateEntry(STATUS_UNCONSCIOUS, victim->getId())) 
 			{
                     murderer->getStatistics()->kills.push_back(new BattleUnitKills(killStatRank, killStatRace, killStatWeapon, killStatWeaponAmmo, victim->getFaction(), STATUS_UNCONSCIOUS, killStatMission, killStatTurn, victim->getFatalShotSide(), victim->getFatalShotBodyPart(), victim->getId() ));
 			}
-			if (victim && victim->getGeoscapeSoldier())
+			if (victim->getGeoscapeSoldier())
 			{
 				victim->getStatistics()->wasUnconcious = true;
 			}

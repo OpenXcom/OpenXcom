@@ -41,7 +41,7 @@ SoldierDiary::SoldierDiary() : _killList(), _regionTotal(), _countryTotal(), _ty
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
 	_reactionFireTotal(0), _timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0), _trapKillTotal(0), _alienBaseAssaultTotal(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0),
     _woundsHealedTotal(0), _allUFOs(0), _allMissionTypes(0), _statGainTotal(0), _revivedUnitTotal(0), _wholeMedikitTotal(0), _braveryGainTotal(0), _bestOfRank(0),
-    _bestSoldier(false), _MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _globeTrotter(false)
+    _bestSoldier(false), _MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _globeTrotter(false), _slaveKillsTotal(0)
 {
 }
 /**
@@ -122,6 +122,7 @@ void SoldierDiary::load(const YAML::Node& node)
 	_martyrKillsTotal = node["martyrKillsTotal"].as<int>(_martyrKillsTotal);
     _postMortemKills = node["postMortemKills"].as<int>(_postMortemKills);
 	_globeTrotter = node["globeTrotter"].as<bool>(_globeTrotter);
+	_slaveKillsTotal = node["slaveKillsTotal"].as<int>(_slaveKillsTotal);
 }
 /**
  * Saves the diary to a YAML file.
@@ -182,6 +183,7 @@ YAML::Node SoldierDiary::save() const
 	if (_martyrKillsTotal) node["martyrKillsTotal"] = _martyrKillsTotal;
     if (_postMortemKills) node["postMortemKills"] = _postMortemKills;
 	if (_globeTrotter) node["globeTrotter"] = _globeTrotter;
+	if (_slaveKillsTotal) node["slaveKillsTotal"] = _slaveKillsTotal;
 	return node;
 }
 /**
@@ -274,20 +276,22 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 		_allUFOs = 1;
 	if ((_UFOTotal.size() + _typeTotal.size()) == (rules->getUfosList().size() + rules->getDeploymentsList().size() - 2))
 		_allMissionTypes = 1;
-	_martyrKillsTotal = unitStatistics->martyr;
+	_martyrKillsTotal += unitStatistics->martyr;
+	_slaveKillsTotal += unitStatistics->slaveKills;
 
 	// Stat change long hand calculation
-	_statGainTotal = unitStatistics->delta.tu;
-	_statGainTotal = unitStatistics->delta.stamina;
-	_statGainTotal = unitStatistics->delta.health;
-	_statGainTotal = unitStatistics->delta.bravery / 10; // Normalize
-	_statGainTotal = unitStatistics->delta.reactions;
-	_statGainTotal = unitStatistics->delta.firing;
-	_statGainTotal = unitStatistics->delta.throwing;
-	_statGainTotal = unitStatistics->delta.strength;
-	_statGainTotal = unitStatistics->delta.psiStrength;
-	_statGainTotal = unitStatistics->delta.melee;
-	_statGainTotal = unitStatistics->delta.psiSkill;
+	_statGainTotal = 0; // Reset.
+	_statGainTotal += unitStatistics->delta.tu;
+	_statGainTotal += unitStatistics->delta.stamina;
+	_statGainTotal += unitStatistics->delta.health;
+	_statGainTotal += unitStatistics->delta.bravery / 10; // Normalize
+	_statGainTotal += unitStatistics->delta.reactions;
+	_statGainTotal += unitStatistics->delta.firing;
+	_statGainTotal += unitStatistics->delta.throwing;
+	_statGainTotal += unitStatistics->delta.strength;
+	_statGainTotal += unitStatistics->delta.psiStrength;
+	_statGainTotal += unitStatistics->delta.melee;
+	_statGainTotal += unitStatistics->delta.psiSkill;
     
     _braveryGainTotal = unitStatistics->delta.bravery;
     _revivedUnitTotal += unitStatistics->revivedSoldier;
@@ -388,7 +392,9 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                     ((*j).first == "isMIA" && _MIA < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalMartyrKills" && _martyrKillsTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalPostMortemKills" && _postMortemKills < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-                    ((*j).first == "globeTrotter" && (int)_globeTrotter < (*j).second.at(nextCommendationLevel["noNoun"])) )
+                    ((*j).first == "globeTrotter" && (int)_globeTrotter < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalSlaveKills" && _slaveKillsTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )
+					
 			{
 				awardCommendationBool = false;
 				break;
