@@ -705,7 +705,10 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 						if ((*j)->getId() == murderer->getMurdererId() && (*j)->getGeoscapeSoldier())
 						{
 							(*j)->getStatistics()->kills.push_back(new BattleUnitKills(killStatRank, killStatRace, killStatWeapon, killStatWeaponAmmo, victim->getFaction(), STATUS_DEAD, killStatMission, killStatTurn, victim->getFatalShotSide(), victim->getFatalShotBodyPart(), victim->getId() ));
-							(*j)->getStatistics()->slaveKills++;
+							if (victim->getFaction() == FACTION_HOSTILE)
+							{
+								(*j)->getStatistics()->slaveKills++;
+							}							
 							victim->setMurdererId((*j)->getId());
 							break;
 						}
