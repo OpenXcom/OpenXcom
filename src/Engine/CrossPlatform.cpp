@@ -59,6 +59,7 @@
 #include <SDL.h>
 #include <SDL_syswm.h>
 #include <SDL_image.h>
+#include "BundlePath.h"
 
 namespace OpenXcom
 {
@@ -147,6 +148,10 @@ std::vector<std::string> findDataFolders()
 	char path[MAXPATHLEN];
 
 	// Get user-specific data folders
+#ifdef __APPLE__
+	snprintf(path, MAXPATHLEN, "%s/Contents/Resources/data/", getBundlePath().c_str());
+	list.push_back(path);
+#endif
 	if (char const *const xdg_data_home = getenv("XDG_DATA_HOME"))
  	{
 		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_data_home);

@@ -7,82 +7,7 @@ set ( root_src
   version.h
 )
 
-set ( basescape_src
-  Basescape/BaseView.cpp
-  Basescape/BaseView.h
-  Basescape/CraftSoldiersState.cpp
-  Basescape/CraftSoldiersState.h
-  Basescape/TransfersState.cpp
-  Basescape/TransfersState.h
-  Basescape/StoresState.cpp
-  Basescape/StoresState.h
-  Basescape/SackSoldierState.h
-  Basescape/SackSoldierState.cpp
-  Basescape/SellState.h
-  Basescape/SellState.cpp
-  Basescape/CraftInfoState.cpp
-  Basescape/CraftInfoState.h
-  Basescape/PlaceLiftState.h
-  Basescape/PlaceLiftState.cpp
-  Basescape/DismantleFacilityState.h
-  Basescape/DismantleFacilityState.cpp
-  Basescape/SoldierInfoState.h
-  Basescape/SoldierInfoState.cpp
-  Basescape/CraftsState.cpp
-  Basescape/CraftsState.h
-  Basescape/PlaceFacilityState.h
-  Basescape/PlaceFacilityState.cpp
-  Basescape/TransferItemsState.cpp
-  Basescape/TransferItemsState.h
-  Basescape/CraftArmorState.h
-  Basescape/CraftArmorState.cpp
-  Basescape/MonthlyCostsState.cpp
-  Basescape/MonthlyCostsState.h
-  Basescape/CraftEquipmentState.cpp
-  Basescape/CraftEquipmentState.h
-  Basescape/BaseInfoState.h
-  Basescape/BaseInfoState.cpp
-  Basescape/ResearchState.h
-  Basescape/ResearchState.cpp
-  Basescape/PurchaseState.cpp
-  Basescape/PurchaseState.h
-  Basescape/TransferBaseState.cpp
-  Basescape/TransferBaseState.h
-  Basescape/CraftWeaponsState.h
-  Basescape/CraftWeaponsState.cpp
-  Basescape/ManufactureState.h
-  Basescape/ManufactureState.cpp
-  Basescape/BuildFacilitiesState.h
-  Basescape/BuildFacilitiesState.cpp
-  Basescape/MiniBaseView.cpp
-  Basescape/MiniBaseView.h
-  Basescape/BasescapeState.cpp
-  Basescape/BasescapeState.h
-  Basescape/TransferConfirmState.cpp
-  Basescape/TransferConfirmState.h
-  Basescape/SoldierArmorState.h
-  Basescape/SoldierArmorState.cpp
-  Basescape/SoldiersState.cpp
-  Basescape/SoldiersState.h
-  Basescape/NewResearchListState.h
-  Basescape/NewResearchListState.cpp
-  Basescape/ResearchInfoState.h
-  Basescape/ResearchInfoState.cpp
-  Basescape/NewManufactureListState.h
-  Basescape/NewManufactureListState.cpp
-  Basescape/ManufactureStartState.h
-  Basescape/ManufactureStartState.cpp
-  Basescape/ManufactureInfoState.h
-  Basescape/ManufactureInfoState.cpp
-  Basescape/PlaceStartFacilityState.h
-  Basescape/PlaceStartFacilityState.cpp
-  Basescape/SelectStartFacilityState.h
-  Basescape/SelectStartFacilityState.cpp
-  Basescape/SoldierMemorialState.cpp
-  Basescape/SoldierMemorialState.h
-  Basescape/ManageAlienContainmentState.h
-  Basescape/ManageAlienContainmentState.cpp
-)
+add_subdirectory(Basescape)
 
 set ( battlescape_src
   Battlescape/ActionMenuState.cpp
@@ -267,7 +192,7 @@ set ( engine_src
   Engine/Scalers/hq4x.cpp
   Engine/Scalers/init.cpp
   Engine/Scalers/config.h
-  Engine/Scalers/xbrz.h  
+  Engine/Scalers/xbrz.h
   Engine/Scalers/xbrz.cpp
   Engine/Adlib/adlplayer.cpp
   Engine/Adlib/adlplayer.h
@@ -276,6 +201,12 @@ set ( engine_src
   Engine/AdlibMusic.h
   Engine/AdlibMusic.cpp
 )
+if (APPLE)
+  list(APPEND engine_src
+    Engine/BundlePath.mm
+    Engine/BundlePath.h
+  )
+endif (APPLE)
 
 set ( geoscape_src
   Geoscape/GeoscapeCraftState.cpp
@@ -707,7 +638,7 @@ if ( WIN32 )
   set ( application_type WIN32 )
 endif ()
 
-set ( openxcom_src ${root_src} ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${resource_src} ${ruleset_src} ${savegame_src} ${ufopedia_src} )
+set ( openxcom_src ${root_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${resource_src} ${ruleset_src} ${savegame_src} ${ufopedia_src} )
 
 set ( install_dest RUNTIME )
 set ( set_exec_path ON )
@@ -747,6 +678,8 @@ if ( FORCE_INSTALL_DATA_TO_BIN )
 endif ()
 
 add_executable ( openxcom  ${application_type} ${openxcom_src} )
+target_link_libraries(openxcom Basescape)
+
 install ( TARGETS openxcom ${install_dest} DESTINATION bin )
 # Extra link flags for Windows. They need to be set before the SDL/YAML link flags, otherwise you will get strange link errors ('Undefined reference to WinMain@16')
 if ( WIN32 )
@@ -816,7 +749,6 @@ endif ()
 
 #Setup source groups for IDE
 if ( MSVC )
-  source_group ( "Basescape" FILES ${basescape_src} )
   source_group ( "Battlescape" FILES ${battlescape_src} )
   source_group ( "Engine" FILES ${engine_src} )
   source_group ( "Geoscape" FILES ${geoscape_src} )
