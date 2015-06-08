@@ -1291,7 +1291,7 @@ static inline void scale2x_32_mmx_border(scale2x_uint32* dst, const scale2x_uint
  * Scale by a factor of 2 a row of pixels of 8 bits.
  * This is a very fast MMX implementation.
  * The implementation uses a combination of cmp/and/not operations to
- * completly remove the need of conditional jumps. This trick give the
+ * completely remove the need of conditional jumps. This trick give the
  * major speed improvement.
  * Also, using the 8 bytes MMX registers more than one pixel are computed
  * at the same time.

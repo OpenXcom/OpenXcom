@@ -501,7 +501,7 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 		_w2FireInterval = _craft->getWeapons()->at(1)->getRules()->getStandardReload();
 	}
 
-	// Set UFO size - going to be moved to Ufo class to implement simultanous dogfights.
+	// Set UFO size - going to be moved to Ufo class to implement simultaneous dogfights.
 	std::string ufoSize = _ufo->getRules()->getSize();
 	if (ufoSize.compare("STR_VERY_SMALL") == 0)
 	{

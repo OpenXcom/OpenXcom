@@ -235,7 +235,7 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
 			}
 		}
 	}
-	// Unble to reach the target
+	// Unable to reach the target
 	return false;
 }
 

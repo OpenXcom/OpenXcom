@@ -281,7 +281,7 @@ void Game::run()
 
 			if (_init && _timeUntilNextFrame <= 0)
 			{
-				// make a note of when this frame update occured.
+				// make a note of when this frame update occurred.
 				_timeOfLastFrame = SDL_GetTicks();
 				_fpsCounter->addFrame();
 				_screen->clear();

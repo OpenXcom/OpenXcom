@@ -433,7 +433,7 @@ void Language::load(ExtraStrings *extras)
 }
 
 /**
-* Replaces all special string markers with the approriate characters
+* Replaces all special string markers with the appropriate characters
 * and converts the string encoding.
 * @param string Original UTF-8 string.
 * @return New widechar string.

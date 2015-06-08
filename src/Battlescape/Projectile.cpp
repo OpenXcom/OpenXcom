@@ -457,7 +457,7 @@ Position Projectile::getTarget()
 
 /**
  * Is this projectile drawn back to front or front to back?
- * @retun return if this is to be drawn in reverse order.
+ * @return return if this is to be drawn in reverse order.
  */
 bool Projectile::isReversed() const
 {

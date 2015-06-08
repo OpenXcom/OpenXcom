@@ -42,7 +42,7 @@ namespace FileMap
 	/// filesystem paths via getFilePath()
 	const std::set<std::string> &getVFolderContents(const std::string &relativePath);
 
-	/// Returns the subset of the given files that matches the given extention
+	/// Returns the subset of the given files that matches the given extension
 	std::set<std::string> filterFiles(const std::vector<std::string> &files, const std::string &ext);
 	std::set<std::string> filterFiles(const std::set<std::string>    &files, const std::string &ext);
 

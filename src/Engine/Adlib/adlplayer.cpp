@@ -697,7 +697,7 @@ int decode_op(int instrument, bool* another_loop)
 }
 
 // music initialization function, sets up subblock array,
-// tempo, instrument addreses and samples
+// tempo, instrument addresses and samples
 void init_music_data(unsigned char* music_ptr,int length)
 {
 	unsigned int i, to_add, j;

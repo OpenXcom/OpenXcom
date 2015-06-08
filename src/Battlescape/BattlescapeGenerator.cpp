@@ -2213,7 +2213,7 @@ void BattlescapeGenerator::attachNodeLinks()
 
 /**
  * Selects a position for a map block.
- * @param rects the postions to select from, none meaning the whole map.
+ * @param rects the positions to select from, none meaning the whole map.
  * @param X the x position for the block gets stored in this variable.
  * @param Y the y position for the block gets stored in this variable.
  * @param sizeX the x size of the block we want to add.

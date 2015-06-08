@@ -1786,7 +1786,7 @@ std::vector<Soldier*> *SavedGame::getDeadSoldiers()
 }
 
 /**
- * Sets the the last selected armour.
+ * Sets the last selected armour.
  * @param value The new value for last selected armor - Armor type string.
  */
 
@@ -1796,7 +1796,7 @@ void SavedGame::setLastSelectedArmor(const std::string &value)
 }
 
 /**
- * Gets the the last selected armour
+ * Gets the last selected armour
  * @return last used armor type string
  */
 std::string SavedGame::getLastSelectedArmor()

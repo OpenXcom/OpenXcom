@@ -242,7 +242,7 @@ New features:
 - Game can now be completed, game over screens for winning and losing.
 - Randomizer for "New Battle" mode.
 - Your settings in "New Battle" mode will be saved for next time you play.
-- New translations: Ukranian, Bulgarian, Portuguese (Portugal), Spanish (Latin American), Danish.
+- New translations: Ukrainian, Bulgarian, Portuguese (Portugal), Spanish (Latin American), Danish.
 - New soldier names: Italian, Hungarian.
 - Aliens progress their equipment levels, races and aggression over time.
 - Added "Alien Weapon Level" button in New Battle menu.
@@ -343,7 +343,7 @@ Bugfixes:
 Battlescape:
 - Battlescape buttons are now unavailable during alien turn.
 - Fixed bug in map generator regarding nodes outside the map.
-- Improved map generation of alien base assualt missions.
+- Improved map generation of alien base assault missions.
 - The player no longer reveals the tile an alien is standing on when they detect an alien on an unrevealed tile.
 - The camera resets after non-reaction shots.
 - Camera now correctly centers on explosions, and properly detects explosion visibility.
