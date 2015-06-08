@@ -1124,7 +1124,7 @@ void SavedBattleGame::addDestroyedObjective()
 }
 
 /**
- * Returns whether the objectives are detroyed.
+ * Returns whether the objectives are destroyed.
  * @return True if the objectives are destroyed.
  */
 bool SavedBattleGame::allObjectivesDestroyed()
@@ -1186,7 +1186,7 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
  * @param scout Is the unit scouting?
  * @param unit Pointer to the unit (to get its position).
  * @param fromNode Pointer to the node the unit is at.
- * @return Pointer to the choosen node.
+ * @return Pointer to the chosen node.
  */
 Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNode)
 {
@@ -1283,7 +1283,7 @@ void SavedBattleGame::prepareNewTurn()
 			// if we're still burning
 			if ((*i)->getFire())
 			{
-				// propegate in four cardinal directions (0, 2, 4, 6)
+				// propagate in four cardinal directions (0, 2, 4, 6)
 				for (int dir = 0; dir <= 6; dir += 2)
 				{
 					Position pos;
@@ -1408,7 +1408,7 @@ void SavedBattleGame::prepareNewTurn()
 }
 
 /**
- * Checks for units that are unconcious and revives them if they shouldn't be.
+ * Checks for units that are unconscious and revives them if they shouldn't be.
  *
  * Revived units need a tile to stand on. If the unit's current position is occupied, then
  * all directions around the tile are searched for a free tile to place the unit in.
@@ -1791,7 +1791,7 @@ std::vector< std::vector<std::pair<int, int> > > &SavedBattleGame::getModuleMap(
 /**
  * calculate the number of map modules remaining by counting the map objects
  * on the top floor who have the baseModule flag set. we store this data in the grid
- * as outlined in the comments above, in pairs representing intial and current values.
+ * as outlined in the comments above, in pairs representing initial and current values.
  */
 void SavedBattleGame::calculateModuleMap()
 {

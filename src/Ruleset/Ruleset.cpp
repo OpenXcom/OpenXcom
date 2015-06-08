@@ -896,7 +896,7 @@ RuleBaseFacility *Ruleset::getBaseFacility(const std::string &id) const
 /**
  * Returns the list of all base facilities
  * provided by the ruleset.
- * @return List of base faciliies.
+ * @return List of base facilities.
  */
 const std::vector<std::string> &Ruleset::getBaseFacilitiesList() const
 {

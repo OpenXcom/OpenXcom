@@ -205,7 +205,7 @@ void AlienMission::think(Game &engine, const Globe &globe)
 }
 
 /**
- * This function will spawn a UFO according the the mission rules.
+ * This function will spawn a UFO according the mission rules.
  * Some code is duplicated between cases, that's ok for now. It's on different
  * code paths and the function is MUCH easier to read written this way.
  * @param game The saved game information.
@@ -554,7 +554,7 @@ void AlienMission::setId(int id)
  */
 int AlienMission::getId() const
 {
-	assert(_uniqueID != 0 && "Uninitalized mission!");
+	assert(_uniqueID != 0 && "Uninitialized mission!");
 	return _uniqueID;
 }
 
@@ -684,7 +684,7 @@ std::pair<double, double> AlienMission::getLandPoint(const Globe &globe, const R
 		&& tries < 100);
 	if (tries == 100)
 	{
-		Log(LOG_DEBUG) << "Region: " << region.getType() << " Longitude: " << pos.first << " Lattitude: " << pos.second << " invalid zone: " << zone << " ufo forced to land on water!";
+		Log(LOG_DEBUG) << "Region: " << region.getType() << " Longitude: " << pos.first << " Latitude: " << pos.second << " invalid zone: " << zone << " ufo forced to land on water!";
 	}
 	return pos;
 

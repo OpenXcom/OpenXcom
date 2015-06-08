@@ -233,7 +233,7 @@ void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors, bool imm
 {
 	if (_numColors && (_numColors != ncolors) && (_firstColor != firstcolor))
 	{
-		// an initial palette setup has not been comitted to the screen yet
+		// an initial palette setup has not been committed to the screen yet
 		// just update it with whatever colors are being sent now
 		memmove(&(deferredPalette[firstcolor]), colors, sizeof(SDL_Color)*ncolors);
 		_numColors = 256; // all the use cases are just a full palette with 16-color follow-ups

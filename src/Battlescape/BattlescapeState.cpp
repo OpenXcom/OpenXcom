@@ -504,7 +504,7 @@ BattlescapeState::~BattlescapeState()
 }
 
 /**
- * Initilizes the battlescapestate.
+ * Initializes the battlescapestate.
  */
 void BattlescapeState::init()
 {

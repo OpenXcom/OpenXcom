@@ -1584,7 +1584,7 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 		block = blockage(startTile, MapData::O_NORTHWALL, type);
 		break;
 	case 1: // north east
-		if (type == DT_NONE) //this is two-way diagonal visiblity check, used in original game
+		if (type == DT_NONE) //this is two-way diagonal visibility check, used in original game
 		{
 			block = blockage(startTile, MapData::O_NORTHWALL, type) + blockage(endTile, MapData::O_WESTWALL, type); //up+right
 			tmpTile = _save->getTile(startTile->getPosition() + oneTileNorth);
@@ -2249,7 +2249,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 
 /**
  * Calculates a parabola trajectory, used for throwing items.
- * @param origin Orign in voxelspace.
+ * @param origin Origin in voxelspace.
  * @param target Target in voxelspace.
  * @param storeTrajectory True will store the whole trajectory - otherwise it just stores the last position.
  * @param trajectory A vector of positions in which the trajectory is stored.
@@ -2350,7 +2350,7 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
 {
 	int zstart = voxel.z+3; // slight Z adjust
 	if ((zstart/24)!=(voxel.z/24))
-		return true; // visble!
+		return true; // visible!
 	Position tmpVoxel = voxel;
 	int zend = (zstart/24)*24 +24;
 	for (int z = zstart; z<zend; z++)
@@ -2529,7 +2529,7 @@ Tile *TileEngine::applyGravity(Tile *t)
 			{
 				if (occupant->getMovementType() == MT_FLY)
 				{
-					// move to the position you're already in. this will unset the kneeling flag, set teh floating flag, etc.
+					// move to the position you're already in. this will unset the kneeling flag, set the floating flag, etc.
 					occupant->startWalking(occupant->getDirection(), occupant->getPosition(), _save->getTile(occupant->getPosition() + Position(0,0,-1)), true);
 					// and set our status to standing (rather than walking or flying) to avoid weirdness.
 					occupant->abortTurn();
