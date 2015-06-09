@@ -189,7 +189,7 @@ public:
 	void addToObjectiveCount();
 	/// increments the objective counter.
 	void addDestroyedObjective();
-	/// Checks if all the objectives are detroyed.
+	/// Checks if all the objectives are destroyed.
 	bool allObjectivesDestroyed();
 	/// Gets the current item ID.
 	int *getCurrentItemId();

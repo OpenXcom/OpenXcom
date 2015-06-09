@@ -79,7 +79,7 @@ std::set<std::string> _filterFiles(const T &files, const std::string &ext)
 	for (typename T::const_iterator i = files.begin(); i != files.end(); ++i)
 	{
 		// less-than not less-than-or-equal since we should have at least
-		// one character in the filename that is not part of the extention
+		// one character in the filename that is not part of the extension
 		if (extLen < i->length() && 0 == _canonicalize(i->substr(i->length() - (extLen - 1))).compare(canonicalExt))
 		{
 			ret.insert(*i);

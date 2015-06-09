@@ -808,7 +808,7 @@ int Tile::getTopItemSprite()
  */
 void Tile::prepareNewTurn()
 {
-	// we've recieved new smoke in this turn, but we're not on fire, average out the smoke.
+	// we've received new smoke in this turn, but we're not on fire, average out the smoke.
 	if ( _overlaps != 0 && _smoke != 0 && _fire == 0)
 	{
 		_smoke = std::max(0, std::min((_smoke / _overlaps)- 1, 15));
