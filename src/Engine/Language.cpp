@@ -53,14 +53,14 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 	if (_names.empty())
 	{
 		// names are in all lower case to support case insensitivity
-		_names["en-us"] = utf8ToWstr("English (US)");
-		_names["en-gb"] = utf8ToWstr("English (UK)");
+		_names["en-US"] = utf8ToWstr("English (US)");
+		_names["en-GB"] = utf8ToWstr("English (UK)");
 		_names["bg"] = utf8ToWstr("Български");
 		_names["cs"] = utf8ToWstr("Česky");
 		_names["da"] = utf8ToWstr("Dansk");
 		_names["de"] = utf8ToWstr("Deutsch");
 		_names["el"] = utf8ToWstr("Ελληνικά");
-		_names["es-es"] = utf8ToWstr("Español (ES)");
+		_names["es-ES"] = utf8ToWstr("Español (ES)");
 		_names["es-419"] = utf8ToWstr("Español (AL)");
 		_names["fr"] = utf8ToWstr("Français");
 		_names["fi"] = utf8ToWstr("Suomi");
@@ -72,8 +72,8 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 		_names["nl"] = utf8ToWstr("Nederlands");
 		_names["no"] = utf8ToWstr("Norsk");
 		_names["pl"] = utf8ToWstr("Polski");
-		_names["pt-br"] = utf8ToWstr("Português (BR)");
-		_names["pt-pt"] = utf8ToWstr("Português (PT)");
+		_names["pt-BR"] = utf8ToWstr("Português (BR)");
+		_names["pt-PT"] = utf8ToWstr("Português (PT)");
 		_names["ro"] = utf8ToWstr("Română");
 		_names["ru"] = utf8ToWstr("Русский");
 		_names["sk"] = utf8ToWstr("Slovenčina");
@@ -81,8 +81,8 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 		_names["th"] = utf8ToWstr("ไทย");
 		_names["tr"] = utf8ToWstr("Türkçe");
 		_names["uk"] = utf8ToWstr("Українська");
-		_names["zh-cn"] = utf8ToWstr("中文");
-		_names["zh-tw"] = utf8ToWstr("文言");
+		_names["zh-CN"] = utf8ToWstr("中文");
+		_names["zh-TW"] = utf8ToWstr("文言");
 	}
 	if (_rtl.empty())
 	{
@@ -92,8 +92,8 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 	{
 		_cjk.push_back("ja");
 		//_cjk.push_back("ko");  has spacing between words
-		_cjk.push_back("zh-cn");
-		_cjk.push_back("zh-tw");
+		_cjk.push_back("zh-CN");
+		_cjk.push_back("zh-TW");
 	}
 }
 
@@ -349,9 +349,7 @@ void Language::replace(std::wstring &str, const std::wstring &find, const std::w
  */
 void Language::getList(std::vector<std::string> &files, std::vector<std::wstring> &names)
 {
-	std::set<std::string> contents = FileMap::getVFolderContents("Language");
-	std::set<std::string> ymlContents = FileMap::filterFiles(contents, "yml");
-	files.insert(files.end(), ymlContents.begin(), ymlContents.end());
+	files = CrossPlatform::getFolderContents(CrossPlatform::searchDataFolder("common/Language"), "yml");
 	names.clear();
 
 	for (std::vector<std::string>::iterator i = files.begin(); i != files.end(); ++i)
@@ -376,12 +374,9 @@ void Language::getList(std::vector<std::string> &files, std::vector<std::wstring
  * Not that this has anything to do with Ruby, but since it's a
  * widely-supported format and we already have YAML, it was convenient.
  * @param filename Filename of the YAML file.
- * @param extras Pointer to extra strings from ruleset.
  */
-void Language::load(const std::string &filename, ExtraStrings *extras)
+void Language::load(const std::string &filename)
 {
-	_strings.clear();
-
 	YAML::Node doc = YAML::LoadFile(filename);
 	_id = doc.begin()->first.as<std::string>();
 	YAML::Node lang = doc.begin()->second;
@@ -402,13 +397,6 @@ void Language::load(const std::string &filename, ExtraStrings *extras)
 			}
 		}
 	}
-	if (extras)
-	{
-		for (std::map<std::string, std::string>::const_iterator i = extras->getStrings()->begin(); i != extras->getStrings()->end(); ++i)
-		{
-			_strings[i->first] = loadString(i->second);
-		}
-	}
 	delete _handler;
 	_handler = LanguagePlurality::create(_id);
 	if (std::find(_rtl.begin(), _rtl.end(), _id) == _rtl.end())
@@ -426,6 +414,21 @@ void Language::load(const std::string &filename, ExtraStrings *extras)
 	else
 	{
 		_wrap = WRAP_LETTERS;
+	}
+}
+
+/**
+ * Loads a language file from a mod's ExtraStrings.
+ * @param extras Pointer to extra strings from ruleset.
+ */
+void Language::load(ExtraStrings *extras)
+{
+	if (extras)
+	{
+		for (std::map<std::string, std::string>::const_iterator i = extras->getStrings()->begin(); i != extras->getStrings()->end(); ++i)
+		{
+			_strings[i->first] = loadString(i->second);
+		}
 	}
 }
 

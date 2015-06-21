@@ -77,7 +77,9 @@ public:
 	/// Gets list of languages in the data directory.
 	static void getList(std::vector<std::string> &files, std::vector<std::wstring> &names);
 	/// Loads the language from a YAML file.
-	void load(const std::string &filename, ExtraStrings *extras);
+	void load(const std::string &filename);
+	/// Loads the language from a ruleset file.
+	void load(ExtraStrings *strings);
 	/// Gets the language's ID.
 	std::string getId() const;
 	/// Gets the language's name.
