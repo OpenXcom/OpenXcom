@@ -1609,20 +1609,25 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit *unit)
 	{
 		return false;
 	}
-	Position entryPoint = Position(-1, -1, -1);
-	int tries = 100;
-	while (entryPoint == Position(-1, -1, -1) && tries)
+	for (int i = 0; i != 10; ++i)
 	{
-		BattleUnit* k = _save->getUnits()->at(RNG::generate(0, _save->getUnits()->size()-1));
-		if (k->getFaction() == unit->getFaction() && k->getPosition() != Position(-1, -1, -1) && k->getArmor()->getSize() >= unit->getArmor()->getSize())
+		Position entryPoint = Position(-1, -1, -1);
+		int tries = 100;
+		bool largeUnit = false;
+		while (entryPoint == Position(-1, -1, -1) && tries)
 		{
-			entryPoint = k->getPosition();
+			BattleUnit* k = _save->getUnits()->at(RNG::generate(0, _save->getUnits()->size()-1));
+			if (k->getFaction() == unit->getFaction() && k->getPosition() != Position(-1, -1, -1) && k->getArmor()->getSize() >= unit->getArmor()->getSize())
+			{
+				entryPoint = k->getPosition();
+				largeUnit = (k->getArmor()->getSize() != 1);
+			}
+			--tries;
 		}
-		--tries;
-	}
-	if (tries && _save->placeUnitNearPosition(unit, entryPoint))
-	{
-		return true;
+		if (tries && _save->placeUnitNearPosition(unit, entryPoint, largeUnit))
+		{
+			return true;
+		}
 	}
 	return false;
 }
