@@ -26,6 +26,8 @@
 #include "../Engine/Timer.h"
 #include "../Interface/Text.h"
 #include "../Resource/ResourcePack.h"
+#include "../Engine/Options.h"
+#include "../Interface/Cursor.h"
 
 namespace OpenXcom
 {
@@ -43,6 +45,8 @@ SlideshowState::SlideshowState(const SlideshowHeader &slideshowHeader,
 			new InteractiveSurface(Screen::ORIGINAL_WIDTH, Screen::ORIGINAL_HEIGHT, 0, 0);
 		slide->loadImage(FileMap::getFilePath(it->imagePath));
 		slide->onMouseClick((ActionHandler)&SlideshowState::screenClick);
+		slide->onKeyboardPress((ActionHandler)&SlideshowState::screenClick, Options::keyOk);
+		slide->onKeyboardPress((ActionHandler)&SlideshowState::screenSkip, Options::keyCancel);
 		slide->setVisible(false);
 		_slides.push_back(slide);
 		setPalette(slide->getPalette());
@@ -53,6 +57,7 @@ SlideshowState::SlideshowState(const SlideshowHeader &slideshowHeader,
 		Text *caption = new Text(it->w, it->h, it->x, it->y);
 		caption->setColor(it->color);
 		caption->setText(tr(it->caption));
+		caption->setAlign(it->align);
 		caption->setWordWrap(true);
 		caption->setVisible(false);
 		_captions.push_back(caption);
@@ -61,11 +66,14 @@ SlideshowState::SlideshowState(const SlideshowHeader &slideshowHeader,
 
 	centerAllSurfaces();
 
-	_transitionTimer = new Timer(slideshowHeader.transitionSeconds * 1000);
+	int transitionSeconds = _slideshowHeader.transitionSeconds;
+	if (_slideshowSlides->front().transitionSeconds > 0)
+		transitionSeconds = _slideshowSlides->front().transitionSeconds;
+	_transitionTimer = new Timer(transitionSeconds * 1000);
 	_transitionTimer->onTimer((StateHandler)&SlideshowState::screenTimer);
 
-	_game->getResourcePack()->playMusic(slideshowHeader.musicId);
-
+	_game->getResourcePack()->playMusic(_slideshowHeader.musicId);
+	_game->getCursor()->setVisible(false);
 	screenClick(0);
 }
 
@@ -93,7 +101,7 @@ void SlideshowState::think()
 /**
  * Shows the next screen in the slideshow; pops the state when there are no more slides
  */
-void SlideshowState::screenClick(Action *)
+void SlideshowState::screenClick(Action *action)
 {
 	if (_curScreen >= 0)
 	{
@@ -106,6 +114,10 @@ void SlideshowState::screenClick(Action *)
 	// next screen
 	if (_curScreen < _slideshowSlides->size())
 	{
+		int transitionSeconds = _slideshowHeader.transitionSeconds;
+		if (_slideshowSlides->at(_curScreen).transitionSeconds > 0)
+			transitionSeconds = _slideshowSlides->at(_curScreen).transitionSeconds;
+		_transitionTimer->setInterval(transitionSeconds * 1000);
 		_transitionTimer->start();
 		setPalette(_slides[_curScreen]->getPalette());
 		_slides[_curScreen]->setVisible(true);
@@ -114,10 +126,19 @@ void SlideshowState::screenClick(Action *)
 	}
 	else
 	{
-		// slideshow is over.  restore the screen scale and pop the state
-		CutsceneState::resetDisplay(_wasLetterboxed);
-		_game->popState();
+		screenSkip(action);
 	}
+}
+
+/**
+ * Skips the slideshow
+ */
+void SlideshowState::screenSkip(Action *)
+{
+	// slideshow is over.  restore the screen scale and pop the state
+	_game->getCursor()->setVisible(true);
+	CutsceneState::resetDisplay(_wasLetterboxed);
+	_game->popState();
 }
 
 }

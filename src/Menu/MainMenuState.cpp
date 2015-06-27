@@ -95,9 +95,6 @@ MainMenuState::MainMenuState()
 	title << tr("STR_OPENXCOM") << L"\x02";
 	title << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT);
 	_txtTitle->setText(title.str());
-
-	// Set music
-	_game->getResourcePack()->playMusic("GMSTORY");
 }
 
 /**
