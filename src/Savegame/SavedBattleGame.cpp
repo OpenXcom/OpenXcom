@@ -1433,7 +1433,9 @@ void SavedBattleGame::reviveUnconsciousUnits()
 			}
 			if ((*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0)
 			{
-				if (placeUnitNearPosition((*i), originalPosition))
+				Tile *targetTile = getTile(originalPosition);
+				bool largeUnit =  targetTile && targetTile->getUnit() && targetTile->getUnit() != *i && targetTile->getUnit()->getArmor()->getSize() != 1;
+				if (placeUnitNearPosition((*i), originalPosition, largeUnit))
 				{
 					// recover from unconscious
 					(*i)->turn(false); // makes the unit stand up again
@@ -1673,19 +1675,22 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
  * @param entryPoint The position around which to attempt to place the unit.
  * @return True if the unit was successfully placed.
  */
-bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, Position entryPoint)
+bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, Position entryPoint, bool largeFriend)
 {
 	if (setUnitPosition(unit, entryPoint))
 	{
 		return true;
 	}
-
+	
+	int me = 0 - unit->getArmor()->getSize();
+	int you = largeFriend ? 2 : 1;
+	int xArray[8] = {0, you, you, you, 0, me, me, me};
+	int yArray[8] = {me, me, 0, you, you, you, 0, me};
 	for (int dir = 0; dir <= 7; ++dir)
 	{
-		Position offset;
-		getPathfinding()->directionToVector(dir, &offset);
+		Position offset = Position (xArray[dir], yArray[dir], 0);
 		Tile *t = getTile(entryPoint + offset);
-		if (t && !getPathfinding()->isBlocked(getTile(entryPoint), t, dir, 0)
+		if (t && !getPathfinding()->isBlocked(getTile(entryPoint + (offset / 2)), t, dir, 0)
 			&& setUnitPosition(unit, entryPoint + offset))
 		{
 			return true;
