@@ -924,7 +924,7 @@ void InventoryState::_updateTemplateButtons(bool isVisible)
 			// use "empty template" icons
 			_game->getResourcePack()->getSurface("InvCopy")->blit(_btnCreateTemplate);
 			_game->getResourcePack()->getSurface("InvPasteEmpty")->blit(_btnApplyTemplate);
-			_btnApplyTemplate->setTooltip("STR_CLEAR_INVENTORY_TEMPLATE");
+			_btnApplyTemplate->setTooltip("STR_CLEAR_INVENTORY");
 		}
 		else
 		{
