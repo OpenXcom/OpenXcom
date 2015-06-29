@@ -142,8 +142,6 @@ en-GB:
   STR_SPENDRESEARCHEDITEMS: "Spend researched items"
   STR_SPENDRESEARCHEDITEMS_DESC: "Researched items are disassembled and removed from your stores, like in XCOM 2012. After \"researching\" living aliens, the body will be returned to the base stores."
   STR_SAVE_VOXEL_VIEW: "Save First-Person Screenshot"
-  STR_TIME_UNITS_RESERVED_FOR_KNEELING: "Time Units reserved for Kneeling"
-  STR_TIME_UNITS_RESERVED_FOR_KNEELING_AND_FIRING: "TUs reserved for Kneeling and Firing"
   STR_RESERVE_TIME_UNITS_FOR_KNEEL: "Reserve TUs for kneeling"
   STR_EXPEND_ALL_TIME_UNITS: "Expend all remaining Time Units"
   STR_PSISTRENGTHEVAL: "Psi-Strength Evaluation"

@@ -94,12 +94,12 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 	_txtInExit->setBig();
 	_txtInExit->setAlign(ALIGN_CENTER);
 	_txtInExit->setHighContrast(true);
-	_txtInExit->setText(tr("STR_UNITS_IN_EXIT_AREA", _inExitArea));
+	_txtInExit->setText(tr("STR_UNITS_IN_CRAFT", _inExitArea));
 
 	_txtOutsideExit->setBig();
 	_txtOutsideExit->setAlign(ALIGN_CENTER);
 	_txtOutsideExit->setHighContrast(true);
-	_txtOutsideExit->setText(tr("STR_UNITS_OUTSIDE_EXIT_AREA", _outExitArea));
+	_txtOutsideExit->setText(tr("STR_UNITS_OUTSIDE", _outExitArea));
 	if (_battleGame->getMissionType() == "STR_BASE_DEFENSE")
 	{
 		_txtInExit->setVisible(false);

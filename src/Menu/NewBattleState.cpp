@@ -613,7 +613,7 @@ void NewBattleState::cbxMissionChange(Action *)
 	for (std::set<std::string>::const_iterator i = terrains.begin(); i != terrains.end(); ++i)
 	{
 		_terrainTypes.push_back(*i);
-		terrainStrings.push_back("STR_" + *i);
+		terrainStrings.push_back("MAP_" + *i);
 	}
 
 	// Hide controls that don't apply to mission
