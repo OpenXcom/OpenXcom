@@ -58,6 +58,8 @@ namespace YAML
 namespace OpenXcom
 {
 
+const std::string UfoTrajectory::RETALIATION_ASSAULT_RUN = "__RETALIATION_ASSAULT_RUN";
+
 UfoTrajectory::UfoTrajectory(const std::string &id) : _id(id), _groundTimer(5)
 {
 }

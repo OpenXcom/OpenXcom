@@ -228,7 +228,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 		{
 			// Spawn a battleship straight for the XCOM base.
 			const RuleUfo &battleshipRule = *ruleset.getUfo(_rule.getSpawnUfo());
-			const UfoTrajectory &assaultTrajectory = *ruleset.getUfoTrajectory("__RETALIATION_ASSAULT_RUN");
+			const UfoTrajectory &assaultTrajectory = *ruleset.getUfoTrajectory(UfoTrajectory::RETALIATION_ASSAULT_RUN);
 			Ufo *ufo = new Ufo(&battleshipRule);
 			ufo->setMissionInfo(this, &assaultTrajectory);
 			std::pair<double, double> pos;
@@ -426,7 +426,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 				}
 			}
 		}
-		else if (trajectory.getID() == "__RETALIATION_ASSAULT_RUN")
+		else if (trajectory.getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN)
 		{
 			// Ignore what the trajectory might say, this is a base assault.
 			// Remove UFO, replace with Base defense.
