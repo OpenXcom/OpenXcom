@@ -291,9 +291,10 @@ en-US:
   STR_BASE_UC_: "BASE> {0}"
   STR_BASE_DEFENSE_BRIEFING: "An Alien vessel has touched down nearby. Our base is in severe danger. As per standard procedure all non combat personnel and functional X-Com subs have been evacuated. Aliens will enter the base via Submarine Pen gates or the air-lock. Defend the base and its vital installations at all costs - this is a fight to the death. If you click on the 'abort mission' icon you will concede defeat and lose the base."
 
-  STR_ALIEN_COLONY_P1: "ALIEN COLONY ATTACK MISSION"
+  STR_ALIEN_COLONY_ATTACK_MISSION: "ALIEN COLONY ATTACK MISSION"
+  STR_ALIEN_COLONY_P1: "ALIEN COLONY PART ONE"
   STR_ALIEN_COLONY_P1_BRIEFING: "This mission is a raid on an Alien colony site. There are 2 levels to the site, get all the aquanauts to the glowing exit in the first complex and click on the 'Abort Mission' icon to proceed. Any equipment left behind will stay on the seabed until the 2nd section is resolved. To quit, place aquanauts into the Submarine and click on the 'Abort Mission' icon."
-  STR_ALIEN_COLONY_P2: "ALIEN COLONY ATTACK MISSION"
+  STR_ALIEN_COLONY_P2: "ALIEN COLONY PART TWO"
   STR_ALIEN_COLONY_P2_BRIEFING: "Having negotiated the first level and entered the core of the colony. The mission is to now destroy the control center, the Synomium Device, or eliminate all Aliens. To abort place all aquanauts on the start point and click on 'Abort Mission' icon. All viable X-Com equipment will be returned to base. "
 
   STR_ALIENS_LAUNCH_PORT_TERROR: "ALIENS LAUNCH{NEWLINE}PORT ATTACK ON"
@@ -305,20 +306,19 @@ en-US:
   STR_ISLAND_TERROR_BRIEFING: "Aliens have launched an attack against surface sites. The island and its civilian population have been put at risk. Your squad must eliminate all Aliens and protect the innocent bystanders from this Alien incursion. To quit, place aquanauts into the flying sub and click on the 'Abort Mission' icon."
 
   STR_ALIENS_ATTACK_SHIPPING_ROUTE: "ALIENS ATTACK{NEWLINE}SHIPPING ROUTE"
-  STR_CARGO_SHIP_P1: "SHIP RESCUE MISSION"
-  STR_CARGO_SHIP_P1_BRIEFING: "This mission is a bug hunt, eliminate all Alien units on the ship, and preserve the lives of any civilians onboard. The Aliens are dispersed above and below decks, secure the upper decks before entering the lower ones. To quit, place aquanauts into the flying sub and click on the 'Abort Mission' icon."
-  STR_CARGO_SHIP_P2: "SHIP RESCUE MISSION"
-  STR_CARGO_SHIP_P2_BRIEFING: "Now the upper deck is clear proceed to the lower decks. Using the cargo lift you descend into the hold. Your squad must eliminate all Aliens on this level to complete the mission. To abort place all aquanauts on the lift start point and click on 'Abort Mission' icon."
-
-  STR_CRUISE_SHIP_P1: "SHIP RESCUE MISSION"
-  STR_CRUISE_SHIP_P1_BRIEFING: "This mission is a bug hunt, eliminate all Alien units on the ship, and preserve the lives of any civilians onboard. The Aliens are dispersed above and below decks, secure the upper decks before entering the lower ones. To quit, place aquanauts into the flying sub and click on the 'Abort Mission' icon."
-  STR_CRUISE_SHIP_P2: "SHIP RESCUE MISSION"
-  STR_CRUISE_SHIP_P2_BRIEFING: "Now the upper deck is clear proceed to the lower decks. Using the cargo lift you descend into the hold. Your squad must eliminate all Aliens on this level to complete the mission. To abort place all aquanauts on the lift start point and click on 'Abort Mission' icon."
+  STR_CARGO_SHIP_P1: "CARGO SHIP PART ONE"
+  STR_CARGO_SHIP_P2: "CARGO SHIP PART TWO"
+  STR_CRUISE_SHIP_P1: "CRUISE SHIP PART ONE"
+  STR_CRUISE_SHIP_P2: "CRUISE SHIP PART TWO"
+  STR_SHIP_RESCUE_MISSION: "SHIP RESCUE MISSION"
+  STR_SHIP_RESCUE_P1_BRIEFING: "This mission is a bug hunt, eliminate all Alien units on the ship, and preserve the lives of any civilians onboard. The Aliens are dispersed above and below decks, secure the upper decks before entering the lower ones. To quit, place aquanauts into the flying sub and click on the 'Abort Mission' icon."
+  STR_SHIP_RESCUE_P2_BRIEFING: "Now the upper deck is clear proceed to the lower decks. Using the cargo lift you descend into the hold. Your squad must eliminate all Aliens on this level to complete the mission. To abort place all aquanauts on the lift start point and click on 'Abort Mission' icon."
 
   STR_ALIEN_ACTIVITY_DETECTED: "ALIEN ACTIVITY DETECTED"
-  STR_ARTIFACT_SITE_P1: "ALIEN CONTACT SITE MISSION"
+  STR_ALIEN_CONTACT_SITE_MISSION: "ALIEN CONTACT SITE MISSION"
+  STR_ARTIFACT_SITE_P1: "ALIEN CONTACT SITE PART ONE"
   STR_ARTIFACT_SITE_P1_BRIEFING: "This mission is a raid on a freshly activated Alien communications site. There are 2 levels to the site, the seabed with its Alien pyramids and a hidden Alien complex. Get all the aquanauts to the entrance of the complex and click on the 'Abort Mission' icon to proceed. To quit, place aquanauts into the flying sub and click on the 'Abort Mission' icon."
-  STR_ARTIFACT_SITE_P2: "ALIEN CONTACT SITE MISSION"
+  STR_ARTIFACT_SITE_P2: "ALIEN CONTACT SITE PART TWO"
   STR_ARTIFACT_SITE_P2_BRIEFING: "Having negotiated the Alien structures and entered the complex the mission goals are clear. Penetrate the heart of the Alien facility and destroy the Synomium Molecular Control Device to complete the mission. To abort place all aquanauts on the access lift start point and click on 'Abort Mission' icon."
 
   STR_TLETH_P1: "SIGSBEE DEEP MISSION{NEWLINE}ALIEN CITY LEVEL ONE"

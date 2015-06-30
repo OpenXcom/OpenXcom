@@ -79,6 +79,8 @@ namespace YAML
 			Node node;
 			node["palette"] = rhs.palette;
 			node["textOffset"] = rhs.textOffset;
+			node["title"] = rhs.title;
+			node["desc"] = rhs.desc;
 			node["music"] = rhs.music;
 			node["cutscene"] = rhs.cutscene;
 			node["background"] = rhs.background;
@@ -92,6 +94,8 @@ namespace YAML
 				return false;
 			rhs.palette = node["palette"].as<int>(rhs.palette);
 			rhs.textOffset = node["textOffset"].as<int>(rhs.textOffset);
+			rhs.title = node["title"].as<std::string>(rhs.title);
+			rhs.desc = node["desc"].as<std::string>(rhs.desc);
 			rhs.music = node["music"].as<std::string>(rhs.music);
 			rhs.cutscene = node["cutscene"].as<std::string>(rhs.cutscene);
 			rhs.background = node["background"].as<std::string>(rhs.background);
