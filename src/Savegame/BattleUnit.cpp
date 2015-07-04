@@ -1566,7 +1566,7 @@ double BattleUnit::getReactionScore()
 /**
  * Prepare for a new turn.
  */
-void BattleUnit::prepareNewTurn()
+void BattleUnit::prepareNewTurn(bool fullProcess)
 {
 	if (_status == STATUS_TIME_OUT)
 	{
@@ -1606,6 +1606,15 @@ void BattleUnit::prepareNewTurn()
 		_energy += ENRecovery;
 		if (_energy > getBaseStats()->stamina)
 			_energy = getBaseStats()->stamina;
+	}
+
+	_dontReselect = false;
+	_motionPoints = 0;
+
+	// transition between stages, don't do damage or panic
+	if (!fullProcess)
+	{
+		return;
 	}
 
 	// suffer from fatal wounds
@@ -1651,8 +1660,6 @@ void BattleUnit::prepareNewTurn()
 		}
 	}
 	_hitByFire = false;
-	_dontReselect = false;
-	_motionPoints = 0;
 }
 
 

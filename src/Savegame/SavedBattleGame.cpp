@@ -1714,6 +1714,8 @@ bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, Position entryPoin
 void SavedBattleGame::resetTurnCounter()
 {
 	_turn = 1;
+	_cheating = false;
+	_side = FACTION_PLAYER;
 }
 
 /**

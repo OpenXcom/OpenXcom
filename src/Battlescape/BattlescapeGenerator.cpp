@@ -212,10 +212,6 @@ void BattlescapeGenerator::nextStage()
 		(*i)->setPosition(Position(-1,-1,-1), false);
 	}
 
-	while (_game->getSavedGame()->getSavedBattle()->getSide() != FACTION_PLAYER)
-	{
-		_game->getSavedGame()->getSavedBattle()->endTurn();
-	}
 	_save->resetTurnCounter();
 
 	// remove all items not belonging to our soldiers from the map.
@@ -292,7 +288,6 @@ void BattlescapeGenerator::nextStage()
 		{
 			if (!(*j)->isOut())
 			{
-				(*j)->convertToFaction(FACTION_PLAYER);
 				(*j)->setTurnsSinceSpotted(255);
 				(*j)->getVisibleTiles()->clear();
 				if (!selectedFirstSoldier && (*j)->getGeoscapeSoldier())
@@ -317,12 +312,17 @@ void BattlescapeGenerator::nextStage()
 					{
 						highestSoldierID = (*j)->getId();
 					}
-					(*j)->prepareNewTurn();
+					//reset TUs, regain energy, etc. but don't take damage or go berserk
+					(*j)->prepareNewTurn(false);
 				}
 			}
 		}
 	}
-
+	// tanks only i guess?
+	if (_save->getSelectedUnit() == 0 || _save->getSelectedUnit()->getFaction() != FACTION_PLAYER)
+	{
+		_save->selectNextPlayerUnit();
+	}
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
 
 	for (std::vector<BattleItem*>::iterator i = takeToNextStage.begin(); i != takeToNextStage.end(); ++i)
