@@ -20,6 +20,7 @@
 #include <fstream>
 #include <algorithm>
 #include "../fmath.h"
+#include "../Battlescape/Pathfinding.h"
 #include "../Engine/Options.h"
 #include "../Engine/Exception.h"
 #include "../Engine/FileMap.h"
@@ -128,6 +129,10 @@ void Ruleset::resetGlobalStatics()
 	Window::soundPopup[0] = 0;
 	Window::soundPopup[1] = 0;
 	Window::soundPopup[2] = 0;
+
+	Pathfinding::red = 3;
+	Pathfinding::yellow = 10;
+	Pathfinding::green = 4;
 }
 
 /**
