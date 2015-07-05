@@ -233,13 +233,13 @@ void BattlescapeGenerator::nextStage()
 			if (tile)
 			{
 				tile->removeItem(*j);
-				if (tile->getMapData(MapData::O_FLOOR))
+				if (tile->getMapData(O_FLOOR))
 				{
-					if (tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
+					if (tile->getMapData(O_FLOOR)->getSpecialType() == START_POINT)
 					{
 						toContainer = takeHomeGuaranteed;
 					}
-					else if (tile->getMapData(MapData::O_FLOOR)->getSpecialType() == END_POINT
+					else if (tile->getMapData(O_FLOOR)->getSpecialType() == END_POINT
 					&& (*j)->getRules()->isRecoverable()
 					&& !(*j)->getUnit())
 					{
@@ -809,7 +809,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 	}
 	else
 	{
-		for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; i++)
+		for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
 		{
 			if (canPlaceXCOMUnit(_save->getTiles()[i]))
 			{
@@ -835,10 +835,10 @@ bool BattlescapeGenerator::canPlaceXCOMUnit(Tile *tile)
 {
 	// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
 	if (tile &&
-		tile->getMapData(MapData::O_FLOOR) &&
-		tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT &&
-		!tile->getMapData(MapData::O_OBJECT) &&
-		tile->getMapData(MapData::O_FLOOR)->getTUCost(MT_WALK) < 255)
+		tile->getMapData(O_FLOOR) &&
+		tile->getMapData(O_FLOOR)->getSpecialType() == START_POINT &&
+		!tile->getMapData(O_OBJECT) &&
+		tile->getMapData(O_FLOOR)->getTUCost(MT_WALK) < 255)
 	{
 		if (_craftInventoryTile == 0)
 			_craftInventoryTile = tile;
@@ -899,7 +899,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment *deployment)
 
 		quantity += RNG::generate(0, (*d).extraQty);
 
-		for (int i = 0; i < quantity; i++)
+		for (int i = 0; i < quantity; ++i)
 		{
 			bool outside = RNG::generate(0,99) < (*d).percentageOutsideUfo;
 			if (_ufo == 0)
@@ -991,7 +991,7 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 	/* following data is the order in which certain alien ranks spawn on certain node ranks */
 	/* note that they all can fall back to rank 0 nodes - which is scout (outside ufo) */
 
-	for (int i = 0; i < 7 && node == 0; i++)
+	for (int i = 0; i < 7 && node == 0; ++i)
 	{
 		if (outside)
 			node = _save->getSpawnNode(0, unit); // when alien is instructed to spawn outside, we only look for node 0 spawnpoints
@@ -1378,7 +1378,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	for (int i = _mapsize_z-1; i >0; i--)
 	{
 		// check if there is already a layer - if so, we have to move Z up
-		MapData *floor = _save->getTile(Position(x, y, i))->getMapData(MapData::O_FLOOR);
+		MapData *floor = _save->getTile(Position(x, y, i))->getMapData(O_FLOOR);
 		if (floor != 0)
 		{
 			z += i;
@@ -1397,7 +1397,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
-		for (int part = 0; part < 4; part++)
+		for (int part = 0; part < 4; ++part)
 		{
 			terrainObjectID = ((unsigned char)value[part]);
 			if (terrainObjectID>0)
@@ -1525,8 +1525,8 @@ void BattlescapeGenerator::fuelPowerSources()
 {
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
-			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE)
+		if (_save->getTiles()[i]->getMapData(O_OBJECT)
+			&& _save->getTiles()[i]->getMapData(O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE)
 		{
 			BattleItem *alienFuel = new BattleItem(_game->getRuleset()->getItem(_game->getRuleset()->getAlienFuel()), _save->getCurrentItemId());
 			_save->getItems()->push_back(alienFuel);
@@ -1543,8 +1543,8 @@ void BattlescapeGenerator::explodePowerSources()
 {
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
-			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE && RNG::percent(75))
+		if (_save->getTiles()[i]->getMapData(O_OBJECT)
+			&& _save->getTiles()[i]->getMapData(O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE && RNG::percent(75))
 		{
 			Position pos;
 			pos.x = _save->getTiles()[i]->getPosition().x*16;
@@ -1652,10 +1652,10 @@ void BattlescapeGenerator::runInventory(Craft *craft)
 	for (int i = 0; i < soldiers; ++i)
 	{
 		Tile *tile = _save->getTiles()[i];
-		tile->setMapData(data, 0, 0, MapData::O_FLOOR);
-		tile->getMapData(MapData::O_FLOOR)->setSpecialType(START_POINT, 0);
-		tile->getMapData(MapData::O_FLOOR)->setTUWalk(0);
-		tile->getMapData(MapData::O_FLOOR)->setFlags(false, false, false, 0, false, false, false, false, false);
+		tile->setMapData(data, 0, 0, O_FLOOR);
+		tile->getMapData(O_FLOOR)->setSpecialType(START_POINT, 0);
+		tile->getMapData(O_FLOOR)->setTUWalk(0);
+		tile->getMapData(O_FLOOR)->setFlags(false, false, false, 0, false, false, false, false, false);
 	}
 
 	// ok now generate the battleitems for inventory
@@ -2078,9 +2078,9 @@ void BattlescapeGenerator::generateBaseMap()
 									Tile *t = _save->getTile(Position(k,l,groundLevel));
 									Tile *tEast = _save->getTile(Position(k+1,l,groundLevel));
 									Tile *tSouth = _save->getTile(Position(k,l+1,groundLevel));
-									if (t && t->getMapData(MapData::O_FLOOR) && !t->getMapData(MapData::O_OBJECT) &&
-										tEast && !tEast->getMapData(MapData::O_WESTWALL) &&
-										tSouth && !tSouth->getMapData(MapData::O_NORTHWALL))
+									if (t && t->getMapData(O_FLOOR) && !t->getMapData(O_OBJECT) &&
+										tEast && !tEast->getMapData(O_WESTWALL) &&
+										tSouth && !tSouth->getMapData(O_NORTHWALL))
 									{
 										_save->getStorageSpace().push_back(Position(k, l, groundLevel));
 									}
@@ -2480,20 +2480,20 @@ void BattlescapeGenerator::drillModules(TunnelData* data, const std::vector<SDL_
 						tile = _save->getTile(Position((i*10)+9, (j*10)+k, data->level));
 						if (tile)
 						{
-							tile->setMapData(0, -1, -1, MapData::O_WESTWALL);
-							tile->setMapData(0, -1, -1, MapData::O_OBJECT);
+							tile->setMapData(0, -1, -1, O_WESTWALL);
+							tile->setMapData(0, -1, -1, O_OBJECT);
 							if (floor)
 							{
 								md = _terrain->getMapDataSets()->at(floor->set)->getObjects()->at(floor->entry);
-								tile->setMapData(md, floor->entry, floor->set, MapData::O_FLOOR);
+								tile->setMapData(md, floor->entry, floor->set, O_FLOOR);
 							}
 
 							tile = _save->getTile(Position((i+1)*10, (j*10)+k, data->level));
-							tile->setMapData(0, -1, -1, MapData::O_WESTWALL);
-							MapData* obj = tile->getMapData(MapData::O_OBJECT);
+							tile->setMapData(0, -1, -1, O_WESTWALL);
+							MapData* obj = tile->getMapData(O_OBJECT);
 							if (obj && obj->getTUCost(MT_WALK) == 0)
 							{
-								tile->setMapData(0, -1, -1, MapData::O_OBJECT);
+								tile->setMapData(0, -1, -1, O_OBJECT);
 							}
 						}
 					}
@@ -2502,17 +2502,17 @@ void BattlescapeGenerator::drillModules(TunnelData* data, const std::vector<SDL_
 					{
 						md = _terrain->getMapDataSets()->at(nWall->set)->getObjects()->at(nWall->entry);
 						tile = _save->getTile(Position((i*10)+9, (j*10)+rect.y, data->level));
-						tile->setMapData(md, nWall->entry, nWall->set, MapData::O_NORTHWALL);
+						tile->setMapData(md, nWall->entry, nWall->set, O_NORTHWALL);
 						tile = _save->getTile(Position((i*10)+9, (j*10)+rect.y+rect.h, data->level));
-						tile->setMapData(md, nWall->entry, nWall->set, MapData::O_NORTHWALL);
+						tile->setMapData(md, nWall->entry, nWall->set, O_NORTHWALL);
 					}
 
 					if (corner)
 					{
 						md = _terrain->getMapDataSets()->at(corner->set)->getObjects()->at(corner->entry);
 						tile = _save->getTile(Position((i+1)*10, (j*10)+rect.y, data->level));
-						if (tile->getMapData(MapData::O_NORTHWALL) == 0)
-							tile->setMapData(md, corner->entry, corner->set, MapData::O_NORTHWALL);
+						if (tile->getMapData(O_NORTHWALL) == 0)
+							tile->setMapData(md, corner->entry, corner->set, O_NORTHWALL);
 					}
 				}
 			}
@@ -2528,20 +2528,20 @@ void BattlescapeGenerator::drillModules(TunnelData* data, const std::vector<SDL_
 						Tile * tile = _save->getTile(Position((i*10)+k, (j*10)+9, data->level));
 						if (tile)
 						{
-							tile->setMapData(0, -1, -1, MapData::O_NORTHWALL);
-							tile->setMapData(0, -1, -1, MapData::O_OBJECT);
+							tile->setMapData(0, -1, -1, O_NORTHWALL);
+							tile->setMapData(0, -1, -1, O_OBJECT);
 							if (floor)
 							{
 								md = _terrain->getMapDataSets()->at(floor->set)->getObjects()->at(floor->entry);
-								tile->setMapData(md, floor->entry, floor->set, MapData::O_FLOOR);
+								tile->setMapData(md, floor->entry, floor->set, O_FLOOR);
 							}
 
 							tile = _save->getTile(Position((i*10)+k, (j+1)*10, data->level));
-							tile->setMapData(0, -1, -1, MapData::O_NORTHWALL);
-							MapData* obj = tile->getMapData(MapData::O_OBJECT);
+							tile->setMapData(0, -1, -1, O_NORTHWALL);
+							MapData* obj = tile->getMapData(O_OBJECT);
 							if (obj && obj->getTUCost(MT_WALK) == 0)
 							{
-								tile->setMapData(0, -1, -1, MapData::O_OBJECT);
+								tile->setMapData(0, -1, -1, O_OBJECT);
 							}
 						}
 					}
@@ -2550,17 +2550,17 @@ void BattlescapeGenerator::drillModules(TunnelData* data, const std::vector<SDL_
 					{
 						md = _terrain->getMapDataSets()->at(wWall->set)->getObjects()->at(wWall->entry);
 						tile = _save->getTile(Position((i*10)+rect.x, (j*10)+9, data->level));
-						tile->setMapData(md, wWall->entry, wWall->set, MapData::O_WESTWALL);
+						tile->setMapData(md, wWall->entry, wWall->set, O_WESTWALL);
 						tile = _save->getTile(Position((i*10)+rect.x+rect.w, (j*10)+9, data->level));
-						tile->setMapData(md, wWall->entry, wWall->set, MapData::O_WESTWALL);
+						tile->setMapData(md, wWall->entry, wWall->set, O_WESTWALL);
 					}
 
 					if (corner)
 					{
 						md = _terrain->getMapDataSets()->at(corner->set)->getObjects()->at(corner->entry);
 						tile = _save->getTile(Position((i*10)+rect.x, (j+1)*10, data->level));
-						if (tile->getMapData(MapData::O_WESTWALL) == 0)
-							tile->setMapData(md, corner->entry, corner->set, MapData::O_WESTWALL);
+						if (tile->getMapData(O_WESTWALL) == 0)
+							tile->setMapData(md, corner->entry, corner->set, O_WESTWALL);
 					}
 				}
 			}

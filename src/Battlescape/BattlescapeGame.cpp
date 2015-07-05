@@ -456,7 +456,7 @@ void BattlescapeGame::endTurn()
 
 	if (_save->allObjectivesDestroyed())
 	{
-		_parentState->finishBattle(false,liveSoldiers);
+		_parentState->finishBattle(false, liveSoldiers);
 		return;
 	}
 

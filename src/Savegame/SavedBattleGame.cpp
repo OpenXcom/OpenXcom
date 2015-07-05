@@ -363,7 +363,7 @@ void SavedBattleGame::loadMapResources(Game *game)
 
 	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
-		for (int part = 0; part < 4; part++)
+		for (int part = 0; part < 4; ++part)
 		{
 			_tiles[i]->getMapData(&mdID, &mdsID, part);
 			if (mdID != -1 && mdsID != -1)
@@ -1302,25 +1302,25 @@ void SavedBattleGame::prepareNewTurn()
 			{
 				(*i)->setSmoke(0);
 				// burn this tile, and any object in it, if it's not fireproof/indestructible.
-				if ((*i)->getMapData(MapData::O_OBJECT))
+				if ((*i)->getMapData(O_OBJECT))
 				{
-					if ((*i)->getMapData(MapData::O_OBJECT)->getFlammable() != 255 && (*i)->getMapData(MapData::O_OBJECT)->getArmor() != 255)
+					if ((*i)->getMapData(O_OBJECT)->getFlammable() != 255 && (*i)->getMapData(O_OBJECT)->getArmor() != 255)
 					{
-						if ((*i)->destroy(MapData::O_OBJECT))
+						if ((*i)->destroy(O_OBJECT))
 						{
 							addDestroyedObjective();
 						}
-						if ((*i)->destroy(MapData::O_FLOOR))
+						if ((*i)->destroy(O_FLOOR))
 						{
 							addDestroyedObjective();
 						}
 					}
 				}
-				else if ((*i)->getMapData(MapData::O_FLOOR))
+				else if ((*i)->getMapData(O_FLOOR))
 				{
-					if ((*i)->getMapData(MapData::O_FLOOR)->getFlammable() != 255 && (*i)->getMapData(MapData::O_FLOOR)->getArmor() != 255)
+					if ((*i)->getMapData(O_FLOOR)->getFlammable() != 255 && (*i)->getMapData(O_FLOOR)->getArmor() != 255)
 					{
-						if ((*i)->destroy(MapData::O_FLOOR))
+						if ((*i)->destroy(O_FLOOR))
 						{
 							addDestroyedObjective();
 						}
@@ -1488,9 +1488,9 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 			Tile *tb = getTile(position + Position(x,y,-1));
 			if (t == 0 ||
 				(t->getUnit() != 0 && t->getUnit() != bu) ||
-				t->getTUCost(MapData::O_OBJECT, bu->getMovementType()) == 255 ||
+				t->getTUCost(O_OBJECT, bu->getMovementType()) == 255 ||
 				(t->hasNoFloor(tb) && bu->getMovementType() != MT_FLY) ||
-				(t->getMapData(MapData::O_OBJECT) && t->getMapData(MapData::O_OBJECT)->getBigWall() && t->getMapData(MapData::O_OBJECT)->getBigWall() <= 3))
+				(t->getMapData(O_OBJECT) && t->getMapData(O_OBJECT)->getBigWall() && t->getMapData(O_OBJECT)->getBigWall() <= 3))
 			{
 				return false;
 			}
@@ -1809,7 +1809,7 @@ void SavedBattleGame::calculateModuleMap()
 		for (int y = 0; y != _mapsize_y; ++y)
 		{
 			Tile *tile = getTile(Position(x,y,_mapsize_z-1));
-			if (tile && tile->getMapData(MapData::O_OBJECT) && tile->getMapData(MapData::O_OBJECT)->isBaseModule())
+			if (tile && tile->getMapData(O_OBJECT) && tile->getMapData(O_OBJECT)->isBaseModule())
 			{
 				_baseModules[x/10][y/10].first += _baseModules[x/10][y/10].first > 0 ? 1 : 2;
 				_baseModules[x/10][y/10].second = _baseModules[x/10][y/10].first;

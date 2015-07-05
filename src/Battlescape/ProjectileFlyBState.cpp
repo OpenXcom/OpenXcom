@@ -212,30 +212,30 @@ void ProjectileFlyBState::init()
 				_parent->getTileEngine()->canTargetUnit(&originVoxel, targetTile, &_targetVoxel, _unit);
 			}
 		}
-		else if (targetTile->getMapData(MapData::O_OBJECT) != 0)
+		else if (targetTile->getMapData(O_OBJECT) != 0)
 		{
-			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_OBJECT, &_targetVoxel, _unit))
+			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, O_OBJECT, &_targetVoxel, _unit))
 			{
 				_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
 			}
 		}
-		else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0)
+		else if (targetTile->getMapData(O_NORTHWALL) != 0)
 		{
-			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_NORTHWALL, &_targetVoxel, _unit))
+			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, O_NORTHWALL, &_targetVoxel, _unit))
 			{
 				_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16, _action.target.z*24 + 9);
 			}
 		}
-		else if (targetTile->getMapData(MapData::O_WESTWALL) != 0)
+		else if (targetTile->getMapData(O_WESTWALL) != 0)
 		{
-			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_WESTWALL, &_targetVoxel, _unit))
+			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, O_WESTWALL, &_targetVoxel, _unit))
 			{
 				_targetVoxel = Position(_action.target.x*16, _action.target.y*16 + 8, _action.target.z*24 + 9);
 			}
 		}
-		else if (targetTile->getMapData(MapData::O_FLOOR) != 0)
+		else if (targetTile->getMapData(O_FLOOR) != 0)
 		{
-			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_FLOOR, &_targetVoxel, _unit))
+			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, O_FLOOR, &_targetVoxel, _unit))
 			{
 				_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 2);
 			}

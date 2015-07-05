@@ -1001,11 +1001,17 @@ en-GB:
   STR_TIME_UNITS_RESERVED_FOR_KNEELING: "Time Units reserved for Kneeling"
   STR_TIME_UNITS_RESERVED_FOR_KNEELING_AND_FIRING: "TUs reserved for Kneeling and Firing"
   STR_UNITS_IN_CRAFT:
-    one: "{N} Unit in Exit Area"
-    other: "{N} Units in Exit Area"
+    one: "{N} Unit in X-Com Craft"
+    other: "{N} Units in X-Com Craft"
   STR_UNITS_OUTSIDE:
-    one: "{N} Unit outside Exit Area"
-    other: "{N} Units outside Exit Area"
+    one: "{N} Unit left outside"
+    other: "{N} Units left outside"
+  STR_UNITS_IN_ENTRANCE:
+    one: "{N} Unit in Entrance"
+    other: "{N} Units in Entrance"
+  STR_UNITS_IN_EXIT:
+    one: "{N} Unit in Target Exit"
+    other: "{N} Units in Target Exit"
   STR_ABORT_MISSION_QUESTION: "Abort Mission?"
   STR_CORPSE: "Corpse"
   STR_UNLOAD_CRAFT: "Unload"
