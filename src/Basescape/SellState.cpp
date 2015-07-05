@@ -309,10 +309,10 @@ void SellState::btnOkClick(Action *)
 				}
 
 				// Remove vehicles from craft
-				for (std::vector<Vehicle*>::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
+				for (std::vector<Vehicle*>::iterator v = craft->getVehicles()->begin(); v != craft->getVehicles()->end(); ++v)
 				{
-					_base->getItems()->addItem((*i)->getRules()->getType());
-					_base->getItems()->addItem((*i)->getRules()->getCompatibleAmmo()->front(), (*i)->getAmmo());
+					_base->getItems()->addItem((*v)->getRules()->getType());
+					_base->getItems()->addItem((*v)->getRules()->getCompatibleAmmo()->front(), (*v)->getAmmo());
 				}
 
 				// Remove soldiers from craft
