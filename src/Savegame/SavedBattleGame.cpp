@@ -209,6 +209,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			std::string type = (*i)["genUnitType"].as<std::string>();
 			std::string armor = (*i)["genUnitArmor"].as<std::string>();
 			// create a new Unit.
+			if(!rule->getUnit(type) || !rule->getArmor(armor)) continue;
 			unit = new BattleUnit(rule->getUnit(type), originalFaction, id, rule->getArmor(armor), savedGame->getDifficulty(), _depth);
 		}
 		unit->load(*i);
@@ -244,49 +245,54 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	// matches up tiles and units
 	resetUnitTiles();
 
-	for (YAML::const_iterator i = node["items"].begin(); i != node["items"].end(); ++i)
+	std::string fromContainer[3] = { "items", "recoverConditional", "recoverGuaranteed" };
+	std::vector<BattleItem*> *toContainer[3] = {&_items, &_recoverConditional, &_recoverGuaranteed};
+	for (int pass = 0; pass != 3; ++pass)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		_itemId = (*i)["id"].as<int>(_itemId);
-		if (rule->getItem(type))
+		for (YAML::const_iterator i = node[fromContainer[pass]].begin(); i != node[fromContainer[pass]].end(); ++i)
 		{
-			BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
-			item->load(*i);
-			type = (*i)["inventoryslot"].as<std::string>();
-			if (type != "NULL")
-				item->setSlot(rule->getInventory(type));
-			int owner = (*i)["owner"].as<int>();
-			int prevOwner = (*i)["previousOwner"].as<int>(-1);
-			int unit = (*i)["unit"].as<int>();
+			std::string type = (*i)["type"].as<std::string>();
+			_itemId = (*i)["id"].as<int>(_itemId);
+			if (rule->getItem(type))
+			{
+				BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
+				item->load(*i);
+				type = (*i)["inventoryslot"].as<std::string>();
+				if (type != "NULL")
+					item->setSlot(rule->getInventory(type));
+				int owner = (*i)["owner"].as<int>();
+				int prevOwner = (*i)["previousOwner"].as<int>(-1);
+				int unit = (*i)["unit"].as<int>();
 
-			// match up items and units
-			for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
-			{
-				if ((*bu)->getId() == owner)
+				// match up items and units
+				for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
 				{
-					item->moveToOwner(*bu);
+					if ((*bu)->getId() == owner)
+					{
+						item->moveToOwner(*bu);
+					}
+					if ((*bu)->getId() == unit)
+					{
+						item->setUnit(*bu);
+					}
 				}
-				if ((*bu)->getId() == unit)
+				for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
 				{
-					item->setUnit(*bu);
+					if ((*bu)->getId() == prevOwner)
+					{
+						item->setPreviousOwner(*bu);
+					}
 				}
-			}
-			for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
-			{
-				if ((*bu)->getId() == prevOwner)
-				{
-					item->setPreviousOwner(*bu);
-				}
-			}
 
-			// match up items and tiles
-			if (item->getSlot() && item->getSlot()->getType() == INV_GROUND)
-			{
-				Position pos = (*i)["position"].as<Position>();
-				if (pos.x != -1)
-					getTile(pos)->addItem(item, rule->getInventory("STR_GROUND"));
+				// match up items and tiles
+				if (item->getSlot() && item->getSlot()->getType() == INV_GROUND)
+				{
+					Position pos = (*i)["position"].as<Position>();
+					if (pos.x != -1)
+						getTile(pos)->addItem(item, rule->getInventory("STR_GROUND"));
+				}
+				toContainer[pass]->push_back(item);
 			}
-			_items.push_back(item);
 		}
 	}
 
@@ -316,30 +322,6 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	_tuReserved = (BattleActionType)node["tuReserved"].as<int>(_tuReserved);
 	_kneelReserved = node["kneelReserved"].as<bool>(_kneelReserved);
 	_ambience = node["ambience"].as<int>(_ambience);
-
-	for (YAML::const_iterator i = node["recoverConditional"].begin(); i != node["recoverConditional"].end(); ++i)
-	{
-		std::string type = (*i)["type"].as<std::string>();
-		_itemId = (*i)["id"].as<int>(_itemId);
-		if (rule->getItem(type))
-		{
-			BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
-			item->load(*i);
-			_recoverConditional.push_back(item);
-		}
-	}
-
-	for (YAML::const_iterator i = node["recoverGuaranteed"].begin(); i != node["recoverGuaranteed"].end(); ++i)
-	{
-		std::string type = (*i)["type"].as<std::string>();
-		_itemId = (*i)["id"].as<int>(_itemId);
-		if (rule->getItem(type))
-		{
-			BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
-			item->load(*i);
-			_recoverGuaranteed.push_back(item);
-		}
-	}
 	_music = node["music"].as<std::string>(_music);
 }
 
