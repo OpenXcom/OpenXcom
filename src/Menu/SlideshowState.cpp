@@ -34,7 +34,7 @@ namespace OpenXcom
 
 SlideshowState::SlideshowState(const SlideshowHeader &slideshowHeader,
 			       const std::vector<SlideshowSlide> *slideshowSlides)
-		: _slideshowHeader(slideshowHeader), _slideshowSlides(slideshowSlides), _curScreen(-1)
+		: _slideshowSlides(slideshowSlides), _curScreen(-1)
 {
 	_wasLetterboxed = CutsceneState::initDisplay();
 
