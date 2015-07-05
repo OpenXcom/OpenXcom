@@ -73,7 +73,7 @@ namespace OpenXcom
  * Initializes all the elements in the Debriefing screen.
  * @param game Pointer to the core game.
  */
-DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(false), _manageContainment(false), _destroyBase(false)
+DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(false), _manageContainment(false), _destroyBase(false), _positiveScore(true)
 {
 	Options::baseXResolution = Options::baseXGeoscape;
 	Options::baseYResolution = Options::baseYGeoscape;
@@ -211,16 +211,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 		rating = tr("STR_RATING_EXCELLENT");
 	}
 	_txtRating->setText(tr("STR_RATING").arg(rating));
-
-	if (total <= 0)
-	{
-		_game->getResourcePack()->playMusic(ResourcePack::DEBRIEF_MUSIC_BAD);
-	}
-	else
-	{
-		_game->getResourcePack()->playMusic(ResourcePack::DEBRIEF_MUSIC_GOOD);
-	}
-
+	_positiveScore = (total > 0);
 }
 
 /**
@@ -244,6 +235,18 @@ DebriefingState::~DebriefingState()
 	_rounds.clear();
 }
 
+void DebriefingState::init()
+{
+	State::init();
+	if (_positiveScore)
+	{
+		_game->getResourcePack()->playMusic(ResourcePack::DEBRIEF_MUSIC_GOOD);
+	}
+	else
+	{
+		_game->getResourcePack()->playMusic(ResourcePack::DEBRIEF_MUSIC_BAD);
+	}
+}
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.

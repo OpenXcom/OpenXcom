@@ -63,6 +63,7 @@ private:
 	std::vector<ReequipStat> _missingItems;
 	std::map<RuleItem*, int> _rounds;
 	std::map<int, RecoveryItem*> _recoveryStats;
+	bool _positiveScore;
 	/// Adds to the debriefing stats.
 	void addStat(const std::string &name, int quantity, int score);
 	/// Prepares debriefing.
@@ -82,6 +83,7 @@ public:
 	~DebriefingState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	void init();
 };
 
 }
