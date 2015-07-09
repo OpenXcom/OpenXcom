@@ -620,7 +620,6 @@ void BattlescapeGame::handleNonTargetAction()
 		if (!_currentAction.result.empty())
 		{
 			_parentState->warning(_currentAction.result);
-			_currentAction.result = "";
 		}
 		if (_currentAction.type == BA_PRIME && _currentAction.value > -1)
 		{
@@ -652,6 +651,7 @@ void BattlescapeGame::handleNonTargetAction()
 				}
 			}
 		}
+		_currentAction.result = "";
 		_currentAction.type = BA_NONE;
 		_parentState->updateSoldierInfo();
 	}
