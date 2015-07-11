@@ -622,7 +622,7 @@ void BattlescapeGame::handleNonTargetAction()
 			_parentState->warning(_currentAction.result);
 			_currentAction.result = "";
 		}
-		if (_currentAction.type == BA_PRIME && _currentAction.value > -1)
+		else if (_currentAction.type == BA_PRIME && _currentAction.value > -1)
 		{
 			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
@@ -634,22 +634,19 @@ void BattlescapeGame::handleNonTargetAction()
 				_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
 			}
 		}
-		if (_currentAction.type == BA_USE || _currentAction.type == BA_LAUNCH)
+		else if (_currentAction.type == BA_USE || _currentAction.type == BA_LAUNCH)
 		{
 			_save->reviveUnconsciousUnits();
 		}
-		if (_currentAction.type == BA_HIT)
+		else if (_currentAction.type == BA_HIT)
 		{
-			if (_currentAction.result.empty())
+			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
-				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
-				{
-					statePushBack(new MeleeAttackBState(this, _currentAction));
-				}
-				else
-				{
-					_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
-				}
+				statePushBack(new MeleeAttackBState(this, _currentAction));
+			}
+			else
+			{
+				_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
 			}
 		}
 		_currentAction.type = BA_NONE;
