@@ -181,12 +181,23 @@ void UnitWalkBState::think()
 		{
 			// update the TU display
 			_parent->getSave()->getBattleState()->updateSoldierInfo();
-			// if the unit burns floortiles, burn floortiles
-			if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
+			// if the unit burns floortiles, burn floortiles as long as we're not falling
+			if (!_falling && (_unit->getSpecialAbility() == SPECAB_BURNFLOOR || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 			{
 				_unit->getTile()->ignite(1);
-				Position here = (_unit->getPosition() * Position(16,16,24)) + Position(8,8,-(_unit->getTile()->getTerrainLevel()));
-				_parent->getTileEngine()->hit(here, _unit->getBaseStats()->strength, DT_IN, _unit);
+				Position posHere = _unit->getPosition();
+				Position voxelHere = (posHere * Position(16,16,24)) + Position(8,8,-(_unit->getTile()->getTerrainLevel()));
+				_parent->getTileEngine()->hit(voxelHere, _unit->getBaseStats()->strength, DT_IN, _unit);
+				
+				if (_unit->getPosition() != posHere) // ie: we burned a hole in the floor and fell through it
+				{
+					_action.TU = 0;
+					_pf->abortPath();
+					_unit->setCache(0);
+					_parent->getMap()->cacheUnit(_unit);
+					_parent->popState();
+					return;
+				}
 			}
 
 			// move our personal lighting with us
