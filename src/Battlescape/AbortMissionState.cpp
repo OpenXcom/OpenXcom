@@ -67,8 +67,6 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 	add(_btnOk, "messageWindowButtons", "battlescape");
 	add(_btnCancel, "messageWindowButtons", "battlescape");
 
-	centerAllSurfaces();
-
 	// Check available areas (maybe should be cached somewhere)
 	bool exit = false, craft = true;
 	AlienDeployment *deployment = _game->getRuleset()->getDeployment(_battleGame->getMissionType());
@@ -177,6 +175,8 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 	_btnCancel->onMouseClick((ActionHandler)&AbortMissionState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&AbortMissionState::btnCancelClick, Options::keyCancel);
 	_btnCancel->onKeyboardPress((ActionHandler)&AbortMissionState::btnCancelClick, Options::keyBattleAbort);
+
+	centerAllSurfaces();
 }
 
 /**
