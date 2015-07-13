@@ -33,7 +33,7 @@ MapBlock::MapBlock(const std::string &name):_name(name), _size_x(10), _size_y(10
 }
 
 /**
- * MapBlock desctruction.
+ * MapBlock destruction.
  */
 MapBlock::~MapBlock()
 {

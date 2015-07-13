@@ -23,6 +23,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include "../Interface/Text.h"
 
 namespace OpenXcom
 {
@@ -37,6 +38,8 @@ struct SlideshowSlide
 	std::string imagePath; // relative path to slide image
 	std::string caption; // STR id of caption text
 	int w, h, x, y, color; // caption rect and color info
+	TextHAlign align; // caption alignment
+	int transitionSeconds; // number of seconds to show this slide
 };
 
 class RuleVideo

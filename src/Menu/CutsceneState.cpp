@@ -28,6 +28,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
 #include "../Savegame/SavedGame.h"
+#include "../Engine/FileMap.h"
 
 namespace OpenXcom
 {
@@ -73,11 +74,23 @@ void CutsceneState::init()
 	}
 
 	const RuleVideo *videoRule = videoRuleIt->second;
+	bool fmv = false, slide = false;
 	if (!videoRule->getVideos()->empty())
+	{
+		std::string file = FileMap::getFilePath(videoRule->getVideos()->front());
+		fmv = CrossPlatform::fileExists(file);
+	}
+	if (!videoRule->getSlides()->empty())
+	{
+		std::string file = FileMap::getFilePath(videoRule->getSlides()->front().imagePath);
+		slide = CrossPlatform::fileExists(file);
+	}
+
+	if (fmv && (!slide || Options::preferredVideo == VIDEO_FMV))
 	{
 		_game->pushState(new VideoState(videoRule->getVideos(), videoRule->useUfoAudioSequence()));
 	}
-	else if (!videoRule->getSlides()->empty())
+	else if (slide && (!fmv || Options::preferredVideo == VIDEO_SLIDE))
 	{
 		_game->pushState(new SlideshowState(videoRule->getSlideshowHeader(), videoRule->getSlides()));
 	}

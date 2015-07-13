@@ -323,7 +323,7 @@ void UnitDieBState::playDeathSound()
 			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::FEMALE_SCREAM[RNG::generate(0, 2)])->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 		}
 	}
-	else
+	else if (_unit->getDeathSound() >= 0)
 	{
 		_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _unit->getDeathSound())->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 	}

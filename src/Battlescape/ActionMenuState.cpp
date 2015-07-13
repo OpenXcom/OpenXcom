@@ -216,7 +216,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			_game->getSavedGame()->getSavedBattle()->getDepth() == 0 &&
 			_action->type != BA_THROW)
 		{
-			_action->result = "STR_THIS_EQUIPMENT_WILL_NOT_FUNCTION_ABOVE_WATER";
+			_action->result = "STR_UNDERWATER_EQUIPMENT";
 			_game->popState();
 		}
 		else if (_action->type == BA_PRIME)

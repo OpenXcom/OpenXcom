@@ -1,6 +1,7 @@
 
 interfaces:
   - type: mainMenu
+    music: GMSTORY
     elements:
       - id: palette
         color: 0     # brown
@@ -941,6 +942,7 @@ interfaces:
       - id: button
         color: 213   # gold
   - type: soldierMemorial
+    music: GMLOSE
     palette: PAL_BASESCAPE
     elements:
       - id: palette

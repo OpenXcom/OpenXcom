@@ -671,7 +671,7 @@ set ( data_install_dir bin )
 if ( CMAKE_COMPILER_IS_GNUCXX AND "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" )
   add_definitions ( -D_DEBUG )
 endif ()
-if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR ENABLE_WARNING) )
+if ( ( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" ) AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR ENABLE_WARNING ) )
     # Enable more GCC warnings if requested or we are doing a Debug build.
     add_definitions ( -Wall
       -Winit-self
@@ -681,10 +681,9 @@ if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR EN
       -Wredundant-decls
       -Wformat-security
       -Wtype-limits
-      -Wclobbered
       -Wempty-body
-      -Wlogical-op
       -Wuninitialized
+      -Wno-unused-function
 # These warning options actually generate way too many warnings. Should be enabled later.
 #      -Wignored-qualifiers
 #      -Weffc++
@@ -692,12 +691,20 @@ if ( CMAKE_COMPILER_IS_GNUCXX AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR EN
 #      -Winline
 #      -Wshadow
       )
+    if ( CMAKE_COMPILER_IS_GNUCXX )
+      # add warning flags recognized by g++ but not by clang
+      add_definitions ( -Wclobbered -Wlogical-op )
+    endif ()
+    if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+      # add warning flags recognized by clang but not by g++
+      add_definitions ( -Wno-overloaded-virtual )
+    endif ()
     if ( FATAL_WARNING )
       add_definitions ( -Werror )
-    endif ( FATAL_WARNING )
-endif()
+    endif ()
+endif ()
 
-if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" )
+if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
   add_definitions ( -Qunused-arguments -pipe )
   if ( ENABLE_CLANG_ANALYSIS )
     add_definitions ( --analyze )
@@ -776,7 +783,7 @@ if ( WIN32 )
   endif ()
   set ( system_libs ${basic_windows_libs} SDLmain ${static_flags} )
 endif ()
-target_link_libraries ( openxcom ${system_libs} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${SDL_LIBRARY} ${YAMLCPP_LIBRARY} ${OPENGL_gl_LIBRARY} )
+target_link_libraries ( openxcom ${system_libs} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${SDL_LIBRARY} ${OPENGL_gl_LIBRARY} debug ${YAMLCPP_LIBRARY_DEBUG} optimized ${YAMLCPP_LIBRARY} )
 
 set ( bin_data_dirs TFTD UFO common standard )
 foreach ( binpath ${bin_data_dirs} )

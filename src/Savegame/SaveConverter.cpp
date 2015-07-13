@@ -55,6 +55,7 @@
 #include "../Ruleset/RuleManufacture.h"
 #include "Production.h"
 #include "../Ruleset/Armor.h"
+#include "../Ruleset/UfoTrajectory.h"
 
 namespace OpenXcom
 {
@@ -146,7 +147,7 @@ SaveConverter::SaveConverter(int save, Ruleset *rule) : _rule(rule)
 					_idAlienRaces.push_back(race);
 				}
 				std::string rank = i->substr(n);
-				if (std::find(_idAlienRanks.begin(), _idAlienRanks.end(), race) == _idAlienRanks.end())
+				if (std::find(_idAlienRanks.begin(), _idAlienRanks.end(), rank) == _idAlienRanks.end())
 				{
 					_idAlienRanks.push_back(rank);
 				}
@@ -980,7 +981,7 @@ void SaveConverter::loadDatCraft()
 					_missions[std::make_pair(mission, region)] = m;
 					if (mission == 6)
 					{
-						trajectory << "__RETALIATION_ASSAULT_RUN";
+						trajectory << UfoTrajectory::RETALIATION_ASSAULT_RUN;
 					}
 				}
 				node["mission"] = m->getId();

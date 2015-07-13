@@ -296,7 +296,7 @@ void CivilianBAIState::setupEscape()
 	const int FIRE_PENALTY = 40;
 	const int BASE_SYSTEMATIC_SUCCESS = 100;
 	const int BASE_DESPERATE_SUCCESS = 110;
-	const int FAST_PASS_THRESHOLD = 100; // a score that's good engouh to quit the while loop early; it's subjective, hand-tuned and may need tweaking
+	const int FAST_PASS_THRESHOLD = 100; // a score that's good enough to quit the while loop early; it's subjective, hand-tuned and may need tweaking
 
 	int tu = _unit->getTimeUnits() / 2;
 

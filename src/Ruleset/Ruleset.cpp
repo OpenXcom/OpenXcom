@@ -20,6 +20,7 @@
 #include <fstream>
 #include <algorithm>
 #include "../fmath.h"
+#include "../Battlescape/Pathfinding.h"
 #include "../Engine/Options.h"
 #include "../Engine/Exception.h"
 #include "../Engine/FileMap.h"
@@ -130,6 +131,10 @@ void Ruleset::resetGlobalStatics()
 	Window::soundPopup[0] = 0;
 	Window::soundPopup[1] = 0;
 	Window::soundPopup[2] = 0;
+
+	Pathfinding::red = 3;
+	Pathfinding::yellow = 10;
+	Pathfinding::green = 4;
 }
 
 /**
@@ -914,7 +919,7 @@ RuleBaseFacility *Ruleset::getBaseFacility(const std::string &id) const
 /**
  * Returns the list of all base facilities
  * provided by the ruleset.
- * @return List of base faciliies.
+ * @return List of base facilities.
  */
 const std::vector<std::string> &Ruleset::getBaseFacilitiesList() const
 {

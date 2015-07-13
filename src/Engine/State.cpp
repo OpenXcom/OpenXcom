@@ -102,6 +102,10 @@ void State::setInterface(const std::string& category, bool alterPal, bool battle
 				backPal = color;
 			}
 		}
+		if (!_ruleInterface->getMusic().empty())
+		{
+			_game->getResourcePack()->playMusic(_ruleInterface->getMusic());
+		}
 	}
 	if (battlescape)
 	{

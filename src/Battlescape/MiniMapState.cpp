@@ -84,13 +84,7 @@ MiniMapState::MiniMapState (Camera * camera, SavedBattleGame * battleGame)
 	_btnOk->onKeyboardPress((ActionHandler)&MiniMapState::btnOkClick, Options::keyBattleMap);
 	_txtLevel->setBig();
 	_txtLevel->setHighContrast(true);
-	std::wostringstream s;
-	if (_txtLevel->isTFTDMode())
-	{
-		s << tr("STR_LEVEL_SHORT");
-	}
-	s << camera->getViewLevel();
-	_txtLevel->setText(s.str());
+	_txtLevel->setText(tr("STR_LEVEL_SHORT").arg(camera->getViewLevel()));
 	_timerAnimate = new Timer(125);
 	_timerAnimate->onTimer((StateHandler)&MiniMapState::animate);
 	_timerAnimate->start();
@@ -145,13 +139,7 @@ void MiniMapState::btnOkClick(Action *)
  */
 void MiniMapState::btnLevelUpClick(Action *)
 {
-	std::wostringstream s;
-	if (_miniMapView->isTFTDMode())
-	{
-		s << tr("STR_LEVEL_SHORT");
-	}
-	s << _miniMapView->up();
-	_txtLevel->setText(s.str());
+	_txtLevel->setText(tr("STR_LEVEL_SHORT").arg(_miniMapView->up()));
 }
 
 /**
@@ -160,13 +148,7 @@ void MiniMapState::btnLevelUpClick(Action *)
  */
 void MiniMapState::btnLevelDownClick(Action *)
 {
-	std::wostringstream s;
-	if (_miniMapView->isTFTDMode())
-	{
-		s << tr("STR_LEVEL_SHORT");
-	}
-	s << _miniMapView->down();
-	_txtLevel->setText(s.str());
+	_txtLevel->setText(tr("STR_LEVEL_SHORT").arg(_miniMapView->down()));
 }
 
 /**

@@ -139,7 +139,6 @@ struct BodyXCOM2
  */
 struct FallXCOM2
 {
-	static const Uint8 HairFall = 8 << 4;
 	static const Uint8 RoguePixel = 151;
 	static inline void func(Uint8& src, int, int, int, int)
 	{

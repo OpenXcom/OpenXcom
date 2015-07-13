@@ -38,6 +38,8 @@ enum SaveSort { SORT_NAME_ASC, SORT_NAME_DESC, SORT_DATE_ASC, SORT_DATE_DESC };
 enum MusicFormat { MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI };
 /// Sound format preferences.
 enum SoundFormat { SOUND_AUTO, SOUND_14, SOUND_10 };
+/// Video format preferences.
+enum VideoFormat { VIDEO_FMV, VIDEO_SLIDE };
 /// Path preview modes (can be OR'd together).
 enum PathPreview {
 	PATH_NONE    = 0x00, // 0000 (must always be zero)
