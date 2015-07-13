@@ -53,6 +53,8 @@ public:
 	void screenTimer();
 	/// Handler for clicking the screen.
 	void screenClick(Action *action);
+	/// Handler for skipping the screen.
+	void screenSkip(Action *action);
 };
 
 }

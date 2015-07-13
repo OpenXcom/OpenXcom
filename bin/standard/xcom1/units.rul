@@ -852,3 +852,4 @@ units:
     energyRecovery: 20
     spawnUnit: STR_CHRYSSALID_TERRORIST
     livingWeapon: true
+    deathSound: -2

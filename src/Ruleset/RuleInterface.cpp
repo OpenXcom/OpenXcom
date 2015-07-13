@@ -44,6 +44,7 @@ void RuleInterface::load(const YAML::Node& node)
 {
 	_palette = node["palette"].as<std::string>(_palette);
 	_parent = node["parent"].as<std::string>(_parent);
+	_music = node["music"].as<std::string>(_music);
 	for (YAML::const_iterator i = node["elements"].begin(); i != node["elements"].end(); ++i)
 	{
 		Element element;
@@ -95,6 +96,11 @@ const std::string &RuleInterface::getPalette() const
 const std::string &RuleInterface::getParent() const
 {
 	return _parent;
+}
+
+const std::string &RuleInterface::getMusic() const
+{
+	return _music;
 }
 
 }

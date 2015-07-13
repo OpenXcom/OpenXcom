@@ -242,7 +242,7 @@ size_t ComboBox::getHoveredListIdx() const
 	{
 		ret = _list->getSelectedRow();
 	}
-	if (-1 == ret)
+	if ((size_t)-1 == ret)
 	{
 		ret = _sel;
 	}

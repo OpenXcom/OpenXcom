@@ -64,6 +64,7 @@
 #include "../Engine/Screen.h"
 #include "../Basescape/SellState.h"
 #include "../Menu/SaveGameState.h"
+#include "../Ruleset/AlienDeployment.h"
 
 namespace OpenXcom
 {
@@ -72,7 +73,7 @@ namespace OpenXcom
  * Initializes all the elements in the Debriefing screen.
  * @param game Pointer to the core game.
  */
-DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(false), _manageContainment(false), _destroyBase(false)
+DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(false), _manageContainment(false), _destroyBase(false), _positiveScore(true)
 {
 	Options::baseXResolution = Options::baseXGeoscape;
 	Options::baseYResolution = Options::baseYGeoscape;
@@ -128,8 +129,6 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 	_txtQuantity->setAlign(ALIGN_RIGHT);
 
 	_txtScore->setText(tr("STR_SCORE"));
-
-	_txtRecovery->setText(tr("STR_UFO_RECOVERY"));
 
 	_lstStats->setColumns(3, 224, 30, 64);
 	_lstStats->setDot(true);
@@ -212,16 +211,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(fal
 		rating = tr("STR_RATING_EXCELLENT");
 	}
 	_txtRating->setText(tr("STR_RATING").arg(rating));
-
-	if (total <= 0)
-	{
-		_game->getResourcePack()->playMusic(ResourcePack::DEBRIEF_MUSIC_BAD);
-	}
-	else
-	{
-		_game->getResourcePack()->playMusic(ResourcePack::DEBRIEF_MUSIC_GOOD);
-	}
-
+	_positiveScore = (total > 0);
 }
 
 /**
@@ -245,6 +235,18 @@ DebriefingState::~DebriefingState()
 	_rounds.clear();
 }
 
+void DebriefingState::init()
+{
+	State::init();
+	if (_positiveScore)
+	{
+		_game->getResourcePack()->playMusic(ResourcePack::DEBRIEF_MUSIC_GOOD);
+	}
+	else
+	{
+		_game->getResourcePack()->playMusic(ResourcePack::DEBRIEF_MUSIC_BAD);
+	}
+}
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
@@ -360,7 +362,6 @@ void ClearAlienBase::operator()(AlienMission *am) const
  */
 void DebriefingState::prepareDebriefing()
 {
-
 	for (std::vector<std::string>::const_iterator i = _game->getRuleset()->getItemsList().begin(); i != _game->getRuleset()->getItemsList().end(); ++i)
 	{
 		if (_game->getRuleset()->getItem(*i)->getSpecialType() > 1)
@@ -400,6 +401,7 @@ void DebriefingState::prepareDebriefing()
 	Craft* craft = 0;
 	std::vector<Craft*>::iterator craftIterator;
 	Base* base = 0;
+	std::string target;
 
 	int playerInExitArea = 0; // if this stays 0 the craft is lost...
 	int playersSurvived = 0; // if this stays 0 the craft is lost...
@@ -431,6 +433,18 @@ void DebriefingState::prepareDebriefing()
 				craft = (*j);
 				base = (*i);
 				craftIterator = j;
+				if (dynamic_cast<Ufo*>(craft->getDestination()))
+				{
+					target = "STR_UFO";
+				}
+				else if (dynamic_cast<AlienBase*>(craft->getDestination()))
+				{
+					target = "STR_ALIEN_BASE";
+				}
+				else if (dynamic_cast<MissionSite*>(craft->getDestination()))
+				{
+					target = "STR_MISSION_SITE";
+				}
 				craft->returnToBase();
 				craft->setMissionComplete(true);
 				craft->setInBattlescape(false);
@@ -448,6 +462,7 @@ void DebriefingState::prepareDebriefing()
 		if ((*i)->isInBattlescape())
 		{
 			base = (*i);
+			target = "STR_BASE";
 			base->setInBattlescape(false);
 			base->cleanupDefenses(false);
 			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
@@ -494,6 +509,7 @@ void DebriefingState::prepareDebriefing()
 	{
 		if ((*i)->isInBattlescape())
 		{
+			_txtRecovery->setText(tr("STR_UFO_RECOVERY"));
 			(*i)->setInBattlescape(false);
 			if ((*i)->getStatus() == Ufo::LANDED && aborted)
 			{
@@ -547,42 +563,45 @@ void DebriefingState::prepareDebriefing()
 	}
 
 	// alien base disappears (if you didn't abort)
-	if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
+	for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
 	{
-		_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
-		bool destroyAlienBase = true;
-		if (aborted || playersSurvived == 0)
+		if ((*i)->isInBattlescape())
 		{
-			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
+			_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
+			bool destroyAlienBase = true;
+			AlienDeployment *deployment = _game->getRuleset()->getDeployment(battle->getMissionType());
+			if (!deployment->getNextStage().empty())
 			{
-				// get recoverable map data objects from the battlescape map
-				if (battle->getTiles()[i]->getMapData(3) && battle->getTiles()[i]->getMapData(3)->getSpecialType() == UFO_NAVIGATION)
+				destroyAlienBase = false;
+			}
+			else if (aborted || playersSurvived == 0)
+			{
+				for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 				{
-					destroyAlienBase = false;
-					break;
+					// get recoverable map data objects from the battlescape map
+					if (
+						battle->getTiles()[i]->getMapData(O_OBJECT) && battle->getTiles()[i]->getMapData(O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
+					{
+						destroyAlienBase = false;
+						break;
+					}
 				}
 			}
-		}
-		success = destroyAlienBase;
-		for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
-		{
-			if ((*i)->isInBattlescape())
+			success = destroyAlienBase;
+			if (destroyAlienBase)
 			{
-				if (destroyAlienBase)
-				{
-					addStat("STR_ALIEN_BASE_CONTROL_DESTROYED", 1, 500);
-					// Take care to remove supply missions for this base.
-					std::for_each(save->getAlienMissions().begin(), save->getAlienMissions().end(),
-								ClearAlienBase(*i));
-					delete *i;
-					save->getAlienBases()->erase(i);
-					break;
-				}
-				else
-				{
-					(*i)->setInBattlescape(false);
-					break;
-				}
+				addStat("STR_ALIEN_BASE_CONTROL_DESTROYED", 1, 500);
+				// Take care to remove supply missions for this base.
+				std::for_each(save->getAlienMissions().begin(), save->getAlienMissions().end(),
+							ClearAlienBase(*i));
+				delete *i;
+				save->getAlienBases()->erase(i);
+				break;
+			}
+			else
+			{
+				(*i)->setInBattlescape(false);
+				break;
 			}
 		}
 	}
@@ -744,7 +763,7 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	if (((playerInExitArea == 0 && aborted) || (playersSurvived == 0)) && craft != 0)
+	if (craft != 0 && ((playerInExitArea == 0 && aborted) || (playersSurvived == 0)))
 	{
 		addStat("STR_XCOM_CRAFT_LOST", 1, -craft->getRules()->getScore());
 		for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end();)
@@ -756,7 +775,7 @@ void DebriefingState::prepareDebriefing()
 			}
 			else
 			{
-				 ++i;
+				++i;
 			}
 		}
 		// Since this is not a base defense mission, we can safely erase the craft,
@@ -768,7 +787,7 @@ void DebriefingState::prepareDebriefing()
 		_txtTitle->setText(tr("STR_CRAFT_IS_LOST"));
 		return;
 	}
-	if (aborted && battle->getMissionType() == "STR_BASE_DEFENSE" && !base->getCrafts()->empty())
+	if (aborted && target == "STR_BASE" && !base->getCrafts()->empty())
 	{
 		for (std::vector<Craft*>::iterator i = base->getCrafts()->begin(); i != base->getCrafts()->end(); ++i)
 		{
@@ -777,23 +796,21 @@ void DebriefingState::prepareDebriefing()
 	}
 	if ((!aborted || success) && playersSurvived > 0) 	// RECOVER UFO : run through all tiles to recover UFO components and items
 	{
-		if (battle->getMissionType() == "STR_BASE_DEFENSE")
+		if (target == "STR_BASE")
 		{
 			_txtTitle->setText(tr("STR_BASE_IS_SAVED"));
 		}
-		else if (battle->getMissionType() == "STR_TERROR_MISSION")
+		else if (target == "STR_UFO")
 		{
-			_txtTitle->setText(tr("STR_ALIENS_DEFEATED"));
+			_txtTitle->setText(tr("STR_UFO_IS_RECOVERED")); 
 		}
-		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT" ||
-				 battle->getMissionType() == "STR_MARS_CYDONIA_LANDING" ||
-				 battle->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
+		else if (target == "STR_ALIEN_BASE")
 		{
 			_txtTitle->setText(tr("STR_ALIEN_BASE_DESTROYED"));
 		}
 		else
 		{
-			_txtTitle->setText(tr("STR_UFO_IS_RECOVERED"));
+			_txtTitle->setText(tr("STR_ALIENS_DEFEATED"));
 		}
 
 		if (!aborted)
@@ -805,7 +822,7 @@ void DebriefingState::prepareDebriefing()
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
 				// get recoverable map data objects from the battlescape map
-				for (int part = 0; part < 4; part++)
+				for (int part = 0; part < 4; ++part)
 				{
 					if (battle->getTiles()[i]->getMapData(part))
 					{
@@ -824,31 +841,29 @@ void DebriefingState::prepareDebriefing()
 		{
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
-				if (battle->getTiles()[i]->getMapData(MapData::O_FLOOR) && (battle->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
+				if (battle->getTiles()[i]->getMapData(O_FLOOR) && (battle->getTiles()[i]->getMapData(O_FLOOR)->getSpecialType() == START_POINT))
 					recoverItems(battle->getTiles()[i]->getInventory(), base);
 			}
 		}
 	}
 	else
 	{
-		if (battle->getMissionType() == "STR_BASE_DEFENSE")
+		if (target == "STR_BASE")
 		{
 			_txtTitle->setText(tr("STR_BASE_IS_LOST"));
 			_destroyBase = true;
 		}
-		else if (battle->getMissionType() == "STR_TERROR_MISSION")
+		else if (target == "STR_UFO")
 		{
-			_txtTitle->setText(tr("STR_TERROR_CONTINUES"));
+			_txtTitle->setText(tr("STR_UFO_IS_NOT_RECOVERED"));
 		}
-		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT" ||
-				 battle->getMissionType() == "STR_MARS_CYDONIA_LANDING" ||
-				 battle->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
+		else if (target == "STR_ALIEN_BASE")
 		{
 			_txtTitle->setText(tr("STR_ALIEN_BASE_STILL_INTACT"));
 		}
 		else
 		{
-			_txtTitle->setText(tr("STR_UFO_IS_NOT_RECOVERED"));
+			_txtTitle->setText(tr("STR_TERROR_CONTINUES"));
 		}
 
 		if (playersSurvived > 0 && !_destroyBase)
@@ -856,7 +871,7 @@ void DebriefingState::prepareDebriefing()
 			// recover items from the craft floor
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
-				if (battle->getTiles()[i]->getMapData(MapData::O_FLOOR) && (battle->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
+				if (battle->getTiles()[i]->getMapData(O_FLOOR) && (battle->getTiles()[i]->getMapData(O_FLOOR)->getSpecialType() == START_POINT))
 					recoverItems(battle->getTiles()[i]->getInventory(), base);
 			}
 		}
@@ -873,7 +888,7 @@ void DebriefingState::prepareDebriefing()
 	// recover all our goodies
 	if (playersSurvived > 0)
 	{
-		int aadivider = battle->getMissionType()=="STR_ALIEN_BASE_ASSAULT"?150:10;
+		int aadivider = (target == "STR_ALIEN_BASE") ? 150 : 10;
 		for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 		{
 			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
@@ -901,7 +916,7 @@ void DebriefingState::prepareDebriefing()
 		reequipCraft(base, craft, true);
 	}
 
-	if (battle->getMissionType() == "STR_BASE_DEFENSE")
+	if (target == "STR_BASE")
 	{
 		if (!_destroyBase)
 		{

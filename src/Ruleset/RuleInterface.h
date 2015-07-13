@@ -41,6 +41,7 @@ private:
 	std::string _type;
 	std::string _palette;
 	std::string _parent;
+	std::string _music;
 
 	std::map <std::string, Element> _elements;
 public:
@@ -56,6 +57,8 @@ public:
 	const std::string &getPalette() const;
 	/// Get parent interface rule.
 	const std::string &getParent() const;
+	/// Get music.
+	const std::string &getMusic() const;
 };
 
 }

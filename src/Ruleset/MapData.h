@@ -44,6 +44,7 @@ enum SpecialTileType{TILE=0,
 
 enum MovementType{ MT_WALK, MT_FLY, MT_SLIDE, MT_FLOAT};
 enum VoxelType{ V_EMPTY = -1, V_FLOOR, V_WESTWALL, V_NORTHWALL, V_OBJECT, V_UNIT, V_OUTOFBOUNDS };
+enum MapDataType { O_FLOOR, O_WESTWALL, O_NORTHWALL, O_OBJECT };
 
 /**
  * MapData is the smallest piece of a Battlescape terrain, holding info about a certain object, wall, floor, ...
@@ -62,10 +63,6 @@ private:
 	int _loftID[12];
 	unsigned short _miniMapIndex;
 public:
-	static const int O_FLOOR;
-	static const int O_WESTWALL;
-	static const int O_NORTHWALL;
-	static const int O_OBJECT;
 	MapData(MapDataSet *dataset);
 	~MapData();
 	/// Gets the dataset this object belongs to.

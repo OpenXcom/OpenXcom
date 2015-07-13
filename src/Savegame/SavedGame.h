@@ -289,9 +289,9 @@ public:
 	void setSelectedBase(size_t base);
 	/// Evaluate the score of a soldier based on all of his stats, missions and kills.
 	int getSoldierScore(Soldier *soldier);
-	/// Sets the the last selected armour
+	/// Sets the last selected armour
 	void setLastSelectedArmor(const std::string &value);
-	/// Gets the the last selected armour
+	/// Gets the last selected armour
 	std::string getLastSelectedArmor();
 	/// Returns the craft corresponding to the specified unique id.
 	Craft *findCraftByUniqueId(const CraftId& craftId) const;

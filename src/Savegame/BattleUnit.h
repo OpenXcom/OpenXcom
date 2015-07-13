@@ -259,7 +259,7 @@ public:
 	/// Get the current reaction score.
 	double getReactionScore();
 	/// Prepare for a new turn.
-	void prepareNewTurn();
+	void prepareNewTurn(bool fullProcess = true);
 	/// Morale change
 	void moraleChange(int change);
 	/// Don't reselect this unit

@@ -230,7 +230,7 @@ void Production::load(const YAML::Node &node)
 	setAmountTotal(node["amount"].as<int>(getAmountTotal()));
 	setInfiniteAmount(node["infinite"].as<bool>(getInfiniteAmount()));
 	setSellItems(node["sell"].as<bool>(getSellItems()));
-	// backwards compatiblity
+	// backwards compatibility
 	if (getAmountTotal() == std::numeric_limits<int>::max())
 	{
 		setAmountTotal(999);

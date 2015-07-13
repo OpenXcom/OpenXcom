@@ -209,6 +209,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			std::string type = (*i)["genUnitType"].as<std::string>();
 			std::string armor = (*i)["genUnitArmor"].as<std::string>();
 			// create a new Unit.
+			if(!rule->getUnit(type) || !rule->getArmor(armor)) continue;
 			unit = new BattleUnit(rule->getUnit(type), originalFaction, id, rule->getArmor(armor), savedGame->getDifficulty(), _depth);
 		}
 		unit->load(*i);
@@ -244,49 +245,54 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	// matches up tiles and units
 	resetUnitTiles();
 
-	for (YAML::const_iterator i = node["items"].begin(); i != node["items"].end(); ++i)
+	std::string fromContainer[3] = { "items", "recoverConditional", "recoverGuaranteed" };
+	std::vector<BattleItem*> *toContainer[3] = {&_items, &_recoverConditional, &_recoverGuaranteed};
+	for (int pass = 0; pass != 3; ++pass)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		_itemId = (*i)["id"].as<int>(_itemId);
-		if (rule->getItem(type))
+		for (YAML::const_iterator i = node[fromContainer[pass]].begin(); i != node[fromContainer[pass]].end(); ++i)
 		{
-			BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
-			item->load(*i);
-			type = (*i)["inventoryslot"].as<std::string>();
-			if (type != "NULL")
-				item->setSlot(rule->getInventory(type));
-			int owner = (*i)["owner"].as<int>();
-			int prevOwner = (*i)["previousOwner"].as<int>(-1);
-			int unit = (*i)["unit"].as<int>();
+			std::string type = (*i)["type"].as<std::string>();
+			_itemId = (*i)["id"].as<int>(_itemId);
+			if (rule->getItem(type))
+			{
+				BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
+				item->load(*i);
+				type = (*i)["inventoryslot"].as<std::string>();
+				if (type != "NULL")
+					item->setSlot(rule->getInventory(type));
+				int owner = (*i)["owner"].as<int>();
+				int prevOwner = (*i)["previousOwner"].as<int>(-1);
+				int unit = (*i)["unit"].as<int>();
 
-			// match up items and units
-			for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
-			{
-				if ((*bu)->getId() == owner)
+				// match up items and units
+				for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
 				{
-					item->moveToOwner(*bu);
+					if ((*bu)->getId() == owner)
+					{
+						item->moveToOwner(*bu);
+					}
+					if ((*bu)->getId() == unit)
+					{
+						item->setUnit(*bu);
+					}
 				}
-				if ((*bu)->getId() == unit)
+				for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
 				{
-					item->setUnit(*bu);
+					if ((*bu)->getId() == prevOwner)
+					{
+						item->setPreviousOwner(*bu);
+					}
 				}
-			}
-			for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
-			{
-				if ((*bu)->getId() == prevOwner)
-				{
-					item->setPreviousOwner(*bu);
-				}
-			}
 
-			// match up items and tiles
-			if (item->getSlot() && item->getSlot()->getType() == INV_GROUND)
-			{
-				Position pos = (*i)["position"].as<Position>();
-				if (pos.x != -1)
-					getTile(pos)->addItem(item, rule->getInventory("STR_GROUND"));
+				// match up items and tiles
+				if (item->getSlot() && item->getSlot()->getType() == INV_GROUND)
+				{
+					Position pos = (*i)["position"].as<Position>();
+					if (pos.x != -1)
+						getTile(pos)->addItem(item, rule->getInventory("STR_GROUND"));
+				}
+				toContainer[pass]->push_back(item);
 			}
-			_items.push_back(item);
 		}
 	}
 
@@ -316,30 +322,6 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	_tuReserved = (BattleActionType)node["tuReserved"].as<int>(_tuReserved);
 	_kneelReserved = node["kneelReserved"].as<bool>(_kneelReserved);
 	_ambience = node["ambience"].as<int>(_ambience);
-
-	for (YAML::const_iterator i = node["recoverConditional"].begin(); i != node["recoverConditional"].end(); ++i)
-	{
-		std::string type = (*i)["type"].as<std::string>();
-		_itemId = (*i)["id"].as<int>(_itemId);
-		if (rule->getItem(type))
-		{
-			BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
-			item->load(*i);
-			_recoverConditional.push_back(item);
-		}
-	}
-
-	for (YAML::const_iterator i = node["recoverGuaranteed"].begin(); i != node["recoverGuaranteed"].end(); ++i)
-	{
-		std::string type = (*i)["type"].as<std::string>();
-		_itemId = (*i)["id"].as<int>(_itemId);
-		if (rule->getItem(type))
-		{
-			BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
-			item->load(*i);
-			_recoverGuaranteed.push_back(item);
-		}
-	}
 	_music = node["music"].as<std::string>(_music);
 }
 
@@ -363,7 +345,7 @@ void SavedBattleGame::loadMapResources(Game *game)
 
 	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
-		for (int part = 0; part < 4; part++)
+		for (int part = 0; part < 4; ++part)
 		{
 			_tiles[i]->getMapData(&mdID, &mdsID, part);
 			if (mdID != -1 && mdsID != -1)
@@ -1124,7 +1106,7 @@ void SavedBattleGame::addDestroyedObjective()
 }
 
 /**
- * Returns whether the objectives are detroyed.
+ * Returns whether the objectives are destroyed.
  * @return True if the objectives are destroyed.
  */
 bool SavedBattleGame::allObjectivesDestroyed()
@@ -1186,7 +1168,7 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
  * @param scout Is the unit scouting?
  * @param unit Pointer to the unit (to get its position).
  * @param fromNode Pointer to the node the unit is at.
- * @return Pointer to the choosen node.
+ * @return Pointer to the chosen node.
  */
 Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNode)
 {
@@ -1283,7 +1265,7 @@ void SavedBattleGame::prepareNewTurn()
 			// if we're still burning
 			if ((*i)->getFire())
 			{
-				// propegate in four cardinal directions (0, 2, 4, 6)
+				// propagate in four cardinal directions (0, 2, 4, 6)
 				for (int dir = 0; dir <= 6; dir += 2)
 				{
 					Position pos;
@@ -1302,25 +1284,25 @@ void SavedBattleGame::prepareNewTurn()
 			{
 				(*i)->setSmoke(0);
 				// burn this tile, and any object in it, if it's not fireproof/indestructible.
-				if ((*i)->getMapData(MapData::O_OBJECT))
+				if ((*i)->getMapData(O_OBJECT))
 				{
-					if ((*i)->getMapData(MapData::O_OBJECT)->getFlammable() != 255 && (*i)->getMapData(MapData::O_OBJECT)->getArmor() != 255)
+					if ((*i)->getMapData(O_OBJECT)->getFlammable() != 255 && (*i)->getMapData(O_OBJECT)->getArmor() != 255)
 					{
-						if ((*i)->destroy(MapData::O_OBJECT))
+						if ((*i)->destroy(O_OBJECT))
 						{
 							addDestroyedObjective();
 						}
-						if ((*i)->destroy(MapData::O_FLOOR))
+						if ((*i)->destroy(O_FLOOR))
 						{
 							addDestroyedObjective();
 						}
 					}
 				}
-				else if ((*i)->getMapData(MapData::O_FLOOR))
+				else if ((*i)->getMapData(O_FLOOR))
 				{
-					if ((*i)->getMapData(MapData::O_FLOOR)->getFlammable() != 255 && (*i)->getMapData(MapData::O_FLOOR)->getArmor() != 255)
+					if ((*i)->getMapData(O_FLOOR)->getFlammable() != 255 && (*i)->getMapData(O_FLOOR)->getArmor() != 255)
 					{
-						if ((*i)->destroy(MapData::O_FLOOR))
+						if ((*i)->destroy(O_FLOOR))
 						{
 							addDestroyedObjective();
 						}
@@ -1408,7 +1390,7 @@ void SavedBattleGame::prepareNewTurn()
 }
 
 /**
- * Checks for units that are unconcious and revives them if they shouldn't be.
+ * Checks for units that are unconscious and revives them if they shouldn't be.
  *
  * Revived units need a tile to stand on. If the unit's current position is occupied, then
  * all directions around the tile are searched for a free tile to place the unit in.
@@ -1433,7 +1415,9 @@ void SavedBattleGame::reviveUnconsciousUnits()
 			}
 			if ((*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0)
 			{
-				if (placeUnitNearPosition((*i), originalPosition))
+				Tile *targetTile = getTile(originalPosition);
+				bool largeUnit =  targetTile && targetTile->getUnit() && targetTile->getUnit() != *i && targetTile->getUnit()->getArmor()->getSize() != 1;
+				if (placeUnitNearPosition((*i), originalPosition, largeUnit))
 				{
 					// recover from unconscious
 					(*i)->turn(false); // makes the unit stand up again
@@ -1486,9 +1470,9 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 			Tile *tb = getTile(position + Position(x,y,-1));
 			if (t == 0 ||
 				(t->getUnit() != 0 && t->getUnit() != bu) ||
-				t->getTUCost(MapData::O_OBJECT, bu->getMovementType()) == 255 ||
+				t->getTUCost(O_OBJECT, bu->getMovementType()) == 255 ||
 				(t->hasNoFloor(tb) && bu->getMovementType() != MT_FLY) ||
-				(t->getMapData(MapData::O_OBJECT) && t->getMapData(MapData::O_OBJECT)->getBigWall() && t->getMapData(MapData::O_OBJECT)->getBigWall() <= 3))
+				(t->getMapData(O_OBJECT) && t->getMapData(O_OBJECT)->getBigWall() && t->getMapData(O_OBJECT)->getBigWall() <= 3))
 			{
 				return false;
 			}
@@ -1673,19 +1657,22 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
  * @param entryPoint The position around which to attempt to place the unit.
  * @return True if the unit was successfully placed.
  */
-bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, Position entryPoint)
+bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, Position entryPoint, bool largeFriend)
 {
 	if (setUnitPosition(unit, entryPoint))
 	{
 		return true;
 	}
-
+	
+	int me = 0 - unit->getArmor()->getSize();
+	int you = largeFriend ? 2 : 1;
+	int xArray[8] = {0, you, you, you, 0, me, me, me};
+	int yArray[8] = {me, me, 0, you, you, you, 0, me};
 	for (int dir = 0; dir <= 7; ++dir)
 	{
-		Position offset;
-		getPathfinding()->directionToVector(dir, &offset);
+		Position offset = Position (xArray[dir], yArray[dir], 0);
 		Tile *t = getTile(entryPoint + offset);
-		if (t && !getPathfinding()->isBlocked(getTile(entryPoint), t, dir, 0)
+		if (t && !getPathfinding()->isBlocked(getTile(entryPoint + (offset / 2)), t, dir, 0)
 			&& setUnitPosition(unit, entryPoint + offset))
 		{
 			return true;
@@ -1709,6 +1696,8 @@ bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, Position entryPoin
 void SavedBattleGame::resetTurnCounter()
 {
 	_turn = 1;
+	_cheating = false;
+	_side = FACTION_PLAYER;
 }
 
 /**
@@ -1791,7 +1780,7 @@ std::vector< std::vector<std::pair<int, int> > > &SavedBattleGame::getModuleMap(
 /**
  * calculate the number of map modules remaining by counting the map objects
  * on the top floor who have the baseModule flag set. we store this data in the grid
- * as outlined in the comments above, in pairs representing intial and current values.
+ * as outlined in the comments above, in pairs representing initial and current values.
  */
 void SavedBattleGame::calculateModuleMap()
 {
@@ -1802,7 +1791,7 @@ void SavedBattleGame::calculateModuleMap()
 		for (int y = 0; y != _mapsize_y; ++y)
 		{
 			Tile *tile = getTile(Position(x,y,_mapsize_z-1));
-			if (tile && tile->getMapData(MapData::O_OBJECT) && tile->getMapData(MapData::O_OBJECT)->isBaseModule())
+			if (tile && tile->getMapData(O_OBJECT) && tile->getMapData(O_OBJECT)->isBaseModule())
 			{
 				_baseModules[x/10][y/10].first += _baseModules[x/10][y/10].first > 0 ? 1 : 2;
 				_baseModules[x/10][y/10].second = _baseModules[x/10][y/10].first;

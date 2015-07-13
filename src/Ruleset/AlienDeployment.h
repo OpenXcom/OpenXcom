@@ -44,7 +44,7 @@ struct DeploymentData
 struct BriefingData
 {
 	int palette, textOffset;
-	std::string music, background, cutscene;
+	std::string title, desc, music, background, cutscene;
 	bool showCraft, showTarget;
 	BriefingData() : palette(0), textOffset(0), music("GMDEFEND"), background("BACK16.SCR"), showCraft(true), showTarget(true) { /*Empty by Design*/ };
 };

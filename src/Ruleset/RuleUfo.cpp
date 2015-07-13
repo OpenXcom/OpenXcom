@@ -59,7 +59,6 @@ void RuleUfo::load(const YAML::Node &node, Ruleset *ruleset)
 	_reload = node["reload"].as<int>(_reload);
 	_breakOffTime = node["breakOffTime"].as<int>(_breakOffTime);
 	_sightRange = node["sightRange"].as<int>(_sightRange);
-	_briefingString = node["briefingString"].as<std::string>(_briefingString);
 	if (const YAML::Node &terrain = node["battlescapeTerrainData"])
 	{
 		RuleTerrain *rule = new RuleTerrain(terrain["name"].as<std::string>());
@@ -243,12 +242,4 @@ int RuleUfo::getSightRange() const
 	return _sightRange;
 }
 
-/**
- * Gets the UFO's custom briefing string
- * @return The string name.
- */
-std::string RuleUfo::getBriefingString() const
-{
-	return _briefingString;
-}
 }

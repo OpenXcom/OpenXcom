@@ -739,7 +739,7 @@ unsigned lodepng_huffman_code_lengths(unsigned* lengths, const unsigned* frequen
   according to RFC 1951 section 3.2.7. To decoders incorrectly require two. To
   make these work as well ensure there are at least two symbols. The
   Package-Merge code below also doesn't work correctly if there's only one
-  symbol, it'd give it the theoritical 0 bits but in practice zlib wants 1 bit*/
+  symbol, it'd give it the theoretical 0 bits but in practice zlib wants 1 bit*/
   if(numpresent == 0)
   {
     lengths[0] = lengths[1] = 1; /*note that for RFC 1951 section 3.2.7, only lengths[0] = 1 is needed*/
@@ -1694,7 +1694,7 @@ static unsigned deflateDynamic(ucvector* out, size_t* bp, Hash* hash,
   uivector frequencies_d; /*frequency of dist codes*/
   uivector frequencies_cl; /*frequency of code length codes*/
   uivector bitlen_lld; /*lit,len,dist code lenghts (int bits), literally (without repeat codes).*/
-  uivector bitlen_lld_e; /*bitlen_lld encoded with repeat codes (this is a rudemtary run length compression)*/
+  uivector bitlen_lld_e; /*bitlen_lld encoded with repeat codes (this is a rudimentary run length compression)*/
   /*bitlen_cl is the code length code lengths ("clcl"). The bit lengths of codes to represent tree_cl
   (these are written as is in the file, it would be crazy to compress these using yet another huffman
   tree that needs to be represented by yet another set of code lengths)*/
@@ -1702,7 +1702,7 @@ static unsigned deflateDynamic(ucvector* out, size_t* bp, Hash* hash,
   size_t datasize = dataend - datapos;
 
   /*
-  Due to the huffman compression of huffman tree representations ("two levels"), there are some anologies:
+  Due to the huffman compression of huffman tree representations ("two levels"), there are some analogies:
   bitlen_lld is to tree_cl what data is to tree_ll and tree_d.
   bitlen_lld_e is to bitlen_lld what lz77_encoded is to data.
   bitlen_cl is to bitlen_lld_e what bitlen_lld is to lz77_encoded.
@@ -1773,7 +1773,7 @@ static unsigned deflateDynamic(ucvector* out, size_t* bp, Hash* hash,
     17 (3-10 zeroes), 18 (11-138 zeroes)*/
     for(i = 0; i < (unsigned)bitlen_lld.size; i++)
     {
-      unsigned j = 0; /*amount of repititions*/
+      unsigned j = 0; /*amount of repetitions*/
       while(i + j + 1 < (unsigned)bitlen_lld.size && bitlen_lld.data[i + j + 1] == bitlen_lld.data[i]) j++;
 
       if(bitlen_lld.data[i] == 0 && j >= 2) /*repeat code for zeroes*/
@@ -3207,7 +3207,7 @@ static unsigned getPixelColorRGBA8(unsigned char* r, unsigned char* g,
 
 /*Similar to getPixelColorRGBA8, but with all the for loops inside of the color
 mode test cases, optimized to convert the colors much faster, when converting
-to RGBA or RGB with 8 bit per cannel. buffer must be RGBA or RGB output with
+to RGBA or RGB with 8 bit per channel. buffer must be RGBA or RGB output with
 enough memory, if has_alpha is true the output is RGBA. mode has the color mode
 of the input buffer.*/
 static unsigned getPixelColorsRGBA8(unsigned char* buffer, size_t numpixels,
@@ -4221,7 +4221,7 @@ static unsigned postProcessScanlines(unsigned char* out, unsigned char* in,
       CERROR_TRY_RETURN(unfilter(in, in, w, h, bpp));
       removePaddingBits(out, in, w * bpp, ((w * bpp + 7) / 8) * 8, h);
     }
-    /*we can immediatly filter into the out buffer, no other steps needed*/
+    /*we can immediately filter into the out buffer, no other steps needed*/
     else CERROR_TRY_RETURN(unfilter(out, in, w, h, bpp));
   }
   else /*interlace_method is 1 (Adam7)*/
@@ -5566,7 +5566,7 @@ static unsigned preProcessScanlines(unsigned char** out, size_t* outsize, const 
       }
       else
       {
-        /*we can immediatly filter into the out buffer, no other steps needed*/
+        /*we can immediately filter into the out buffer, no other steps needed*/
         error = filter(*out, in, w, h, &info_png->color, settings);
       }
     }

@@ -71,7 +71,7 @@ private:
 	int _playingState;
 	bool _hasAudio;
 	int _videoDelay;
-
+	double _volume;
 
 	typedef struct AudioBuffer
 	{

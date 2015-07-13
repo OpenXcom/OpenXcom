@@ -189,7 +189,7 @@ public:
 	void addToObjectiveCount();
 	/// increments the objective counter.
 	void addDestroyedObjective();
-	/// Checks if all the objectives are detroyed.
+	/// Checks if all the objectives are destroyed.
 	bool allObjectivesDestroyed();
 	/// Gets the current item ID.
 	int *getCurrentItemId();
@@ -226,7 +226,7 @@ public:
 	/// Checks whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit).
 	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
 	/// Attempts to place a unit on or near entryPoint.
-	bool placeUnitNearPosition(BattleUnit *unit, Position entryPoint);
+	bool placeUnitNearPosition(BattleUnit *unit, Position entryPoint, bool largeFriend);
 	/// Resets the turn counter.
 	void resetTurnCounter();
 	/// Resets the visibility of all tiles on the map.

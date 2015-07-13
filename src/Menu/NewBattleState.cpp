@@ -482,7 +482,8 @@ void NewBattleState::btnOkClick(Action *)
 		_craft = 0;
 	}
 	// alien base
-	else if (_missionTypes[_cbxMission->getSelected()] == "STR_ALIEN_BASE_ASSAULT")
+	else if (_missionTypes[_cbxMission->getSelected()].find("STR_ALIEN_BASE") != std::string::npos ||
+			 _missionTypes[_cbxMission->getSelected()].find("STR_ALIEN_COLONY") != std::string::npos)
 	{
 		AlienBase *b = new AlienBase();
 		b->setId(1);
@@ -613,7 +614,7 @@ void NewBattleState::cbxMissionChange(Action *)
 	for (std::set<std::string>::const_iterator i = terrains.begin(); i != terrains.end(); ++i)
 	{
 		_terrainTypes.push_back(*i);
-		terrainStrings.push_back("STR_" + *i);
+		terrainStrings.push_back("MAP_" + *i);
 	}
 
 	// Hide controls that don't apply to mission

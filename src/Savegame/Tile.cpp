@@ -256,7 +256,7 @@ int Tile::getTUCost(int part, MovementType movementType) const
 	{
 		if (_objects[part]->isUFODoor() && _currentFrame[part] > 1)
 			return 0;
-		if (part == MapData::O_OBJECT && _objects[part]->getBigWall() >= 4)
+		if (part == O_OBJECT && _objects[part]->getBigWall() >= 4)
 			return 0;
 		return _objects[part]->getTUCost(movementType);
 	}
@@ -273,8 +273,8 @@ bool Tile::hasNoFloor(Tile *tileBelow) const
 {
 	if (tileBelow != 0 && tileBelow->getTerrainLevel() == -24)
 		return false;
-	if (_objects[MapData::O_FLOOR])
-		return _objects[MapData::O_FLOOR]->isNoFloor();
+	if (_objects[O_FLOOR])
+		return _objects[O_FLOOR]->isNoFloor();
 	else
 		return true;
 }
@@ -285,8 +285,8 @@ bool Tile::hasNoFloor(Tile *tileBelow) const
  */
 bool Tile::isBigWall() const
 {
-	if (_objects[MapData::O_OBJECT])
-		return (_objects[MapData::O_OBJECT]->getBigWall() != 0);
+	if (_objects[O_OBJECT])
+		return (_objects[O_OBJECT]->getBigWall() != 0);
 	else
 		return false;
 }
@@ -299,11 +299,11 @@ int Tile::getTerrainLevel() const
 {
 	int level = 0;
 
-	if (_objects[MapData::O_FLOOR])
-		level = _objects[MapData::O_FLOOR]->getTerrainLevel();
+	if (_objects[O_FLOOR])
+		level = _objects[O_FLOOR]->getTerrainLevel();
 	// whichever's higher, but not the sum.
-	if (_objects[MapData::O_OBJECT])
-		level = std::min(_objects[MapData::O_OBJECT]->getTerrainLevel(), level);
+	if (_objects[O_OBJECT])
+		level = std::min(_objects[O_OBJECT]->getTerrainLevel(), level);
 
 	return level;
 }
@@ -317,12 +317,12 @@ int Tile::getFootstepSound(Tile *tileBelow) const
 {
 	int sound = -1;
 
-	if (_objects[MapData::O_FLOOR])
-		sound = _objects[MapData::O_FLOOR]->getFootstepSound();
-	if (_objects[MapData::O_OBJECT] && _objects[MapData::O_OBJECT]->getBigWall() <= 1 && _objects[MapData::O_OBJECT]->getFootstepSound() > -1)
-		sound = _objects[MapData::O_OBJECT]->getFootstepSound();
-	if (!_objects[MapData::O_FLOOR] && !_objects[MapData::O_OBJECT] && tileBelow != 0 && tileBelow->getTerrainLevel() == -24)
-		sound = tileBelow->getMapData(MapData::O_OBJECT)->getFootstepSound();
+	if (_objects[O_FLOOR])
+		sound = _objects[O_FLOOR]->getFootstepSound();
+	if (_objects[O_OBJECT] && _objects[O_OBJECT]->getBigWall() <= 1 && _objects[O_OBJECT]->getFootstepSound() > -1)
+		sound = _objects[O_OBJECT]->getFootstepSound();
+	if (!_objects[O_FLOOR] && !_objects[O_OBJECT] && tileBelow != 0 && tileBelow->getTerrainLevel() == -24)
+		sound = tileBelow->getMapData(O_OBJECT)->getFootstepSound();
 
 	return sound;
 }
@@ -368,7 +368,7 @@ int Tile::closeUfoDoor()
 {
 	int retval = 0;
 
-	for (int part = 0; part < 4; part++)
+	for (int part = 0; part < 4; ++part)
 	{
 		if (isUfoDoorOpen(part))
 		{
@@ -482,10 +482,10 @@ bool Tile::destroy(int part)
 		}
 	}
 	/* check if the floor on the lowest level is gone */
-	if (part == MapData::O_FLOOR && getPosition().z == 0 && _objects[MapData::O_FLOOR] == 0)
+	if (part == O_FLOOR && getPosition().z == 0 && _objects[O_FLOOR] == 0)
 	{
 		/* replace with scorched earth */
-		setMapData(MapDataSet::getScorchedEarthTile(), 1, 0, MapData::O_FLOOR);
+		setMapData(MapDataSet::getScorchedEarthTile(), 1, 0, O_FLOOR);
 	}
 	return _objective;
 }
@@ -808,7 +808,7 @@ int Tile::getTopItemSprite()
  */
 void Tile::prepareNewTurn()
 {
-	// we've recieved new smoke in this turn, but we're not on fire, average out the smoke.
+	// we've received new smoke in this turn, but we're not on fire, average out the smoke.
 	if ( _overlaps != 0 && _smoke != 0 && _fire == 0)
 	{
 		_smoke = std::max(0, std::min((_smoke / _overlaps)- 1, 15));

@@ -288,13 +288,9 @@ SaveInfo SavedGame::getSaveInfo(const std::string &file, Language *lang)
 	std::pair<std::wstring, std::wstring> str = CrossPlatform::timeToString(save.timestamp);
 	save.isoDate = str.first;
 	save.isoTime = str.second;
-        save.mods = doc["mods"].as<std::vector< std::string> >(std::vector<std::string>());
+	save.mods = doc["mods"].as<std::vector< std::string> >(std::vector<std::string>());
 
 	std::wostringstream details;
-	if (!save.mods.empty())
-	{
-		details << Language::utf8ToWstr(save.mods[0]) << L" ";
-	}
 	if (doc["turn"])
 	{
 		details << lang->getString("STR_BATTLESCAPE") << L": " << lang->getString(doc["mission"].as<std::string>()) << L", ";
@@ -1786,7 +1782,7 @@ std::vector<Soldier*> *SavedGame::getDeadSoldiers()
 }
 
 /**
- * Sets the the last selected armour.
+ * Sets the last selected armour.
  * @param value The new value for last selected armor - Armor type string.
  */
 
@@ -1796,7 +1792,7 @@ void SavedGame::setLastSelectedArmor(const std::string &value)
 }
 
 /**
- * Gets the the last selected armour
+ * Gets the last selected armour
  * @return last used armor type string
  */
 std::string SavedGame::getLastSelectedArmor()

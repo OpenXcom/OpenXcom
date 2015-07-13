@@ -507,7 +507,7 @@ void AlienBAIState::setupPatrol()
 				for (int i = x; i < x+9; i++)
 				for (int j = y; j < y+9; j++)
 				{
-					MapData *md = _save->getTile(Position(i, j, 1))->getMapData(MapData::O_OBJECT);
+					MapData *md = _save->getTile(Position(i, j, 1))->getMapData(O_OBJECT);
 					if (md && md->isBaseModule())
 					{
 						_patrolAction->actor = _unit;
@@ -797,7 +797,7 @@ void AlienBAIState::setupEscape()
 	const int FIRE_PENALTY = 40;
 	const int BASE_SYSTEMATIC_SUCCESS = 100;
 	const int BASE_DESPERATE_SUCCESS = 110;
-	const int FAST_PASS_THRESHOLD = 100; // a score that's good engouh to quit the while loop early; it's subjective, hand-tuned and may need tweaking
+	const int FAST_PASS_THRESHOLD = 100; // a score that's good enough to quit the while loop early; it's subjective, hand-tuned and may need tweaking
 
 	std::vector<Position> randomTileSearch = _save->getTileSearch();
 	RNG::shuffle(randomTileSearch);
@@ -2069,7 +2069,7 @@ bool AlienBAIState::getNodeOfBestEfficacy(BattleAction *action)
 	{
 		int dist = _save->getTileEngine()->distance((*i)->getPosition(), _unit->getPosition());
 		if (dist <= 20 && dist > action->weapon->getRules()->getExplosionRadius() &&
-			_save->getTileEngine()->canTargetTile(&originVoxel, _save->getTile((*i)->getPosition()), MapData::O_FLOOR, &targetVoxel, _unit))
+			_save->getTileEngine()->canTargetTile(&originVoxel, _save->getTile((*i)->getPosition()), O_FLOOR, &targetVoxel, _unit))
 		{
 			int nodePoints = 0;
 			for (std::vector<BattleUnit*>::const_iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
@@ -2078,7 +2078,7 @@ bool AlienBAIState::getNodeOfBestEfficacy(BattleAction *action)
 				if (!(*j)->isOut() && dist < action->weapon->getRules()->getExplosionRadius())
 				{
 					Position targetOriginVoxel = _save->getTileEngine()->getSightOriginVoxel(*j);
-					if (_save->getTileEngine()->canTargetTile(&targetOriginVoxel, _save->getTile((*i)->getPosition()), MapData::O_FLOOR, &targetVoxel, *j))
+					if (_save->getTileEngine()->canTargetTile(&targetOriginVoxel, _save->getTile((*i)->getPosition()), O_FLOOR, &targetVoxel, *j))
 					{
 						if ((*j)->getFaction() != FACTION_HOSTILE)
 						{

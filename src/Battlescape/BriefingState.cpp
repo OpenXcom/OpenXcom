@@ -57,7 +57,7 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(120, 18, 100, 164);
-	_txtTitle = new Text(300, 17, 16, 24);
+	_txtTitle = new Text(300, 32, 16, 24);
 	_txtTarget = new Text(300, 17, 16, 40);
 	_txtCraft = new Text(300, 17, 16, 56);
 	_txtBriefing = new Text(274, 64, 16, 72);
@@ -74,6 +74,8 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 		}
 	}
 
+	std::string title = mission;
+	std::string desc = title + "_BRIEFING";
 	if (!deployment) // none defined - should never happen, but better safe than sorry i guess.
 	{
 		setPalette("PAL_GEOSCAPE", 0);
@@ -89,9 +91,16 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 		_txtBriefing->setY(72 + data.textOffset);
 		_txtTarget->setVisible(data.showTarget);
 		_txtCraft->setVisible(data.showCraft);
-
 		_cutsceneId = data.cutscene;
 		_musicId = data.music;
+		if (!data.title.empty())
+		{
+			title = data.title;
+		}
+		if (!data.desc.empty())
+		{
+			desc = data.desc;
+		}
 	}
 
 	add(_window, "window", "briefing");
@@ -129,20 +138,10 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 	}
 	_txtCraft->setText(s);
 
+	_txtTitle->setText(tr(title));
+
 	_txtBriefing->setWordWrap(true);
-
-	_txtTitle->setText(tr(mission));
-	std::ostringstream briefingtext;
-	briefingtext << mission.c_str() << "_BRIEFING";
-	_txtBriefing->setText(tr(briefingtext.str()));
-
-	// if this UFO has a specific briefing, use that instead
-	if (ufo && ufo->getRules()->getBriefingString() != "")
-	{
-		briefingtext.str("");
-		briefingtext << ufo->getRules()->getBriefingString();
-		_txtBriefing->setText(tr(briefingtext.str()));
-	}
+	_txtBriefing->setText(tr(desc));
 
 	if (mission == "STR_BASE_DEFENSE")
 	{

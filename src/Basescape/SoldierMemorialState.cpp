@@ -59,8 +59,6 @@ SoldierMemorialState::SoldierMemorialState()
 	// Set palette
 	setInterface("soldierMemorial");
 
-	_game->getResourcePack()->playMusic("GMLOSE");
-
 	add(_window, "window", "soldierMemorial");
 	add(_btnOk, "button", "soldierMemorial");
 	add(_txtTitle, "text", "soldierMemorial");

@@ -55,7 +55,7 @@ ListLoadState::ListLoadState(OptionsOrigin origin) : ListGamesState(origin, 0, t
 		_btnCancel->setX(180);
 	}
 
-	_btnOld->setText(L"Original X-Com");
+	_btnOld->setText(tr("STR_ORIGINAL_XCOM"));
 	_btnOld->onMouseClick((ActionHandler)&ListLoadState::btnOldClick);
 
 	centerAllSurfaces();

@@ -501,7 +501,7 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 		_w2FireInterval = _craft->getWeapons()->at(1)->getRules()->getStandardReload();
 	}
 
-	// Set UFO size - going to be moved to Ufo class to implement simultanous dogfights.
+	// Set UFO size - going to be moved to Ufo class to implement simultaneous dogfights.
 	std::string ufoSize = _ufo->getRules()->getSize();
 	if (ufoSize.compare("STR_VERY_SMALL") == 0)
 	{
@@ -1039,7 +1039,7 @@ void DogfightState::update()
 				// Difference from original: No retaliation until final UFO lands (Original: Is spawned).
 				if (!_game->getSavedGame()->findAlienMission(targetRegion, OBJECTIVE_RETALIATION))
 				{
-					const RuleAlienMission &rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
+					const RuleAlienMission &rule = *_game->getRuleset()->getRandomMission(OBJECTIVE_RETALIATION, _game->getSavedGame()->getMonthsPassed());
 					AlienMission *mission = new AlienMission(rule);
 					mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
 					mission->setRegion(targetRegion, *_game->getRuleset());

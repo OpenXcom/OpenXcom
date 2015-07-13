@@ -252,8 +252,8 @@ int Projectile::calculateThrow(double accuracy)
 			// check if the item would land on a tile with a blocking object
 			if (_action.type == BA_THROW
 				&& endTile
-				&& endTile->getMapData(MapData::O_OBJECT)
-				&& endTile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+				&& endTile->getMapData(O_OBJECT)
+				&& endTile->getMapData(O_OBJECT)->getTUCost(MT_WALK) == 255)
 			{
 				test = V_OUTOFBOUNDS;
 			}
@@ -457,7 +457,7 @@ Position Projectile::getTarget()
 
 /**
  * Is this projectile drawn back to front or front to back?
- * @retun return if this is to be drawn in reverse order.
+ * @return return if this is to be drawn in reverse order.
  */
 bool Projectile::isReversed() const
 {

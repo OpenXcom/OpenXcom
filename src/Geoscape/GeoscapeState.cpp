@@ -695,7 +695,7 @@ void GeoscapeState::time5Seconds()
 					mission->ufoReachedWaypoint(**i, *_game, *_globe);
 					if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 					{
-						if (!((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && (*i)->getStatus() == Ufo::LANDED))
+						if (!((*i)->getTrajectory().getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN && (*i)->getStatus() == Ufo::LANDED))
 							popup(new UfoLostState((*i)->getName(_game->getLanguage())));
 					}
 					if (count < _game->getSavedGame()->getMissionSites()->size())
@@ -803,7 +803,7 @@ void GeoscapeState::time5Seconds()
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				if (u != 0 && !u->getDetected())
 				{
-					if (u->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && (u->getStatus() == Ufo::LANDED || u->getStatus() == Ufo::DESTROYED))
+					if (u->getTrajectory().getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN && (u->getStatus() == Ufo::LANDED || u->getStatus() == Ufo::DESTROYED))
 					{
 						(*j)->returnToBase();
 					}
@@ -997,10 +997,10 @@ private:
  */
 bool DetectXCOMBase::operator()(const Ufo *ufo) const
 {
-	if ((ufo->getMissionType() != "STR_ALIEN_RETALIATION" && !Options::aggressiveRetaliation) || // only UFOs on retaliation missions actively scan for bases
-		ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" || 										// UFOs attacking a base don't detect!
-		ufo->isCrashed() ||																				 // Crashed UFOs don't detect!
-		_base.getDistance(ufo) >= ufo->getRules()->getSightRange() * (1 / 60.0) * (M_PI / 180.0))		 // UFOs have a detection range of 80 XCOM units. - we use a great circle fomrula and nautical miles.
+	if ((ufo->getMission()->getRules().getObjective() != OBJECTIVE_RETALIATION && !Options::aggressiveRetaliation) || // only UFOs on retaliation missions actively scan for bases
+		ufo->getTrajectory().getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN || 									// UFOs attacking a base don't detect!
+		ufo->isCrashed() ||																				// Crashed UFOs don't detect!
+		_base.getDistance(ufo) >= ufo->getRules()->getSightRange() * (1 / 60.0) * (M_PI / 180.0))		// UFOs have a detection range of 80 XCOM units. - we use a great circle fomrula and nautical miles.
 	{
 		return false;
 	}
