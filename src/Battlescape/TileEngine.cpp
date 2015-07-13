@@ -1690,11 +1690,13 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 		break;
 	}
 
-	if (skipObject) return block; //
+	if (!skipObject)
+		block += blockage(startTile,O_OBJECT, type, direction);
 
-    block += blockage(startTile,O_OBJECT, type, direction);
 	if (type != DT_NONE)
 	{
+		if (skipObject) return block;
+
 		direction += 4;
 		if (direction > 7)
 			direction -= 8;
@@ -2102,6 +2104,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 	int cx, cy, cz;
 	Position lastPoint(origin);
 	int result;
+	int steps = 0;
 
 	//start and end points
 	x0 = origin.x;	 x1 = target.x;
@@ -2173,7 +2176,8 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 		else
 		{
             int temp_res = verticalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE);
-			result = horizontalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE);
+			result = horizontalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE, steps<2);
+			steps++;
             if (result == -1)
             {
                 if (temp_res > 127)
