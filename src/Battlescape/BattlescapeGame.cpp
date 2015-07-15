@@ -817,7 +817,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					}
 				}
 			}
-			else if (!murderer->getStatistics()->duplicateEntry(STATUS_UNCONSCIOUS, victim->getId())) 
+			else if (murderer && !murderer->getStatistics()->duplicateEntry(STATUS_UNCONSCIOUS, victim->getId())) 
 			{
                     murderer->getStatistics()->kills.push_back(new BattleUnitKills(killStatRank, killStatRace, killStatWeapon, killStatWeaponAmmo, victim->getFaction(), STATUS_UNCONSCIOUS, killStatMission, killStatTurn, victim->getFatalShotSide(), victim->getFatalShotBodyPart(), victim->getId() ));
 			}

@@ -488,7 +488,7 @@ bool SoldierDiary::manageCommendations(Ruleset *rules)
                             {
                                 continue;
                             }
-                            else if (thisTime != lastTime) 
+                            else if (thisTime != lastTime && (*j).first != "killsWithCriteriaCareer") 
                             {
                                 count = 1; // Reset.
                                 goToNextTime = false;
