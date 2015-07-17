@@ -653,7 +653,8 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		
 		if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_COLLAPSING)
 		{
-			// Assume that, in absence of a murderer and an explosion, fire killed victim.
+			// Assume that, in absence of a murderer and an explosion, the laster unit to hit the victim is the murderer.
+            // Possible causes of death: bleed out, fire.
 			// Assume that the fire that killed victim was started by the unit who hit victim with DT_IN.
 			if (!murderer && !terrainExplosion)
 			{

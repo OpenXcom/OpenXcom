@@ -163,6 +163,76 @@ void PsiAttackBState::psiAttack()
 		Game *game = _parent->getSave()->getBattleState()->getGame();
 		_action.actor->addPsiSkillExp();
 		_action.actor->addPsiSkillExp();
+		/// Decide target race and rank.
+		std::string killStatRank, killStatRace;
+		// Soldiers
+		if (_target->getGeoscapeSoldier() && _target->getOriginalFaction() == FACTION_PLAYER)
+		{
+			if (_target->getUnitRules() != NULL && _target->getUnitRules()->getRank() != "")
+			{
+				killStatRank = _target->getGeoscapeSoldier()->getRankString();
+			}
+			else
+			{
+				killStatRank = "STR_LIVE_SOLDIER";
+			}
+			if (_target->getUnitRules() != NULL && _target->getUnitRules()->getRace() != "")
+			{
+				killStatRace = _target->getUnitRules()->getRace();
+			}
+			else
+			{
+				killStatRace = "STR_HUMAN";								
+			}
+		}
+		// Aliens
+		else if (_target->getOriginalFaction() == FACTION_HOSTILE)
+		{
+			if (_target->getUnitRules() != NULL && _target->getUnitRules()->getRank() != "")
+			{
+				killStatRank = _target->getUnitRules()->getRank();
+			}
+			else
+			{
+				killStatRank = "STR_UNKNOWN";
+			}
+			if (_target->getUnitRules() != NULL && _target->getUnitRules()->getRace() != "")
+			{
+				killStatRace = _target->getUnitRules()->getRace();
+			}
+			else
+			{
+				killStatRace = "STR_LIVE_SOLDIER";								
+			}
+		}
+		// Civilians
+		else if (_target->getOriginalFaction() == FACTION_NEUTRAL)
+		{
+			if (_target->getUnitRules() != NULL && _target->getUnitRules()->getRank() != "")
+			{
+				killStatRank = _target->getUnitRules()->getRank();
+			}
+			else
+			{
+				killStatRank = "STR_CIVILIAN";
+			}
+			if (_target->getUnitRules() != NULL && (_target->getUnitRules()->getRace() != "" || _target->getUnitRules()->getRace() != "STR_CIVILIAN"))
+			{
+				killStatRace = _target->getUnitRules()->getRace();
+			}
+			else
+			{
+				killStatRace = "STR_HUMAN";
+			}
+		}
+		// Error
+		else
+		{
+			killStatRank = "STR_UNKNOWN";
+			killStatRace = "STR_UNKNOWN";
+		}
+
+
 		if (_action.type == BA_PANIC)
 		{
 			int moraleLoss = (110-_target->getBaseStats()->bravery);
@@ -171,7 +241,7 @@ void PsiAttackBState::psiAttack()
 			// Award Panic battle unit kill
 			if (!_unit->getStatistics()->duplicateEntry(STATUS_PANICKING, _target->getId()))
 			{
-				_unit->getStatistics()->kills.push_back(new BattleUnitKills(_target->getRankString(), _target->getUnitRules()->getRace(), _action.weapon->getRules()->getName(), _action.weapon->getRules()->getName(), _target->getFaction(), STATUS_PANICKING, _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size(), turn, SIDE_FRONT, BODYPART_HEAD, _target->getId()));
+				_unit->getStatistics()->kills.push_back(new BattleUnitKills(killStatRank, killStatRace, _action.weapon->getRules()->getName(), _action.weapon->getRules()->getName(), _target->getFaction(), STATUS_PANICKING, _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size(), turn, SIDE_FRONT, BODYPART_HEAD, _target->getId()));
 				_target->setMurdererId(_unit->getId());
 			}
 			if (_parent->getSave()->getSide() == FACTION_PLAYER)
@@ -184,7 +254,7 @@ void PsiAttackBState::psiAttack()
 			// Award MC battle unit kill
 			if (!_unit->getStatistics()->duplicateEntry(STATUS_TURNING, _target->getId()))
 			{
-				_unit->getStatistics()->kills.push_back(new BattleUnitKills(_target->getRankString(), _target->getUnitRules()->getRace(), _action.weapon->getRules()->getName(), _action.weapon->getRules()->getName(), _target->getFaction(), STATUS_TURNING, _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size(), turn, SIDE_FRONT, BODYPART_HEAD, _target->getId()));
+				_unit->getStatistics()->kills.push_back(new BattleUnitKills(killStatRank, killStatRace, _action.weapon->getRules()->getName(), _action.weapon->getRules()->getName(), _target->getFaction(), STATUS_TURNING, _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size(), turn, SIDE_FRONT, BODYPART_HEAD, _target->getId()));
 				_target->setMurdererId(_unit->getId());
 			}
 			_target->convertToFaction(_unit->getFaction());
