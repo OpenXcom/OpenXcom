@@ -41,7 +41,7 @@ SoldierDiary::SoldierDiary() : _killList(), _regionTotal(), _countryTotal(), _ty
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
 	_reactionFireTotal(0), _timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0), _trapKillTotal(0), _alienBaseAssaultTotal(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0),
     _woundsHealedTotal(0), _allUFOs(0), _allMissionTypes(0), _statGainTotal(0), _revivedUnitTotal(0), _wholeMedikitTotal(0), _braveryGainTotal(0), _bestOfRank(0),
-    _bestSoldier(false), _MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _globeTrotter(false), _slaveKillsTotal(0)
+    _bestSoldier(false), _MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _globeTrotter(false), _slaveKillsTotal(0), _panickTotal(0), _controlTotal(0)
 {
 }
 /**
@@ -123,6 +123,8 @@ void SoldierDiary::load(const YAML::Node& node)
     _postMortemKills = node["postMortemKills"].as<int>(_postMortemKills);
 	_globeTrotter = node["globeTrotter"].as<bool>(_globeTrotter);
 	_slaveKillsTotal = node["slaveKillsTotal"].as<int>(_slaveKillsTotal);
+    _panickTotal = node["panickTotal"].as<int>(_panickTotal);
+    _controlTotal = node["controlTotal"].as<int>(_controlTotal);
 }
 /**
  * Saves the diary to a YAML file.
@@ -184,6 +186,8 @@ YAML::Node SoldierDiary::save() const
     if (_postMortemKills) node["postMortemKills"] = _postMortemKills;
 	if (_globeTrotter) node["globeTrotter"] = _globeTrotter;
 	if (_slaveKillsTotal) node["slaveKillsTotal"] = _slaveKillsTotal;
+    if (_panickTotal) node["panickTotal"] =_panickTotal;
+    if (_controlTotal) node["controlTotal"] = _controlTotal;
 	return node;
 }
 /**
@@ -207,6 +211,14 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
             else if ((*kill)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
             {
                 _stunTotal++;
+            }
+            else if ((*kill)->getUnitStatusString() == "STATUS_PANICKING")
+            {
+                _panickTotal++;
+            }
+            else if ((*kill)->getUnitStatusString() == "STATUS_TURNING")
+            {
+                _controlTotal++;
             }
             if ((*kill)->hostileTurn())
             {
@@ -763,6 +775,20 @@ int SoldierDiary::getWinTotal() const
 int SoldierDiary::getStunTotal() const
 {
 	return _stunTotal;
+}
+/**
+ * 
+ */
+int SoldierDiary::getPanickTotal() const
+{
+    return _panickTotal;
+}
+/**
+ *
+ */
+int SoldierDiary::getControlTotal() const
+{
+    return _controlTotal;
 }
 /**
  *

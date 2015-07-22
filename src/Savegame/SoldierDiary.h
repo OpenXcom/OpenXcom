@@ -77,7 +77,7 @@ private:
 		_importantMissionTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal, _shotAtCounter10in1Mission,
 		_hitCounter5in1Mission, _reactionFireTotal, _timesWoundedTotal, _valiantCruxTotal, _KIA, _trapKillTotal, _alienBaseAssaultTotal, _allAliensKilledTotal, _allAliensStunnedTotal,
         _woundsHealedTotal, _allUFOs, _allMissionTypes, _statGainTotal, _revivedUnitTotal, _wholeMedikitTotal, _braveryGainTotal, _bestOfRank, _MIA, _martyrKillsTotal, _postMortemKills,
-        _slaveKillsTotal;
+        _slaveKillsTotal, _panickTotal, _controlTotal;
     bool _bestSoldier, _globeTrotter;
 	void manageModularCommendations(std::map<std::string, int> &nextCommendationLevel, std::map<std::string, int> &modularCommendations, std::pair<std::string, int> statTotal, int criteria);
 	void awardCommendation(std::string type, std::string noun = "noNoun");
@@ -120,6 +120,10 @@ public:
 	int getWinTotal() const;
 	/// Get the total number of stuns.
 	int getStunTotal() const;
+    /// Get the total number of psi panicks.
+    int getPanickTotal() const;
+    /// Get the total number of psi mind controls.
+    int getControlTotal() const;
 	/// Get the total number of days wounded.
 	int getDaysWoundedTotal() const;
 	/// Get the solder's commendations.

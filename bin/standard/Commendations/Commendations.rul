@@ -909,7 +909,7 @@ extraStrings:
      STR_AWARD_DECOR_7: "First Broche d'Or"
      STR_AWARD_DECOR_8: "Second Broche d'Or"
      STR_AWARD_DECOR_9: "Troisième Broche d'Or"
-     STR_MISSION_DETAILS: "DETAILS DE MISSIONS POUR{NEWLINE}{0}"
+     STR_MISSION_DETAILS: "DETAILS DE MISSIONS"
      STR_DETAILS_UC: "DETAILS"
      STR_TANK: "Blindé"
      STR_HEAVY_WEAPONS_PLATFORM_LC: "Plateforme d'armement lourde"
@@ -1049,7 +1049,7 @@ extraStrings:
      STR_SCORE_VALUE: "ОЧКОВ> {ALT}{0}"
      STR_WINS: "ПОБЕД> {ALT}{0}"
      STR_STUNS: "ЗАДЕРЖАНО> {ALT}{0}"
-     STR_MISSION_DETAILS: "СВЕДЕНИЯ ОБ ОПЕРАЦИИ ДЛЯ{NEWLINE}{0}"
+     STR_MISSION_DETAILS: "СВЕДЕНИЯ ОБ ОПЕРАЦИИ"
      STR_DETAILS_UC: "СВЕДЕНИЯ"
      STR_TANK: "Танк"
      STR_HEAVY_WEAPONS_PLATFORM_LC: "Тяжелая Боевая Платформа" 
@@ -1175,7 +1175,7 @@ extraStrings:
       STR_MISSIONS_BY_UFO: Missioni per UFO
       STR_MISSIONS_TYPE: Missioni
       STR_MISSIONS_UC: Missioni
-      STR_MISSION_DETAILS: "Dettagli Missione per {NEWLINE}{0}"
+      STR_MISSION_DETAILS: "Dettagli Missione"
       STR_MISSION_LOSS: Sconfitte
       STR_MISSION_TYPE: "Missione> {ALT}{0}"
       STR_MISSION_WIN: Vittorie

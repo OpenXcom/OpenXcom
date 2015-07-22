@@ -234,7 +234,7 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 
 	_lstKillTotals->setColor(Palette::blockOffset(15)+1);
 	_lstKillTotals->setSecondaryColor(Palette::blockOffset(13)+10);
-	_lstKillTotals->setColumns(2, 98, 98);
+	_lstKillTotals->setColumns(4, 68, 68, 68, 84);
 	_lstKillTotals->setMargin(8);
 	_lstKillTotals->setBackground(_window);
 	
@@ -307,7 +307,6 @@ SoldierDiaryPerformanceState::~SoldierDiaryPerformanceState()
 
 /**
  *  Clears all the variables and reinitializes the list of kills or missions for the soldier.
- *
  */
 void SoldierDiaryPerformanceState::init()
 {
@@ -379,8 +378,18 @@ void SoldierDiaryPerformanceState::init()
 	_lstKillTotals->clearList();
 	_lstMissionTotals->clearList();
 	_commendationsListEntry.clear();
-	_lstKillTotals->addRow(2, tr("STR_KILLS").arg(_soldier->getDiary()->getKillTotal()).c_str(),
-							  tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str());
+	if (_soldier->getCurrentStats()->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+	{
+		_lstKillTotals->addRow(4, tr("STR_KILLS").arg(_soldier->getDiary()->getKillTotal()).c_str(),
+								  tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str(),
+								  tr("STR_PANICKS").arg(_soldier->getDiary()->getPanickTotal()).c_str(),
+								  tr("STR_CONTROLS").arg(_soldier->getDiary()->getControlTotal()).c_str());
+	}
+	else
+	{
+		_lstKillTotals->addRow(2, tr("STR_KILLS").arg(_soldier->getDiary()->getKillTotal()).c_str(),
+								  tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str());
+	}
 	_lstMissionTotals->addRow(4, tr("STR_MISSIONS").arg(_soldier->getDiary()->getMissionTotal()).c_str(),
 								 tr("STR_WINS").arg(_soldier->getDiary()->getWinTotal()).c_str(),
 								 tr("STR_SCORE_VALUE").arg(_soldier->getDiary()->getScoreTotal()).c_str(),

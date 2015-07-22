@@ -56,17 +56,17 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Base *base, size_t soldierId,
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 232, 128, 44, 36, POPUP_BOTH);
-	_btnOk = new TextButton(180, 16, 70, 140);
+	_window = new Window(this, 272, 128, 24, 36, POPUP_BOTH);
+	_btnOk = new TextButton(220, 16, 50, 140);
 	_txtTitle = new Text(222, 9, 49, 44);
-	_txtScore = new Text(222, 9, 49, 62);
-	_txtMissionType= new Text(222, 9, 49, 71);
-	_txtUFO = new Text(222, 9, 49, 80);
-	_txtKills = new Text(130, 9, 187, 62);
-	_txtRace = new Text(130, 9, 187, 71);
-	_txtDaylight = new Text(130, 9, 187, 80);
-	_txtDaysWounded = new Text(130, 9, 187, 89);
-	_lstKills = new TextList(200, 32, 49, 102);
+	_txtScore = new Text(222, 9, 29, 62);
+	_txtMissionType= new Text(222, 9, 29, 71);
+	_txtUFO = new Text(222, 9, 29, 80);
+	_txtKills = new Text(130, 9, 207, 62);
+	_txtRace = new Text(130, 9, 207, 71);
+	_txtDaylight = new Text(130, 9, 207, 80);
+	_txtDaysWounded = new Text(130, 9, 207, 89);
+	_lstKills = new TextList(240, 32, 29, 102);
 
 	// Set palette
 	setPalette("PAL_BASESCAPE");
@@ -155,7 +155,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Base *base, size_t soldierId,
 
 	_lstKills->setColor(Palette::blockOffset(13));
 	_lstKills->setArrowColor(Palette::blockOffset(13)+5);
-	_lstKills->setColumns(3, 40, 90, 80);
+	_lstKills->setColumns(3, 60, 90, 90);
 	_lstKills->setSelectable(false);
 	_lstKills->setBackground(_window);
 	_lstKills->setMargin(8);
@@ -182,7 +182,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Base *base, size_t soldierId,
             count++;
             stunOrKill = true;
 		}
-		else if ((*j)->getUnitStatusString() == "STATUS_STUNNED")
+		else if ((*j)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
 		{
 			wssStatus << tr("STR_STUNNED").c_str();
             stunOrKill = true;
