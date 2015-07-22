@@ -494,7 +494,7 @@ extraStrings:
      STR_AWARD_DECOR_7: "First gold pin"
      STR_AWARD_DECOR_8: "Second gold pin"
      STR_AWARD_DECOR_9: "Third gold pin"
-     STR_HEAVY_WEAPONS_PLATFORMS: "COMMENDATION ENTRIES"
+     STR_COMMENDATIONS_UC: "COMMENDATION ENTRIES"
      STR_XCOM_CRAFT_ARMAMENT: "XCOM CRAFT, ARMAMENT & HWPs"
      STR_MEDAL_MERIT_STAR_UFOPEDIA: "'We may demonstrate to the enemy the unacceptable cost of his struggle by:{NEWLINE}  invading his territory;{NEWLINE}  conducting operations to increase his suffering;{NEWLINE}  or by wearing down the enemy.    {NEWLINE}  --Clauswitz'   {NEWLINE} {NEWLINE} This award is given to a soldier who has proven their lethality and killed many aliens.{NEWLINE} {NEWLINE}  Eligibility for the award starts at 10 kills. Additional awards are issued for every 10 kills after that."
      STR_MEDAL_MILITARY_CROSS_UFOPEDIA: "'Permanence, perseverance, and persistence in spite of all obstacles, discouragements, and impossibilities: It is this, that in all things distinguishes the strong soul from the weak.'{NEWLINE}      --Thomas Carlyle{NEWLINE} {NEWLINE}  This decoration is awarded to soldiers who have participated in many missions. Their reliability and tenacity have made them trusted veterans of the force. {NEWLINE} {NEWLINE}     The award is issued at 4, 8, 12, 16, 20, 25, 30, 35, 40, and 50 missions."
@@ -715,7 +715,7 @@ extraStrings:
      STR_AWARD_DECOR_7: "First gold pin"
      STR_AWARD_DECOR_8: "Second gold pin"
      STR_AWARD_DECOR_9: "Third gold pin"
-     STR_HEAVY_WEAPONS_PLATFORMS: "COMMENDATION ENTRIES"
+     STR_COMMENDATIONS_UC: "COMMENDATION ENTRIES"
      STR_XCOM_CRAFT_ARMAMENT: "XCOM CRAFT, ARMAMENT & HWPs"
 # This _UFOPEDIA section is simply a copy of the en-US section that mod development was done on.  No attempts have been made to Anglicize spellings, etc.
      STR_MEDAL_MERIT_STAR_UFOPEDIA: "'We may demonstrate to the enemy the unacceptable cost of his struggle by:{NEWLINE}  invading his territory;{NEWLINE}  conducting operations to increase his suffering;{NEWLINE}  or by wearing down the enemy.    {NEWLINE}  --Clauswitz'   {NEWLINE} {NEWLINE} This award is given to a soldier who has proven their lethality and killed many aliens.{NEWLINE} {NEWLINE}  Eligibility for the award starts at 10 kills. Additional awards are issued for every 10 kills after that."
@@ -1642,433 +1642,422 @@ commendations:
 ufopaedia:
   - id: STR_MEDAL_MILITARY_CROSS_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: MILITARY_CROSS
     text: STR_MEDAL_MILITARY_CROSS_UFOPEDIA
     text_width: 158
     listOrder: 6001
   - id: STR_MEDAL_MERIT_STAR_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: MERIT_STAR
     text: STR_MEDAL_MERIT_STAR_UFOPEDIA
     text_width: 158
     listOrder: 6002 
   - id: STR_MEDAL_ORDER_OF_RESTRAINT_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: ORDER_OF_RESTRAINT
     text: STR_MEDAL_ORDER_OF_RESTRAINT_UFOPEDIA
     text_width: 158
     listOrder: 6003
   - id: STR_MEDAL_DEFENDER_MEDAL_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: DEFENDER
     text: STR_MEDAL_DEFENDER_UFOPEDIA
     text_width: 158
     listOrder: 6004    
   - id: STR_MEDAL_LONGEST_NIGHT_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: LONGEST_NIGHT
     text: STR_MEDAL_LONGEST_NIGHT_UFOPEDIA
     text_width: 158
     listOrder: 6005
   - id: STR_MEDAL_HONOR_CROSS_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: HONOR_CROSS
     text: STR_MEDAL_HONOR_CROSS_UFOPEDIA
     text_width: 158
     listOrder: 6006    
   - id: STR_MEDAL_SERVICE_MEDAL_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: SERVICE
     text: STR_MEDAL_SERVICE_MEDAL_UFOPEDIA
     text_width: 158
     listOrder: 6007
   - id: STR_MEDAL_WEAPON_PROFICIENCY_MEDAL_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: WEAPON_PROFICIENCY 
     text: STR_MEDAL_WEAPON_PROFICIENCY_MEDAL_UFOPEDIA
     text_width: 158
     listOrder: 6008
   - id: STR_MEDAL_CAMPAIGN_RIBBON_MEDAL_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: CAMPAIGN_RIBBON
     text: STR_MEDAL_CAMPAIGN_RIBBON_MEDAL_UFOPEDIA
     text_width: 158
     listOrder: 6009
   - id: STR_MEDAL_XENOCIDE_MEDAL_UFOPEDIA_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: XENOCIDE
     text: STR_MEDAL_XENOCIDE_MEDAL_UFOPEDIA
     text_width: 158
     listOrder: 6010
   - id: STR_MEDAL_MEDAL_OF_HEROISM_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: MEDAL_OF_HEROISM
     text: STR_MEDAL_MEDAL_OF_HEROISM_UFOPEDIA
     text_width: 158
     listOrder: 6011
   - id: STR_MEDAL_HELLRAISER_MEDAL_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: HELLRAISER
     text: STR_MEDAL_HELLRAISER_MEDAL_UFOPEDIA
     text_width: 158
     listOrder: 6012
   - id: STR_MEDAL_DISTINGUISHED_SERVICE_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: DISTINGUISHED_SERVICE
     text: STR_MEDAL_DISTINGUISHED_SERVICE_MEDAL_UFOPEDIA
     text_width: 158
     listOrder: 6013
   - id: STR_MEDAL_BOLTS_CROSS_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: BOLTS_CROSS
     text: STR_MEDAL_BOLTS_CROSS_UFOPEDIA
     text_width: 162
     listOrder: 6014
   - id: STR_MEDAL_GRENADIERS_MEDAL_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: GRENADIERS_MEDAL
     text: STR_MEDAL_GRENADIERS_MEDAL_UFOPEDIA
     text_width: 158
     listOrder: 6015 
   - id: STR_MEDAL_STAR_OF_ASCLEPIUS_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: STAR_OF_ASCLEPIUS
     text: STR_MEDAL_STAR_OF_ASCLEPIUS_MEDAL_UFOPEDIA
     text_width: 158
     listOrder: 6016 
   - id: STR_MEDAL_MAN_OF_STEEL_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: MAN_OF_STEEL
     text: STR_MEDAL_MAN_OF_STEEL_UFOPEDIA
     text_width: 158
     listOrder: 6017
   - id: STR_MEDAL_BLACK_CROSS_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: BLACK_CROSS
     text: STR_MEDAL_BLACK_CROSS_MEDAL_UFOPEDIA
     text_width: 158
     listOrder: 6018
   - id: STR_MEDAL_STAR_OF_VALOR_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: STAR_OF_VALOR
     text: STR_MEDAL_STAR_OF_VALOR_UFOPEDIA
     text_width: 158
     listOrder: 6019    
   - id: STR_MEDAL_IRON_MAN_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: IRON_MAN
     text: STR_MEDAL_IRON_MAN_MEDAL_UFOPEDIA
     text_width: 158
     listOrder: 6020
   - id: STR_MEDAL_ORDER_OF_EARTH_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: ORDER_OF_EARTH
     text: STR_MEDAL_ORDER_OF_EARTH_UFOPEDIA
     text_width: 158
     listOrder: 6021    
   - id: STR_MEDAL_SNIPER_TMPNAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: SNIPER
     text: STR_MEDAL_SNIPER_MEDAL_UFOPEDIA
     text_width: 158
     listOrder: 6022
   - id: STR_MEDAL_LUCKYSHOT_TMPNAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: LUCKYSHOT
     text: STR_MEDAL_LUCKYSHOT_MEDAL_UFOPEDIA
     text_width: 158
     listOrder: 6023
   - id: STR_MEDAL_DBLKILL_TMPNAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: DBLKILL
     text: STR_MEDAL_DBLKILL_TMPNAME_UFOPEDIA
     text_width: 158
     listOrder: 6024
   - id: STR_MEDAL_REACTIONFIRE_TMPNAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: REACTIONFIRE
     text: STR_MEDAL_REACTIONFIRE_UFOPEDIA
     text_width: 165
     listOrder: 6025 
   - id: STR_MEDAL_PURPLE_HEART_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: PURPLE_HEART
     text: STR_MEDAL_PURPLE_HEART_UFOPEDIA
     text_width: 158
     listOrder: 6026    
   - id: STR_MEDAL_CRIMSON_HEART_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: CRIMSON_HEART
     text: STR_MEDAL_CRIMSON_HEART_UFOPEDIA
     text_width: 158
     listOrder: 6027
   - id: STR_MEDAL_ORDER_OF_GLORY_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: ORDER_OF_GLORY
     text: STR_MEDAL_ORDER_OF_GLORY_UFOPEDIA
     text_width: 158
     listOrder: 6028
   - id: STR_MEDAL_VALIANT_CRUX_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: VALIANT_CRUX
     text: STR_MEDAL_VALIANT_CRUX_UFOPEDIA
     text_width: 158
     listOrder: 6029    
   - id: STR_MEDAL_FALLEN_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: FALLEN
     text: STR_MEDAL_FALLEN_UFOPEDIA
     text_width: 158
     listOrder: 6030
   - id: STR_MEDAL_TRAP_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: TRAP
     text: STR_MEDAL_TRAP_UFOPEDIA
     text_width: 158
     listOrder: 6031    
   - id: STR_MEDAL_ALIEN_BASE_ASSAULT_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: ALIEN_BASE_ASSAULT
     text: STR_MEDAL_ALIEN_BASE_ASSAULT_UFOPEDIA
     text_width: 158
     listOrder: 6032
   - id: STR_MEDAL_NIKE_CROSS_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: NIKE_CROSS
     text: STR_MEDAL_NIKE_CROSS_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6033
   - id: STR_MEDAL_SAPPER_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: SAPPER
     text: STR_MEDAL_SAPPER_UFOPEDIA
     text_width: 158
     listOrder: 6034
   - id: STR_MEDAL_SECTOPOD_KILL_MEDAL_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: SECTOPOD_KILL
     text: STR_MEDAL_SECTOPOD_KILL_MEDAL_UFOPEDIA
     text_width: 158
     listOrder: 6035 
   - id: STR_MEDAL_MERCY_CROSS_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: MERCY_CROSS
     text: STR_MEDAL_MERCY_CROSS_UFOPEDIA
     text_width: 164
     listOrder: 6036  
   - id: STR_MEDAL_HEADSHOT_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: HEADSHOT
     text: STR_MEDAL_HEADSHOT_UFOPEDIA
     text_width: 164
     listOrder: 6037
   - id: STR_MEDAL_REARSHOT_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: REARSHOT
     text: STR_MEDAL_REARSHOT_UFOPEDIA
     text_width: 164
     listOrder: 6038
   - id: STR_MEDAL_FLANKSHOT_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: FLANKSHOT
     text: STR_MEDAL_FLANKSHOT_UFOPEDIA
     text_width: 164
     listOrder: 6039
   - id: STR_MEDAL_HEALER_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: HEALER
     text: STR_MEDAL_HEALER_UFOPEDIA
     text_width: 164
     listOrder: 6040
   - id: STR_MEDAL_ALLUFOS_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: ALLUFOS
     text: STR_MEDAL_ALLUFOS_UFOPEDIA
     text_width: 164
     listOrder: 6041
   - id: STR_MEDAL_ALLMISSIONS_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: ALLMISSIONS
     text: STR_MEDAL_ALLMISSIONS_UFOPEDIA
     text_width: 164
     listOrder: 6042
   - id: STR_MEDAL_ANTITERROR_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: ANTITERROR
     text: STR_MEDAL_ANTITERROR_UFOPEDIA
     text_width: 164
     listOrder: 6043
   - id: STR_MEDAL_ALLBATTLETYPES_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: ALLBATTLETYPES
     text: STR_MEDAL_ALLBATTLETYPES_UFOPEDIA
     text_width: 164
     listOrder: 6044
   - id: STR_MEDAL_NIGHTOPS_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: NIGHTOPS
     text: STR_MEDAL_NIGHTOPS_UFOPEDIA
     text_width: 164
     listOrder: 6045
   - id: STR_MEDAL_ALLRANKS_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: ALLRANKS
     text: STR_MEDAL_ALLRANKS_UFOPEDIA
     text_width: 164
     listOrder: 6046
   - id: STR_MEDAL_ORIGINAL8_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: ORIGINAL8
     text: STR_MEDAL_ORIGINAL8_UFOPEDIA
     text_width: 164
     listOrder: 6047
   - id: STR_MEDAL_STATGAIN_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: STATGAIN
     text: STR_MEDAL_STATGAIN_UFOPEDIA
     text_width: 164
     listOrder: 6048
   - id: STR_MEDAL_REVIVE_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: REVIVE
     text: STR_MEDAL_REVIVE_UFOPEDIA
     text_width: 164
     listOrder: 6049
   - id: STR_MEDAL_MEDIKIT_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: MEDIKIT
     text: STR_MEDAL_MEDIKIT_UFOPEDIA
     text_width: 164
     listOrder: 6050
   - id: STR_MEDAL_BRAVERYGAIN_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: BRAVERYGAIN
     text: STR_MEDAL_BRAVERYGAIN_UFOPEDIA
     text_width: 164
     listOrder: 6051
   - id: STR_MEDAL_BESTOFRANK_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: BESTOFRANK
     text: STR_MEDAL_BESTOFRANK_UFOPEDIA
     text_width: 164
     listOrder: 6052
   - id: STR_MEDAL_BESTSOLDIER_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: BESTSOLDIER
     text: STR_MEDAL_BESTSOLDIER_UFOPEDIA
     text_width: 164
     listOrder: 6053    
   - id: STR_MEDAL_MIA_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: MIA
     text: STR_MEDAL_MIA_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6054
   - id: STR_MEDAL_MARTYR_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: PLACEHOLDER
     text: STR_MEDAL_MARTYR_MEDAL_UFOPEDIA
     text_width: 164
     listOrder: 6055
   - id: STR_MEDAL_POSTMORTEM_KILL_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: PLACEHOLDER
     text: STR_MEDAL_POSTMORTEM_KILL_UFOPEDIA
     text_width: 164
     listOrder: 6056
   - id: STR_MEDAL_GLOBETROTTER_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: PLACEHOLDER
     text: STR_MEDAL_GLOBETROTTER_UFOPEDIA
     text_width: 164
     listOrder: 6057
   - id: STR_MEDAL_MINDCONTROL_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: PLACEHOLDER
     text: STR_MEDAL_MINDCONTROL_UFOPEDIA
     text_width: 164
     listOrder: 6058
   - id: STR_MEDAL_PSIPANIC_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: PLACEHOLDER
     text: STR_MEDAL_PSIPANIC_UFOPEDIA
     text_width: 164
     listOrder: 6059
   - id: STR_MEDAL_SLAVEKILLS_NAME
     type_id: 7
-    section: STR_HEAVY_WEAPONS_PLATFORMS
+    section: STR_COMMENDATIONS_UC
     image_id: PLACEHOLDER
     text: STR_MEDAL_SLAVEKILLS_UFOPEDIA
     text_width: 164
     listOrder: 6070
-# entries below move the HWPs to the Craft Section of the UFOPedia
-  - id: STR_TANK_CANNON
-    section: STR_XCOM_CRAFT_ARMAMENT
-  - id: STR_TANK_ROCKET_LAUNCHER
-    section: STR_XCOM_CRAFT_ARMAMENT
-  - id: STR_TANK_LASER_CANNON
-    section: STR_XCOM_CRAFT_ARMAMENT
-  - id: STR_HOVERTANK_PLASMA
-    section: STR_XCOM_CRAFT_ARMAMENT
-  - id: STR_HOVERTANK_LAUNCHER
-    section: STR_XCOM_CRAFT_ARMAMENT
 

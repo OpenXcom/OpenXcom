@@ -43,6 +43,7 @@ namespace OpenXcom
 	static const std::string UFOPAEDIA_ALIEN_RESEARCH = "STR_ALIEN_RESEARCH_UC";
 	static const std::string UFOPAEDIA_UFO_COMPONENTS = "STR_UFO_COMPONENTS";
 	static const std::string UFOPAEDIA_UFOS = "STR_UFOS";
+    static const std::string UFOPAEDIA_COMMENDATIONS = "STR_COMMENDATIONS_UC";
 	static const std::string UFOPAEDIA_NOT_AVAILABLE = "STR_NOT_AVAILABLE";
 	// This last section is meant for articles, that have to be activated,
 	// but have no own entry in a list. E.g. Ammunition items.
