@@ -253,20 +253,21 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
             _allAliensKilledTotal++;
         if (unitStatistics->mercyCross)
             _allAliensStunnedTotal++;
+        if (missionStatistics->daylight > 5 && missionStatistics->type != "STR_ALIEN_BASE_ASSAULT" && missionStatistics->type != "STR_BASE_DEFENSE")
+            _nightMissionTotal++;
+        if (missionStatistics->type == "STR_BASE_DEFENSE")
+            _baseDefenseMissionTotal++;
+        else if (missionStatistics->type == "STR_TERROR_MISSION")
+        {
+            _terrorMissionTotal++;
+            if (missionStatistics->daylight > 5)
+                _nightTerrorMissionTotal++;
+        }
     }
     _daysWoundedTotal += unitStatistics->daysWounded;
     if (unitStatistics->daysWounded)
         _timesWoundedTotal++;
-    if (missionStatistics->type == "STR_BASE_DEFENSE")
-        _baseDefenseMissionTotal++;
-    else if (missionStatistics->type == "STR_TERROR_MISSION")
-    {
-        _terrorMissionTotal++;
-        if (missionStatistics->daylight > 5)
-            _nightTerrorMissionTotal++;
-    }
-    if (missionStatistics->daylight != 0)
-        _nightMissionTotal++;
+
     if (unitStatistics->wasUnconcious)
         _unconciousTotal++;
 	_shotAtCounterTotal += unitStatistics->shotAtCounter;
