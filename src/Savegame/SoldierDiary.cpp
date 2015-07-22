@@ -241,7 +241,7 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
     if (missionStatistics->success)
     {
         _winTotal++;
-        if (missionStatistics->type != "STR_SMALL_SCOUT" && missionStatistics->type != "STR_MEDIUM_SCOUT" && missionStatistics->type != "STR_LARGE_SCOUT" && missionStatistics->type != "STR_SUPPLY_SHIP")
+        if (missionStatistics->type != "STR_UFO_CRASH_RECOVERY")
             _importantMissionTotal++;
 		if (missionStatistics->type == "STR_ALIEN_BASE_ASSAULT")
 			_alienBaseAssaultTotal++;
