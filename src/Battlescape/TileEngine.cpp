@@ -1086,13 +1086,12 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 				}
 			}
 		}
-		if (bu)
+		if (bu && bu->getHealth() != 0 && bu->getStunlevel() < bu->getHealth())
 		{
 			const int sz = bu->getArmor()->getSize() * 8;
 			const Position target = bu->getPosition() * Position(16,16,24) + Position(sz,sz, bu->getFloatHeight() - tile->getTerrainLevel());
 			const Position relative = (center - target) - Position(0,0,verticaloffset);
 			const int wounds = bu->getFatalWounds();
-			bool wasAlive = bu->getHealth() != 0 && bu->getStunlevel() < bu->getHealth();
 
 			adjustedDamage = bu->damage(relative, rndPower, type);
 
@@ -1107,7 +1106,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 
 			bu->moraleChange(-morale_loss);
 
-			if ((bu->getSpecialAbility() == SPECAB_EXPLODEONDEATH || bu->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE) && wasAlive && !bu->isOut() && (bu->getHealth() == 0 || bu->getStunlevel() >= bu->getHealth()))
+			if ((bu->getSpecialAbility() == SPECAB_EXPLODEONDEATH || bu->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE) && !bu->isOut() && (bu->getHealth() == 0 || bu->getStunlevel() >= bu->getHealth()))
 			{
 				if (type != DT_STUN && type != DT_HE && type != DT_IN && type != DT_MELEE)
 				{
