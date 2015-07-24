@@ -731,23 +731,24 @@ void DogfightState::update()
 	if (!_minimized)
 	{
 		animate();
-		int escapeCounter = _ufo->getEscapeCountdown();
-		if (!_ufo->isCrashed() && !_ufo->isDestroyed() && !_craft->isDestroyed())
+		if (!_ufo->isCrashed() && !_ufo->isDestroyed() && !_craft->isDestroyed() && !_ufo->getInterceptionProcessed())
 		{
-			if (escapeCounter > 0 && !_ufo->getInterceptionProcessed())
+			_ufo->setInterceptionProcessed(true);
+			int escapeCounter = _ufo->getEscapeCountdown();
+
+			if (escapeCounter > 0 )
 			{
 				escapeCounter--;
 				_ufo->setEscapeCountdown(escapeCounter);
-				_ufo->setInterceptionProcessed(true);
-				if (_ufo->getFireCountdown() > 0)
+				// Check if UFO is breaking off.
+				if (escapeCounter == 0)
 				{
-					_ufo->setFireCountdown(_ufo->getFireCountdown() - 1);
+					_ufo->setSpeed(_ufo->getRules()->getMaxSpeed());
 				}
 			}
-			// Check if UFO is breaking off.
-			if (escapeCounter == 0)
+			if (_ufo->getFireCountdown() > 0)
 			{
-				_ufo->setSpeed(_ufo->getRules()->getMaxSpeed());
+				_ufo->setFireCountdown(_ufo->getFireCountdown() - 1);
 			}
 		}
 	}
