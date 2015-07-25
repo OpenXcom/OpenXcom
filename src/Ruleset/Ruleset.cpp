@@ -514,7 +514,7 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 	_costScientist = doc["costScientist"].as<int>(_costScientist);
 	_timePersonnel = doc["timePersonnel"].as<int>(_timePersonnel);
 	_initialFunding = doc["initialFunding"].as<int>(_initialFunding);
-	_alienFuel = doc["alienFuel"].as<std::string>(_alienFuel);
+	_alienFuel = doc["alienFuel"].as<std::pair<std::string, int> >(_alienFuel);
 	_fontName = doc["fontName"].as<std::string>(_fontName);
 	_turnAIUseGrenade = doc["turnAIUseGrenade"].as<int>(_turnAIUseGrenade);
 	_turnAIUseBlaster = doc["turnAIUseBlaster"].as<int>(_turnAIUseBlaster);
@@ -1608,9 +1608,18 @@ Soldier *Ruleset::genSoldier(SavedGame *save) const
  * Gets the name of the item to be used as alien fuel.
  * @return the name of the fuel.
  */
-const std::string Ruleset::getAlienFuel() const
+const std::string Ruleset::getAlienFuelName() const
 {
-	return _alienFuel;
+	return _alienFuel.first;
+}
+
+/**
+ * Gets the amount of alien fuel to recover.
+ * @return the amount to recover.
+ */
+const int Ruleset::getAlienFuelQuantity() const
+{
+	return _alienFuel.second;
 }
 
 /**

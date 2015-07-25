@@ -13,7 +13,7 @@ costEngineer: 25000
 costScientist: 30000
 timePersonnel: 72
 initialFunding: 6000
-alienFuel: STR_ELERIUM_115
+alienFuel: [STR_ELERIUM_115, 50]
 turnAIUseGrenade: 3
 turnAIUseBlaster: 3
 fontName: Font.dat

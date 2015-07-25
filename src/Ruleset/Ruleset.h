@@ -110,7 +110,7 @@ protected:
 	std::map<std::string, RuleMusic *> _musics;
 	RuleGlobe *_globe;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding, _turnAIUseGrenade, _turnAIUseBlaster;
-	std::string _alienFuel;
+	std::pair<std::string, int> _alienFuel;
 	std::string _fontName;
 	YAML::Node _startingBase;
 	GameTime _startingTime;
@@ -249,7 +249,9 @@ public:
 	/// Generates a new soldier.
 	Soldier *genSoldier(SavedGame *save) const;
 	/// Gets the item to be used as fuel for ships.
-	const std::string getAlienFuel() const;
+	const std::string getAlienFuelName() const;
+	/// Gets the amount of alien fuel to recover
+	const int getAlienFuelQuantity() const;
 	/// Gets the font name.
 	const std::string getFontName() const;
 	/// Gets first turn when AI can use grenade.

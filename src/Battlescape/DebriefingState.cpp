@@ -392,7 +392,7 @@ void DebriefingState::prepareDebriefing()
 		_stats.push_back(new DebriefingStat((*i).second->name, true));
 	}
 
-	_stats.push_back(new DebriefingStat(_game->getRuleset()->getAlienFuel(), true));
+	_stats.push_back(new DebriefingStat(_game->getRuleset()->getAlienFuelName(), true));
 
 	SavedGame *save = _game->getSavedGame();
 	SavedBattleGame *battle = save->getSavedBattle();
@@ -1070,10 +1070,10 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 {
 	for (std::vector<BattleItem*>::iterator it = from->begin(); it != from->end(); ++it)
 	{
-		if ((*it)->getRules()->getName() == _game->getRuleset()->getAlienFuel())
+		if ((*it)->getRules()->getName() == _game->getRuleset()->getAlienFuelName())
 		{
 			// special case of an item counted as a stat
-			addStat(_game->getRuleset()->getAlienFuel(), 50, 5);
+			addStat(_game->getRuleset()->getAlienFuelName(), _game->getRuleset()->getAlienFuelQuantity(), 5);
 		}
 		else
 		{
