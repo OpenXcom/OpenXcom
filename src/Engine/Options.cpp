@@ -74,6 +74,7 @@ void create()
 
 	_info.push_back(OptionInfo("maxFrameSkip", &maxFrameSkip, 0));
 	_info.push_back(OptionInfo("traceAI", &traceAI, false));
+	_info.push_back(OptionInfo("verboseLogging", &verboseLogging, false));
 	_info.push_back(OptionInfo("StereoSound", &StereoSound, true));
 	_info.push_back(OptionInfo("baseXResolution", &baseXResolution, Screen::ORIGINAL_WIDTH));
 	_info.push_back(OptionInfo("baseYResolution", &baseYResolution, Screen::ORIGINAL_HEIGHT));
@@ -447,7 +448,7 @@ static void _scanMods(const std::string &modsDir)
 {
 	if (!CrossPlatform::folderExists(modsDir))
 	{
-		Log(LOG_INFO) << "skipping non-existent mod directory: '" << modsDir << "'";
+		Log(LOG_VERBOSE) << "skipping non-existent mod directory: '" << modsDir << "'";
 		return;
 	}
 
@@ -461,7 +462,7 @@ static void _scanMods(const std::string &modsDir)
 			continue;
 		}
 
-		Log(LOG_INFO) << "- " << modPath;
+		Log(LOG_VERBOSE) << "- " << modPath;
 		ModInfo modInfo(modPath);
 
 		std::string metadataPath = modPath + "/metadata.yml";
@@ -474,24 +475,24 @@ static void _scanMods(const std::string &modsDir)
 			modInfo.load(metadataPath);
 		}
 
-		Log(LOG_DEBUG) << "  id: " << modInfo.getId();
-		Log(LOG_DEBUG) << "  name: " << modInfo.getName();
-		Log(LOG_DEBUG) << "  version: " << modInfo.getVersion();
-		Log(LOG_DEBUG) << "  description: " << modInfo.getDescription();
-		Log(LOG_DEBUG) << "  author: " << modInfo.getAuthor();
-		Log(LOG_DEBUG) << "  master: " << modInfo.getMaster();
-		Log(LOG_DEBUG) << "  isMaster: " << modInfo.isMaster();
-		Log(LOG_DEBUG) << "  loadResources:";
+		Log(LOG_VERBOSE) << "  id: " << modInfo.getId();
+		Log(LOG_VERBOSE) << "  name: " << modInfo.getName();
+		Log(LOG_VERBOSE) << "  version: " << modInfo.getVersion();
+		Log(LOG_VERBOSE) << "  description: " << modInfo.getDescription();
+		Log(LOG_VERBOSE) << "  author: " << modInfo.getAuthor();
+		Log(LOG_VERBOSE) << "  master: " << modInfo.getMaster();
+		Log(LOG_VERBOSE) << "  isMaster: " << modInfo.isMaster();
+		Log(LOG_VERBOSE) << "  loadResources:";
 		std::vector<std::string> externals = modInfo.getExternalResourceDirs();
 		for (std::vector<std::string>::iterator j = externals.begin(); j != externals.end(); ++j)
 		{
-			Log(LOG_DEBUG) << "    " << *j;
+			Log(LOG_VERBOSE) << "    " << *j;
 		}
 
 		if (("xcom1" == modInfo.getId() && !_ufoIsInstalled())
 		 || ("xcom2" == modInfo.getId() && !_tftdIsInstalled()))
 		{
-			Log(LOG_DEBUG) << "skipping " << modInfo.getId() << " since related game data isn't installed";
+			Log(LOG_VERBOSE) << "skipping " << modInfo.getId() << " since related game data isn't installed";
 			continue;
 		}
 
@@ -712,14 +713,14 @@ void mapResources()
 	{
 		if (!i->second)
 		{
-			Log(LOG_DEBUG) << "skipping inactive mod: " << i->first;
+			Log(LOG_VERBOSE) << "skipping inactive mod: " << i->first;
 			continue;
 		}
 
 		const ModInfo &modInfo = _modInfos.find(i->first)->second;
 		if (!modInfo.isMaster() && !modInfo.getMaster().empty() && modInfo.getMaster() != curMaster)
 		{
-			Log(LOG_DEBUG) << "skipping mod for non-current master: " << i->first << "(" << modInfo.getMaster() << " != " << curMaster << ")";
+			Log(LOG_VERBOSE) << "skipping mod for non-current master: " << i->first << "(" << modInfo.getMaster() << " != " << curMaster << ")";
 			continue;
 		}
 
@@ -728,6 +729,7 @@ void mapResources()
 	}
 	// pick up stuff in common
 	FileMap::load("common", CrossPlatform::searchDataFolder("common"), true);
+	Log(LOG_INFO) << "Resources files mapped successfully.";
 }
 
 /**

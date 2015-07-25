@@ -277,7 +277,7 @@ void Ruleset::loadModRulesets(const std::vector<std::string> &rulesetFiles, size
 
 	for (std::vector<std::string>::const_iterator i = rulesetFiles.begin(); i != rulesetFiles.end(); ++i)
 	{
-		Log(LOG_INFO) << "- " << *i;
+		Log(LOG_VERBOSE) << "- " << *i;
 		loadFile(*i, spriteOffset);
 	}
 }
