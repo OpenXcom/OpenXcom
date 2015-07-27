@@ -31,7 +31,7 @@
 !insertmacro LANG_STRING SETUP_UNDATA "Delete X-COM Data"
 !insertmacro LANG_STRING SETUP_UNDATA_DESC "Deletes all ${GAME_NAME} data, including X-COM resources. Recommended for a clean reinstall."
 !insertmacro LANG_STRING SETUP_UNUSER "Delete User Data"
-!insertmacro LANG_STRING SERUP_UNUSER_DESC "Deletes all ${GAME_NAME} user data, including mods, savegames, screenshots and options. Only use this for a complete wipe."
+!insertmacro LANG_STRING SETUP_UNUSER_DESC "Deletes all ${GAME_NAME} user data, including mods, savegames, screenshots and options. Only use this for a complete wipe."
 
 ;--------------------------------
 ;Shortcuts
