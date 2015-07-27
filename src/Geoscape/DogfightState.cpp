@@ -1197,7 +1197,7 @@ void DogfightState::fireWeapon2()
  */
 void DogfightState::ufoFireWeapon()
 {
-	int fireCountdown = (_ufo->getRules()->getWeaponReload() - 2 * (int)(_game->getSavedGame()->getDifficulty()));
+	int fireCountdown = std::max(1, (_ufo->getRules()->getWeaponReload() - 2 * (int)(_game->getSavedGame()->getDifficulty())));
 	_ufo->setFireCountdown(RNG::generate(0, fireCountdown) + fireCountdown);
 
 	setStatus("STR_UFO_RETURN_FIRE");
