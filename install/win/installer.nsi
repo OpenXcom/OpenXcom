@@ -4,6 +4,7 @@
 ;Includes
 
 	!include "MUI2.nsh"
+	!include "nsDialogs.nsh"
 	!include "x64.nsh"
 	!include "Sections.nsh"
 
@@ -33,9 +34,20 @@
 ;--------------------------------
 ;Variables
 
+	Var XDialog
+	Var XLabelHeader
+	Var XLabelDirUFO
+	Var XDirUFO
+	Var XBrowseUFO
+	Var XLabelDirTFTD
+	Var XDirTFTD
+	Var XBrowseTFTD
+	
 	Var StartMenuFolder
-	Var STEAMDIR
-	Var UFODIR
+	Var STEAM_UFO_DIR
+	Var UFO_DIR
+	Var STEAM_TFTD_DIR
+	Var TFTD_DIR
 
 ;--------------------------------
 ;Interface Settings
@@ -57,20 +69,9 @@
 	
 	!insertmacro MUI_PAGE_WELCOME
 	!insertmacro MUI_PAGE_COMPONENTS
-	!define MUI_PAGE_CUSTOMFUNCTION_PRE PreDirectory
 	!insertmacro MUI_PAGE_DIRECTORY
 	
-	; UFO Folder Page Configuration
-	!define MUI_PAGE_HEADER_TEXT $(PAGE_UfoFolder_TITLE)
-	!define MUI_PAGE_HEADER_SUBTEXT $(PAGE_UfoFolder_SUBTITLE)
-	!define MUI_DIRECTORYPAGE_TEXT_TOP $(PAGE_UfoFolder)
-	!define MUI_DIRECTORYPAGE_TEXT_DESTINATION $(DEST_UfoFolder)
-	!define MUI_DIRECTORYPAGE_VARIABLE $UFODIR
-	!define MUI_DIRECTORYPAGE_VERIFYONLEAVE
-	!define MUI_PAGE_CUSTOMFUNCTION_PRE PreUFO
-	!define MUI_PAGE_CUSTOMFUNCTION_LEAVE ValidateUFO
-	
-	!insertmacro MUI_PAGE_DIRECTORY
+	Page custom XcomFolder ValidateXcom
 	
 	;Start Menu Folder Page Configuration
 	!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM" 
@@ -91,28 +92,100 @@
 	!insertmacro MUI_UNPAGE_CONFIRM
 	!insertmacro MUI_UNPAGE_INSTFILES
 
+Function XcomFolder
+	
+	!insertmacro MUI_HEADER_TEXT $(SETUP_XCOM_FOLDER_TITLE) $(SETUP_XCOM_FOLDER_SUBTITLE)
+
+	nsDialogs::Create 1018
+	Pop $XDialog
+
+	${If} $XDialog == error
+		Abort
+	${EndIf}
+	
+	${NSD_CreateLabel} 0 0 100% 50% $(SETUP_XCOM_FOLDER)
+	Pop $XLabelHeader
+
+	${NSD_CreateLabel} 0 -67u 100% 10u $(SETUP_UFO_FOLDER)
+	Pop $XLabelDirUFO
+	
+	${NSD_CreateDirRequest} 0 -56u 95% 12u $UFO_DIR
+	Pop $XDirUFO
+	${NSD_OnChange} $XDirUFO XcomFolderOnChange
+
+	${NSD_CreateBrowseButton} -14u -56u 14u 12u "..."
+	Pop $XBrowseUFO
+	${NSD_OnClick} $XBrowseUFO XcomFolderOnBrowse
+	
+	${NSD_CreateLabel} 0 -31u 95% 10u $(SETUP_TFTD_FOLDER)
+	Pop $XLabelDirTFTD
+	
+	${NSD_CreateDirRequest} 0 -20u 95% 12u $TFTD_DIR
+	Pop $XDirTFTD
+	${NSD_OnChange} $XDirTFTD XcomFolderOnChange
+
+	${NSD_CreateBrowseButton} -14u -20u 14u 12u "..."
+	Pop $XBrowseTFTD
+	${NSD_OnClick} $XBrowseTFTD XcomFolderOnBrowse
+
+	nsDialogs::Show
+
+FunctionEnd
+
+Function XcomFolderOnChange
+
+	Pop $0
+	
+	${If} $0 == $XDirUFO
+		${NSD_GetText} $0 $UFO_DIR
+	${EndIf}
+	
+	${If} $0 == $XDirTFTD
+		${NSD_GetText} $0 $TFTD_DIR
+	${EndIf}
+
+FunctionEnd
+
+Function XcomFolderOnBrowse
+
+	Pop $0
+	
+	${If} $0 == $XBrowseUFO
+		nsDialogs::SelectFolderDialog $(SETUP_UFO_FOLDER) $UFO_DIR
+		Pop $1
+		${If} $1 == error
+			Return
+		${EndIf}
+		StrCpy $UFO_DIR $1
+		${NSD_SetText} $XDirUFO $UFO_DIR
+	${EndIf}
+	
+	${If} $0 == $XBrowseTFTD
+		nsDialogs::SelectFolderDialog $(SETUP_TFTD_FOLDER) $TFTD_DIR
+		Pop $1
+		${If} $1 == error
+			Return
+		${EndIf}
+		StrCpy $TFTD_DIR $1
+		${NSD_SetText} $XDirTFTD $TFTD_DIR
+	${EndIf}
+	
+FunctionEnd
+
 ;--------------------------------
 ;Languages
 
-	!insertmacro MUI_LANGUAGE "English" ;first language is the default language
-	!insertmacro MUI_LANGUAGE "Czech"
-	!insertmacro MUI_LANGUAGE "French"
-	!insertmacro MUI_LANGUAGE "Finnish"
-	!insertmacro MUI_LANGUAGE "German"
-	!insertmacro MUI_LANGUAGE "Hungarian"
-	!insertmacro MUI_LANGUAGE "Italian"
-	!insertmacro MUI_LANGUAGE "Portuguese"
-	!insertmacro MUI_LANGUAGE "PortugueseBR"
-	!insertmacro MUI_LANGUAGE "Polish"
-	!insertmacro MUI_LANGUAGE "Romanian"
-	!insertmacro MUI_LANGUAGE "Russian"
-	!insertmacro MUI_LANGUAGE "Slovak"
-	!insertmacro MUI_LANGUAGE "Spanish"
-	!insertmacro MUI_LANGUAGE "SpanishInternational"
-	!insertmacro MUI_LANGUAGE "Turkish"
-	!insertmacro MUI_LANGUAGE "Ukrainian"
+!macro LANG_LOAD LANGLOAD
+	!insertmacro MUI_LANGUAGE "${LANGLOAD}"
+	!include "${LANGLOAD}.nsh"
+	!undef LANG
+!macroend
+ 
+!macro LANG_STRING NAME VALUE
+	LangString "${NAME}" "${LANG_${LANG}}" "${VALUE}"
+!macroend
 
-	!include "installerlang.nsh" ; Language strings
+	!insertmacro LANG_LOAD "English" ;first language is the default language
 
 ;--------------------------------
 ;Reserve Files
@@ -126,22 +199,12 @@
 ;--------------------------------
 ;Installer Sections
 
-Section "$(NAME_SecMain)" SecMain
+Section "$(SETUP_GAME)" SecMain
 
 	SectionIn RO
 
 	SetOutPath "$INSTDIR"
 	
-	IfFileExists "$INSTDIR\dosbox.exe" 0 no_steam
-	CreateDirectory "$INSTDIR\bak"
-	Rename "$INSTDIR\dosbox.exe"  "$INSTDIR\bak\dosbox.exe"
-	Rename "$INSTDIR\dosbox.conf" "$INSTDIR\bak\dosbox.conf"
-	Rename "$INSTDIR\readme.txt"  "$INSTDIR\bak\readme.txt"
-	Rename "$INSTDIR\SDL.dll"     "$INSTDIR\bak\SDL.dll"
-	Rename "$INSTDIR\SDL_net.dll" "$INSTDIR\bak\SDL_net.dll"
-	
-	no_steam:
-
 ${If} ${RunningX64}
 	File "..\..\bin\x64\Release\OpenXcom.exe"
 	File "..\..\bin\x64\*.dll"
@@ -154,28 +217,54 @@ ${EndIf}
 	File "..\..\README.md"
 	
 	;Copy UFO files
-	IfFileExists "$UFODIR\*.*" 0 ufo_no
+	IfFileExists "$UFO_DIR\*.*" 0 install_ufo_no
 	
 	CreateDirectory "$INSTDIR\UFO\GEODATA"
-	CopyFiles /SILENT "$UFODIR\GEODATA\*.*" "$INSTDIR\UFO\GEODATA" 361
+	CopyFiles /SILENT "$UFO_DIR\GEODATA\*.*" "$INSTDIR\UFO\GEODATA"
 	CreateDirectory "$INSTDIR\UFO\GEOGRAPH"
-	CopyFiles /SILENT "$UFODIR\GEOGRAPH\*.*" "$INSTDIR\UFO\GEOGRAPH" 2770
+	CopyFiles /SILENT "$UFO_DIR\GEOGRAPH\*.*" "$INSTDIR\UFO\GEOGRAPH"
 	CreateDirectory "$INSTDIR\UFO\MAPS"
-	CopyFiles /SILENT "$UFODIR\MAPS\*.*" "$INSTDIR\UFO\MAPS" 278
+	CopyFiles /SILENT "$UFO_DIR\MAPS\*.*" "$INSTDIR\UFO\MAPS"
 	CreateDirectory "$INSTDIR\UFO\ROUTES"
-	CopyFiles /SILENT "$UFODIR\ROUTES\*.*" "$INSTDIR\UFO\ROUTES" 27
+	CopyFiles /SILENT "$UFO_DIR\ROUTES\*.*" "$INSTDIR\UFO\ROUTES"
 	CreateDirectory "$INSTDIR\UFO\SOUND"
-	CopyFiles /SILENT "$UFODIR\SOUND\*.*" "$INSTDIR\UFO\SOUND" 2386
+	CopyFiles /SILENT "$UFO_DIR\SOUND\*.*" "$INSTDIR\UFO\SOUND"
 	CreateDirectory "$INSTDIR\UFO\TERRAIN"
-	CopyFiles /SILENT "$UFODIR\TERRAIN\*.*" "$INSTDIR\UFO\TERRAIN" 620
+	CopyFiles /SILENT "$UFO_DIR\TERRAIN\*.*" "$INSTDIR\UFO\TERRAIN"
 	CreateDirectory "$INSTDIR\UFO\UFOGRAPH"
-	CopyFiles /SILENT "$UFODIR\UFOGRAPH\*.*" "$INSTDIR\UFO\UFOGRAPH" 437
+	CopyFiles /SILENT "$UFO_DIR\UFOGRAPH\*.*" "$INSTDIR\UFO\UFOGRAPH"
 	CreateDirectory "$INSTDIR\UFO\UFOINTRO"
-	CopyFiles /SILENT "$UFODIR\UFOINTRO\*.*" "$INSTDIR\UFO\UFOINTRO" 2736
+	CopyFiles /SILENT "$UFO_DIR\UFOINTRO\*.*" "$INSTDIR\UFO\UFOINTRO"
 	CreateDirectory "$INSTDIR\UFO\UNITS"
-	CopyFiles /SILENT "$UFODIR\UNITS\*.*" "$INSTDIR\UFO\UNITS" 467
+	CopyFiles /SILENT "$UFO_DIR\UNITS\*.*" "$INSTDIR\UFO\UNITS"
 	
-	ufo_no:
+	install_ufo_no:
+	
+	;Copy TFTD files
+	IfFileExists "$TFTD_DIR\*.*" 0 install_tftd_no
+	
+	CreateDirectory "$INSTDIR\TFTD\ANIMS"
+	CopyFiles /SILENT "$TFTD_DIR\ANIMS\*.*" "$INSTDIR\TFTD\ANIMS"
+	CreateDirectory "$INSTDIR\TFTD\FLOP_INT"
+	CopyFiles /SILENT "$TFTD_DIR\FLOP_INT\*.*" "$INSTDIR\TFTD\FLOP_INT"
+	CreateDirectory "$INSTDIR\TFTD\GEODATA"
+	CopyFiles /SILENT "$TFTD_DIR\GEODATA\*.*" "$INSTDIR\TFTD\GEODATA"
+	CreateDirectory "$INSTDIR\TFTD\GEOGRAPH"
+	CopyFiles /SILENT "$TFTD_DIR\GEOGRAPH\*.*" "$INSTDIR\TFTD\GEOGRAPH"
+	CreateDirectory "$INSTDIR\TFTD\MAPS"
+	CopyFiles /SILENT "$TFTD_DIR\MAPS\*.*" "$INSTDIR\TFTD\MAPS"
+	CreateDirectory "$INSTDIR\TFTD\ROUTES"
+	CopyFiles /SILENT "$TFTD_DIR\ROUTES\*.*" "$INSTDIR\TFTD\ROUTES"
+	CreateDirectory "$INSTDIR\TFTD\SOUND"
+	CopyFiles /SILENT "$TFTD_DIR\SOUND\*.*" "$INSTDIR\TFTD\SOUND"
+	CreateDirectory "$INSTDIR\TFTD\TERRAIN"
+	CopyFiles /SILENT "$TFTD_DIR\TERRAIN\*.*" "$INSTDIR\TFTD\TERRAIN"
+	CreateDirectory "$INSTDIR\TFTD\UFOGRAPH"
+	CopyFiles /SILENT "$TFTD_DIR\UFOGRAPH\*.*" "$INSTDIR\TFTD\UFOGRAPH"
+	CreateDirectory "$INSTDIR\TFTD\UNITS"
+	CopyFiles /SILENT "$TFTD_DIR\UNITS\*.*" "$INSTDIR\TFTD\UNITS"
+	
+	install_tftd_no:
 	
 	SetOutPath "$INSTDIR"
 	
@@ -207,17 +296,17 @@ ${EndIf}
 	!insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     
 		CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(LINK_DataFolder).lnk" "$INSTDIR"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${GAME_NAME}.lnk" "$INSTDIR\OpenXcom.exe"
-		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(LINK_Readme).lnk" "$INSTDIR\README.TXT"
-		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(LINK_Uninstall).lnk" "$INSTDIR\Uninstall.exe"
-		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(LINK_UserFolder).lnk" "$DOCUMENTS\OpenXcom"
+		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(SETUP_SHORTCUT_CHANGELOG).lnk" "$INSTDIR\CHANGELOG.txt"
+		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(SETUP_SHORTCUT_README).lnk" "$INSTDIR\README.md"
+		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(SETUP_SHORTCUT_USER).lnk" "$DOCUMENTS\OpenXcom"
+		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(SETUP_SHORTCUT_UNINSTALL).lnk" "$INSTDIR\Uninstall.exe"
   
 	!insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
 
-Section "$(NAME_SecPatch)" SecPatch
+Section "$(SETUP_PATCH)" SecPatch
 	
 	;(uses NSISdl.dll)
 	NSISdl::download "http://openxcom.org/download/extras/universal-patch.zip" "$TEMP\universal-patch.zip"
@@ -241,13 +330,13 @@ Section "$(NAME_SecPatch)" SecPatch
 
 SectionEnd
 
-Section /o "$(NAME_SecPortable)" SecPortable
+Section /o "$(SETUP_PORTABLE)" SecPortable
 
 	CreateDirectory "$INSTDIR\user"
 	
 SectionEnd
 
-Section /o "$(NAME_SecSteam)" SecSteam
+Section /o "$(SETUP_STEAM)" SecSteam
 
 	SectionIn RO
 	
@@ -255,7 +344,7 @@ Section /o "$(NAME_SecSteam)" SecSteam
 	
 SectionEnd
 
-Section /o "$(NAME_SecDesktop)" SecDesktop
+Section /o "$(SETUP_DESKTOP)" SecDesktop
 
 	SetOutPath "$INSTDIR"
 	
@@ -268,17 +357,18 @@ SectionEnd
 
 	;Assign language strings to sections
 	!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-		!insertmacro MUI_DESCRIPTION_TEXT ${SecMain} $(DESC_SecMain)
-		!insertmacro MUI_DESCRIPTION_TEXT ${SecPatch} $(DESC_SecPatch)
-		!insertmacro MUI_DESCRIPTION_TEXT ${SecPortable} $(DESC_SecPortable)
-		!insertmacro MUI_DESCRIPTION_TEXT ${SecSteam} $(DESC_SecSteam)
-		!insertmacro MUI_DESCRIPTION_TEXT ${SecDesktop} $(DESC_SecDesktop)
+		!insertmacro MUI_DESCRIPTION_TEXT ${SecMain} $(SETUP_GAME_DESC)
+		!insertmacro MUI_DESCRIPTION_TEXT ${SecPatch} $(SETUP_PATCH_DESC)
+		!insertmacro MUI_DESCRIPTION_TEXT ${SecPortable} $(SETUP_PORTABLE_DESC)
+		!insertmacro MUI_DESCRIPTION_TEXT ${SecSteam} $(SETUP_STEAM_DESC)
+		!insertmacro MUI_DESCRIPTION_TEXT ${SecDesktop} $(SETUP_DESKTOP_DESC)
 	!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
 ;Installer functions
 
 Function .onInit
+
 ${If} ${RunningX64}
 	StrCpy $INSTDIR "$PROGRAMFILES64\${GAME_NAME}"
 ${Else}
@@ -286,61 +376,82 @@ ${Else}
 ${EndIf}
 	StrCpy $StartMenuFolder "${GAME_NAME}"
 	
-	; Get UFO folder from Steam
-	StrCpy $STEAMDIR ""
-	StrCpy $UFODIR ""
+	; Get X-COM folders from Steam
+	StrCpy $STEAM_UFO_DIR ""
+	StrCpy $UFO_DIR ""
+	StrCpy $STEAM_TFTD_DIR ""
+	StrCpy $TFTD_DIR ""	
 	ReadRegStr $R1 HKLM "Software\Valve\Steam" "InstallPath"
-	IfErrors ufo_no
-	StrCpy $R0 "$R1\steamapps\common\xcom ufo defense\XCOM"
+	IfErrors xcom_no
+	
+	StrCpy $R0 "$R1\steamapps\common\XCom UFO Defense\XCOM"
 	IfFileExists "$R0\*.*" ufo_yes ufo_no
 	ufo_yes:
-	StrCpy $STEAMDIR "$R1\steamapps\common\xcom ufo defense"
-	StrCpy $UFODIR $R0
+	StrCpy $STEAM_UFO_DIR "$R1\steamapps\common\XCom UFO Defense"
+	StrCpy $UFO_DIR $R0
 	SectionSetFlags ${SecSteam} 0
 	ufo_no:
 	
+	StrCpy $R0 "$R1\steamapps\common\X-COM Terror from the Deep\TFD"
+	IfFileExists "$R0\*.*" tftd_yes tftd_no
+	tftd_yes:
+	StrCpy $STEAM_TFTD_DIR "$R1\steamapps\common\X-COM Terror from the Deep"
+	StrCpy $TFTD_DIR $R0
+	SectionSetFlags ${SecSteam} 0
+	tftd_no:
+	
+	xcom_no:	
 	!insertmacro MUI_LANGDLL_DISPLAY
+
 FunctionEnd
 
 ;--------------------------------
-;Skip pages for Steam installation
+;Validate X-COM folders
 
-Function PreDirectory
-	${If} ${SectionIsSelected} ${SecSteam}
-		StrCpy $INSTDIR $STEAMDIR
-		Abort
-	${EndIf}
-FunctionEnd
+Function ValidateXcom
 
-Function PreUFO
-	${If} ${SectionIsSelected} ${SecSteam}
-		Abort
-	${EndIf}
-FunctionEnd
-
-;--------------------------------
-;Validate UFO folder
-
-Function ValidateUFO
-	StrCmp $UFODIR "" validate_yes
-	IfFileExists "$UFODIR\GEODATA\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\GEOGRAPH\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\MAPS\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\ROUTES\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\SOUND\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\TERRAIN\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\UFOGRAPH\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\UFOINTRO\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\UNITS\*.*" 0 confirm_ufo
-	IfFileExists "$UFODIR\XcuSetup.bat" confirm_xcu
-	Goto validate_yes
+	; UFO
+	StrCmp $UFO_DIR "" validate_ufo_yes
+	IfFileExists "$UFO_DIR\GEODATA\*.*" 0 confirm_ufo
+	IfFileExists "$UFO_DIR\GEOGRAPH\*.*" 0 confirm_ufo
+	IfFileExists "$UFO_DIR\MAPS\*.*" 0 confirm_ufo
+	IfFileExists "$UFO_DIR\ROUTES\*.*" 0 confirm_ufo
+	IfFileExists "$UFO_DIR\SOUND\*.*" 0 confirm_ufo
+	IfFileExists "$UFO_DIR\TERRAIN\*.*" 0 confirm_ufo
+	IfFileExists "$UFO_DIR\UFOGRAPH\*.*" 0 confirm_ufo
+	IfFileExists "$UFO_DIR\UFOINTRO\*.*" 0 confirm_ufo
+	IfFileExists "$UFO_DIR\UNITS\*.*" 0 confirm_ufo
+	IfFileExists "$UFO_DIR\XcuSetup.bat" confirm_ufo_xcu
+	Goto validate_ufo_yes
 	confirm_ufo:
-	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(WARN_UFOMissing) /SD IDYES IDYES validate_yes IDNO validate_no
-	confirm_xcu:
-	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(WARN_XCUDetected) /SD IDYES IDYES validate_yes IDNO validate_no
-	validate_no:
+	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(SETUP_WARNING_UFO) /SD IDYES IDYES validate_ufo_yes IDNO validate_ufo_no
+	confirm_ufo_xcu:
+	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(SETUP_WARNING_XCU) /SD IDYES IDYES validate_ufo_yes IDNO validate_ufo_no
+	validate_ufo_no:
 	Abort	
-	validate_yes:
+	validate_ufo_yes:
+	
+	; TFTD
+	StrCmp $TFTD_DIR "" validate_tftd_yes
+	IfFileExists "$TFTD_DIR\FLOP_INT\*.*" 0 confirm_tftd
+	IfFileExists "$TFTD_DIR\GEODATA\*.*" 0 confirm_tftd
+	IfFileExists "$TFTD_DIR\GEOGRAPH\*.*" 0 confirm_tftd
+	IfFileExists "$TFTD_DIR\MAPS\*.*" 0 confirm_tftd
+	IfFileExists "$TFTD_DIR\ROUTES\*.*" 0 confirm_tftd
+	IfFileExists "$TFTD_DIR\SOUND\*.*" 0 confirm_tftd
+	IfFileExists "$TFTD_DIR\TERRAIN\*.*" 0 confirm_tftd
+	IfFileExists "$TFTD_DIR\UFOGRAPH\*.*" 0 confirm_tftd
+	IfFileExists "$TFTD_DIR\UNITS\*.*" 0 confirm_tftd
+	IfFileExists "$TFTD_DIR\XcuSetup.bat" confirm_tftd_xcu
+	Goto validate_tftd_yes
+	confirm_tftd:
+	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(SETUP_WARNING_TFTD) /SD IDYES IDYES validate_tftd_yes IDNO validate_tftd_no
+	confirm_tftd_xcu:
+	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(SETUP_WARNING_XCU) /SD IDYES IDYES validate_tftd_yes IDNO validate_tftd_no
+	validate_tftd_no:
+	Abort	
+	validate_tftd_yes:
+	
 FunctionEnd
 
 ;--------------------------------
@@ -355,12 +466,12 @@ FunctionEnd
 ;--------------------------------
 ;Uninstaller Sections
 
-Section /o "un.$(NAME_UnData)" UnData
+Section /o "un.$(SETUP_UNDATA)" UnData
 	RMDir /r "$INSTDIR\TFTD"
 	RMDir /r "$INSTDIR\UFO"
 SectionEnd
 
-Section /o "un.$(NAME_UnUser)" UnUser
+Section /o "un.$(SETUP_UNUSER)" UnUser
 	RMDir /r "$INSTDIR\user"
 	RMDir /r "$DOCUMENTS\OpenXcom"
 SectionEnd
@@ -379,14 +490,7 @@ Section "-un.Main"
 	RMDir /r "$INSTDIR\standard"
 
 	Delete "$INSTDIR\Uninstall.exe"
-	RMDir "$INSTDIR"	
-	
-	IfFileExists "$INSTDIR\bak\*.*" 0 no_backup
-	Delete "$INSTDIR\dosbox.exe"
-	CopyFiles "$INSTDIR\bak\*.*" "$INSTDIR"
-	RMDir "$INSTDIR\bak"
-	
-	no_backup:
+	RMDir "$INSTDIR"
 	
 	!insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
     
@@ -405,8 +509,8 @@ SectionEnd
 
 	;Assign language strings to sections
 	!insertmacro MUI_UNFUNCTION_DESCRIPTION_BEGIN
-		!insertmacro MUI_DESCRIPTION_TEXT ${UnData} $(DESC_UnData)
-		!insertmacro MUI_DESCRIPTION_TEXT ${UnUser} $(DESC_UnUser)
+		!insertmacro MUI_DESCRIPTION_TEXT ${UnData} $(SETUP_UNDATA_DESC)
+		!insertmacro MUI_DESCRIPTION_TEXT ${UnUser} $(SERUP_UNUSER_DESC)
 	!insertmacro MUI_UNFUNCTION_DESCRIPTION_END
 
 ;--------------------------------
