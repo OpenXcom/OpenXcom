@@ -2239,7 +2239,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 			missionRules = rules->getAlienMission(missionType);
 			targetZone = missionRules->getSpawnZone();
 
-			for (std::vector<std::string>::const_iterator i = regions.begin(); i != regions.end();)
+			for (std::vector<std::string>::iterator i = regions.begin(); i != regions.end();)
 			{
 				// we don't want the same mission running in any given region twice simultaneously, so prune the list as needed.
 				bool processThisRegion = true;
@@ -2392,7 +2392,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 					// if the mission types match
 					if (types[entry] == (*j)->getRules().getType())
 					{
-						for (std::vector<std::string>::const_iterator k = regions.begin(); k != regions.end();)
+						for (std::vector<std::string>::iterator k = regions.begin(); k != regions.end();)
 						{
 							// and the regions match
 							if ((*k) == (*j)->getRegion())
