@@ -23,7 +23,6 @@
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
 #include "../Engine/RNG.h"
-#include "../Engine/Exception.h"
 #include "BattleUnit.h"
 #include "BattleItem.h"
 #include "../Ruleset/RuleItem.h"

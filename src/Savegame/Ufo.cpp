@@ -20,7 +20,6 @@
 #include <assert.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include <sstream>
 #include <algorithm>
 #include "../fmath.h"
 #include "Craft.h"

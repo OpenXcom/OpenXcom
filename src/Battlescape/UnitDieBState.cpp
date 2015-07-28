@@ -18,11 +18,9 @@
  */
 
 #include "UnitDieBState.h"
-#include "ExplosionBState.h"
 #include "TileEngine.h"
 #include "BattlescapeState.h"
 #include "Map.h"
-#include "Camera.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"

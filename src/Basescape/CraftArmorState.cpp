@@ -17,11 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CraftArmorState.h"
-#include <string>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Engine/Action.h"
 #include "../Interface/TextButton.h"
@@ -31,7 +29,6 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Craft.h"
-#include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/Armor.h"
 #include "SoldierArmorState.h"
 #include "../Savegame/SavedGame.h"

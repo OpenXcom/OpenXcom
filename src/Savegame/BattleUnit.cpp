@@ -21,8 +21,6 @@
 #include "BattleItem.h"
 #include <cmath>
 #include <sstream>
-#include <typeinfo>
-#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"

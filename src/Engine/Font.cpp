@@ -19,9 +19,7 @@
 #include "Font.h"
 #include "DosFont.h"
 #include "Surface.h"
-#include "Language.h"
 #include "FileMap.h"
-#include "Logger.h"
 
 namespace OpenXcom
 {

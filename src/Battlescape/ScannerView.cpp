@@ -25,7 +25,6 @@
 #include "../Savegame/Tile.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Interface/Text.h"
 
 namespace OpenXcom
 {

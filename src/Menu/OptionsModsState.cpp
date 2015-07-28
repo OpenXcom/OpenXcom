@@ -18,12 +18,8 @@
  */
 #include "OptionsModsState.h"
 #include <algorithm>
-#include <limits>
 #include "../Engine/Game.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/FileMap.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Language.h"
 #include "../Interface/Window.h"
 #include "../Interface/TextList.h"

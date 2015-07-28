@@ -23,10 +23,8 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Action.h"
 #include "../Engine/Surface.h"
-#include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Music.h"
 #include "../Engine/Font.h"
@@ -37,8 +35,6 @@
 #include "../Interface/Text.h"
 #include "../Resource/XcomResourcePack.h"
 #include "MainMenuState.h"
-#include "VideoState.h"
-#include "ErrorMessageState.h"
 #include "CutsceneState.h"
 #include <SDL_mixer.h>
 #include <SDL_thread.h>

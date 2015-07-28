@@ -19,7 +19,6 @@
 #include "ActionMenuItem.h"
 #include "../Interface/Text.h"
 #include "../Interface/Frame.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 

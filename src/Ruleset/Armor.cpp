@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Armor.h"
-#include "../Savegame/Soldier.h"
 
 namespace OpenXcom
 {

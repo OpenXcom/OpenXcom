@@ -17,15 +17,12 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BaseDefenseState.h"
-#include <sstream>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
-#include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
 #include "../Ruleset/RuleBaseFacility.h"
@@ -34,10 +31,7 @@
 #include "GeoscapeState.h"
 #include "../Engine/Action.h"
 #include "../Engine/RNG.h"
-#include "../Battlescape/BriefingState.h"
-#include "../Battlescape/BattlescapeGenerator.h"
 #include "../Engine/Sound.h"
-#include "BaseDestroyedState.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
 

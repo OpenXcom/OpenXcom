@@ -19,13 +19,11 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <sstream>
-#include <typeinfo>
 #include "BattlescapeGame.h"
 #include "BattlescapeState.h"
 #include "Map.h"
 #include "Camera.h"
 #include "NextTurnState.h"
-#include "AbortMissionState.h"
 #include "BattleState.h"
 #include "UnitTurnBState.h"
 #include "UnitWalkBState.h"

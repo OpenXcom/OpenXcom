@@ -21,7 +21,6 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleInterface.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Game.h"
 #include "../Engine/Timer.h"
 #include "../Interface/Text.h"

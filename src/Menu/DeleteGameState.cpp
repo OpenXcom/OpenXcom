@@ -19,15 +19,12 @@
 #include "DeleteGameState.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/Text.h"
 #include "../Interface/Window.h"
 #include "../Interface/TextButton.h"
 #include "../Resource/ResourcePack.h"
-#include "ListGamesState.h"
 #include "../Engine/Options.h"
-#include "../Engine/Exception.h"
 #include "ErrorMessageState.h"
 
 namespace OpenXcom

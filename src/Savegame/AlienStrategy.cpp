@@ -18,9 +18,7 @@
  */
 #include <assert.h>
 #include "AlienStrategy.h"
-#include "SavedGame.h"
 #include "WeightedOptions.h"
-#include "../Engine/RNG.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleRegion.h"
 

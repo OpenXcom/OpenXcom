@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "AlienDeployment.h"
-#include "../Engine/RNG.h"
 
 namespace YAML
 {

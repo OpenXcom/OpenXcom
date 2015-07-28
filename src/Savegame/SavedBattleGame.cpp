@@ -18,8 +18,6 @@
  */
 #include <assert.h>
 #include <vector>
-#include <deque>
-#include <queue>
 #include "BattleItem.h"
 #include "SavedBattleGame.h"
 #include "SavedGame.h"
@@ -35,7 +33,6 @@
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
-#include "../Engine/Language.h"
 #include "../Engine/Game.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Battlescape/CivilianBAIState.h"

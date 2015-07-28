@@ -21,7 +21,6 @@
 #include <yaml-cpp/yaml.h>
 #include "../Engine/RNG.h"
 #include "../Engine/Exception.h"
-#include <sstream>
 
 
 namespace OpenXcom

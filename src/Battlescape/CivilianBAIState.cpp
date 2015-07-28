@@ -21,14 +21,12 @@
 #include "CivilianBAIState.h"
 #include "TileEngine.h"
 #include "Pathfinding.h"
-#include "BattlescapeState.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Node.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/Armor.h"
 #include "../Savegame/Tile.h"
 
 namespace OpenXcom

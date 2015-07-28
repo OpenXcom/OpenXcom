@@ -20,17 +20,13 @@
 #include "Ufopaedia.h"
 #include "UfopaediaSelectState.h"
 #include "../Ruleset/ArticleDefinition.h"
-#include "ArticleState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Surface.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
-#include "../Interface/Cursor.h"
 #include "../Resource/ResourcePack.h"
 
 namespace OpenXcom

@@ -21,7 +21,6 @@
 #include <climits>
 #include <algorithm>
 #include "AlienBAIState.h"
-#include "ProjectileFlyBState.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Node.h"
@@ -36,7 +35,6 @@
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Ruleset/Armor.h"
-#include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 

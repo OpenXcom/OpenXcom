@@ -28,12 +28,9 @@
 #include <fstream>
 
 #include "Logger.h"
-#include "Exception.h"
-#include "Zoom.h"
 #include "Screen.h"
 #include "Surface.h"
 #include "Options.h"
-#include "../fmath.h"
 #include "Game.h"
 
 namespace OpenXcom

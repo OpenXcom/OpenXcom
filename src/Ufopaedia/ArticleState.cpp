@@ -18,14 +18,11 @@
  */
 
 #include "Ufopaedia.h"
-#include <sstream>
 #include "ArticleState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Options.h"
 #include "../Engine/Surface.h"
-#include "../Engine/Language.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Palette.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Ruleset/RuleItem.h"
 

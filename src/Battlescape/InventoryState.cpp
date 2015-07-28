@@ -18,12 +18,10 @@
  */
 #include "InventoryState.h"
 #include "Inventory.h"
-#include <sstream>
 #include "../Engine/Game.h"
-#include "../Engine/CrossPlatform.h"
 #include "../Engine/FileMap.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
@@ -38,7 +36,6 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/Tile.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/Armor.h"
@@ -46,9 +43,6 @@
 #include "UnitInfoState.h"
 #include "BattlescapeState.h"
 #include "TileEngine.h"
-#include "Map.h"
-#include "Camera.h"
-#include "Pathfinding.h"
 
 namespace OpenXcom
 {

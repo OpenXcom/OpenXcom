@@ -22,11 +22,10 @@
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Resource/ResourcePack.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-#include "../Interface/Cursor.h"
 
 namespace OpenXcom
 {

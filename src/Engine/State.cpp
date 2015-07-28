@@ -21,7 +21,6 @@
 #include "Game.h"
 #include "Screen.h"
 #include "Surface.h"
-#include "Font.h"
 #include "Language.h"
 #include "LocalizedText.h"
 #include "Palette.h"

@@ -21,7 +21,6 @@
 #include "BattlescapeGame.h"
 #include "BattlescapeState.h"
 #include "TileEngine.h"
-#include "Pathfinding.h"
 #include "Map.h"
 #include "InfoboxState.h"
 #include "Camera.h"
@@ -36,7 +35,6 @@
 #include "../Engine/Sound.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Armor.h"
 
 namespace OpenXcom
 {

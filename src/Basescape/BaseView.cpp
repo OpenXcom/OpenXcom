@@ -27,7 +27,6 @@
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Interface/Text.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
 #include <limits>

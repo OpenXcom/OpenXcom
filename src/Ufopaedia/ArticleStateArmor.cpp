@@ -19,7 +19,6 @@
 
 #include <sstream>
 #include "../fmath.h"
-#include "Ufopaedia.h"
 #include "ArticleStateArmor.h"
 #include "../Ruleset/ArticleDefinition.h"
 #include "../Ruleset/Ruleset.h"
@@ -27,7 +26,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/FileMap.h"
 #include "../Resource/ResourcePack.h"

@@ -19,7 +19,6 @@
 #include "Ruleset.h"
 #include <fstream>
 #include <algorithm>
-#include "../fmath.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Engine/Options.h"
 #include "../Engine/Exception.h"
@@ -66,10 +65,8 @@
 #include "../Savegame/GameTime.h"
 #include "UfoTrajectory.h"
 #include "RuleAlienMission.h"
-#include "City.h"
 #include "MCDPatch.h"
 #include "../Engine/Logger.h"
-#include "../Ufopaedia/Ufopaedia.h"
 #include "StatString.h"
 #include "RuleGlobe.h"
 #include "../Resource/ResourcePack.h"

@@ -19,7 +19,6 @@
 #include "Timer.h"
 #include "Game.h"
 #include "Options.h"
-#include <assert.h>
 
 namespace OpenXcom
 {

@@ -18,8 +18,6 @@
  */
 
 #include <sstream>
-
-#include "Ufopaedia.h"
 #include "ArticleStateCraftWeapon.h"
 #include "../Ruleset/ArticleDefinition.h"
 #include "../Ruleset/Ruleset.h"
@@ -27,7 +25,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Resource/ResourcePack.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"

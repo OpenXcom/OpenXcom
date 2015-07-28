@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "MissionSite.h"
-#include <sstream>
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleAlienMission.h"
 #include "../Ruleset/AlienDeployment.h"

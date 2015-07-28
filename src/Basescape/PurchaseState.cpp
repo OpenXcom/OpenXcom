@@ -25,8 +25,7 @@
 #include "../fmath.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
@@ -40,10 +39,8 @@
 #include "../Engine/Action.h"
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Craft.h"
-#include "../Savegame/Soldier.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Menu/ErrorMessageState.h"
-#include "../Ruleset/RuleCraftWeapon.h"
 
 namespace OpenXcom
 {

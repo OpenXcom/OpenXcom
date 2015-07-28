@@ -18,14 +18,12 @@
 */
 #include "ResearchRequiredState.h"
 #include "../Engine/Game.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Resource/ResourcePack.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
 
 namespace OpenXcom

@@ -43,7 +43,6 @@
 #include "Waypoint.h"
 #include <assert.h>
 #include <algorithm>
-#include <functional>
 #include <math.h>
 #include "../Ruleset/AlienDeployment.h"
 

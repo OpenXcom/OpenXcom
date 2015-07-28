@@ -13,9 +13,7 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <yaml-cpp/yaml.h>
-#include <iostream>
 #include <fstream>
-#include <cstdlib>
 
 #include "OpenGL.h"
 #include "Logger.h"

@@ -20,7 +20,6 @@
 #include <cmath>
 #include <sstream>
 #include <SDL_mixer.h>
-#include "Adlib/adlplayer.h"
 #include "State.h"
 #include "Screen.h"
 #include "Sound.h"
@@ -32,10 +31,8 @@
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/SavedGame.h"
-#include "Palette.h"
 #include "Action.h"
 #include "Exception.h"
-#include "InteractiveSurface.h"
 #include "Options.h"
 #include "CrossPlatform.h"
 #include "FileMap.h"

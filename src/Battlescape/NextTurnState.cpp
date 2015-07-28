@@ -17,21 +17,18 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "NextTurnState.h"
-#include <sstream>
 #include "../Engine/Game.h"
 #include "../Engine/Options.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Screen.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Engine/Action.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
-#include "DebriefingState.h"
-#include "../Interface/Cursor.h"
 #include "BattlescapeState.h"
 #include "../Menu/SaveGameState.h"
 #include "Map.h"

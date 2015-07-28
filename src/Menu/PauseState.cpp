@@ -19,8 +19,7 @@
 #include "PauseState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -32,7 +31,6 @@
 #include "OptionsGeoscapeState.h"
 #include "OptionsBattlescapeState.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {
