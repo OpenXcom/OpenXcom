@@ -50,6 +50,7 @@
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/Ufo.h"
 #include "../Ruleset/RuleUfo.h"
+#include "../Ruleset/RuleMissionScript.h"
 #include "../Savegame/Waypoint.h"
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Soldier.h"
@@ -109,6 +110,7 @@
 #include "../Menu/CutsceneState.h"
 #include "../Ruleset/AlienRace.h"
 #include "../Ruleset/RuleGlobe.h"
+#include "../Engine/Exception.h"
 
 namespace OpenXcom
 {
@@ -515,8 +517,7 @@ void GeoscapeState::init()
 		_game->getSavedGame()->getBases()->front()->getName() != L"")
 	{
 		_game->getSavedGame()->addMonth();
-		determineAlienMissions(true);
-		setupLandMission();
+		determineAlienMissions();
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - (_game->getSavedGame()->getBaseMaintenance() - _game->getSavedGame()->getBases()->front()->getPersonnelMaintenance()));
 	}
 }
@@ -1674,61 +1675,13 @@ void GeoscapeState::time1Month()
 {
 	_game->getSavedGame()->addMonth();
 
-	int monthsPassed = _game->getSavedGame()->getMonthsPassed();
-	bool newRetaliation = false;
-
 	// Determine alien mission for this month.
 	determineAlienMissions();
-	if (monthsPassed > 5)
-		determineAlienMissions();
-
-	setupLandMission();
-
-	if (monthsPassed >= 14 - (int)(_game->getSavedGame()->getDifficulty())
-		|| _game->getSavedGame()->isResearched("STR_THE_MARTIAN_SOLUTION"))
-	{
-		newRetaliation = true;
-	}
 
 	// Handle Psi-Training and initiate a new retaliation mission, if applicable
 	bool psi = false;
 	for (std::vector<Base*>::const_iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
 	{
-		if (newRetaliation)
-		{
-			for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
-			{
-				if ((*i)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
-				{
-					if (!_game->getSavedGame()->findAlienMission((*i)->getRules()->getType(), OBJECTIVE_RETALIATION))
-					{
-						const RuleAlienMission &rule = *_game->getRuleset()->getRandomMission(OBJECTIVE_RETALIATION, _game->getSavedGame()->getMonthsPassed());
-						AlienMission *mission = new AlienMission(rule);
-						mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
-						mission->setRegion((*i)->getRules()->getType(), *_game->getRuleset());
-						// get races for retaliation missions
-						std::vector<std::string> races = _game->getRuleset()->getAlienRacesList();
-						for (std::vector<std::string>::iterator i = races.begin(); i != races.end();)
-						{
-							if (_game->getRuleset()->getAlienRace(*i)->canRetaliate())
-							{
-								i++;
-							}
-							else
-							{
-								i = races.erase(i);
-							}
-						}
-						size_t race = RNG::generate(0, races.size()-1);
-						mission->setRace(races[race]);
-						mission->start(150);
-						_game->getSavedGame()->getAlienMissions().push_back(mission);
-						newRetaliation = false;
-					}
-					break;
-				}
-			}
-		}
 		if ((*b)->getAvailablePsiLabs() > 0 && !Options::anytimePsiTraining)
 		{
 			psi = true;
@@ -2170,87 +2123,393 @@ void GeoscapeState::handleBaseDefense(Base *base, Ufo *ufo)
 
 /**
  * Determine the alien missions to start this month.
- * In the vanilla game each month a terror mission and one other are started in
- * random regions.
  */
-void GeoscapeState::determineAlienMissions(bool atGameStart)
+void GeoscapeState::determineAlienMissions()
 {
-	if (!atGameStart)
+	SavedGame *save = _game->getSavedGame();
+	AlienStrategy &strategy = save->getAlienStrategy();
+	Ruleset *rules = _game->getRuleset();
+	int month = _game->getSavedGame()->getMonthsPassed();
+	std::vector<RuleMissionScript*> availableMissions;
+	std::map<int, bool> conditions;
+
+	// well, here it is, ladies and gents, the nuts and bolts behind the geoscape mission scheduling.
+
+	// first we need to build a list of "valid" commands
+	for (std::vector<std::pair<std::string, RuleMissionScript*> >::const_iterator i = rules->getMissionScripts()->begin(); i != rules->getMissionScripts()->end(); ++i)
 	{
-		//
-		// One randomly selected mission.
-		//
-		AlienStrategy &strategy = _game->getSavedGame()->getAlienStrategy();
-		const std::string &targetRegion = strategy.chooseRandomRegion(_game->getRuleset());
-		const std::string &targetMission = strategy.chooseRandomMission(targetRegion);
-		// Choose race for this mission.
-		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission(targetMission);
-		const std::string &missionRace = missionRules.generateRace(_game->getSavedGame()->getMonthsPassed());
-		AlienMission *otherMission = new AlienMission(missionRules);
-		otherMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
-		otherMission->setRegion(targetRegion, *_game->getRuleset());
-		otherMission->setRace(missionRace);
-		otherMission->start();
-		_game->getSavedGame()->getAlienMissions().push_back(otherMission);
-		// Make sure this combination never comes up again.
-		strategy.removeMission(targetRegion, targetMission);
+		RuleMissionScript *command = (*i).second;
+
+			// level one condition check: make sure we're within our time constraints
+		if (command->getFirstMonth() <= month &&
+			(command->getLastMonth() >= month || command->getLastMonth() == -1) &&
+			// make sure we haven't hit our run limit, if we have one
+			(command->getMaxRuns() == -1 ||	command->getMaxRuns() > strategy.getMissionsRun(command->getVarName())) &&
+			// and make sure we satisfy the difficulty restrictions
+			command->getMinDifficulty() <= save->getDifficulty())
+		{
+			// level two condition check: make sure we meet any research requirements, if any.
+			bool triggerHappy = true;
+			for (std::map<std::string, bool>::const_iterator j = command->getResearchTriggers().begin(); triggerHappy && j != command->getResearchTriggers().end(); ++j)
+			{
+				triggerHappy = (save->isResearched(j->first) == j->second);
+			}
+			// levels one and two passed: insert this command into the array.
+			if (triggerHappy)
+			{
+				availableMissions.push_back(command);
+			}
+		}
 	}
-	else
+
+	// start processing command array.
+	for (std::vector<RuleMissionScript*>::const_iterator i = availableMissions.begin(); i != availableMissions.end(); ++i)
 	{
-		//
-		// Sectoid Research at base's region.
-		//
-		AlienStrategy &strategy = _game->getSavedGame()->getAlienStrategy();
-		std::string targetRegion =
-		_game->getSavedGame()->locateRegion(*_game->getSavedGame()->getBases()->front())->getRules()->getType();
-		// Choose race for this mission.
-		std::string research = _game->getRuleset()->getAlienMissionList().front();
-		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission(research);
-		AlienMission *otherMission = new AlienMission(missionRules);
-		otherMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
-		otherMission->setRegion(targetRegion, *_game->getRuleset());
-		std::string sectoid = missionRules.getTopRace(_game->getSavedGame()->getMonthsPassed());
-		otherMission->setRace(sectoid);
-		otherMission->start(150);
-		_game->getSavedGame()->getAlienMissions().push_back(otherMission);
-		// Make sure this combination never comes up again.
-		strategy.removeMission(targetRegion, research);
+		RuleMissionScript *command = *i;
+		bool process = true;
+		bool success = false;
+		// level three condition check: make sure our conditionals are met, if any. this list is dynamic, and must be checked here.
+		for (std::vector<int>::const_iterator j = command->getConditionals().begin(); process && j != command->getConditionals().end(); ++j)
+		{
+			std::map<int, bool>::const_iterator found = conditions.find(std::abs(*j));
+			// just an FYI: if you add a 0 to your conditionals, this flag will never resolve to true, and your command will never run.
+			process = (found == conditions.end() || (found->second == true && *j > 0) || (found->second == false && *j < 0));
+		}
+		// level four condition check: does random chance favour this command's execution?
+		if (process && RNG::percent(command->getExecutionOdds()))
+		{
+			// good news, little command pointer! you're FDA approved! off to the main processing facility with you!
+			success = processCommand(command);
+		}
+		if (command->getLabel() > 0)
+		{
+			// tsk, tsk. you really should be careful with these unique labels, they're supposed to be unique.
+			if (conditions.find(command->getLabel()) != conditions.end())
+			{
+				throw Exception("Error in mission scripts: " + command->getType() + ". Two or more commands sharing the same label. That's bad, Mmmkay?");
+			}
+			// keep track of what happened to this command, so others may reference it.
+			conditions[command->getLabel()] = success;
+		}
 	}
 }
 
-void GeoscapeState::setupLandMission()
+
+/**
+ * Proccesses a directive to start up a mission, if possible.
+ * @param command the directive from which to read information.
+ * @return whether the command successfully produced a new mission.
+ */
+bool GeoscapeState::processCommand(RuleMissionScript *command)
 {
-	const RuleAlienMission &missionRules = *_game->getRuleset()->getRandomMission(OBJECTIVE_SITE, _game->getSavedGame()->getMonthsPassed());
-	//Determine a random region with a valid mission zone and no mission already running
-	RuleRegion* region = 0;
-	bool picked = false;
-	std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
-	// we try 40 times to pick a valid zone for a terror mission
-	for (int counter = 0; counter < 40 && !picked; ++counter)
+	SavedGame *save = _game->getSavedGame();
+	AlienStrategy &strategy = save->getAlienStrategy();
+	Ruleset *rules = _game->getRuleset();
+	int month = _game->getSavedGame()->getMonthsPassed();
+	std::string targetRegion;
+	const RuleAlienMission *missionRules;
+	std::string missionType;
+	std::string missionRace;
+	int targetZone = -1;
+
+	// terror mission type deal? this will require special handling.
+	if (command->getSiteType())
 	{
-		region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size()-1)]);
-		if (region->getMissionZones().size() > (size_t)(missionRules.getSpawnZone()) &&
-			_game->getSavedGame()->findAlienMission(region->getType(), OBJECTIVE_SITE) == 0)
+		// we know for a fact that this command has mission weights defined, otherwise this flag could not be set.
+		missionType = command->generate(month, GEN_MISSION);
+		std::vector<std::string> missions = command->getMissionTypes(month);
+		int max = missions.size();
+		int currPos = 0;
+		for (; currPos != max; ++currPos)
 		{
-			const MissionZone &zone = region->getMissionZones().at(missionRules.getSpawnZone());
-			for (std::vector<MissionArea>::const_iterator i = zone.areas.begin(); i != zone.areas.end(); ++i)
+			if (missions[currPos] == missionType)
 			{
-				if (i->isPoint())
+				break;
+			}
+		}
+
+		// let's build a list of regions with spawn zones to pick from
+		std::vector<std::pair<std::string, int> > validAreas;
+
+		// this is actually a bit of a cheat, we ARE using the mission weights as defined, but we'll try them all if the one we pick first isn't valid.
+		for (int h = 0; h != max; ++h)
+		{
+			// we'll use the regions listed in the command, if any, otherwise check all the regions in the ruleset looking for matches
+			std::vector<std::string> regions = (command->hasRegionWeights()) ? command->getRegions(month) : rules->getRegionsList();
+			missionRules = rules->getAlienMission(missionType);
+			targetZone = missionRules->getSpawnZone();
+
+			for (std::vector<std::string>::const_iterator i = regions.begin(); i != regions.end();)
+			{
+				// we don't want the same mission running in any given region twice simultaneously, so prune the list as needed.
+				bool processThisRegion = true;
+				for (std::vector<AlienMission*>::const_iterator j = save->getAlienMissions().begin(); j != save->getAlienMissions().end(); ++j)
 				{
-					picked = true;
+					if ((*j)->getRules().getType() == missionRules->getType() && (*j)->getRegion() == *i)
+					{
+						processThisRegion = false;
+						break;
+					}
+				}
+				if (!processThisRegion)
+				{
+					i = regions.erase(i);
+					continue;
+				}
+				// ok, we found a region that doesn't have our mission in it, let's see if it has an appropriate landing zone.
+				// if it does, let's add it to our list of valid areas, taking note of which mission area(s) matched.
+				RuleRegion *region = rules->getRegion(*i);
+				if (region->getMissionZones().size() > targetZone)
+				{
+					std::vector<MissionArea> areas = region->getMissionZones()[targetZone].areas;
+					int counter = 0;
+					for (std::vector<MissionArea>::const_iterator j = areas.begin(); j != areas.end(); ++j)
+					{
+						// validMissionLocation checks to make sure this city/whatever hasn't been used by the last n missions using this varName
+						// this prevents the same location getting hit more than once every n missions.
+						if ((*j).isPoint() && strategy.validMissionLocation(command->getVarName(), region->getType(), counter))
+						{
+							validAreas.push_back(std::make_pair(region->getType(), counter));
+						}
+						counter++;
+					}
+				}
+				++i;
+			}
+
+			// oh bother, we couldn't find anything valid, this mission won't run this month.
+			if (validAreas.empty())
+			{
+				if (max > 1 && ++currPos == max)
+				{
+					currPos = 0;
+				}
+				missionType = missions[currPos];
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		if (validAreas.empty())
+		{
+			// now we're in real trouble, we've managed to make it out of the loop and we still don't have any valid choices
+			// this command cannot run this month, we have failed, forgive us senpai.
+			return false;
+		}
+		// reset this, we may have used it earlier, it longer represents the target zone type, but the target zone number within that type
+		targetZone = -1;
+		// everything went according to plan: we can now pick a city/whatever to attack.
+		while (targetZone == -1)
+		{
+			if (command->hasRegionWeights())
+			{
+				// if we have a weighted region list, we know we have at least one valid choice for this mission
+				targetRegion = command->generate(month, GEN_REGION);
+			}
+			else
+			{
+				// if we don't have a weighted list, we'll select a region at random from the ruleset,
+				// validate that it's in our list, and pick one of its cities at random
+				// this will give us an even distribution between regions regardless of the number of cities.
+				targetRegion = rules->getRegionsList().at(RNG::generate(0, rules->getRegionsList().size() - 1));
+			}
+
+			// we need to know the range of the region within our vector, in order to randomly select a city from it
+			int min = -1;
+			int max = -1;
+			int curr = 0;
+			for (std::vector<std::pair<std::string, int> >::const_iterator i = validAreas.begin(); i != validAreas.end(); ++i)
+			{
+				if ((*i).first == targetRegion)
+				{
+					if (min == -1)
+					{
+						min = curr;
+					}
+					max = curr;
+				}
+				else if (min > -1)
+				{
+					// if we've stopped detecting matches, we're done looking.
 					break;
+				}
+				++curr;
+			}
+			if (min != -1)
+			{
+				// we have our random range, we can make a selection, and we're done.
+				targetZone = validAreas[RNG::generate(min, max)].second;
+			}
+		}
+		// now add that city to the list of sites we've hit, store the array, etc.
+		strategy.addMissionLocation(command->getVarName(), targetRegion, targetZone, command->getRepeatAvoidance());
+	}
+	else if (RNG::percent(command->getTargetBaseOdds()))
+	{
+		// build a list of the mission types we're dealing with, if any
+		std::vector<std::string> types = command->getMissionTypes(month);
+		// now build a list of regions with bases in.
+		std::vector<std::string> regionsMaster;
+		for (std::vector<Base*>::const_iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
+		{
+			regionsMaster.push_back(save->locateRegion(*(*i))->getRules()->getType());
+		}
+		// no defined mission types? then we'll prune the region list to ensure we only have a region that can generate a mission.
+		if (types.empty())
+		{
+			for (std::vector<std::string>::iterator i = regionsMaster.begin(); i != regionsMaster.end();)
+			{
+				if (!strategy.validMissionRegion(*i))
+				{
+					i = regionsMaster.erase(i);
+					continue;
+				}
+				++i;
+			}
+			// no valid missions in any base regions? oh dear, i guess we failed.
+			if (regionsMaster.empty())
+			{
+				return false;
+			}
+			// pick a random region from our list
+			targetRegion = regionsMaster[RNG::generate(0, regionsMaster.size()-1)];
+		}
+		else
+		{
+			// we don't care about regional mission distributions, we're targetting a base with whatever mission we pick, so let's pick now
+			// we'll iterate the mission list, starting at a random point, and wrapping around to the beginning
+			int max = types.size();
+			int entry = RNG::generate(0,  max - 1);
+			std::vector<std::string> regions;
+
+			for (int i = 0; i != max; ++i)
+			{
+				regions = regionsMaster;
+				for (std::vector<AlienMission*>::const_iterator j = save->getAlienMissions().begin(); j != save->getAlienMissions().end(); ++j)
+				{
+					// if the mission types match
+					if (types[entry] == (*j)->getRules().getType())
+					{
+						for (std::vector<std::string>::const_iterator k = regions.begin(); k != regions.end();)
+						{
+							// and the regions match
+							if ((*k) == (*j)->getRegion())
+							{
+								// prune the entry from the list
+								k = regions.erase(k);
+								continue;
+							}
+							++k;
+						}
+					}
+				}
+
+				// we have a valid list of regions containing bases, pick one.
+				if (!regions.empty())
+				{
+					missionType = types[entry];
+					targetRegion = regions[RNG::generate(0, regions.size()-1)];
+					break;
+				}
+				// otherwise, try the next mission in the list.
+				if (max > 1 && ++entry == max)
+				{
+					entry = 0;
 				}
 			}
 		}
 	}
-	// Choose race for terror mission.
-	const std::string &race = missionRules.generateRace(_game->getSavedGame()->getMonthsPassed());
-	AlienMission *mission = new AlienMission(missionRules);
+	// now the easy stuff
+	else if (!command->hasRegionWeights())
+	{
+		// no regionWeights means we pick from the table
+		targetRegion = strategy.chooseRandomRegion(rules);
+	}
+	else
+	{
+		// otherwise, let the command dictate the region.
+		targetRegion = command->generate(month, GEN_REGION);
+	}
+
+	if (targetRegion == "")
+	{
+		// something went horribly wrong, we should have had at LEAST a region by now.
+		return false;
+	}
+
+	// we're bound to end up with typos, so let's throw an exception instead of simply returning false
+	// that way, the modder can fix their mistake
+	if (rules->getRegion(targetRegion) == 0)
+	{
+		throw Exception("Error proccessing mission script named: " + command->getType() + ", region named: " + targetRegion + " is not defined");
+	}
+
+	if (missionType == "") // ie: not a terror mission, not targetting a base, or otherwise not already chosen
+	{
+		if (!command->hasMissionWeights())
+		{
+			// no weights means let the strategy pick
+			missionType = strategy.chooseRandomMission(targetRegion);
+		}
+		else
+		{
+			// otherwise the command gives us the weights.
+			missionType = command->generate(month, GEN_MISSION);
+		}
+	}
+
+	if (missionType == "")
+	{
+		// something went horribly wrong, we didn't manage to choose a mission type
+		return false;
+	}
+
+	missionRules = rules->getAlienMission(missionType);
+
+	// we're bound to end up with typos, so let's throw an exception instead of simply returning false
+	// that way, the modder can fix their mistake
+	if (missionRules == 0)
+	{
+		throw Exception("Error proccessing mission script named: " + command->getType() + ", mission type: " + missionType + " is not defined");
+	}
+
+	// do i really need to comment this? shouldn't it be obvious what's happening here?
+	if (!command->hasRaceWeights())
+	{
+		missionRace = missionRules->generateRace(month);
+	}
+	else
+	{
+		missionRace = command->generate(month, GEN_RACE);
+	}
+
+	// we're bound to end up with typos, so let's throw an exception instead of simply returning false
+	// that way, the modder can fix their mistake
+	if (rules->getAlienRace(missionRace) == 0)
+	{
+		throw Exception("Error proccessing mission script named: " + command->getType() + ", race: " + missionRace + " is not defined");
+	}
+
+	// ok, we've derived all the variables we need to start up our mission, let's do magic to turn those values into a mission
+	AlienMission *mission = new AlienMission(*missionRules);
+	mission->setRace(missionRace);
 	mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
-	mission->setRegion(region->getType(), *_game->getRuleset());
-	mission->setRace(race);
-	mission->start(150);
+	mission->setRegion(targetRegion, *_game->getRuleset());
+	mission->setMissionSiteZone(targetZone);
+	strategy.addMissionRun(command->getVarName());
+	mission->start(command->getDelay());
 	_game->getSavedGame()->getAlienMissions().push_back(mission);
+	// if this flag is set, we want to delete it from the table so it won't show up again until the schedule resets.
+	if (command->getUseTable())
+	{
+		strategy.removeMission(targetRegion, missionType);
+	}
+
+	// we did it, we can go home now.
+	return true;
+
 }
 /**
  * Handler for clicking on a timer button.

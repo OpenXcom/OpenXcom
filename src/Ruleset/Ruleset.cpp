@@ -50,6 +50,7 @@
 #include "RuleInterface.h"
 #include "SoundDefinition.h"
 #include "RuleMusic.h"
+#include "RuleMissionScript.h"
 #include "../Geoscape/Globe.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -279,6 +280,35 @@ void Ruleset::loadModRulesets(const std::vector<std::string> &rulesetFiles, size
 	{
 		Log(LOG_VERBOSE) << "- " << *i;
 		loadFile(*i, spriteOffset);
+	}
+
+	// these need to be validated, otherwise we're gonna get into some serious trouble down the line.
+	// it may seem like a somewhat arbitrary limitation, but there is a good reason behind it.
+	// i'd need to know what results are going to be before they are formulated, and there's a heirarchical structure to
+	// the order in which variables are determined for a mission, and the order is DIFFERENT for regular missions vs
+	// missions that spawn a mission site. where normally we pick a region, then a mission based on the weights for that region.
+	// a terror-type mission picks a mission type FIRST, then a region based on the criteria defined by the mission.
+	// there is no way i can conceive of to reconcile this difference to allow mixing and matching,
+	// short of knowing the results of calls to the RNG before they're determined.
+	// the best solution i can come up with is to disallow it, as there are other ways to acheive what this would amount to anyway,
+	// and they don't require time travel. - Warboy
+	for (std::vector<std::pair<std::string, RuleMissionScript*> >::iterator i = _missionScripts.begin(); i != _missionScripts.end(); ++i)
+	{
+		RuleMissionScript *rule = (*i).second;
+		std::set<std::string> missions = rule->getAllMissionTypes();
+		if (!missions.empty())
+		{
+			std::set<std::string>::const_iterator j = missions.begin();
+			bool isSiteType = getAlienMission(*j) && getAlienMission(*j)->getObjective() == OBJECTIVE_SITE;
+			rule->setSiteType(isSiteType);
+			for (;j != missions.end(); ++j)
+			{
+				if (getAlienMission(*j) && (getAlienMission(*j)->getObjective() == OBJECTIVE_SITE) != isSiteType)
+				{
+					throw Exception("Error with MissionScript: " + (*i).first + " cannot mix terror/non-terror missions in a single command, so sayeth the wise Alaundo."); 
+				}
+			}
+		}
 	}
 }
 
@@ -696,6 +726,38 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 			mapScript->load(*j);
 			_mapScripts[type].push_back(mapScript.release());
 		}
+	}
+	for (YAML::const_iterator i = doc["missionScripts"].begin(); i != doc["missionScripts"].end(); ++i)
+	{
+		std::string type = (*i)["type"].as<std::string>();
+		bool kill = (*i)["delete"].as<bool>(false);
+		RuleMissionScript *rule = 0;
+		for (std::vector<std::pair<std::string, RuleMissionScript*> >::iterator j = _missionScripts.begin(); j != _missionScripts.end(); ++j)
+		{
+			if ((*j).first == type)
+			{
+				if (kill)
+				{
+					delete (*j).second;
+					_missionScripts.erase(j);
+				}
+				else
+				{
+					rule = (*j).second;
+				}
+				break;
+			}
+		}
+		if (kill)
+		{
+			continue;
+		}
+		if (!rule)
+		{
+			rule = new RuleMissionScript(type);
+		}
+		rule->load(*i);
+		_missionScripts.push_back(std::make_pair(type, rule));
 	}
 
 	// refresh _psiRequirements for psiStrengthEval
@@ -1704,4 +1766,8 @@ const std::map<std::string, RuleMusic *> *Ruleset::getMusic() const
 	return &_musics;
 }
 
+const std::vector<std::pair<std::string, RuleMissionScript*> > *Ruleset::getMissionScripts() const
+{
+	return &_missionScripts;
+}
 }

@@ -516,6 +516,8 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleItem.h \
 	src/Ruleset/RuleManufacture.cpp \
 	src/Ruleset/RuleManufacture.h \
+	src/Ruleset/RuleMissionScript.cpp \
+	src/Ruleset/RuleMissionScript.h \
 	src/Ruleset/RuleMusic.cpp \
 	src/Ruleset/RuleMusic.h \
 	src/Ruleset/RuleRegion.cpp \

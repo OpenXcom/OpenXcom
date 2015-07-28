@@ -66,6 +66,7 @@ class SoundDefinition;
 class MapScript;
 class RuleVideo;
 class RuleMusic;
+class RuleMissionScript;
 
 /**
  * Set of rules and stats for a game.
@@ -103,6 +104,7 @@ protected:
 	std::map<std::string, RuleVideo *>_videos;
 	std::map<std::string, MCDPatch *> _MCDPatches;
 	std::map<std::string, std::vector<MapScript *> > _mapScripts;
+	std::vector<std::pair<std::string, RuleMissionScript*> > _missionScripts;
 	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
@@ -272,6 +274,7 @@ public:
 	/// Gets the list videos for intro/outro etc.
 	const std::map<std::string, RuleVideo *> *getVideos() const;
 	const std::map<std::string, RuleMusic *> *getMusic() const;
+	const std::vector<std::pair<std::string, RuleMissionScript*> > *Ruleset::getMissionScripts() const;
 };
 
 }

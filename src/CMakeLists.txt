@@ -508,6 +508,8 @@ set ( ruleset_src
   Ruleset/RuleResearch.cpp
   Ruleset/RuleManufacture.h
   Ruleset/RuleManufacture.cpp
+  Ruleset/RuleMissionScript.h
+  Ruleset/RuleMissionScript.cpp
   Ruleset/AlienDeployment.h
   Ruleset/AlienDeployment.cpp
   Ruleset/AlienRace.h

@@ -431,6 +431,7 @@
     <ClCompile Include="Ruleset\ExtraSounds.cpp" />
     <ClCompile Include="Ruleset\ExtraSprites.cpp" />
     <ClCompile Include="Ruleset\ExtraStrings.cpp" />
+    <ClCompile Include="Ruleset\RuleMissionScript.cpp" />
     <ClCompile Include="Ruleset\Texture.cpp" />
     <ClCompile Include="Ruleset\MapScript.cpp" />
     <ClCompile Include="Ruleset\MCDPatch.cpp" />
@@ -752,6 +753,7 @@
     <ClInclude Include="Ruleset\ExtraSounds.h" />
     <ClInclude Include="Ruleset\ExtraSprites.h" />
     <ClInclude Include="Ruleset\ExtraStrings.h" />
+    <ClInclude Include="Ruleset\RuleMissionScript.h" />
     <ClInclude Include="Ruleset\Texture.h" />
     <ClInclude Include="Ruleset\MapBlock.h" />
     <ClInclude Include="Ruleset\MapDataSet.h" />
