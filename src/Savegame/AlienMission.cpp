@@ -50,7 +50,7 @@
 namespace OpenXcom
 {
 
-AlienMission::AlienMission(const RuleAlienMission &rule) : _rule(rule), _nextWave(0), _nextUfoCounter(0), _spawnCountdown(0), _liveUfos(0), _uniqueID(0), _base(0)
+AlienMission::AlienMission(const RuleAlienMission &rule) : _rule(rule), _nextWave(0), _nextUfoCounter(0), _spawnCountdown(0), _liveUfos(0), _uniqueID(0), _missionSiteZone(-1), _base(0)
 {
 	// Empty by design.
 }
@@ -95,7 +95,7 @@ void AlienMission::load(const YAML::Node& node, SavedGame &game)
 		}
 		_base = *found;
 	}
-
+	_missionSiteZone = node["missionSiteZone"].as<int>(_missionSiteZone);
 }
 
 /**
@@ -117,6 +117,7 @@ YAML::Node AlienMission::save() const
 	{
 		node["alienBase"] = _base->getId();
 	}
+	node["missionSiteZone"] = _missionSiteZone;
 	return node;
 }
 
@@ -663,7 +664,18 @@ std::pair<double, double> AlienMission::getWaypoint(const UfoTrajectory &traject
 	}
 	else
 	*/
-		return region.getRandomPoint(trajectory.getZone(nextWaypoint));
+	int waveNumber = _nextWave - 1;
+	if (waveNumber < 0)
+	{
+		waveNumber = _rule.getWaveCount() - 1;
+	}
+
+	if (_missionSiteZone != -1 && _rule.getWave(waveNumber).objective && trajectory.getZone(nextWaypoint) == (size_t)(_rule.getSpawnZone()))
+	{
+		const MissionArea *area = &region.getMissionZones().at(_rule.getObjective()).areas.at(_missionSiteZone);
+		return std::make_pair(area->lonMin, area->latMin);
+	}
+	return region.getRandomPoint(trajectory.getZone(nextWaypoint));
 }
 
 /**
@@ -715,5 +727,14 @@ MissionSite *AlienMission::spawnMissionSite(SavedGame &game, const Ruleset &rule
 		return missionSite;
 	}
 	return 0;
+}
+
+/**
+ * Tell the mission which entry in the zone array we're targetting for our missionSite payload.
+ * @param zone the number of the zone to target, synonymous with a city.
+ */
+void AlienMission::setMissionSiteZone(int zone)
+{
+	_missionSiteZone = zone;
 }
 }

@@ -53,7 +53,7 @@ private:
 	size_t _nextUfoCounter;
 	size_t _spawnCountdown;
 	size_t _liveUfos;
-	int _uniqueID;
+	int _uniqueID, _missionSiteZone;
 	const AlienBase *_base;
 public:
 	// Data
@@ -109,6 +109,8 @@ public:
 	void ufoShotDown(Ufo &ufo);
 	/// Handle Points for mission successes.
 	void addScore(const double lon, const double lat, SavedGame &game);
+	/// Keep track of the city/whatever that we're going to target.
+	void setMissionSiteZone(int zone);
 private:
 	/// Spawns a UFO, based on mission rules.
 	Ufo *spawnUfo(const SavedGame &game, const Ruleset &ruleset, const Globe &globe, const MissionWave &wave, const UfoTrajectory &trajectory);
