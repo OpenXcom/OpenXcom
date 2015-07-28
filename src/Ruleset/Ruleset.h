@@ -274,7 +274,7 @@ public:
 	/// Gets the list videos for intro/outro etc.
 	const std::map<std::string, RuleVideo *> *getVideos() const;
 	const std::map<std::string, RuleMusic *> *getMusic() const;
-	const std::vector<std::pair<std::string, RuleMissionScript*> > *Ruleset::getMissionScripts() const;
+	const std::vector<std::pair<std::string, RuleMissionScript*> > *getMissionScripts() const;
 };
 
 }
