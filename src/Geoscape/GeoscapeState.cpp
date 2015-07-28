@@ -2259,7 +2259,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 				// ok, we found a region that doesn't have our mission in it, let's see if it has an appropriate landing zone.
 				// if it does, let's add it to our list of valid areas, taking note of which mission area(s) matched.
 				RuleRegion *region = rules->getRegion(*i);
-				if (region->getMissionZones().size() > targetZone)
+				if ((int)(region->getMissionZones().size()) > targetZone)
 				{
 					std::vector<MissionArea> areas = region->getMissionZones()[targetZone].areas;
 					int counter = 0;

@@ -216,7 +216,7 @@ void AlienStrategy::addMissionLocation(const std::string varName, const std::str
 {
 	if (maximum <= 0) return;
 	_missionLocations[varName].push_back(std::make_pair(regionName, zoneNumber));
-	if (_missionLocations[varName].size() > maximum)
+	if (_missionLocations[varName].size() > (size_t)(maximum))
 	{
 		_missionLocations.erase(_missionLocations.begin());
 	}
