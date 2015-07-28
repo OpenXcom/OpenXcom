@@ -701,6 +701,7 @@ void GeoscapeState::time5Seconds()
 					if (count < _game->getSavedGame()->getMissionSites()->size())
 					{
 						MissionSite *site = _game->getSavedGame()->getMissionSites()->back();
+						site->setDetected(true);
 						popup(new MissionDetectedState(site, this));
 					}
 					// If UFO was destroyed, don't spawn missions
@@ -1417,6 +1418,15 @@ void GeoscapeState::time1Hour()
 		{
 			popup(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg((*i)->getName()).c_str(), _palette, _game->getRuleset()->getInterface("geoscape")->getElement("errorMessage")->color, "BACK13.SCR", _game->getRuleset()->getInterface("geoscape")->getElement("errorPalette")->color));
 			popup(new SellState((*i)));
+		}
+	}
+	for (std::vector<MissionSite*>::iterator i = _game->getSavedGame()->getMissionSites()->begin(); i != _game->getSavedGame()->getMissionSites()->end(); ++i)
+	{
+		if (!(*i)->getDetected())
+		{
+			(*i)->setDetected(true);
+			popup(new MissionDetectedState(*i, this));
+			break;
 		}
 	}
 }
