@@ -269,7 +269,7 @@ const std::vector<std::string> RuleMissionScript::getMissionTypes(const int mont
 {
 	std::vector<std::string> missions;
 	std::vector<std::pair<size_t, WeightedOptions*> >::const_reverse_iterator rw = _missionWeights.rbegin();
-	while (month < rw->first)
+	while (month < (int)(rw->first))
 	{
 		++rw;
 		if (rw == _missionWeights.rend())
@@ -294,7 +294,7 @@ const std::vector<std::string> RuleMissionScript::getRegions(const int month) co
 {
 	std::vector<std::string> regions;
 	std::vector<std::pair<size_t, WeightedOptions*> >::const_reverse_iterator rw = _regionWeights.rbegin();
-	while (month < rw->first)
+	while (month < (int)(rw->first))
 	{
 		++rw;
 		if (rw == _regionWeights.rend())
