@@ -47,6 +47,7 @@
 #else
 #include "Language.h"
 #include <iostream>
+#include <SDL_image.h>
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
