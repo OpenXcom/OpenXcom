@@ -89,7 +89,7 @@ void AlienStrategy::load(const Ruleset *, const YAML::Node &node)
 		options->load(missions);
 		_regionMissions.insert(std::make_pair(region, options.release()));
 	}
-	_missionLocations = node["missionLocations"].as<std::string, std::vector<std::pair<std::string, int> > > >(_missionLocations);
+	_missionLocations = node["missionLocations"].as<std::map<std::string, std::vector<std::pair<std::string, int> > > >(_missionLocations);
 	_missionRuns = node["missionsRun"].as<std::map<std::string, int> >(_missionRuns);
 }
 
