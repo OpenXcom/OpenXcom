@@ -4,8 +4,11 @@
 #    label: 1                            # label, used for conditionals (default 0)
 #    conditionals: [1, -2]               # conditional list, just like mapscripts (default none)
 #    missionWeights:                     # the type of mission to spawn (omit to pick one from the mission table) (default none)
-#      0:                                # these are split into monthly chunks
-#        STR_ALIEN_RESEARCH: 100         # and can contain multiple entries, including weighted odds
+#      0:                                # these are split into monthly chunks, and can contain multiple entries,
+#        STR_ALIEN_RESEARCH: 20          # including weighted odds, but there is a caveat here:
+#        STR_ALIEN_ABDUCTION: 30         # you cannot mix and match missions with mission site objectives (ie: terror) with regular missions,
+#        STR_ALIEN_CROP_CIRCLES: 30      # they are generated too differently. using executionOdds and conditionals instead can achieve
+#        STR_CATTLE_MUTILATION: 20       # exactly the same thing. similarly, terror missions should not appear in regional mission weights (regions.rul)
 #    executionOdds: 100                  # % chances of this command executing (default 100)
 #    targetBaseOdds: 75                  # % chances of this mission targeting a region containing an xcom base instead of random (default 0)
 #    startDelay: 120                     # number of minutes to delay the start of the mission (rounded down to the nearest 30, 0 to use the wave timer from the mission itself) (default 0)
