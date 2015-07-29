@@ -55,7 +55,6 @@ AlienStrategy::~AlienStrategy()
 void AlienStrategy::init(const Ruleset *rules)
 {
 	std::vector<std::string> regions = rules->getRegionsList();
-
 	for (std::vector<std::string>::const_iterator rr = regions.begin(); rr != regions.end(); ++rr)
 	{
 		RuleRegion *region = rules->getRegion(*rr);
@@ -129,6 +128,7 @@ const std::string AlienStrategy::chooseRandomRegion(const Ruleset *rules)
 		{
 			delete ii->second;
 		}
+		_regionMissions.clear();
 		// re-initialize the list
 		init(rules);
 		// now let's try that again.

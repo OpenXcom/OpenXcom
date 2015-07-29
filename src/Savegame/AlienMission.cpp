@@ -178,7 +178,7 @@ void AlienMission::think(Game &engine, const Globe &globe)
 		MissionArea area = areas.at((_missionSiteZone == -1) ? RNG::generate(0, areas.size()-1) : _missionSiteZone);
 		Texture *texture = ruleset.getGlobe()->getTexture(area.texture);
 		AlienDeployment *deployment = ruleset.getDeployment(wave.ufoType) ? ruleset.getDeployment(wave.ufoType) : ruleset.getDeployment(texture->getRandomDeployment());
-		MissionSite *missionSite = spawnMissionSite(game, deployment, area);
+		spawnMissionSite(game, deployment, area);
 	}
 
 	++_nextUfoCounter;
