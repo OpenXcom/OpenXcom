@@ -45,6 +45,8 @@
 #pragma comment(lib, "shlwapi.lib")
 #endif
 #else
+#include "Language.h"
+#include <iostream>
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
