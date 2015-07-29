@@ -1787,11 +1787,14 @@ void SavedBattleGame::calculateModuleMap()
 	{
 		for (int y = 0; y != _mapsize_y; ++y)
 		{
-			Tile *tile = getTile(Position(x,y,_mapsize_z-1));
-			if (tile && tile->getMapData(O_OBJECT) && tile->getMapData(O_OBJECT)->isBaseModule())
+			for (int z = 0; z != _mapsize_z; ++z)
 			{
-				_baseModules[x/10][y/10].first += _baseModules[x/10][y/10].first > 0 ? 1 : 2;
-				_baseModules[x/10][y/10].second = _baseModules[x/10][y/10].first;
+				Tile *tile = getTile(Position(x,y,z));
+				if (tile && tile->getMapData(O_OBJECT) && tile->getMapData(O_OBJECT)->isBaseModule())
+				{
+					_baseModules[x/10][y/10].first += _baseModules[x/10][y/10].first > 0 ? 1 : 2;
+					_baseModules[x/10][y/10].second = _baseModules[x/10][y/10].first;
+				}
 			}
 		}
 	}
