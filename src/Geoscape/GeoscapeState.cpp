@@ -2133,9 +2133,9 @@ void GeoscapeState::determineAlienMissions()
 	// well, here it is, ladies and gents, the nuts and bolts behind the geoscape mission scheduling.
 
 	// first we need to build a list of "valid" commands
-	for (std::vector<std::pair<std::string, RuleMissionScript*> >::const_iterator i = rules->getMissionScripts()->begin(); i != rules->getMissionScripts()->end(); ++i)
+	for (std::vector<std::string>::const_iterator i = rules->getMissionScriptList()->begin(); i != rules->getMissionScriptList()->end(); ++i)
 	{
-		RuleMissionScript *command = (*i).second;
+		RuleMissionScript *command = rules->getMissionScript(*i);
 
 			// level one condition check: make sure we're within our time constraints
 		if (command->getFirstMonth() <= month &&
