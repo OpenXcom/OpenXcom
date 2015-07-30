@@ -325,13 +325,13 @@ void SaveConverter::loadDatIGlob()
 	int second = load<int>(data + 0x14);
 	_save->setTime(GameTime(weekday, day, month, _year, hour, minute, second));
 
-	int difficulty = load<int>(data + 0x3C);
-	// if the save was affected by the difficulty bug, this will have a garbage value
-	// tests show this value to be negative, and as a result, rather hilariously,
-	// the game will be reset to beginner.
-	// TODO: when we add the difficulty coefficient, account for TFTD's values here.
-	difficulty = std::min(4, std::max(0, difficulty));
-	_save->setDifficulty((GameDifficulty)difficulty);
+	// The save file might be missing the difficulty due to this bug:
+	// http://www.ufopaedia.org/index.php?title=Known_Bugs#Difficulty_Bug
+	if (buffer.size() > 0x3C)
+	{
+		int difficulty = load<int>(data + 0x3C);
+		_save->setDifficulty((GameDifficulty)difficulty);
+	}
 
 	// Fix up the months
 	int monthsPassed = month + (_year - _rule->getStartingTime().getYear()) * 12;
