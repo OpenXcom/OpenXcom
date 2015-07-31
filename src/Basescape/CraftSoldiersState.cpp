@@ -193,7 +193,6 @@ void CraftSoldiersState::moveSoldierUp(Action *action, unsigned int row, bool ma
 	{
 		_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 		_base->getSoldiers()->insert(_base->getSoldiers()->begin(), s);
-		initList(0);
 	}
 	else
 	{
@@ -207,8 +206,8 @@ void CraftSoldiersState::moveSoldierUp(Action *action, unsigned int row, bool ma
 		{
 			_lstSoldiers->scrollUp(false);
 		}
-		initList(_lstSoldiers->getScroll());
 	}
+	initList(_lstSoldiers->getScroll());
 }
 
 /**
@@ -245,7 +244,6 @@ void CraftSoldiersState::moveSoldierDown(Action *action, unsigned int row, bool 
 	{
 		_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 		_base->getSoldiers()->insert(_base->getSoldiers()->end(), s);
-		initList(std::max(0, (int)(_lstSoldiers->getRows() - _lstSoldiers->getVisibleRows())));
 	}
 	else
 	{
@@ -259,8 +257,8 @@ void CraftSoldiersState::moveSoldierDown(Action *action, unsigned int row, bool 
 		{
 			_lstSoldiers->scrollDown(false);
 		}
-		initList(_lstSoldiers->getScroll());
 	}
+	initList(_lstSoldiers->getScroll());
 }
 
 /**
