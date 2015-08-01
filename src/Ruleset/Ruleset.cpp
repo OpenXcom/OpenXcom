@@ -827,7 +827,9 @@ SavedGame *Ruleset::newSave() const
 	// Add countries
 	for (std::vector<std::string>::const_iterator i = _countriesIndex.begin(); i != _countriesIndex.end(); ++i)
 	{
-		save->getCountries()->push_back(new Country(getCountry(*i)));
+		RuleCountry *country = getCountry(*i);
+		if (!country->getLonMin().empty())
+			save->getCountries()->push_back(new Country(country));
 	}
 	// Adjust funding to total $6M
 	int missing = ((_initialFunding - save->getCountryFunding()/1000) / (int)save->getCountries()->size()) * 1000;
@@ -845,7 +847,9 @@ SavedGame *Ruleset::newSave() const
 	// Add regions
 	for (std::vector<std::string>::const_iterator i = _regionsIndex.begin(); i != _regionsIndex.end(); ++i)
 	{
-		save->getRegions()->push_back(new Region(getRegion(*i)));
+		RuleRegion *region = getRegion(*i);
+		if (!region->getLonMin().empty())
+			save->getRegions()->push_back(new Region(region));
 	}
 
 	// Set up starting base
