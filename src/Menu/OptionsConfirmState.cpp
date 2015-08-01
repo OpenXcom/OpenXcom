@@ -51,7 +51,7 @@ OptionsConfirmState::OptionsConfirmState(OptionsOrigin origin) : _origin(origin)
 	_timer = new Timer(1000);
 
 	// Set palette
-	setInterface("mainMenu", false, _game->getSavedGame()->getSavedBattle());
+	setInterface("mainMenu", false, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : 0);
 
 	add(_window, "confirmVideo", "mainMenu");
 	add(_btnYes, "confirmVideo", "mainMenu");

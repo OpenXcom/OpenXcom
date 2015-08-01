@@ -46,7 +46,7 @@ OptionsDefaultsState::OptionsDefaultsState(OptionsOrigin origin, OptionsBaseStat
 	_txtTitle = new Text(246, 32, 37, 70);
 
 	// Set palette
-	setInterface("mainMenu", false, _game->getSavedGame()->getSavedBattle());
+	setInterface("mainMenu", false, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : 0);
 
 	add(_window, "confirmDefaults", "mainMenu");
 	add(_btnYes, "confirmDefaults", "mainMenu");
