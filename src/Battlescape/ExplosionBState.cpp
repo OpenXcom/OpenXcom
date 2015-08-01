@@ -71,7 +71,7 @@ void ExplosionBState::init()
 		_power = _item->getRules()->getPower();
 
 		// this usually only applies to melee, but as a concession for modders i'll leave it here in case they wanna make bows or something.
-		if (_item->getRules()->isStrengthApplied())
+		if (_item->getRules()->isStrengthApplied() && _unit)
 		{
 			_power += _unit->getBaseStats()->strength;
 		}

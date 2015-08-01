@@ -890,6 +890,7 @@ BattleUnit* TileEngine::getReactor(std::vector<std::pair<BattleUnit *, int> > sp
 	for (std::vector<std::pair<BattleUnit *, int> >::iterator i = spotters.begin(); i != spotters.end(); ++i)
 	{
 		if (!(*i).first->isOut() &&
+		!(*i).first->getRespawn() &&
 		determineReactionType((*i).first, unit) != BA_NONE &&
 		(*i).first->getReactionScore() > bestScore)
 		{
