@@ -58,7 +58,7 @@ AbandonGameState::AbandonGameState(OptionsOrigin origin) : _origin(origin)
 	_txtTitle = new Text(206, 17, x+5, 70);
 
 	// Set palette
-	setInterface("geoscape", false, _origin == OPT_BATTLESCAPE);
+	setInterface("geoscape", false, _game->getSavedGame()->getSavedBattle());
 
 	add(_window, "genericWindow", "geoscape");
 	add(_btnYes, "genericButton2", "geoscape");

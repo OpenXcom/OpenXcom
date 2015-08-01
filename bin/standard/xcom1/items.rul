@@ -78,7 +78,6 @@ items:
     transferTime: 48
     weight: 1
     bigSprite: -1
-    floorSprite: 12
     hitSound: 13
     hitAnimation: 26
     power: 60
@@ -116,7 +115,6 @@ items:
     transferTime: 48
     weight: 1
     bigSprite: -1
-    floorSprite: 16
     hitSound: 0
     hitAnimation: 0
     power: 85
@@ -199,7 +197,6 @@ items:
     transferTime: 48
     weight: 1
     bigSprite: -1
-    floorSprite: 35
     hitSound: 0
     hitAnimation: 0
     power: 140

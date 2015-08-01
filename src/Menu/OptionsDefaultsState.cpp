@@ -24,6 +24,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Engine/Options.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
@@ -45,7 +46,7 @@ OptionsDefaultsState::OptionsDefaultsState(OptionsOrigin origin, OptionsBaseStat
 	_txtTitle = new Text(246, 32, 37, 70);
 
 	// Set palette
-	setInterface("mainMenu", false, _origin == OPT_BATTLESCAPE);
+	setInterface("mainMenu", false, _game->getSavedGame()->getSavedBattle());
 
 	add(_window, "confirmDefaults", "mainMenu");
 	add(_btnYes, "confirmDefaults", "mainMenu");

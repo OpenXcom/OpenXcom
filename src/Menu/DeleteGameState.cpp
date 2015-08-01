@@ -26,6 +26,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Options.h"
 #include "ErrorMessageState.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
@@ -48,7 +49,7 @@ DeleteGameState::DeleteGameState(OptionsOrigin origin, const std::string &save) 
 	_txtMessage = new Text(246, 32, 37, 70);
 
 	// Set palette
-	setInterface("saveMenus", false, _origin == OPT_BATTLESCAPE);
+	setInterface("saveMenus", false, _game->getSavedGame()->getSavedBattle());
 
 	add(_window, "confirmDelete", "saveMenus");
 	add(_btnYes, "confirmDelete", "saveMenus");

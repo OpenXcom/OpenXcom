@@ -28,6 +28,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Screen.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
@@ -50,7 +51,7 @@ OptionsConfirmState::OptionsConfirmState(OptionsOrigin origin) : _origin(origin)
 	_timer = new Timer(1000);
 
 	// Set palette
-	setInterface("mainMenu", false, _origin == OPT_BATTLESCAPE);
+	setInterface("mainMenu", false, _game->getSavedGame()->getSavedBattle());
 
 	add(_window, "confirmVideo", "mainMenu");
 	add(_btnYes, "confirmVideo", "mainMenu");

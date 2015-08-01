@@ -64,7 +64,7 @@ PauseState::PauseState(OptionsOrigin origin) : _origin(origin)
 	_txtTitle = new Text(206, 17, x+5, 32);
 
 	// Set palette
-	setInterface("pauseMenu", false, _origin == OPT_BATTLESCAPE);
+	setInterface("pauseMenu", false, _game->getSavedGame()->getSavedBattle());
 
 	add(_window, "window", "pauseMenu");
 	add(_btnLoad, "button", "pauseMenu");
