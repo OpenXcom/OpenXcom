@@ -712,6 +712,7 @@ dist-hook:
 	fi
 
 install-data-local:
+	mkdir -p $(DESTDIR)$(pkgdatadir)
 	cp -r $(top_srcdir)/bin/* $(DESTDIR)$(pkgdatadir)/ ; \
 	find $(DESTDIR)$(pkgdatadir) | xargs chmod a=rX,u+w
 
