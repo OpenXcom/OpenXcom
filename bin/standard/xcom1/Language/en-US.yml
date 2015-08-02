@@ -1058,6 +1058,6 @@ en-US:
   STR_NO_MORE_EQUIPMENT_ALLOWED:
     one: "NO MORE EQUIPMENT ALLOWED ON BOARD!{SMALLLINE}You are only allowed to take a maximum of {N} item of equipment on this craft."
     other: "NO MORE EQUIPMENT ALLOWED ON BOARD!{SMALLLINE}You are only allowed to take a maximum of {N} items of equipment on this craft."
-  STR_CONTROL_CENTER_DESTROYED: "CONTROL CENTER DESTROYED{NEWLINE}Make your way to the entrance and abort."
+  STR_CONTROL_CENTER_DESTROYED: "{SMALLLINE}CONTROL CENTER DESTROYED{NEWLINE}Make your way to the entrance and abort."
   STR_XCOM_BASE_CANNOT_BE_BUILT: "X-Com facilities cannot be built underwater"
   STR_LEVEL_SHORT: "{0}"
