@@ -151,8 +151,13 @@ void ExplosionBState::init()
 		{
 			anim = _item->getRules()->getMeleeAnimation();
 		}
-		Explosion *explosion = new Explosion(_center, anim, 0, false, _cosmetic);
-		_parent->getMap()->getExplosions()->push_back(explosion);
+
+		if (anim != -1)
+		{
+			Explosion *explosion = new Explosion(_center, anim, 0, false, _cosmetic);
+			_parent->getMap()->getExplosions()->push_back(explosion);
+		}
+
 		_parent->getMap()->getCamera()->setViewLevel(_center.z / 24);
 
 		BattleUnit *target = t->getUnit();
@@ -176,6 +181,9 @@ void ExplosionBState::think()
 {
 	if (!_parent->getMap()->getBlastFlash())
 	{
+		if (_parent->getMap()->getExplosions()->empty())
+			explode();
+
 		for (std::list<Explosion*>::iterator i = _parent->getMap()->getExplosions()->begin(); i != _parent->getMap()->getExplosions()->end();)
 		{
 			if (!(*i)->animate())
