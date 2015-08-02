@@ -113,7 +113,8 @@ namespace OpenXcom
  * type of deployment data.
  * @param type String defining the type.
  */
-AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _width(0), _length(0), _height(0), _civilians(0), _shade(-1), _finalDestination(false), _markerIcon(-1), _durationMin(0), _durationMax(0), _minDepth(0), _maxDepth(0), _minSiteDepth(0), _maxSiteDepth(0)
+AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _width(0), _length(0), _height(0), _civilians(0), _shade(-1), _finalDestination(false), _markerIcon(-1), _durationMin(0), _durationMax(0),
+	_minDepth(0), _maxDepth(0), _minSiteDepth(0), _maxSiteDepth(0), _objectiveType(0), _objectivesRequired(0), _objectiveCompleteScore(0), _objectiveFailedScore(0), _despawnPenalty(0), _points(0)
 {
 }
 
@@ -167,6 +168,22 @@ void AlienDeployment::load(const YAML::Node &node)
 	{
 		_music.push_back((*i).as<std::string>(""));
 	}
+	_objectiveType = node["objectiveType"].as<int>(_objectiveType);
+	_objectivesRequired = node["objectivesRequired"].as<int>(_objectivesRequired);
+	_objectivePopup = node["objectivePopup"].as<std::string>(_objectivePopup);
+
+	if (node["objectiveComplete"])
+	{
+		_objectiveCompleteText = node["objectiveComplete"][0].as<std::string>(_objectiveCompleteText);
+		_objectiveCompleteScore = node["objectiveComplete"][1].as<int>(_objectiveCompleteScore);
+	}
+	if (node["objectiveFailed"])
+	{
+		_objectiveFailedText = node["objectiveFailed"][0].as<std::string>(_objectiveFailedText);
+		_objectiveFailedScore = node["objectiveFailed"][1].as<int>(_objectiveFailedScore);
+	}
+	_despawnPenalty = node["despawnPenalty"].as<int>(_despawnPenalty);
+	_points = node["points"].as<int>(_points);
 }
 
 /**
@@ -381,4 +398,74 @@ int AlienDeployment::getMaxSiteDepth()
 	return _maxSiteDepth;
 }
 
+/**
+ * Gets the target type for this mission (ie: alien control consoles and synonium devices).
+ * @return the target type for this mission.
+ */
+int AlienDeployment::getObjectiveType()
+{
+	return _objectiveType;
+}
+
+/**
+ * Gets the number of objectives required by this mission.
+ * @return the number of objectives required.
+ */
+int AlienDeployment::getObjectivesRequired()
+{
+	return _objectivesRequired;
+}
+
+/**
+ * Gets the string name for the popup to splash when the objective conditions are met.
+ * @return the string to pop up.
+ */
+std::string AlienDeployment::getObjectivePopup()
+{
+	return _objectivePopup;
+}
+
+/**
+ * Fills out the variables associated with mission success, and returns if those variables actually contain anything.
+ * @param &text a reference to the text we wish to alter.
+ * @param &score a reference to the score we wish to alter.
+ * @return if there is anything worthwhile processing.
+ */
+bool AlienDeployment::getObjectiveCompleteInfo(std::string &text, int &score)
+{
+	text = _objectiveCompleteText;
+	score = _objectiveCompleteScore;
+	return text != "";
+}
+
+/**
+ * Fills out the variables associated with mission failure, and returns if those variables actually contain anything.
+ * @param &text a reference to the text we wish to alter.
+ * @param &score a reference to the score we wish to alter.
+ * @return if there is anything worthwhile processing.
+ */
+bool AlienDeployment::getObjectiveFailedInfo(std::string &text, int &score)
+{
+	text = _objectiveFailedText;
+	score = _objectiveFailedScore;
+	return text != "";
+}
+
+/**
+ * Gets the score penalty XCom receives for letting this mission despawn.
+ * @return the score for letting this site despawn.
+ */
+const int AlienDeployment::getDespawnPenalty() const
+{
+	return _despawnPenalty;
+}
+
+/**
+ * Gets the (half hourly) score penalty against XCom for this site existing.
+ * @return the number of points the aliens get per half hour.
+ */
+const int AlienDeployment::getPoints() const
+{
+	return _points;
+}
 }

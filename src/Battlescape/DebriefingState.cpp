@@ -368,11 +368,41 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
+	SavedGame *save = _game->getSavedGame();
+	SavedBattleGame *battle = save->getSavedBattle();
+	AlienDeployment *deployment = _game->getRuleset()->getDeployment(battle->getMissionType());
+
+	bool aborted = battle->isAborted();
+	bool success = !aborted;
+	Craft* craft = 0;
+	std::vector<Craft*>::iterator craftIterator;
+	Base* base = 0;
+	std::string target;
+
+	int playerInExitArea = 0; // if this stays 0 the craft is lost...
+	int playersSurvived = 0; // if this stays 0 the craft is lost...
+	int playersUnconscious = 0;
+
+
 	_stats.push_back(new DebriefingStat("STR_ALIENS_KILLED", false));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_CORPSES_RECOVERED", false));
 	_stats.push_back(new DebriefingStat("STR_LIVE_ALIENS_RECOVERED", false));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_ARTIFACTS_RECOVERED", false));
-	_stats.push_back(new DebriefingStat("STR_ALIEN_BASE_CONTROL_DESTROYED", false));
+
+	std::string objectiveCompleteText, objectiveFailedText;
+	int objectiveCompleteScore = 0, objectiveFailedScore = 0;
+	if (deployment)
+	{
+		if (deployment->getObjectiveCompleteInfo(objectiveCompleteText, objectiveCompleteScore))
+		{
+			_stats.push_back(new DebriefingStat(objectiveCompleteText, false));
+		}
+		if (deployment->getObjectiveFailedInfo(objectiveFailedText, objectiveFailedScore))
+		{
+			_stats.push_back(new DebriefingStat(objectiveFailedText, false));
+		}
+	}
+
 	_stats.push_back(new DebriefingStat("STR_CIVILIANS_KILLED_BY_ALIENS", false));
 	_stats.push_back(new DebriefingStat("STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES", false));
 	_stats.push_back(new DebriefingStat("STR_CIVILIANS_SAVED", false));
@@ -388,19 +418,6 @@ void DebriefingState::prepareDebriefing()
 	}
 
 	_stats.push_back(new DebriefingStat(_game->getRuleset()->getAlienFuelName(), true));
-
-	SavedGame *save = _game->getSavedGame();
-	SavedBattleGame *battle = save->getSavedBattle();
-	bool aborted = battle->isAborted();
-	bool success = !aborted;
-	Craft* craft = 0;
-	std::vector<Craft*>::iterator craftIterator;
-	Base* base = 0;
-	std::string target;
-
-	int playerInExitArea = 0; // if this stays 0 the craft is lost...
-	int playersSurvived = 0; // if this stays 0 the craft is lost...
-	int playersUnconscious = 0;
 
 	for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
 	{
@@ -564,28 +581,22 @@ void DebriefingState::prepareDebriefing()
 		{
 			_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
 			bool destroyAlienBase = true;
-			AlienDeployment *deployment = _game->getRuleset()->getDeployment(battle->getMissionType());
 			if (!deployment->getNextStage().empty())
 			{
 				destroyAlienBase = false;
 			}
 			else if (aborted || playersSurvived == 0)
 			{
-				for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
-				{
-					// get recoverable map data objects from the battlescape map
-					if (
-						battle->getTiles()[i]->getMapData(O_OBJECT) && battle->getTiles()[i]->getMapData(O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
-					{
-						destroyAlienBase = false;
-						break;
-					}
-				}
+				if (!battle->allObjectivesDestroyed())
+					destroyAlienBase = false;
 			}
 			success = destroyAlienBase;
 			if (destroyAlienBase)
 			{
-				addStat("STR_ALIEN_BASE_CONTROL_DESTROYED", 1, 500);
+				if (objectiveCompleteText != "")
+				{
+					addStat(objectiveCompleteText, 1, objectiveCompleteScore);
+				}
 				// Take care to remove supply missions for this base.
 				std::for_each(save->getAlienMissions().begin(), save->getAlienMissions().end(),
 							ClearAlienBase(*i));
@@ -806,6 +817,10 @@ void DebriefingState::prepareDebriefing()
 		else
 		{
 			_txtTitle->setText(tr("STR_ALIENS_DEFEATED"));
+			if (objectiveCompleteText != "")
+			{
+				addStat(objectiveCompleteText, 1, objectiveCompleteScore);
+			}
 		}
 
 		if (!aborted)
@@ -859,6 +874,10 @@ void DebriefingState::prepareDebriefing()
 		else
 		{
 			_txtTitle->setText(tr("STR_TERROR_CONTINUES"));
+			if (objectiveFailedText != "")
+			{
+				addStat(objectiveFailedText, 1, objectiveFailedScore);
+			}
 		}
 
 		if (playersSurvived > 0 && !_destroyBase)

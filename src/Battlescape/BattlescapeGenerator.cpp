@@ -278,7 +278,10 @@ void BattlescapeGenerator::nextStage()
 	{
 		throw Exception("Map generator encountered an error: " + _terrain->getScript() + " script not found.");
 	}
+
 	generateMap(script);
+
+	setupObjectives(ruleDeploy);
 
 	int highestSoldierID = 0;
 	bool selectedFirstSoldier = false;
@@ -427,7 +430,10 @@ void BattlescapeGenerator::run()
 	{
 		throw Exception("Map generator encountered an error: " + _terrain->getScript() + " script not found.");
 	}
+
 	generateMap(script);
+
+	setupObjectives(ruleDeploy);
 
 	deployXCOM();
 
@@ -2010,17 +2016,6 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 		}
 	}
 
-	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
-	{
-		for (int j = 0; j != 4; ++j)
-		{
-			if (_save->getTiles()[i]->getMapData(j) && _save->getTiles()[i]->getMapData(j)->getSpecialType() == MUST_DESTROY)
-			{
-				_save->addToObjectiveCount();
-			}
-		}
-	}
-
 	delete _dummy;
 
 	attachNodeLinks();
@@ -2660,4 +2655,44 @@ void BattlescapeGenerator::setTerrain(RuleTerrain *terrain)
 	_terrain = terrain;
 }
 
+
+/**
+ * Sets up the objectives for the map.
+ * @param ruleDeploy the deployment data we're gleaning data from.
+ */
+void BattlescapeGenerator::setupObjectives(AlienDeployment *ruleDeploy)
+{
+	int targetType = ruleDeploy->getObjectiveType();
+
+	if (targetType > -1)
+	{
+		int objectives = ruleDeploy->getObjectivesRequired();
+		int actualCount = 0;
+
+		for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
+		{
+			for (int j = 0; j != 4; ++j)
+			{
+				if (_save->getTiles()[i]->getMapData(j) && _save->getTiles()[i]->getMapData(j)->getSpecialType() == targetType)
+				{
+					actualCount++;
+				}
+			}
+		}
+
+		if (actualCount > 0)
+		{
+			_save->setObjectiveType(targetType);
+
+			if (actualCount < objectives || objectives == 0)
+			{
+				_save->setObjectiveCount(actualCount);
+			}
+			else
+			{
+				_save->setObjectiveCount(objectives);
+			}
+		}
+	}
+}
 }

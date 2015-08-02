@@ -108,6 +108,7 @@
 #include "../Menu/ListSaveState.h"
 #include "../Ruleset/RuleGlobe.h"
 #include "../Engine/Exception.h"
+#include "../Ruleset/AlienDeployment.h"
 
 namespace OpenXcom
 {
@@ -1112,29 +1113,34 @@ private:
  */
 bool GeoscapeState::processMissionSite(MissionSite *site) const
 {
-	if (site->getSecondsRemaining() >= 30 * 60)
+	bool removeSite = site->getSecondsRemaining() < 30 * 60;
+	if (!removeSite)
 	{
 		site->setSecondsRemaining(site->getSecondsRemaining() - 30 * 60);
-		return false;
 	}
-	if (!site->getFollowers()->empty()) // CHEEKY EXPLOIT
+	else
 	{
-		return false;
+		removeSite = site->getFollowers()->empty(); // CHEEKY EXPLOIT
 	}
-	// Score and delete it.
+
+	int score = removeSite ? site->getDeployment()->getDespawnPenalty() : site->getDeployment()->getPoints();
+
 	Region *region = _game->getSavedGame()->locateRegion(*site);
 	if (region)
 	{
-		region->addActivityAlien(site->getRules()->getPoints() * 100);
-		//kids, tell your folks... don't ignore mission sites.
+		region->addActivityAlien(score);
 	}
 	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 	{
 		if ((*k)->getRules()->insideCountry(site->getLongitude(), site->getLatitude()))
 		{
-			(*k)->addActivityAlien(site->getRules()->getPoints() * 100);
+			(*k)->addActivityAlien(score);
 			break;
 		}
+	}
+	if (!removeSite)
+	{
+		return false;
 	}
 	delete site;
 	return true;
@@ -2171,6 +2177,10 @@ void GeoscapeState::determineAlienMissions()
 			std::map<int, bool>::const_iterator found = conditions.find(std::abs(*j));
 			// just an FYI: if you add a 0 to your conditionals, this flag will never resolve to true, and your command will never run.
 			process = (found == conditions.end() || (found->second == true && *j > 0) || (found->second == false && *j < 0));
+		}
+		if (command->getLabel() > 0 && conditions.find(command->getLabel()) != conditions.end())
+		{
+			throw Exception("Mission generator encountered an error: multiple commands are sharing the same label.");
 		}
 		// level four condition check: does random chance favour this command's execution?
 		if (process && RNG::percent(command->getExecutionOdds()))

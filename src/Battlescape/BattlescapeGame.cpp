@@ -38,6 +38,7 @@
 #include "AlienBAIState.h"
 #include "CivilianBAIState.h"
 #include "Pathfinding.h"
+#include "../Ruleset/AlienDeployment.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Sound.h"
@@ -452,7 +453,7 @@ void BattlescapeGame::endTurn()
 
 	tallyUnits(liveAliens, liveSoldiers);
 
-	if (_save->allObjectivesDestroyed())
+	if (_save->allObjectivesDestroyed() && _save->getObjectiveType() == MUST_DESTROY)
 	{
 		_parentState->finishBattle(false, liveSoldiers);
 		return;
@@ -607,6 +608,21 @@ void BattlescapeGame::showInfoBoxQueue()
 	_infoboxQueue.clear();
 }
 
+/**
+ * Sets up a mission complete notification.
+ */
+void BattlescapeGame::missionComplete()
+{
+	Game *game = _parentState->getGame();
+	if (game->getRuleset()->getDeployment(_save->getMissionType()))
+	{
+		std::string missionComplete = game->getRuleset()->getDeployment(_save->getMissionType())->getObjectivePopup();
+		if (missionComplete != "")
+		{
+			_infoboxQueue.push_back(new InfoboxOKState(game->getLanguage()->getString(missionComplete)));
+		}
+	}
+}
 /**
  * Handles the result of non target actions, like priming a grenade.
  */

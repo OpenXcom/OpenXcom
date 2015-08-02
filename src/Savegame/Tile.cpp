@@ -456,17 +456,18 @@ int Tile::getShade() const
  * Destroy a part on this tile. We first remove the old object, then replace it with the destroyed one.
  * This is because the object type of the old and new one are not necessarily the same.
  * If the destroyed part is an explosive, set the tile's explosive value, which will trigger a chained explosion.
- * @param part
- * @return bool Return true objective was destroyed
+ * @param part the part to destroy.
+ * @param type the objective type for this mission we are checking against.
+ * @return bool Return true objective was destroyed.
  */
-bool Tile::destroy(int part)
+bool Tile::destroy(int part, SpecialTileType type)
 {
 	bool _objective = false;
 	if (_objects[part])
 	{
 		if (_objects[part]->isGravLift())
 			return false;
-		_objective = _objects[part]->getSpecialType() == MUST_DESTROY;
+		_objective = _objects[part]->getSpecialType() == type;
 		MapData *originalPart = _objects[part];
 		int originalMapDataSetID = _mapDataSetID[part];
 		setMapData(0, -1, -1, part);
@@ -493,13 +494,14 @@ bool Tile::destroy(int part)
  * damage terrain - check against armor
  * @param part Part to check.
  * @param power Power of the damage.
+ * @param type the objective type for this mission we are checking against.
  * @return bool Return true objective was destroyed
  */
-bool Tile::damage(int part, int power)
+bool Tile::damage(int part, int power, SpecialTileType type)
 {
 	bool objective = false;
 	if (power >= _objects[part]->getArmor())
-		objective = destroy(part);
+		objective = destroy(part, type);
 	return objective;
 }
 
@@ -820,7 +822,9 @@ void Tile::prepareNewTurn()
 			if (_fire)
 			{
 				// this is how we avoid hitting the same unit multiple times.
-				if (_unit->getArmor()->getSize() == 1 || !_unit->tookFireDamage())
+				if ((_unit->getArmor()->getSize() == 1 || !_unit->tookFireDamage())
+					//and avoid setting fire elementals on fire
+					&& _unit->getSpecialAbility() != SPECAB_BURNFLOOR && _unit->getSpecialAbility() != SPECAB_BURN_AND_EXPLODE)
 				{
 					_unit->toggleFireDamage();
 					// _smoke becomes our damage value
