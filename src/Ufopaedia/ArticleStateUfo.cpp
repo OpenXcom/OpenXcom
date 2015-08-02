@@ -82,9 +82,9 @@ namespace OpenXcom
 		else
 		{
 			graphic = _game->getResourcePack()->getSurface(ufo->getModSprite());
-			graphic->setX(0);
-			graphic->setY(0);
 		}
+		graphic->setX(0);
+		graphic->setY(0);
 		graphic->blit(_image);
 
 		_txtInfo = new Text(300, 50, 10, 140);

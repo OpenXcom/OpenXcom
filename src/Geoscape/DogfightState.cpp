@@ -321,17 +321,15 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	graphic->blit(_preview);
 	if (ufo->getRules()->getModSprite().empty())
 	{
-		graphic->setX(dogfightInterface->getElement("previewTop")->x);
-		graphic->setY(dogfightInterface->getElement("previewTop")->y);
 		graphic->getCrop()->y = dogfightInterface->getElement("previewMid")->y + dogfightInterface->getElement("previewMid")->h * _ufo->getRules()->getSprite();
 		graphic->getCrop()->h = dogfightInterface->getElement("previewMid")->h;
 	}
 	else
 	{
 		graphic = _game->getResourcePack()->getSurface(ufo->getRules()->getModSprite());
-		graphic->setX(0);
-		graphic->setY(0);
 	}
+	graphic->setX(dogfightInterface->getElement("previewTop")->x);
+	graphic->setY(dogfightInterface->getElement("previewTop")->h);
 	graphic->blit(_preview);
 	_preview->setVisible(false);
 	_preview->onMouseClick((ActionHandler)&DogfightState::previewClick);
