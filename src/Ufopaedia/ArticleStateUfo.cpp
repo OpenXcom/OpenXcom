@@ -63,27 +63,21 @@ namespace OpenXcom
 		_image = new Surface(160, 52, 160, 6);
 		add(_image);
 
+		RuleInterface *dogfightInterface = _game->getRuleset()->getInterface("dogfight");
 		Surface *graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
 		graphic->setX(0);
 		graphic->setY(0);
 		graphic->getCrop()->x = 0;
 		graphic->getCrop()->y = 0;
-		graphic->getCrop()->w = 160;
-		graphic->getCrop()->h = 52;
+		graphic->getCrop()->w = _image->getWidth();
+		graphic->getCrop()->h = _image->getHeight();
 		_image->drawRect(graphic->getCrop(), 15);
-/*
-		graphic->getCrop()->y = 96;
-		graphic->getCrop()->h = 15;
 		graphic->blit(_image);
-		graphic->setY(67);
-		graphic->getCrop()->y = 111;
-		graphic->getCrop()->h = 29;
-		graphic->blit(_image);
-*/
+
 		if (ufo->getModSprite().empty())
 		{
-			graphic->getCrop()->y = 140 + 52 * ufo->getSprite();
-			graphic->getCrop()->h = 52;
+			graphic->getCrop()->y = dogfightInterface->getElement("previewMid")->y + dogfightInterface->getElement("previewMid")->h * ufo->getSprite();
+			graphic->getCrop()->h = dogfightInterface->getElement("previewMid")->h;
 		}
 		else
 		{

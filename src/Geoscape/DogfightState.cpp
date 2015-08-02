@@ -298,36 +298,39 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	_btnUfo->invalidate(false);
 
 	// Set up objects
+	RuleInterface *dogfightInterface = _game->getRuleset()->getInterface("dogfight");
+
 	Surface *graphic;
 	graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
 	graphic->setX(0);
 	graphic->setY(0);
 	graphic->getCrop()->x = 0;
 	graphic->getCrop()->y = 0;
-	graphic->getCrop()->w = 160;
-	graphic->getCrop()->h = 96;
+	graphic->getCrop()->w = _window->getWidth();
+	graphic->getCrop()->h = _window->getHeight();
 	_window->drawRect(graphic->getCrop(), 15);
 	graphic->blit(_window);
 
 	_preview->drawRect(graphic->getCrop(), 15);
-	graphic->getCrop()->y = 96;
-	graphic->getCrop()->h = 15;
+	graphic->getCrop()->y = dogfightInterface->getElement("previewTop")->y;
+	graphic->getCrop()->h = dogfightInterface->getElement("previewTop")->h;
 	graphic->blit(_preview);
-	graphic->setY(67);
-	graphic->getCrop()->y = 111;
-	graphic->getCrop()->h = 29;
+	graphic->setY(_window->getHeight() - dogfightInterface->getElement("previewBot")->h);
+	graphic->getCrop()->y = dogfightInterface->getElement("previewBot")->y;
+	graphic->getCrop()->h = dogfightInterface->getElement("previewBot")->h;
 	graphic->blit(_preview);
 	if (ufo->getRules()->getModSprite().empty())
 	{
-		graphic->setY(15);
-		graphic->getCrop()->y = 140 + 52 * _ufo->getRules()->getSprite();
-		graphic->getCrop()->h = 52;
+		graphic->setX(dogfightInterface->getElement("previewTop")->x);
+		graphic->setY(dogfightInterface->getElement("previewTop")->y);
+		graphic->getCrop()->y = dogfightInterface->getElement("previewMid")->y + dogfightInterface->getElement("previewMid")->h * _ufo->getRules()->getSprite();
+		graphic->getCrop()->h = dogfightInterface->getElement("previewMid")->h;
 	}
 	else
 	{
 		graphic = _game->getResourcePack()->getSurface(ufo->getRules()->getModSprite());
 		graphic->setX(0);
-		graphic->setY(15);
+		graphic->setY(0);
 	}
 	graphic->blit(_preview);
 	_preview->setVisible(false);
@@ -378,7 +381,6 @@ DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(glob
 	_txtInterceptionNumber->setText(ss1.str());
 	_txtInterceptionNumber->setVisible(false);
 
-	RuleInterface *dogfightInterface = _game->getRuleset()->getInterface("dogfight");
 	// define the colors to be used
 	_colors[CRAFT_MIN] = dogfightInterface->getElement("craftRange")->color;
 	_colors[CRAFT_MAX] = dogfightInterface->getElement("craftRange")->color2;

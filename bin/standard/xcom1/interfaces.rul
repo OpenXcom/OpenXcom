@@ -347,6 +347,15 @@ interfaces:
         color2: 7
       - id: disabledAmmo
         color: 24
+      - id: previewTop
+        pos: [0, 96]
+        size: [160, 15]
+      - id: previewBot
+        pos: [0, 111]
+        size: [160, 29]
+      - id: previewMid
+        pos: [0, 140]
+        size: [160, 52]
   - type: baseNaming
     elements:
       - id: palette
