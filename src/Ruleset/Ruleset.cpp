@@ -1302,17 +1302,18 @@ const std::vector<std::string> &Ruleset::getManufactureList() const
  */
 std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() const
 {
-	std::vector<OpenXcom::RuleBaseFacility*> PlaceList;
+	std::vector<OpenXcom::RuleBaseFacility*> placeList;
 
 	for (YAML::const_iterator i = _startingBase["facilities"].begin(); i != _startingBase["facilities"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		if (type != "STR_ACCESS_LIFT")
+		RuleBaseFacility *facility = getBaseFacility(type);
+		if (!facility->isLift())
 		{
-			PlaceList.push_back(getBaseFacility(type));
+			placeList.push_back(facility);
 		}
 	}
-	return PlaceList;
+	return placeList;
 }
 
 /**

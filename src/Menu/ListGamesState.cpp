@@ -98,7 +98,7 @@ ListGamesState::ListGamesState(OptionsOrigin origin, int firstValidRow, bool aut
 	_sortDate = new ArrowButton(ARROW_NONE, 11, 8, 204, 32);
 
 	// Set palette
-	setInterface("geoscape", true, _game->getSavedGame()->getSavedBattle());
+	setInterface("geoscape", true, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : 0);
 
 	add(_window, "window", "saveMenus");
 	add(_btnCancel, "button", "saveMenus");
