@@ -1066,6 +1066,8 @@ items: #done
     armor: 20
     attraction: 1
   - type: STR_VIBRO_BLADE
+    requires:
+      - STR_VIBRO_BLADE
     size: 3
     costSell: 1500
     transferTime: 48
@@ -1085,6 +1087,8 @@ items: #done
     invHeight: 3
     armor: 20
   - type: STR_THERMIC_LANCE
+    requires:
+      - STR_THERMIC_LANCE
     size: 3
     costSell: 1800
     transferTime: 48
@@ -1104,6 +1108,8 @@ items: #done
     invHeight: 3
     armor: 20
   - type: STR_HEAVY_THERMIC_LANCE
+    requires:
+      - STR_HEAVY_THERMIC_LANCE
     size: 3
     costSell: 2000
     transferTime: 48
