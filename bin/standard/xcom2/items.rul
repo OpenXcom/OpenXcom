@@ -1363,16 +1363,16 @@ items: #done
     name: STR_CORPSE
     weight: 30
     floorSprite: 50
-    invWidth: 2
-    invHeight: 3
+    invWidth: 0
+    invHeight: 0
     armor: 12
     recover: false
   - type: CIVF_CORPSE
     name: STR_CORPSE
     weight: 50
     floorSprite: 51
-    invWidth: 2
-    invHeight: 3
+    invWidth: 0
+    invHeight: 0
     armor: 12
     recover: false
   - type: STR_ION_BEAM_ACCELERATORS
