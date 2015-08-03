@@ -1,0 +1,1723 @@
+items: #done
+  - type: STR_AJAX_LAUNCHER
+    size: 0.8
+    costBuy: 16000
+    costSell: 12000
+    transferTime: 48
+  - type: STR_AJAX_TORPEDOES
+    size: 0.4
+    costBuy: 3000
+    costSell: 2400
+    transferTime: 48
+  - type: STR_DUP_HEAD_LAUNCHER
+    size: 1
+    costBuy: 17000
+    costSell: 12750
+    transferTime: 48
+  - type: STR_DUP_HEAD_TORPEDOES
+    size: 1.5
+    costBuy: 9000
+    costSell: 7200
+    transferTime: 48
+  - type: STR_CRAFT_GAS_CANNON
+    size: 1.5
+    costBuy: 30000
+    costSell: 22500
+    transferTime: 48
+  - type: STR_CRAFT_GAS_CANNON_ROUNDS_X50
+    size: 0
+    costBuy: 1240
+    costSell: 1012
+    transferTime: 96
+  - type: STR_GAUSS_CANNON
+    size: 2.0
+    costSell: 211000
+    transferTime: 48
+  - type: STR_SONIC_OSCILLATOR
+    size: 1.2
+    costSell: 267300
+    transferTime: 48
+  - type: STR_PWT_CANNON
+    size: 2.0
+    costSell: 281000
+    transferTime: 48
+  - type: STR_PULSE_WAVE_TORPEDOES
+    size: 0.6
+    costSell: 53300
+    transferTime: 48
+  - type: STR_COELACANTH_GAS_CANNON
+    size: 6
+    costBuy: 420000
+    costSell: 340000
+    transferTime: 96
+    weight: 1
+    bigSprite: 40
+    floorSprite: 0
+    handSprite: 0
+    bulletSprite: 4
+    fireSound: 24
+    compatibleAmmo:
+      - STR_HWP_SOLID_HARPOON_BOLTS
+    accuracySnap: 60
+    accuracyAimed: 90
+    tuSnap: 33
+    tuAimed: 80
+    battleType: 1
+    fixedWeapon: true
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+    turretType: 0
+  - type: STR_HWP_SOLID_HARPOON_BOLTS
+    size: 0.1
+    costBuy: 200
+    costSell: 100
+    transferTime: 48
+    weight: 1
+    hitSound: 21
+    hitAnimation: 26
+    power: 60
+    damageType: 1
+    clipSize: 30
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    armor: 20
+    vaporColor: 0
+    vaporDensity: 15
+  - type: STR_COELACANTH_AQUA_JET
+    size: 6
+    costBuy: 480000
+    costSell: 360000
+    transferTime: 96
+    bigSprite: 42
+    fireSound: 23
+    bulletSprite: 0
+    compatibleAmmo:
+      - STR_HWP_AQUA_JET_MISSILES
+    accuracySnap: 55
+    accuracyAimed: 115
+    tuSnap: 45
+    tuAimed: 75
+    battleType: 1
+    fixedWeapon: true
+    invWidth: 2
+    invHeight: 3
+    turretType: 1
+    underwaterOnly: true
+  - type: STR_HWP_AQUA_JET_MISSILES
+    size: 0.6
+    costBuy: 3000
+    costSell: 2250
+    transferTime: 48
+    power: 85
+    damageType: 3
+    clipSize: 8
+    battleType: 2
+    hitAnimation: 8
+    vaporColor: 1
+    vaporDensity: 20
+  - type: STR_COELACANTH_GAUSS
+    size: 6
+    costSell: 594000
+    transferTime: 96
+    bigSprite: 40
+    bulletSprite: 6
+    fireSound: 34
+    hitSound: 31
+    hitAnimation: 46
+    power: 110
+    damageType: 4
+    accuracySnap: 50
+    accuracyAimed: 85
+    tuSnap: 33
+    tuAimed: 75
+    battleType: 1
+    fixedWeapon: true
+    clipSize: 50
+    invWidth: 2
+    invHeight: 3
+    turretType: 2
+    vaporColor: 2
+    vaporDensity: 10
+  - type: STR_DISPLACER_SONIC
+    size: 6
+    costSell: 980000
+    transferTime: 96
+    bigSprite: 54
+    bulletSprite: 8
+    fireSound: 36
+    hitSound: 31
+    power: 110
+    damageType: 5
+    hitAnimation: 46
+    accuracySnap: 85
+    accuracyAimed: 100
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    fixedWeapon: true
+    clipSize: 100
+    invWidth: 2
+    invHeight: 3
+    turretType: 3
+    vaporColor: 3
+    vaporDensity: 30
+  - type: STR_DISPLACER_PWT
+    size: 6
+    costSell: 1043000
+    transferTime: 96
+    bigSprite: 43
+    bulletSprite: 10
+    fireSound: 26
+    compatibleAmmo:
+      - STR_HWP_DISPLACER_PWT
+    accuracyAimed: 100
+    tuAimed: 66
+    battleType: 1
+    fixedWeapon: true
+    waypoint: true
+    invWidth: 2
+    invHeight: 3
+    turretType: 4
+    underwaterOnly: true
+  - type: STR_HWP_DISPLACER_PWT
+    size: 6
+    costSell: 31500
+    transferTime: 48
+    power: 140
+    damageType: 3
+    clipSize: 8
+    battleType: 2
+    blastRadius: 11
+    hitAnimation: 8
+    vaporColor: 1
+    vaporDensity: 15
+  - type: STR_DART_PISTOL
+    size: 0.1
+    costBuy: 800
+    costSell: 600
+    weight: 5
+    bigSprite: 3
+    floorSprite: 3
+    handSprite: 96
+    bulletSprite: 1
+    fireSound: 20
+    compatibleAmmo:
+      - STR_DART_POD
+    accuracySnap: 40
+    accuracyAimed: 80
+    tuSnap: 20
+    tuAimed: 50
+    battleType: 1
+    invWidth: 1
+    invHeight: 2
+    armor: 20
+  - type: STR_DART_POD
+    size: 0.1
+    costBuy: 70
+    costSell: 52
+    weight: 2
+    bigSprite: 4
+    floorSprite: 4
+    handSprite: 240
+    hitSound: 21
+    hitAnimation: 26
+    power: 16
+    damageType: 1
+    clipSize: 12
+    battleType: 2
+    armor: 20
+    vaporColor: 0
+    vaporDensity: 5
+  - type: STR_JET_HARPOON
+    size: 0.2
+    costBuy: 3000
+    costSell: 2250
+    weight: 8
+    bigSprite: 1
+    floorSprite: 1
+    handSprite: 0
+    bulletSprite: 2
+    fireSound: 19
+    compatibleAmmo:
+      - STR_HARPOON_POD
+    accuracyAuto: 40
+    accuracySnap: 60
+    accuracyAimed: 90
+    tuAuto: 40
+    tuSnap: 35
+    tuAimed: 70
+    battleType: 1
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+    armor: 20
+  - type: STR_HARPOON_POD
+    size: 0.1
+    costBuy: 200
+    costSell: 150
+    weight: 2
+    bigSprite: 2
+    floorSprite: 2
+    handSprite: 248
+    hitSound: 16
+    hitAnimation: 26
+    power: 32
+    damageType: 1
+    clipSize: 10
+    battleType: 2
+    armor: 20
+    vaporColor: 0
+    vaporDensity: 10
+  - type: STR_GAS_CANNON
+    size: 0.3
+    costBuy: 6400
+    costSell: 4800
+    weight: 17
+    bigSprite: 11
+    floorSprite: 11
+    handSprite: 24
+    bulletSprite: 4
+    fireSound: 24
+    compatibleAmmo:
+      - STR_GC_AP_AMMO
+      - STR_GC_HE_AMMO
+      - STR_GC_P_AMMO
+    accuracySnap: 60
+    accuracyAimed: 90
+    tuSnap: 40
+    tuAimed: 75
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+  - type: STR_GC_AP_AMMO
+    size: 0.1
+    costBuy: 300
+    costSell: 225
+    weight: 5
+    bigSprite: 12
+    floorSprite: 8
+    handSprite: 272
+    hitSound: 21
+    hitAnimation: 26
+    power: 60
+    damageType: 1
+    clipSize: 8
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    armor: 50
+    attraction: 1
+    vaporColor: 0
+    vaporDensity: 15
+  - type: STR_GC_HE_AMMO
+    size: 0.1
+    costBuy: 500
+    costSell: 275
+    weight: 6
+    bigSprite: 13
+    floorSprite: 9
+    handSprite: 256
+    hitSound: 0
+    hitAnimation: 8
+    power: 65
+    damageType: 3
+    clipSize: 8
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    armor: 50
+    attraction: 1
+    vaporColor: 0
+    vaporDensity: 15
+  - type: STR_GC_P_AMMO
+    size: 0.1
+    costBuy: 400
+    costSell: 300
+    weight: 6
+    bigSprite: 14
+    floorSprite: 10
+    handSprite: 264
+    hitSound: 0
+    hitAnimation: 8
+    power: 60
+    damageType: 2
+    clipSize: 8
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    armor: 50
+    attraction: 1
+    vaporColor: 0
+    vaporDensity: 15
+  - type: STR_HYDRO_JET_CANNON
+    size: 0.3
+    costBuy: 13500
+    costSell: 10125
+    weight: 19
+    bigSprite: 7
+    floorSprite: 7
+    handSprite: 32
+    bulletSprite: 3
+    fireSound: 23
+    compatibleAmmo:
+      - STR_HJC_AP_AMMO
+      - STR_HJC_HE_AMMO
+      - STR_HJC_P_AMMO
+    accuracyAuto: 40
+    accuracySnap: 50
+    accuracyAimed: 80
+    tuAuto: 40
+    tuSnap: 35
+    tuAimed: 80
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+    underwaterOnly: true
+  - type: STR_HJC_AP_AMMO
+    size: 0.1
+    costBuy: 500
+    costSell: 400
+    weight: 5
+    bigSprite: 8
+    floorSprite: 13
+    handSprite: 296
+    hitSound: 21
+    hitAnimation: 26
+    power: 40
+    damageType: 1
+    clipSize: 14
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    armor: 40
+    vaporColor: 0
+    vaporDensity: 10
+  - type: STR_HJC_HE_AMMO
+    size: 0.1
+    costBuy: 700
+    costSell: 560
+    weight: 5
+    bigSprite: 9
+    floorSprite: 14
+    handSprite: 280
+    hitSound: 0
+    hitAnimation: 8
+    power: 50
+    damageType: 3
+    clipSize: 14
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    armor: 40
+    vaporColor: 0
+    vaporDensity: 10
+  - type: STR_HJC_P_AMMO
+    size: 0.1
+    costBuy: 650
+    costSell: 520
+    weight: 5
+    bigSprite: 10
+    floorSprite: 12
+    handSprite: 288
+    hitSound: 0
+    hitAnimation: 8
+    power: 40
+    damageType: 2
+    clipSize: 14
+    battleType: 2
+    invWidth: 2
+    invHeight: 1
+    armor: 40
+    attraction: 1
+    vaporColor: 0
+    vaporDensity: 10
+  - type: STR_TORPEDO_LAUNCHER
+    size: 0.4
+    costBuy: 4000
+    costSell: 3000
+    weight: 10
+    bigSprite: 15
+    floorSprite: 15
+    handSprite: 72
+    bulletSprite: 0
+    fireSound: 23
+    compatibleAmmo:
+      - STR_SMALL_TORPEDO
+      - STR_LARGE_TORPEDO
+      - STR_PHOSPHOROUS_TORPEDO
+    accuracySnap: 50
+    accuracyAimed: 110
+    tuSnap: 40
+    tuAimed: 80
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+    underwaterOnly: true
+  - type: STR_SMALL_TORPEDO
+    size: 0.2
+    costBuy: 600
+    costSell: 480
+    weight: 5
+    bigSprite: 16
+    floorSprite: 16
+    handSprite: 304
+    hitSound: 0
+    hitAnimation: 8
+    power: 80
+    damageType: 3
+    clipSize: 1
+    battleType: 2
+    invWidth: 1
+    invHeight: 3
+    armor: 50
+    vaporColor: 1
+    vaporDensity: 20
+  - type: STR_LARGE_TORPEDO
+    size: 0.2
+    costBuy: 900
+    costSell: 720
+    weight: 8
+    bigSprite: 17
+    floorSprite: 17
+    handSprite: 312
+    hitSound: 0
+    hitAnimation: 8
+    power: 90
+    damageType: 3
+    clipSize: 1
+    battleType: 2
+    invWidth: 1
+    invHeight: 3
+    armor: 50
+    vaporColor: 1
+    vaporDensity: 20
+  - type: STR_PHOSPHOROUS_TORPEDO
+    size: 0.2
+    costBuy: 1200
+    costSell: 960
+    weight: 8
+    bigSprite: 18
+    floorSprite: 18
+    handSprite: 320
+    hitSound: 0
+    hitAnimation: 8
+    power: 80
+    damageType: 2
+    clipSize: 1
+    battleType: 2
+    invWidth: 1
+    invHeight: 3
+    armor: 40
+    vaporColor: 1
+    vaporDensity: 20
+  - type: STR_GAUSS_PISTOL
+    size: 0.1
+    costSell: 20000
+    weight: 7
+    bigSprite: 5
+    floorSprite: 5
+    handSprite: 128
+    bulletSprite: 5
+    fireSound: 35
+    accuracyAuto: 30
+    accuracySnap: 40
+    accuracyAimed: 70
+    tuAuto: 30
+    tuSnap: 25
+    tuAimed: 50
+    compatibleAmmo:
+      - STR_GAUSS_PISTOL_CLIP
+    battleType: 1
+    invWidth: 1
+    invHeight: 2
+    armor: 20
+  - type: STR_GAUSS_PISTOL_CLIP
+    size: 0.2
+    costSell: 1050
+    weight: 2
+    bigSprite: 57
+    floorSprite: 78
+    handSprite: 216
+    hitSound: 31
+    hitAnimation: 46
+    power: 45
+    damageType: 4
+    clipSize: 20
+    battleType: 2
+    invWidth: 1
+    invHeight: 1
+    armor: 70
+    vaporColor: 2
+    vaporDensity: 5
+  - type: STR_GAUSS_RIFLE
+    size: 0.2
+    costSell: 36900
+    weight: 8
+    bigSprite: 0
+    floorSprite: 0
+    handSprite: 8
+    bulletSprite: 6
+    fireSound: 34
+    accuracyAuto: 50
+    accuracySnap: 65
+    accuracyAimed: 100
+    tuAuto: 40
+    tuSnap: 30
+    tuAimed: 60
+    compatibleAmmo:
+      - STR_GAUSS_RIFLE_CLIP
+    battleType: 1
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+    armor: 20
+  - type: STR_GAUSS_RIFLE_CLIP
+    size: 0.2
+    costSell: 1950
+    weight: 3
+    bigSprite: 61
+    floorSprite: 78
+    handSprite: 224
+    hitSound: 31
+    hitAnimation: 46
+    power: 60
+    damageType: 4
+    clipSize: 15
+    battleType: 2
+    invWidth: 1
+    invHeight: 1
+    armor: 70
+    vaporColor: 2
+    vaporDensity: 10
+  - type: STR_HEAVY_GAUSS
+    size: 0.3
+    costSell: 61000
+    weight: 18
+    bigSprite: 6
+    floorSprite: 6
+    handSprite: 16
+    bulletSprite: 7
+    fireSound: 33
+    accuracySnap: 50
+    accuracyAimed: 90
+    tuSnap: 40
+    tuAimed: 80
+    compatibleAmmo:
+      - STR_HEAVY_GAUSS_CLIP
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+  - type: STR_HEAVY_GAUSS_CLIP
+    size: 0.2
+    costSell: 3220
+    weight: 4
+    bigSprite: 62
+    floorSprite: 78
+    handSprite: 232
+    hitSound: 31
+    hitAnimation: 46
+    power: 75
+    damageType: 4
+    clipSize: 10
+    battleType: 2
+    invWidth: 1
+    invHeight: 1
+    armor: 70
+    vaporColor: 2
+    vaporDensity: 15
+  - type: STR_MAGNA_BLAST_GRENADE
+    size: 0.1
+    costBuy: 300
+    costSell: 240
+    weight: 3
+    bigSprite: 19
+    floorSprite: 19
+    handSprite: 120
+    power: 50
+    damageType: 3
+    battleType: 4
+    armor: 300
+    blastRadius: 5
+    hitAnimation: 8
+  - type: STR_DYE_GRENADE
+    size: 0.1
+    costBuy: 150
+    costSell: 120
+    weight: 3
+    bigSprite: 20
+    floorSprite: 19
+    handSprite: 120
+    # Applying Zombie's patch here, because I happen to agree with him.
+    power: 60
+    damageType: 9
+    battleType: 4
+    armor: 110
+    blastRadius: 5
+    hitAnimation: 8
+  - type: STR_PARTICLE_DISTURBANCE_GRENADE
+    size: 0.1
+    costBuy: 500
+    costSell: 400
+    weight: 3
+    bigSprite: 21
+    floorSprite: 21
+    handSprite: 120
+    power: 70
+    damageType: 3
+    battleType: 5
+    armor: 300
+    blastRadius: 5
+    hitAnimation: 8
+  - type: STR_MAGNA_PACK_EXPLOSIVE
+    size: 0.25
+    costBuy: 1500
+    costSell: 1200
+    weight: 6
+    bigSprite: 22
+    floorSprite: 22
+    handSprite: 352
+    power: 100
+    damageType: 3
+    battleType: 4
+    invWidth: 2
+    invHeight: 1
+    armor: 300
+    blastRadius: 5
+    hitAnimation: 8
+  - type: STR_PARTICLE_DISTURBANCE_SENSOR
+    size: 0.1
+    costSell: 45600
+    weight: 3
+    bigSprite: 23
+    floorSprite: 23
+    handSprite: 192
+    battleType: 7
+    tuUse: 25
+    armor: 20
+    underwaterOnly: true
+  - type: STR_MEDI_KIT
+    size: 0.1
+    costSell: 46500
+    weight: 5
+    bigSprite: 24
+    floorSprite: 24
+    handSprite: 208
+    battleType: 6
+    invWidth: 1
+    invHeight: 2
+    painKiller: 10
+    heal: 10
+    stimulant: 10
+    woundRecovery: 1
+    healthRecovery: 3
+    stunRecovery: 4
+    energyRecovery: 10
+    tuUse: 10
+    flatRate: true
+    armor: 20
+  - type: STR_MC_DISRUPTOR
+    requires:
+      - STR_MC_DISRUPTOR
+    size: 0.1
+    costSell: 194700
+    weight: 8
+    bigSprite: 33
+    floorSprite: 28
+    handSprite: 384
+    hitSound: 43
+    battleType: 9
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+    tuUse: 25
+    flatRate: true
+    armor: 20
+    underwaterOnly: true
+  - type: STR_THERMAL_TAZER
+    size: 0.1
+    costBuy: 1260
+    costSell: 945
+    weight: 6
+    bigSprite: 26
+    floorSprite: 26
+    handSprite: 152
+    meleeSound: 26
+    power: 80
+    damageType: 6
+    accuracyMelee: 100
+    skillApplied: false
+    tuMelee: 40
+    battleType: 3
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+    armor: 20
+  - type: STR_CHEMICAL_FLARE
+    size: 0.1
+    costBuy: 60
+    costSell: 40
+    weight: 3
+    bigSprite: 55
+    floorSprite: 72
+    handSprite: 360
+    power: 15
+    battleType: 10
+    armor: 40
+  - type: STR_CORPSE
+    weight: 35
+    bigSprite: 28
+    floorSprite: 39
+    invWidth: 2
+    invHeight: 3
+    armor: 0
+    recover: false
+  - type: STR_CORPSE_ARMOR
+    name: STR_CORPSE
+    weight: 35
+    bigSprite: 44
+    floorSprite: 40
+    invWidth: 2
+    invHeight: 3
+    armor: 0
+    recover: false
+  - type: STR_CORPSE_ION
+    name: STR_CORPSE
+    weight: 40
+    bigSprite: 45
+    floorSprite: 41
+    invWidth: 2
+    invHeight: 3
+    armor: 0
+    recover: false
+  - type: STR_SONIC_CANNON
+    requires:
+      - STR_SONIC_CANNON
+    size: 0.2
+    costSell: 171600
+    weight: 8
+    bigSprite: 30
+    floorSprite: 29
+    handSprite: 40
+    bulletSprite: 8
+    fireSound: 37
+    compatibleAmmo:
+      - STR_CANNON_POWER_CLIP
+    accuracySnap: 80
+    accuracyAimed: 115
+    tuSnap: 50
+    tuAimed: 70
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 3
+    recoveryPoints: 5
+    armor: 50
+    attraction: 1
+  - type: STR_CANNON_POWER_CLIP
+    requires:
+      - STR_CANNON_POWER_CLIP
+    size: 0.3
+    costSell: 9590
+    weight: 3
+    bigSprite: 25
+    floorSprite: 33
+    handSprite: 200
+    hitSound: 31
+    hitAnimation: 46
+    power: 130
+    damageType: 5
+    clipSize: 10
+    battleType: 2
+    recoveryPoints: 1
+    armor: 50
+    attraction: 1
+    vaporColor: 3
+    vaporDensity: 30
+  - type: STR_SONIC_BLASTA_RIFLE
+    requires:
+      - STR_SONIC_BLASTA_RIFLE
+    size: 0.2
+    costSell: 126500
+    weight: 5
+    bigSprite: 31
+    floorSprite: 30
+    handSprite: 48
+    bulletSprite: 8
+    fireSound: 36
+    compatibleAmmo:
+      - STR_BLASTA_POWER_CLIP
+    accuracySnap: 75
+    accuracyAimed: 110
+    tuSnap: 40
+    tuAimed: 60
+    battleType: 1
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+    recoveryPoints: 4
+    armor: 50
+    attraction: 1
+  - type: STR_BLASTA_POWER_CLIP
+    requires:
+      - STR_BLASTA_POWER_CLIP
+    size: 0.1
+    costSell: 6290
+    weight: 3
+    bigSprite: 41
+    floorSprite: 33
+    handSprite: 432
+    hitSound: 31
+    hitAnimation: 46
+    power: 95
+    damageType: 5
+    clipSize: 15
+    battleType: 2
+    recoveryPoints: 1
+    armor: 50
+    attraction: 1
+    vaporColor: 3
+    vaporDensity: 30
+  - type: STR_SONIC_PISTOL
+    requires:
+      - STR_SONIC_PISTOL
+    size: 0.1
+    costSell: 84000
+    weight: 3
+    bigSprite: 32
+    floorSprite: 31
+    handSprite: 104
+    bulletSprite: 8
+    fireSound: 38
+    compatibleAmmo:
+      - STR_PISTOL_POWER_CLIP
+    accuracySnap: 65
+    accuracyAimed: 85
+    tuSnap: 30
+    tuAimed: 50
+    battleType: 1
+    invWidth: 1
+    invHeight: 2
+    recoveryPoints: 3
+    armor: 45
+    attraction: 1
+  - type: STR_PISTOL_POWER_CLIP
+    requires:
+      - STR_PISTOL_POWER_CLIP
+    size: 0.1
+    costSell: 4440
+    weight: 3
+    bigSprite: 34
+    floorSprite: 33
+    handSprite: 424
+    hitSound: 31
+    hitAnimation: 46
+    power: 80
+    damageType: 5
+    clipSize: 20
+    battleType: 2
+    recoveryPoints: 1
+    armor: 50
+    attraction: 1
+    vaporColor: 3
+    vaporDensity: 30
+  - type: STR_DISRUPTOR_PULSE_LAUNCHER
+    requires:
+      - STR_DISRUPTOR_PULSE_LAUNCHER
+    size: 0.3
+    costSell: 144000
+    weight: 12
+    bigSprite: 35
+    floorSprite: 34
+    handSprite: 56
+    bulletSprite: 10
+    fireSound: 26
+    compatibleAmmo:
+      - STR_DISRUPTOR_AMMO
+    accuracyAimed: 120
+    tuAimed: 66
+    battleType: 1
+    twoHanded: true
+    waypoint: true
+    invWidth: 2
+    invHeight: 3
+    recoveryPoints: 5
+    armor: 40
+    attraction: 1
+    underwaterOnly: true
+  - type: STR_DISRUPTOR_AMMO
+    requires:
+      - STR_DISRUPTOR_AMMO
+    size: 0.2
+    costSell: 17028
+    weight: 4
+    bigSprite: 36
+    floorSprite: 35
+    handSprite: 328
+    hitSound: 0
+    hitAnimation: 8
+    power: 210
+    damageType: 3
+    clipSize: 1
+    battleType: 2
+    invWidth: 1
+    invHeight: 2
+    recoveryPoints: 1
+    armor: 60
+    blastRadius: 11
+    attraction: 1
+    vaporColor: 1
+    vaporDensity: 15
+  - type: STR_THERMAL_SHOK_LAUNCHER
+    requires:
+      - STR_THERMAL_SHOK_LAUNCHER
+    size: 0.2
+    costSell: 120000
+    weight: 8
+    bigSprite: 37
+    floorSprite: 36
+    handSprite: 64
+    bulletSprite: 9
+    fireSound: 41
+    compatibleAmmo:
+      - STR_THERMAL_SHOK_BOMB
+    accuracySnap: 70
+    accuracyAimed: 120
+    tuSnap: 50
+    tuAimed: 70
+    battleType: 1
+    twoHanded: true
+    invWidth: 2
+    invHeight: 2
+    recoveryPoints: 4
+    armor: 20
+    attraction: 1
+  - type: STR_THERMAL_SHOK_BOMB
+    requires:
+      - STR_THERMAL_SHOK_BOMB
+    size: 0.1
+    costSell: 15200
+    weight: 3
+    bigSprite: 38
+    floorSprite: 81
+    handSprite: 368
+    hitSound: 0
+    hitAnimation: 8
+    power: 120
+    damageType: 6
+    clipSize: 1
+    battleType: 2
+    recoveryPoints: 1
+    armor: 60
+    attraction: 1
+    vaporColor: 1
+    vaporDensity: 10
+  - type: STR_SONIC_PULSER
+    requires:
+      - STR_SONIC_PULSER
+    size: 0.1
+    costSell: 14850
+    weight: 3
+    bigSprite: 39
+    floorSprite: 38
+    handSprite: 368
+    power: 120
+    damageType: 3
+    battleType: 4
+    recoveryPoints: 1
+    armor: 300
+    blastRadius: 5
+    attraction: 1
+    hitAnimation: 8
+  - type: STR_ZRBITE
+    size: 0.1
+    costSell: 5000
+    weight: 3
+    bigSprite: 56
+    floorSprite: 79
+    invWidth: 1
+    invHeight: 1
+    armor: 20
+    attraction: 4
+  - type: STR_MC_READER
+    requires:
+      - STR_MC_READER
+    size: 0.1
+    costSell: 304000
+    weight: 7
+    bigSprite: 29
+    floorSprite: 77
+    handSprite: 376
+    hitSound: 43
+    battleType: 8
+    invWidth: 2
+    invHeight: 2
+    tuUse: 50
+    recoveryPoints: 1
+    armor: 20
+    attraction: 1
+  - type: STR_VIBRO_BLADE
+    size: 3
+    costSell: 1500
+    transferTime: 48
+    weight: 10
+    bigSprite: 60
+    floorSprite: 75
+    handSprite: 168
+    meleeSound: 26
+    hitAnimation: 0
+    accuracyMelee: 150
+    tuMelee: 10
+    power: 80
+    damageType: 7
+    clipSize: -1
+    battleType: 3
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+  - type: STR_THERMIC_LANCE
+    size: 3
+    costSell: 1800
+    transferTime: 48
+    weight: 10
+    bigSprite: 59
+    floorSprite: 74
+    handSprite: 176
+    meleeSound: 26
+    hitAnimation: 0
+    accuracyMelee: 160
+    tuMelee: 15
+    power: 110
+    damageType: 7
+    clipSize: -1
+    battleType: 3
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+  - type: STR_HEAVY_THERMIC_LANCE
+    size: 3
+    costSell: 2000
+    transferTime: 48
+    weight: 15
+    bigSprite: 58
+    floorSprite: 73
+    handSprite: 184
+    meleeSound: 26
+    hitAnimation: 0
+    accuracyMelee: 160
+    tuMelee: 20
+    power: 150
+    damageType: 7
+    clipSize: -1
+    battleType: 3
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+  - type: STR_AQUATOID_CORPSE
+    size: 0.4
+    costSell: 20000
+    weight: 30
+    bigSprite: 46
+    floorSprite: 42
+    invWidth: 2
+    invHeight: 3
+    recoveryPoints: 5
+    battleType: 11
+    armor: 26
+  - type: STR_DEEP_ONE_CORPSE
+    size: 0.4
+    costSell: 20000
+    weight: 35
+    bigSprite: 47
+    floorSprite: 43
+    invWidth: 2
+    invHeight: 3
+    recoveryPoints: 5
+    battleType: 11
+    armor: 26
+  - type: STR_GILLMAN_CORPSE
+    size: 0.4
+    costSell: 20000
+    weight: 40
+    bigSprite: 50
+    floorSprite: 46
+    invWidth: 2
+    invHeight: 3
+    recoveryPoints: 5
+    battleType: 11
+    armor: 26
+  - type: STR_TASOTH_CORPSE
+    size: 0.4
+    costSell: 20000
+    weight: 40
+    bigSprite: 48
+    floorSprite: 44
+    invWidth: 2
+    invHeight: 3
+    recoveryPoints: 5
+    battleType: 11
+    armor: 26
+  - type: STR_CALCINITE_CORPSE
+    size: 0.4
+    costSell: 20000
+    weight: 30
+    bigSprite: 52
+    floorSprite: 48
+    invWidth: 2
+    invHeight: 3
+    recoveryPoints: 5
+    battleType: 11
+    armor: 26
+  - type: STR_TENTACULAT_CORPSE
+    size: 0.4
+    costSell: 20000
+    weight: 40
+    bigSprite: 53
+    floorSprite: 49
+    invWidth: 2
+    invHeight: 3
+    recoveryPoints: 3
+    battleType: 11
+    armor: 26
+  - type: STR_LOBSTER_CORPSE
+    size: 0.4
+    costSell: 20000
+    weight: 45
+    bigSprite: 49
+    floorSprite: 45
+    invWidth: 2
+    invHeight: 3
+    recoveryPoints: 3
+    battleType: 11
+    armor: 26
+  - type: STR_BIODRONE_CORPSE
+    size: 0.4
+    costSell: 20000
+    weight: 30
+    bigSprite: 51
+    floorSprite: 47
+    invWidth: 2
+    invHeight: 3
+    recoveryPoints: 3
+    battleType: 11
+    armor: 26
+    power: 120
+    blastRadius: 6
+  - type: STR_XARQUID_CORPSE
+    size: 1
+    costSell: 20000
+    battleType: 11
+  - type: XARQUID_CORPSE_1
+    name: STR_XARQUID_CORPSE
+    floorSprite: 56
+    invWidth: 0
+    invHeight: 0
+    battleType: 11
+    recoveryPoints: 3
+    armor: 20
+  - type: XARQUID_CORPSE_2
+    floorSprite: 57
+    invWidth: 0
+    invHeight: 0
+    battleType: 11
+    armor: 20
+    recover: false
+  - type: XARQUID_CORPSE_3
+    floorSprite: 58
+    invWidth: 0
+    invHeight: 0
+    battleType: 11
+    armor: 20
+    recover: false
+  - type: XARQUID_CORPSE_4
+    floorSprite: 59
+    invWidth: 0
+    invHeight: 0
+    battleType: 11
+    armor: 20
+    recover: false
+  - type: STR_HALLUCINOID_CORPSE
+    size: 1
+    costSell: 20000
+    battleType: 11
+  - type: HALLUCINOID_CORPSE_1
+    name: STR_HALLUCINOID_CORPSE
+    floorSprite: 60
+    invWidth: 0
+    invHeight: 0
+    battleType: 11
+    recoveryPoints: 3
+    armor: 20
+  - type: HALLUCINOID_CORPSE_2
+    floorSprite: 61
+    invWidth: 0
+    invHeight: 0
+    battleType: 11
+    armor: 20
+    recover: false
+  - type: HALLUCINOID_CORPSE_3
+    floorSprite: 62
+    invWidth: 0
+    invHeight: 0
+    battleType: 11
+    armor: 20
+    recover: false
+  - type: HALLUCINOID_CORPSE_4
+    floorSprite: 63
+    invWidth: 0
+    invHeight: 0
+    battleType: 11
+    armor: 20
+    recover: false
+  - type: STR_TRISCENE_CORPSE
+    size: 1
+    costSell: 20000
+    battleType: 11
+  - type: TRISCENE_CORPSE_1
+    name: STR_TRISCENE_CORPSE
+    floorSprite: 52
+    invWidth: 0
+    invHeight: 0
+    battleType: 11
+    recoveryPoints: 3
+    armor: 20
+  - type: TRISCENE_CORPSE_2
+    floorSprite: 55
+    invWidth: 0
+    invHeight: 0
+    battleType: 11
+    armor: 20
+    recover: false
+  - type: TRISCENE_CORPSE_3
+    floorSprite: 54
+    invWidth: 0
+    invHeight: 0
+    battleType: 11
+    armor: 20
+    recover: false
+  - type: TRISCENE_CORPSE_4
+    floorSprite: 53
+    invWidth: 0
+    invHeight: 0
+    battleType: 11
+    armor: 20
+    recover: false
+  - type: DISPLACER_CORPSE_1
+    floorSprite: 64
+    invWidth: 0
+    invHeight: 0
+    recover: false
+    armor: 20
+  - type: DISPLACER_CORPSE_2
+    floorSprite: 65
+    invWidth: 0
+    invHeight: 0
+    recover: false
+    armor: 20
+  - type: DISPLACER_CORPSE_3
+    floorSprite: 66
+    invWidth: 0
+    invHeight: 0
+    recover: false
+    armor: 20
+  - type: DISPLACER_CORPSE_4
+    floorSprite: 67
+    invWidth: 0
+    invHeight: 0
+    recover: false
+    armor: 20
+  - type: COELACANTH_CORPSE_1
+    floorSprite: 68
+    invWidth: 0
+    invHeight: 0
+    recover: false
+    armor: 20
+  - type: COELACANTH_CORPSE_2
+    floorSprite: 69
+    invWidth: 0
+    invHeight: 0
+    recover: false
+    armor: 20
+  - type: COELACANTH_CORPSE_3
+    floorSprite: 70
+    invWidth: 0
+    invHeight: 0
+    recover: false
+    armor: 20
+  - type: COELACANTH_CORPSE_4
+    floorSprite: 71
+    invWidth: 0
+    invHeight: 0
+    recover: false
+    armor: 20
+  - type: CIVM_CORPSE
+    name: STR_CORPSE
+    weight: 30
+    floorSprite: 50
+    invWidth: 2
+    invHeight: 3
+    armor: 12
+    recover: false
+  - type: CIVF_CORPSE
+    name: STR_CORPSE
+    weight: 50
+    floorSprite: 51
+    invWidth: 2
+    invHeight: 3
+    armor: 12
+    recover: false
+  - type: STR_ION_BEAM_ACCELERATORS
+    size: 0.7
+    costSell: 250000
+    specialType: 2
+    recoveryPoints: 20
+  - type: STR_MAGNETIC_NAVIGATION
+    size: 0.2
+    costSell: 80000
+    specialType: 3
+    recoveryPoints: 5
+  - type: STR_ALIEN_SUB_CONSTRUCTION
+    size: 0.1
+    costSell: 20000
+    specialType: 4
+    recoveryPoints: 2
+  - type: STR_ALIEN_CRYOGENICS
+    size: 0.2
+    costSell: 5000
+    specialType: 5
+    recoveryPoints: 2
+  - type: STR_ALIEN_CLONING
+    size: 0.2
+    costSell: 40000
+    specialType: 6
+    recoveryPoints: 2
+  - type: STR_ALIEN_LEARNING_ARRAYS
+    size: 0.2
+    costSell: 20000
+    specialType: 7
+    recoveryPoints: 2
+  - type: STR_ALIEN_IMPLANTER
+    size: 0.2
+    costSell: 38000
+    specialType: 8
+    recoveryPoints: 2
+  - type: STR_EXAMINATION_ROOM
+    size: 0.2
+    costSell: 9000
+    specialType: 9
+    recoveryPoints: 2
+  - type: STR_ALIEN_REANIMATION_ZONE
+    size: 0.1
+    costSell: 100
+    specialType: 11
+    recoveryPoints: 1
+  - type: STR_AQUA_PLASTICS
+    size: 0.1
+    costSell: 6500
+    specialType: 10
+    recoveryPoints: 1
+  - type: STR_PLASTIC_AQUA_ARMOR
+    size: 0.8
+    costSell: 54000
+  - type: STR_ION_ARMOR
+    size: 0.8
+    costSell: 85000
+  - type: STR_MAGNETIC_ION_ARMOR
+    size: 0.8
+    costSell: 115000
+  - type: STR_BIODRONE_MELEE_WEAPON
+    bigSprite: 26
+    meleeSound: 26
+    strengthApplied: true
+    damageType: 7
+    accuracyMelee: 100
+    tuMelee: 15
+    battleType: 3
+    fixedWeapon: true
+    invWidth: 1
+    invHeight: 3
+    clipSize: -1
+    recover: false
+  - type: HALLUCINOID_WEAPON
+    bigSprite: 26
+    meleeSound: 26
+    strengthApplied: true
+    damageType: 7
+    accuracyMelee: 100
+    tuMelee: 15
+    battleType: 3
+    fixedWeapon: true
+    invWidth: 1
+    invHeight: 3
+    clipSize: -1
+    recover: false
+  - type: STR_LOBSTERMAN_MELEE_WEAPON
+    bigSprite: 26
+    meleeSound: 42
+    strengthApplied: true
+    damageType: 7
+    accuracyMelee: 100
+    tuMelee: 15
+    battleType: 3
+    fixedWeapon: true
+    invWidth: 1
+    invHeight: 3
+    clipSize: -1
+    recover: false
+  - type: CALCINITE_WEAPON
+    bigSprite: 26
+    meleeSound: 16
+    strengthApplied: true
+    damageType: 7
+    accuracyMelee: 100
+    tuMelee: 15
+    battleType: 3
+    fixedWeapon: true
+    invWidth: 1
+    invHeight: 3
+    clipSize: -1
+    recover: false
+  - type: DEEP_ONE_WEAPON 
+    bulletSprite: 8
+    fireSound: 67
+    power: 100
+    damageType: 8
+    accuracyAuto: 50
+    accuracySnap: 75
+    accuracyAimed: 110
+    tuAuto: 35
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    fixedWeapon: true
+    invWidth: 2
+    invHeight: 3
+    clipSize: -1
+    recover: false
+    arcingShot: true
+    hitAnimation: -1
+  - type: STR_TRISCENE_MELEE_WEAPON
+    bigSprite: 26
+    handSprite: 41
+    meleeSound: 44
+    strengthApplied: true
+    damageType: 7
+    accuracyMelee: 100
+    tuMelee: 15
+    battleType: 3
+    fixedWeapon: true
+    invWidth: 1
+    invHeight: 3
+    clipSize: -1
+    recover: false
+  - type: STR_TRIBIO_SONIC_WEAPON
+    weight: 3
+    bigSprite: 30
+    floorSprite: 29
+    handSprite: 40
+    fireSound: 36
+    hitSound: 31
+    hitAnimation: 46
+    power: 110
+    damageType: 5
+    accuracySnap: 86
+    accuracyAimed: 100
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    fixedWeapon: true
+    invWidth: 2
+    invHeight: 3
+    clipSize: -1
+    bulletSprite: 8
+    recover: false
+    vaporColor: 3
+    vaporDensity: 30
+  - type: XARQUID_WEAPON
+    weight: 3
+    bigSprite: 30
+    floorSprite: 29
+    handSprite: 40
+    fireSound: 37
+    hitSound: 31
+    hitAnimation: 46
+    power: 130
+    damageType: 5
+    accuracySnap: 75
+    accuracyAimed: 100
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    fixedWeapon: true
+    invWidth: 2
+    invHeight: 3
+    clipSize: -1
+    bulletSprite: 8
+    recover: false
+    vaporColor: 3
+    vaporDensity: 30
+  - type: TENTACULAT_WEAPON
+    bigSprite: 26
+    meleeSound: 42
+    strengthApplied: true
+    damageType: 7
+    accuracyMelee: 100
+    tuMelee: 15
+    battleType: 3
+    fixedWeapon: true
+    invWidth: 1
+    invHeight: 3
+    clipSize: -1
+    recover: false
+    zombieUnit: STR_ZOMBIE
+  - type: ZOMBIE_WEAPON
+    bigSprite: 26
+    meleeSound: 42
+    strengthApplied: true
+    damageType: 7
+    accuracyMelee: 100
+    tuMelee: 15
+    battleType: 3
+    fixedWeapon: true
+    invWidth: 1
+    invHeight: 3
+    clipSize: -1
+    recover: false
+  - type: STR_AQUATOID_SOLDIER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 40000
+  - type: STR_AQUATOID_SQUAD_LEADER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_AQUATOID_TECHNICIAN
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_AQUATOID_MEDIC
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_AQUATOID_NAVIGATOR
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_AQUATOID_COMMANDER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_HALLUCINOID_TERRORIST
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 80000
+  - type: STR_CALCINITE_TERRORIST
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_GILLMAN_SOLDIER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 40000
+  - type: STR_GILLMAN_SQUAD_LEADER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_GILLMAN_TECHNICIAN
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_GILLMAN_COMMANDER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_DEEP_ONE_TERRORIST
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_XARQUID_TERRORIST
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 40000
+  - type: STR_TASOTH_SOLDIER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 40000
+  - type: STR_TASOTH_SQUAD_LEADER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_TRISCENE_TERRORIST
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_BIODRONE_TERRORIST
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_TENTACULAT_TERRORIST
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_LOBSTERMAN_SOLDIER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_LOBSTERMAN_SQUAD_LEADER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 40000
+  - type: STR_LOBSTERMAN_TECHNICIAN
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_LOBSTERMAN_NAVIGATOR
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+  - type: STR_LOBSTERMAN_COMMANDER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+# Special Psi Weapon for Aliens.
+# Usage of this is hard-coded.
+# DO NOT DELETE!
+  - type: ALIEN_PSI_WEAPON
+    hitSound: 43
+    battleType: 9
+    tuUse: 25
+    flatRate: true
+    recover: false

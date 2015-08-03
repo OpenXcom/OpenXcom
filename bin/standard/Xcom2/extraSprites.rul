@@ -1,0 +1,55 @@
+extraSprites: #done
+  - type: Pathfinding
+    files:
+      0: Resources/Pathfinding/Pathfinding.png
+    width: 384
+    height: 80
+    subX: 32
+    subY: 40
+  - type: Projectiles
+    width: 105
+    height: 33
+    subX: 3
+    subY: 3
+    files:
+      0: Resources/BulletSprites/TFTD-LAND.png
+  - type: UnderwaterProjectiles
+    width: 105
+    height: 33
+    subX: 3
+    subY: 3
+    files:
+      0: Resources/BulletSprites/TFTD-UNDERWATER.png
+  - type: InvCopy
+    width: 16
+    height: 16
+    singleImage: true
+    files:
+      0: Resources/UI/invcopy_TFTD.png
+  - type: InvCopyActive
+    width: 16
+    height: 16
+    singleImage: true
+    files:
+      0: Resources/UI/invcopy_active_TFTD.png
+  - type: InvPaste
+    width: 16
+    height: 16
+    singleImage: true
+    files:
+      0: Resources/UI/invpaste_TFTD.png
+  - type: InvPasteEmpty
+    width: 16
+    height: 16
+    singleImage: true
+    files:
+      0: Resources/UI/invpaste_empty_TFTD.png
+  - type: GlobeMarkers
+    width: 27
+    height: 3
+    subX: 3
+    subY: 3
+    files:
+      0: Resources/UI/globe_tftd.png
+
+

@@ -1,0 +1,1448 @@
+interfaces: #done
+  - type: mainMenu
+    music: GMWAITLO
+    elements:
+      - id: palette
+        color: 4
+      - id: window
+        color: 1 
+      - id: text
+        color: 1
+      - id: button
+        color: 1
+      - id: confirmDefaults
+        color: 1
+      - id: confirmVideo
+        color: 1
+      - id: battlescapeTheme
+        color: 48
+        color2: 48
+        border: 48
+  - type: newBattleMenu
+    elements:
+      - id: palette
+        color: 6
+      - id: window
+        color: 1
+      - id: heading
+        color: 1
+      - id: text
+        color: 239
+      - id: frames
+        color: 239
+      - id: button1
+        color: 1
+      - id: button2
+        color: 1
+  - type: newGameMenu
+    elements:
+      - id: palette
+        color: 4
+      - id: window
+        color: 1
+      - id: text
+        color: 1
+      - id: ironman
+        color: 239
+      - id: button
+        color: 1
+  - type: optionsMenu
+    elements:
+      - id: palette
+        color: 6
+      - id: window
+        color: 1
+      - id: tooltip
+        color: 239
+      - id: button
+        color: 1
+  - type: videoMenu
+    elements:
+      - id: text
+        color: 239
+      - id: resolution
+        color: 1
+      - id: button
+        color: 1
+  - type: audioMenu
+    elements:
+      - id: text
+        color: 239
+      - id: button
+        color: 1
+  - type: controlsMenu
+    elements:
+      - id: optionLists
+        color: 1
+        color2: 239
+        border: 239
+  - type: geoscapeMenu
+    elements:
+      - id: text
+        color: 239
+      - id: button
+        color: 1
+  - type: battlescapeMenu
+    elements:
+      - id: text
+        color: 239
+      - id: button
+        color: 1
+  - type: advancedMenu
+    elements:
+      - id: optionLists
+        color: 1
+        color2: 239
+        border: 239
+  - type: modsMenu
+    elements:
+      - id: optionLists
+        color: 1
+        border: 239
+      - id: text
+        color: 239
+      - id: button
+        color: 1
+  - type: saveMenus
+    elements:
+      - id: palette
+        color: 4
+      - id: window
+        color: 1
+      - id: text
+        color: 1
+        color2: 239
+      - id: list
+        color: 1
+        color2: 239
+        border: 1
+      - id: button
+        color: 1
+      - id: confirmLoad
+        color: 1
+      - id: confirmDelete
+        color: 1
+  - type: pauseMenu
+    elements:
+      - id: palette
+        color: 4
+      - id: window
+        color: 1
+      - id: text
+        color: 1
+      - id: button
+        color: 1
+  - type: errorMessages
+    elements:
+      - id: geoscapePalette
+        color: 6
+      - id: battlescapePalette
+        color: -1
+      - id: geoscapeColor
+        color: 1
+      - id: battlescapeColor
+        color: 0
+  - type: geoCraftScreens
+    elements:
+      - id: palette
+        color: 1
+        color2: 6    # oxide
+      - id: window
+        color: 1
+      - id: text1
+        color: 1
+        color2: 244
+        border: 1
+      - id: text2
+        color: 1
+        color2: 244
+        border: 133  # minty green
+      - id: text3
+        color: 1
+        color2: 244
+        border: 239  # bright green
+      - id: list
+        color: 1
+        color2: 239
+        border: 1
+      - id: button
+        color: 1
+  - type: targetInfo
+    elements:
+      - id: palette
+        color: 1     # brown
+      - id: window
+        color: 1   # yellow
+      - id: text
+        color: 1   # bright green
+        color2: 1  # yellow
+      - id: button
+        color: 1   # minty green
+  - type: confirmDestination
+    elements:
+      - id: palette
+        color: 1     # aqua
+        color2: 1    # oxide
+      - id: window
+        color: 1   # bright green
+      - id: text
+        color: 1   # bright green
+        color2: 1  # yellow
+        border: 1  # minty green
+      - id: button
+        color: 1   # minty green
+  - type: confirmCydonia
+    elements:
+      - id: palette
+        color: 2     # red
+      - id: window
+        color: 1   # minty green
+      - id: button
+        color: 1   # minty green
+      - id: text
+        color: 1   # yellow
+  - type: confirmLanding
+    elements:
+      - id: palette
+        color: 1
+      - id: window
+        color: 1
+      - id: text
+        color: 1
+        color2: 1
+      - id: button
+        color: 1
+  - type: lowFuel
+    elements:
+      - id: palette
+        color: 1
+      - id: text
+        color: 1
+      - id: window
+        color: 1
+      - id: button
+        color: 1
+  - type: UFOInfo
+    elements:
+      - id: palette
+        color: 1     # aqua
+        color2: 1    # aqua
+      - id: window
+        color: 1     # white
+      - id: text
+        color: 1     # white
+        color2: 244  # minty green
+      - id: button
+        color: 1     # white
+        color2: 1    # white
+  - type: baseDefense
+    palette: PAL_BASESCAPE
+    elements:
+      - id: palette
+        color: 2     # red/orange
+      - id: window
+        color: 1   # purple
+      - id: text
+        color: 1   # blue
+      - id: button
+        color: 1   # blue
+  - type: terrorSite
+    elements:
+      - id: palette
+        color: 7     # pink
+      - id: window
+        color: 1   # minty green
+      - id: text
+        color: 1   # minty green
+      - id: button
+        color: 1   # minty green
+  - type: alienBase
+    elements:
+      - id: palette
+        color: 1     # pink
+      - id: window
+        color: 1   # bright green
+      - id: text
+        color: 1   # minty green
+      - id: button
+        color: 1   # yellow
+  - type: itemsArriving
+    elements:
+      - id: palette
+        color: 3     # yellow
+      - id: window
+        color: 1   # minty green
+      - id: text1
+        color: 1   # minty green
+      - id: text2
+        color: 244   # yellow
+        border: 1  # minty green
+      - id: button
+        color: 1   # minty green
+  - type: geoResearch
+    elements:
+      - id: palette
+        color: 0     # green
+      - id: window
+        color: 1   # bright green
+      - id: text1
+        color: 1   # bright green
+      - id: text2
+        color: 1   # yellow
+      - id: button
+        color: 1   # minty green
+  - type: geoManufacture
+    elements:
+      - id: palette
+        color: 2     # oxide
+      - id: window
+        color: 1   # bright green
+      - id: text1
+        color: 1   # bright green
+      - id: text2
+        color: 1   # yellow
+      - id: button
+        color: 1   # minty green
+  - type: dogfight
+    elements:
+      - id: button1
+        color: 1
+        TFTDMode: true
+      - id: standoffButton
+        color: 1
+        pos: [84, 4]
+        size: [35, 14]
+        TFTDMode: true
+      - id: cautiousButton
+        color: 1
+        pos: [121, 4]
+        size: [35, 14]
+        TFTDMode: true
+      - id: standardButton
+        color: 1
+        pos: [84, 20]
+        size: [35, 14]
+        TFTDMode: true
+      - id: aggressiveButton
+        color: 1
+        pos: [121, 20]
+        size: [35, 14]
+        TFTDMode: true
+      - id: disengageButton
+        color: 1
+        pos: [121, 36]
+        size: [35, 14]
+        TFTDMode: true
+      - id: ufoButton
+        color: 1
+        pos: [121, 52]
+        size: [35, 14]
+        TFTDMode: true
+      - id: text
+        color: 1
+      - id: numbers
+        color: 244
+      - id: distance
+        color: 244
+        pos: [123, 73]
+      - id: minimizedNumber
+        color: 80
+      - id: radarDetail
+        color: 160
+        color2: 124
+      - id: craftRange
+        color: 1
+        color2: 8
+      - id: radarRange
+        color: 160
+        color2: 176
+      - id: damageRange
+        color: 125
+        color2: 126
+      - id: disabledWeapon
+        color: 32
+        color2: 2
+      - id: disabledAmmo
+        color: 20
+      - id: previewTop
+        pos: [0, 96]
+        size: [160, 17]
+      - id: previewBot
+        pos: [0, 113]
+        size: [160, 21]
+      - id: previewMid
+        pos: [0, 134]
+        size: [160, 58]
+  - type: baseNaming
+    elements:
+      - id: palette
+        color: 4
+      - id: window
+        color: 1
+      - id: text
+        color: 1
+      - id: button
+        color: 1
+  - type: monthlyReport
+    elements:
+      - id: palette
+        color: 3
+      - id: window
+        color: 1   # bright green
+        color2: 1  # yellow
+      - id: text1
+        color: 1   # bright green
+        color2: 239  # yellow
+      - id: text2
+        color: 239   # yellow
+      - id: button
+        color: 1   # bright green
+  - type: psiTraining
+    palette: PAL_BASESCAPE
+    elements:
+      - id: palette
+        color: 4     # violet
+      - id: window
+        color: 1   # purple
+      - id: text
+        color: 1   # light blue
+      - id: button1
+        color: 1   # purple
+      - id: button2
+        color: 1   # light blue
+  - type: allocatePsi
+    palette: PAL_BASESCAPE
+    elements:
+      - id: palette
+        color: 4     # violet
+      - id: window
+        color: 1   # blue
+      - id: text
+        color: 1   # blue
+        color2: 1  # white
+      - id: list
+        color: 239   # purple
+        color2: 239  # yellow
+        border: 1  # blue
+      - id: button
+        color: 1   # blue
+  - type: fundingWindow
+    elements:
+      - id: palette
+        color: 3
+      - id: window
+        color: 1
+      - id: text1
+        color: 1
+      - id: text2
+        color: 1
+      - id: list
+        color: 244
+        color2: 244
+      - id: button
+        color: 1
+  - type: graphs
+    palette: PAL_GRAPHS
+    elements:
+      - id: text
+        color: 135   # red
+      - id: scale
+        color: 103   # minty green
+      - id: graph
+        color: 160   # green
+      - id: button
+        color: 2   # grey
+        TFTDMode: true
+      - id: regionTotal
+        color: 133    # salmon (inverted button offset)
+        color2: 136  # also salmon (the line itself)
+      - id: countryTotal
+        color: 141    # magenta (inverted button offset)
+        color2: 144  # also magenta (the line itself)
+  - type: ufopaedia
+    elements:
+      - id: palette
+        color: 4
+      - id: window
+        color: 1
+      - id: text
+        color: 1
+      - id: list
+        color: 1
+        border: 1
+      - id: button1
+        color: 1
+      - id: button2
+        color: 1
+  - type: noContainment
+    elements:
+      - id: palette
+        color: 4     # brown
+      - id: window
+        color: 1   # bright green
+      - id: text
+        color: 1   # minty green
+      - id: button
+        color: 1   # minty green
+  - type: promotions
+    elements:
+      - id: palette
+        color: 4     # green
+      - id: window
+        color: 1   # bright green
+      - id: heading
+        color: 1   # minty green
+      - id: text
+        color: 1   # bright green
+      - id: list
+        color: 239   # yellow
+      - id: button
+        color: 1   # bright green
+  - type: cannotReequip
+    elements:
+      - id: palette
+        color: 1     # brown
+      - id: window
+        color: 1   # bright green
+      - id: heading
+        color: 1   # minty green
+      - id: text
+        color: 1   # bright green
+      - id: list
+        color: 1   # yellow
+      - id: button
+        color: 1   # minty green
+  - type: debriefing
+    elements:
+      - id: palette
+        color: 4     # green
+      - id: window
+        color: 1     # white
+      - id: heading
+        color: 1     # white
+      - id: text
+        color: 1     # white
+      - id: list
+        color: 1     # white
+        color2: 1    # white
+      - id: totals
+        color: 1     # white
+      - id: button
+        color: 1     # white
+      - id: errorPalette
+        color: 1     # brown
+      - id: errorMessage
+        color: 1     # white
+  - type: geoscape
+    elements:
+      - id: palette
+        color: 4     # brown
+        color2: 4
+      - id: textLoad
+        color: 239   # minty green
+      - id: button
+        color: 2   # light blue
+        color2: 1  # slightly lighter blue
+        TFTDMode: true
+      - id: text
+        color: 1   # even lighter blue
+      - id: genericWindow
+        color: 1
+      - id: genericText
+        color: 1
+        color2: 239  # yellow
+        border: 1  # minty green
+      - id: genericButton1
+        color: 1   # minty green
+      - id: genericButton2
+        color: 1   # bright green
+      - id: errorPalette
+        color: 6     # brown
+      - id: errorMessage
+        color: 241   # pink
+  - type: gameOver
+    elements:
+      - id: defeatText
+        color: 244
+      - id: victoryText
+        color: 244
+  - type: sellMenu
+    palette: PAL_BASESCAPE
+    elements:
+      - id: palette
+        color: 6
+      - id: window
+        color: 1
+      - id: text
+        color: 1
+        color2: 244
+      - id: list
+        color: 244
+        color2: 239
+        border: 1
+      - id: ammoColor
+        color: 1
+      - id: button
+        color: 1
+  - type: buyMenu
+    elements:
+      - id: palette
+        color: 6     # blue
+      - id: window
+        color: 1   # blue
+      - id: text
+        color: 1   # blue
+        color2: 244  # white
+      - id: list
+        color: 244   # blue
+        color2: 239   # purple
+        border: 1
+      - id: ammoColor
+        color: 1  # white
+      - id: button
+        color: 1   # blue
+      - id: errorPalette
+        color: 6     # brown
+      - id: errorMessage
+        color: 1   # pink
+  - type: manageContainment
+    elements:
+      - id: palette
+        color: 0     # burgundy
+      - id: window
+        color: 1   # blue
+      - id: text
+        color: 1   # blue
+        color2: 239  # white
+      - id: list
+        color: 1   # white
+        color2: 239  # blue
+        border: 1  # blue
+      - id: button
+        color: 1   # blue
+      - id: errorPalette
+        color: 0     # oxide
+      - id: errorMessage
+        color: 1   # pink
+  - type: transferBaseSelect
+    elements:
+      - id: palette
+        color: 6     # blue
+      - id: window
+        color: 1   # gold
+      - id: button
+        color: 1   # gold
+      - id: text
+        color: 1   # gold
+        color2: 239  # white
+      - id: list
+        color: 244   # pink
+        color2: 244  # gold
+        border: 1
+  - type: transferMenu
+    elements:
+      - id: palette
+        color: 6     # brown
+      - id: window
+        color: 1   # blue
+      - id: text
+        color: 1   # blue
+      - id: list
+        color: 244   # blue
+        color2: 1  # white
+      - id: ammoColor
+        color: 239   # purple
+      - id: button
+        color: 1   # purple
+      - id: errorPalette
+        color: 6     # brown
+      - id: errorMessage
+        color: 1   # pink
+  - type: transferConfirm
+    elements:
+      - id: palette
+        color: 6     # oxide
+      - id: window
+        color: 1   # gold
+      - id: button
+        color: 1   # purple
+      - id: text
+        color: 1   # blue
+        color2: 1  # pink
+  - type: transferInfo
+    elements:
+      - id: palette
+        color: 6
+      - id: window
+        color: 1
+      - id: button
+        color: 1
+      - id: text
+        color: 1
+      - id: list
+        color: 244
+        border: 1
+  - type: selectFacility
+    palette: PAL_BASESCAPE
+    elements:
+      - id: palette
+        color: 0
+      - id: window
+        color: 1
+      - id: button
+        color: 1
+      - id: text
+        color: 1
+      - id: list
+        color: 1
+  - type: placeFacility
+    palette: PAL_BASESCAPE
+    elements:
+      - id: palette
+        color: 0
+      - id: window
+        color: 1
+      - id: button
+        color: 1
+      - id: text
+        color: 1
+      - id: numbers
+        color: 244
+      - id: errorPalette
+        color: 0
+      - id: errorMessage
+        color: 1
+  - type: dismantleFacility
+    palette: PAL_BASESCAPE
+    elements:
+      - id: palette
+        color: 6     # oxide
+      - id: window
+        color: 1
+      - id: button
+        color: 1
+      - id: text
+        color: 1
+  - type: manufactureMenu
+    elements:
+      - id: palette
+        color: 2     # oxide
+      - id: window
+        color: 1   # purple
+      - id: text1
+        color: 1   # purple
+        color2: 244  # white
+      - id: text2
+        color: 1   # pink
+      - id: list
+        color: 244   # blue
+        border: 1  # purple
+      - id: button
+        color: 1   # blue
+  - type: selectNewManufacture
+    parent: manufactureMenu
+    elements:
+      - id: window
+        color: 1   # pink
+      - id: text
+        color: 1   # pink
+      - id: list
+        color: 239   # white
+        border: 1  # pink
+      - id: button
+        color: 1   # blue
+      - id: catBox
+        color: 1   # pink
+  - type: allocateManufacture
+    parent: manufactureMenu
+    elements:
+      - id: window
+        color: 1   # blue
+      - id: text
+        color: 1   # blue
+        color2: 244  # white
+      - id: list
+        color: 1   # blue
+        color2: 244  # white
+      - id: button
+        color: 1   # blue
+  - type: manufactureInfo
+    parent: manufactureMenu
+    elements:
+      - id: window
+        color: 1   # pink
+      - id: text
+        color: 1   # pink
+        color2: 244  # white
+      - id: list
+        color: 1   # blue
+        color2: 244  # white
+      - id: button1
+        color: 1   # pink
+      - id: button2
+        color: 1   # purple
+  - type: researchMenu
+    elements:
+      - id: palette
+        color: 0     # green
+      - id: window
+        color: 1     # blue
+      - id: text
+        color: 1   # blue
+        color2: 239  # white
+      - id: list
+        color: 239   # purple
+        border: 1  # blue
+      - id: button
+        color: 1   # purple
+  - type: selectNewResearch
+    parent: researchMenu
+    elements:
+      - id: window
+        color: 1   # blue
+      - id: text
+        color: 1   # blue
+      - id: list
+        color: 1   # white
+        border: 1  # blue
+      - id: button
+        color: 1   # purple
+  - type: allocateResearch
+    parent: researchMenu
+    elements:
+      - id: window
+        color: 1   # gold
+      - id: text
+        color: 1   # gold
+        color2: 1  # white
+      - id: button1
+        color: 1   # gold
+      - id: button2
+        color: 1   # blue
+  - type: baseInfo
+    elements:
+      - id: palette
+      - id: text1
+        color: 1
+      - id: text2
+        color: 1
+      - id: numbers
+        color: 244
+      - id: button
+        color: 1
+      - id: personnelBars
+        color: 123
+        border: 124
+      - id: facilityBars
+        color: 157
+        border: 158
+      - id: defenceBar
+        color: 10
+        border: 12
+      - id: detectionBars
+        color: 128
+        border: 129
+  - type: storesInfo
+    elements:
+      - id: palette
+        color: 6
+      - id: window
+        color: 1
+      - id: text
+        color: 1
+      - id: list
+        color: 244
+      - id: button
+        color: 1
+  - type: costsInfo
+    elements:
+      - id: palette
+        color: 3
+      - id: window
+        color: 1
+      - id: text1
+        color: 1
+        color2: 1
+      - id: text2
+        color: 1
+      - id: list
+        color: 244
+        color2: 1
+      - id: button
+        color: 1
+  - type: soldierList
+    elements:
+      - id: palette
+        color: 2
+      - id: window
+        color: 1
+      - id: text1
+        color: 1
+      - id: text2
+        color: 1
+      - id: list
+        color: 244
+        color2: 239
+        border: 1
+      - id: button
+        color: 1
+  - type: soldierInfo
+    elements:
+      - id: palette
+      - id: text1
+        color: 1     # blue
+        color2: 244  # white
+      - id: text2
+        color: 1   # pink
+      - id: numbers
+        color: 244   # white
+      - id: button
+        color: 1   # purple
+      - id: barTUs
+        color: 144
+        color2: 148
+        border: 151
+      - id: barEnergy
+        color: 111
+        color2: 115
+        border: 116
+      - id: barHealth
+        color: 5
+        color2: 9
+        border: 12
+      - id: barBravery
+        color: 254
+        color2: 2
+        border: 4
+      - id: barReactions
+        color: 35
+        color2: 39
+        border: 40
+      - id: barFiring
+        color: 12
+        color2: 16
+        border: 24
+      - id: barThrowing
+        color: 241
+        color2: 245
+        border: 248
+      - id: barMelee
+        color: 111
+        color2: 115
+        border: 116
+      - id: barStrength
+        color: 254
+        color2: 2
+        border: 4
+      - id: barPsiStrength
+        color: 1
+        color2: 2
+        border: 4
+      - id: barPsiSkill
+        color: 1
+        color2: 2
+        border: 4
+      - id: errorPalette
+        color: 0     # brown
+      - id: errorMessage
+        color: 1   # pink
+  - type: sackSoldier
+    elements:
+      - id: palette
+        color: 6     # oxide
+      - id: window
+        color: 1   # pink
+      - id: text
+        color: 1   # blue
+      - id: button
+        color: 1   # purple
+  - type: soldierArmor
+    elements:
+      - id: palette
+        color: 4     # green
+      - id: window
+        color: 1     # white
+      - id: text
+        color: 1     # white
+        color2: 239  # blue
+      - id: list
+        color: 1   # white
+        border: 1  # white
+      - id: button
+        color: 1   # white
+  - type: soldierMemorial
+    music: GMLOSE
+    palette: PAL_BASESCAPE
+    elements:
+      - id: palette
+        color: 1     # violet
+      - id: window
+        color: 1     # blue
+      - id: text
+        color: 1   # blue
+        color2: 244  # white
+      - id: list
+        color: 244   # purple
+        border: 1  # blue
+      - id: button
+        color: 1   # blue
+  - type: craftEquipment
+    elements:
+      - id: palette
+        color: 2
+      - id: window
+        color: 1
+      - id: text
+        color: 1
+        color2: 244
+      - id: button
+        color: 1
+      - id: list
+        color: 244
+        color2: 239
+        border: 1
+      - id: ammoColor
+        color: 1
+      - id: errorPalette
+        color: 2
+      - id: errorMessage
+        color: 1
+  - type: craftArmor
+    elements:
+      - id: palette
+        color: 4     # aqua
+      - id: window
+        color: 1     # blue
+      - id: text
+        color: 1     # blue
+      - id: button
+        color: 1     # blue
+      - id: list
+        color: 1     # white
+        color2: 239  # blue
+      - id: otherCraft
+        color: 239   # blue
+  - type: craftInfo
+    palette: PAL_BASESCAPE
+    elements:
+      - id: palette
+        color: 4
+      - id: window
+        color: 1
+      - id: text1
+        color: 1
+        color2: 244
+      - id: text2
+        color: 1
+        color2: 244
+      - id: button
+        color: 1
+  - type: craftWeapons
+    palette: PAL_BASESCAPE
+    elements:
+      - id: palette
+        color: 4
+      - id: window
+        color: 1
+      - id: text
+        color: 1
+      - id: list
+        color: 244
+      - id: button
+        color: 1
+  - type: craftSoldiers
+    elements:
+      - id: palette
+        color: 2
+      - id: window
+        color: 1
+      - id: text
+        color: 1
+        color2: 239
+      - id: otherCraft
+        color: 244
+      - id: list
+        color: 244
+        color2: 239
+        border: 1
+      - id: button
+        color: 1
+  - type: craftSelect
+    palette: PAL_BASESCAPE
+    elements:
+      - id: palette
+        color: 4
+      - id: window
+        color: 1
+      - id: text
+        color: 1
+        color2: 244
+      - id: list
+        color: 244
+        border: 1
+      - id: button
+        color: 1
+      - id: errorPalette
+        color: 0     # brown
+      - id: errorMessage
+        color: 241   # pink
+  - type: basescape
+    palette: PAL_BASESCAPE
+    elements:
+      - id: button
+        color: 1
+      - id: text1
+        color: 244
+      - id: text2
+        color: 244
+      - id: text3
+        color: 164
+      - id: textTooltip
+        color: 1
+      - id: baseView
+        color: 213   # gold   (time remaining)
+        color2: 16   # orange (selector color)
+      - id: errorPalette
+        color: 6     # oxide
+      - id: errorMessage
+        color: 1
+      - id: miniBase
+        color: 8
+        color2: 80
+  - type: battlescape
+    palette: PAL_BATTLESCAPE
+    elements:
+      - id: buttonUnitUp
+        pos: [50, 1]
+        size: [28, 13]
+        TFTDMode: true
+      - id: buttonUnitDown
+        pos: [50, 17]
+        size: [28, 13]
+        TFTDMode: true
+      - id: buttonMapUp
+        pos: [82, 1]
+        size: [28, 13]
+        TFTDMode: true
+      - id: buttonMapDown
+        pos: [82, 17]
+        size: [28, 13]
+        TFTDMode: true
+      - id: buttonShowMap
+        pos: [114, 1]
+        size: [28, 13]
+        TFTDMode: true
+      - id: buttonKneel
+        pos: [114, 17]
+        size: [28, 13]
+        TFTDMode: true
+      - id: buttonInventory
+        pos: [146, 1]
+        size: [28, 13]
+        TFTDMode: true
+      - id: buttonCenter
+        pos: [146, 17]
+        size: [28, 13]
+        TFTDMode: true
+      - id: buttonNextSoldier
+        pos: [178, 1]
+        size: [28, 13]
+        TFTDMode: true
+      - id: buttonNextStop
+        pos: [178, 17]
+        size: [28, 13]
+        TFTDMode: true
+      - id: buttonShowLayers
+        pos: [210, 1]
+        size: [28, 13]
+        TFTDMode: true
+      - id: numLayers
+        pos: [229, 5]
+        TFTDMode: true
+        color: 15
+      - id: buttonHelp
+        pos: [210, 17]
+        size: [28, 13]
+        TFTDMode: true
+      - id: buttonEndTurn
+        pos: [242, 1]
+        size: [28, 13]
+        TFTDMode: true
+      - id: buttonAbort
+        pos: [242, 17]
+        size: [28, 13]
+        TFTDMode: true
+      - id: textName
+        pos: [134, 32]
+        color: 48
+      - id: numTUs
+        color: 1
+      - id: numEnergy
+        color: 1
+      - id: numHealth
+        color: 1
+      - id: numMorale
+        color: 1
+      - id: barTUs
+        color: 148
+        border: 151
+      - id: barEnergy
+        color: 160
+        border: 176
+      - id: barHealth
+        color: 9
+        color2: 4
+        border: 11
+      - id: barMorale
+        color: 157
+        border: 158
+      - id: buttonReserveNone
+        pos: [54, 33]
+        size: [20, 11]
+        TFTDMode: true
+      - id: buttonReserveSnap
+        pos: [75, 33]
+        size: [21, 11]
+        TFTDMode: true
+      - id: buttonReserveAimed
+        pos: [54, 45]
+        size: [20, 11]
+        TFTDMode: true
+      - id: buttonReserveAuto
+        pos: [75, 45]
+        size: [21, 11]
+        TFTDMode: true
+      - id: buttonReserveKneel
+        pos: [97, 33]
+        size: [10, 23]
+        TFTDMode: true
+      - id: buttonZeroTUs
+        pos: [43, 33]
+        size: [10, 23]
+        TFTDMode: true
+      - id: numAmmoLeft
+        color: 1
+      - id: numAmmoRight
+        color: 1
+      - id: textTooltip
+        color: 48
+      - id: infoBoxOK
+        color: 47
+        color2: 63
+        border: 57
+      - id: infoBoxOKButton
+        color: 47
+      - id: infoBox
+        color: 47
+        color2: 63
+        border: 54
+      - id: grenadeMenu
+        color: 47
+        color2: 63
+        border: 57
+      - id: pathfinding
+        color: 6
+        color2: 2
+        border: 12
+      - id: messageWindowButtons
+        color: 47
+        color2: 47
+      - id: messageWindowBorder
+        color: -1
+      # The usage of the following is hard-coded, these ones MUST be defined
+      - id: visibleUnits
+        pos: [300, -16]
+        color: 1
+      - id: icons
+        size: [320, 56]
+        TFTDMode: true
+      - id: messageWindows
+        color: 47
+        color2: 60
+        border: 51
+      - id: warning
+        size: [232, 24]
+        pos: [44, 32]
+        color: 48
+        color2: 32
+      - id: actionMenu
+        color: 47
+        color2: 61
+        border: 51
+        TFTDMode: true
+      - id: grenadeBackground
+        color: 59
+        color2: 63
+        border: 55
+      - id: textLoad
+        color: 80
+      - id: optionLists
+        color: -1
+        color2: 80
+        border: -1
+  - type: briefing
+    elements:
+      - id: window
+        color: 1
+      - id: button
+        color: 1
+        color2: 1
+      - id: text
+        color: 1
+  - type: inventory
+    elements:
+      - id: textName
+        color: 48
+      - id: textTUs
+        color: 48
+        color2: 16
+      - id: textWeight
+        color: 48
+        color2: 16
+      - id: textFiring
+        color: 48
+        color2: 16
+      - id: textReaction
+        color: 48
+        color2: 16
+      - id: textPsiSkill
+        color: 48
+        color2: 16
+      - id: textPsiStrength
+        color: 48
+        color2: 16
+      - id: textItem
+        color: 192
+      - id: textAmmo
+        color: 48
+        color2: 16
+      - id: buttonOK
+        TFTDMode: true
+      - id: buttonPrev
+        TFTDMode: true
+      - id: buttonNext
+        TFTDMode: true
+      - id: buttonUnload
+        TFTDMode: true
+      - id: buttonGround
+        TFTDMode: true
+      - id: buttonCreate
+        TFTDMode: true
+      - id: buttonApply
+        TFTDMode: true
+      # required
+      - id: textSlots
+        color: 48
+      - id: grid
+        color: 5
+      - id: weight
+        color: 16     # gold (acceptable)
+        color2: 32    # red (overweight)
+      - id: numStack
+        color: 82
+  - type: stats
+    elements:
+      - id: textName
+        color: 48
+      - id: barTUs
+        color: 148
+        border: 151
+      - id: barEnergy
+        color: 160
+        border: 176
+      - id: barHealth
+        color: 9
+        color2: 4
+        border: 11
+      - id: barWounds
+        color: 32
+      - id: barBravery
+        color: 192
+      - id: barMorale
+        color: 157
+        border: 158
+      - id: barReactions
+        color: 16
+      - id: barFiring
+        color: 128
+      - id: barThrowing
+        color: 96
+      - id: barMelee
+        color: 3
+        border: 4
+      - id: barStrength
+        color: 48
+      - id: barPsiStrength
+        color: 192
+      - id: barPsiSkill
+        color: 192
+      - id: barFrontArmor
+        color: 80
+      - id: barLeftArmor
+        color: 80
+      - id: barRightArmor
+        color: 80
+      - id: barRearArmor
+        color: 80
+      - id: barUnderArmor
+        color: 80
+      # required
+      - id: text
+        color: 48
+        color2: 96
+  - type: minimap
+    elements:
+      - id: buttonUp
+        pos: [280, 98]
+        size: [24, 12]
+        TFTDMode: true
+      - id: buttonDown
+        pos: [280, 115]
+        size: [24, 12]
+        TFTDMode: true
+      - id: buttonOK
+        pos: [280, 144]
+        size: [24, 12]
+        TFTDMode: true
+      # required
+      - id: textLevel
+        pos: [282, 28]
+        color: 80
+        TFTDMode: true
+  - type: medikit
+    elements:
+      - id: textPK
+        pos: [181, 33]
+      - id: textStim
+        pos: [181, 69]
+      - id: textHeal
+        pos: [181, 105]
+      - id: buttonPK
+        pos: [186, 44]
+        size: [21, 21]
+      - id: buttonStim
+        pos: [186, 80]
+        size: [21, 21]
+      - id: buttonHeal
+        pos: [186, 116]
+        size: [21, 21]
+      - id: numPK
+        pos: [215, 48]
+        color: 16
+      - id: numStim
+        pos: [215, 84]
+        color: 16
+      - id: numHeal
+        pos: [215, 120]
+        color: 16
+      - id: textPart
+        pos: [82, 116]
+        color: 32
+      - id: numWounds
+        pos: [145, 116]
+        color: 32
+      # required
+      - id: body
+        pos: [90, 55]
+        color: 6
+        color2: 12

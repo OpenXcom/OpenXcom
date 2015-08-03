@@ -1,0 +1,143 @@
+crafts: #done
+  - type: STR_TRITON
+    sprite: 0
+    fuelMax: 1400
+    damageMax: 160
+    speedMax: 790
+    accel: 2
+    soldiers: 14
+    vehicles: 3
+    costBuy: 500000
+    costRent: 500000
+    refuelRate: 50
+    transferTime: 72
+    score: 200
+    maxDepth: 3
+    battlescapeTerrainData:
+      name: TRITON
+      mapDataSets:
+        - BLANKS
+        - TRITON
+      mapBlocks:
+        - name: TRITON
+          width: 10
+          length: 20
+    deployment:
+      - [5, 7, 0, 4]
+      - [4, 7, 0, 4]
+      - [5, 6, 0, 4]
+      - [4, 6, 0, 4]
+      - [5, 5, 0, 4]
+      - [4, 5, 0, 4]
+      - [5, 4, 0, 4]
+      - [4, 4, 0, 4]
+      - [5, 3, 0, 4]
+      - [4, 3, 0, 4]
+      - [5, 2, 0, 4]
+      - [4, 2, 0, 4]
+      - [3, 7, 0, 4]
+      - [3, 6, 0, 4]
+  - type: STR_BARRACUDA
+    sprite: 3
+    fuelMax: 800
+    damageMax: 120
+    speedMax: 2100
+    accel: 3
+    weapons: 2
+    costRent: 600000
+    costBuy: 600000
+    refuelRate: 50
+    transferTime: 96
+    score: 250
+    maxDepth: 3
+  - type: STR_MANTA
+    sprite: 4
+    fuelMax: 30
+    damageMax: 400
+    speedMax: 4600
+    accel: 10
+    weapons: 2
+    refuelItem: STR_ZRBITE
+    refuelRate: 5
+    score: 250
+  - type: STR_HAMMERHEAD
+    sprite: 1
+    fuelMax: 60
+    damageMax: 960
+    speedMax: 4030
+    accel: 9
+    weapons: 1
+    soldiers: 12
+    refuelItem: STR_ZRBITE
+    refuelRate: 5
+    score: 300
+    maxDepth: 2
+    battlescapeTerrainData:
+      name: HAMMER
+      mapDataSets:
+        - BLANKS
+        - HAMMER
+      mapBlocks:
+        - name: HAMMER
+          width: 10
+          length: 10
+    deployment:
+      - [5, 7, 0, 4]
+      - [4, 7, 0, 4]
+      - [3, 7, 0, 4]
+      - [5, 6, 0, 4]
+      - [4, 6, 0, 4]
+      - [3, 6, 0, 4]
+      - [5, 5, 0, 4]
+      - [4, 5, 0, 4]
+      - [3, 5, 0, 4]
+      - [5, 4, 0, 4]
+      - [4, 4, 0, 4]
+      - [3, 4, 0, 4]
+  - type: STR_LEVIATHAN
+    sprite: 2
+    fuelMax: 50
+    damageMax: 1250
+    speedMax: 5800
+    accel: 9
+    weapons: 2
+    soldiers: 26
+    vehicles: 4
+    refuelItem: STR_ZRBITE
+    refuelRate: 5
+    score: 400
+    maxDepth: 3
+    battlescapeTerrainData:
+      name: LEVIATH
+      mapDataSets:
+        - BLANKS
+        - LEVIATH
+      mapBlocks:
+        - name: LEVIATH
+          width: 10
+          length: 20
+    deployment:
+      - [5, 10, 0, 4]
+      - [4, 10, 0, 4]
+      - [5, 9, 0, 4]
+      - [4, 9, 0, 4]
+      - [5, 8, 0, 4]
+      - [4, 8, 0, 4]
+      - [5, 7, 0, 4]
+      - [4, 7, 0, 4]
+      - [5, 6, 0, 4]
+      - [4, 6, 0, 4]
+      - [5, 5, 0, 4]
+      - [4, 5, 0, 4]
+      - [5, 4, 0, 4]
+      - [4, 4, 0, 4]
+      - [5, 3, 0, 4]
+      - [4, 3, 0, 4]
+      - [6, 8, 0, 4]
+      - [3, 8, 0, 4]
+      - [6, 7, 0, 4]
+      - [3, 7, 0, 4]
+      - [6, 6, 0, 4]
+      - [3, 6, 0, 4]
+      - [6, 5, 0, 4]
+      - [3, 5, 0, 4]

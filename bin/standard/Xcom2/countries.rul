@@ -1,0 +1,135 @@
+countries: #done
+  - type: STR_USA
+    fundingBase: 600
+    fundingCap: 10000
+    labelLon: 257
+    labelLat: -45
+    areas:   # lonMin lonMax latMin latMax
+      - [266, 83, -63.5, -57]
+      - [297, 39.5, -57, -44]
+      - [217.5, 239, -51, -30]
+  - type: STR_ALASKA
+    fundingBase: 230
+    fundingCap: 8000
+    labelLon: 193.25
+    labelLat: -68.75
+    areas:
+      - [180, 197, -75, -57.5]
+      - [197, 237, -75, -70]
+  - type: STR_EU_SYNDICATE
+    fundingBase: 240
+    fundingCap: 7000
+    labelLon: 355
+    labelLat: -45
+    areas:
+      - [343, 354.5, -61, -43]
+      - [337, 349, -43, -28.5]
+      - [1, 21.5, -45, -36.5]
+  - type: STR_ARABIAN_BLOC
+    fundingBase: 320
+    fundingCap: 8000
+    labelLon: 45
+    labelLat: -5
+    areas:
+      - [21.5, 36.5, -38, -31]
+      - [60, 73, -24, -12.5]
+      - [52, 73, -12.5, -0.5]
+  - type: STR_EGYPTIAN_CARTEL
+    fundingBase: 250
+    fundingCap: 9000
+    labelLon: 18.75
+    labelLat: -26.75
+    areas:
+      - [325, 347, -28.5, -3]
+      - [323, 11, -3, 4]
+      - [1, 21.5, -36.5, -31]
+  - type: STR_AFRICA_CORP
+    fundingBase: 160
+    fundingCap: 6000
+    labelLon: 16.75
+    labelLat: 31.75
+    areas:
+      - [3.5, 18, 4, 42.5]
+      - [18, 38, 34.5, 42.5]
+      - [38, 52, -0.5, 42.5]
+  - type: STR_BRAZILIAN_UNION
+    fundingBase: 140
+    fundingCap: 5000
+    labelLon: 290
+    labelLat: 30
+    areas:
+      - [273, 290, 18, 57]
+      - [296, 310, 30.5, 57]
+      - [310, 323, 23, 40]
+      - [323, 341, 4, 23]
+  - type: STR_NEW_MEXICO
+    fundingBase: 245
+    fundingCap: 7000
+    labelLon: 265
+    labelLat: -10.75
+    areas:
+      - [228, 251, -30, -14]
+      - [245, 273, -14, 7]
+      - [267, 297.5, -30, -17.5]
+  - type: STR_ASIAN_COALITION
+    fundingBase: 400
+    fundingCap: 10000
+    labelLon: 81.25
+    labelLat: -15.25
+    areas:
+      - [72.5, 97, -24, 2]
+  - type: STR_SCANDINAVIA
+    fundingBase: 150
+    fundingCap: 5000
+    labelLon: 20
+    labelLat: -60
+    areas:
+      - [354.5, 5, -67, -57]
+      - [5, 15, -75, -65]
+      - [18, 27, -65, -55]
+  - type: STR_NEO_JAPAN
+    fundingBase: 300
+    fundingCap: 4000
+    labelLon: 142.5
+    labelLat: -41.25
+    areas:
+      - [118.5, 142, -44, -30]
+  - type: STR_FREE_CHINA
+    fundingBase: 280
+    fundingCap: 5000
+    labelLon: 126
+    labelLat: -18
+    areas:
+      - [118.5, 135, -30, -12.5]
+  - type: STR_AUSTRALASIA
+    fundingBase: 180
+    fundingCap: 2000
+    labelLon: 146.25
+    labelLat: 25
+    areas:
+      - [119, 142, 2, 13]
+      - [119, 153, 37, 47]
+      - [153, 170.5, 2, 42]
+  - type: STR_FED_KOREA
+    fundingBase: 310
+    fundingCap: 3000
+    labelLon: 118.75
+    labelLat: -36
+    areas:
+      - [111, 118.5, -24, -3]
+  - type: STR_EURASIA_UC
+    fundingBase: 160
+    fundingCap: 2000
+    labelLon: 60
+    labelLat: -60.75
+    areas:
+      - [135, 168, -62, -44]
+      - [31, 168, -75, -68]
+  - type: STR_ICELANDIC_UNION
+    fundingBase: 110
+    fundingCap: 4000
+    labelLon: 323
+    labelLat: -72
+    areas:
+      - [323, 340, -67, -56]
+      - [340, 250, -74, -65]
