@@ -306,8 +306,7 @@ static bool _ufoIsInstalled()
 static bool _tftdIsInstalled()
 {
 	// ensure both the resource data and the mod data is in place
-	return _gameIsInstalled("TFTD")
-		&& CrossPlatform::fileExists(CrossPlatform::searchDataFile("standard/xcom2/Xcom2Ruleset.rul"));
+	return _gameIsInstalled("TFTD");
 }
 
 static void _setDefaultMods()
