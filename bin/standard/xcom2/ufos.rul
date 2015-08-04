@@ -131,8 +131,8 @@ ufos: #done
           length: 20
           items:
             STR_ZRBITE:
-              - [9, 3, 0]
-              - [10, 3, 0]
+              - [9, 3, 1]
+              - [10, 3, 1]
   - type: STR_BATTLESHIP
     size: STR_LARGE
     sprite: 5
