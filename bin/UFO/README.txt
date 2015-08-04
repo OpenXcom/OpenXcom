@@ -12,8 +12,9 @@ After the copy, this directory should contain at least the following items:
   SOUND
   TERRAIN
   UFOGRAPH
-  UFOINTRO
+  UFOINTRO*
   UNITS
+*optional
 
 If you want to import your old games, copy the GAME_* folders to the
 directory where your OpenXcom saves are.
