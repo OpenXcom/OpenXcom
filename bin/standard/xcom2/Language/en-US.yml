@@ -292,7 +292,7 @@ en-US:
   STR_BASE_DEFENSE_BRIEFING: "An Alien vessel has touched down nearby. Our base is in severe danger. As per standard procedure all non combat personnel and functional X-Com subs have been evacuated. Aliens will enter the base via Submarine Pen gates or the air-lock. Defend the base and its vital installations at all costs - this is a fight to the death. If you click on the 'abort mission' icon you will concede defeat and lose the base."
 
   STR_ALIEN_COLONY_ATTACK_MISSION: "ALIEN COLONY ATTACK MISSION"
-  STR_ALIEN_COLONY_P1: "ALIEN COLONY PART ONE"
+  STR_ALIEN_BASE_ASSAULT: "ALIEN COLONY PART ONE"
   STR_ALIEN_COLONY_P1_BRIEFING: "This mission is a raid on an Alien colony site. There are 2 levels to the site, get all the aquanauts to the glowing exit in the first complex and click on the 'Abort Mission' icon to proceed. Any equipment left behind will stay on the seabed until the 2nd section is resolved. To quit, place aquanauts into the Submarine and click on the 'Abort Mission' icon."
   STR_ALIEN_COLONY_P2: "ALIEN COLONY PART TWO"
   STR_ALIEN_COLONY_P2_BRIEFING: "Having negotiated the first level and entered the core of the colony. The mission is to now destroy the control center, the Synomium Device, or eliminate all Aliens. To abort place all aquanauts on the start point and click on 'Abort Mission' icon. All viable X-Com equipment will be returned to base. "

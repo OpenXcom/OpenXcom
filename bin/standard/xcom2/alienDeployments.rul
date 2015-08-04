@@ -1953,7 +1953,7 @@ alienDeployments: #done
     objectiveComplete: [STR_ALIEN_SYNOMIUM_DEVICE_DESTROYED, 750]
     objectiveFailed: [STR_ALIEN_SYNOMIUM_DEVICE_FAILED, -750]
     objectivePopup: STR_CONTROL_CENTER_DESTROYED
-  - type: STR_ALIEN_COLONY_P1
+  - type: STR_ALIEN_BASE_ASSAULT # use of this name is hard coded, as is STR_BASE_DEFENSE. this is because of REASONS.
     data:
       - alienRank: 6
         lowQty: 2
@@ -2118,6 +2118,7 @@ alienDeployments: #done
     nextStage: STR_ALIEN_COLONY_P2
     briefing:
       title: STR_ALIEN_COLONY_ATTACK_MISSION
+      desc: STR_ALIEN_COLONY_P1_BRIEFING
       palette: 4
       music: GMATTBAS
       background: BACK01.SCR
