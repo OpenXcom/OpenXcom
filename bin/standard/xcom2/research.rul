@@ -156,7 +156,7 @@ research: #done: double check scores and times.
     points: 0
     dependencies:
       - STR_PWT_CANNON
-  - name: STR_PWT_DEFENSE
+  - name: STR_PWT_DEFENSES
     cost: 800
     points: 25
     dependencies:
@@ -215,7 +215,7 @@ research: #done: double check scores and times.
       - STR_SONIC_OSCILLATOR_DEP1
       - STR_SONIC_OSCILLATOR_DEP2
       - STR_SONIC_OSCILLATOR_DEP3
-  - name: STR_SONIC_DEFENSE
+  - name: STR_SONIC_DEFENSES
     cost: 620
     points: 25
     dependencies:
