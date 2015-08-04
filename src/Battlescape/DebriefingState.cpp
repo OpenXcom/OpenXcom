@@ -373,7 +373,7 @@ void DebriefingState::prepareDebriefing()
 	AlienDeployment *deployment = _game->getRuleset()->getDeployment(battle->getMissionType());
 
 	bool aborted = battle->isAborted();
-	bool success = !aborted || battle->allObjectivesDestroyed();;
+	bool success = !aborted || battle->allObjectivesDestroyed();
 	Craft* craft = 0;
 	std::vector<Craft*>::iterator craftIterator;
 	Base* base = 0;
@@ -536,7 +536,7 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 	
-	if (!deployment->getNextStage().empty())
+	if (deployment->getNextStage().empty())
 	{
 		// mission site disappears (even when you abort)
 		for (std::vector<MissionSite*>::iterator i = save->getMissionSites()->begin(); i != save->getMissionSites()->end(); ++i)
@@ -577,7 +577,7 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	if (!deployment->getNextStage().empty())
+	if (deployment->getNextStage().empty())
 	{
 		// alien base disappears (if you didn't abort)
 		for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
