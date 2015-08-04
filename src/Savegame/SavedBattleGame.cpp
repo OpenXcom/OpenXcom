@@ -1088,6 +1088,7 @@ bool SavedBattleGame::isAborted() const
 void SavedBattleGame::setObjectiveCount(int counter)
 {
 	_objectivesNeeded = counter;
+	_objectivesDestroyed = 0;
 }
 
 /**
