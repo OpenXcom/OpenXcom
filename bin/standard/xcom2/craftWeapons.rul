@@ -72,6 +72,7 @@ craftWeapons: #done
     ammoMax: 50
     rearmRate: 50
     launcher: STR_GAUSS_CANNON
+    clip: STR_GAUSS_CANNON_AMMO
     projectileType: 4
     underwaterOnly: true
   - type: STR_SONIC_OSCILLATOR_UC

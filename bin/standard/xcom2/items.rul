@@ -29,10 +29,24 @@ items: #done
     costBuy: 1240
     costSell: 1012
     transferTime: 96
+    clipSize: 50
   - type: STR_GAUSS_CANNON
     size: 2.0
     costSell: 211000
     transferTime: 48
+  - type: STR_GAUSS_CANNON_AMMO
+    size: 0
+    clipSize: 1
+    costSell: 200
+    transferTime: 48
+    battleType: 2
+    bulletSprite: 6
+    hitSound: 31
+    hitAnimation: 46
+    power: 110
+    damageType: 4
+    vaporColor: 2
+    vaporDensity: 10
   - type: STR_SONIC_OSCILLATOR
     size: 1.2
     costSell: 267300
@@ -122,24 +136,22 @@ items: #done
     costSell: 594000
     transferTime: 96
     bigSprite: 40
-    bulletSprite: 6
     fireSound: 34
-    hitSound: 31
-    hitAnimation: 46
-    power: 110
-    damageType: 4
     accuracySnap: 50
     accuracyAimed: 85
     tuSnap: 33
     tuAimed: 75
-    battleType: 1
     fixedWeapon: true
-    clipSize: 50
     invWidth: 2
     invHeight: 3
     turretType: 2
-    vaporColor: 2
-    vaporDensity: 10
+    battleType: 1
+    # special behaviour here: for a HWP with compatible ammo, setting a clipsize
+    # defines the max ammo for the HWP, and the clipsize on the weapon dictates
+    # how many rounds it adds.
+    compatibleAmmo:
+      - STR_GAUSS_CANNON_AMMO
+    clipSize: 50
   - type: STR_DISPLACER_SONIC
     size: 6
     costSell: 980000

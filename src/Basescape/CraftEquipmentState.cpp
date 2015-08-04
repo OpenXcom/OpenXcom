@@ -523,6 +523,10 @@ void CraftEquipmentState::moveRightByValue(int change)
 				// And now let's see if we can add the total number of vehicles.
 				RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 				int ammoPerVehicle = ammo->getClipSize();
+				if (ammoPerVehicle > 0 && item->getClipSize() > 0)
+				{
+					ammoPerVehicle = item->getClipSize() / ammo->getClipSize();
+				}
 				int baseQty = _base->getItems()->getItem(ammo->getType()) / ammoPerVehicle;
 				if (_game->getSavedGame()->getMonthsPassed() == -1)
 					baseQty = 1;

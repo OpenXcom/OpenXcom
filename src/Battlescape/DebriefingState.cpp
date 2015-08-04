@@ -709,14 +709,32 @@ void DebriefingState::prepareDebriefing()
 						{
 							BattleItem *ammoItem = (*j)->getItem("STR_RIGHT_HAND")->getAmmoItem();
 							if (!tankRule->getCompatibleAmmo()->empty() && ammoItem != 0 && ammoItem->getAmmoQuantity() > 0)
-								base->getItems()->addItem(tankRule->getCompatibleAmmo()->front(), ammoItem->getAmmoQuantity());
+							{
+								int total = ammoItem->getAmmoQuantity();
+
+								if (tankRule->getClipSize()) // meaning this tank can store multiple clips
+								{
+									total /= ammoItem->getRules()->getClipSize();
+								}
+
+								base->getItems()->addItem(tankRule->getCompatibleAmmo()->front(), total);
+							}
 						}
 						if ((*j)->getItem("STR_LEFT_HAND"))
 						{
 							RuleItem *secondaryRule = (*j)->getItem("STR_LEFT_HAND")->getRules();
 							BattleItem *ammoItem = (*j)->getItem("STR_LEFT_HAND")->getAmmoItem();
 							if (!secondaryRule->getCompatibleAmmo()->empty() && ammoItem != 0 && ammoItem->getAmmoQuantity() > 0)
-								base->getItems()->addItem(secondaryRule->getCompatibleAmmo()->front(), ammoItem->getAmmoQuantity());
+							{
+								int total = ammoItem->getAmmoQuantity();
+
+								if (secondaryRule->getClipSize()) // meaning this tank can store multiple clips
+								{
+									total /= ammoItem->getRules()->getClipSize();
+								}
+
+								base->getItems()->addItem(secondaryRule->getCompatibleAmmo()->front(), total);
+							}
 						}
 					}
 				}
