@@ -572,20 +572,20 @@ ufopaedia: #done
       - STR_DEEP_ONE_AUTOPSY
     image_id: UP014.BDY
     text: STR_DEEP_ONE_AUTOPSY_UFOPEDIA
-  - id: STR_BIO_DRONE
+  - id: STR_BIODRONE
     type_id: 10
     section: STR_ALIEN_LIFE_FORMS
     requires:
-      - STR_BIO_DRONE
+      - STR_BIODRONE
     image_id: UP070.BDY
-    text: STR_BIO_DRONE_UFOPEDIA
-  - id: STR_BIO_DRONE_AUTOPSY
+    text: STR_BIODRONE_UFOPEDIA
+  - id: STR_BIODRONE_AUTOPSY
     type_id: 10
     section: STR_ALIEN_LIFE_FORMS
     requires:
-      - STR_BIO_DRONE_AUTOPSY
+      - STR_BIODRONE_AUTOPSY
     image_id: UP071.BDY
-    text: STR_BIO_DRONE_AUTOPSY_UFOPEDIA
+    text: STR_BIODRONE_AUTOPSY_UFOPEDIA
   - id: STR_TENTACULAT
     type_id: 10
     section: STR_ALIEN_LIFE_FORMS
@@ -698,36 +698,36 @@ ufopaedia: #done
     text: STR_ALIEN_INFILTRATION_UFOPEDIA
     image_id: UP105.BDY
     text_width: 308
-  - id: STR_ALIEN_COLONY_EXPANSION
+  - id: STR_ALIEN_BASE
     type_id: 10
     section: STR_ALIEN_RESEARCH_UC
     requires:
-      - STR_ALIEN_COLONY_EXPANSION
-    text: STR_ALIEN_COLONY_EXPANSION_UFOPEDIA
+      - STR_ALIEN_BASE
+    text: STR_ALIEN_BASE_UFOPEDIA
     image_id: UP105.BDY
     text_width: 308
-  - id: STR_ALIEN_TERROR
+  - id: STR_ALIEN_SURFACE_ATTACK
     type_id: 10
     section: STR_ALIEN_RESEARCH_UC
     requires:
-      - STR_ALIEN_TERROR
-    text: STR_ALIEN_TERROR_UFOPEDIA
+      - STR_ALIEN_SURFACE_ATTACK
+    text: STR_ALIEN_SURFACE_ATTACK_UFOPEDIA
     image_id: UP105.BDY
     text_width: 308
-  - id: STR_FLOATING_BASE_ATTACK
+  - id: STR_ALIEN_RETALIATION
     type_id: 10
     section: STR_ALIEN_RESEARCH_UC
     requires:
-      - STR_FLOATING_BASE_ATTACK
-    text: STR_FLOATING_BASE_ATTACK_UFOPEDIA
+      - STR_ALIEN_RETALIATION
+    text: STR_ALIEN_RETALIATION_UFOPEDIA
     image_id: UP105.BDY
     text_width: 308
-  - id: STR_COLONY_SUPPLY_MISSIONS
+  - id: STR_ALIEN_SUPPLY
     type_id: 10
     section: STR_ALIEN_RESEARCH_UC
     requires:
-      - STR_COLONY_SUPPLY_MISSIONS
-    text: STR_COLONY_SUPPLY_MISSIONS_UFOPEDIA
+      - STR_ALIEN_SUPPLY
+    text: STR_ALIEN_SUPPLY_UFOPEDIA
     image_id: UP105.BDY
     text_width: 308
   - id: STR_ION_BEAM_ACCELERATORS

@@ -23,7 +23,7 @@ manufacture: # done
     time: 300
     cost: 182000
   - name: STR_GAUSS_CANNON_AMMO    #Gauss Cannon Ammo #
-    category: STR_HWP_CANNON_SHELLS
+    category: STR_AMMUNITION
     requires:
      - STR_GAUSS_CANNON
     space: 2 
@@ -69,7 +69,7 @@ manufacture: # done
       STR_ZRBITE: 25
       STR_AQUA_PLASTICS: 8
   - name: STR_HWP_DISPLACER_PWT    #P.W. Torpedo #
-    category: STR_HWP_CANNON_SHELLS
+    category: STR_AMMUNITION
     requires:
      - STR_PWT_CANNON
      - STR_NEW_FIGHTER_FLYING_SUB

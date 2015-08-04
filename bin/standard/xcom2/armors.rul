@@ -232,7 +232,7 @@ armors: #done
     drawingRoutine: 19
   - type: LOBSTERMAN_ARMOR0
     spriteSheet: LOBSTER.PCK
-    corpseItem: STR_LOBSTER_CORPSE
+    corpseItem: STR_LOBSTERMAN_CORPSE
     frontArmor: 20
     sideArmor: 20
     rearArmor: 15
@@ -252,7 +252,7 @@ armors: #done
     drawingRoutine: 14
   - type: LOBSTERMAN_ARMOR1
     spriteSheet: LOBSTER.PCK
-    corpseItem: STR_LOBSTER_CORPSE
+    corpseItem: STR_LOBSTERMAN_CORPSE
     frontArmor: 20
     sideArmor: 20
     rearArmor: 18
@@ -272,7 +272,7 @@ armors: #done
     drawingRoutine: 14
   - type: LOBSTERMAN_ARMOR2
     spriteSheet: LOBSTER.PCK
-    corpseItem: STR_LOBSTER_CORPSE
+    corpseItem: STR_LOBSTERMAN_CORPSE
     frontArmor: 22
     sideArmor: 22
     rearArmor: 20

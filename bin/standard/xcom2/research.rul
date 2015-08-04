@@ -357,10 +357,10 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_TASOTH_AUTOPSY
     needItem: true
-  - name: STR_BIO_DRONE_CORPSE
+  - name: STR_BIODRONE_CORPSE
     cost: 180
     points: 50
-    lookup: STR_BIO_DRONE_AUTOPSY
+    lookup: STR_BIODRONE_AUTOPSY
     needItem: true
   - name: STR_TENTACULAT_CORPSE
     cost: 180
@@ -421,7 +421,7 @@ research: #done: double check scores and times.
       - STR_ALIEN_RESOURCE_RAID
       - STR_ALIEN_INFILTRATION
       - STR_ALIEN_BASE
-      - STR_ALIEN_TERROR
+      - STR_ALIEN_SURFACE_ATTACK
       - STR_ALIEN_RETALIATION
       - STR_ALIEN_SUPPLY
   - name: STR_AQUATOID_MEDIC
@@ -502,7 +502,7 @@ research: #done: double check scores and times.
       - STR_ALIEN_RESOURCE_RAID
       - STR_ALIEN_INFILTRATION
       - STR_ALIEN_BASE
-      - STR_ALIEN_TERROR
+      - STR_ALIEN_SURFACE_ATTACK
       - STR_ALIEN_RETALIATION
       - STR_ALIEN_SUPPLY
   - name: STR_GILLMAN_TECHNICIAN
@@ -549,7 +549,7 @@ research: #done: double check scores and times.
       - STR_ALIEN_RESOURCE_RAID
       - STR_ALIEN_INFILTRATION
       - STR_ALIEN_BASE
-      - STR_ALIEN_TERROR
+      - STR_ALIEN_SURFACE_ATTACK
       - STR_ALIEN_RETALIATION
       - STR_ALIEN_SUPPLY
   - name: STR_LOBSTERMAN_TECHNICIAN
@@ -607,7 +607,7 @@ research: #done: double check scores and times.
       - STR_ALIEN_RESOURCE_RAID
       - STR_ALIEN_INFILTRATION
       - STR_ALIEN_BASE
-      - STR_ALIEN_TERROR
+      - STR_ALIEN_SURFACE_ATTACK
       - STR_ALIEN_RETALIATION
       - STR_ALIEN_SUPPLY
   - name: STR_AQUATOID
@@ -622,7 +622,7 @@ research: #done: double check scores and times.
     cost: 0
     points: 50
     needItem: true
-  - name: STR_BIO_DRONE
+  - name: STR_BIODRONE
     cost: 0
     points: 50
     needItem: true
@@ -656,10 +656,10 @@ research: #done: double check scores and times.
     needItem: true
 
 
-  - name: STR_BIO_DRONE_TERRORIST
+  - name: STR_BIODRONE_TERRORIST
     cost: 170
     points: 50
-    lookup: STR_BIO_DRONE
+    lookup: STR_BIODRONE
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -731,7 +731,7 @@ research: #done: double check scores and times.
     cost: 0
     points: 50
     needItem: true
-  - name: STR_ALIEN_TERROR
+  - name: STR_ALIEN_SURFACE_ATTACK
     cost: 0
     points: 50
     needItem: true
@@ -787,7 +787,7 @@ research: #done: double check scores and times.
     cost: 0
     points: 50
     needItem: true
-  - name: STR_BIO_DRONE_AUTOPSY
+  - name: STR_BIODRONE_AUTOPSY
     cost: 0
     points: 50
     needItem: true

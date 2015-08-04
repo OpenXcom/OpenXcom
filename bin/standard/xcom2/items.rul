@@ -1206,7 +1206,7 @@ items: #done
     recoveryPoints: 3
     battleType: 11
     armor: 26
-  - type: STR_LOBSTER_CORPSE
+  - type: STR_LOBSTERMAN_CORPSE
     size: 0.4
     costSell: 20000
     weight: 45
