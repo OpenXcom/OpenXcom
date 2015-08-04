@@ -224,7 +224,7 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 	{
 		std::ostringstream s;
 		s << "GEODATA/" << "INTERWIN.DAT";
-		_surfaces["INTERWIN.DAT"] = new Surface(160, 556);
+		_surfaces["INTERWIN.DAT"] = new Surface(160, 600);
 		_surfaces["INTERWIN.DAT"]->loadScr(FileMap::getFilePath(s.str()));
 	}
 
