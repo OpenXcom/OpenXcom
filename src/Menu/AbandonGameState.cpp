@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "AbandonGameState.h"
+#include "../Engine/Sound.h"
 #include "../Engine/Game.h"
 #include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
@@ -27,6 +28,7 @@
 #include "MainMenuState.h"
 #include "../Engine/Screen.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
 #include "SaveGameState.h"
 
 namespace OpenXcom
@@ -102,6 +104,8 @@ AbandonGameState::~AbandonGameState()
  */
 void AbandonGameState::btnYesClick(Action *)
 {
+	if (_origin == OPT_BATTLESCAPE)
+		_game->getResourcePack()->getSoundByDepth(0, _game->getSavedGame()->getSavedBattle()->getAmbientSound())->stopLoop();
 	if (!_game->getSavedGame()->isIronman())
 	{
 		Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
