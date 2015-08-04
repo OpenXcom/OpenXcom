@@ -338,6 +338,8 @@ void BattlescapeGenerator::nextStage()
 	size_t unitCount = _save->getUnits()->size();
 
 	// Let's figure out what race we're up against.
+	_alienRace = ruleDeploy->getRace();
+
 	for (std::vector<MissionSite*>::iterator i = _game->getSavedGame()->getMissionSites()->begin();
 		_alienRace == "" && i != _game->getSavedGame()->getMissionSites()->end(); ++i)
 	{
