@@ -40,7 +40,7 @@ soldiers: #done
       firing: 120
       throwing: 120
       strength: 70
-      psiStrength: 0
+      psiStrength: 100
       psiSkill: 100
       melee: 120
     armor: STR_NONE_UC
