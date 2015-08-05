@@ -54,16 +54,17 @@ SaveGameState::SaveGameState(OptionsOrigin origin, const std::string &filename, 
  */
 SaveGameState::SaveGameState(OptionsOrigin origin, SaveType type, SDL_Color *palette) : _firstRun(0), _origin(origin), _type(type)
 {
+	std::string curMaster = Options::getActiveMaster();
 	switch (type)
 	{
 	case SAVE_QUICK:
-		_filename = SavedGame::QUICKSAVE;
+		_filename = curMaster + SavedGame::QUICKSAVE;
 		break;
 	case SAVE_AUTO_GEOSCAPE:
-		_filename = SavedGame::AUTOSAVE_GEOSCAPE;
+		_filename = curMaster + SavedGame::AUTOSAVE_GEOSCAPE;
 		break;
 	case SAVE_AUTO_BATTLESCAPE:
-		_filename = SavedGame::AUTOSAVE_BATTLESCAPE;
+		_filename = curMaster + SavedGame::AUTOSAVE_BATTLESCAPE;
 		break;
 	case SAVE_IRONMAN:
 	case SAVE_IRONMAN_END:

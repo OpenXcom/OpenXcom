@@ -255,17 +255,18 @@ SaveInfo SavedGame::getSaveInfo(const std::string &file, Language *lang)
 
 	save.fileName = file;
 
-	if (save.fileName == QUICKSAVE)
+	std::string curMaster = Options::getActiveMaster();
+	if (save.fileName == curMaster + QUICKSAVE)
 	{
 		save.displayName = lang->getString("STR_QUICK_SAVE_SLOT");
 		save.reserved = true;
 	}
-	else if (save.fileName == AUTOSAVE_GEOSCAPE)
+	else if (save.fileName == curMaster + AUTOSAVE_GEOSCAPE)
 	{
 		save.displayName = lang->getString("STR_AUTO_SAVE_GEOSCAPE_SLOT");
 		save.reserved = true;
 	}
-	else if (save.fileName == AUTOSAVE_BATTLESCAPE)
+	else if (save.fileName == curMaster + AUTOSAVE_BATTLESCAPE)
 	{
 		save.displayName = lang->getString("STR_AUTO_SAVE_BATTLESCAPE_SLOT");
 		save.reserved = true;
