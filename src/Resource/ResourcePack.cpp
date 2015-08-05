@@ -208,7 +208,7 @@ void ResourcePack::playMusic(const std::string &name, int id)
 		{
 			std::ostringstream ss;
 			ss << name << id;
-			getMusic(name)->play(loop);
+			getMusic(ss.str())->play(loop);
 		}
 	}
 }
