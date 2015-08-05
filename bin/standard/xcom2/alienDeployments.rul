@@ -1803,6 +1803,7 @@ alienDeployments: #done
     duration: [4, 10]
     despawnPenalty: 2000
     siteDepth: [1, 3]
+    objectiveFailed: [STR_ALIEN_SYNOMIUM_DEVICE_FAILED, -750]
   - type: STR_ARTIFACT_SITE_P2
     data:
       - alienRank: 5
