@@ -264,7 +264,7 @@ manufacture: # done
     requiredItems:
       STR_ZRBITE: 1
   - name: STR_PLASTIC_AQUA_ARMOR    #Plastic Aqua-Armour #
-    category: STR_PLASTIC_AQUA_ARMOR
+    category: STR_PERSONAL_ARMOR
     requires:
      - STR_PLASTIC_AQUA_ARMOR
     space: 12 
@@ -273,7 +273,7 @@ manufacture: # done
     requiredItems:
       STR_AQUA_PLASTICS: 4
   - name: STR_ION_ARMOR    #Ion Armour #
-    category: STR_PLASTIC_AQUA_ARMOR
+    category: STR_PERSONAL_ARMOR
     requires:
      - STR_ION_ARMOR
     space: 16 
@@ -283,7 +283,7 @@ manufacture: # done
       STR_AQUA_PLASTICS: 5
       STR_ZRBITE: 5
   - name: STR_MAGNETIC_ION_ARMOR    #Mag. Ion Armour #
-    category: STR_PLASTIC_AQUA_ARMOR
+    category: STR_PERSONAL_ARMOR
     requires:
      - STR_MAGNETIC_ION_ARMOR
     space: 16 

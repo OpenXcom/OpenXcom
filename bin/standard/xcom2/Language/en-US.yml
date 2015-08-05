@@ -512,6 +512,7 @@ en-US:
   STR_EQUIPMENT: "Equipment"
   STR_ALIEN_CORPSE: "Alien Corpse"
   STR_UFO_COMPONENT: "ALIEN SUB component"
+  STR_PERSONAL_ARMOR: "Personal Armor"
   STR_RAW_MATERIALS: "Raw Materials"
   STR_HWP_SOLID_HARPOON_BOLTS: "Solid Harpoon Bolts"
   STR_ALIEN: "Alien"
@@ -912,7 +913,6 @@ en-US:
   STR_ALIEN_INFILTRATION: "Alien Infiltration"
   STR_ALIEN_BASE: "Alien Colony Expansion"
   STR_ALIEN_SURFACE_ATTACK: "Alien Surface Attacks"
-  STR_ALIEN_SHIP_ATTACK: "Alien Surface Attacks"
   STR_ALIEN_RETALIATION: "Floating Base Attack"
   STR_ALIEN_SUPPLY: "Colony Supply Missions"
 
