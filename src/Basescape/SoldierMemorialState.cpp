@@ -130,7 +130,7 @@ SoldierMemorialState::~SoldierMemorialState()
 void SoldierMemorialState::btnOkClick(Action *)
 {
 	_game->popState();
-	_game->getResourcePack()->playMusic("GMGEO", true);
+	_game->getResourcePack()->playMusic("GMGEO");
 }
 
 /**

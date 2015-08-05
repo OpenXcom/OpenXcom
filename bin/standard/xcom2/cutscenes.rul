@@ -177,7 +177,7 @@ cutscenes: #done
     videos:
       - ANIMS/OUTRO.VID
     slideshow:
-      musicId: GMNEWINT
+      musicId: GMWIN
       slides:
         - imagePath: FLOP_INT/OUT01.LBM
           transitionSeconds: 10
@@ -255,7 +255,7 @@ cutscenes: #done
     videos:
       - ANIMS/GAMEOVER.VID
     slideshow:
-      musicId: GMISPOSH
+      musicId: GMLOSE
       slides:
         - imagePath: FLOP_INT/GAO01.LBM
           transitionSeconds: 10

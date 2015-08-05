@@ -498,11 +498,11 @@ void GeoscapeState::init()
 	{
 		if (_game->getSavedGame()->getMonthsPassed() == -1)
 		{
-			_game->getResourcePack()->playMusic("GMGEO1");
+			_game->getResourcePack()->playMusic("GMGEO", 1);
 		}
 		else
 		{
-			_game->getResourcePack()->playMusic("GMGEO", true);
+			_game->getResourcePack()->playMusic("GMGEO");
 		}
 	}
 	_globe->unsetNewBaseHover();
@@ -863,7 +863,7 @@ void GeoscapeState::time5Seconds()
 									startDogfight();
 									_dogfightStartTimer->start();
 								}
-								_game->getResourcePack()->playMusic("GMINTER", true);
+								_game->getResourcePack()->playMusic("GMINTER");
 							}
 						}
 						break;

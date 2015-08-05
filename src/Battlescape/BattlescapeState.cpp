@@ -455,7 +455,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _xBeforeMouseScrolling(0), _
 	// Set music
 	if (_save->getMusic() == "")
 	{
-		_game->getResourcePack()->playMusic("GMTACTIC", true);
+		_game->getResourcePack()->playMusic("GMTACTIC");
 	}
 	else
 	{
