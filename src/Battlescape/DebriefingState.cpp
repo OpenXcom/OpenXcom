@@ -536,7 +536,7 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 	
-	if (deployment->getNextStage().empty())
+	if (deployment && deployment->getNextStage().empty())
 	{
 		// mission site disappears (even when you abort)
 		for (std::vector<MissionSite*>::iterator i = save->getMissionSites()->begin(); i != save->getMissionSites()->end(); ++i)
@@ -577,7 +577,7 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	if (deployment->getNextStage().empty())
+	if (deployment && deployment->getNextStage().empty())
 	{
 		// alien base disappears (if you didn't abort)
 		for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
