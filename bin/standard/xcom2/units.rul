@@ -547,7 +547,7 @@ units: #done
       strength: 120
       psiStrength: 90
       psiSkill: 0
-      melee: 0
+      melee: 1 # vanilla TFTD had this value as 0, but it would still have a 0.89999% chance to hit with an attack.
     armor: BIODRONE_ARMOR0
     standHeight: 17
     floatHeight: 2
