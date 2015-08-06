@@ -338,7 +338,7 @@ int Tile::openDoor(int part, BattleUnit *unit, BattleActionType reserve)
 {
 	if (!_objects[part]) return -1;
 
-	if (_objects[part]->isDoor())
+	if (_objects[part]->isDoor() && unit->getArmor()->getSize() == 1) // don't allow double-wide units to open swinging doors due to engine limitations
 	{
 		if (unit && unit->getTimeUnits() < _objects[part]->getTUCost(unit->getMovementType()) + unit->getActionTUs(reserve, unit->getMainHandWeapon(false)))
 			return 4;

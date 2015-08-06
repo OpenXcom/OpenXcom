@@ -1868,8 +1868,6 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 	int TUCost = 0;
 	int size = unit->getArmor()->getSize();
 	int z = unit->getTile()->getTerrainLevel() < -12 ? 1 : 0; // if we're standing on stairs, check the tile above instead.
-	if (size > 1 && rClick)
-		return door;
 	if (dir == -1)
 	{
 		dir = unit->getDirection();
