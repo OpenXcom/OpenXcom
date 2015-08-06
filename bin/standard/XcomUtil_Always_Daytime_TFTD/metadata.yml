@@ -1,0 +1,9 @@
+#
+# metadata.yaml for XcomUtil Always Daytime
+
+name: "XcomUtil: Always Daytime"
+version: 1.0
+description: "Forces all ground missions to daytime."
+author: the OpenXcom team
+
+master: xcom2
