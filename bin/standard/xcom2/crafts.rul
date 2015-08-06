@@ -104,6 +104,7 @@ crafts: #done
     soldiers: 26
     vehicles: 4
     refuelItem: STR_ZRBITE
+    spacecraft: true
     refuelRate: 5
     score: 400
     maxDepth: 3
