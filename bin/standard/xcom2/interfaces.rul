@@ -1337,7 +1337,7 @@ interfaces: #done
         color: 5
       - id: weight
         color: 16     # gold (acceptable)
-        color2: 32    # red (overweight)
+        color2: 176    # red (overweight)
       - id: numStack
         color: 82
   - type: stats
