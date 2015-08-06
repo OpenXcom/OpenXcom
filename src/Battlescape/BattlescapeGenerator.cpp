@@ -224,15 +224,35 @@ void BattlescapeGenerator::nextStage()
 	std::vector<BattleItem*> takeToNextStage;
 	std::map<RuleItem*, int> guaranteedRounds, conditionalRounds;
 
-	for (std::vector<BattleItem*>::iterator j = _save->getItems()->begin(); j != _save->getItems()->end();)
+	for (std::vector<BattleItem*>::iterator i = _save->getItems()->begin(); i != _save->getItems()->end();)
 	{
-		if (!(*j)->getOwner() || (*j)->getOwner()->getOriginalFaction() != FACTION_PLAYER)
+		if (!(*i)->getOwner() || (*i)->getOwner()->getOriginalFaction() != FACTION_PLAYER)
 		{
-			Tile *tile = (*j)->getTile();
+			bool isAmmo = false;
+
+			for (std::vector<BattleItem*>::iterator j = _save->getItems()->begin(); j != _save->getItems()->end(); ++j)
+			{
+				if ((*j)->getAmmoItem() == *i)
+				{
+					if ((*j)->getOwner() && (*j)->getOwner()->getOriginalFaction() == FACTION_PLAYER)
+					{
+						isAmmo = true;
+					}
+					break;
+				}
+			}
+
+			if (isAmmo)
+			{
+				++i;
+				continue;
+			}
+
+			Tile *tile = (*i)->getTile();
 			std::vector<BattleItem*> *toContainer = takeHomeConditional;
 			if (tile)
 			{
-				tile->removeItem(*j);
+				tile->removeItem(*i);
 				if (tile->getMapData(O_FLOOR))
 				{
 					if (tile->getMapData(O_FLOOR)->getSpecialType() == START_POINT)
@@ -240,23 +260,23 @@ void BattlescapeGenerator::nextStage()
 						toContainer = takeHomeGuaranteed;
 					}
 					else if (tile->getMapData(O_FLOOR)->getSpecialType() == END_POINT
-					&& (*j)->getRules()->isRecoverable()
-					&& !(*j)->getUnit())
+					&& (*i)->getRules()->isRecoverable()
+					&& !(*i)->getUnit())
 					{
-						takeToNextStage.push_back(*j);
-						++j;
+						takeToNextStage.push_back(*i);
+						++i;
 						continue;
 					}
 				}
 			}
-			if ((*j)->getRules()->isRecoverable() && !(*j)->getXCOMProperty())
+			if ((*i)->getRules()->isRecoverable() && !(*i)->getXCOMProperty())
 			{
-				toContainer->push_back(*j);
-				j = _save->getItems()->erase(j);
+				toContainer->push_back(*i);
+				i = _save->getItems()->erase(i);
 				continue;
 			}
 		}
-		++j;
+		++i;
 	}
 
 	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_save->getMissionType());
