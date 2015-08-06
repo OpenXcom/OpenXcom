@@ -128,7 +128,7 @@ SelectDestinationState::SelectDestinationState(Craft *craft, Globe *globe) : _cr
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTitle->setWordWrap(true);
 
-	if (!_craft->getRules()->getSpacecraft() || !_game->getSavedGame()->isResearched("STR_CYDONIA_OR_BUST"))
+	if (!_craft->getRules()->getSpacecraft() || !_game->getSavedGame()->isResearched(_game->getRuleset()->getFinalResearch()))
 	{
 		_btnCydonia->setVisible(false);
 	}

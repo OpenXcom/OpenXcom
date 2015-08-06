@@ -164,6 +164,7 @@ research: #done: double check scores and times.
   - name: STR_TLETH_ALIEN_CITY
     cost: 600
     points: 60
+    unlockFinalMission: true
     dependencies:
       - STR_COMMANDER_PLUS
   - name: STR_COMMANDER_PLUS

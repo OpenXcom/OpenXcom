@@ -453,6 +453,10 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 		{
 			_researchListOrder += 100;
 			rule->load(*i, _researchListOrder);
+			if ((*i)["unlockFinalMission"].as<bool>(false))
+			{
+				_finalResearch = (*i)["name"].as<std::string>(_finalResearch);
+			}
 		}
 	}
 	for (YAML::const_iterator i = doc["manufacture"].begin(); i != doc["manufacture"].end(); ++i)
@@ -1758,5 +1762,13 @@ RuleMissionScript *Ruleset::getMissionScript(const std::string &name) const
 	std::map<std::string, RuleMissionScript*>::const_iterator i = _missionScripts.find(name);
 	if (_missionScripts.end() != i) return i->second; else return 0;
 }
+const std::string Ruleset::getFinalResearch() const
+{
+	return _finalResearch; 
+}
 
+void Ruleset::setFinalResearch(std::string name)
+{
+	_finalResearch = name;
+}
 }
