@@ -197,7 +197,7 @@ void ResourcePack::playMusic(const std::string &name, int id)
 
 		// hacks
 		if (!Options::musicAlwaysLoop &&
-				(name == "GMSTORY" || name == "GMWAITLO" || name == "GMWIN" || name == "GMLOSE"))
+				(name == "GMSTORY" || name == "GMWIN" || name == "GMLOSE"))
 			loop = 0;
 
 		if (id == 0)
