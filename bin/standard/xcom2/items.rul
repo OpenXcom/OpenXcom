@@ -719,7 +719,6 @@ items: #done
     battleType: 7
     tuUse: 25
     armor: 20
-    underwaterOnly: true
   - type: STR_MEDI_KIT
     size: 0.1
     costSell: 46500
@@ -757,7 +756,6 @@ items: #done
     tuUse: 25
     flatRate: true
     armor: 20
-    underwaterOnly: true
   - type: STR_THERMAL_TAZER
     size: 0.1
     costBuy: 1260
