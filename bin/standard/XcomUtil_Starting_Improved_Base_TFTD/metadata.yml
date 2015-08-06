@@ -1,0 +1,9 @@
+#
+# metadata.yaml for XcomUtil Starting Improved Base
+
+name: "XcomUtil: Starting Improved Base"
+version: 1.0
+description: "Gives the starting base a Wide Sonar, Alien Containment, 50 scientists and 20 engineers."
+author: the OpenXcom team
+
+master: xcom2

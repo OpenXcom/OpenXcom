@@ -1,0 +1,12 @@
+# Enforce the old 80 item limit on crafts.
+crafts:
+  - type: STR_TRITON
+    maxItems: 80
+  - type: STR_HAMMERHEAD
+    maxItems: 80
+  - type: STR_LEVIATHAN
+    maxItems: 80
+  - type: STR_BARRACUDA
+    maxItems: 80
+  - type: STR_MANTA
+    maxItems: 80

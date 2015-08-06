@@ -1,0 +1,30 @@
+# Based on XcomUtil by Scott Jones and BladeFireLight
+startingBase:
+  facilities:
+      - type: STR_AIR_LOCK
+        x: 0
+        y: 2
+      - type: STR_SUB_PEN
+        x: 0
+        y: 0
+      - type: STR_SUB_PEN
+        x: 2
+        y: 0
+      - type: STR_SUB_PEN
+        x: 4
+        y: 0
+      - type: STR_GENERAL_STORES
+        x: 0
+        y: 3
+      - type: STR_LIVING_QUARTERS
+        x: 0
+        y: 4
+      - type: STR_LABORATORY
+        x: 1
+        y: 4
+      - type: STR_WORKSHOP
+        x: 2
+        y: 4
+      - type: STR_STANDARD_SONAR
+        x: 3
+        y: 4
