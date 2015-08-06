@@ -501,7 +501,7 @@ void PurchaseState::increaseByValue(int change)
 			// Item count
 			double storesNeededPerItem = rule->getSize();
 			double freeStores = _base->getAvailableStores() - _base->getUsedStores() - _iQty;
-			double maxByStores = double(INT_MAX);
+			double maxByStores = (double)(INT_MAX);
 			if (!AreSame(storesNeededPerItem, 0.0))
 			{
 				maxByStores = (freeStores + 0.05) / storesNeededPerItem;
