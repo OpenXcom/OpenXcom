@@ -1767,8 +1767,4 @@ const std::string Ruleset::getFinalResearch() const
 	return _finalResearch; 
 }
 
-void Ruleset::setFinalResearch(std::string name)
-{
-	_finalResearch = name;
-}
 }
