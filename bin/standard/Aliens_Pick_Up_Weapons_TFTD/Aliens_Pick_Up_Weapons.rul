@@ -1,0 +1,42 @@
+# Make aliens try to pick up weapons they dropped
+items:
+  - type: STR_DART_PISTOL
+    attraction: 10
+  - type: STR_JET_HARPOON
+    attraction: 10
+  - type: STR_GAS_CANNON
+    attraction: 10
+  - type: STR_HYDRO_JET_CANNON
+    attraction: 10
+  - type: STR_TORPEDO_LAUNCHER
+    attraction: 10
+  - type: STR_GAUSS_PISTOL
+    attraction: 10
+  - type: STR_GAUSS_RIFLE
+    attraction: 10
+  - type: STR_HEAVY_GAUSS
+    attraction: 10
+  - type: STR_SONIC_CANNON
+    attraction: 10
+  - type: STR_SONIC_BLASTA_RIFLE
+    attraction: 10
+  - type: STR_SONIC_PISTOL
+    attraction: 10
+  - type: STR_DISRUPTOR_PULSE_LAUNCHER
+    attraction: 10
+  - type: STR_THERMAL_SHOK_LAUNCHER
+    attraction: 10
+  - type: STR_GAUSS_PISTOL_CLIP
+    attraction: 10
+  - type: STR_GAUSS_RIFLE_CLIP
+    attraction: 10
+  - type: STR_HEAVY_GAUSS_CLIP
+    attraction: 10
+  - type: STR_CANNON_POWER_CLIP
+    attraction: 10
+  - type: STR_BLASTA_POWER_CLIP
+    attraction: 10
+  - type: STR_PISTOL_POWER_CLIP
+    attraction: 10
+  - type: STR_SONIC_PULSER
+    attraction: 6 # pick up grenades they're standing on, but don't chase after ones they throw
