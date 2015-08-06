@@ -9,6 +9,7 @@ items: #done
     costBuy: 3000
     costSell: 2400
     transferTime: 48
+    clipSize: 1
   - type: STR_DUP_HEAD_LAUNCHER
     size: 1
     costBuy: 17000
@@ -19,6 +20,7 @@ items: #done
     costBuy: 9000
     costSell: 7200
     transferTime: 48
+    clipSize: 1
   - type: STR_CRAFT_GAS_CANNON
     size: 1.5
     costBuy: 30000
@@ -59,6 +61,7 @@ items: #done
     size: 0.6
     costSell: 53300
     transferTime: 48
+    clipSize: 1
   - type: STR_COELACANTH_GAS_CANNON
     size: 6
     costBuy: 420000
