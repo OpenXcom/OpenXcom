@@ -1441,6 +1441,9 @@ interfaces: #done
       - id: numWounds
         pos: [145, 116]
         color: 32
+      - id: buttonEnd
+        pos: [292, 46]
+        size: [28, 86]
       # required
       - id: body
         pos: [90, 55]
