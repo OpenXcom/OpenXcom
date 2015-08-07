@@ -364,7 +364,7 @@ regions: #done
     cost: 1000000
     areas:
       - [1, 40, -48, -30]
-      - [353, 1, -40, -32]
+      - [353, 1, -41, -32]
     regionWeight: 16
     missionWeights:
       STR_ALIEN_PROBE_MISSION: 10
@@ -508,7 +508,7 @@ regions: #done
   - type: STR_THE_EAST_SEA
     cost: 500000
     areas:
-      - [112, 142, -47.5, -24]
+      - [112, 142, -24, -47.5]
       - [133, 142, -47.5, -50]
     regionWeight: 12
     missionWeights:
@@ -640,9 +640,9 @@ regions: #done
     cost: 750000
     areas:
       - [292, 142, 40, 65]
-      - [96, 142, 30, 40]
+      - [96, 142, 30, 80]
       - [142, 212, 64, 80]
-      - [212, 292, 64, 70]
+      - [212, 292, 64, 80]
     regionWeight: 10
     missionWeights:
       STR_ALIEN_PROBE_MISSION: 15
@@ -690,7 +690,7 @@ regions: #done
     cost: 600000
     areas:
       - [0, 360, -80, -70]
-      - [292, 40, -66, -70]
+      - [292, 40, -70, -66]
       - [27, 40, -68.25, -58]
     regionWeight: 5
     missionWeights:

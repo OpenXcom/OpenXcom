@@ -62,6 +62,9 @@ void RuleRegion::load(const YAML::Node &node)
 		_lonMax.push_back(areas[i][1] * M_PI / 180.0);
 		_latMin.push_back(areas[i][2] * M_PI / 180.0);
 		_latMax.push_back(areas[i][3] * M_PI / 180.0);
+
+		if (_latMin.back() > _latMax.back())
+			std::swap(_latMin.back(), _latMax.back());
 	}
 	_missionZones = node["missionZones"].as< std::vector<MissionZone> >(_missionZones);
 	if (const YAML::Node &weights = node["missionWeights"])
@@ -107,7 +110,7 @@ bool RuleRegion::insideRegion(double lon, double lat) const
 		if (_lonMin[i] <= _lonMax[i])
 			inLon = (lon >= _lonMin[i] && lon < _lonMax[i]);
 		else
-			inLon = ((lon >= _lonMin[i] && lon < 6.283) || (lon >= 0 && lon < _lonMax[i]));
+			inLon = ((lon >= _lonMin[i] && lon < M_PI*2) || (lon >= 0 && lon < _lonMax[i]));
 
 		inLat = (lat >= _latMin[i] && lat < _latMax[i]);
 
