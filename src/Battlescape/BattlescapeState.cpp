@@ -1501,13 +1501,25 @@ inline void BattlescapeState::handle(Action *action)
 						{
 							if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
 							{
-								(*i)->instaKill();
-								if ((*i)->getTile())
-								{
-									(*i)->getTile()->setUnit(0);
-								}
+								(*i)->damage(Position(0,0,0), 1000, DT_AP, true);
+							}
+							_save->getBattleGame()->checkForCasualties(0, 0, true, false);
+							_save->getBattleGame()->handleState();
+						}
+					}
+					// "ctrl-j" - kill all aliens
+					else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_j && (SDL_GetModState() & KMOD_CTRL) != 0)
+					{
+						debug(L"Deploying Celine Dione album");
+						for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i !=_save->getUnits()->end(); ++i)
+						{
+							if ((*i)->getOriginalFaction() == FACTION_HOSTILE && !(*i)->isOut())
+							{
+								(*i)->damage(Position(0,0,0), 1000, DT_STUN, true);
 							}
 						}
+						_save->getBattleGame()->checkForCasualties(0, 0, true, false);
+						_save->getBattleGame()->handleState();
 					}
 					// f11 - voxel map dump
 					else if (action->getDetails()->key.keysym.sym == SDLK_F11)
