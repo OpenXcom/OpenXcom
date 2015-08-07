@@ -83,7 +83,6 @@ items: #done
     fixedWeapon: true
     invWidth: 2
     invHeight: 3
-    armor: 20
     turretType: 0
   - type: STR_HWP_SOLID_HARPOON_BOLTS
     size: 0.1
@@ -99,7 +98,6 @@ items: #done
     battleType: 2
     invWidth: 2
     invHeight: 1
-    armor: 20
     vaporColor: 0
     vaporDensity: 15
   - type: STR_COELACANTH_AQUA_JET
@@ -227,7 +225,6 @@ items: #done
     battleType: 1
     invWidth: 1
     invHeight: 2
-    armor: 20
   - type: STR_DART_POD
     size: 0.1
     costBuy: 70
@@ -242,7 +239,6 @@ items: #done
     damageType: 1
     clipSize: 12
     battleType: 2
-    armor: 20
     vaporColor: 0
     vaporDensity: 5
   - type: STR_JET_HARPOON
@@ -267,7 +263,6 @@ items: #done
     twoHanded: true
     invWidth: 1
     invHeight: 3
-    armor: 20
   - type: STR_HARPOON_POD
     size: 0.1
     costBuy: 200
@@ -282,7 +277,6 @@ items: #done
     damageType: 1
     clipSize: 10
     battleType: 2
-    armor: 20
     vaporColor: 0
     vaporDensity: 10
   - type: STR_GAS_CANNON
@@ -307,7 +301,6 @@ items: #done
     twoHanded: true
     invWidth: 2
     invHeight: 3
-    armor: 20
   - type: STR_GC_AP_AMMO
     size: 0.1
     costBuy: 300
@@ -392,7 +385,6 @@ items: #done
     twoHanded: true
     invWidth: 2
     invHeight: 3
-    armor: 20
     underwaterOnly: true
   - type: STR_HJC_AP_AMMO
     size: 0.1
@@ -474,7 +466,6 @@ items: #done
     twoHanded: true
     invWidth: 2
     invHeight: 3
-    armor: 20
     underwaterOnly: true
   - type: STR_SMALL_TORPEDO
     size: 0.2
@@ -553,7 +544,6 @@ items: #done
     battleType: 1
     invWidth: 1
     invHeight: 2
-    armor: 20
   - type: STR_GAUSS_PISTOL_CLIP
     size: 0.2
     costSell: 1050
@@ -593,7 +583,6 @@ items: #done
     twoHanded: true
     invWidth: 1
     invHeight: 3
-    armor: 20
   - type: STR_GAUSS_RIFLE_CLIP
     size: 0.2
     costSell: 1950
@@ -631,7 +620,6 @@ items: #done
     twoHanded: true
     invWidth: 2
     invHeight: 3
-    armor: 20
   - type: STR_HEAVY_GAUSS_CLIP
     size: 0.2
     costSell: 3220
@@ -661,7 +649,7 @@ items: #done
     power: 50
     damageType: 3
     battleType: 4
-    armor: 300
+    armor: 150
     blastRadius: 5
     hitAnimation: 8
   - type: STR_DYE_GRENADE
@@ -690,7 +678,7 @@ items: #done
     power: 70
     damageType: 3
     battleType: 5
-    armor: 300
+    armor: 90
     blastRadius: 5
     hitAnimation: 8
   - type: STR_MAGNA_PACK_EXPLOSIVE
@@ -706,7 +694,7 @@ items: #done
     battleType: 4
     invWidth: 2
     invHeight: 1
-    armor: 300
+    armor: 140
     blastRadius: 5
     hitAnimation: 8
   - type: STR_PARTICLE_DISTURBANCE_SENSOR
@@ -718,7 +706,6 @@ items: #done
     handSprite: 192
     battleType: 7
     tuUse: 25
-    armor: 20
   - type: STR_MEDI_KIT
     size: 0.1
     costSell: 46500
@@ -738,7 +725,6 @@ items: #done
     energyRecovery: 10
     tuUse: 10
     flatRate: true
-    armor: 20
   - type: STR_MC_DISRUPTOR
     requires:
       - STR_MC_DISRUPTOR
@@ -755,7 +741,6 @@ items: #done
     invHeight: 3
     tuUse: 25
     flatRate: true
-    armor: 20
   - type: STR_THERMAL_TAZER
     size: 0.1
     costBuy: 1260
@@ -774,7 +759,6 @@ items: #done
     twoHanded: true
     invWidth: 1
     invHeight: 3
-    armor: 20
   - type: STR_CHEMICAL_FLARE
     size: 0.1
     costBuy: 60
@@ -1012,7 +996,6 @@ items: #done
     invWidth: 2
     invHeight: 2
     recoveryPoints: 4
-    armor: 20
     attraction: 1
   - type: STR_THERMAL_SHOK_BOMB
     requires:
@@ -1047,7 +1030,7 @@ items: #done
     damageType: 3
     battleType: 4
     recoveryPoints: 1
-    armor: 300
+    armor: 150
     blastRadius: 5
     attraction: 1
     hitAnimation: 8
@@ -1059,7 +1042,6 @@ items: #done
     floorSprite: 79
     invWidth: 1
     invHeight: 1
-    armor: 20
     attraction: 4
   - type: STR_MC_READER
     requires:
@@ -1076,7 +1058,6 @@ items: #done
     invHeight: 2
     tuUse: 50
     recoveryPoints: 1
-    armor: 20
     attraction: 1
   - type: STR_VIBRO_BLADE
     requires:
@@ -1098,7 +1079,6 @@ items: #done
     battleType: 3
     invWidth: 2
     invHeight: 3
-    armor: 20
   - type: STR_THERMIC_LANCE
     requires:
       - STR_THERMIC_LANCE
@@ -1119,7 +1099,6 @@ items: #done
     battleType: 3
     invWidth: 2
     invHeight: 3
-    armor: 20
   - type: STR_HEAVY_THERMIC_LANCE
     requires:
       - STR_HEAVY_THERMIC_LANCE
@@ -1140,7 +1119,6 @@ items: #done
     battleType: 3
     invWidth: 2
     invHeight: 3
-    armor: 20
   - type: STR_AQUATOID_CORPSE
     size: 0.4
     costSell: 20000
@@ -1242,27 +1220,23 @@ items: #done
     invHeight: 0
     battleType: 11
     recoveryPoints: 3
-    armor: 20
   - type: XARQUID_CORPSE_2
     floorSprite: 57
     invWidth: 0
     invHeight: 0
     battleType: 11
-    armor: 20
     recover: false
   - type: XARQUID_CORPSE_3
     floorSprite: 58
     invWidth: 0
     invHeight: 0
     battleType: 11
-    armor: 20
     recover: false
   - type: XARQUID_CORPSE_4
     floorSprite: 59
     invWidth: 0
     invHeight: 0
     battleType: 11
-    armor: 20
     recover: false
   - type: STR_HALLUCINOID_CORPSE
     size: 1
@@ -1275,27 +1249,23 @@ items: #done
     invHeight: 0
     battleType: 11
     recoveryPoints: 3
-    armor: 20
   - type: HALLUCINOID_CORPSE_2
     floorSprite: 61
     invWidth: 0
     invHeight: 0
     battleType: 11
-    armor: 20
     recover: false
   - type: HALLUCINOID_CORPSE_3
     floorSprite: 62
     invWidth: 0
     invHeight: 0
     battleType: 11
-    armor: 20
     recover: false
   - type: HALLUCINOID_CORPSE_4
     floorSprite: 63
     invWidth: 0
     invHeight: 0
     battleType: 11
-    armor: 20
     recover: false
   - type: STR_TRISCENE_CORPSE
     size: 1
@@ -1308,76 +1278,64 @@ items: #done
     invHeight: 0
     battleType: 11
     recoveryPoints: 3
-    armor: 20
   - type: TRISCENE_CORPSE_2
     floorSprite: 55
     invWidth: 0
     invHeight: 0
     battleType: 11
-    armor: 20
     recover: false
   - type: TRISCENE_CORPSE_3
     floorSprite: 54
     invWidth: 0
     invHeight: 0
     battleType: 11
-    armor: 20
     recover: false
   - type: TRISCENE_CORPSE_4
     floorSprite: 53
     invWidth: 0
     invHeight: 0
     battleType: 11
-    armor: 20
     recover: false
   - type: DISPLACER_CORPSE_1
     floorSprite: 64
     invWidth: 0
     invHeight: 0
     recover: false
-    armor: 20
   - type: DISPLACER_CORPSE_2
     floorSprite: 65
     invWidth: 0
     invHeight: 0
     recover: false
-    armor: 20
   - type: DISPLACER_CORPSE_3
     floorSprite: 66
     invWidth: 0
     invHeight: 0
     recover: false
-    armor: 20
   - type: DISPLACER_CORPSE_4
     floorSprite: 67
     invWidth: 0
     invHeight: 0
     recover: false
-    armor: 20
   - type: COELACANTH_CORPSE_1
     floorSprite: 68
     invWidth: 0
     invHeight: 0
     recover: false
-    armor: 20
   - type: COELACANTH_CORPSE_2
     floorSprite: 69
     invWidth: 0
     invHeight: 0
     recover: false
-    armor: 20
   - type: COELACANTH_CORPSE_3
     floorSprite: 70
     invWidth: 0
     invHeight: 0
     recover: false
-    armor: 20
   - type: COELACANTH_CORPSE_4
     floorSprite: 71
     invWidth: 0
     invHeight: 0
     recover: false
-    armor: 20
   - type: CIVM_CORPSE
     name: STR_CORPSE
     weight: 30
