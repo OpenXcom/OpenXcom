@@ -25,7 +25,7 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain type of craft weapon.
  * @param type String defining the type.
  */
-	RuleCraftWeapon::RuleCraftWeapon(const std::string &type) : _type(type), _sprite(-1), _sound(-1), _damage(0), _range(0), _accuracy(0), _reloadCautious(0), _reloadStandard(0), _reloadAggressive(0), _ammoMax(0), _rearmRate(1), _projectileSpeed(0), _projectileType(CWPT_CANNON_ROUND)
+RuleCraftWeapon::RuleCraftWeapon(const std::string &type) : _type(type), _sprite(-1), _sound(-1), _damage(0), _range(0), _accuracy(0), _reloadCautious(0), _reloadStandard(0), _reloadAggressive(0), _ammoMax(0), _rearmRate(1), _projectileSpeed(0), _projectileType(CWPT_CANNON_ROUND), _underwaterOnly(false)
 {
 }
 
@@ -70,6 +70,7 @@ void RuleCraftWeapon::load(const YAML::Node &node, int modIndex)
 	_projectileSpeed = node["projectileSpeed"].as<int>(_projectileSpeed);
 	_launcher = node["launcher"].as<std::string>(_launcher);
 	_clip = node["clip"].as<std::string>(_clip);
+	_underwaterOnly = node["underwaterOnly"].as<bool>(_underwaterOnly);
 }
 
 /**
@@ -217,6 +218,15 @@ CraftWeaponProjectileType RuleCraftWeapon::getProjectileType() const
 int RuleCraftWeapon::getProjectileSpeed() const
 {
 	return _projectileSpeed;
+}
+
+/**
+* Can this item be used on land or is it underwater only?
+* @return if this is an underwater weapon or not.
+*/
+bool RuleCraftWeapon::isWaterOnly() const
+{
+	return _underwaterOnly;
 }
 
 }

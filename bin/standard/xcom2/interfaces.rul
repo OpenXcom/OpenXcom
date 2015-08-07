@@ -234,7 +234,17 @@ interfaces: #done
         color2: 244  # minty green
       - id: button
         color: 1     # white
-        color2: 1    # white
+        color2: 1    # white  
+  - type: dogfightInfo
+    elements:
+      - id: palette
+        color: 4
+      - id: window
+        color: 1
+      - id: text
+        color: 1
+      - id: button
+        color: 1
   - type: baseDefense
     palette: PAL_BASESCAPE
     elements:
@@ -852,6 +862,7 @@ interfaces: #done
         color: 1
       - id: list
         color: 244
+        border: 1
       - id: button
         color: 1
   - type: costsInfo

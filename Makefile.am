@@ -326,6 +326,8 @@ openxcom_SOURCES = \
 	src/Geoscape/CraftPatrolState.h \
 	src/Geoscape/DogfightState.cpp \
 	src/Geoscape/DogfightState.h \
+	src/Geoscape/DogfightErrorState.cpp \
+	src/Geoscape/DogfightErrorState.h \
 	src/Geoscape/FundingState.cpp \
 	src/Geoscape/FundingState.h \
 	src/Geoscape/GeoscapeCraftState.cpp \

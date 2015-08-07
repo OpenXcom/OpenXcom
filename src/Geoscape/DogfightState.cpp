@@ -18,6 +18,7 @@
  */
 #include "DogfightState.h"
 #include <sstream>
+#include "../Geoscape/GeoscapeState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Screen.h"
@@ -48,6 +49,7 @@
 #include "../Savegame/AlienStrategy.h"
 #include "../Engine/Options.h"
 #include <cstdlib>
+#include "DogfightErrorState.h"
 
 namespace OpenXcom
 {
@@ -228,11 +230,11 @@ const int DogfightState::_projectileBlobs[4][6][3] =
 /**
  * Initializes all the elements in the Dogfight window.
  * @param game Pointer to the core game.
- * @param globe Pointer to the Geoscape globe.
+ * @param state Pointer to the Geoscape.
  * @param craft Pointer to the craft intercepting.
  * @param ufo Pointer to the UFO being intercepted.
  */
-DogfightState::DogfightState(Globe *globe, Craft *craft, Ufo *ufo) : _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _w1FireCountdown(0), _w2FireCountdown(0), _end(false), _destroyUfo(false), _destroyCraft(false), _ufoBreakingOff(false), _weapon1Enabled(true), _weapon2Enabled(true), _minimized(false), _endDogfight(false), _animatingHit(false), _ufoSize(0), _craftHeight(0), _currentCraftDamageColor(0), _interceptionNumber(0), _interceptionsCount(0), _x(0), _y(0), _minimizedIconX(0), _minimizedIconY(0)
+DogfightState::DogfightState(GeoscapeState *state, Craft *craft, Ufo *ufo) : _state(state), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _w1FireCountdown(0), _w2FireCountdown(0), _end(false), _destroyUfo(false), _destroyCraft(false), _ufoBreakingOff(false), _weapon1Enabled(true), _weapon2Enabled(true), _minimized(false), _endDogfight(false), _animatingHit(false), _ufoSize(0), _craftHeight(0), _currentCraftDamageColor(0), _interceptionNumber(0), _interceptionsCount(0), _x(0), _y(0), _minimizedIconX(0), _minimizedIconY(0)
 {
 	_screen = false;
 
@@ -1097,7 +1099,7 @@ void DogfightState::update()
 						}
 					}
 				}
-				if (!_globe->insideLand(_ufo->getLongitude(), _ufo->getLatitude()))
+				if (!_state->getGlobe()->insideLand(_ufo->getLongitude(), _ufo->getLatitude()))
 				{
 					_ufo->setStatus(Ufo::DESTROYED);
 					_destroyUfo = true;
@@ -1627,28 +1629,51 @@ void DogfightState::setMinimized(const bool minimized)
  */
 void DogfightState::btnMinimizedIconClick(Action *)
 {
-	setMinimized(false);
-	_window->setVisible(true);
-	_btnStandoff->setVisible(true);
-	_btnCautious->setVisible(true);
-	_btnStandard->setVisible(true);
-	_btnAggressive->setVisible(true);
-	_btnDisengage->setVisible(true);
-	_btnUfo->setVisible(true);
-	_btnMinimize->setVisible(true);
-	_battle->setVisible(true);
-	_weapon1->setVisible(true);
-	_range1->setVisible(true);
-	_weapon2->setVisible(true);
-	_range2->setVisible(true);
-	_damage->setVisible(true);
-	_txtAmmo1->setVisible(true);
-	_txtAmmo2->setVisible(true);
-	_txtDistance->setVisible(true);
-	_txtStatus->setVisible(true);
-	_btnMinimizedIcon->setVisible(false);
-	_txtInterceptionNumber->setVisible(false);
-	_preview->setVisible(false);
+	if (_craft->getDestination()->getSiteDepth() > _craft->getRules()->getMaxDepth())
+	{
+		_state->popup(new DogfightErrorState(_craft, tr("STR_UNABLE_TO_ENGAGE_DEPTH")));
+	}
+	else
+	{
+		bool underwater = !_craft->getWeapons()->empty();
+		for (std::vector<CraftWeapon*>::iterator w = _craft->getWeapons()->begin(); w != _craft->getWeapons()->end(); ++w)
+		{
+			if (!(*w)->getRules()->isWaterOnly())
+			{
+				underwater = false;
+				break;
+			}
+		}
+		if (underwater && !_state->getGlobe()->insideLand(_craft->getLongitude(), _craft->getLatitude()))
+		{
+			_state->popup(new DogfightErrorState(_craft, tr("STR_UNABLE_TO_ENGAGE_AIRBORNE")));
+		}
+		else
+		{
+			setMinimized(false);
+			_window->setVisible(true);
+			_btnStandoff->setVisible(true);
+			_btnCautious->setVisible(true);
+			_btnStandard->setVisible(true);
+			_btnAggressive->setVisible(true);
+			_btnDisengage->setVisible(true);
+			_btnUfo->setVisible(true);
+			_btnMinimize->setVisible(true);
+			_battle->setVisible(true);
+			_weapon1->setVisible(true);
+			_range1->setVisible(true);
+			_weapon2->setVisible(true);
+			_range2->setVisible(true);
+			_damage->setVisible(true);
+			_txtAmmo1->setVisible(true);
+			_txtAmmo2->setVisible(true);
+			_txtDistance->setVisible(true);
+			_txtStatus->setVisible(true);
+			_btnMinimizedIcon->setVisible(false);
+			_txtInterceptionNumber->setVisible(false);
+			_preview->setVisible(false);			
+		}
+	}
 }
 
 /**

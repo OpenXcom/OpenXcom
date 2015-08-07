@@ -75,6 +75,7 @@
 #include "ConfirmLandingState.h"
 #include "ItemsArrivingState.h"
 #include "CraftErrorState.h"
+#include "DogfightErrorState.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../Savegame/ResearchProject.h"
 #include "ResearchCompleteState.h"
@@ -109,6 +110,8 @@
 #include "../Ruleset/RuleGlobe.h"
 #include "../Engine/Exception.h"
 #include "../Ruleset/AlienDeployment.h"
+#include "../Savegame/CraftWeapon.h"
+#include "../Ruleset/RuleCraftWeapon.h"
 
 namespace OpenXcom
 {
@@ -659,11 +662,6 @@ void GeoscapeState::timeAdvance()
 	_globe->draw();
 }
 
-class LoseGameState : public State
-{
-public:	void init() { _game->pushState(new CutsceneState("loseGame")); }
-};
-
 /**
  * Takes care of any game logic that has to
  * run every game second, like craft movement.
@@ -673,7 +671,7 @@ void GeoscapeState::time5Seconds()
 	// Game over if there are no more bases.
 	if (_game->getSavedGame()->getBases()->empty())
 	{
-		popup(new LoseGameState);
+		_game->pushState(new CutsceneState("loseGame"));
 		return;
 	}
 
@@ -828,13 +826,6 @@ void GeoscapeState::time5Seconds()
 			}
 			if ((*j)->reachedDestination())
 			{
-				if ((*j)->getDestination()->getSiteDepth() > (*j)->getRules()->getMaxDepth())
-				{
-					std::wstring msg = tr("STR_SITE_TOO_DEEP").arg((*j)->getName(_game->getLanguage()));
-					(*j)->returnToBase();
-					popup(new CraftErrorState(this, msg));
-					continue;
-				}
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
 				MissionSite* m = dynamic_cast<MissionSite*>((*j)->getDestination());
@@ -844,6 +835,29 @@ void GeoscapeState::time5Seconds()
 					switch (u->getStatus())
 					{
 					case Ufo::FLYING:
+						// Can we actually fight it
+						if ((*j)->getDestination()->getSiteDepth() > (*j)->getRules()->getMaxDepth())
+						{
+							popup(new DogfightErrorState((*j), tr("STR_UNABLE_TO_ENGAGE_DEPTH")));
+							continue;
+						}
+						else
+						{
+							bool underwater = !(*j)->getWeapons()->empty();
+							for (std::vector<CraftWeapon*>::iterator w = (*j)->getWeapons()->begin(); w != (*j)->getWeapons()->end(); ++w)
+							{
+								if (!(*w)->getRules()->isWaterOnly())
+								{
+									underwater = false;
+									break;
+								}
+							}
+							if (underwater && !_globe->insideLand((*j)->getLongitude(), (*j)->getLatitude()))
+							{
+								popup(new DogfightErrorState((*j), tr("STR_UNABLE_TO_ENGAGE_AIRBORNE")));
+								continue;
+							}
+						}
 						// Not more than 4 interceptions at a time.
 						if (_dogfights.size() + _dogfightsToBeStarted.size() >= 4)
 						{
@@ -853,7 +867,7 @@ void GeoscapeState::time5Seconds()
 						if (!(*j)->isInDogfight() && !(*j)->getDistance(u))
 						{
 							{
-								_dogfightsToBeStarted.push_back(new DogfightState(_globe, (*j), u));
+								_dogfightsToBeStarted.push_back(new DogfightState(this, (*j), u));
 
 								if (!_dogfightStartTimer->isRunning())
 								{

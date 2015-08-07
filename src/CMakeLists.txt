@@ -346,6 +346,8 @@ set ( geoscape_src
   Geoscape/NewPossibleManufactureState.cpp
   Geoscape/ResearchRequiredState.h
   Geoscape/ResearchRequiredState.cpp
+  Geoscape/DogfightErrorState.cpp
+  Geoscape/DogfightErrorState.h
 )
 
 set ( interface_src

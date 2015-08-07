@@ -34,7 +34,7 @@ class Text;
 class Surface;
 class InteractiveSurface;
 class Timer;
-class Globe;
+class GeoscapeState;
 class Craft;
 class Ufo;
 class CraftWeaponProjectile;
@@ -46,6 +46,7 @@ class CraftWeaponProjectile;
 class DogfightState : public State
 {
 private:
+	GeoscapeState *_state;
 	Timer *_craftDamageAnimTimer;
 	Surface *_window, *_battle, *_range1, *_range2, *_damage;
 	InteractiveSurface *_btnMinimize, *_preview, *_weapon1, *_weapon2;
@@ -53,7 +54,6 @@ private:
 	ImageButton *_mode;
 	InteractiveSurface *_btnMinimizedIcon;
 	Text *_txtAmmo1, *_txtAmmo2, *_txtDistance, *_txtStatus, *_txtInterceptionNumber;
-	Globe *_globe;
 	Craft *_craft;
 	Ufo *_ufo;
 	int _timeout, _currentDist, _targetDist, _w1FireInterval, _w2FireInterval, _w1FireCountdown, _w2FireCountdown;
@@ -70,7 +70,7 @@ private:
 
 public:
 	/// Creates the Dogfight state.
-	DogfightState(Globe *globe, Craft *craft, Ufo *ufo);
+	DogfightState(GeoscapeState *state, Craft *craft, Ufo *ufo);
 	/// Cleans up the Dogfight state.
 	~DogfightState();
 	/// Runs the timers.
