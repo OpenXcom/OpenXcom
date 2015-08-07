@@ -1335,7 +1335,7 @@ void BattlescapeState::updateSoldierInfo()
 		++j;
 	}
 
-	showPsiButton(battleUnit->getSpecialWeapon(BT_PSIAMP));
+	showPsiButton(battleUnit->getSpecialWeapon(BT_PSIAMP) != 0);
 }
 
 /**

@@ -1124,7 +1124,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 					if ((*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS ||
 						// or it's in timeout because it's unconscious from the previous stage
 						// units can be in timeout and alive, and we assume they flee.
-						((*it)->getUnit()->getStatus() == STATUS_TIMEOUT &&
+						((*it)->getUnit()->getStatus() == STATUS_TIME_OUT &&
 						(*it)->getUnit()->getHealth() > 0 &&
 						(*it)->getUnit()->getHealth() < (*it)->getUnit()->getStunlevel()))
 					{
