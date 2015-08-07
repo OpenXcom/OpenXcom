@@ -536,17 +536,14 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 	
-	if (deployment && deployment->getNextStage().empty())
+	// mission site disappears (even when you abort)
+	for (std::vector<MissionSite*>::iterator i = save->getMissionSites()->begin(); i != save->getMissionSites()->end(); ++i)
 	{
-		// mission site disappears (even when you abort)
-		for (std::vector<MissionSite*>::iterator i = save->getMissionSites()->begin(); i != save->getMissionSites()->end(); ++i)
+		if ((*i)->isInBattlescape())
 		{
-			if ((*i)->isInBattlescape())
-			{
-				delete *i;
-				save->getMissionSites()->erase(i);
-				break;
-			}
+			delete *i;
+			save->getMissionSites()->erase(i);
+			break;
 		}
 	}
 
@@ -577,42 +574,45 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	if (deployment && deployment->getNextStage().empty())
+	// alien base disappears (if you didn't abort)
+	for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
 	{
-		// alien base disappears (if you didn't abort)
-		for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
+		if ((*i)->isInBattlescape())
 		{
-			if ((*i)->isInBattlescape())
-			{
-				_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
-				bool destroyAlienBase = true;
+			_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
+			bool destroyAlienBase = true;
 
-				if (aborted || playersSurvived == 0)
+			if (aborted || playersSurvived == 0)
+			{
+				if (!battle->allObjectivesDestroyed())
+					destroyAlienBase = false;
+			}
+			
+			if (deployment && !deployment->getNextStage().empty())
+			{
+				destroyAlienBase = false;
+			}
+			success = destroyAlienBase;
+			if (destroyAlienBase)
+			{
+				if (objectiveCompleteText != "")
 				{
-					if (!battle->allObjectivesDestroyed())
-						destroyAlienBase = false;
+					addStat(objectiveCompleteText, 1, objectiveCompleteScore);
 				}
-				success = destroyAlienBase;
-				if (destroyAlienBase)
-				{
-					if (objectiveCompleteText != "")
-					{
-						addStat(objectiveCompleteText, 1, objectiveCompleteScore);
-					}
-					// Take care to remove supply missions for this base.
-					std::for_each(save->getAlienMissions().begin(), save->getAlienMissions().end(),
-								ClearAlienBase(*i));
-					delete *i;
-					save->getAlienBases()->erase(i);
-					break;
-				}
-				else
-				{
-					(*i)->setInBattlescape(false);
-					break;
-				}
+				// Take care to remove supply missions for this base.
+				std::for_each(save->getAlienMissions().begin(), save->getAlienMissions().end(),
+							ClearAlienBase(*i));
+				delete *i;
+				save->getAlienBases()->erase(i);
+				break;
+			}
+			else
+			{
+				(*i)->setInBattlescape(false);
+				break;
 			}
 		}
+	}
 	}
 
 	// time to care for units.
