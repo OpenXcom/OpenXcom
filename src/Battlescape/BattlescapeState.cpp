@@ -1499,7 +1499,7 @@ inline void BattlescapeState::handle(Action *action)
 						debug(L"Influenza bacterium dispersed");
 						for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i !=_save->getUnits()->end(); ++i)
 						{
-							if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
+							if ((*i)->getOriginalFaction() == FACTION_HOSTILE && !(*i)->isOut())
 							{
 								(*i)->damage(Position(0,0,0), 1000, DT_AP, true);
 							}
@@ -1507,7 +1507,7 @@ inline void BattlescapeState::handle(Action *action)
 							_save->getBattleGame()->handleState();
 						}
 					}
-					// "ctrl-j" - kill all aliens
+					// "ctrl-j" - stun all aliens
 					else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_j && (SDL_GetModState() & KMOD_CTRL) != 0)
 					{
 						debug(L"Deploying Celine Dione album");

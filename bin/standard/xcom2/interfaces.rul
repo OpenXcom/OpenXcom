@@ -567,7 +567,7 @@ interfaces: #done
       - id: victoryText
         color: 244
   - type: sellMenu
-    palette: PAL_BASESCAPE
+    palette: PAL_GEOSCAPE
     elements:
       - id: palette
         color: 6
