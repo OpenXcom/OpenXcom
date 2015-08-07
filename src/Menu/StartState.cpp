@@ -167,16 +167,13 @@ void StartState::think()
 	case LOADING_SUCCESSFUL:
 		CrossPlatform::flashWindow();
 		Log(LOG_INFO) << "OpenXcom started successfully!";
+		_game->setState(new GoToMainMenuState);
 		if (!Options::reload && Options::playIntro)
 		{
-			_game->setState(new GoToMainMenuState);
 			_game->pushState(new CutsceneState("intro"));
 		}
 		else
 		{
-			Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
-			_game->getScreen()->resetDisplay(false);
-			_game->setState(new MainMenuState);
 			Options::reload = false;
 		}
 		_game->getCursor()->setVisible(true);
