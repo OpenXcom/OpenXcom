@@ -613,7 +613,6 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
-	}
 
 	// time to care for units.
 	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
