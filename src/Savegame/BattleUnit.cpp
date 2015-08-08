@@ -2962,7 +2962,7 @@ MovementType BattleUnit::getMovementType() const
 }
 
 /**
- * Elevates the unit to grand galactic inquisitor status status,
+ * Elevates the unit to grand galactic inquisitor status,
  * meaning they will NOT take part in the current battle.
  */
 void BattleUnit::goToTimeOut()
