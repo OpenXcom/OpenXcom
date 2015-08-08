@@ -553,6 +553,7 @@ terrains: #done
       - SEA
       - PORT01
       - PORT02
+    ambience: 67
     civilianTypes:
       - SAILOR_CIVILIAN
       - DOCKER_CIVILIAN
@@ -640,6 +641,7 @@ terrains: #done
       - ISLAND1
       - ISLAND2
       - ISLAND3
+    ambience: 67
     mapBlocks:
       - name: ISLAND00
         width: 10

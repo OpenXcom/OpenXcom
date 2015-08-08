@@ -508,8 +508,8 @@ regions: #done
   - type: STR_THE_EAST_SEA
     cost: 500000
     areas:
-      - [112, 142, -24, -47.5]
-      - [133, 142, -47.5, -50]
+      - [112, 142, -47.5, -24]
+      - [133, 142, -50, -47.5]
     regionWeight: 12
     missionWeights:
       STR_ALIEN_PROBE_MISSION: 5

@@ -860,16 +860,13 @@ void GeoscapeState::time5Seconds()
 									break;
 								}
 							}
-							if (!(*j)->isInDogfight() && underwater && !_globe->insideLand((*j)->getLongitude(), (*j)->getLatitude()))
-							{
-								popup(new DogfightErrorState((*j), tr("STR_UNABLE_TO_ENGAGE_AIRBORNE")));
-							}
 						}
 						if (!(*j)->isInDogfight() && !(*j)->getDistance(u))
 						{
 							_dogfightsToBeStarted.push_back(new DogfightState(this, (*j), u));
 							if (underwater && !_globe->insideLand((*j)->getLongitude(), (*j)->getLatitude()))
 							{
+								popup(new DogfightErrorState((*j), tr("STR_UNABLE_TO_ENGAGE_AIRBORNE")));
 								_dogfightsToBeStarted.back()->btnMinimizeClick(0);
 							}
 							if (!_dogfightStartTimer->isRunning())
