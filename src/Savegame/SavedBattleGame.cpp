@@ -207,7 +207,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			std::string armor = (*i)["genUnitArmor"].as<std::string>();
 			// create a new Unit.
 			if(!rule->getUnit(type) || !rule->getArmor(armor)) continue;
-			unit = new BattleUnit(rule->getUnit(type), originalFaction, id, rule->getArmor(armor), savedGame->getDifficulty(), _depth);
+			unit = new BattleUnit(rule->getUnit(type), originalFaction, id, rule->getArmor(armor), savedGame->getDifficultyCoefficient(), _depth);
 		}
 		unit->load(*i);
 		unit->setSpecialWeapon(this, rule);

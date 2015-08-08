@@ -627,6 +627,13 @@ GameDifficulty SavedGame::getDifficulty() const
 	return _difficulty;
 }
 
+int SavedGame::getDifficultyCoefficient() const
+{
+	if (_difficulty > 4)
+		return Ruleset::DIFFICULTY_COEFFICIENT[4];
+
+	return Ruleset::DIFFICULTY_COEFFICIENT[_difficulty];
+}
 /**
  * Changes the game's difficulty to a new level.
  * @param difficulty New difficulty.

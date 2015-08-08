@@ -17,3 +17,4 @@ alienFuel: [STR_ELERIUM_115, 50]
 turnAIUseGrenade: 3
 turnAIUseBlaster: 3
 fontName: Font.dat
+difficultyCoefficient: [0, 1, 2, 3, 4]

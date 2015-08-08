@@ -532,7 +532,7 @@ units: #done
     intelligence: 7
     aggression: 2
     livingWeapon: true
-    moveSound: 64
+    moveSound: 65
   - type: STR_BIODRONE_TERRORIST
     race: STR_BIODRONE
     rank: STR_LIVE_TERRORIST

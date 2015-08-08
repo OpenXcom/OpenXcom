@@ -129,6 +129,7 @@ protected:
 	template <typename T>
 	T *loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index = 0, const std::string &key = "type");
 public:
+	static int DIFFICULTY_COEFFICIENT[5];
 	// reset all the statics in all classes to default values
 	static void resetGlobalStatics();
 	/// Creates a blank ruleset.

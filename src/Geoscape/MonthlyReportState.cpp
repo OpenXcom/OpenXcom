@@ -128,7 +128,7 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 	case 12: m = "STR_DEC"; break;
 	default: m = "";
 	}
-	int difficulty_threshold = 100*((int)(_game->getSavedGame()->getDifficulty())-9);
+	int difficulty_threshold = 100*(_game->getSavedGame()->getDifficultyCoefficient()-9);
 
 	_txtMonth->setText(tr("STR_MONTH").arg(tr(m)).arg(year));
 

@@ -1565,7 +1565,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, const std::string &ne
 	std::string terroristWeapon = getRuleset()->getUnit(newType)->getRace().substr(4);
 	terroristWeapon += "_WEAPON";
 	RuleItem *newItem = getRuleset()->getItem(terroristWeapon);
-	int difficulty = (int)(_parentState->getGame()->getSavedGame()->getDifficulty());
+	int difficulty = _parentState->getGame()->getSavedGame()->getDifficultyCoefficient();
 
 	BattleUnit *newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()), difficulty, getDepth());
 

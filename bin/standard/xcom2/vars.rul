@@ -19,6 +19,7 @@ alienFuel: [STR_ZRBITE, 50]
 turnAIUseGrenade: 2
 turnAIUseBlaster: 2
 fontName: Font.dat
+difficultyCoefficient: [0, 1, 2, 4, 6]
 
 constants: #done
   - doorSound: 47

@@ -77,6 +77,9 @@
 namespace OpenXcom
 {
 
+
+int Ruleset::DIFFICULTY_COEFFICIENT[5];
+
 void Ruleset::resetGlobalStatics()
 {
 	ResourcePack::DOOR_OPEN = 3;
@@ -131,6 +134,12 @@ void Ruleset::resetGlobalStatics()
 	Pathfinding::red = 3;
 	Pathfinding::yellow = 10;
 	Pathfinding::green = 4;
+
+	DIFFICULTY_COEFFICIENT[0] = 0;
+	DIFFICULTY_COEFFICIENT[1] = 1;
+	DIFFICULTY_COEFFICIENT[2] = 2;
+	DIFFICULTY_COEFFICIENT[3] = 3;
+	DIFFICULTY_COEFFICIENT[4] = 4;
 }
 
 /**
@@ -549,6 +558,15 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 	_fontName = doc["fontName"].as<std::string>(_fontName);
 	_turnAIUseGrenade = doc["turnAIUseGrenade"].as<int>(_turnAIUseGrenade);
 	_turnAIUseBlaster = doc["turnAIUseBlaster"].as<int>(_turnAIUseBlaster);
+	if (doc["difficultyCoefficient"])
+	{
+		size_t num = 0;
+		for (YAML::const_iterator i = doc["difficultyCoefficient"].begin(); i != doc["difficultyCoefficient"].end() && num < 5; ++i)
+		{
+			DIFFICULTY_COEFFICIENT[num] = (*i).as<int>(DIFFICULTY_COEFFICIENT[num]);
+			++num;
+		}
+	}
 	for (YAML::const_iterator i = doc["ufoTrajectories"].begin(); i != doc["ufoTrajectories"].end(); ++i)
 	{
 		UfoTrajectory *rule = loadRule(*i, &_ufoTrajectories, 0, "id");
