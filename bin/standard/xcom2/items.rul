@@ -1464,6 +1464,7 @@ items: #done
     clipSize: -1
     recover: false
   - type: DEEP_ONE_WEAPON 
+    bigSprite: 34
     bulletSprite: 8
     fireSound: 67
     power: 100
