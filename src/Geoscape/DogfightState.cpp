@@ -1638,7 +1638,7 @@ void DogfightState::btnMinimizedIconClick(Action *)
 		bool underwater = !_craft->getWeapons()->empty();
 		for (std::vector<CraftWeapon*>::iterator w = _craft->getWeapons()->begin(); w != _craft->getWeapons()->end(); ++w)
 		{
-			if (!(*w)->getRules()->isWaterOnly())
+			if ((*w) && !(*w)->getRules()->isWaterOnly())
 			{
 				underwater = false;
 				break;
