@@ -154,6 +154,7 @@ void CraftInfoState::init()
 
 	_edtCraft->setText(_craft->getName(_game->getLanguage()));
 
+	_sprite->clear();
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(_craft->getRules()->getSprite() + 33)->setX(0);
 	texture->getFrame(_craft->getRules()->getSprite() + 33)->setY(0);
@@ -218,6 +219,7 @@ void CraftInfoState::init()
 	{
 		CraftWeapon *w1 = _craft->getWeapons()->at(0);
 
+		_weapon1->clear();
 		if (w1 != 0)
 		{
 			Surface *frame = texture->getFrame(w1->getRules()->getSprite() + 48);
@@ -240,7 +242,6 @@ void CraftInfoState::init()
 		}
 		else
 		{
-			_weapon1->clear();
 			_txtW1Name->setText(L"");
 			_txtW1Ammo->setText(L"");
 		}
@@ -257,6 +258,7 @@ void CraftInfoState::init()
 	{
 		CraftWeapon *w2 = _craft->getWeapons()->at(1);
 
+		_weapon2->clear();
 		if (w2 != 0)
 		{
 			Surface *frame = texture->getFrame(w2->getRules()->getSprite() + 48);
@@ -279,7 +281,6 @@ void CraftInfoState::init()
 		}
 		else
 		{
-			_weapon2->clear();
 			_txtW2Name->setText(L"");
 			_txtW2Ammo->setText(L"");
 		}
