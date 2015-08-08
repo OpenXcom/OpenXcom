@@ -860,7 +860,7 @@ void GeoscapeState::time5Seconds()
 									break;
 								}
 							}
-							if (underwater && !_globe->insideLand((*j)->getLongitude(), (*j)->getLatitude()) && !(*j)->isInDogfight())
+							if (!(*j)->isInDogfight() && underwater && !_globe->insideLand((*j)->getLongitude(), (*j)->getLatitude()))
 							{
 								popup(new DogfightErrorState((*j), tr("STR_UNABLE_TO_ENGAGE_AIRBORNE")));
 							}
