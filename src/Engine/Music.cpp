@@ -91,9 +91,9 @@ void Music::play(int loop) const
 #ifndef __NO_MUSIC
 	if (!Options::mute)
 	{
-		stop();
 		if (_music != 0 && Mix_PlayMusic(_music, loop) == -1)
 		{
+			stop();
 			Log(LOG_WARNING) << Mix_GetError();
 		}
 	}

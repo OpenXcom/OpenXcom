@@ -176,7 +176,7 @@ Music *ResourcePack::getRandomMusic(const std::string &name) const
 				music.push_back(i->second);
 			}
 		}
-		if (_musics.empty())
+		if (music.empty())
 			return _muteMusic;
 		else
 			return music[RNG::seedless(0, music.size()-1)];
@@ -193,22 +193,26 @@ void ResourcePack::playMusic(const std::string &name, int id)
 	if (!Options::mute && _playingMusic != name)
 	{
 		int loop = -1;
-		_playingMusic = name;
-
 		// hacks
 		if (!Options::musicAlwaysLoop &&
 				(name == "GMSTORY" || name == "GMWIN" || name == "GMLOSE"))
 			loop = 0;
 
+		Music *music = 0;
 		if (id == 0)
 		{
-			getRandomMusic(name)->play(loop);
+			music = getRandomMusic(name);
 		}
 		else
 		{
 			std::ostringstream ss;
 			ss << name << id;
-			getMusic(ss.str())->play(loop);
+			music = getMusic(ss.str());
+		}
+		music->play(loop);
+		if (music != _muteMusic)
+		{
+			_playingMusic = name;			
 		}
 	}
 }
