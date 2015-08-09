@@ -79,13 +79,13 @@ soundDefs: #done: double check explosions.
     soundRanges:
       - [49, 96]
       - [99, 117]
-    sounds: [48]
+    sounds: [122]
   - type: BATTLE2.CAT
     file: SAMPLE.CAT
     soundRanges:
       - [0, 47]
       - [99, 117]
-    sounds: [122]
+    sounds: [48]
 
 transparencyLUTs: #done
   - colors: 
