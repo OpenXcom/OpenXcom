@@ -77,6 +77,7 @@ private:
 	bool _kneelReserved;
 	std::vector< std::vector<std::pair<int, int> > > _baseModules;
 	int _depth, _ambience;
+	double _ambientVolume;
 	std::vector<BattleItem*> _recoverGuaranteed, _recoverConditional;
 	std::string _music;
 	/// Selects a soldier.
@@ -275,6 +276,10 @@ public:
 	void setObjectiveType(int type);
 	/// Gets the objective type of this mission.
 	SpecialTileType getObjectiveType();
+	/// sets the ambient sound effect;
+	void setAmbientVolume(double volume);
+	/// gets the ambient sound effect;
+	double getAmbientVolume() const;
 };
 
 }

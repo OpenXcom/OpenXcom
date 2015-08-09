@@ -102,7 +102,10 @@ void LoadGameState::buildUi(SDL_Color *palette)
 	{
 		add(_txtStatus, "textLoad", "battlescape");
 		_txtStatus->setHighContrast(true);
-		_game->getResourcePack()->getSoundByDepth(0, _game->getSavedGame()->getSavedBattle()->getAmbientSound())->stopLoop();
+		if (_game->getSavedGame()->getSavedBattle()->getAmbientSound() != -1)
+		{
+			_game->getResourcePack()->getSoundByDepth(0, _game->getSavedGame()->getSavedBattle()->getAmbientSound())->stopLoop();
+		}
 	}
 	else
 	{

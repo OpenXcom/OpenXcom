@@ -29,7 +29,7 @@ namespace OpenXcom
 /**
  * RuleTerrain construction.
  */
-RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _script("DEFAULT"), _minDepth(0), _maxDepth(0), _ambience(-1)
+RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _script("DEFAULT"), _minDepth(0), _maxDepth(0), _ambience(-1), _ambientVolume(0.5)
 {
 }
 
@@ -89,6 +89,7 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 		_maxDepth = node["depth"][1].as<int>(_maxDepth);
 	}
 	_ambience = node["ambience"].as<int>(_ambience);
+	_ambientVolume = node["ambientVolume"].as<double>(_ambientVolume);
 	_script = node["script"].as<std::string>(_script);
 }
 
@@ -248,4 +249,11 @@ const std::vector<std::string> &RuleTerrain::getMusic()
 {
 	return _music;
 }
+
+
+const double RuleTerrain::getAmbientVolume() const
+{
+	return _ambientVolume;
+}
+
 }

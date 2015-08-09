@@ -1738,6 +1738,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 {
 	// set our ambient sound
 	_save->setAmbientSound(_terrain->getAmbience());
+	_save->setAmbientVolume(_terrain->getAmbientVolume());
 
 	// set up our map generation vars
 	_dummy = new MapBlock("dummy");

@@ -554,6 +554,7 @@ terrains: #done
       - PORT01
       - PORT02
     ambience: 67
+    ambientVolume: 0.25
     civilianTypes:
       - SAILOR_CIVILIAN
       - DOCKER_CIVILIAN
@@ -642,6 +643,7 @@ terrains: #done
       - ISLAND2
       - ISLAND3
     ambience: 67
+    ambientVolume: 0.25
     mapBlocks:
       - name: ISLAND00
         width: 10
@@ -697,6 +699,7 @@ terrains: #done
     music:
       - GMTACDRY
     ambience: 67
+    ambientVolume: 0.25
     mapDataSets:
       - BLANKS
       - SEA
@@ -721,6 +724,7 @@ terrains: #done
     music:
       - GMTACDRY
     ambience: 67
+    ambientVolume: 0.25
     mapDataSets:
       - BLANKS
       - XBASES01
@@ -847,6 +851,7 @@ terrains: #done
     music:
       - GMTACDRY
     ambience: 67
+    ambientVolume: 0.25
     mapDataSets:
       - BLANKS
       - GRUNGE1
@@ -918,6 +923,7 @@ terrains: #done
     music:
       - GMTACDRY
     ambience: 67
+    ambientVolume: 0.25
     mapDataSets:
       - BLANKS
       - DECKC
@@ -940,6 +946,7 @@ terrains: #done
     music:
       - GMTACDRY
     ambience: 67
+    ambientVolume: 0.25
     mapDataSets:
       - BLANKS
       - SEA

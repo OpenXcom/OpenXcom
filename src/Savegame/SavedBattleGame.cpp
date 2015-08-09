@@ -49,7 +49,7 @@ namespace OpenXcom
  * Initializes a brand new battlescape saved game.
  */
 SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _selectedUnit(0), _lastSelectedUnit(0), _pathfinding(0), _tileEngine(0), _globalShade(0), _side(FACTION_PLAYER), _turn(1),
-                                     _debugMode(false), _aborted(false), _itemId(0), _objectiveType(-1), _objectivesDestroyed(0), _objectivesNeeded(0), _unitsFalling(false), _cheating(false), _tuReserved(BA_NONE), _kneelReserved(false), _depth(0), _ambience(-1)
+                                     _debugMode(false), _aborted(false), _itemId(0), _objectiveType(-1), _objectivesDestroyed(0), _objectivesNeeded(0), _unitsFalling(false), _cheating(false), _tuReserved(BA_NONE), _kneelReserved(false), _depth(0), _ambience(-1), _ambientVolume(0.5)
 {
 	_tileSearch.resize(11*11);
 	for (int i = 0; i < 121; ++i)
@@ -320,6 +320,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	_tuReserved = (BattleActionType)node["tuReserved"].as<int>(_tuReserved);
 	_kneelReserved = node["kneelReserved"].as<bool>(_kneelReserved);
 	_ambience = node["ambience"].as<int>(_ambience);
+	_ambientVolume = node["ambientVolume"].as<double>(_ambientVolume);
 	_music = node["music"].as<std::string>(_music);
 }
 
@@ -1930,5 +1931,18 @@ void SavedBattleGame::setObjectiveType(int type)
 SpecialTileType SavedBattleGame::getObjectiveType()
 {
 	return (SpecialTileType)(_objectiveType);
+}
+
+
+
+/// sets the ambient sound effect;
+void SavedBattleGame::setAmbientVolume(double volume)
+{
+	_ambientVolume = volume;
+}
+/// gets the ambient sound effect;
+double SavedBattleGame::getAmbientVolume() const
+{
+	return _ambientVolume;
 }
 }
