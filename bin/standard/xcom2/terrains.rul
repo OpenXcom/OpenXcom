@@ -720,6 +720,7 @@ terrains: #done
   - name: XBASES
     music:
       - GMTACDRY
+    ambience: 67
     mapDataSets:
       - BLANKS
       - XBASES01
@@ -845,6 +846,7 @@ terrains: #done
   - name: GRUNGE
     music:
       - GMTACDRY
+    ambience: 67
     mapDataSets:
       - BLANKS
       - GRUNGE1
@@ -915,6 +917,7 @@ terrains: #done
   - name: LINERT
     music:
       - GMTACDRY
+    ambience: 67
     mapDataSets:
       - BLANKS
       - DECKC
@@ -936,6 +939,7 @@ terrains: #done
   - name: LINERB
     music:
       - GMTACDRY
+    ambience: 67
     mapDataSets:
       - BLANKS
       - SEA

@@ -30,6 +30,8 @@
 #include "../Geoscape/GeoscapeState.h"
 #include "ErrorMessageState.h"
 #include "../Battlescape/BattlescapeState.h"
+#include "../Resource/ResourcePack.h"
+#include "../Engine/Sound.h"
 
 namespace OpenXcom
 {
@@ -100,6 +102,7 @@ void LoadGameState::buildUi(SDL_Color *palette)
 	{
 		add(_txtStatus, "textLoad", "battlescape");
 		_txtStatus->setHighContrast(true);
+		_game->getResourcePack()->getSoundByDepth(0, _game->getSavedGame()->getSavedBattle()->getAmbientSound())->stopLoop();
 	}
 	else
 	{

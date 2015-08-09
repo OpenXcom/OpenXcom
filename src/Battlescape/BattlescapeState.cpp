@@ -493,7 +493,7 @@ void BattlescapeState::init()
 {
 	if (_save->getAmbientSound() != -1)
 	{
-		_game->getResourcePack()->getSoundByDepth(0, _save->getAmbientSound())->loop();
+		_game->getResourcePack()->getSoundByDepth(_save->getDepth(), _save->getAmbientSound())->loop();
 	}
 
 	State::init();
