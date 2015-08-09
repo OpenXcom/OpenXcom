@@ -1046,7 +1046,7 @@ void DogfightState::update()
 					mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
 					mission->setRegion(targetRegion, *_game->getRuleset());
 					mission->setRace(_ufo->getAlienRace());
-					mission->start();
+					mission->start(mission->getRules().getWave(0).spawnTimer); // fixed delay for first scout
 					_game->getSavedGame()->getAlienMissions().push_back(mission);
 				}
 			}

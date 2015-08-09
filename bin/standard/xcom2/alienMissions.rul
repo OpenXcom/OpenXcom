@@ -315,7 +315,7 @@ alienMissions: #done
   - type: STR_ALIEN_RETALIATION
     points: 0
     objective: 4
-    spawnUfo: STR_BATTLESHIP #Spawned for the final retaliation run
+    spawnUfo: STR_DREADNOUGHT #Spawned for the final retaliation run
     raceWeights:
       0:
         STR_AQUATOID: 20

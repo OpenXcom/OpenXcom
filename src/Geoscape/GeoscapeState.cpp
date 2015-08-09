@@ -1010,6 +1010,8 @@ private:
  */
 bool DetectXCOMBase::operator()(const Ufo *ufo) const
 {
+	if (ufo->getTrajectoryPoint() <= 1) return false;
+	if (ufo->getTrajectory().getZone(ufo->getTrajectoryPoint()) == 5) return false;
 	if ((ufo->getMission()->getRules().getObjective() != OBJECTIVE_RETALIATION && !Options::aggressiveRetaliation) || // only UFOs on retaliation missions actively scan for bases
 		ufo->getTrajectory().getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN || 									// UFOs attacking a base don't detect!
 		ufo->isCrashed() ||																				// Crashed UFOs don't detect!
