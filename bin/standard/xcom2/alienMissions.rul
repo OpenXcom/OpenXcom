@@ -355,8 +355,7 @@ alienMissions: #done
     spawnZone: 0 #Mission zone for terror missions
     raceWeights:
       0:
-        STR_AQUATOID: 70
-        STR_GILLMAN: 30
+        STR_MIXED_CREW: 100
     waves:
       - ufo: STR_ARTIFACT_SITE_P1 # spawn this site directly
         count: 1
