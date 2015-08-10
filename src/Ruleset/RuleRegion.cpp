@@ -110,7 +110,7 @@ bool RuleRegion::insideRegion(double lon, double lat) const
 		if (_lonMin[i] <= _lonMax[i])
 			inLon = (lon >= _lonMin[i] && lon < _lonMax[i]);
 		else
-			inLon = ((lon >= _lonMin[i] && lon < M_PI*2) || (lon >= 0 && lon < _lonMax[i]));
+			inLon = ((lon >= _lonMin[i] && lon < M_PI*2.0) || (lon >= 0 && lon < _lonMax[i]));
 
 		inLat = (lat >= _latMin[i] && lat < _latMax[i]);
 

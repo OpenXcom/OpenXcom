@@ -152,6 +152,8 @@ namespace YAML
 			rhs.lonMax = node[1].as<double>() * M_PI / 180.0;
 			rhs.latMin = node[2].as<double>() * M_PI / 180.0;
 			rhs.latMax = node[3].as<double>() * M_PI / 180.0;
+			if (rhs.latMin > rhs.latMax)
+				std::swap(rhs.latMin, rhs.latMax);
 			if (node.size() >= 5) rhs.texture = node[4].as<int>();
 			if (node.size() >= 6) rhs.name = node[5].as<std::string>();
 			return true;
