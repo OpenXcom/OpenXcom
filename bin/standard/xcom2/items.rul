@@ -1466,7 +1466,7 @@ items: #done
   - type: DEEP_ONE_WEAPON 
     bigSprite: 34
     bulletSprite: 8
-    fireSound: 67
+    fireSound: 40
     power: 100
     damageType: 8
     accuracyAuto: 50
