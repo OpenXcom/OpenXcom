@@ -760,7 +760,7 @@ void DogfightState::update()
 		finalRun = true;
 		setStatus("STR_UFO_OUTRUNNING_INTERCEPTOR");
 	}
-	else //ufo cannot break off, because it's too slow
+	else if (!_ufo->isCrashed()) //ufo cannot break off, because it's too slow
 	{
 		_craft->setSpeed(_ufo->getSpeed());
 		_ufoBreakingOff = false;
