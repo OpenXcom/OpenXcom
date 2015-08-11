@@ -61,6 +61,8 @@ void RuleUfo::load(const YAML::Node &node, Ruleset *ruleset)
 	_sightRange = node["sightRange"].as<int>(_sightRange);
 	if (const YAML::Node &terrain = node["battlescapeTerrainData"])
 	{
+		if (_battlescapeTerrainData)
+			delete _battlescapeTerrainData;
 		RuleTerrain *rule = new RuleTerrain(terrain["name"].as<std::string>());
 		rule->load(terrain, ruleset);
 		_battlescapeTerrainData = rule;
