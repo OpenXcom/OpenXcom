@@ -883,7 +883,8 @@ bool BattlescapeGenerator::canPlaceXCOMUnit(Tile *tile)
  */
 void BattlescapeGenerator::deployAliens(AlienDeployment *deployment)
 {
-	if (deployment->getRace() != "" && _alienRace == "")
+	// race defined by deployment if there is one.
+	if (deployment->getRace() != "" && _game->getSavedGame()->getMonthsPassed() > -1)
 	{
 		_alienRace = deployment->getRace();
 	}
