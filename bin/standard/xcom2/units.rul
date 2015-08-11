@@ -581,7 +581,7 @@ units: #done
     standHeight: 18
     kneelHeight: 18
     value: 18
-    deathSound: 55 # check this
+    deathSound: -2
     intelligence: 3
     aggression: 2
     spawnUnit: STR_TENTACULAT_TERRORIST
