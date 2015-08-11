@@ -834,7 +834,7 @@ ufopaedia: #done
     requires:
       - STR_BATTLESHIP
     text: STR_BATTLESHIP_UFOPEDIA
-    image_id: UP098.BDY
+    image_id: UP100.BDY
   - id: STR_DREADNOUGHT
     type_id: 17
     section: STR_UFOS
@@ -848,4 +848,4 @@ ufopaedia: #done
     requires:
       - STR_FLEET_SUPPLY_CRUISER
     text: STR_FLEET_SUPPLY_CRUISER_UFOPEDIA
-    image_id: UP100.BDY
+    image_id: UP098.BDY
