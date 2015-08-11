@@ -187,6 +187,10 @@ mapScripts: #done
     - type: digTunnel
       direction: both
       tunnelData:
+        level: 1
+    - type: digTunnel
+      direction: both
+      tunnelData:
         level: 2
   - type: PORT_TERROR
     commands:

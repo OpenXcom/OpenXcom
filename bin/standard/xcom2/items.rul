@@ -749,7 +749,7 @@ items: #done
     bigSprite: 26
     floorSprite: 26
     handSprite: 152
-    meleeSound: 26
+    meleeSound: 60
     power: 80
     damageType: 6
     accuracyMelee: 100
@@ -1467,6 +1467,7 @@ items: #done
     bigSprite: 34
     bulletSprite: 8
     fireSound: 40
+    hitSound: 41
     power: 100
     damageType: 8
     accuracyAuto: 50

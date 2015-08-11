@@ -1945,6 +1945,7 @@ alienDeployments: #done
     terrains:
       - GRUNGE
     shade: 0
+    depth: [3, 3]
     script: ARTIFACT_P2
     briefing:
       title: STR_ALIEN_CONTACT_SITE_MISSION
@@ -2556,6 +2557,7 @@ alienDeployments: #done
     terrains: 
       - ALSHIP
     shade: 15
+    depth: [3, 3]
     race: STR_AQUATOID
     nextStage: STR_TLETH_P2
     finalDestination: true
@@ -2695,6 +2697,7 @@ alienDeployments: #done
     terrains: 
       - LEVEL
     shade: 15
+    depth: [3, 3]
     race: STR_MIXED_CREW_2
     nextStage: STR_TLETH_P3
     script: TLETH_P2_P3
@@ -2832,6 +2835,7 @@ alienDeployments: #done
     terrains:
       - CRYPT
     shade: 15
+    depth: [3, 3]
     race: STR_MIXED_CREW_2
     script: TLETH_P2_P3
     winCutscene: winGame
