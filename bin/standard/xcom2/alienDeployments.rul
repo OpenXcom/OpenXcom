@@ -1364,6 +1364,7 @@ alienDeployments: #done
     script: SHIP_P2
     terrains:
       - CARGO
+    shade: 0
     briefing:
       title: STR_SHIP_RESCUE_MISSION
       desc: STR_SHIP_RESCUE_P2_BRIEFING
@@ -1647,6 +1648,7 @@ alienDeployments: #done
     script: SHIP_P2
     terrains:
       - LINERB
+    shade: 0
     briefing:
       title: STR_SHIP_RESCUE_MISSION
       desc: STR_SHIP_RESCUE_P2_BRIEFING
@@ -1942,6 +1944,7 @@ alienDeployments: #done
     height: 4
     terrains:
       - GRUNGE
+    shade: 0
     script: ARTIFACT_P2
     briefing:
       title: STR_ALIEN_CONTACT_SITE_MISSION
@@ -2279,7 +2282,7 @@ alienDeployments: #done
     width: 60
     length: 60
     height: 4
-    shade: 15
+    shade: 0
     depth: [3, 3]
     terrains:
       - A_BASE
@@ -2459,7 +2462,7 @@ alienDeployments: #done
     height: 4
     terrains:
       - XBASES
-    shade: 5
+    shade: 8
     script: BASE_DRILL
     briefing:
       palette: 4
@@ -2828,7 +2831,7 @@ alienDeployments: #done
     height: 2
     terrains:
       - CRYPT
-    shade: 5
+    shade: 15
     race: STR_MIXED_CREW_2
     script: TLETH_P2_P3
     winCutscene: winGame
