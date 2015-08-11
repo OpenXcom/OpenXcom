@@ -1944,7 +1944,7 @@ alienDeployments: #done
     height: 4
     terrains:
       - GRUNGE
-    shade: 0
+    shade: 15
     depth: [3, 3]
     script: ARTIFACT_P2
     briefing:
