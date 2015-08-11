@@ -29,7 +29,7 @@
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Interface/Text.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/ToggleTextButton.h"
 #include "../Savegame/GameTime.h"

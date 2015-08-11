@@ -476,7 +476,10 @@ const LocalizedText &Language::getString(const std::string &id) const
 	static LocalizedText hack(L"");
 	static std::set<std::string> notFoundIds;
 	if (id.empty())
+	{
+		hack = LocalizedText(L"");
 		return hack;
+	}
 	std::map<std::string, LocalizedText>::const_iterator s = _strings.find(id);
 	if (s == _strings.end())
 	{

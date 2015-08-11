@@ -21,8 +21,6 @@
 #include "BattleItem.h"
 #include <cmath>
 #include <sstream>
-#include <typeinfo>
-#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
@@ -1255,7 +1253,7 @@ int BattleUnit::getFallingPhase() const
  */
 bool BattleUnit::isOut() const
 {
-	return _status == STATUS_DEAD || _status == STATUS_UNCONSCIOUS || _status == STATUS_TIME_OUT;
+	return _status == STATUS_DEAD || _status == STATUS_UNCONSCIOUS || _status == STATUS_IGNORE_ME;
 }
 
 /**
@@ -1586,7 +1584,7 @@ double BattleUnit::getReactionScore()
  */
 void BattleUnit::prepareNewTurn(bool fullProcess)
 {
-	if (_status == STATUS_TIME_OUT)
+	if (_status == STATUS_IGNORE_ME)
 	{
 		return;
 	}
@@ -2982,12 +2980,12 @@ MovementType BattleUnit::getMovementType() const
 }
 
 /**
- * Sets this unit to "time-out" status,
+ * Elevates the unit to grand galactic inquisitor status,
  * meaning they will NOT take part in the current battle.
  */
 void BattleUnit::goToTimeOut()
 {
-	_status = STATUS_TIME_OUT;
+	_status = STATUS_IGNORE_ME;
 }
 
 /**

@@ -1,0 +1,45 @@
+musics: #done
+  - type: GMNEWINT #intro
+    catPos: 0
+  - type: GMSIG #tleth cutscene
+    catPos: 1
+  - type: GMWAITLO #main menu
+    catPos: 2
+  - type: GMGEO1
+    catPos: 3
+  - type: GMGEO2
+    catPos: 4
+  - type: GMGEO3
+    catPos: 5
+  - type: GMGEO4
+    catPos: 6
+  - type: GMGEO5
+    catPos: 7
+  - type: GMGEO6
+    catPos: 8
+  - type: GMINTER1
+    catPos: 9
+  - type: GMINTER2
+    catPos: 10
+  - type: GMINTER3
+    catPos: 11
+  - type: GMISPOSH #ufo / terror
+    catPos: 12
+  - type: GMBIGMAR #tleth
+    catPos: 13
+  - type: GMDEFBAS #base defense
+    catPos: 14
+  - type: GMATTBAS #alien base
+    catPos: 15
+  - type: GMDEBGOO #debriefing good
+    catPos: 16
+  - type: GMDEBPOR #debriefing poor
+    catPos: 17
+  - type: GMTACWET #tactical water
+    catPos: 18
+  - type: GMTACDRY #tactical land
+    catPos: 19
+  - type: GMWIN #doesn't have a midi
+    catPos: 20
+  - type: GMLOSE #doesn't have a midi
+    catPos: 21

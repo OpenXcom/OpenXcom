@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SurfaceSet.h"
-#include <SDL_endian.h>
 #include <fstream>
 #include "Surface.h"
 #include "Exception.h"

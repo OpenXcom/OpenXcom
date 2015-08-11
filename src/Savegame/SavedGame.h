@@ -207,6 +207,7 @@ public:
 	void setName(const std::wstring &name);
 	/// Gets the game difficulty.
 	GameDifficulty getDifficulty() const;
+	int getDifficultyCoefficient() const;
 	/// Sets the game difficulty.
 	void setDifficulty(GameDifficulty difficulty);
 	/// Gets if the game is in ironman mode.

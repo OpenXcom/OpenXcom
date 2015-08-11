@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Surface.h"
-#include "Screen.h"
 #include "ShaderDraw.h"
 #include <vector>
 #include <fstream>

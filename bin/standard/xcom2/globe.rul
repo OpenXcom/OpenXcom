@@ -1,0 +1,142 @@
+globe: #done
+  data: GEODATA/WORLD.DAT
+  oceanPalette: 1
+  countryColor: 245
+  cityColor: 239
+  baseColor: 239
+  lineColor: 111
+  polylines:
+    - [28, -30.375, 29, -27, 29, -24, 31, -21, 30.625, -19, 30.625, -16, 33, -18, 34, -15, 32, -11, 31, -8, 31, -3]
+    - [34, -15, 36, -9, 39, -8, 39, -5, 35, -4]
+    - [308.625, 0, 306, 4, 303, 6, 300, 6.5, 296, 8, 292, 7.5]
+    - [306, 4, 306, 6]
+    - [300, 6.5, 299, 9]
+    - [270, -30, 266, -33, 267, -35, 267, -37, 265, -40]
+    - [266, -33, 264, -35]
+    - [267, -37, 269, -38, 269.5, -41]
+    - [66.25, -24, 67, -26, 69, -29, 74, -31, 77, -34, 76.625, -35, 77, -39]
+    - [72, -20, 74, -23, 74.5, -26, 75, -29, 74, -31, 77, -34, 80, -35, 82, -37]
+    - [28.375, -42, 27, -42.5, 26, -41.5, 24, -41, 22, -41, 20, -42, 19, -42]
+    - [20, -42, 19, -43]
+    - [2.25, -4, 9, -7, 8, -9.625, 8, -11, 6, -13, 4, -14, 1, -14.5, 358, -13, 357, -11]
+    - [9, -7, 11, -9, 13, -10, 15, -9.5]
+    - [40.625, -39, 43, -39, 46, -38.625, 49, -38, 51, -39, 53, -39, 55, -40, 58, -41, 60, -43, 63, -44]
+    - [49, -38, 51, -37, 53, -34]
+    - [120, -36, 118, -35, 116, -34, 115, -33, 113, -32.5, 112, -33, 111, -34, 110, -36, 109.5, -38, 108.5, -38.625, 107, -39, 105, -38.5, 104.5, -38.5, 104.5, -38, 104, -36]
+    - [129.75, 15.125, 131, 16, 132, 16.25, 132.25, 17, 132, 18, 131, 19, 130, 19.125, 128, 18.5, 126.5, 19, 126, 20]
+    - [132, 31, 133, 30, 135, 29.5, 137, 30, 139, 29.625, 140, 29, 140.5, 28, 141, 26]
+  textures:
+    - id: 0
+      terrain:
+        - name: SEABED
+          weight: 75
+        - name: CORAL
+          weight: 25
+    - id: 1
+      terrain:
+        - name: PIPES
+          weight: 50
+        - name: SEABED
+          weight: 25
+        - name: CORAL
+          weight: 25
+    - id: 2
+      terrain:
+        - name: PLANE
+          weight: 50
+        - name: SEABED
+          weight: 25
+        - name: CORAL
+          weight: 25
+    - id: 3
+      terrain:
+        - name: ATLAN
+          weight: 50
+        - name: SEABED
+          weight: 25
+        - name: CORAL
+          weight: 25
+    - id: 4
+      terrain:
+        - name: MU
+          weight: 50
+        - name: SEABED
+          weight: 25
+        - name: CORAL
+          weight: 25
+    - id: 5
+      terrain:
+        - name: GAL
+          weight: 50
+        - name: SEABED
+          weight: 25
+        - name: CORAL
+          weight: 25
+    - id: 6
+      terrain:
+        - name: MSUNK
+          weight: 50
+        - name: SEABED
+          weight: 25
+        - name: CORAL
+          weight: 25
+    - id: 7
+      terrain:
+        - name: VOLC
+          weight: 50
+        - name: SEABED
+          weight: 25
+        - name: CORAL
+          weight: 25
+    - id: 8
+      terrain:
+        - name: CORAL
+          weight: 75
+        - name: SEABED
+          weight: 25
+    - id: 9
+      terrain:
+        - name: VOLC
+          weight: 50
+        - name: SEABED
+          weight: 25
+        - name: CORAL
+          weight: 25
+    - id: 10
+      terrain:
+        - name: MSUNK
+          weight: 50
+        - name: SEABED
+          weight: 25
+        - name: CORAL
+          weight: 25
+    - id: 11
+      terrain:
+        - name: PIPES
+          weight: 50
+        - name: SEABED
+          weight: 25
+        - name: CORAL
+          weight: 25
+    - id: 12
+      terrain:
+        - name: MU
+          weight: 50
+        - name: SEABED
+          weight: 25
+        - name: CORAL
+          weight: 25
+    - id: -1
+      deployments:
+        STR_PORT_TERROR: 100
+    - id: -2
+      deployments:
+        STR_ISLAND_TERROR: 100
+    - id: -3
+      deployments:
+        STR_ARTIFACT_SITE_P1: 100
+    - id: -4
+      deployments:
+        STR_CARGO_SHIP_P1: 50
+        STR_CRUISE_SHIP_P1: 50
+

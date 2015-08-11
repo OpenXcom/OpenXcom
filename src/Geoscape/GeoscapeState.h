@@ -24,7 +24,6 @@
 
 namespace OpenXcom
 {
-
 class Surface;
 class Globe;
 class TextButton;
@@ -152,9 +151,9 @@ public:
 	void resize(int &dX, int &dY);
 private:
 	/// Handle alien mission generation.
-	void determineAlienMissions(bool atGameStart = false);
-	/// Handle land mission generation.
-	void setupLandMission();
+	void determineAlienMissions();
+	/// Process each individual mission script command.
+	bool processCommand(RuleMissionScript *command);
 };
 
 }

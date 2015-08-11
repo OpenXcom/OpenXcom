@@ -50,7 +50,8 @@ enum SeverityLevel
 	LOG_ERROR,		/**< Something bad happened but we can still move on. */
 	LOG_WARNING,	/**< Something weird happened, nothing special but it's good to know. */
 	LOG_INFO,		/**< Useful information for users/developers to help debug and figure stuff out. */
-	LOG_DEBUG		/**< Purely test stuff to help developers implement, not really relevant to users. */
+	LOG_DEBUG,		/**< Purely test stuff to help developers implement, not really relevant to users. */
+	LOG_VERBOSE     /**< Extra details that even developers won't really need 90% of the time. */
 };
 
 /**

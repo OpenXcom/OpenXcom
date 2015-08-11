@@ -23,8 +23,6 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
 #include "../Ruleset/RuleBaseFacility.h"
-#include "../Savegame/Craft.h"
-#include "../Engine/Palette.h"
 
 namespace OpenXcom
 {

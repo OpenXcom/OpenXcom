@@ -20,17 +20,12 @@
 #include <cmath>
 #include "UnitSprite.h"
 #include "../Engine/SurfaceSet.h"
-#include "../Battlescape/Position.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleSoldier.h"
-#include "../Ruleset/Unit.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Armor.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Soldier.h"
 #include "../Ruleset/RuleInventory.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Engine/ShaderDraw.h"
 #include "../Engine/ShaderMove.h"
 #include "../Engine/Options.h"
@@ -1313,7 +1308,8 @@ void UnitSprite::drawRoutine11()
 	}
 
 	const int offTurretX[8] = { -2, -6, -5, 0, 5, 6, 2, 0 }; // turret offsets
-	const int offTurretY[8] = { -12, -13, -16, -16, -16, -13, -12, -12 }; // turret offsets
+	const int offTurretYAbove[8] = { 5, 3, 0, 0, 0, 3, 5, 4 }; // turret offsets
+	const int offTurretYBelow[8] = { -12, -13, -16, -16, -16, -13, -12, -12 }; // turret offsets
 
 	int body = 0;
 	int animFrame = _unit->getWalkingPhase() % 4;
@@ -1329,11 +1325,14 @@ void UnitSprite::drawRoutine11()
 
 	int turret = _unit->getTurretType();
 	// draw the turret, overlapping all 4 parts
-	if (_part == 3 && turret != -1 && !_unit->getFloorAbove())
+	if ((_part == 3 || _part == 0) && turret != -1 && !_unit->getFloorAbove())
 	{
 		s = _unitSurface->getFrame(256 + (turret * 8) + _unit->getTurretDirection());
 		s->setX(offTurretX[_unit->getDirection()]);
-		s->setY(offTurretY[_unit->getDirection()]);
+		if (_part == 3)
+			s->setY(offTurretYBelow[_unit->getDirection()]);
+		else
+			s->setY(offTurretYAbove[_unit->getDirection()]);
 		drawRecolored(s);
 	}
 

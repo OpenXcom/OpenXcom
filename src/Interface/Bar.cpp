@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Bar.h"
-#include <cmath>
 #include <SDL.h>
 
 namespace OpenXcom

@@ -46,6 +46,7 @@ private:
 	std::string _name, _script;
 	std::vector<std::string> _civilianTypes, _music;
 	int _minDepth, _maxDepth, _ambience;
+	double _ambientVolume;
 public:
 	RuleTerrain(const std::string &name);
 	~RuleTerrain();
@@ -75,6 +76,7 @@ public:
 	const std::string getScript();
 	/// Gets the list of music to pick from.
 	const std::vector<std::string> &getMusic();
+	const double getAmbientVolume() const;
 };
 
 }

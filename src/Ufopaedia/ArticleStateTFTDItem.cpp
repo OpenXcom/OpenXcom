@@ -25,7 +25,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/TextList.h"
 
 namespace OpenXcom

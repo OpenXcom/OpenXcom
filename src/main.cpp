@@ -60,6 +60,8 @@ int main(int argc, char *argv[])
 			return EXIT_SUCCESS;
 		std::ostringstream title;
 		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
+		if (Options::verboseLogging)
+			Logger::reportingLevel() = LOG_VERBOSE;
 		Options::baseXResolution = Options::displayWidth;
 		Options::baseYResolution = Options::displayHeight;
 		game = new Game(title.str());

@@ -18,12 +18,8 @@
  */
 #include "OptionsModsState.h"
 #include <algorithm>
-#include <limits>
 #include "../Engine/Game.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/FileMap.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Language.h"
 #include "../Interface/Window.h"
 #include "../Interface/TextList.h"
@@ -356,7 +352,7 @@ void OptionsModsState::moveModDown(Action *action, unsigned int row, bool max)
 			}
 			targetScrollPos += _lstMods->getNumTextLines(i);
 		}
-		if (curScrollPos + _lstMods->getVisibleRows() > targetScrollPos)
+		if (curScrollPos + (int)_lstMods->getVisibleRows() > targetScrollPos)
 		{
 			int ydiff = _lstMods->getTextHeight(row + 1);
 			SDL_WarpMouse(action->getLeftBlackBand() + action->getXMouse(),

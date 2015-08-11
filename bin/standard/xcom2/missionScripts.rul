@@ -1,0 +1,174 @@
+#  - type: example                       # the type/name is used for overwriting or deleting purposes.
+#    firstMonth: 0                       # months this command runs on, 0 runs on startup of a new game (default 0)
+#    lastMonth: 0                        # don't run after this month. in this context we mean "run once". -1 denotes no limit (default -1)
+#    label: 1                            # label, used for conditionals (default 0)
+#    conditionals: [1, -2]               # conditional list, just like mapscripts (default none)
+#    missionWeights:                     # the type of mission to spawn (omit to pick one from the mission table) (default none)
+#      0:                                # these are split into monthly chunks, and can contain multiple entries,
+#        STR_ALIEN_PROBE_MISSION: 20     # including weighted odds, but there is a caveat here:
+#        STR_ALIEN_INTERDICTION: 30      # you cannot mix and match missions with mission site objectives (ie: terror) with regular missions,
+#        STR_ALIEN_OUTERDICTION: 30      # they are generated too differently. using executionOdds and conditionals instead can achieve
+#        STR_WHALE_WATCHING: 20          # exactly the same thing. similarly, terror missions should not appear in regional mission weights (regions.rul)
+#    executionOdds: 100                  # % chances of this command executing (default 100)
+#    targetBaseOdds: 75                  # % chances of this mission targeting a region containing an xcom base instead of random (default 0)
+#    startDelay: 120                     # number of minutes to delay the start of the mission (rounded down to the nearest 30, 0 to use the wave timer from the mission itself) (default 0)
+#    raceWeights:                        # can override established monthly race weights here if desired (default empty)
+#      0:
+#        STR_AQUATOID: 100               # in this case we want an aquatoid mission, so they get 100%
+#    regionWeights:                      # again, this can override the defined mission region weights (default empty)
+#      0:                                # this won't come into play here unless the mission doesn't target an xcom base, as described above.
+#        STR_SAMPLE_REGION1: 20          # IF OMITTED:
+#        STR_SAMPLE_REGION2: 30          # for a terror type mission, all regions that meet the criteria will be weighed equally.
+#        STR_SAMPLE_REGION3: 50          # for regular missions the normal regional distribution weights will be applied.
+#    minDifficulty: 0                    # this command only applies to difficulty levels of this or above (default 0)
+#    researchTriggers:                   # a list of research topics that can influence the execution of this mission (default empty)
+#      STR_THE_ULTIMATE_THREAT: true     # in this case, the mission would only run if the player has the ultimate threat
+#      STR_TLETH_TH_ALIEN_CITY: false    # and does NOT have T'Leth
+#    maxRuns: 12                         # this mission type can only execute this number of times, -1 for infinite (default -1)
+#    avoidRepeats: 12                    # this means "store an array of the 12 previous coordinates, and don't use them again" (default 0)
+#    varName: researching                # this is an internal variable name, used for tracking maxruns and avoidRepeats (default none)
+#    useTable: false                     # check this mission type appears in the mission tables, and remove it if it does? (default true)
+
+missionScripts: #done
+  - type: gameStart
+    missionWeights:
+      0:
+        STR_ALIEN_PROBE_MISSION: 100
+    lastMonth: 0
+    targetBaseOdds: 100
+    raceWeights:
+      0:
+        STR_AQUATOID: 100
+    startDelay: 120
+    
+    
+  - type: artifacts
+    label: 1
+    missionWeights:
+      # 0 is just for safety
+      0:
+        STR_ALIEN_ARTIFACT: 100
+    regionWeights:
+      0:
+        ARTIFACT_SITES: 100
+    avoidRepeats: 12
+    maxRuns: 12
+    varName: artifacts
+    useTable: false
+    firstMonth: 6
+    executionOdds: 50
+    startDelay: 0
+    
+    
+    
+  - type: shipTerror
+    conditionals: [-1]
+    label: 2
+    missionWeights:
+      # 0 is just for safety
+      0:
+        STR_ALIEN_SHIP_ATTACK: 100
+    regionWeights:
+      0:
+        SHIPPING_LANES: 100
+    avoidRepeats: 5
+    varName: shippingLanes
+    useTable: false
+    firstMonth: 3
+    executionOdds: 60
+    startDelay: 0
+    
+    
+  - type: recurringTerror
+    conditionals: [-1, -2]
+    missionWeights:
+      0:
+        STR_ALIEN_SURFACE_ATTACK: 100
+    regionWeights:
+      0:
+        STR_NORTH_ATLANTIC: 10
+        STR_SOUTH_ATLANTIC: 10
+        STR_NORTH_PACIFIC: 10
+        STR_SOUTH_PACIFIC: 10
+        STR_MEDITERRANEAN: 10
+        STR_SOUTH_CHINA_SEA: 10
+        STR_INDIAN_OCEAN: 10
+        STR_THE_EAST_SEA: 10
+        STR_NORTH_SEA: 10
+        STR_CARRIBEAN: 10
+    useTable: false
+    startDelay: 150
+    
+    
+    
+    
+
+
+  - type: recon
+    firstMonth: 1
+  - type: invasion
+    firstMonth: 6
+  - type: researchRetaliation
+    missionWeights:
+      0:
+        STR_ALIEN_RETALIATION: 100
+    researchTriggers:
+      STR_THE_ULTIMATE_THREAT: true
+    startDelay: 150
+    targetBaseOdds: 100
+    useTable: false
+    label: 3
+  - type: beginnerRetaliation
+    missionWeights:
+      0:
+        STR_ALIEN_RETALIATION: 100
+    firstMonth: 14
+    targetBaseOdds: 100
+    useTable: false
+    conditionals: [-3]
+    label: 4
+    startDelay: 150
+  - type: experiencedRetaliation
+    minDifficulty: 1
+    missionWeights:
+      0:
+        STR_ALIEN_RETALIATION: 100
+    firstMonth: 13
+    targetBaseOdds: 100
+    useTable: false
+    conditionals: [-3, -4]
+    label: 5
+    startDelay: 150
+  - type: veteranRetaliation
+    minDifficulty: 2
+    missionWeights:
+      0:
+        STR_ALIEN_RETALIATION: 100
+    firstMonth: 12
+    targetBaseOdds: 100
+    useTable: false
+    conditionals: [-3, -4, -5]
+    label: 6
+    startDelay: 150
+  - type: geniusRetaliation
+    minDifficulty: 3
+    missionWeights:
+      0:
+        STR_ALIEN_RETALIATION: 100
+    firstMonth: 10
+    targetBaseOdds: 100
+    useTable: false
+    conditionals: [-3, -4, -5, -6]
+    label: 7
+    startDelay: 150
+  - type: superhumanRetaliation
+    minDifficulty: 4
+    missionWeights:
+      0:
+        STR_ALIEN_RETALIATION: 100
+    firstMonth: 8
+    targetBaseOdds: 100
+    useTable: false
+    conditionals: [-3, -4, -5, -6, -7]
+    startDelay: 150
+    

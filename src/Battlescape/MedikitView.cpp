@@ -24,10 +24,8 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Action.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Interface/Text.h"
-#include <iostream>
 
 namespace OpenXcom
 {

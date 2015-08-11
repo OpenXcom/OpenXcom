@@ -21,12 +21,9 @@
 #include <cmath>
 #include <climits>
 #include <set>
-#include <functional>
 #include "TileEngine.h"
 #include <SDL.h>
-#include "BattleAIState.h"
 #include "AlienBAIState.h"
-#include "UnitTurnBState.h"
 #include "Map.h"
 #include "Camera.h"
 #include "../Savegame/SavedGame.h"
@@ -35,16 +32,12 @@
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
-#include "../Savegame/Soldier.h"
 #include "../Engine/RNG.h"
 #include "BattlescapeState.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/Unit.h"
-#include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/Armor.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Resource/ResourcePack.h"
 #include "Pathfinding.h"
 #include "../Engine/Options.h"
 #include "ProjectileFlyBState.h"
@@ -897,6 +890,7 @@ BattleUnit* TileEngine::getReactor(std::vector<std::pair<BattleUnit *, int> > sp
 	for (std::vector<std::pair<BattleUnit *, int> >::iterator i = spotters.begin(); i != spotters.end(); ++i)
 	{
 		if (!(*i).first->isOut() &&
+		!(*i).first->getRespawn() &&
 		determineReactionType((*i).first, unit) != BA_NONE &&
 		(*i).first->getReactionScore() > bestScore)
 		{
@@ -1053,14 +1047,12 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 	{
 		// power 25% to 75%
 		const int rndPower = RNG::generate(power/4, (power*3)/4); //RNG::boxMuller(power, power/6)
-		if (part == V_OBJECT && _save->getMissionType() == "STR_BASE_DEFENSE")
+		if (part == V_OBJECT && rndPower >= tile->getMapData(O_OBJECT)->getArmor() &&
+			_save->getMissionType() == "STR_BASE_DEFENSE" && tile->getMapData(V_OBJECT)->isBaseModule())
 		{
-			if (rndPower >= tile->getMapData(O_OBJECT)->getArmor() && tile->getMapData(V_OBJECT)->isBaseModule())
-			{
-				_save->getModuleMap()[(center.x/16)/10][(center.y/16)/10].second--;
-			}
+			_save->getModuleMap()[(center.x/16)/10][(center.y/16)/10].second--;
 		}
-		if (tile->damage(part, rndPower))
+		if (tile->damage(part, rndPower, _save->getObjectiveType()))
 		{
 			_save->addDestroyedObjective();
 		}
@@ -1086,7 +1078,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 				}
 			}
 		}
-		if (bu)
+		if (bu && bu->getHealth() != 0 && bu->getStunlevel() < bu->getHealth())
 		{
 			const int sz = bu->getArmor()->getSize() * 8;
 			const Position target = bu->getPosition() * Position(16,16,24) + Position(sz,sz, bu->getFloatHeight() - tile->getTerrainLevel());
@@ -1108,7 +1100,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 
 			if ((bu->getSpecialAbility() == SPECAB_EXPLODEONDEATH || bu->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE) && !bu->isOut() && (bu->getHealth() == 0 || bu->getStunlevel() >= bu->getHealth()))
 			{
-				if (type != DT_STUN && type != DT_HE)
+				if (type != DT_STUN && type != DT_HE && type != DT_IN && type != DT_MELEE)
 				{
 					Position p = Position(bu->getPosition().x * 16, bu->getPosition().y * 16, bu->getPosition().z * 24);
 					_save->getBattleGame()->statePushNext(new ExplosionBState(_save->getBattleGame(), p, 0, bu, 0));
@@ -1447,7 +1439,7 @@ bool TileEngine::detonate(Tile* tile)
 				currentpart2 = tiles[i]->getMapData(currentpart)->getDataset()->getObjects()->at(diemcd)->getObjectType();
 			else
 				currentpart2 = currentpart;
-			if (tiles[i]->destroy(currentpart))
+			if (tiles[i]->destroy(currentpart, _save->getObjectiveType()))
 				objective = true;
 			currentpart =  currentpart2;
 			if (tiles[i]->getMapData(currentpart)) // take new values
@@ -1876,8 +1868,6 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 	int TUCost = 0;
 	int size = unit->getArmor()->getSize();
 	int z = unit->getTile()->getTerrainLevel() < -12 ? 1 : 0; // if we're standing on stairs, check the tile above instead.
-	if (size > 1 && rClick)
-		return door;
 	if (dir == -1)
 	{
 		dir = unit->getDirection();

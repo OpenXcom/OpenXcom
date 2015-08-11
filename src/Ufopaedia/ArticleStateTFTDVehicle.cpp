@@ -21,7 +21,7 @@
 #include "ArticleStateTFTDVehicle.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextList.h"
 #include "../Ruleset/Ruleset.h"

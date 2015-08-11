@@ -21,7 +21,6 @@
 #include "Game.h"
 #include "Screen.h"
 #include "Surface.h"
-#include "Font.h"
 #include "Language.h"
 #include "LocalizedText.h"
 #include "Palette.h"
@@ -36,6 +35,7 @@
 #include "../Interface/ComboBox.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
+#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {
@@ -70,9 +70,9 @@ State::~State()
  * Set interface data from the ruleset, also sets the palette for the state.
  * @param category Name of the interface set.
  * @param alterPal Should we swap out the backpal colors?
- * @param battlescape Should we use battlescape palette? (this only applies to options screens)
+ * @param battleGame Should we use battlescape palette? (this only applies to options screens)
  */
-void State::setInterface(const std::string& category, bool alterPal, bool battlescape)
+void State::setInterface(const std::string& category, bool alterPal, SavedBattleGame *battleGame)
 {
 	int backPal = -1;
 	std::string pal = "PAL_GEOSCAPE";
@@ -107,16 +107,19 @@ void State::setInterface(const std::string& category, bool alterPal, bool battle
 			_game->getResourcePack()->playMusic(_ruleInterface->getMusic());
 		}
 	}
-	if (battlescape)
+	if (battleGame)
 	{
-		pal = "PAL_BATTLESCAPE";
-		backPal = -1;
+		battleGame->setPaletteByDepth(this);
 	}
 	else if (pal.empty())
 	{
 		pal = "PAL_GEOSCAPE";
+		setPalette(pal, backPal);
 	}
-	setPalette(pal, backPal);
+	else
+	{
+		setPalette(pal, backPal);
+	}
 }
 
 /**

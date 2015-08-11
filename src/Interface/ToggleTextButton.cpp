@@ -19,7 +19,6 @@
 
 #include "ToggleTextButton.h"
 #include "TextButton.h"
-#include "../Engine/Sound.h"
 
 
 namespace OpenXcom

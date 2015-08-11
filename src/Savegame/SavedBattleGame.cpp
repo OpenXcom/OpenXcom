@@ -18,8 +18,6 @@
  */
 #include <assert.h>
 #include <vector>
-#include <deque>
-#include <queue>
 #include "BattleItem.h"
 #include "SavedBattleGame.h"
 #include "SavedGame.h"
@@ -35,7 +33,6 @@
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
-#include "../Engine/Language.h"
 #include "../Engine/Game.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Battlescape/CivilianBAIState.h"
@@ -52,7 +49,7 @@ namespace OpenXcom
  * Initializes a brand new battlescape saved game.
  */
 SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _selectedUnit(0), _lastSelectedUnit(0), _pathfinding(0), _tileEngine(0), _globalShade(0), _side(FACTION_PLAYER), _turn(1),
-                                     _debugMode(false), _aborted(false), _itemId(0), _objectivesDestroyed(0), _objectivesNeeded(0), _unitsFalling(false), _cheating(false), _tuReserved(BA_NONE), _kneelReserved(false), _depth(0), _ambience(-1)
+                                     _debugMode(false), _aborted(false), _itemId(0), _objectiveType(-1), _objectivesDestroyed(0), _objectivesNeeded(0), _unitsFalling(false), _cheating(false), _tuReserved(BA_NONE), _kneelReserved(false), _depth(0), _ambience(-1), _ambientVolume(0.5)
 {
 	_tileSearch.resize(11*11);
 	for (int i = 0; i < 121; ++i)
@@ -210,7 +207,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			std::string armor = (*i)["genUnitArmor"].as<std::string>();
 			// create a new Unit.
 			if(!rule->getUnit(type) || !rule->getArmor(armor)) continue;
-			unit = new BattleUnit(rule->getUnit(type), originalFaction, id, rule->getArmor(armor), savedGame->getDifficulty(), _depth);
+			unit = new BattleUnit(rule->getUnit(type), originalFaction, id, rule->getArmor(armor), savedGame->getDifficultyCoefficient(), _depth);
 		}
 		unit->load(*i);
 		unit->setSpecialWeapon(this, rule);
@@ -317,11 +314,13 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			 ++weaponi;
 		}
 	}
+	_objectiveType = node["objectiveType"].as<int>(_objectiveType);
 	_objectivesDestroyed = node["objectivesDestroyed"].as<int>(_objectivesDestroyed);
 	_objectivesNeeded = node["objectivesNeeded"].as<int>(_objectivesNeeded);
 	_tuReserved = (BattleActionType)node["tuReserved"].as<int>(_tuReserved);
 	_kneelReserved = node["kneelReserved"].as<bool>(_kneelReserved);
 	_ambience = node["ambience"].as<int>(_ambience);
+	_ambientVolume = node["ambientVolume"].as<double>(_ambientVolume);
 	_music = node["music"].as<std::string>(_music);
 }
 
@@ -373,6 +372,7 @@ YAML::Node SavedBattleGame::save() const
 	{
 		node["objectivesDestroyed"] = _objectivesDestroyed;
 		node["objectivesNeeded"] = _objectivesNeeded;
+		node["objectiveType"] = _objectiveType;
 	}
 	node["width"] = _mapsize_x;
 	node["length"] = _mapsize_y;
@@ -1084,11 +1084,12 @@ bool SavedBattleGame::isAborted() const
 }
 
 /**
- * Sets whether the objective is destroyed.
+ * increments the number of objectives to be destroyed.
  */
-void SavedBattleGame::addToObjectiveCount()
+void SavedBattleGame::setObjectiveCount(int counter)
 {
-	_objectivesNeeded++;
+	_objectivesNeeded = counter;
+	_objectivesDestroyed = 0;
 }
 
 /**
@@ -1096,12 +1097,25 @@ void SavedBattleGame::addToObjectiveCount()
  */
 void SavedBattleGame::addDestroyedObjective()
 {
-	_objectivesDestroyed++;
-	if (allObjectivesDestroyed() && Options::battleAutoEnd)
+	if (!allObjectivesDestroyed())
 	{
-		setSelectedUnit(0);
-		_battleState->getBattleGame()->cancelCurrentAction(true);
-		_battleState->getBattleGame()->requestEndTurn();
+		_objectivesDestroyed++;
+		if (allObjectivesDestroyed())
+		{
+			if (getObjectiveType() == MUST_DESTROY)
+			{
+				if (Options::battleAutoEnd)
+				{
+					setSelectedUnit(0);
+					_battleState->getBattleGame()->cancelCurrentAction(true);
+					_battleState->getBattleGame()->requestEndTurn();
+				}
+			}
+			else
+			{
+				_battleState->getBattleGame()->missionComplete();
+			}
+		}
 	}
 }
 
@@ -1288,11 +1302,11 @@ void SavedBattleGame::prepareNewTurn()
 				{
 					if ((*i)->getMapData(O_OBJECT)->getFlammable() != 255 && (*i)->getMapData(O_OBJECT)->getArmor() != 255)
 					{
-						if ((*i)->destroy(O_OBJECT))
+						if ((*i)->destroy(O_OBJECT, getObjectiveType()))
 						{
 							addDestroyedObjective();
 						}
-						if ((*i)->destroy(O_FLOOR))
+						if ((*i)->destroy(O_FLOOR, getObjectiveType()))
 						{
 							addDestroyedObjective();
 						}
@@ -1302,7 +1316,7 @@ void SavedBattleGame::prepareNewTurn()
 				{
 					if ((*i)->getMapData(O_FLOOR)->getFlammable() != 255 && (*i)->getMapData(O_FLOOR)->getArmor() != 255)
 					{
-						if ((*i)->destroy(O_FLOOR))
+						if ((*i)->destroy(O_FLOOR, getObjectiveType()))
 						{
 							addDestroyedObjective();
 						}
@@ -1426,7 +1440,6 @@ void SavedBattleGame::reviveUnconsciousUnits()
 					getTileEngine()->calculateFOV((*i));
 					getTileEngine()->calculateUnitLighting();
 					removeUnconsciousBodyItem((*i));
-					break;
 				}
 			}
 		}
@@ -1790,11 +1803,14 @@ void SavedBattleGame::calculateModuleMap()
 	{
 		for (int y = 0; y != _mapsize_y; ++y)
 		{
-			Tile *tile = getTile(Position(x,y,_mapsize_z-1));
-			if (tile && tile->getMapData(O_OBJECT) && tile->getMapData(O_OBJECT)->isBaseModule())
+			for (int z = 0; z != _mapsize_z; ++z)
 			{
-				_baseModules[x/10][y/10].first += _baseModules[x/10][y/10].first > 0 ? 1 : 2;
-				_baseModules[x/10][y/10].second = _baseModules[x/10][y/10].first;
+				Tile *tile = getTile(Position(x,y,z));
+				if (tile && tile->getMapData(O_OBJECT) && tile->getMapData(O_OBJECT)->isBaseModule())
+				{
+					_baseModules[x/10][y/10].first += _baseModules[x/10][y/10].first > 0 ? 1 : 2;
+					_baseModules[x/10][y/10].second = _baseModules[x/10][y/10].first;
+				}
 			}
 		}
 	}
@@ -1897,5 +1913,36 @@ std::string &SavedBattleGame::getMusic()
 void SavedBattleGame::setMusic(std::string track)
 {
 	_music = track;
+}
+
+/**
+ * Set the objective type for the current battle.
+ * @param the objective type.
+ */
+void SavedBattleGame::setObjectiveType(int type)
+{
+	_objectiveType = type;
+}
+
+/**
+ * Get the objective type for the current battle.
+ * @return the objective type.
+ */
+SpecialTileType SavedBattleGame::getObjectiveType()
+{
+	return (SpecialTileType)(_objectiveType);
+}
+
+
+
+/// sets the ambient sound effect;
+void SavedBattleGame::setAmbientVolume(double volume)
+{
+	_ambientVolume = volume;
+}
+/// gets the ambient sound effect;
+double SavedBattleGame::getAmbientVolume() const
+{
+	return _ambientVolume;
 }
 }

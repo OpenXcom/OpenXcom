@@ -103,7 +103,7 @@ public:
 	/// Gets a particular music.
 	Music *getMusic(const std::string &name) const;
 	/// Plays a particular music.
-	void playMusic(const std::string &name, bool random = false);
+	void playMusic(const std::string &name, int id = 0);
 	/// Gets a particular sound.
 	Sound *getSound(const std::string &set, unsigned int sound) const;
 	/// Gets a particular palette.

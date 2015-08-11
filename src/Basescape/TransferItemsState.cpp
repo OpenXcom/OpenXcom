@@ -24,8 +24,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -37,8 +36,6 @@
 #include "../Savegame/Craft.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Savegame/CraftWeapon.h"
-#include "../Ruleset/RuleCraftWeapon.h"
 #include "../Engine/Timer.h"
 #include "../Menu/ErrorMessageState.h"
 #include "TransferConfirmState.h"
@@ -613,7 +610,7 @@ void TransferItemsState::increaseByValue(int change)
 	{
 		double storesNeededPerItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize();
 		double freeStores = _baseTo->getAvailableStores() - _baseTo->getUsedStores() - _iQty;
-		double freeStoresForItem = DBL_MAX;
+		double freeStoresForItem = (double)(INT_MAX);
 		if (!AreSame(storesNeededPerItem, 0.0))
 		{
 			freeStoresForItem = (freeStores + 0.05) / storesNeededPerItem;

@@ -24,7 +24,7 @@
 #include "ArticleStateTFTDCraft.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/Text.h"
 
 namespace OpenXcom

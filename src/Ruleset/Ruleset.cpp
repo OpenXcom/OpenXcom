@@ -19,7 +19,6 @@
 #include "Ruleset.h"
 #include <fstream>
 #include <algorithm>
-#include "../fmath.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Engine/Options.h"
 #include "../Engine/Exception.h"
@@ -51,6 +50,7 @@
 #include "RuleInterface.h"
 #include "SoundDefinition.h"
 #include "RuleMusic.h"
+#include "RuleMissionScript.h"
 #include "../Geoscape/Globe.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -66,10 +66,8 @@
 #include "../Savegame/GameTime.h"
 #include "UfoTrajectory.h"
 #include "RuleAlienMission.h"
-#include "City.h"
 #include "MCDPatch.h"
 #include "../Engine/Logger.h"
-#include "../Ufopaedia/Ufopaedia.h"
 #include "StatString.h"
 #include "RuleGlobe.h"
 #include "../Resource/ResourcePack.h"
@@ -80,6 +78,9 @@
 
 namespace OpenXcom
 {
+
+
+int Ruleset::DIFFICULTY_COEFFICIENT[5];
 
 void Ruleset::resetGlobalStatics()
 {
@@ -135,6 +136,12 @@ void Ruleset::resetGlobalStatics()
 	Pathfinding::red = 3;
 	Pathfinding::yellow = 10;
 	Pathfinding::green = 4;
+
+	DIFFICULTY_COEFFICIENT[0] = 0;
+	DIFFICULTY_COEFFICIENT[1] = 1;
+	DIFFICULTY_COEFFICIENT[2] = 2;
+	DIFFICULTY_COEFFICIENT[3] = 3;
+	DIFFICULTY_COEFFICIENT[4] = 4;
 }
 
 /**
@@ -283,8 +290,37 @@ void Ruleset::loadModRulesets(const std::vector<std::string> &rulesetFiles, size
 
 	for (std::vector<std::string>::const_iterator i = rulesetFiles.begin(); i != rulesetFiles.end(); ++i)
 	{
-		Log(LOG_INFO) << "- " << *i;
+		Log(LOG_VERBOSE) << "- " << *i;
 		loadFile(*i, spriteOffset);
+	}
+
+	// these need to be validated, otherwise we're gonna get into some serious trouble down the line.
+	// it may seem like a somewhat arbitrary limitation, but there is a good reason behind it.
+	// i'd need to know what results are going to be before they are formulated, and there's a heirarchical structure to
+	// the order in which variables are determined for a mission, and the order is DIFFERENT for regular missions vs
+	// missions that spawn a mission site. where normally we pick a region, then a mission based on the weights for that region.
+	// a terror-type mission picks a mission type FIRST, then a region based on the criteria defined by the mission.
+	// there is no way i can conceive of to reconcile this difference to allow mixing and matching,
+	// short of knowing the results of calls to the RNG before they're determined.
+	// the best solution i can come up with is to disallow it, as there are other ways to acheive what this would amount to anyway,
+	// and they don't require time travel. - Warboy
+	for (std::map<std::string, RuleMissionScript*>::iterator i = _missionScripts.begin(); i != _missionScripts.end(); ++i)
+	{
+		RuleMissionScript *rule = (*i).second;
+		std::set<std::string> missions = rule->getAllMissionTypes();
+		if (!missions.empty())
+		{
+			std::set<std::string>::const_iterator j = missions.begin();
+			bool isSiteType = getAlienMission(*j) && getAlienMission(*j)->getObjective() == OBJECTIVE_SITE;
+			rule->setSiteType(isSiteType);
+			for (;j != missions.end(); ++j)
+			{
+				if (getAlienMission(*j) && (getAlienMission(*j)->getObjective() == OBJECTIVE_SITE) != isSiteType)
+				{
+					throw Exception("Error with MissionScript: " + (*i).first + " cannot mix terror/non-terror missions in a single command, so sayeth the wise Alaundo."); 
+				}
+			}
+		}
 	}
 }
 
@@ -432,6 +468,10 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 		{
 			_researchListOrder += 100;
 			rule->load(*i, _researchListOrder);
+			if ((*i)["unlockFinalMission"].as<bool>(false))
+			{
+				_finalResearch = (*i)["name"].as<std::string>(_finalResearch);
+			}
 		}
 	}
 	for (YAML::const_iterator i = doc["manufacture"].begin(); i != doc["manufacture"].end(); ++i)
@@ -520,10 +560,19 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 	_costScientist = doc["costScientist"].as<int>(_costScientist);
 	_timePersonnel = doc["timePersonnel"].as<int>(_timePersonnel);
 	_initialFunding = doc["initialFunding"].as<int>(_initialFunding);
-	_alienFuel = doc["alienFuel"].as<std::string>(_alienFuel);
+	_alienFuel = doc["alienFuel"].as<std::pair<std::string, int> >(_alienFuel);
 	_fontName = doc["fontName"].as<std::string>(_fontName);
 	_turnAIUseGrenade = doc["turnAIUseGrenade"].as<int>(_turnAIUseGrenade);
 	_turnAIUseBlaster = doc["turnAIUseBlaster"].as<int>(_turnAIUseBlaster);
+	if (doc["difficultyCoefficient"])
+	{
+		size_t num = 0;
+		for (YAML::const_iterator i = doc["difficultyCoefficient"].begin(); i != doc["difficultyCoefficient"].end() && num < 5; ++i)
+		{
+			DIFFICULTY_COEFFICIENT[num] = (*i).as<int>(DIFFICULTY_COEFFICIENT[num]);
+			++num;
+		}
+	}
 	for (YAML::const_iterator i = doc["ufoTrajectories"].begin(); i != doc["ufoTrajectories"].end(); ++i)
 	{
 		UfoTrajectory *rule = loadRule(*i, &_ufoTrajectories, 0, "id");
@@ -670,7 +719,7 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 		ResourcePack::UFO_HIT = (*i)["ufoHit"].as<int>(ResourcePack::UFO_HIT);
 		ResourcePack::UFO_CRASH = (*i)["ufoCrash"].as<int>(ResourcePack::UFO_CRASH);
 		ResourcePack::UFO_EXPLODE = (*i)["ufoExplode"].as<int>(ResourcePack::UFO_EXPLODE);
-		ResourcePack::INTERCEPTOR_HIT = (*i)["intterceptorHit"].as<int>(ResourcePack::INTERCEPTOR_HIT);
+		ResourcePack::INTERCEPTOR_HIT = (*i)["interceptorHit"].as<int>(ResourcePack::INTERCEPTOR_HIT);
 		ResourcePack::INTERCEPTOR_EXPLODE = (*i)["interceptorExplode"].as<int>(ResourcePack::INTERCEPTOR_EXPLODE);
 		ResourcePack::GEOSCAPE_CURSOR = (*i)["geoscapeCursor"].as<int>(ResourcePack::GEOSCAPE_CURSOR);
 		ResourcePack::BASESCAPE_CURSOR = (*i)["basescapeCursor"].as<int>(ResourcePack::BASESCAPE_CURSOR);
@@ -695,6 +744,10 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 	for (YAML::const_iterator i = doc["mapScripts"].begin(); i != doc["mapScripts"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
+		if ((*i)["delete"])
+		{
+			type = (*i)["delete"].as<std::string>(type);
+		}
 		if (_mapScripts.find(type) != _mapScripts.end())
 		{
 			for (std::vector<MapScript*>::iterator j = _mapScripts[type].begin(); j != _mapScripts[type].end();)
@@ -708,6 +761,14 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 			std::auto_ptr<MapScript> mapScript(new MapScript());
 			mapScript->load(*j);
 			_mapScripts[type].push_back(mapScript.release());
+		}
+	}
+	for (YAML::const_iterator i = doc["missionScripts"].begin(); i != doc["missionScripts"].end(); ++i)
+	{
+		RuleMissionScript *rule = loadRule(*i, &_missionScripts, &_missionScriptIndex, "type");
+		if (rule != 0)
+		{
+			rule->load(*i);
 		}
 	}
 
@@ -801,7 +862,9 @@ SavedGame *Ruleset::newSave() const
 	// Add countries
 	for (std::vector<std::string>::const_iterator i = _countriesIndex.begin(); i != _countriesIndex.end(); ++i)
 	{
-		save->getCountries()->push_back(new Country(getCountry(*i)));
+		RuleCountry *country = getCountry(*i);
+		if (!country->getLonMin().empty())
+			save->getCountries()->push_back(new Country(country));
 	}
 	// Adjust funding to total $6M
 	int missing = ((_initialFunding - save->getCountryFunding()/1000) / (int)save->getCountries()->size()) * 1000;
@@ -819,7 +882,9 @@ SavedGame *Ruleset::newSave() const
 	// Add regions
 	for (std::vector<std::string>::const_iterator i = _regionsIndex.begin(); i != _regionsIndex.end(); ++i)
 	{
-		save->getRegions()->push_back(new Region(getRegion(*i)));
+		RuleRegion *region = getRegion(*i);
+		if (!region->getLonMin().empty())
+			save->getRegions()->push_back(new Region(region));
 	}
 
 	// Set up starting base
@@ -1286,17 +1351,18 @@ const std::vector<std::string> &Ruleset::getManufactureList() const
  */
 std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() const
 {
-	std::vector<OpenXcom::RuleBaseFacility*> PlaceList;
+	std::vector<OpenXcom::RuleBaseFacility*> placeList;
 
 	for (YAML::const_iterator i = _startingBase["facilities"].begin(); i != _startingBase["facilities"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		if (type != "STR_ACCESS_LIFT")
+		RuleBaseFacility *facility = getBaseFacility(type);
+		if (!facility->isLift())
 		{
-			PlaceList.push_back(getBaseFacility(type));
+			placeList.push_back(facility);
 		}
 	}
-	return PlaceList;
+	return placeList;
 }
 
 /**
@@ -1635,9 +1701,18 @@ Soldier *Ruleset::genSoldier(SavedGame *save) const
  * Gets the name of the item to be used as alien fuel.
  * @return the name of the fuel.
  */
-const std::string Ruleset::getAlienFuel() const
+const std::string Ruleset::getAlienFuelName() const
 {
-	return _alienFuel;
+	return _alienFuel.first;
+}
+
+/**
+ * Gets the amount of alien fuel to recover.
+ * @return the amount to recover.
+ */
+const int Ruleset::getAlienFuelQuantity() const
+{
+	return _alienFuel.second;
 }
 
 /**
@@ -1720,6 +1795,21 @@ const std::map<std::string, RuleVideo *> *Ruleset::getVideos() const
 const std::map<std::string, RuleMusic *> *Ruleset::getMusic() const
 {
 	return &_musics;
+}
+
+const std::vector<std::string> *Ruleset::getMissionScriptList() const
+{
+	return &_missionScriptIndex;
+}
+
+RuleMissionScript *Ruleset::getMissionScript(const std::string &name) const
+{
+	std::map<std::string, RuleMissionScript*>::const_iterator i = _missionScripts.find(name);
+	if (_missionScripts.end() != i) return i->second; else return 0;
+}
+const std::string Ruleset::getFinalResearch() const
+{
+	return _finalResearch; 
 }
 
 }

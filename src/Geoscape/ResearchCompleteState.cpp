@@ -18,16 +18,13 @@
  */
 #include "ResearchCompleteState.h"
 #include "../Engine/Game.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Resource/ResourcePack.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Ruleset/RuleResearch.h"
-#include "../Ruleset/ArticleDefinition.h"
 #include "../Ufopaedia/Ufopaedia.h"
-#include <algorithm>
 #include "../Engine/Options.h"
 
 namespace OpenXcom

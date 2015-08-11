@@ -23,23 +23,17 @@
 #include "Map.h"
 #include "Camera.h"
 #include "Particle.h"
-#include "../fmath.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
 #include "../Resource/ResourcePack.h"
-#include "../Ruleset/Unit.h"
-#include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/MapData.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
-#include "../Savegame/Soldier.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/Armor.h"
-#include "../Engine/Game.h"
 
 namespace OpenXcom
 {

@@ -17,11 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CraftWeaponProjectile.h"
-#include <iostream>
-#include "../Engine/SurfaceSet.h"
-#include "../Engine/Surface.h"
-#include "../Engine/Palette.h"
-#include "../Ruleset/RuleCraftWeapon.h"
 
 namespace OpenXcom {
 

@@ -164,6 +164,8 @@ public:
 	void nextStage();
 	/// Generates an inventory battlescape.
 	void runInventory(Craft *craft);
+	/// Sets up the objectives for the map.
+	void setupObjectives(AlienDeployment *ruleDeploy);
 };
 
 }

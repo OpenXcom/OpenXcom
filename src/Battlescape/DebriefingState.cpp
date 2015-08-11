@@ -19,9 +19,7 @@
 #include "DebriefingState.h"
 #include "CannotReequipState.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
-#include "../Engine/Music.h"
-#include "../Engine/Palette.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
@@ -34,7 +32,6 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleCraft.h"
-#include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/RuleUfo.h"
@@ -60,8 +57,6 @@
 #include <sstream>
 #include "../Menu/ErrorMessageState.h"
 #include "../Menu/MainMenuState.h"
-#include "../Engine/RNG.h"
-#include "../Interface/FpsCounter.h"
 #include "../Interface/Cursor.h"
 #include "../Engine/Options.h"
 #include "../Basescape/ManageAlienContainmentState.h"
@@ -77,7 +72,7 @@ namespace OpenXcom
  * Initializes all the elements in the Debriefing screen.
  * @param game Pointer to the core game.
  */
-DebriefingState::DebriefingState() : _region(0), _country(0), _noContainment(false), _manageContainment(false), _destroyBase(false), _positiveScore(true)
+DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(true), _noContainment(false), _manageContainment(false), _destroyBase(false)
 {
     _missionStatistics = new MissionStatistics();
 
@@ -590,11 +585,41 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
+	SavedGame *save = _game->getSavedGame();
+	SavedBattleGame *battle = save->getSavedBattle();
+	AlienDeployment *deployment = _game->getRuleset()->getDeployment(battle->getMissionType());
+
+	bool aborted = battle->isAborted();
+	bool success = !aborted || battle->allObjectivesDestroyed();
+	Craft* craft = 0;
+	std::vector<Craft*>::iterator craftIterator;
+	Base* base = 0;
+	std::string target;
+
+	int playerInExitArea = 0; // if this stays 0 the craft is lost...
+	int playersSurvived = 0; // if this stays 0 the craft is lost...
+	int playersUnconscious = 0;
+
+
 	_stats.push_back(new DebriefingStat("STR_ALIENS_KILLED", false));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_CORPSES_RECOVERED", false));
 	_stats.push_back(new DebriefingStat("STR_LIVE_ALIENS_RECOVERED", false));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_ARTIFACTS_RECOVERED", false));
-	_stats.push_back(new DebriefingStat("STR_ALIEN_BASE_CONTROL_DESTROYED", false));
+
+	std::string objectiveCompleteText, objectiveFailedText;
+	int objectiveCompleteScore = 0, objectiveFailedScore = 0;
+	if (deployment)
+	{
+		if (deployment->getObjectiveCompleteInfo(objectiveCompleteText, objectiveCompleteScore))
+		{
+			_stats.push_back(new DebriefingStat(objectiveCompleteText, false));
+		}
+		if (deployment->getObjectiveFailedInfo(objectiveFailedText, objectiveFailedScore))
+		{
+			_stats.push_back(new DebriefingStat(objectiveFailedText, false));
+		}
+	}
+
 	_stats.push_back(new DebriefingStat("STR_CIVILIANS_KILLED_BY_ALIENS", false));
 	_stats.push_back(new DebriefingStat("STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES", false));
 	_stats.push_back(new DebriefingStat("STR_CIVILIANS_SAVED", false));
@@ -609,22 +634,11 @@ void DebriefingState::prepareDebriefing()
 		_stats.push_back(new DebriefingStat((*i).second->name, true));
 	}
 
-	_stats.push_back(new DebriefingStat(_game->getRuleset()->getAlienFuel(), true));
-
-	SavedGame *save = _game->getSavedGame();
-	SavedBattleGame *battle = save->getSavedBattle();
 	bool aborted = battle->isAborted();
 	bool success = !aborted;
-	Craft* craft = 0;
-	std::vector<Craft*>::iterator craftIterator;
-	Base* base = 0;
 	_missionStatistics->time = *save->getTime();
 	_missionStatistics->type = battle->getMissionType();
-	std::string target;
-
-	int playerInExitArea = 0; // if this stays 0 the craft is lost...
-	int playersSurvived = 0; // if this stays 0 the craft is lost...
-	int playersUnconscious = 0;
+	_stats.push_back(new DebriefingStat(_game->getRuleset()->getAlienFuelName(), true));
 
 	for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
 	{
@@ -751,7 +765,7 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
-
+	
 	// mission site disappears (even when you abort)
 	for (std::vector<MissionSite*>::iterator i = save->getMissionSites()->begin(); i != save->getMissionSites()->end(); ++i)
 	{
@@ -818,29 +832,25 @@ void DebriefingState::prepareDebriefing()
 		{
 			_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
 			bool destroyAlienBase = true;
-			AlienDeployment *deployment = _game->getRuleset()->getDeployment(battle->getMissionType());
-			if (!deployment->getNextStage().empty())
+
+			if (aborted || playersSurvived == 0)
 			{
-				destroyAlienBase = false;
+				if (!battle->allObjectivesDestroyed())
+					destroyAlienBase = false;
 			}
-			else if (aborted || playersSurvived == 0)
+			
+			if (deployment && !deployment->getNextStage().empty())
 			{
 				_missionStatistics->alienRace = (*i)->getAlienRace();
-				for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
-				{
-					// get recoverable map data objects from the battlescape map
-					if (
-						battle->getTiles()[i]->getMapData(O_OBJECT) && battle->getTiles()[i]->getMapData(O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
-					{
-						destroyAlienBase = false;
-						break;
-					}
-				}
+				destroyAlienBase = false;
 			}
 			success = destroyAlienBase;
 			if (destroyAlienBase)
 			{
-				addStat("STR_ALIEN_BASE_CONTROL_DESTROYED", 1, 500);
+				if (objectiveCompleteText != "")
+				{
+					addStat(objectiveCompleteText, 1, objectiveCompleteScore);
+				}
 				// Take care to remove supply missions for this base.
 				std::for_each(save->getAlienMissions().begin(), save->getAlienMissions().end(),
 							ClearAlienBase(*i));
@@ -954,14 +964,32 @@ void DebriefingState::prepareDebriefing()
 						{
 							BattleItem *ammoItem = (*j)->getItem("STR_RIGHT_HAND")->getAmmoItem();
 							if (!tankRule->getCompatibleAmmo()->empty() && ammoItem != 0 && ammoItem->getAmmoQuantity() > 0)
-								base->getItems()->addItem(tankRule->getCompatibleAmmo()->front(), ammoItem->getAmmoQuantity());
+							{
+								int total = ammoItem->getAmmoQuantity();
+
+								if (tankRule->getClipSize()) // meaning this tank can store multiple clips
+								{
+									total /= ammoItem->getRules()->getClipSize();
+								}
+
+								base->getItems()->addItem(tankRule->getCompatibleAmmo()->front(), total);
+							}
 						}
 						if ((*j)->getItem("STR_LEFT_HAND"))
 						{
 							RuleItem *secondaryRule = (*j)->getItem("STR_LEFT_HAND")->getRules();
 							BattleItem *ammoItem = (*j)->getItem("STR_LEFT_HAND")->getAmmoItem();
 							if (!secondaryRule->getCompatibleAmmo()->empty() && ammoItem != 0 && ammoItem->getAmmoQuantity() > 0)
-								base->getItems()->addItem(secondaryRule->getCompatibleAmmo()->front(), ammoItem->getAmmoQuantity());
+							{
+								int total = ammoItem->getAmmoQuantity();
+
+								if (secondaryRule->getClipSize()) // meaning this tank can store multiple clips
+								{
+									total /= ammoItem->getRules()->getClipSize();
+								}
+
+								base->getItems()->addItem(secondaryRule->getCompatibleAmmo()->front(), total);
+							}
 						}
 					}
 				}
@@ -1063,6 +1091,10 @@ void DebriefingState::prepareDebriefing()
 		else
 		{
 			_txtTitle->setText(tr("STR_ALIENS_DEFEATED"));
+			if (objectiveCompleteText != "")
+			{
+				addStat(objectiveCompleteText, 1, objectiveCompleteScore);
+			}
 		}
 
 		if (!aborted)
@@ -1116,6 +1148,10 @@ void DebriefingState::prepareDebriefing()
 		else
 		{
 			_txtTitle->setText(tr("STR_TERROR_CONTINUES"));
+			if (objectiveFailedText != "")
+			{
+				addStat(objectiveFailedText, 1, objectiveFailedScore);
+			}
 		}
 
 		if (playersSurvived > 0 && !_destroyBase)
@@ -1323,10 +1359,10 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 {
 	for (std::vector<BattleItem*>::iterator it = from->begin(); it != from->end(); ++it)
 	{
-		if ((*it)->getRules()->getName() == _game->getRuleset()->getAlienFuel())
+		if ((*it)->getRules()->getName() == _game->getRuleset()->getAlienFuelName())
 		{
 			// special case of an item counted as a stat
-			addStat(_game->getRuleset()->getAlienFuel(), 50, 5);
+			addStat(_game->getRuleset()->getAlienFuelName(), _game->getRuleset()->getAlienFuelQuantity(), 5);
 		}
 		else
 		{
@@ -1337,15 +1373,24 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 					addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getUnit()->getValue());
 					base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape(), 1);
 				}
-				else if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+				else if ((*it)->getRules()->getBattleType() == BT_CORPSE)
 				{
-					if ((*it)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
+					// it's unconscious
+					if ((*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS ||
+						// or it's in timeout because it's unconscious from the previous stage
+						// units can be in timeout and alive, and we assume they flee.
+						((*it)->getUnit()->getStatus() == STATUS_IGNORE_ME &&
+						(*it)->getUnit()->getHealth() > 0 &&
+						(*it)->getUnit()->getHealth() < (*it)->getUnit()->getStunlevel()))
 					{
-						recoverAlien((*it)->getUnit(), base);
-					}
-					else if ((*it)->getUnit()->getOriginalFaction() == FACTION_NEUTRAL)
-					{
-						addStat("STR_CIVILIANS_SAVED", 1, (*it)->getUnit()->getValue());
+						if ((*it)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
+						{
+							recoverAlien((*it)->getUnit(), base);
+						}
+						else if ((*it)->getUnit()->getOriginalFaction() == FACTION_NEUTRAL)
+						{
+							addStat("STR_CIVILIANS_SAVED", 1, (*it)->getUnit()->getValue());
+						}
 					}
 				}
 				// only "recover" unresearched items

@@ -17,7 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ResourcePack.h"
-#include <SDL_mixer.h>
+#include <sstream>
 #include "../Engine/Palette.h"
 #include "../Engine/Font.h"
 #include "../Engine/Surface.h"
@@ -151,7 +151,7 @@ Music *ResourcePack::getMusic(const std::string &name) const
 	else
 	{
 		std::map<std::string, Music*>::const_iterator i = _musics.find(name);
-		if (_musics.end() != i) return i->second; else return 0;
+		if (_musics.end() != i) return i->second; else return _muteMusic;
 	}
 }
 
@@ -176,7 +176,7 @@ Music *ResourcePack::getRandomMusic(const std::string &name) const
 				music.push_back(i->second);
 			}
 		}
-		if (_musics.empty())
+		if (music.empty())
 			return _muteMusic;
 		else
 			return music[RNG::seedless(0, music.size()-1)];
@@ -186,28 +186,33 @@ Music *ResourcePack::getRandomMusic(const std::string &name) const
 /**
  * Plays the specified track if it's not already playing.
  * @param name Name of the music.
- * @param random Pick a random track?
+ * @param id Id of the music, 0 for random.
  */
-void ResourcePack::playMusic(const std::string &name, bool random)
+void ResourcePack::playMusic(const std::string &name, int id)
 {
 	if (!Options::mute && _playingMusic != name)
 	{
 		int loop = -1;
-		_playingMusic = name;
-
 		// hacks
-		if (name == "GMGEO1")
-			_playingMusic = "GMGEO";
-		else if (!Options::musicAlwaysLoop && (name == "GMSTORY" || name == "GMWIN" || name == "GMLOSE"))
+		if (!Options::musicAlwaysLoop &&
+				(name == "GMSTORY" || name == "GMWIN" || name == "GMLOSE"))
 			loop = 0;
 
-		if (random)
+		Music *music = 0;
+		if (id == 0)
 		{
-			getRandomMusic(name)->play(loop);
+			music = getRandomMusic(name);
 		}
 		else
 		{
-			getMusic(name)->play(loop);
+			std::ostringstream ss;
+			ss << name << id;
+			music = getMusic(ss.str());
+		}
+		music->play(loop);
+		if (music != _muteMusic)
+		{
+			_playingMusic = name;			
 		}
 	}
 }

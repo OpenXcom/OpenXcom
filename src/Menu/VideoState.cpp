@@ -31,7 +31,6 @@
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleVideo.h"
-#include "MainMenuState.h"
 #include "CutsceneState.h"
 #include "../Interface/Cursor.h"
 

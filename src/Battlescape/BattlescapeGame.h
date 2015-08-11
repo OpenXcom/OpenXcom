@@ -194,6 +194,8 @@ public:
 	void cleanupDeleted();
 	/// Get the depth of the saved game.
 	const int getDepth() const;
+	/// Sets up a mission complete notification.
+	void missionComplete();
 };
 
 }

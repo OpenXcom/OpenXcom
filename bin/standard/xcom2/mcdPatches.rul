@@ -1,0 +1,571 @@
+MCDPatches: #will never be done
+# pathFinding Hacks.
+# bigWall 1 = regular bigwall, no movement allowed.
+# bigWall 2 = can walk by north-east/south-west |
+# bigWall 3 = can walk by north-west/south-east -
+# bigWall 4 = acts as west wall
+# bigWall 5 = acts as north wall
+# bigWall 6 = acts as east wall
+# bigWall 7 = acts as south wall
+# bigWall 8 = acts as east and south wall
+# bigWall 9 = acts as west and north wall
+  - type: ATLANTIS
+    data:
+      - MCDIndex: 47
+        LOFTS: [4,4,4,4,5,5,63,63,63,6,6,6]
+      - MCDIndex: 48
+        LOFTS: [4,4,4,4,5,5,5,63,63,6,6,6]
+      - MCDIndex: 62
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+      - MCDIndex: 63
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+  - type: ASUNK
+    data:
+      - MCDIndex: 31
+        bigWall: 0
+  - type: CARGO1
+    data:
+      - MCDIndex: 10
+        bigWall: 6
+      - MCDIndex: 12
+        bigWall: 2
+      - MCDIndex: 13
+        bigWall: 6
+      - MCDIndex: 14
+        LOFTS: [44,0,43,42,0,14,0,0,0,0,0,0]
+      - MCDIndex: 15
+        LOFTS: [0,0,0,0,0,0,44,0,43,42,0,14]
+      - MCDIndex: 20
+        LOFTS: [47,0,46,45,0,13,0,0,0,0,0,0]
+      - MCDIndex: 21
+        LOFTS: [0,0,0,0,0,0,47,0,46,45,0,13]
+      - MCDIndex: 31
+        bigWall: 2
+  - type: CARGO3
+    data:
+      - MCDIndex: 0
+        LOFTS: [0,0,0,0,0,0,47,0,46,45,0,13]
+      - MCDIndex: 1
+        LOFTS: [47,0,46,45,0,13,0,0,0,0,0,0]
+      - MCDIndex: 2
+        LOFTS: [0,0,0,0,0,0,44,0,43,42,0,14]
+      - MCDIndex: 3
+        LOFTS: [44,0,43,42,0,14,0,0,0,0,0,0]
+  - type: CRYPT1
+    data:
+      - MCDIndex: 12
+        bigWall: 9
+  - type: GRUNGE1
+    data:
+      - MCDIndex: 9
+        bigWall: 2
+      - MCDIndex: 11
+        bigWall: 9
+      - MCDIndex: 12
+        bigWall: 3
+      - MCDIndex: 14
+        bigWall: 3
+      - MCDIndex: 15
+        bigWall: 2
+  - type: GRUNGE3
+    data:
+      - MCDIndex: 3
+        bigWall: 2
+  - type: GRUNGE4
+    data:
+      - MCDIndex: 27
+        stopLOS: true
+        bigWall: 1
+      - MCDIndex: 28
+        bigWall: 2
+      - MCDIndex: 29
+        bigWall: 3
+      - MCDIndex: 30
+        bigWall: 3
+      - MCDIndex: 31
+        bigWall: 2
+  - type: HAMMER
+    data:
+      - MCDIndex: 2
+        bigWall: 0
+        stopLOS: false
+        footstepSound: -1
+      - MCDIndex: 5
+        bigWall: 0
+        stopLOS: false
+        footstepSound: -1
+      - MCDIndex: 8
+        bigWall: 6
+      - MCDIndex: 10
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -16
+      - MCDIndex: 11
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -16
+      - MCDIndex: 12
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -16
+      - MCDIndex: 13
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -16
+      - MCDIndex: 14
+        bigWall: 7
+        terrainHeight: 0
+        LOFTS: [44,44,44,44,44,44,0,0,0,0,0,0]
+      - MCDIndex: 25
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -20
+      - MCDIndex: 26
+        bigWall: 7
+      - MCDIndex: 27
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -20
+      - MCDIndex: 29
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -20
+      - MCDIndex: 31
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -16
+      - MCDIndex: 32
+        bigWall: 7
+      - MCDIndex: 33
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -16
+      - MCDIndex: 34
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -16
+      - MCDIndex: 35
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -16
+  - type: LEVIATH
+    data:
+      - MCDIndex: 2
+        bigWall: 0
+        TUWalk: 0
+        TUFly: 0
+        TUSlide: 0
+        stopLOS: false
+        footstepSound: -1
+      - MCDIndex: 3
+        bigWall: 2
+      - MCDIndex: 9
+        bigWall: 3
+      - MCDIndex: 10
+        bigWall: 0
+        TUWalk: 0
+        TUFly: 0
+        TUSlide: 0
+        stopLOS: false
+        footstepSound: -1
+      - MCDIndex: 11
+        bigWall: 6
+      - MCDIndex: 13
+        TUWalk: 0
+        TUFly: 0
+        TUSlide: 0
+      - MCDIndex: 14
+        TUWalk: 0
+        TUFly: 0
+        TUSlide: 0
+      - MCDIndex: 15
+        TUWalk: 0
+        TUFly: 0
+        TUSlide: 0
+      - MCDIndex: 16
+        TUWalk: 0
+        TUFly: 0
+        TUSlide: 0
+      - MCDIndex: 22
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+      - MCDIndex: 23
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+      - MCDIndex: 24
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+      - MCDIndex: 25
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+      - MCDIndex: 28
+        stopLOS: false
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+      - MCDIndex: 29
+        stopLOS: false
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+      - MCDIndex: 30
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -18
+      - MCDIndex: 32
+        stopLOS: false
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+      - MCDIndex: 34
+        stopLOS: false
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -10
+      - MCDIndex: 35
+        stopLOS: false
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -10
+      - MCDIndex: 36
+        stopLOS: false
+        bigWall: 0
+      - MCDIndex: 38
+        stopLOS: false
+        bigWall: 0
+      - MCDIndex: 39
+        stopLOS: false
+      - MCDIndex: 40
+        stopLOS: false
+        bigWall: 0
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -10
+      - MCDIndex: 41
+        stopLOS: false
+        bigWall: 0
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -10
+      - MCDIndex: 42
+        stopLOS: false
+        terrainHeight: -10
+      - MCDIndex: 45
+        stopLOS: false
+        terrainHeight: -10
+      - MCDIndex: 46
+        stopLOS: false
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -10
+  - type: LINERA
+    data:
+      - MCDIndex: 14
+        LOFTS: [44,0,43,42,0,14,0,0,0,0,0,0]
+      - MCDIndex: 15
+        LOFTS: [0,0,0,0,0,0,44,0,43,42,0,14]
+      - MCDIndex: 20
+        LOFTS: [47,0,46,45,0,13,0,0,0,0,0,0]
+      - MCDIndex: 21
+        LOFTS: [0,0,0,0,0,0,47,0,46,45,0,13]
+      - MCDIndex: 30
+        bigWall: 3
+      - MCDIndex: 31
+        bigWall: 2
+      - MCDIndex: 32
+        bigWall: 3
+      - MCDIndex: 33
+        bigWall: 3
+      - MCDIndex: 34
+        bigWall: 2
+      - MCDIndex: 35
+        bigWall: 2
+      - MCDIndex: 37
+        stopLOS: false
+        bigWall: 0
+      - MCDIndex: 41
+        bigWall: 0
+      - MCDIndex: 46
+        footstepSound: -1
+      - MCDIndex: 47
+        footstepSound: -1
+      - MCDIndex: 48
+        footstepSound: -1
+      - MCDIndex: 65
+        bigWall: 6
+      - MCDIndex: 66
+        bigWall: 6
+      - MCDIndex: 78
+        footstepSound: -1
+      - MCDIndex: 79
+        footstepSound: -1
+      - MCDIndex: 80
+        footstepSound: -1
+      - MCDIndex: 92
+        footstepSound: -1
+  - type: LINERB
+    data:
+      - MCDIndex: 1
+        noFloor: false
+        TUFly: 4
+        terrainHeight: 0
+      - MCDIndex: 8
+        bigWall: 2
+      - MCDIndex: 21
+        noFloor: true
+        TUWalk: 4
+        TUSlide: 4
+        TUFly: 4
+  - type: MSUNK2
+    data:
+      - MCDIndex: 2
+        bigWall: 6
+      - MCDIndex: 5
+        bigWall: 2
+      - MCDIndex: 6
+        bigWall: 2
+      - MCDIndex: 8
+        bigWall: 6
+      - MCDIndex: 9
+        bigWall: 6
+      - MCDIndex: 10
+        bigWall: 3
+  - type: ORGANIC1
+    data:
+      - MCDIndex: 33
+        bigWall: 2
+      - MCDIndex: 34
+        bigWall: 3
+      - MCDIndex: 36
+        bigWall: 3
+      - MCDIndex: 73
+        bigWall: 2
+      - MCDIndex: 74
+        bigWall: 2
+      - MCDIndex: 75
+        bigWall: 3
+      - MCDIndex: 76
+        bigWall: 3
+      - MCDIndex: 77
+        bigWall: 3
+  - type: PIPES
+    data:
+      - MCDIndex: 32
+        LOFTS: [44,0,43,42,0,14,0,0,0,0,0,0]
+      - MCDIndex: 33
+        LOFTS: [109,109,109,109,109,109,44,0,43,42,0,14]
+      - MCDIndex: 34
+        LOFTS: [109,109,109,109,109,109,109,67,0,94,0,14]
+      - MCDIndex: 36
+        LOFTS: [109,109,109,109,109,109,47,0,46,45,0,13]
+      - MCDIndex: 37
+        LOFTS: [47,0,46,45,0,13,0,0,0,0,0,0]
+      - MCDIndex: 38
+        LOFTS: [109,109,109,109,109,109,109,97,0,93,66,13]
+      - MCDIndex: 51
+        bigWall: 4
+      - MCDIndex: 52
+        bigWall: 4
+      - MCDIndex: 53
+        bigWall: 5
+      - MCDIndex: 54
+        bigWall: 5
+  - type: PLANE
+    data:
+      - MCDIndex: 11
+        LOFTS: [44,44,44,43,43,43,42,42,42,14,14,14]
+      - MCDIndex: 12
+        LOFTS: [44,44,44,43,75,75,42,42,41,41,41,14]
+      - MCDIndex: 17
+        LOFTS: [23,23,106,106,106,23,23,23,23,23,23,23]
+      - MCDIndex: 20
+        LOFTS: [10,10,113,113,113,113,10,10,10,10,10,10]
+      - MCDIndex: 24
+        LOFTS: [83,0,0,0,0,0,0,0]
+      - MCDIndex: 25
+        LOFTS: [23,23,44,43,43,69,69,42,42,14,12,12]
+      - MCDIndex: 26
+        LOFTS: [44,105,105,75,75,75,71,71,102,94,94,12]
+      - MCDIndex: 28
+        LOFTS: [12,12,94,94,0,75,75,71,105,106,44,44]
+  - type: PORT01
+    data:
+      - MCDIndex: 19
+        TUWalk: 4
+        TUFly: 4
+      - MCDIndex: 62
+        LOFTS: [44,38,43,42,38,14,0,0,0,0,0,0]
+      - MCDIndex: 64
+        LOFTS: [85,85,85,85,85,85,44,48,43,42,38,14]
+      - MCDIndex: 67
+        LOFTS: [85,85,85,85,85,85,47,37,46,45,37,13]
+      - MCDIndex: 69
+        LOFTS: [47,37,46,45,37,13,0,0,0,0,0,0]
+  - type: TRITON
+    data:
+      - MCDIndex: 0
+        bigWall: 6
+      - MCDIndex: 1
+        bigWall: 7
+      - MCDIndex: 3
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -18
+      - MCDIndex: 7
+        bigWall: 7
+        terrainHeight: 0
+        LOFTS: [44,44,44,44,44,44,0,0,0,0,0,0]
+      - MCDIndex: 13
+        LOFTS: [6,6,6,6,6,6,6,6,6,78,78,0]
+      - MCDIndex: 18
+        bigWall: 4
+        LOFTS: [13,13,13,13,13,0,0,0,0,0,0,0]
+      - MCDIndex: 19
+        bigWall: 0
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -10
+      - MCDIndex: 20
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -16
+      - MCDIndex: 21
+        bigWall: 0
+        terrainHeight: -12
+      - MCDIndex: 22
+        bigWall: 0
+      - MCDIndex: 24
+        bigWall: 6
+        LOFTS: [26,26,26,26,26,0,0,0,0,0,0,0]
+      - MCDIndex: 25
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -10
+      - MCDIndex: 26
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        terrainHeight: -16
+      - MCDIndex: 27
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+        LOFTS: [6,6,6,6,6,6,19,17,15,13,11,9]
+      - MCDIndex: 28
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+      - MCDIndex: 29
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+      - MCDIndex: 30
+        TUWalk: 4
+        TUFly: 4
+        TUSlide: 4
+      - MCDIndex: 31
+        bigWall: 7
+        terrainHeight: 0
+  - type: UEXT3
+    data:
+      - MCDIndex: 0
+        bigWall: 5
+      - MCDIndex: 1
+        bigWall: 2
+      - MCDIndex: 2
+        bigWall: 4
+      - MCDIndex: 3
+        footstepSound: -1
+      - MCDIndex: 4
+        footstepSound: -1
+      - MCDIndex: 6
+        bigWall: 3
+      - MCDIndex: 7
+        bigWall: 3
+      - MCDIndex: 8
+        bigWall: 5
+      - MCDIndex: 9
+        bigWall: 2
+      - MCDIndex: 10
+        bigWall: 4
+      - MCDIndex: 12
+        bigWall: 2
+      - MCDIndex: 14
+        bigWall: 5
+      - MCDIndex: 15
+        bigWall: 2
+      - MCDIndex: 16
+        bigWall: 4
+      - MCDIndex: 19
+        bigWall: 5
+      - MCDIndex: 20
+        bigWall: 2
+      - MCDIndex: 21
+        bigWall: 4
+  - type: UINT1
+    data:
+      - MCDIndex: 17
+        bigWall: 2
+      - MCDIndex: 19
+        bigWall: 3
+      - MCDIndex: 20
+        bigWall: 0
+      - MCDIndex: 21
+        bigWall: 3
+  - type: UINT3
+    data:
+      - MCDIndex: 9
+        bigWall: 0
+        footstepSound: -1
+      - MCDIndex: 10
+        bigWall: 0
+        footstepSound: -1
+      - MCDIndex: 11
+        bigWall: 0
+        footstepSound: -1
+      - MCDIndex: 12
+        bigWall: 0
+        footstepSound: -1
+  - type: XBASES01
+    data:
+      - MCDIndex: 0
+        bigWall: 4
+      - MCDIndex: 6
+        bigWall: 6
+      - MCDIndex: 9
+        bigWall: 6
+  - type: XBASES02
+    data:
+      - MCDIndex: 8
+        bigWall: 9
+      - MCDIndex: 9
+        bigWall: 9

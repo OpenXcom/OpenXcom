@@ -20,7 +20,6 @@
 #include <cmath>
 #include <sstream>
 #include <SDL_mixer.h>
-#include "Adlib/adlplayer.h"
 #include "State.h"
 #include "Screen.h"
 #include "Sound.h"
@@ -32,10 +31,9 @@
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/SavedGame.h"
-#include "Palette.h"
+#include "../Savegame/SavedBattleGame.h"
 #include "Action.h"
 #include "Exception.h"
-#include "InteractiveSurface.h"
 #include "Options.h"
 #include "CrossPlatform.h"
 #include "FileMap.h"
@@ -345,8 +343,15 @@ void Game::setVolume(int sound, int music, int ui)
 		{
 			sound = volumeExponent(sound) * (double)SDL_MIX_MAXVOLUME;
 			Mix_Volume(-1, sound);
-			// channel 3: reserved for ambient sound effect.
-			Mix_Volume(3, sound / 2);
+			if (_save && _save->getSavedBattle())
+			{
+				Mix_Volume(3, sound * _save->getSavedBattle()->getAmbientVolume());
+			}
+			else
+			{
+				// channel 3: reserved for ambient sound effect.
+				Mix_Volume(3, sound / 2);
+			}
 		}
 		if (music >= 0)
 		{

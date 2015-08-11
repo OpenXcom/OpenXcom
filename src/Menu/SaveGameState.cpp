@@ -20,18 +20,15 @@
 #include <sstream>
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
-#include "../Engine/Action.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Interface/Text.h"
 #include "ErrorMessageState.h"
 #include "MainMenuState.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {

@@ -120,7 +120,7 @@ static void _mapFiles(const std::string &modId, const std::string &basePath,
 		for (std::set<std::string>::iterator i = rulesetFiles.begin(); i != rulesetFiles.end(); ++i)
 		{
 			std::string fullpath = fullDir + "/" + *i;
-			Log(LOG_DEBUG) << "  recording ruleset: " << fullpath;
+			Log(LOG_VERBOSE) << "  recording ruleset: " << fullpath;
 			_rulesets.front().second.push_back(fullpath);
 		}
 	}
@@ -132,13 +132,13 @@ static void _mapFiles(const std::string &modId, const std::string &basePath,
 		if (_canonicalize(*i) == "metadata.yml" || rulesetFiles.find(*i) != rulesetFiles.end())
 		{
 			// no need to map mod metadata files or ruleset files
-			Log(LOG_DEBUG) << "  ignoring non-resource file: " << fullpath;
+			Log(LOG_VERBOSE) << "  ignoring non-resource file: " << fullpath;
 			continue;
 		}
 
 		if (CrossPlatform::folderExists(fullpath))
 		{
-			Log(LOG_DEBUG) << "  recursing into: " << fullpath;
+			Log(LOG_VERBOSE) << "  recursing into: " << fullpath;
 			// allow old mod directory format -- if the top-level subdir
 			// is named "Ruleset" and no top-level ruleset files were found,
 			// record ruleset files in that subdirectory, otherwise ignore them
@@ -152,11 +152,11 @@ static void _mapFiles(const std::string &modId, const std::string &basePath,
 		std::string canonicalRelativeFilePath = _canonicalize(_combinePath(relPath, *i));
 		if (_resources.insert(std::pair<std::string, std::string>(canonicalRelativeFilePath, fullpath)).second)
 		{
-			Log(LOG_DEBUG) << "  mapped resource: " << canonicalRelativeFilePath << " -> " << fullpath;
+			Log(LOG_VERBOSE) << "  mapped resource: " << canonicalRelativeFilePath << " -> " << fullpath;
 		}
 		else
 		{
-			Log(LOG_DEBUG) << "  resource already mapped by higher-priority mod; ignoring: " << fullpath;
+			Log(LOG_VERBOSE) << "  resource already mapped by higher-priority mod; ignoring: " << fullpath;
 		}
 
 		// populate vdir map
@@ -168,7 +168,7 @@ static void _mapFiles(const std::string &modId, const std::string &basePath,
 		}
 		if (_vdirs.at(canonicalRelativePath).insert(canonicalFile).second)
 		{
-			Log(LOG_DEBUG) << "  mapped file to virtual directory: " << canonicalRelativePath << " -> " << canonicalFile;
+			Log(LOG_VERBOSE) << "  mapped file to virtual directory: " << canonicalRelativePath << " -> " << canonicalFile;
 		}
 	}
 }
@@ -182,7 +182,7 @@ void clear()
 
 void load(const std::string &modId, const std::string &path, bool ignoreRulesets)
 {
-	Log(LOG_INFO) << "  mapping resources in: " << path;
+	Log(LOG_VERBOSE) << "  mapping resources in: " << path;
 	_mapFiles(modId, path, "", ignoreRulesets);
 }
 

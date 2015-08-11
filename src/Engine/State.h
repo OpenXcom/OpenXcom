@@ -35,6 +35,7 @@ class Surface;
 class InteractiveSurface;
 class Action;
 class LocalizedText;
+class SavedBattleGame;
 
 /**
  * A game state that receives user input and reacts accordingly.
@@ -64,7 +65,7 @@ public:
 	/// Cleans up the state.
 	virtual ~State();
 	/// Set interface rules.
-	void setInterface(const std::string &s, bool alterPal = false, bool battlescape = false);
+	void setInterface(const std::string &s, bool alterPal = false, SavedBattleGame *battleGame = 0);
 	/// Adds a child element to the state.
 	void add(Surface *surface);
 	/// Adds a child element to the state.

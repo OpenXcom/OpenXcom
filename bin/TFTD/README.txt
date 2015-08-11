@@ -5,14 +5,17 @@ user folder (where your OpenXcom savegames are) and copy your TFTD subfolders
 there.
 
 After the copy, this directory should contain at least the following items:
-  ANIMS (optional -- not all TFTD versions have this directory)
-  FLOP_INT
+  ANIMS*
+  FLOP_INT*
   GEODATA
   GEOGRAPH
   MAPS
-  MISSDAT
   ROUTES
   SOUND
   TERRAIN
   UFOGRAPH
   UNITS
+*optional
+
+If you want to import your old games, copy the GAME_* folders to the
+directory where your OpenXcom saves are.

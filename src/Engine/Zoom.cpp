@@ -19,7 +19,6 @@
 
 #include "Zoom.h"
 
-#include "Exception.h"
 #include "Surface.h"
 #include "Logger.h"
 #include "Options.h"
@@ -32,7 +31,6 @@
 
 // HQX
 
-#include "Scalers/common.h"
 #include "Scalers/hqx.h"
 
 // xBRZ

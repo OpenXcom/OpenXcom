@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <assert.h>
 #include "WeightedOptions.h"
 #include "../Engine/RNG.h"
 
@@ -133,4 +132,17 @@ YAML::Node WeightedOptions::save() const
 	return node;
 }
 
+/**
+ * Get the list of strings associated with these weights.
+ * @return the list of strings in these weights.
+ */
+std::vector<std::string> WeightedOptions::getNames()
+{
+	std::vector<std::string> names;
+	for (std::map<std::string, size_t>::const_iterator ii = _choices.begin(); ii != _choices.end(); ++ii)
+	{
+		names.push_back((*ii).first);
+	}
+	return names;
+}
 }

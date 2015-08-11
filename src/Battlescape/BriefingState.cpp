@@ -20,9 +20,7 @@
 #include "BattlescapeState.h"
 #include "AliensCrashState.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
-#include "../Engine/Music.h"
-#include "../Engine/Palette.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
 #include "../Interface/Window.h"
@@ -37,7 +35,6 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleUfo.h"
-#include <sstream>
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
 #include "../Menu/CutsceneState.h"

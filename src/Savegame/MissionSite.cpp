@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "MissionSite.h"
-#include <sstream>
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleAlienMission.h"
 #include "../Ruleset/AlienDeployment.h"
@@ -28,7 +27,7 @@ namespace OpenXcom
 /**
  * Initializes a mission site.
  */
-MissionSite::MissionSite(const RuleAlienMission *rules, const AlienDeployment *deployment) : Target(), _rules(rules), _deployment(deployment), _id(0), _texture(-1), _secondsRemaining(0), _inBattlescape(false)
+MissionSite::MissionSite(const RuleAlienMission *rules, const AlienDeployment *deployment) : Target(), _rules(rules), _deployment(deployment), _id(0), _texture(-1), _secondsRemaining(0), _inBattlescape(false), _detected(false)
 {
 }
 
@@ -51,6 +50,7 @@ void MissionSite::load(const YAML::Node &node)
 	_secondsRemaining = node["secondsRemaining"].as<size_t>(_secondsRemaining);
 	_race = node["race"].as<std::string>(_race);
 	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
+	_detected = node["detected"].as<bool>(_detected);
 }
 
 /**
@@ -69,6 +69,7 @@ YAML::Node MissionSite::save() const
 	node["race"] = _race;
 	if (_inBattlescape)
 		node["inBattlescape"] = _inBattlescape;
+	node["detected"] = _detected;
 	return node;
 }
 
@@ -136,6 +137,8 @@ std::wstring MissionSite::getName(Language *lang) const
  */
 int MissionSite::getMarker() const
 {
+	if (!_detected)
+		return -1;
 	if (_deployment->getMarkerIcon() == -1)
 		return 5;
 	return _deployment->getMarkerIcon();
@@ -231,4 +234,21 @@ void MissionSite::setCity(const std::string &city)
 	_city = city;
 }
 
+/**
+ * Gets the detection state for this mission site.
+ * used for popups of sites spawned directly rather than by UFOs.
+ * @return whether or not this site has been detected.
+ */
+bool MissionSite::getDetected()
+{
+	return _detected;
+}
+
+/**
+ * Sets the mission site's detection state.
+ * @param detected whether we want this site to show on the geoscape or not.
+ */void MissionSite::setDetected(bool detected)
+{
+	_detected = detected;
+}
 }

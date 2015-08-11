@@ -1,0 +1,95 @@
+# X-COM 2 (Terror From The Deep) ruleset
+# For documentation on these values, see http://ufopaedia.org/index.php?title=Rulesets_(OpenXcom)
+
+startingTime: #done
+  second: 0
+  minute: 0
+  hour: 12
+  weekday: 6
+  day: 1
+  month: 1
+  year: 2040
+
+costSoldier: 20000
+costEngineer: 25000
+costScientist: 30000
+timePersonnel: 72
+initialFunding: 6000
+alienFuel: [STR_ZRBITE, 50]
+turnAIUseGrenade: 2
+turnAIUseBlaster: 2
+fontName: Font.dat
+difficultyCoefficient: [0, 1, 2, 4, 6]
+
+constants: #done
+  - doorSound: 47
+  - slidingDoorSound: 46
+  - slidingDoorClose: -1
+  - smallExplosion: 30
+  - largeExplosion: 29
+  - itemDrop: 44
+  - itemThrow: 42
+  - itemReload: 45
+  - walkOffset: 0
+  - flyingSound: 66
+  - maleScream: [48, 48, 48]
+  - femaleScream: [48, 48, 48]
+  - buttonPress: 0
+  - windowPopup: [1, 1, 1]
+  - ufoFire: 5
+  - ufoHit: 4
+  - ufoExplode: 3
+  - ufoCrash: 2
+  - interceptorHit: 2
+  - interceptorExplode: 2
+  - explosionOffset: 8
+  - smokeOffset: 56
+  - underwaterSmokeOffset: 8
+  - basescapeCursor: 42
+  - graphsCursor: 144
+  - goodDebriefingMusic: GMDEBGOO
+  - badDebriefingMusic: GMDEBPOR
+
+soundDefs: #done: double check explosions.
+  - type: GEO.CAT
+    file: SAMPLE.CAT
+    sounds:
+    # UI sounds: press and popup
+      - 120
+      - 98
+    # ufo hit interceptor/ufo crash/interceptor crash, ufo explode, interceptor hit ufo, ufo fire
+      - 27
+      - 28
+      - 31
+      - 37 
+    # craft weapon sounds: ajax, dup, cannon, pwt, gauss, plasma
+      - 14
+      - 15
+      - 33
+      - 97
+      - 37
+      - 18 
+    # base defenses: torpedo, gauss, sonic, pwt
+      - 13
+      - 14
+      - 15
+      - 24
+  - type: BATTLE.CAT
+    file: SAMPLE.CAT
+    soundRanges:
+      - [49, 96]
+      - [99, 117]
+    sounds: [122]
+  - type: BATTLE2.CAT
+    file: SAMPLE.CAT
+    soundRanges:
+      - [0, 47]
+      - [99, 117]
+    sounds: [48]
+
+transparencyLUTs: #done
+  - colors: 
+      - [  8,  8, 12, 2 ] # "white"
+      - [ 16,  8,  0, 2 ] # orange
+      - [  0, 12, 12, 2 ] # cyan
+      - [  4, 16,  4, 2 ] # green

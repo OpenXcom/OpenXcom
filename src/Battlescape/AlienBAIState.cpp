@@ -21,7 +21,6 @@
 #include <climits>
 #include <algorithm>
 #include "AlienBAIState.h"
-#include "ProjectileFlyBState.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Node.h"
@@ -36,7 +35,6 @@
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Ruleset/Armor.h"
-#include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 
@@ -145,7 +143,7 @@ void AlienBAIState::think(BattleAction *action)
  	action->type = BA_RETHINK;
 	action->actor = _unit;
 	action->weapon = _unit->getMainHandWeapon();
-	_attackAction->diff = (int)(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
+	_attackAction->diff = _save->getBattleState()->getGame()->getSavedGame()->getDifficultyCoefficient();
 	_attackAction->actor = _unit;
 	_attackAction->weapon = action->weapon;
 	_attackAction->number = action->number;
@@ -1505,7 +1503,7 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 	}
 	if (diff == -1)
 	{
-		diff = (int)(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
+		diff = _save->getBattleState()->getGame()->getSavedGame()->getDifficultyCoefficient();
 	}
 	int distance = _save->getTileEngine()->distance(attackingUnit->getPosition(), targetPos);
 	int injurylevel = attackingUnit->getBaseStats()->health - attackingUnit->getHealth();

@@ -21,13 +21,10 @@
 #include "BattlescapeState.h"
 #include "Explosion.h"
 #include "TileEngine.h"
-#include "UnitDieBState.h"
 #include "Map.h"
 #include "Camera.h"
-#include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
-#include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
@@ -74,7 +71,7 @@ void ExplosionBState::init()
 		_power = _item->getRules()->getPower();
 
 		// this usually only applies to melee, but as a concession for modders i'll leave it here in case they wanna make bows or something.
-		if (_item->getRules()->isStrengthApplied())
+		if (_item->getRules()->isStrengthApplied() && _unit)
 		{
 			_power += _unit->getBaseStats()->strength;
 		}
@@ -154,8 +151,13 @@ void ExplosionBState::init()
 		{
 			anim = _item->getRules()->getMeleeAnimation();
 		}
-		Explosion *explosion = new Explosion(_center, anim, 0, false, _cosmetic);
-		_parent->getMap()->getExplosions()->push_back(explosion);
+
+		if (anim != -1)
+		{
+			Explosion *explosion = new Explosion(_center, anim, 0, false, _cosmetic);
+			_parent->getMap()->getExplosions()->push_back(explosion);
+		}
+
 		_parent->getMap()->getCamera()->setViewLevel(_center.z / 24);
 
 		BattleUnit *target = t->getUnit();
@@ -179,6 +181,9 @@ void ExplosionBState::think()
 {
 	if (!_parent->getMap()->getBlastFlash())
 	{
+		if (_parent->getMap()->getExplosions()->empty())
+			explode();
+
 		for (std::list<Explosion*>::iterator i = _parent->getMap()->getExplosions()->begin(); i != _parent->getMap()->getExplosions()->end();)
 		{
 			if (!(*i)->animate())

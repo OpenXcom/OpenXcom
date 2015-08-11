@@ -39,6 +39,7 @@ private:
 	int _sprite, _sound, _damage, _range, _accuracy, _reloadCautious, _reloadStandard, _reloadAggressive, _ammoMax, _rearmRate, _projectileSpeed;
 	CraftWeaponProjectileType _projectileType;
 	std::string _launcher, _clip;
+	bool _underwaterOnly;
 public:
 	/// Creates a blank craft weapon ruleset.
 	RuleCraftWeapon(const std::string &type);
@@ -76,6 +77,8 @@ public:
 	CraftWeaponProjectileType getProjectileType() const;
 	/// Gets the craft weapon's projectile speed.
 	int getProjectileSpeed() const;
+	/// Is this item restricted to use underwater?
+	bool isWaterOnly() const;
 };
 
 }

@@ -25,8 +25,7 @@
 #include "../fmath.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
@@ -40,10 +39,8 @@
 #include "../Engine/Action.h"
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Craft.h"
-#include "../Savegame/Soldier.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Menu/ErrorMessageState.h"
-#include "../Ruleset/RuleCraftWeapon.h"
 
 namespace OpenXcom
 {
@@ -504,7 +501,7 @@ void PurchaseState::increaseByValue(int change)
 			// Item count
 			double storesNeededPerItem = rule->getSize();
 			double freeStores = _base->getAvailableStores() - _base->getUsedStores() - _iQty;
-			double maxByStores = DBL_MAX;
+			double maxByStores = (double)(INT_MAX);
 			if (!AreSame(storesNeededPerItem, 0.0))
 			{
 				maxByStores = (freeStores + 0.05) / storesNeededPerItem;

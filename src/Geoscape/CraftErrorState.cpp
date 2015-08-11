@@ -19,8 +19,7 @@
 #include "CraftErrorState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -31,7 +30,7 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in a Cannot Rearm window.
+ * Initializes all the elements in a Craft Error window.
  * @param game Pointer to the core game.
  * @param state Pointer to the Geoscape state.
  * @param msg Error message.

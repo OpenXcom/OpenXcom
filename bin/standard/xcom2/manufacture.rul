@@ -1,0 +1,380 @@
+manufacture: # done
+  - name: STR_PWT_CANNON    #P.W.T. Cannon #
+    category: STR_CRAFT_WEAPON
+    requires:
+     - STR_PWT_CANNON
+    space: 6
+    time: 400
+    cost: 242000
+  - name: STR_PULSE_WAVE_TORPEDOES    #P.W.T Ammo #
+    category: STR_CRAFT_AMMUNITION
+    requires:
+     - STR_PWT_CANNON
+    space: 6
+    time: 600
+    cost: 28000
+    requiredItems:
+      STR_ZRBITE: 4
+  - name: STR_GAUSS_CANNON    #Gauss Cannon #
+    category: STR_CRAFT_WEAPON
+    requires:
+     - STR_GAUSS_CANNON
+    space: 6
+    time: 300
+    cost: 182000
+  - name: STR_GAUSS_CANNON_AMMO    #Gauss Cannon Ammo #
+    category: STR_AMMUNITION
+    requires:
+     - STR_GAUSS_CANNON
+    space: 2 
+    time: 5 
+    cost: 200 
+  - name: STR_SONIC_OSCILLATOR    #Sonic Oscillator #
+    category: STR_CRAFT_WEAPON
+    requires:
+     - STR_SONIC_OSCILLATOR
+    space: 8 
+    time: 500 
+    cost: 226000 
+    requiredItems:
+      STR_ZRBITE: 15
+  - name: STR_COELACANTH_GAUSS    #Coelacanth/Gauss #
+    category: STR_HEAVY_WEAPONS_PLATFORM
+    requires:
+     - STR_GAUSS_CANNON
+     - STR_NEW_FIGHTER_FLYING_SUB
+    space: 25 
+    time: 1200 
+    cost: 500000 
+  - name: STR_DISPLACER_SONIC    #Displacer /Sonic #
+    category: STR_HEAVY_WEAPONS_PLATFORM
+    requires:
+     - STR_SONIC_OSCILLATOR
+     - STR_NEW_FIGHTER_FLYING_SUB
+    space: 30 
+    time: 1200 
+    cost: 850000 
+    requiredItems:
+      STR_ZRBITE: 30
+      STR_AQUA_PLASTICS: 5
+  - name: STR_DISPLACER_PWT    #Displacer /P. W. T. #
+    category: STR_HEAVY_WEAPONS_PLATFORM
+    requires:
+     - STR_PWT_CANNON
+     - STR_NEW_FIGHTER_FLYING_SUB
+    space: 30 
+    time: 1400 
+    cost: 900000 
+    requiredItems:
+      STR_ZRBITE: 25
+      STR_AQUA_PLASTICS: 8
+  - name: STR_HWP_DISPLACER_PWT    #P.W. Torpedo #
+    category: STR_AMMUNITION
+    requires:
+     - STR_PWT_CANNON
+     - STR_NEW_FIGHTER_FLYING_SUB
+    space: 25 
+    time: 400 
+    cost: 15000 
+    requiredItems:
+      STR_ZRBITE: 5
+      STR_AQUA_PLASTICS: 8
+  - name: STR_GAUSS_PISTOL    #Gauss Pistol #
+    category: STR_WEAPON
+    requires:
+     - STR_GAUSS_PISTOL
+    space: 2 
+    time: 300 
+    cost: 8000
+  - name: STR_GAUSS_PISTOL_CLIP    #Gauss Pistol Clip #
+    category: STR_AMMUNITION
+    requires:
+     - STR_GAUSS_PISTOL_CLIP
+    space: 2 
+    time: 20 
+    cost: 1000 
+  - name: STR_GAUSS_RIFLE    #Gauss Rifle #
+    category: STR_WEAPON
+    requires:
+     - STR_GAUSS_RIFLE
+    space: 3
+    time: 400
+    cost: 20000
+  - name: STR_GAUSS_RIFLE_CLIP    #Gauss Rifle Clip #
+    category: STR_AMMUNITION
+    requires:
+     - STR_GAUSS_RIFLE_CLIP
+    space: 4
+    time: 45
+    cost: 2000
+  - name: STR_HEAVY_GAUSS    #Heavy Gauss #
+    category: STR_WEAPON
+    requires:
+     - STR_HEAVY_GAUSS
+    space: 4 
+    time: 700 
+    cost: 32000 
+  - name: STR_HEAVY_GAUSS_CLIP    #Heavy Gauss Clip #
+    category: STR_AMMUNITION
+    requires:
+     - STR_HEAVY_GAUSS_CLIP
+    space: 4 
+    time: 70 
+    cost: 4000 
+  - name: STR_PARTICLE_DISTURBANCE_SENSOR    #Particle Disturbance Sensor #
+    category: STR_EQUIPMENT
+    requires:
+     - STR_PARTICLE_DISTURBANCE_SENSOR
+    space: 4 
+    time: 220 
+    cost: 34000 
+  - name: STR_MEDI_KIT    #Medi-Kit #
+    category: STR_EQUIPMENT
+    requires:
+     - STR_MEDI_KIT
+    space: 4 
+    time: 420 
+    cost: 28000 
+  - name: STR_MC_DISRUPTOR    #M.C. Disruptor #
+    category: STR_EQUIPMENT
+    requires:
+     - STR_MC_DISRUPTOR
+    space: 4 
+    time: 500 
+    cost: 160000 
+    requiredItems:
+      STR_ZRBITE: 2
+      STR_AQUA_PLASTICS: 1
+  - name: STR_SONIC_CANNON    #Sonic Cannon #
+    category: STR_WEAPON
+    requires:
+     - STR_SONIC_CANNON
+     - STR_CANNON_POWER_CLIP
+    space: 4 
+    time: 1000 
+    cost: 122000 
+    requiredItems:
+      STR_AQUA_PLASTICS: 1
+  - name: STR_CANNON_POWER_CLIP    #Cannon Power Clip #
+    category: STR_AMMUNITION
+    requires:
+     - STR_SONIC_CANNON
+     - STR_CANNON_POWER_CLIP
+    space: 4 
+    time: 80 
+    cost: 6000 
+    requiredItems:
+      STR_ZRBITE: 3
+  - name: STR_SONIC_BLASTA_RIFLE    #Sonic-Blasta Rifle #
+    category: STR_WEAPON
+    requires:
+     - STR_SONIC_BLASTA_RIFLE
+     - STR_BLASTA_POWER_CLIP
+    space: 4 
+    time: 820 
+    cost: 88000 
+    requiredItems:
+      STR_AQUA_PLASTICS: 1
+  - name: STR_BLASTA_POWER_CLIP    #Blasta Power Clip #
+    category: STR_AMMUNITION
+    requires:
+     - STR_SONIC_BLASTA_RIFLE
+     - STR_BLASTA_POWER_CLIP
+    space: 4 
+    time: 80 
+    cost: 3000 
+    requiredItems:
+      STR_ZRBITE: 1
+  - name: STR_SONIC_PISTOL    #Sonic Pistol #
+    category: STR_WEAPON
+    requires:
+     - STR_SONIC_PISTOL
+     - STR_PISTOL_POWER_CLIP
+    space: 3 
+    time: 600 
+    cost: 56000 
+    requiredItems:
+      STR_AQUA_PLASTICS: 1
+  - name: STR_PISTOL_POWER_CLIP    #Pistol Power Clip #
+    category: STR_AMMUNITION
+    requires:
+     - STR_SONIC_PISTOL
+     - STR_PISTOL_POWER_CLIP
+    space: 4 
+    time: 60 
+    cost: 2000 
+    requiredItems:
+      STR_ZRBITE: 1
+  - name: STR_DISRUPTOR_PULSE_LAUNCHER    #Disruptor Pulse Launcher #
+    category: STR_WEAPON
+    requires:
+     - STR_DISRUPTOR_PULSE_LAUNCHER
+     - STR_DISRUPTOR_AMMO
+    space: 5 
+    time: 1200 
+    cost: 90000 
+    requiredItems:
+      STR_AQUA_PLASTICS: 1
+  - name: STR_DISRUPTOR_AMMO    #Disruptor Ammo #
+    category: STR_AMMUNITION
+    requires:
+     - STR_DISRUPTOR_PULSE_LAUNCHER
+     - STR_DISRUPTOR_AMMO
+    space: 3 
+    time: 220 
+    cost: 8000 
+    requiredItems:
+      STR_ZRBITE: 3
+  - name: STR_THERMAL_SHOK_LAUNCHER    #Thermal Shok Launcher #
+    category: STR_WEAPON
+    requires:
+     - STR_THERMAL_SHOK_LAUNCHER
+     - STR_THERMAL_SHOK_BOMB
+    space: 3 
+    time: 900 
+    cost: 78000 
+    requiredItems:
+      STR_AQUA_PLASTICS: 1
+  - name: STR_THERMAL_SHOK_BOMB    #Thermal Shok Bomb #
+    category: STR_AMMUNITION
+    requires:
+     - STR_THERMAL_SHOK_LAUNCHER
+     - STR_THERMAL_SHOK_BOMB
+    space: 2 
+    time: 200 
+    cost: 7000 
+    requiredItems:
+      STR_ZRBITE: 1
+  - name: STR_SONIC_PULSER    #Sonic Pulser #
+    category: STR_WEAPON
+    requires:
+     - STR_SONIC_PULSER
+    space: 2 
+    time: 200 
+    cost: 6700 
+    requiredItems:
+      STR_ZRBITE: 2
+  - name: STR_MC_READER    #M.C. Reader #
+    category: STR_EQUIPMENT
+    requires:
+     - STR_MC_READER
+    space: 4 
+    time: 1200 
+    cost: 262000 
+    requiredItems:
+      STR_ZRBITE: 1
+  - name: STR_PLASTIC_AQUA_ARMOR    #Plastic Aqua-Armour #
+    category: STR_PERSONAL_ARMOR
+    requires:
+     - STR_PLASTIC_AQUA_ARMOR
+    space: 12 
+    time: 800 
+    cost: 22000 
+    requiredItems:
+      STR_AQUA_PLASTICS: 4
+  - name: STR_ION_ARMOR    #Ion Armour #
+    category: STR_PERSONAL_ARMOR
+    requires:
+     - STR_ION_ARMOR
+    space: 16 
+    time: 1000 
+    cost: 42000 
+    requiredItems:
+      STR_AQUA_PLASTICS: 5
+      STR_ZRBITE: 5
+  - name: STR_MAGNETIC_ION_ARMOR    #Mag. Ion Armour #
+    category: STR_PERSONAL_ARMOR
+    requires:
+     - STR_MAGNETIC_ION_ARMOR
+    space: 16 
+    time: 1400 
+    cost: 58000 
+    requiredItems:
+      STR_AQUA_PLASTICS: 5
+      STR_ZRBITE: 16
+  - name: STR_AQUA_PLASTICS    #Aqua Plastics
+    category: STR_UFO_COMPONENT
+    requires:
+     - STR_AQUA_PLASTICS
+    space: 10 
+    time: 100 
+    cost: 3000 
+  - name: STR_ION_BEAM_ACCELERATORS    #Ion-Beam Accelerators #
+    category: STR_UFO_COMPONENT
+    requires:
+     - STR_ION_BEAM_ACCELERATORS
+    space: 22 
+    time: 1400 
+    cost: 130000 
+    requiredItems:
+      STR_AQUA_PLASTICS: 5
+      STR_ZRBITE: 16
+  - name: STR_MAGNETIC_NAVIGATION    #Magnetic Navigation #
+    category: STR_UFO_COMPONENT
+    requires:
+     - STR_MAGNETIC_NAVIGATION
+    space: 18 
+    time: 1600 
+    cost: 150000 
+    requiredItems:
+      STR_AQUA_PLASTICS: 3
+  - name: STR_MANTA    #MANTA #
+    category: STR_CRAFT
+    requires:
+     - STR_NEW_FIGHTER_FLYING_SUB
+    space: 30 
+    time: 14000 
+    cost: 400000 
+    requiredItems:
+      STR_AQUA_PLASTICS: 65
+      STR_ION_BEAM_ACCELERATORS: 1
+      STR_MAGNETIC_NAVIGATION: 1
+  - name: STR_HAMMERHEAD    #HAMMERHEAD #
+    category: STR_CRAFT
+    requires:
+     - STR_NEW_FIGHTER_TRANSPORTER
+    space: 34 
+    time: 18000 
+    cost: 600000 
+    requiredItems:
+      STR_AQUA_PLASTICS: 85
+      STR_ION_BEAM_ACCELERATORS: 1
+      STR_MAGNETIC_NAVIGATION: 1
+  - name: STR_LEVIATHAN    #LEVIATHAN #
+    category: STR_CRAFT
+    requires:
+     - STR_THE_LATEST_FLYING_SUB
+    space: 36 
+    time: 34000 
+    cost: 900000 
+    requiredItems:
+      STR_AQUA_PLASTICS: 120
+      STR_ION_BEAM_ACCELERATORS: 2
+      STR_MAGNETIC_NAVIGATION: 1
+  - name: STR_VIBRO_BLADE    #Vibro Blade #
+    category: STR_WEAPON
+    requires:
+     - STR_VIBRO_BLADE
+    space: 3 
+    time: 150 
+    cost: 7000 
+    requiredItems:
+      STR_ZRBITE: 1
+  - name: STR_THERMIC_LANCE    #Thermic Lance #
+    category: STR_WEAPON
+    requires:
+     - STR_THERMIC_LANCE
+    space: 3 
+    time: 220 
+    cost: 12000 
+    requiredItems:
+      STR_ZRBITE: 2
+  - name: STR_HEAVY_THERMIC_LANCE    #Heavy Thermic Lance #
+    category: STR_WEAPON
+    requires:
+     - STR_HEAVY_THERMIC_LANCE
+    space: 3 
+    time: 300 
+    cost: 20000 
+    requiredItems:
+      STR_ZRBITE: 2

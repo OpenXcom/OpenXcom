@@ -1,0 +1,168 @@
+facilities: #done
+  - type: STR_AIR_LOCK
+    spriteShape: 2
+    spriteFacility: 17
+    lift: true
+    buildCost: 300000
+    buildTime: 1
+    monthlyCost: 4000
+    mapName: XBASES00
+  - type: STR_LIVING_QUARTERS
+    spriteShape: 1
+    spriteFacility: 18
+    buildCost: 400000
+    buildTime: 16
+    monthlyCost: 10000
+    personnel: 50
+    mapName: XBASES01
+  - type: STR_LABORATORY
+    spriteShape: 1
+    spriteFacility: 19
+    buildCost: 750000
+    buildTime: 26
+    monthlyCost: 30000
+    labs: 50
+    mapName: XBASES02
+  - type: STR_WORKSHOP
+    spriteShape: 1
+    spriteFacility: 20
+    buildCost: 800000
+    buildTime: 32
+    monthlyCost: 35000
+    workshops: 50
+    mapName: XBASES03
+  - type: STR_STANDARD_SONAR
+    spriteShape: 2
+    spriteFacility: 21
+    buildCost: 500000
+    buildTime: 12
+    monthlyCost: 10000
+    radarRange: 1500
+    radarChance: 10
+    mapName: XBASES04
+  - type: STR_WIDE_ARRAY_SONAR
+    spriteShape: 1
+    spriteFacility: 22
+    buildCost: 800000
+    buildTime: 25
+    monthlyCost: 15000
+    radarRange: 2250
+    radarChance: 20
+    mapName: XBASES05
+  - type: STR_TORPEDO_DEFENSES
+    spriteShape: 2
+    spriteFacility: 23
+    buildCost: 200000
+    buildTime: 16
+    monthlyCost: 5000
+    defense: 500
+    hitRatio: 50
+    fireSound: 12
+    hitSound: 10
+    mapName: XBASES06
+  - type: STR_GENERAL_STORES
+    spriteShape: 1
+    spriteFacility: 24
+    buildCost: 150000
+    buildTime: 10
+    monthlyCost: 5000
+    storage: 50
+    mapName: XBASES07
+  - type: STR_ALIEN_CONTAINMENT
+    spriteShape: 1
+    spriteFacility: 25
+    buildCost: 400000
+    buildTime: 18
+    monthlyCost: 15000
+    aliens: 10
+    mapName: XBASES08
+  - type: STR_GAUSS_DEFENSES
+    requires:
+      - STR_GAUSS_DEFENSES
+    spriteShape: 3
+    spriteFacility: 26
+    buildCost: 400000
+    buildTime: 24
+    monthlyCost: 10000
+    defense: 600
+    hitRatio: 60
+    fireSound: 13
+    hitSound: 10
+    mapName: XBASES09
+  - type: STR_SONIC_DEFENSES
+    requires:
+      - STR_SONIC_DEFENSES
+    spriteShape: 3
+    spriteFacility: 27
+    buildCost: 600000
+    buildTime: 34
+    monthlyCost: 12000
+    defense: 900
+    hitRatio: 70
+    fireSound: 14
+    hitSound: 10
+    mapName: XBASES10
+  - type: STR_PWT_DEFENSES
+    requires:
+      - STR_PWT_DEFENSES
+    spriteShape: 3
+    spriteFacility: 28
+    buildCost: 800000
+    buildTime: 34
+    monthlyCost: 14000
+    defense: 1200
+    hitRatio: 80
+    fireSound: 15
+    hitSound: 10
+    mapName: XBASES11
+  - type: STR_BOMBARDMENT_SHIELD
+    requires:
+      - STR_BOMBARDMENT_SHIELD
+    grav: true
+    spriteShape: 2
+    spriteFacility: 29
+    buildCost: 1200000
+    buildTime: 38
+    monthlyCost: 15000
+    mapName: XBASES12
+  - type: STR_MC_GENERATOR
+    requires:
+      - STR_MC_GENERATOR
+    mind: true
+    spriteShape: 2
+    spriteFacility: 30
+    buildCost: 1300000
+    buildTime: 33
+    monthlyCost: 5000
+    mapName: XBASES13
+  - type: STR_MC_LAB
+    requires:
+      - STR_MC_LAB
+    spriteShape: 1
+    spriteFacility: 31
+    buildCost: 750000
+    buildTime: 24
+    monthlyCost: 16000
+    psiLabs: 10
+    mapName: XBASES14
+  - type: STR_TRANSMISSION_RESOLVER
+    requires:
+      - STR_TRANSMISSION_RESOLVER
+    hyper: true
+    spriteShape: 2
+    spriteFacility: 32
+    buildCost: 1400000
+    buildTime: 26
+    monthlyCost: 30000
+    radarRange: 2400
+    radarChance: 100
+    mapName: XBASES15
+  - type: STR_SUB_PEN
+    spriteShape: 9
+    spriteFacility: 9
+    size: 2
+    buildCost: 200000
+    buildTime: 25
+    monthlyCost: 25000
+    crafts: 1
+    mapName: XBASES16

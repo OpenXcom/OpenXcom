@@ -29,7 +29,6 @@
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/StatString.h"
-#include "../Engine/Options.h"
 #include "SavedGame.h"
 
 namespace OpenXcom

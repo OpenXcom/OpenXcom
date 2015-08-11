@@ -30,7 +30,6 @@
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Engine/FileMap.h"
 #include "SavedBattleGame.h"
 #include "SerializationHelper.h"
 #include "GameTime.h"
@@ -644,6 +643,13 @@ GameDifficulty SavedGame::getDifficulty() const
 	return _difficulty;
 }
 
+int SavedGame::getDifficultyCoefficient() const
+{
+	if (_difficulty > 4)
+		return Ruleset::DIFFICULTY_COEFFICIENT[4];
+
+	return Ruleset::DIFFICULTY_COEFFICIENT[_difficulty];
+}
 /**
  * Changes the game's difficulty to a new level.
  * @param difficulty New difficulty.

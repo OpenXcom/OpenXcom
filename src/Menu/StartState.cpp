@@ -23,10 +23,8 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Action.h"
 #include "../Engine/Surface.h"
-#include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Music.h"
 #include "../Engine/Font.h"
@@ -37,8 +35,6 @@
 #include "../Interface/Text.h"
 #include "../Resource/XcomResourcePack.h"
 #include "MainMenuState.h"
-#include "VideoState.h"
-#include "ErrorMessageState.h"
 #include "CutsceneState.h"
 #include <SDL_mixer.h>
 #include <SDL_thread.h>
@@ -171,16 +167,13 @@ void StartState::think()
 	case LOADING_SUCCESSFUL:
 		CrossPlatform::flashWindow();
 		Log(LOG_INFO) << "OpenXcom started successfully!";
+		_game->setState(new GoToMainMenuState);
 		if (!Options::reload && Options::playIntro)
 		{
-			_game->setState(new GoToMainMenuState);
 			_game->pushState(new CutsceneState("intro"));
 		}
 		else
 		{
-			Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
-			_game->getScreen()->resetDisplay(false);
-			_game->setState(new MainMenuState);
 			Options::reload = false;
 		}
 		_game->getCursor()->setVisible(true);

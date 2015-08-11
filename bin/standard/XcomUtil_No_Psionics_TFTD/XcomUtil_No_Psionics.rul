@@ -1,0 +1,18 @@
+# Based on XcomUtil by Scott Jones and BladeFireLight
+items:
+  - delete: STR_MC_DISRUPTOR
+  - type: ALIEN_PSI_WEAPON
+    tuUse: 9999
+facilities:
+  - delete: STR_MC_LAB
+  - delete: STR_MC_GENERATOR
+research:
+  - delete: STR_MC_DISRUPTOR
+  - delete: STR_MC_GENERATOR
+  - delete: STR_MC_LAB
+manufacture:
+  - delete: STR_MC_DISRUPTOR
+ufopaedia:
+  - delete: STR_MC_DISRUPTOR
+  - delete: STR_MC_GENERATOR
+  - delete: STR_MC_LAB

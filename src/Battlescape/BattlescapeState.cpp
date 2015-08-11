@@ -24,25 +24,15 @@
 #include "Map.h"
 #include "Camera.h"
 #include "BattlescapeState.h"
-#include "NextTurnState.h"
 #include "AbortMissionState.h"
-#include "BattleState.h"
-#include "UnitTurnBState.h"
-#include "UnitWalkBState.h"
-#include "ProjectileFlyBState.h"
-#include "ExplosionBState.h"
 #include "TileEngine.h"
 #include "ActionMenuState.h"
 #include "UnitInfoState.h"
-#include "UnitDieBState.h"
 #include "InventoryState.h"
-#include "AlienBAIState.h"
-#include "CivilianBAIState.h"
 #include "Pathfinding.h"
 #include "BattlescapeGame.h"
 #include "WarningMessage.h"
 #include "DebriefingState.h"
-#include "InfoboxState.h"
 #include "MiniMapState.h"
 #include "BattlescapeGenerator.h"
 #include "BriefingState.h"
@@ -50,8 +40,7 @@
 #include "../fmath.h"
 #include "../Engine/Game.h"
 #include "../Engine/Options.h"
-#include "../Engine/Music.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
@@ -61,13 +50,9 @@
 #include "../Engine/Logger.h"
 #include "../Engine/Timer.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Engine/RNG.h"
-#include "../Engine/Exception.h"
 #include "../Interface/Cursor.h"
-#include "../Interface/FpsCounter.h"
 #include "../Interface/Text.h"
 #include "../Interface/Bar.h"
-#include "../Interface/ImageButton.h"
 #include "../Interface/BattlescapeButton.h"
 #include "../Interface/NumberText.h"
 #include "../Menu/CutsceneState.h"
@@ -84,8 +69,6 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/BattleItem.h"
-#include "../Savegame/MissionSite.h"
-#include "../Savegame/AlienBase.h"
 
 namespace OpenXcom
 {
@@ -472,7 +455,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _xBeforeMouseScrolling(0), _
 	// Set music
 	if (_save->getMusic() == "")
 	{
-		_game->getResourcePack()->playMusic("GMTACTIC", true);
+		_game->getResourcePack()->playMusic("GMTACTIC");
 	}
 	else
 	{
@@ -510,7 +493,8 @@ void BattlescapeState::init()
 {
 	if (_save->getAmbientSound() != -1)
 	{
-		_game->getResourcePack()->getSoundByDepth(0, _save->getAmbientSound())->loop();
+		_game->getResourcePack()->getSoundByDepth(_save->getDepth(), _save->getAmbientSound())->loop();
+		_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 	}
 
 	State::init();
@@ -1352,7 +1336,7 @@ void BattlescapeState::updateSoldierInfo()
 		++j;
 	}
 
-	showPsiButton(battleUnit->getSpecialWeapon(BT_PSIAMP));
+	showPsiButton(battleUnit->getSpecialWeapon(BT_PSIAMP) != 0);
 }
 
 /**
@@ -1516,15 +1500,27 @@ inline void BattlescapeState::handle(Action *action)
 						debug(L"Influenza bacterium dispersed");
 						for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i !=_save->getUnits()->end(); ++i)
 						{
-							if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
+							if ((*i)->getOriginalFaction() == FACTION_HOSTILE && !(*i)->isOut())
 							{
-								(*i)->instaKill();
-								if ((*i)->getTile())
-								{
-									(*i)->getTile()->setUnit(0);
-								}
+								(*i)->damage(Position(0,0,0), 1000, DT_AP, true);
+							}
+							_save->getBattleGame()->checkForCasualties(0, 0, true, false);
+							_save->getBattleGame()->handleState();
+						}
+					}
+					// "ctrl-j" - stun all aliens
+					else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_j && (SDL_GetModState() & KMOD_CTRL) != 0)
+					{
+						debug(L"Deploying Celine Dione album");
+						for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i !=_save->getUnits()->end(); ++i)
+						{
+							if ((*i)->getOriginalFaction() == FACTION_HOSTILE && !(*i)->isOut())
+							{
+								(*i)->damage(Position(0,0,0), 1000, DT_STUN, true);
 							}
 						}
+						_save->getBattleGame()->checkForCasualties(0, 0, true, false);
+						_save->getBattleGame()->handleState();
 					}
 					// f11 - voxel map dump
 					else if (action->getDetails()->key.keysym.sym == SDLK_F11)

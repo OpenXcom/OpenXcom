@@ -23,23 +23,23 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Screen.h"
-#include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
-#include "../Engine/Music.h"
-#include "../Interface/Cursor.h"
-#include "../Interface/FpsCounter.h"
 #include "NewGameState.h"
 #include "NewBattleState.h"
 #include "ListLoadState.h"
 #include "OptionsVideoState.h"
+#include "../Engine/Screen.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
 
 void GoToMainMenuState::init()
 {
+	Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+	_game->getScreen()->resetDisplay(false);
 	_game->setState(new MainMenuState);
 }
 

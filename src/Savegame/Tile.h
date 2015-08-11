@@ -158,9 +158,9 @@ public:
 	/// Get the shade amount.
 	int getShade() const;
 	/// Destroy a tile part.
-	bool destroy(int part);
+	bool destroy(int part, SpecialTileType type);
 	/// Damage a tile part.
-	bool damage(int part, int power);
+	bool damage(int part, int power, SpecialTileType type);
 	/// Set a "virtual" explosive on this tile, to detonate later.
 	void setExplosive(int power, int damageType, bool force = false);
 	/// Get explosive power of this tile.

@@ -19,16 +19,14 @@
 #include "DeleteGameState.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/Text.h"
 #include "../Interface/Window.h"
 #include "../Interface/TextButton.h"
 #include "../Resource/ResourcePack.h"
-#include "ListGamesState.h"
 #include "../Engine/Options.h"
-#include "../Engine/Exception.h"
 #include "ErrorMessageState.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
@@ -51,7 +49,7 @@ DeleteGameState::DeleteGameState(OptionsOrigin origin, const std::string &save) 
 	_txtMessage = new Text(246, 32, 37, 70);
 
 	// Set palette
-	setInterface("saveMenus", false, _origin == OPT_BATTLESCAPE);
+	setInterface("saveMenus", false, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : 0);
 
 	add(_window, "confirmDelete", "saveMenus");
 	add(_btnYes, "confirmDelete", "saveMenus");

@@ -67,6 +67,7 @@ class SoundDefinition;
 class MapScript;
 class RuleVideo;
 class RuleMusic;
+class RuleMissionScript;
 
 /**
  * Set of rules and stats for a game.
@@ -105,6 +106,7 @@ protected:
 	std::map<std::string, MCDPatch *> _MCDPatches;
 	std::map<std::string, std::vector<MapScript *> > _mapScripts;
 	std::map<std::string, RuleCommendations *> _commendations;
+	std::map<std::string, RuleMissionScript*> _missionScripts;
 	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
@@ -112,13 +114,13 @@ protected:
 	std::map<std::string, RuleMusic *> _musics;
 	RuleGlobe *_globe;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding, _turnAIUseGrenade, _turnAIUseBlaster;
-	std::string _alienFuel;
-	std::string _fontName;
+	std::pair<std::string, int> _alienFuel;
+	std::string _fontName, _finalResearch;
 	YAML::Node _startingBase;
 	GameTime _startingTime;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _invsIndex, _ufosIndex;
 	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
-	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex;
+	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex, _missionScriptIndex;
 	std::vector<std::vector<int> > _alienItemLevels;
 	std::vector<SDL_Color> _transparencies;
 	int _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder, _invListOrder;
@@ -129,6 +131,7 @@ protected:
 	template <typename T>
 	T *loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index = 0, const std::string &key = "type");
 public:
+	static int DIFFICULTY_COEFFICIENT[5];
 	// reset all the statics in all classes to default values
 	static void resetGlobalStatics();
 	/// Creates a blank ruleset.
@@ -253,7 +256,9 @@ public:
 	/// Generates a new soldier.
 	Soldier *genSoldier(SavedGame *save) const;
 	/// Gets the item to be used as fuel for ships.
-	const std::string getAlienFuel() const;
+	const std::string getAlienFuelName() const;
+	/// Gets the amount of alien fuel to recover
+	const int getAlienFuelQuantity() const;
 	/// Gets the font name.
 	const std::string getFontName() const;
 	/// Gets first turn when AI can use grenade.
@@ -274,6 +279,9 @@ public:
 	/// Gets the list videos for intro/outro etc.
 	const std::map<std::string, RuleVideo *> *getVideos() const;
 	const std::map<std::string, RuleMusic *> *getMusic() const;
+	const std::vector<std::string> *getMissionScriptList() const;
+	RuleMissionScript *getMissionScript(const std::string &name) const;
+	const std::string getFinalResearch() const;
 };
 
 }

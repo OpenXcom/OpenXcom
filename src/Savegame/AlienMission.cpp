@@ -43,14 +43,13 @@
 #include "Waypoint.h"
 #include <assert.h>
 #include <algorithm>
-#include <functional>
 #include <math.h>
 #include "../Ruleset/AlienDeployment.h"
 
 namespace OpenXcom
 {
 
-AlienMission::AlienMission(const RuleAlienMission &rule) : _rule(rule), _nextWave(0), _nextUfoCounter(0), _spawnCountdown(0), _liveUfos(0), _uniqueID(0), _base(0)
+AlienMission::AlienMission(const RuleAlienMission &rule) : _rule(rule), _nextWave(0), _nextUfoCounter(0), _spawnCountdown(0), _liveUfos(0), _uniqueID(0), _missionSiteZone(-1), _base(0)
 {
 	// Empty by design.
 }
@@ -95,7 +94,7 @@ void AlienMission::load(const YAML::Node& node, SavedGame &game)
 		}
 		_base = *found;
 	}
-
+	_missionSiteZone = node["missionSiteZone"].as<int>(_missionSiteZone);
 }
 
 /**
@@ -117,6 +116,7 @@ YAML::Node AlienMission::save() const
 	{
 		node["alienBase"] = _base->getId();
 	}
+	node["missionSiteZone"] = _missionSiteZone;
 	return node;
 }
 
@@ -171,6 +171,16 @@ void AlienMission::think(Game &engine, const Globe &globe)
 		//Some missions may not spawn a UFO!
 		game.getUfos()->push_back(ufo);
 	}
+	else if ((ruleset.getDeployment(wave.ufoType) && !ruleset.getUfo(wave.ufoType) && ruleset.getDeployment(wave.ufoType)->getMarkerName() != "") // a mission site that we want to spawn directly
+			|| (_rule.getObjective() == OBJECTIVE_SITE && wave.objective))																		// or we want to spawn one at random according to our terrain
+	{
+		std::vector<MissionArea> areas = ruleset.getRegion(_region)->getMissionZones().at((_rule.getSpawnZone() == -1) ? trajectory.getZone(0) : _rule.getSpawnZone()).areas;
+		MissionArea area = areas.at((_missionSiteZone == -1) ? RNG::generate(0, areas.size()-1) : _missionSiteZone);
+		Texture *texture = ruleset.getGlobe()->getTexture(area.texture);
+		AlienDeployment *deployment = ruleset.getDeployment(wave.ufoType) ? ruleset.getDeployment(wave.ufoType) : ruleset.getDeployment(texture->getRandomDeployment());
+		spawnMissionSite(game, deployment, area);
+	}
+
 	++_nextUfoCounter;
 	if (_nextUfoCounter == wave.ufoCount)
 	{
@@ -188,8 +198,6 @@ void AlienMission::think(Game &engine, const Globe &globe)
 				break;
 			}
 		}
-
-
 		// Infiltrations loop for ever.
 		_nextWave = 0;
 	}
@@ -197,6 +205,7 @@ void AlienMission::think(Game &engine, const Globe &globe)
 	{
 		spawnAlienBase(globe, engine, _rule.getSpawnZone());
 	}
+
 	if (_nextWave != _rule.getWaveCount())
 	{
 		size_t spawnTimer = _rule.getWave(_nextWave).spawnTimer / 30;
@@ -253,7 +262,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 	}
 	else if (_rule.getObjective() == OBJECTIVE_SUPPLY)
 	{
-		if (wave.objective && !_base)
+		if (&ufoRule == 0 || (wave.objective && !_base))
 		{
 			// No base to supply!
 			return 0;
@@ -299,6 +308,8 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 		ufo->setDestination(wp);
 		return ufo;
 	}
+	if (&ufoRule == 0)
+		return 0;
 	// Spawn according to sequence.
 	Ufo *ufo = new Ufo(&ufoRule);
 	ufo->setMissionInfo(this, &trajectory);
@@ -407,10 +418,11 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			ufo.setStatus(Ufo::DESTROYED);
 
 			MissionArea area = regionRules.getMissionPoint(trajectory.getZone(curWaypoint), &ufo);
-			MissionSite *missionSite = spawnMissionSite(game, rules, area);
+			Texture *texture = rules.getGlobe()->getTexture(area.texture);
+			AlienDeployment *deployment = rules.getDeployment(texture->getRandomDeployment());
+			MissionSite *missionSite = spawnMissionSite(game, deployment, area);
 			if (missionSite)
 			{
-				game.getMissionSites()->push_back(missionSite);
 				for (std::vector<Target*>::iterator t = ufo.getFollowers()->begin(); t != ufo.getFollowers()->end();)
 				{
 					Craft* c = dynamic_cast<Craft*>(*t);
@@ -663,7 +675,18 @@ std::pair<double, double> AlienMission::getWaypoint(const UfoTrajectory &traject
 	}
 	else
 	*/
-		return region.getRandomPoint(trajectory.getZone(nextWaypoint));
+	int waveNumber = _nextWave - 1;
+	if (waveNumber < 0)
+	{
+		waveNumber = _rule.getWaveCount() - 1;
+	}
+
+	if (_missionSiteZone != -1 && _rule.getWave(waveNumber).objective && trajectory.getZone(nextWaypoint) == (size_t)(_rule.getSpawnZone()))
+	{
+		const MissionArea *area = &region.getMissionZones().at(_rule.getObjective()).areas.at(_missionSiteZone);
+		return std::make_pair(area->lonMin, area->latMin);
+	}
+	return region.getRandomPoint(trajectory.getZone(nextWaypoint));
 }
 
 /**
@@ -697,23 +720,31 @@ std::pair<double, double> AlienMission::getLandPoint(const Globe &globe, const R
  * @param area the point on the globe at which to spawn this site.
  * @return a pointer to the mission site.
  */
-MissionSite *AlienMission::spawnMissionSite(SavedGame &game, const Ruleset &rules, const MissionArea &area)
+MissionSite *AlienMission::spawnMissionSite(SavedGame &game, AlienDeployment *deployment, const MissionArea &area)
 {
-	Texture *texture = rules.getGlobe()->getTexture(area.texture);
-	AlienDeployment *deployment = rules.getDeployment(texture->getRandomDeployment());
 	if (deployment)
 	{
 		MissionSite *missionSite = new MissionSite(&_rule, deployment);
-		missionSite->setLongitude(area.lonMin);
-		missionSite->setLatitude(area.latMin);
+		missionSite->setLongitude(RNG::generate(area.lonMin, area.lonMax));
+		missionSite->setLatitude(RNG::generate(area.latMin, area.latMax));
 		missionSite->setId(game.getId(deployment->getMarkerName()));
 		missionSite->setSecondsRemaining(RNG::generate(deployment->getDurationMin(), deployment->getDurationMax()) * 3600);
 		missionSite->setAlienRace(_race);
 		missionSite->setTexture(area.texture);
 		missionSite->setCity(area.name);
 		missionSite->setSiteDepth(RNG::generate(deployment->getMinSiteDepth(), deployment->getMaxSiteDepth()));
+		game.getMissionSites()->push_back(missionSite);
 		return missionSite;
 	}
 	return 0;
+}
+
+/**
+ * Tell the mission which entry in the zone array we're targetting for our missionSite payload.
+ * @param zone the number of the zone to target, synonymous with a city.
+ */
+void AlienMission::setMissionSiteZone(int zone)
+{
+	_missionSiteZone = zone;
 }
 }

@@ -24,15 +24,12 @@
 #include "TileEngine.h"
 #include "Map.h"
 #include "Pathfinding.h"
-#include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
-#include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Sound.h"
-#include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Options.h"
 #include "AlienBAIState.h"
@@ -430,6 +427,7 @@ void ProjectileFlyBState::think()
 			{
 				_parent->setupCursor();
 			}
+			_parent->convertInfected();
 			_parent->popState();
 		}
 	}

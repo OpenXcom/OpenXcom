@@ -35,7 +35,6 @@
 #include "../Engine/Timer.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
-#include "../Engine/RNG.h"
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -50,7 +49,6 @@
 #include "../Ruleset/Armor.h"
 #include "BattlescapeMessage.h"
 #include "../Savegame/SavedGame.h"
-#include "../Interface/Cursor.h"
 #include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
 

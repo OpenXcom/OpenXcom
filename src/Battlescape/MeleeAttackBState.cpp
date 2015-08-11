@@ -21,7 +21,6 @@
 #include "BattlescapeGame.h"
 #include "BattlescapeState.h"
 #include "TileEngine.h"
-#include "Pathfinding.h"
 #include "Map.h"
 #include "InfoboxState.h"
 #include "Camera.h"
@@ -36,7 +35,6 @@
 #include "../Engine/Sound.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Armor.h"
 
 namespace OpenXcom
 {
@@ -44,7 +42,7 @@ namespace OpenXcom
 /**
  * Sets up a MeleeAttackBState.
  */
-MeleeAttackBState::MeleeAttackBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _target(0), _weapon(0), _ammo(0), _initialized(false), _deathMessage(false)
+MeleeAttackBState::MeleeAttackBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _target(0), _weapon(0), _ammo(0), _initialized(false)
 {
 }
 
@@ -130,13 +128,6 @@ void MeleeAttackBState::init()
  */
 void MeleeAttackBState::think()
 {
-	if (_deathMessage)
-	{
-		Game *game = _parent->getSave()->getBattleState()->getGame();
-		game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _target->getGender()).arg(_target->getName(game->getLanguage()))));
-		_parent->popState();
-		return;
-	}
 	_parent->getSave()->getBattleState()->clearMouseScrollingState();
 
 	// if the unit burns floortiles, burn floortiles
@@ -180,15 +171,8 @@ void MeleeAttackBState::think()
 		{
 			_parent->setupCursor();
 		}
-		if (_parent->convertInfected() && Options::battleNotifyDeath && _target && _target->getFaction() == FACTION_PLAYER)
-		{
-			_deathMessage = true;
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
-		}
-		else
-		{
-			_parent->popState();
-		}
+		_parent->convertInfected();
+		_parent->popState();
 	}
 }
 

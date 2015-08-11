@@ -1,4 +1,3 @@
-
 interfaces:
   - type: mainMenu
     music: GMSTORY
@@ -134,11 +133,11 @@ interfaces:
       - id: palette
         color: 0     # brown
       - id: window
-        color: 133   # minty green
+        color: 239   # bright green
       - id: text
-        color: 133   # minty green
+        color: 239   # bright green
       - id: button
-        color: 133   # minty green
+        color: 239   # bright green
   - type: errorMessages
     elements:
       - id: geoscapePalette
@@ -348,6 +347,15 @@ interfaces:
         color2: 7
       - id: disabledAmmo
         color: 24
+      - id: previewTop
+        pos: [0, 96]
+        size: [160, 15]
+      - id: previewBot
+        pos: [0, 111]
+        size: [160, 29]
+      - id: previewMid
+        pos: [0, 140]
+        size: [160, 52]
   - type: baseNaming
     elements:
       - id: palette
@@ -1279,3 +1287,6 @@ interfaces:
         color: 32
       - id: numWounds
         color: 32
+      - id: buttonEnd
+        pos: [220, 140]
+        size: [20, 20]

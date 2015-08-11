@@ -21,7 +21,6 @@
 #include "MiniMapView.h"
 #include "MiniMapState.h"
 #include "../Savegame/Tile.h"
-#include "Map.h"
 #include "Camera.h"
 #include "../Engine/Action.h"
 #include "../Interface/Cursor.h"
@@ -32,7 +31,6 @@
 #include "../Ruleset/Armor.h"
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
-#include <sstream>
 
 namespace OpenXcom
 {
