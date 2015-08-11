@@ -1,5 +1,5 @@
 # Swaps the maps and interception images for the survey ship and escort.
-ufopaedia:
+ufos:
   - type: STR_SURVEY_SHIP
     sprite: 1
     battlescapeTerrainData:
