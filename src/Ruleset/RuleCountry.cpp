@@ -59,6 +59,9 @@ void RuleCountry::load(const YAML::Node &node)
 		_lonMax.push_back(areas[i][1] * M_PI / 180);
 		_latMin.push_back(areas[i][2] * M_PI / 180);
 		_latMax.push_back(areas[i][3] * M_PI / 180);
+
+		if (_latMin.back() > _latMax.back())
+			std::swap(_latMin.back(), _latMax.back());
 	}
 }
 
@@ -125,7 +128,7 @@ bool RuleCountry::insideCountry(double lon, double lat) const
 		if (_lonMin[i] <= _lonMax[i])
 			inLon = (lon >= _lonMin[i] && lon < _lonMax[i]);
 		else
-			inLon = ((lon >= _lonMin[i] && lon < 6.283) || (lon >= 0 && lon < _lonMax[i]));
+			inLon = ((lon >= _lonMin[i] && lon < M_PI*2.0) || (lon >= 0 && lon < _lonMax[i]));
 
 		inLat = (lat >= _latMin[i] && lat < _latMax[i]);
 

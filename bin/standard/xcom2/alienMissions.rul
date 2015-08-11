@@ -286,26 +286,11 @@ alienMissions: #done
     spawnZone: 0 #Mission zone for terror missions
     raceWeights:
       0:
-        STR_GILLMAN: 100
-      1:
-        STR_AQUATOID: 20
-        STR_GILLMAN: 80
-      3:
-        STR_AQUATOID: 20
-        STR_GILLMAN: 30
-        STR_LOBSTERMAN: 50
-      5:
         STR_AQUATOID: 10
         STR_GILLMAN: 30
+        STR_MIXED_CREW: 20
         STR_LOBSTERMAN: 20
         STR_TASOTH: 20
-        STR_MIXED_CREW: 20
-      7:
-        STR_AQUATOID: 20
-        STR_GILLMAN: 20
-        STR_LOBSTERMAN: 20
-        STR_TASOTH: 10
-        STR_MIXED_CREW: 30
     waves:
       - ufo: dummy #don't spawn a ufo, we only want the site
         count: 1
@@ -355,8 +340,7 @@ alienMissions: #done
     spawnZone: 0 #Mission zone for terror missions
     raceWeights:
       0:
-        STR_AQUATOID: 70
-        STR_GILLMAN: 30
+        STR_MIXED_CREW: 100
     waves:
       - ufo: STR_ARTIFACT_SITE_P1 # spawn this site directly
         count: 1

@@ -2040,6 +2040,18 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 	}
 
 	delete _dummy;
+	
+	// special hacks to fill in empty floors on level 0
+	for (int x = 0; x < _mapsize_x; ++x)
+	{
+		for (int y = 0; y < _mapsize_y; ++y)
+		{
+			if (_save->getTile(Position(x, y, 0))->getMapData(O_FLOOR) == 0)
+			{
+				_save->getTile(Position(x, y, 0))->setMapData(MapDataSet::getScorchedEarthTile(), 1, 0, O_FLOOR);
+			}
+		}
+	}
 
 	attachNodeLinks();
 }
@@ -2125,6 +2137,7 @@ void BattlescapeGenerator::generateBaseMap()
 		}
 	}
 	_save->calculateModuleMap();
+
 }
 
 /**
