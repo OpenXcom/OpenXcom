@@ -1069,7 +1069,7 @@ items: #done
     bigSprite: 60
     floorSprite: 75
     handSprite: 168
-    meleeSound: 26
+    meleeSound: 60
     hitAnimation: 0
     accuracyMelee: 150
     tuMelee: 10
@@ -1089,7 +1089,7 @@ items: #done
     bigSprite: 59
     floorSprite: 74
     handSprite: 176
-    meleeSound: 26
+    meleeSound: 60
     hitAnimation: 0
     accuracyMelee: 160
     tuMelee: 15
@@ -1109,7 +1109,7 @@ items: #done
     bigSprite: 58
     floorSprite: 73
     handSprite: 184
-    meleeSound: 26
+    meleeSound: 60
     hitAnimation: 0
     accuracyMelee: 160
     tuMelee: 20

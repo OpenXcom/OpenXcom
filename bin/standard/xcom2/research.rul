@@ -331,6 +331,7 @@ research: #done: double check scores and times.
     needItem: true
   - name: STR_ION_BEAM_ACCELERATORS
     cost: 450
+    points: 30
     needItem: true
   - name: STR_THE_LATEST_FLYING_SUB
     cost: 900
