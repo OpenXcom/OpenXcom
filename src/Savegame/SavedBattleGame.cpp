@@ -443,6 +443,7 @@ YAML::Node SavedBattleGame::save() const
     node["kneelReserved"] = _kneelReserved;
     node["depth"] = _depth;
 	node["ambience"] = _ambience;
+	node["ambientVolume"] = _ambientVolume;
 	for (std::vector<BattleItem*>::const_iterator i = _recoverGuaranteed.begin(); i != _recoverGuaranteed.end(); ++i)
 	{
 		node["recoverGuaranteed"].push_back((*i)->save());
