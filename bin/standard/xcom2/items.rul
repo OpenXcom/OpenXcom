@@ -1062,7 +1062,7 @@ items: #done
   - type: STR_VIBRO_BLADE
     requires:
       - STR_VIBRO_BLADE
-    size: 3
+    size: 0.3
     costSell: 1500
     transferTime: 48
     weight: 10
@@ -1082,7 +1082,7 @@ items: #done
   - type: STR_THERMIC_LANCE
     requires:
       - STR_THERMIC_LANCE
-    size: 3
+    size: 0.3
     costSell: 1800
     transferTime: 48
     weight: 10
@@ -1102,7 +1102,7 @@ items: #done
   - type: STR_HEAVY_THERMIC_LANCE
     requires:
       - STR_HEAVY_THERMIC_LANCE
-    size: 3
+    size: 0.3
     costSell: 2000
     transferTime: 48
     weight: 15
