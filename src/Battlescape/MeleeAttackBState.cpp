@@ -109,7 +109,7 @@ void MeleeAttackBState::init()
 	
 	AlienBAIState *ai = dynamic_cast<AlienBAIState*>(_unit->getCurrentAIState());
 
-	if (ai && ai->getTarget())
+	if (_unit->getFaction() != FACTION_PLAYER && _parent->_debugPlay == false && ai && ai->getTarget())
 	{
 		_target = ai->getTarget();
 	}
