@@ -164,7 +164,8 @@ void NextTurnState::close()
 	int liveAliens = 0;
 	int liveSoldiers = 0;
 	_state->getBattleGame()->tallyUnits(liveAliens, liveSoldiers);
-	if (liveAliens == 0 || liveSoldiers == 0)
+
+	if (_battleGame->getObjectiveType() != MUST_DESTROY && (liveAliens == 0 || liveSoldiers == 0))		// not the final mission and all aliens dead.
 	{
 		_state->finishBattle(false, liveSoldiers);
 	}
