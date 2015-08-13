@@ -43,6 +43,7 @@ if ( IS_DIRECTORY ${DEPS_DIR} )
 else ( )
   find_package ( SDL2 COMPONENTS mixer gfx image)
   find_package ( Yaml_cpp 0.5.0)
+  set ( YAMLCPP_LIBRARY_DEBUG ${YAMLCPP_LIBRARY} )
 
   if ( NOT SDL_FOUND )
     message ( FATAL_ERROR "Can't find SDL which is required" )
