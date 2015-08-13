@@ -101,7 +101,7 @@ crafts: #done
     speedMax: 5800
     accel: 9
     weapons: 2
-    soldiers: 26
+    soldiers: 24
     vehicles: 4
     refuelItem: STR_ZRBITE
     spacecraft: true
