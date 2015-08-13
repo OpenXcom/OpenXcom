@@ -23,7 +23,7 @@ manufacture: # done
     time: 300
     cost: 182000
   - name: STR_GAUSS_CANNON_AMMO    #Gauss Cannon Ammo #
-    category: STR_AMMUNITION
+    category: STR_CRAFT_AMMUNITION
     requires:
      - STR_GAUSS_CANNON
     space: 2 
