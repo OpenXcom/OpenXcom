@@ -373,6 +373,10 @@ MCDPatches: #will never be done
         bigWall: 3
       - MCDIndex: 77
         bigWall: 3
+  - type: ORGANIC2
+    data:
+      - MCDIndex: 6
+        deathTile: 7
   - type: PIPES
     data:
       - MCDIndex: 32
