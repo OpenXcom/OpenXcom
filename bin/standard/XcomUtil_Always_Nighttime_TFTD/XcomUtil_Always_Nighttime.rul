@@ -24,7 +24,23 @@ alienDeployments:
     shade: 15
   - type: STR_CRUISE_SHIP_P1
     shade: 15
+  - type: STR_CARGO_SHIP_P2
+    shade: 15
+  - type: STR_CRUISE_SHIP_P2
+    shade: 15
   - type: STR_ARTIFACT_SITE_P1
     shade: 15
+  - type: STR_ARTIFACT_SITE_P2
+    shade: 15
   - type: STR_ALIEN_BASE_ASSAULT
+    shade: 15
+  - type: STR_ALIEN_COLONY_P2
+    shade: 15
+  - type: STR_BASE_DEFENSE
+    shade: 15
+  - type: STR_TLETH_P1
+    shade: 15
+  - type: STR_TLETH_P2
+    shade: 15
+  - type: STR_TLETH_P3
     shade: 15
