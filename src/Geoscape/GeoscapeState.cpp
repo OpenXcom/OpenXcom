@@ -2195,7 +2195,17 @@ void GeoscapeState::determineAlienMissions()
 		}
 		if (command->getLabel() > 0 && conditions.find(command->getLabel()) != conditions.end())
 		{
-			throw Exception("Mission generator encountered an error: multiple commands are sharing the same label.");
+			std::stringstream ss;
+			ss << "Mission generator encountered an error: multiple commands: " << command->getType() << " and ";
+			for (std::vector<RuleMissionScript*>::const_iterator j = availableMissions.begin(); j != availableMissions.end(); ++j)
+			{
+				if (command->getLabel() == (*j)->getLabel() && (*j) != (*i))
+				{
+					ss << (*j)->getType();
+				}
+			}
+			ss  << " are sharing the same label: " << command->getLabel(); 
+			throw Exception(ss.str());
 		}
 		// level four condition check: does random chance favour this command's execution?
 		if (process && RNG::percent(command->getExecutionOdds()))
