@@ -2201,10 +2201,10 @@ void GeoscapeState::determineAlienMissions()
 			{
 				if (command->getLabel() == (*j)->getLabel() && (*j) != (*i))
 				{
-					ss << (*j)->getType();
+					ss << (*j)->getType() << ", ";
 				}
 			}
-			ss  << " are sharing the same label: " << command->getLabel(); 
+			ss  << "are sharing the same label: " << command->getLabel(); 
 			throw Exception(ss.str());
 		}
 		// level four condition check: does random chance favour this command's execution?
