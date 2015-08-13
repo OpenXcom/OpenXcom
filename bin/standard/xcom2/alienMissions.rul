@@ -43,9 +43,8 @@ alienMissions: #done
           STR_AQUATOID: 50
           STR_GILLMAN: 50
       1:
-          STR_AQUATOID: 60
-          STR_GILLMAN: 30
-          STR_LOBSTERMAN: 10
+          STR_AQUATOID: 50
+          STR_GILLMAN: 50
       3:
           STR_AQUATOID: 30
           STR_GILLMAN: 50
