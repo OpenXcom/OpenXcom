@@ -42,7 +42,7 @@ enum SpecialTileType{TILE=0,
 					END_POINT,
 					MUST_DESTROY};
 
-enum MovementType{ MT_WALK, MT_FLY, MT_SLIDE, MT_FLOAT};
+enum MovementType{ MT_WALK, MT_FLY, MT_SLIDE, MT_FLOAT, MT_SINK};
 enum VoxelType{ V_EMPTY = -1, V_FLOOR, V_WESTWALL, V_NORTHWALL, V_OBJECT, V_UNIT, V_OUTOFBOUNDS };
 enum MapDataType { O_FLOOR, O_WESTWALL, O_NORTHWALL, O_OBJECT };
 

@@ -83,6 +83,17 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) :
 			_movementType = MT_WALK;
 		}
 	}
+	else if (_movementType == MT_SINK)
+	{
+		if (depth == 0)
+		{
+			_movementType = MT_FLY;
+		}
+		else
+		{
+			_movementType = MT_WALK;
+		}
+	}
 	_stats += *_armor->getStats();	// armors may modify effective stats
 	_loftempsSet = _armor->getLoftempsSet();
 	_gender = soldier->getGender();
@@ -181,6 +192,17 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	if (_movementType == MT_FLOAT)
 	{
 		if (depth > 0)
+		{
+			_movementType = MT_FLY;
+		}
+		else
+		{
+			_movementType = MT_WALK;
+		}
+	}
+	else if (_movementType == MT_SINK)
+	{
+		if (depth == 0)
 		{
 			_movementType = MT_FLY;
 		}
