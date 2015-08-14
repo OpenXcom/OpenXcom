@@ -1325,7 +1325,7 @@ items:
     recover: false
   - type: ZOMBIE_WEAPON
     weight: 3
-    bigSprite: 26
+    bigSprite: -5
     meleeSound: 48
     strengthApplied: true
     damageType: 7
