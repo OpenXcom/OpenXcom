@@ -33,7 +33,7 @@ namespace OpenXcom
 	ArticleStateTFTDCraft::ArticleStateTFTDCraft(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs)
 	{
 		RuleCraft *craft = _game->getRuleset()->getCraft(defs->id);
-		_txtStats = new Text(126, 56, 192, 116);
+		_txtStats = new Text(131, 56, 187, 116);
 		add(_txtStats);
 
 		_txtStats->setColor(Palette::blockOffset(0)+2);

@@ -34,7 +34,7 @@ namespace OpenXcom
 		virtual ~ArticleStateTFTDVehicle();
 
 	protected:
-		TextList *_lstStats;
+		TextList *_lstStats, *_lstStats2;
 	};
 }
 

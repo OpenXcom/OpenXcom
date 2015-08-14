@@ -38,7 +38,7 @@ namespace OpenXcom
 		add(_lstInfo);
 
 		_lstInfo->setColor(Palette::blockOffset(0)+2);
-		_lstInfo->setColumns(2, 90, 78);
+		_lstInfo->setColumns(2, 100, 50);
 		_lstInfo->setDot(true);
 
 		_lstInfo->addRow(2, tr("STR_DAMAGE_CAPACITY").c_str(), Text::formatNumber(ufo->getMaxDamage()).c_str());

@@ -38,13 +38,21 @@ namespace OpenXcom
 		Armor *armor = _game->getRuleset()->getArmor(unit->getArmor());
 		RuleItem *item = _game->getRuleset()->getItem(defs->id);
 
-		_lstStats = new TextList(150, 89, 168, 86);
+		_lstStats = new TextList(150, 65, 168, 106);
 
 		add(_lstStats);
 
 		_lstStats->setColor(Palette::blockOffset(0)+2);
-		_lstStats->setColumns(2, 65, 85);
+		_lstStats->setColumns(2, 100, 50);
 		_lstStats->setDot(true);
+
+		_lstStats2 = new TextList(195, 33, 25, 166);
+
+		add(_lstStats2);
+
+		_lstStats2->setColor(Palette::blockOffset(0) + 2);
+		_lstStats2->setColumns(2, 65, 130);
+		_lstStats2->setDot(true);
 
 		std::wostringstream ss;
 		ss << unit->getStats()->tu;
@@ -74,7 +82,7 @@ namespace OpenXcom
 		ss7 << armor->getUnderArmor();
 		_lstStats->addRow(2, tr("STR_UNDER_ARMOR").c_str(), ss7.str().c_str());
 		
-		_lstStats->addRow(2, tr("STR_WEAPON").c_str(), tr(defs->weapon).c_str());
+		_lstStats2->addRow(2, tr("STR_WEAPON").c_str(), tr(defs->weapon).c_str());
 				
 		if (!item->getCompatibleAmmo()->empty())
 		{
@@ -82,24 +90,28 @@ namespace OpenXcom
 
 			std::wostringstream ss8;
 			ss8 << ammo->getPower();
-			_lstStats->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
+			_lstStats2->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
 
-			_lstStats->addRow(2, tr("STR_AMMUNITION").c_str(), tr(ammo->getName()).c_str());
+			_lstStats2->addRow(2, tr("STR_AMMUNITION").c_str(), tr(ammo->getName()).c_str());
 			
 			std::wostringstream ss9;
 			ss9 << ammo->getClipSize();
-			_lstStats->addRow(2, tr("STR_ROUNDS").c_str(), ss9.str().c_str());
+			_lstStats2->addRow(2, tr("STR_ROUNDS").c_str(), ss9.str().c_str());
 		}
 		else
 		{
 			std::wostringstream ss8;
 			ss8 << item->getPower();
-			_lstStats->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
+			_lstStats2->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
 		}
 
 		for (size_t i = 0; i != _lstStats->getRows(); ++i)
 		{
 			_lstStats->setCellColor(i, 1, Palette::blockOffset(15)+4);
+		}
+		for (size_t i = 0; i != _lstStats2->getRows(); ++i)
+		{
+			_lstStats2->setCellColor(i, 1, Palette::blockOffset(15) + 4);
 		}
 
 		centerAllSurfaces();

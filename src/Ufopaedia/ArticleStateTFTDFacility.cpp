@@ -38,7 +38,7 @@ namespace OpenXcom
 		add(_lstInfo);
 
 		_lstInfo->setColor(Palette::blockOffset(0)+2);
-		_lstInfo->setColumns(2, 100, 68);
+		_lstInfo->setColumns(2, 104, 46);
 		_lstInfo->setDot(true);
 
 		std::wostringstream ss;

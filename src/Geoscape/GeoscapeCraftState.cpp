@@ -52,10 +52,10 @@ GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *way
 
 	// Create objects
 	_window = new Window(this, 240, 184, 8, 8, POPUP_BOTH);
-	_btnBase = new TextButton(192, 12, 32, 124);
-	_btnTarget = new TextButton(192, 12, 32, 140);
-	_btnPatrol = new TextButton(192, 12, 32, 156);
-	_btnCancel = new TextButton(192, 12, 32, 172);
+	_btnBase = new TextButton(212, 12, 22, 124);
+	_btnTarget = new TextButton(212, 12, 22, 140);
+	_btnPatrol = new TextButton(212, 12, 22, 156);
+	_btnCancel = new TextButton(212, 12, 22, 172);
 	_txtTitle = new Text(210, 17, 32, 20);
 	_txtStatus = new Text(210, 17, 32, 36);
 	_txtBase = new Text(210, 9, 32, 52);

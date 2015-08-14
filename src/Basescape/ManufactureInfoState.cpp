@@ -74,7 +74,7 @@ void ManufactureInfoState::buildUi()
 	_txtAvailableEngineer = new Text(200, 9, 16, 55);
 	_txtAvailableSpace = new Text(200, 9, 16, 65);
 	_txtAllocatedEngineer = new Text(112, 32, 16, 75);
-	_txtUnitToProduce = new Text(104, 32, 168, 75);
+	_txtUnitToProduce = new Text(112, 48, 168, 59);
 	_txtEngineerUp = new Text(90, 9, 40, 113);
 	_txtEngineerDown = new Text(90, 9, 40, 133);
 	_txtUnitUp = new Text(90, 9, 192, 113);
@@ -84,7 +84,7 @@ void ManufactureInfoState::buildUi()
 	_btnUnitUp = new ArrowButton(ARROW_BIG_UP, 13, 14, 284, 109);
 	_btnUnitDown = new ArrowButton(ARROW_BIG_DOWN, 13, 14, 284, 131);
 	_txtAllocated = new Text(40, 16, 128, 83);
-	_txtTodo = new Text(40, 16, 272, 83);
+	_txtTodo = new Text(40, 16, 280, 83);
 
 	_surfaceEngineers = new InteractiveSurface(160, 150, 0, 25);
 	_surfaceEngineers->onMouseClick((ActionHandler)&ManufactureInfoState::handleWheelEngineer, 0);
@@ -128,7 +128,7 @@ void ManufactureInfoState::buildUi()
 	_txtAllocatedEngineer->setText(tr("STR_ENGINEERS__ALLOCATED"));
 	_txtAllocatedEngineer->setBig();
 	_txtAllocatedEngineer->setWordWrap(true);
-	_txtAllocatedEngineer->setVerticalAlign(ALIGN_MIDDLE);
+	_txtAllocatedEngineer->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtAllocated->setBig();
 
@@ -137,7 +137,7 @@ void ManufactureInfoState::buildUi()
 	_txtUnitToProduce->setText(tr("STR_UNITS_TO_PRODUCE"));
 	_txtUnitToProduce->setBig();
 	_txtUnitToProduce->setWordWrap(true);
-	_txtUnitToProduce->setVerticalAlign(ALIGN_MIDDLE);
+	_txtUnitToProduce->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtEngineerUp->setText(tr("STR_INCREASE_UC"));
 
