@@ -231,7 +231,8 @@ void BattlescapeGenerator::nextStage()
 
 	for (std::vector<BattleItem*>::iterator i = _save->getItems()->begin(); i != _save->getItems()->end();)
 	{
-		if (aliensAlive == 0 && (*i)->getRules()->isRecoverable() && !(*i)->getUnit())
+		if (aliensAlive == 0 && (!(*i)->getOwner() || (*i)->getOwner()->getOriginalFaction() != FACTION_PLAYER) &&
+			(*i)->getRules()->isRecoverable() && !(*i)->getUnit())
 		{
 			takeToNextStage.push_back(*i);
 			++i;
