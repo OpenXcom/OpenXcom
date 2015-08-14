@@ -1333,7 +1333,7 @@ items:
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
-    invWidth: 1
+    invWidth: 2
     invHeight: 3
     clipSize: -1
     recover: false
