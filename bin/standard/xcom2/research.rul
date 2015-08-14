@@ -151,11 +151,6 @@ research: #done: double check scores and times.
     dependencies:
       - STR_DISRUPTOR_PULSE_LAUNCHER
       - STR_DISRUPTOR_AMMO
-  - name: STR_PWT_AMMO
-    cost: 0
-    points: 0
-    dependencies:
-      - STR_PWT_CANNON
   - name: STR_PWT_DEFENSES
     cost: 800
     points: 25
