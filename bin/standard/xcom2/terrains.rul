@@ -538,7 +538,7 @@ terrains: #done
       - name: ALART09
         width: 20
         length: 20
-        type: 6
+        groups: 6
       - name: ALART10
         width: 20
         length: 20
