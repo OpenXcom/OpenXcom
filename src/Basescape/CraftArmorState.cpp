@@ -51,8 +51,8 @@ CraftArmorState::CraftArmorState(Base *base, size_t craft) : _base(base), _craft
 	_txtTitle = new Text(300, 17, 16, 7);
 	_txtName = new Text(114, 9, 16, 32);
 	_txtCraft = new Text(76, 9, 130, 32);
-	_txtArmor = new Text(100, 9, 204, 32);
-	_lstSoldiers = new TextList(288, 128, 8, 40);
+	_txtArmor = new Text(100, 9, 199, 32);
+	_lstSoldiers = new TextList(292, 128, 8, 40);
 
 	// Set palette
 	setInterface("craftArmor");
@@ -83,10 +83,11 @@ CraftArmorState::CraftArmorState(Base *base, size_t craft) : _base(base), _craft
 
 	_txtArmor->setText(tr("STR_ARMOR"));
 
-	_lstSoldiers->setColumns(3, 114, 74, 92);
+	_lstSoldiers->setColumns(3, 114, 69, 101);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
+	_lstSoldiers->setScrolling(true, 0);
 	_lstSoldiers->onMousePress((ActionHandler)&CraftArmorState::lstSoldiersClick);
 
 	Uint8 otherCraftColor = _game->getRuleset()->getInterface("craftArmor")->getElement("otherCraft")->color;

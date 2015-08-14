@@ -50,7 +50,7 @@ SoldierArmorState::SoldierArmorState(Base *base, size_t soldier) : _base(base), 
 	_btnCancel = new TextButton(140, 16, 90, 136);
 	_txtTitle = new Text(182, 16, 69, 48);
 	_txtType = new Text(90, 9, 80, 72);
-	_txtQuantity = new Text(70, 9, 177, 72);
+	_txtQuantity = new Text(70, 9, 190, 72);
 	_lstArmor = new TextList(160, 40, 73, 88);
 
 	// Set palette
@@ -80,7 +80,7 @@ SoldierArmorState::SoldierArmorState(Base *base, size_t soldier) : _base(base), 
 
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_lstArmor->setColumns(2, 112, 41);
+	_lstArmor->setColumns(2, 132, 21);
 	_lstArmor->setSelectable(true);
 	_lstArmor->setBackground(_window);
 	_lstArmor->setMargin(8);

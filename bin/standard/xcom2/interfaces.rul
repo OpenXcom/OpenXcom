@@ -455,7 +455,7 @@ interfaces: #done
     palette: PAL_GRAPHS
     elements:
       - id: text
-        color: 135   # red
+        color: 1     # white
       - id: scale
         color: 103   # minty green
       - id: graph

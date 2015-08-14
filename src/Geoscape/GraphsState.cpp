@@ -103,7 +103,7 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 		// initially add the GRAPH_MAX_BUTTONS having the first regions information
 		if (offset < GRAPH_MAX_BUTTONS)
 		{
-			_btnRegions.push_back(new ToggleTextButton(80, 11, 0, offset*11));
+			_btnRegions.push_back(new ToggleTextButton(88, 11, 0, offset*11));
 			_btnRegions.at(offset)->setText(tr((*iter)->getRules()->getType()));
 			_btnRegions.at(offset)->setInvertColor(13 + (8*offset));
 			_btnRegions.at(offset)->onMousePress((ActionHandler)&GraphsState::btnRegionListClick);
@@ -120,9 +120,9 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 	}
 
 	if (_regionToggles.size() < GRAPH_MAX_BUTTONS)
-		_btnRegionTotal = new ToggleTextButton(80, 11, 0, _regionToggles.size()*11);
+		_btnRegionTotal = new ToggleTextButton(88, 11, 0, _regionToggles.size()*11);
 	else
-		_btnRegionTotal = new ToggleTextButton(80, 11, 0, GRAPH_MAX_BUTTONS*11);
+		_btnRegionTotal = new ToggleTextButton(88, 11, 0, GRAPH_MAX_BUTTONS*11);
 	_regionToggles.push_back(new GraphButInfo(tr("STR_TOTAL_UC"), regionTotalColor));
 	_btnRegionTotal->onMousePress((ActionHandler)&GraphsState::btnRegionListClick);
 	_btnRegionTotal->setInvertColor(regionTotalColor);
@@ -141,7 +141,7 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 		// initially add the GRAPH_MAX_BUTTONS having the first countries information
 		if (offset < GRAPH_MAX_BUTTONS)
 		{
-			_btnCountries.push_back(new ToggleTextButton(80, 11, 0, offset*11));
+			_btnCountries.push_back(new ToggleTextButton(88, 11, 0, offset*11));
 			_btnCountries.at(offset)->setInvertColor(13 + (8*offset));
 			_btnCountries.at(offset)->setText(tr((*iter)->getRules()->getType()));
 			_btnCountries.at(offset)->onMousePress((ActionHandler)&GraphsState::btnCountryListClick);
@@ -160,9 +160,9 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 	}
 
 	if (_countryToggles.size() < GRAPH_MAX_BUTTONS)
-		_btnCountryTotal = new ToggleTextButton(80, 11, 0, _countryToggles.size()*11);
+		_btnCountryTotal = new ToggleTextButton(88, 11, 0, _countryToggles.size()*11);
 	else
-		_btnCountryTotal = new ToggleTextButton(80, 11, 0, GRAPH_MAX_BUTTONS*11);
+		_btnCountryTotal = new ToggleTextButton(88, 11, 0, GRAPH_MAX_BUTTONS*11);
 	_countryToggles.push_back(new GraphButInfo(tr("STR_TOTAL_UC"), countryTotalColor));
 	_btnCountryTotal->onMousePress((ActionHandler)&GraphsState::btnCountryListClick);
 	_btnCountryTotal->setInvertColor(countryTotalColor);
@@ -179,7 +179,7 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 	for (int iter = 0; iter != 5; ++iter)
 	{
 		offset = iter;
-		_btnFinances.push_back(new ToggleTextButton(80, 11, 0, offset*11));
+		_btnFinances.push_back(new ToggleTextButton(88, 11, 0, offset*11));
 		_financeToggles.push_back(false);
 		_btnFinances.at(offset)->setInvertColor(13 + (8*offset));
 		_btnFinances.at(offset)->onMousePress((ActionHandler)&GraphsState::btnFinanceListClick);

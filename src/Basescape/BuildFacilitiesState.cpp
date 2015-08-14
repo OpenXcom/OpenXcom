@@ -45,7 +45,7 @@ BuildFacilitiesState::BuildFacilitiesState(Base *base, State *state) : _base(bas
 	// Create objects
 	_window = new Window(this, 128, 160, 192, 40, POPUP_VERTICAL);
 	_btnOk = new TextButton(112, 16, 200, 176);
-	_lstFacilities = new TextList(100, 104, 200, 64);
+	_lstFacilities = new TextList(104, 104, 200, 64);
 	_txtTitle = new Text(118, 17, 197, 48);
 
 	// Set palette
@@ -69,11 +69,12 @@ BuildFacilitiesState::BuildFacilitiesState(Base *base, State *state) : _base(bas
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_INSTALLATION"));
 
-	_lstFacilities->setColumns(1, 100);
+	_lstFacilities->setColumns(1, 104);
 	_lstFacilities->setSelectable(true);
 	_lstFacilities->setBackground(_window);
 	_lstFacilities->setMargin(2);
 	_lstFacilities->setWordWrap(true);
+	_lstFacilities->setScrolling(true, 0);
 	_lstFacilities->onMouseClick((ActionHandler)&BuildFacilitiesState::lstFacilitiesClick);
 
 	PopulateBuildList();
