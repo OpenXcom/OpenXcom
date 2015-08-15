@@ -749,6 +749,7 @@ en-US:
   STR_WELLINGTON: "Wellington"
   STR_MELBOURNE: "Melbourne"
   STR_PERTH: "Perth"
+  STR_PSI_TRAINING: "Psi Training"
   STR_PSIONIC_TRAINING: "PSIONIC TRAINING"
   STR_REMAINING_PSI_LAB_CAPACITY: "Remaining Psi-lab capacity> {ALT}{0}"
   STR_PSIONIC__STRENGTH: "Psionic{NEWLINE}Strength"

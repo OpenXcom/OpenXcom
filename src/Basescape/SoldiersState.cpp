@@ -85,7 +85,7 @@ SoldiersState::SoldiersState(Base *base) : _base(base)
 	_btnOk->onMouseClick((ActionHandler)&SoldiersState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SoldiersState::btnOkClick, Options::keyCancel);
 
-	_btnPsiTraining->setText(tr("STR_PSIONIC_TRAINING"));
+	_btnPsiTraining->setText(tr("STR_PSI_TRAINING"));
 	_btnPsiTraining->onMouseClick((ActionHandler)&SoldiersState::btnPsiTrainingClick);
 	_btnPsiTraining->setVisible(isPsiBtnVisible);
 
