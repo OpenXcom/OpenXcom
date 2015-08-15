@@ -827,8 +827,11 @@ void DogfightState::update()
 						if (_ufo->isCrashed())
 						{
 							_ufo->setShotDownByCraftId(_craft->getUniqueId());
-							_ufoBreakingOff = false;
 							_ufo->setSpeed(0);
+							// if the ufo got destroyed here, these no longer apply
+							_ufoBreakingOff = false;
+							finalRun = false;
+							_end = false;
 						}
 						if (_ufo->getHitFrame() == 0)
 						{
