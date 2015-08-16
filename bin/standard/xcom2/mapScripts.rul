@@ -61,7 +61,12 @@ mapScripts: #done
     commands:
     - type: addCraft
       rects:
+        - [1,0,1,1]
+      label: 1
+    - type: addCraft
+      rects:
         - [1,0,1,2]
+      conditionals: [-1]
     - type: addBlock
       size: [3,7]
     - type: addBlock
