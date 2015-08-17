@@ -93,9 +93,17 @@ namespace OpenXcom
 			_lstStats2->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
 
 			_lstStats2->addRow(2, tr("STR_AMMUNITION").c_str(), tr(ammo->getName()).c_str());
-			
+
 			std::wostringstream ss9;
-			ss9 << ammo->getClipSize();
+			if (item->getClipSize() > 0)
+			{
+				ss9 << item->getClipSize();
+			}
+			else
+			{
+				ss9 << ammo->getClipSize();
+			}
+
 			_lstStats2->addRow(2, tr("STR_ROUNDS").c_str(), ss9.str().c_str());
 		}
 		else
