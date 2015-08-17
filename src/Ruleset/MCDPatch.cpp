@@ -128,6 +128,11 @@ void MCDPatch::load(const YAML::Node &node)
 			bool stopLOS = (*i)["stopLOS"].as<bool>();
 			_stopLOSses.push_back(std::make_pair(MCDIndex, stopLOS));
 		}
+		if ((*i)["objectType"])
+		{
+			int objectType = (*i)["objectType"].as<int>();
+			_objectTypes.push_back(std::make_pair(MCDIndex, objectType));
+		}
 	}
 }
 
@@ -188,6 +193,10 @@ void MCDPatch::modifyData(MapDataSet *dataSet) const
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _footstepSounds.begin(); i != _footstepSounds.end(); ++i)
 	{
 		dataSet->getObjects()->at(i->first)->setFootstepSound(i->second);
+	}
+	for (std::vector<std::pair<size_t, int> >::const_iterator i = _objectTypes.begin(); i != _objectTypes.end(); ++i)
+	{
+		dataSet->getObjects()->at(i->first)->setObjectType(i->second);
 	}
 	for (std::vector<std::pair<size_t, bool> >::const_iterator i = _noFloors.begin(); i != _noFloors.end(); ++i)
 	{

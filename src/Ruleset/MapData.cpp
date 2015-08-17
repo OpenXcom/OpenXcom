@@ -234,6 +234,15 @@ SpecialTileType MapData::getSpecialType() const
 }
 
 /**
+ * Sets the type of object.
+ * @param type The object type (0-3).
+ */
+void MapData::setObjectType(int type)
+{
+	_objectType = type;
+}
+
+/**
  * Gets the type of object.
  * @return The object type (0-3).
  */

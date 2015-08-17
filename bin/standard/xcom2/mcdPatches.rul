@@ -422,6 +422,7 @@ MCDPatches: #will never be done
       - MCDIndex: 19
         TUWalk: 4
         TUFly: 4
+        objectType: 0
       - MCDIndex: 62
         LOFTS: [44,38,43,42,38,14,0,0,0,0,0,0]
       - MCDIndex: 64

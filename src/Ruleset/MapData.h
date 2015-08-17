@@ -93,10 +93,12 @@ public:
 	int getYOffset() const;
 	/// Sets the offset on the Y axis for drawing this object.
 	void setYOffset(int value);
-	/// Gets info about special tile types
-	SpecialTileType getSpecialType() const;
+	/// Set the type of tile.
+	void setObjectType(int type);
 	/// Get the type of tile.
 	int getObjectType() const;
+	/// Gets info about special tile types
+	SpecialTileType getSpecialType() const;
 	/// Sets a special tile type and object type.
 	void setSpecialType(int value, int otype);
 	/// Gets the TU cost to move over the object.
