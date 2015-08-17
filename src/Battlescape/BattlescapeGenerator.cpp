@@ -285,6 +285,7 @@ void BattlescapeGenerator::nextStage()
 			{
 				toContainer->push_back(ammo);
 			}
+			(*i)->setTile(0);
 			toContainer->push_back(*i);
 		}
 	}
