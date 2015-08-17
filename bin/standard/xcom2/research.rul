@@ -708,6 +708,7 @@ research: #done: double check scores and times.
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
+      - STR_MC_LAB
   - name: STR_ALIEN_PROBE_MISSION
     cost: 0
     points: 50
