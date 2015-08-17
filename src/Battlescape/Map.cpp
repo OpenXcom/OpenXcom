@@ -1340,10 +1340,13 @@ void Map::animate(bool redraw)
 		{
 			(*i)->breathe();
 		}
-		if ((*i)->getArmor()->getConstantAnimation())
+		if (!(*i)->isOut())
 		{
-			(*i)->setCache(0);
-			cacheUnit(*i);
+			if ((*i)->getArmor()->getConstantAnimation())
+			{
+				(*i)->setCache(0);
+				cacheUnit(*i);
+			}
 		}
 	}
 
