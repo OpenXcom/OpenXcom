@@ -127,7 +127,7 @@ void LoadGameState::buildUi(SDL_Color *palette)
 void LoadGameState::init()
 {
 	State::init();
-	if (_filename == SavedGame::QUICKSAVE && !CrossPlatform::fileExists(Options::getUserFolder() + _filename))
+	if (_filename == SavedGame::QUICKSAVE && !CrossPlatform::fileExists(Options::getMasterUserFolder() + _filename))
 	{
 		_game->popState();
 		return;

@@ -773,18 +773,29 @@ void setFolders()
 	}
 	if (!_userFolder.empty())
 	{
-		// create mods subfolder if it doesn't already exist
-		std::string modsFolder = _userFolder + "mods";
-		if (!CrossPlatform::folderExists(modsFolder))
+		// create subfolders if they don't already exist
+		CrossPlatform::createFolder(_userFolder + "mods");
+		CrossPlatform::createFolder(_userFolder + "xcom1");
+		CrossPlatform::createFolder(_userFolder + "xcom2");
+		// move any old saves to the appropriate folders
+		std::vector<std::string> saves = CrossPlatform::getFolderContents(_userFolder, "sav");
+		std::vector<std::string> autosaves = CrossPlatform::getFolderContents(_userFolder, "asav");
+		saves.insert(saves.end(), autosaves.begin(), autosaves.end());
+		for (std::vector<std::string>::iterator i = saves.begin(); i != saves.end(); ++i)
 		{
-			if (CrossPlatform::createFolder(modsFolder))
+			std::string srcFile = _userFolder + (*i);
+			std::string dstFile = srcFile;
+			YAML::Node doc = YAML::LoadFile(srcFile);
+			std::vector<std::string> mods = doc["mods"].as<std::vector< std::string> >(std::vector<std::string>());
+			if (std::find(mods.begin(), mods.end(), "xcom2") == mods.end())
 			{
-				Log(LOG_INFO) << "created mods folder: '" << modsFolder << "'";
+				dstFile = _userFolder + "xcom1/" + (*i);
 			}
 			else
 			{
-				Log(LOG_WARNING) << "failed to create mods folder: '" << modsFolder << "'";
+				dstFile = _userFolder + "xcom2/" + (*i);
 			}
+			CrossPlatform::moveFile(srcFile, dstFile);
 		}
 	}
 
@@ -958,6 +969,16 @@ std::string getUserFolder()
 std::string getConfigFolder()
 {
 	return _configFolder;
+}
+
+/**
+ * Returns the game's User folder for the
+ * currently loaded master mod.
+ * @return Full path to User folder.
+ */
+std::string getMasterUserFolder()
+{
+	return _userFolder + getActiveMaster() + "/";
 }
 
 /**

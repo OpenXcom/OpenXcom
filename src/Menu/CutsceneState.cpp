@@ -67,7 +67,7 @@ void CutsceneState::init()
 		{
 			std::string filename = CrossPlatform::sanitizeFilename(
 				Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
-			CrossPlatform::deleteFile(Options::getUserFolder() + filename);
+			CrossPlatform::deleteFile(Options::getMasterUserFolder() + filename);
 		}
 		_game->setSavedGame(0);
 		_game->setState(new GoToMainMenuState);

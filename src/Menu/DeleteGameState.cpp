@@ -39,7 +39,7 @@ namespace OpenXcom
  */
 DeleteGameState::DeleteGameState(OptionsOrigin origin, const std::string &save) : _origin(origin)
 {
-	_filename = Options::getUserFolder() + save;
+	_filename = Options::getMasterUserFolder() + save;
 	_screen = false;
 
 	// Create objects

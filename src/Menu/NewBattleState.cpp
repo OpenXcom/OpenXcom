@@ -256,9 +256,9 @@ void NewBattleState::init()
  * Loads new battle data from a YAML file.
  * @param filename YAML filename.
  */
-void NewBattleState::load()
+void NewBattleState::load(const std::string &filename)
 {
-	std::string s = Options::getConfigFolder() + "battle-" + Options::getActiveMaster() + ".cfg";
+	std::string s = Options::getMasterUserFolder() + filename + ".cfg";
 	if (!CrossPlatform::fileExists(s))
 	{
 		initSave();
@@ -344,13 +344,13 @@ void NewBattleState::load()
  * Saves new battle data to a YAML file.
  * @param filename YAML filename.
  */
-void NewBattleState::save()
+void NewBattleState::save(const std::string &filename)
 {
-	std::string s = Options::getConfigFolder() + "battle-" + Options::getActiveMaster() + ".cfg";
+	std::string s = Options::getMasterUserFolder() + filename + ".cfg";
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
-		Log(LOG_WARNING) << "Failed to save " << s;
+		Log(LOG_WARNING) << "Failed to save " << filename << ".cfg";
 		return;
 	}
 	YAML::Emitter out;

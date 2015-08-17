@@ -49,7 +49,7 @@ ListLoadOriginalState::ListLoadOriginalState()
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnNew = new TextButton(80, 16, 60, 172);
 	_btnCancel = new TextButton(80, 16, 180, 172);
-	_txtTitle = new Text(310, 17, 5, 8);
+	_txtTitle = new Text(310, 17, 5, 7);
 	_txtName = new Text(160, 9, 36, 24);
 	_txtTime = new Text(30, 9, 195, 24);
 	_txtDate = new Text(90, 9, 225, 24);

@@ -1668,7 +1668,7 @@ void BattlescapeState::saveAIMap()
 	do
 	{
 		ss.str("");
-		ss << Options::getUserFolder() << "AIExposure" << std::setfill('0') << std::setw(3) << i << ".png";
+		ss << Options::getMasterUserFolder() << "AIExposure" << std::setfill('0') << std::setw(3) << i << ".png";
 		i++;
 	}
 	while (CrossPlatform::fileExists(ss.str()));
@@ -1798,7 +1798,7 @@ void BattlescapeState::saveVoxelView()
 	do
 	{
 		ss.str("");
-		ss << Options::getUserFolder() << "fpslook" << std::setfill('0') << std::setw(3) << i << ".png";
+		ss << Options::getMasterUserFolder() << "fpslook" << std::setfill('0') << std::setw(3) << i << ".png";
 		i++;
 	}
 	while (CrossPlatform::fileExists(ss.str()));
@@ -1872,7 +1872,7 @@ void BattlescapeState::saveVoxelMap()
 		}
 
 		ss.str("");
-		ss << Options::getUserFolder() << "voxel" << std::setfill('0') << std::setw(2) << z << ".png";
+		ss << Options::getMasterUserFolder() << "voxel" << std::setfill('0') << std::setw(2) << z << ".png";
 
 		unsigned error = lodepng::encode(ss.str(), image, _save->getMapSizeX()*16, _save->getMapSizeY()*16, LCT_RGB);
 		if (error)

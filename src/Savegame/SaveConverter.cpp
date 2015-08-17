@@ -98,7 +98,7 @@ SaveConverter::SaveConverter(int save, Ruleset *rule) : _rule(rule)
 {
 	std::stringstream ssFolder, ssPath;
 	ssFolder << "GAME_" << save;
-	ssPath << Options::getUserFolder() << "/" << ssFolder.str();
+	ssPath << Options::getMasterUserFolder() << "/" << ssFolder.str();
 	_saveName = ssFolder.str();
 	_savePath = ssPath.str();
 	ssPath << "/SAVEINFO.DAT";
@@ -186,7 +186,7 @@ void SaveConverter::getList(Language *lang, SaveOriginal info[NUM_SAVES])
 
 		int id = i + 1;
 		std::stringstream ss;
-		ss << Options::getUserFolder() << "/GAME_" << id << "/SAVEINFO.DAT";
+		ss << Options::getMasterUserFolder() << "/GAME_" << id << "/SAVEINFO.DAT";
 		std::ifstream datFile(ss.str().c_str(), std::ios::in | std::ios::binary);
 		if (datFile)
 		{
