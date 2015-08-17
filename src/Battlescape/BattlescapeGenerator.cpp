@@ -276,23 +276,31 @@ void BattlescapeGenerator::nextStage()
 					}
 				}
 			}
+			// if a soldier is already holding it, let's let him keep it
 			if ((*i)->getOwner() && (*i)->getOwner()->getFaction() == FACTION_PLAYER)
 			{
 				toContainer = &carryToNextStage;
 			}
+
+			// at this point, we know what happens with the item, so let's apply it to any ammo as well.
 			BattleItem *ammo = (*i)->getAmmoItem();
 			if (ammo && ammo != *i)
 			{
+				// break any tile links, because all the tiles are about to disappear.
 				ammo->setTile(0);
 				toContainer->push_back(ammo);
 			}
+			// and now the actual item itself.
 			(*i)->setTile(0);
 			toContainer->push_back(*i);
 		}
 	}
 
+	// anything in the "removeFromGame" vector will now be discarded - they're all dead to us now.
 	for (std::vector<BattleItem*>::iterator i = removeFromGame.begin(); i != removeFromGame.end();++i)
 	{
+		// fixed weapons, or anything that's otherwise "equipped" will need to be de-equipped
+		// from their owners to make sure we don't have any null pointers to worry about later
 		if ((*i)->getOwner())
 		{
 			for (std::vector<BattleItem*>::iterator j = (*i)->getOwner()->getInventory()->begin(); j != (*i)->getOwner()->getInventory()->end(); ++j)
@@ -307,8 +315,13 @@ void BattlescapeGenerator::nextStage()
 		delete *i;
 	}
 
+	// empty the items vector
 	_save->getItems()->clear();
 
+	// rebuild it with only the items we want to keep active in battle for the next stage
+	// here we add all the items that our soldiers are carrying, and we'll add the items on the
+	// inventory tile after we've generated our map. everything else will either be in one of the
+	// recovery arrays, or deleted from existance at this point.
 	for (std::vector<BattleItem*>::iterator i = carryToNextStage.begin(); i != carryToNextStage.end();++i)
 	{
 		_save->getItems()->push_back(*i);
