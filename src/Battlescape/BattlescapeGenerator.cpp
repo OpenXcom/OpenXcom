@@ -283,6 +283,7 @@ void BattlescapeGenerator::nextStage()
 			BattleItem *ammo = (*i)->getAmmoItem();
 			if (ammo && ammo != *i)
 			{
+				ammo->setTile(0);
 				toContainer->push_back(ammo);
 			}
 			(*i)->setTile(0);
