@@ -571,7 +571,7 @@ void DogfightState::think()
 		update();
 		_craftDamageAnimTimer->think(this, 0);
 	}
-	if (_craft->getDestination() != _ufo || _ufo->getStatus() == Ufo::LANDED)
+	if (!_craft->isInDogfight() || _craft->getDestination() != _ufo || _ufo->getStatus() == Ufo::LANDED)
 	{
 		endDogfight();
 	}
@@ -723,7 +723,7 @@ void DogfightState::update()
 	// Check if craft is not low on fuel when window minimized, and
 	// Check if crafts destination hasn't been changed when window minimized.
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
-	if (u != _ufo || _craft->getLowFuel() || (_minimized && _ufo->isCrashed()))
+	if (u != _ufo || !_craft->isInDogfight() || _craft->getLowFuel() || (_minimized && _ufo->isCrashed()))
 	{
 		endDogfight();
 		return;

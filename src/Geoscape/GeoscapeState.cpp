@@ -799,25 +799,39 @@ void GeoscapeState::time5Seconds()
 			if ((*j)->getDestination() != 0)
 			{
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
-				if (u != 0 && !u->getDetected())
+				if (u != 0)
 				{
-					if (u->getTrajectory().getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN && (u->getStatus() == Ufo::LANDED || u->getStatus() == Ufo::DESTROYED))
+					if (!u->getDetected())
+					{
+						if (u->getTrajectory().getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN && (u->getStatus() == Ufo::LANDED || u->getStatus() == Ufo::DESTROYED))
+						{
+							(*j)->returnToBase();
+						}
+						else
+						{
+							(*j)->setDestination(0);
+							Waypoint *w = new Waypoint();
+							w->setLongitude(u->getLongitude());
+							w->setLatitude(u->getLatitude());
+							w->setId(u->getId());
+							popup(new GeoscapeCraftState((*j), _globe, w));
+						}
+					}
+					if (u->getStatus() == Ufo::LANDED && (*j)->isInDogfight())
+					{
+						(*j)->setInDogfight(false);
+					}
+					else if (u->getStatus() == Ufo::DESTROYED)
 					{
 						(*j)->returnToBase();
 					}
-					else
-					{
-						(*j)->setDestination(0);
-						Waypoint *w = new Waypoint();
-						w->setLongitude(u->getLongitude());
-						w->setLatitude(u->getLatitude());
-						w->setId(u->getId());
-						popup(new GeoscapeCraftState((*j), _globe, w));
-					}
 				}
-				if (u != 0 && u->getStatus() == Ufo::DESTROYED)
+				else
 				{
-					(*j)->returnToBase();
+					if ((*j)->isInDogfight())
+					{
+						(*j)->setInDogfight(false);
+					}
 				}
 			}
 			if (!_zoomInEffectTimer->isRunning() && !_zoomOutEffectTimer->isRunning())
