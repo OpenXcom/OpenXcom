@@ -457,7 +457,7 @@ void BattlescapeGenerator::run()
 
 	if (_terrain == 0)
 	{
-		if ((_worldTexture == 0 || _worldTexture->getTerrain()->empty()))
+		if (_worldTexture == 0 || _worldTexture->getTerrain()->empty() || !ruleDeploy->getTerrains().empty())
 		{
 			if (!ruleDeploy->getTerrains().empty())
 			{
