@@ -104,8 +104,10 @@ namespace OpenXcom
 		_btnOk->onKeyboardPress((ActionHandler)&ArticleState::btnOkClick,Options::keyCancel);
 		_btnPrev->setText(L"<<");
 		_btnPrev->onMouseClick((ActionHandler)&ArticleState::btnPrevClick);
+		_btnPrev->onKeyboardPress((ActionHandler)&ArticleState::btnPrevClick, Options::keyGeoLeft);
 		_btnNext->setText(L">>");
 		_btnNext->onMouseClick((ActionHandler)&ArticleState::btnNextClick);
+		_btnNext->onKeyboardPress((ActionHandler)&ArticleState::btnNextClick, Options::keyGeoRight);
 	}
 
 	/**
