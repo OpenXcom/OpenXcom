@@ -668,13 +668,11 @@ void AlienMission::setRegion(const std::string &region, const Ruleset &rules)
  */
 std::pair<double, double> AlienMission::getWaypoint(const UfoTrajectory &trajectory, const size_t nextWaypoint, const Globe &globe, const RuleRegion &region)
 {
-	/* LOOK MA! NO HANDS!
-	if (trajectory.getAltitude(nextWaypoint) == "STR_GROUND")
+	if (trajectory.getWaypointCount() > nextWaypoint + 1 && trajectory.getAltitude(nextWaypoint + 1) == "STR_GROUND")
 	{
 		return getLandPoint(globe, region, trajectory.getZone(nextWaypoint));
 	}
-	else
-	*/
+
 	int waveNumber = _nextWave - 1;
 	if (waveNumber < 0)
 	{

@@ -457,10 +457,17 @@ void BattlescapeGenerator::run()
 
 	if (_terrain == 0)
 	{
-		if (_worldTexture == 0 || _worldTexture->getTerrain()->empty() || !ruleDeploy->getTerrains().empty())
+		if ((_worldTexture == 0 || _worldTexture->getTerrain()->empty()))
 		{
-			size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() - 1);
-			_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
+			if (!ruleDeploy->getTerrains().empty())
+			{
+				size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() - 1);
+				_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
+			}
+			else // trouble: no texture and no deployment terrain, most likely scenario is a UFO landing on water: use the first available terrain
+			{
+				_terrain = _game->getRuleset()->getTerrain(_game->getRuleset()->getTerrainList().front());
+			}
 		}
 		else
 		{
