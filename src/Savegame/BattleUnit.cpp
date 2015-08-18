@@ -1594,7 +1594,13 @@ void BattleUnit::prepareNewTurn(bool fullProcess)
 	}
 
 	// revert to original faction
-	_faction = _originalFaction;
+	// don't give it back its TUs or anything this round
+	// because it's no longer a unit of the team getting TUs back
+	if (_faction != _originalFaction)
+	{
+		_faction = _originalFaction;
+		return;
+	}
 
 	_unitsSpottedThisTurn.clear();
 
