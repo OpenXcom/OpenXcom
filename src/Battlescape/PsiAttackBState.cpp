@@ -162,7 +162,7 @@ void PsiAttackBState::psiAttack()
 			_target->convertToFaction(_unit->getFaction());
 			_parent->getTileEngine()->calculateFOV(_target->getPosition());
 			_parent->getTileEngine()->calculateUnitLighting();
-			_target->setTimeUnits(_target->getBaseStats()->tu);
+			_target->recoverTimeUnits();
 			_target->allowReselect();
 			_target->abortTurn(); // resets unit status to STANDING
 			// if all units from either faction are mind controlled - auto-end the mission.

@@ -460,6 +460,8 @@ public:
 	void setSpecialWeapon(SavedBattleGame *save, const Ruleset *rule);
 	/// Get special weapon.
 	BattleItem *getSpecialWeapon(BattleType type) const;
+	/// Recovers the unit's time units and energy.
+	void recoverTimeUnits();
 };
 
 }
