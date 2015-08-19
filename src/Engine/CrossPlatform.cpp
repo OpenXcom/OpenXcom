@@ -19,6 +19,7 @@
 #include "CrossPlatform.h"
 #include <algorithm>
 #include <sstream>
+#include <fstream>
 #include <string>
 #include <locale>
 #include <stdint.h>
@@ -726,7 +727,24 @@ bool moveFile(const std::string &src, const std::string &dest)
 #ifdef _WIN32
 	return (MoveFileExA(src.c_str(), dest.c_str(), MOVEFILE_REPLACE_EXISTING) != 0);
 #else
-	return (rename(src.c_str(), dest.c_str()) == 0);
+	//return (rename(src.c_str(), dest.c_str()) == 0);
+	std::ifstream srcStream;
+	std::ofstream destStream;
+	srcStream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+	destStream.exceptions(std::ofstream::failbit | std::ofstream::badbit);
+	try
+	{
+		srcStream.open(src, std::ios::binary);
+		destStream.open(dest, std::ios::binary);
+		destStream << srcStream.rdbuf();
+		srcStream.close();
+		destStream.close();
+	}
+	catch (std::fstream::failure)
+	{
+		return false;
+	}
+	return deleteFile(src);
 #endif
 }
 
