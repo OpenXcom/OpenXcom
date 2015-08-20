@@ -111,6 +111,8 @@ public:
 	ManufactureInfoState(Base * base, RuleManufacture * _item);
 	/// Creates the State (modify production).
 	ManufactureInfoState(Base * base, Production * production);
+	/// Cleans up the state
+	~ManufactureInfoState();
 };
 }
 #endif
