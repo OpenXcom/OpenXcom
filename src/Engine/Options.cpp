@@ -316,18 +316,12 @@ static void _setDefaultMods()
 	bool haveUfo = _ufoIsInstalled();
 	if (haveUfo)
 	{
-		Log(LOG_DEBUG) << "detected UFO";
 		mods.push_back(std::pair<std::string, bool>("xcom1", true));
 	}
 
 	if (_tftdIsInstalled())
 	{
-		Log(LOG_DEBUG) << "detected TFTD";
 		mods.push_back(std::pair<std::string, bool>("xcom2", !haveUfo));
-	}
-	else if (!haveUfo)
-	{
-		Log(LOG_ERROR) << "neither UFO or TFTD data was detected";
 	}
 }
 
