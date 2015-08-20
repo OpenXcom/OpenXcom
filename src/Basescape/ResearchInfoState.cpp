@@ -158,6 +158,15 @@ void ResearchInfoState::buildUi()
 }
 
 /**
+* Frees up memory that's not automatically cleaned on exit
+*/
+ResearchInfoState::~ResearchInfoState()
+{
+	delete _timerLess;
+	delete _timerMore;
+}
+
+/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
