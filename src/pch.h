@@ -31,6 +31,7 @@
 #include "./dirent.h"
 #include "./lodepng.h"
 
+#define _USE_MATH_DEFINES
 #include <algorithm>
 #include <assert.h>
 #include <bitset>
@@ -87,9 +88,6 @@
 #include <malloc.h>
 #else
 #include <alloca.h>
-#if HAVE_CONFIG_H
-#include <config.h>
-#endif
 #include <dirent.h>
 #include <pwd.h>
 #include <sys/param.h>

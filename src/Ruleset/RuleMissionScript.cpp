@@ -37,20 +37,17 @@ RuleMissionScript::RuleMissionScript(const std::string type) : _type(type), _fir
  */
 RuleMissionScript::~RuleMissionScript()
 {
-	for (std::vector<std::pair<size_t, WeightedOptions*> >::iterator i = _missionWeights.begin(); i != _missionWeights.end();)
+	for (std::vector<std::pair<size_t, WeightedOptions*> >::iterator i = _missionWeights.begin(); i != _missionWeights.end(); ++i)
 	{
 		delete i->second;
-		i = _missionWeights.erase(i);
 	}
-	for (std::vector<std::pair<size_t, WeightedOptions*> >::iterator i = _raceWeights.begin(); i != _raceWeights.end();)
+	for (std::vector<std::pair<size_t, WeightedOptions*> >::iterator i = _raceWeights.begin(); i != _raceWeights.end(); ++i)
 	{
 		delete i->second;
-		i = _raceWeights.erase(i);
 	}
-	for (std::vector<std::pair<size_t, WeightedOptions*> >::iterator i = _regionWeights.begin(); i != _regionWeights.end();)
+	for (std::vector<std::pair<size_t, WeightedOptions*> >::iterator i = _regionWeights.begin(); i != _regionWeights.end(); ++i)
 	{
 		delete i->second;
-		i = _regionWeights.erase(i);
 	}
 }
 

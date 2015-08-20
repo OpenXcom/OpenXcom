@@ -262,10 +262,9 @@ Ruleset::~Ruleset()
 	}
 	for (std::map<std::string, std::vector<MapScript*> >::iterator i = _mapScripts.begin(); i != _mapScripts.end(); ++i)
 	{
-		for (std::vector<MapScript*>::iterator j = (*i).second.begin(); j != (*i).second.end();)
+		for (std::vector<MapScript*>::iterator j = (*i).second.begin(); j != (*i).second.end(); ++j)
 		{
 			delete *j;
-			j = (*i).second.erase(j);
 		}
 	}
 	for (std::map<std::string, RuleVideo *>::const_iterator i = _videos.begin(); i != _videos.end(); ++i)
@@ -275,6 +274,18 @@ Ruleset::~Ruleset()
 	for (std::map<std::string, RuleMusic *>::const_iterator i = _musics.begin(); i != _musics.end(); ++i)
 	{
 		delete i->second;
+	}
+	for (std::map<std::string, RuleMissionScript*>::const_iterator i = _missionScripts.begin(); i != _missionScripts.end(); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, SoundDefinition*>::const_iterator i = _soundDefs.begin(); i != _soundDefs.end(); ++i)
+	{
+		delete i->second;
+	}
+	for (std::vector<StatString*>::const_iterator i = _statStrings.begin(); i != _statStrings.end(); ++i)
+	{
+		delete (*i);
 	}
 }
 
