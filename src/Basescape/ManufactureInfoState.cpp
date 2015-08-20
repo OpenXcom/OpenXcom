@@ -193,6 +193,17 @@ void ManufactureInfoState::buildUi()
 }
 
 /**
+* Frees up memory that's not automatically cleaned on exit
+*/
+ManufactureInfoState::~ManufactureInfoState()
+{
+	delete _timerMoreEngineer;
+	delete _timerLessEngineer;
+	delete _timerMoreUnit;
+	delete _timerLessUnit;
+}
+
+/**
  * Stops this Production. Returns to the previous screen.
  * @param action A pointer to an Action.
  */
