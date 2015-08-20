@@ -569,7 +569,7 @@ interfaces: #done
       - id: errorPalette
         color: 6     # brown
       - id: errorMessage
-        color: 241   # pink
+        color: 1   # even lighter blue
   - type: gameOver
     elements:
       - id: defeatText
@@ -631,7 +631,7 @@ interfaces: #done
       - id: button
         color: 1   # blue
       - id: errorPalette
-        color: 0     # oxide
+        color: 6     # oxide
       - id: errorMessage
         color: 1   # pink
   - type: transferBaseSelect
@@ -1094,9 +1094,9 @@ interfaces: #done
       - id: button
         color: 1
       - id: errorPalette
-        color: 0     # brown
+        color: 6     # oxide
       - id: errorMessage
-        color: 241   # pink
+        color: 1
   - type: basescape
     palette: PAL_BASESCAPE
     elements:
