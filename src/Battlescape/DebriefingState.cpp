@@ -60,6 +60,8 @@
 #include "../Basescape/SellState.h"
 #include "../Menu/SaveGameState.h"
 #include "../Ruleset/AlienDeployment.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 
 namespace OpenXcom
 {

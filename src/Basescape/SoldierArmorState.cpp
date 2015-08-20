@@ -31,6 +31,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {

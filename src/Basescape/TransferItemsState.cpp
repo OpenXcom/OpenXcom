@@ -41,6 +41,8 @@
 #include "TransferConfirmState.h"
 #include "../Engine/Options.h"
 #include "../fmath.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 
 namespace OpenXcom
 {

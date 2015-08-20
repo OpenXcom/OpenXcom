@@ -83,8 +83,6 @@
 #endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <shlobj.h>
-#include <shlwapi.h>
 #include <direct.h>
 #include <malloc.h>
 #else
@@ -141,7 +139,6 @@
 #include "./Engine/AdlibMusic.h"
 #include "./Engine/CatFile.h"
 #include "./Engine/CrossPlatform.h"
-#include "./Engine/DosFont.h"
 #include "./Engine/Exception.h"
 #include "./Engine/FastLineClip.h"
 #include "./Engine/FileMap.h"

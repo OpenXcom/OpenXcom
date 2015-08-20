@@ -43,6 +43,8 @@
 #include "UnitInfoState.h"
 #include "BattlescapeState.h"
 #include "TileEngine.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 
 namespace OpenXcom
 {

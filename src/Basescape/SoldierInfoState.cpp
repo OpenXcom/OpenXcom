@@ -38,6 +38,8 @@
 #include "SellState.h"
 #include "SoldierArmorState.h"
 #include "SackSoldierState.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 
 namespace OpenXcom
 {

@@ -31,6 +31,8 @@
 #include "../Savegame/Base.h"
 #include "ManufactureStartState.h"
 #include "../Menu/ErrorMessageState.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 
 namespace OpenXcom
 {

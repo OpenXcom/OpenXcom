@@ -36,6 +36,8 @@
 #include "../Engine/Options.h"
 #include "../Menu/CutsceneState.h"
 #include "../Menu/SaveGameState.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 
 namespace OpenXcom
 {

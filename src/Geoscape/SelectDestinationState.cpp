@@ -35,6 +35,7 @@
 #include "../Ruleset/RuleCraft.h"
 #include "ConfirmCydoniaState.h"
 #include "../Engine/Options.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {

@@ -21,7 +21,6 @@
 
 #include <list>
 #include <string>
-#include <vector>
 #include <SDL.h>
 
 namespace OpenXcom

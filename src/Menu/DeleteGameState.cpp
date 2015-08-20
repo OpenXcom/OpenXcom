@@ -27,6 +27,8 @@
 #include "../Engine/Options.h"
 #include "ErrorMessageState.h"
 #include "../Savegame/SavedGame.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 
 namespace OpenXcom
 {

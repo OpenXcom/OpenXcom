@@ -23,9 +23,6 @@
 #include <vector>
 #include <string>
 #include <SDL.h>
-#include <climits>
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleInterface.h"
 
 namespace OpenXcom
 {
@@ -36,6 +33,7 @@ class InteractiveSurface;
 class Action;
 class LocalizedText;
 class SavedBattleGame;
+class RuleInterface;
 
 /**
  * A game state that receives user input and reacts accordingly.

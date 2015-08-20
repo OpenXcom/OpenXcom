@@ -52,6 +52,7 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Ruleset/RuleAlienMission.h"
 #include "../Ruleset/RuleGlobe.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {

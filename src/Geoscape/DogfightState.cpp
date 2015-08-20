@@ -36,7 +36,6 @@
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Savegame/Ufo.h"
 #include "../Ruleset/RuleUfo.h"
-#include "../Engine/Music.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 #include "../Savegame/Base.h"
@@ -46,10 +45,9 @@
 #include "../Savegame/Region.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Savegame/AlienMission.h"
-#include "../Savegame/AlienStrategy.h"
-#include "../Engine/Options.h"
-#include <cstdlib>
 #include "DogfightErrorState.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 
 namespace OpenXcom
 {

@@ -25,7 +25,6 @@
 #define OPENXCOM_FLCPLAYER_H
 
 #include <SDL.h>
-#include <deque>
 
 namespace OpenXcom
 {

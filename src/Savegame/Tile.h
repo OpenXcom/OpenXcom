@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_TILE_H
 #define OPENXCOM_TILE_H
 
-#include <string>
+#include <list>
 #include <vector>
 #include "../Battlescape/Position.h"
 #include "../Ruleset/MapData.h"

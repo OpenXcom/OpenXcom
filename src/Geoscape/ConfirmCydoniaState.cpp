@@ -29,6 +29,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Ruleset/AlienDeployment.h"
 #include "../Engine/Options.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {

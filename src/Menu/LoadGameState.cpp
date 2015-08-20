@@ -32,6 +32,8 @@
 #include "../Battlescape/BattlescapeState.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Sound.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 
 namespace OpenXcom
 {

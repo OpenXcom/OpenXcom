@@ -20,7 +20,6 @@
 #define OPENXCOM_CITY_H
 
 #include <string>
-#include <yaml-cpp/yaml.h>
 #include "../Savegame/Target.h"
 
 namespace OpenXcom

@@ -20,7 +20,6 @@
 #define OPENXCOM_SURFACE_H
 
 #include <SDL.h>
-#include <SDL_image.h>
 #include <string>
 
 namespace OpenXcom

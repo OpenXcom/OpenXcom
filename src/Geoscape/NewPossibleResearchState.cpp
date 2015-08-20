@@ -29,6 +29,7 @@
 #include "../Basescape/ResearchState.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {

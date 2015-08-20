@@ -27,6 +27,8 @@
 #include "../Geoscape/GeoscapeState.h"
 #include "../Geoscape/BuildNewBaseState.h"
 #include "../Engine/Options.h"
+#include "../Savegame/SavedGame.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {

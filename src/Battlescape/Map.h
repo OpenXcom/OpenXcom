@@ -22,7 +22,6 @@
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Options.h"
 #include "Position.h"
-#include <set>
 #include <vector>
 
 namespace OpenXcom

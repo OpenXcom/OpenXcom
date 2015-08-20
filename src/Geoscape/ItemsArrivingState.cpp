@@ -38,6 +38,7 @@
 #include "GeoscapeState.h"
 #include "../Engine/Options.h"
 #include "../Basescape/BasescapeState.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {

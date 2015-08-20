@@ -29,6 +29,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
 #include "../Engine/Sound.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {

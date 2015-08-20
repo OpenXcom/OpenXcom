@@ -36,6 +36,8 @@
 #include "ConfirmNewBaseState.h"
 #include "../Engine/Options.h"
 #include "../Menu/ErrorMessageState.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 
 namespace OpenXcom
 {

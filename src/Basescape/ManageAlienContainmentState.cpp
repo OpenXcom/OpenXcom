@@ -38,6 +38,8 @@
 #include "../Engine/Options.h"
 #include "../Menu/ErrorMessageState.h"
 #include "SellState.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 
 namespace OpenXcom
 {

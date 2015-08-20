@@ -33,6 +33,8 @@
 #include "SoldierArmorState.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/ItemContainer.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 
 namespace OpenXcom
 {

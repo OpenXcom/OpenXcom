@@ -21,7 +21,6 @@
 
 #include <string>
 #include <map>
-#include <SDL.h>
 #include <yaml-cpp/yaml.h>
 
 namespace OpenXcom

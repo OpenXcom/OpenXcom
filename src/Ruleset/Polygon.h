@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_POLYGON_H
 #define OPENXCOM_POLYGON_H
 
-#include <SDL.h>
+#include <SDL_types.h>
 #include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
