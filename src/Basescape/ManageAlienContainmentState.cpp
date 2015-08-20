@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ManageAlienContainmentState.h"
+#include <climits>
 #include <sstream>
 #include <algorithm>
 #include "../Engine/Action.h"

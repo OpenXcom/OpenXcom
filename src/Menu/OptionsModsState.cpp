@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "OptionsModsState.h"
+#include <climits>
 #include <algorithm>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
