@@ -734,8 +734,8 @@ bool moveFile(const std::string &src, const std::string &dest)
 	destStream.exceptions(std::ofstream::failbit | std::ofstream::badbit);
 	try
 	{
-		srcStream.open(src, std::ios::binary);
-		destStream.open(dest, std::ios::binary);
+		srcStream.open(src.c_str(), std::ios::binary);
+		destStream.open(dest.c_str(), std::ios::binary);
 		destStream << srcStream.rdbuf();
 		srcStream.close();
 		destStream.close();
