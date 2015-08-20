@@ -221,6 +221,7 @@ en-GB:
   STR_XCOM_ACTIVITY_IN_COUNTRIES: "X-Com Activity in Zones"
   STR_FINANCE: "Finance"
   STR_DATE_FIRST: "{0}st"
+
   STR_DATE_SECOND: "{0}nd"
   STR_DATE_THIRD: "{0}rd"
   STR_DATE_FOURTH: "{0}th"
@@ -715,7 +716,7 @@ en-GB:
   STR_PWT_DEFENSES_UFOPEDIA: "Pulse Wave Torpedoes provide the most effective defence against Alien attacks. These missiles have super dense war heads which can penetrate all known armour. The magnetic waves they produce disable electronic defences."
   STR_BOMBARDMENT_SHIELD_UFOPEDIA: "The Pressure Bombardment shield protects the base from Alien submersibles docking and sets up a resonating field that repulses attacking subs long enough for defence systems to fire repeatedly. In effect this doubles the effectiveness of any defence systems already deployed."
   STR_MC_GENERATOR_UFOPEDIA: "Since Alien subs utilize Molecular Control Technology to detect the presence of living creatures, using a negative M.C. emitter will blanket a base with an impenetrable shield to confuse the Aliens and disguise our presence."
-  STR_MC_LAB_UFOPEDIA: "The Molecular Control lab can implant and train up to ten aquanauts at one time.. Implants are surgically installed in the skulls of aquanauts. Extensive training allows them to utilize their implants. Implant skills are used in conjunction with a Molecular Devices and can be used for attacks during combat."
+  STR_MC_LAB_UFOPEDIA: "The Molecular Control lab can implant and train up to ten aquanauts at one time. Implants are surgically installed in the skulls of aquanauts. Extensive training allows them to utilize their implants. Implant skills are used in conjunction with a Molecular Devices and can be used for attacks during combat."
   STR_TRANSMISSION_RESOLVER_UFOPEDIA: "Alien communications utilize the Molecular control implant network the Aliens have built up. The transmission resolver facility intercepts Alien Sub transmissions and decodes the information. This will show the type of Alien Sub, the Alien race and the type of activity that is occurring."
   STR_SUB_PEN_UFOPEDIA: "Each Pen can accommodate one submarine. There are facilities for maintenance, refuelling and repair of the X-Com submarine fleet. Each Flying Sub stationed at a base must have a free Pen assigned to it which cannot be used by other Subs, even if the assigned submarine is out on a mission."
   STR_DART_PISTOL_UFOPEDIA: "The X-Com dart gun is a small, accurate, high powered unit with a 10 hollow dart ammo clip. The darts are fired by a gas cartridge in the ammo pod."
@@ -930,7 +931,7 @@ en-GB:
   STR_CRUISER_UFOPEDIA: "The Cruiser is a general purpose craft, the mainstay of the Alien fleet, it is used in all types of Alien missions and is a dangerous adversary."
   STR_HEAVY_CRUISER_UFOPEDIA: "The heavy cruiser is a more powerful ship than the cruiser, larger weapons and propulsion systems boost its power. The Heavy Cruiser is used for resource missions to collect large quantities of minerals and equipment."
   STR_HUNTER_UFOPEDIA: "This vessel is equipped with an examination room for performing experiments and surgery on human subjects. The victims are subjected to the foulest tortures and the brain is often removed and stored for processing en-route."
-  STR_BATTLESHIP_UFOPEDIA: "The battleship is the most aggressive ship the Aliens posses, it features all the Alien technologies and systems to act as a base of operations for any form of aggressive act the Aliens may want to perform, it carries a wide array of weapons."
+  STR_BATTLESHIP_UFOPEDIA: "The battleship is the most aggressive ship the Aliens possess, it features all the Alien technologies and systems to act as a base of operations for any form of aggressive act the Aliens may want to perform, it carries a wide array of weapons."
   STR_DREADNOUGHT_UFOPEDIA: "The Dreadnought is a super troop carrier, fully equipped with all Alien technologies and a vast payload. The Dreadnought is a tough and formidable opponent."
   STR_FLEET_SUPPLY_CRUISER_UFOPEDIA: "The supply vessel is used during the construction of Alien colonies or for supplying existing colonies. It carries Alien nutrients, DNA, foetuses and other biological components."
 
