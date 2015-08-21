@@ -1422,10 +1422,16 @@ void BattlescapeGame::launchAction()
  */
 void BattlescapeGame::psiButtonAction()
 {
+	if (!_currentAction.waypoints.empty()) // in case waypoints were set with a blaster launcher, avoid accidental misclick
+		return;
 	_currentAction.weapon = _save->getSelectedUnit()->getSpecialWeapon(BT_PSIAMP);
 	_currentAction.targeting = true;
 	_currentAction.type = BA_PANIC;
-	_currentAction.TU = 25;
+	_currentAction.TU = _currentAction.weapon->getRules()->getTUUse();
+	if (!_currentAction.weapon->getRules()->getFlatRate())
+	{
+		_currentAction.TU = (int)floor(_save->getSelectedUnit()->getBaseStats()->tu * _currentAction.TU / 100.0f);
+	}
 	setupCursor();
 }
 
