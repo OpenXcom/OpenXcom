@@ -434,7 +434,7 @@ void ProjectileFlyBState::think()
 				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
 				_parent->getMap()->invalidate();
 			}
-			if (!_parent->getSave()->getUnitsFalling() && !_parent->getPanicHandled())
+			if (!_parent->getSave()->getUnitsFalling() && _parent->getPanicHandled())
 			{
 				_parent->getTileEngine()->checkReactionFire(_unit);
 			}
