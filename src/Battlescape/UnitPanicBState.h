@@ -34,6 +34,8 @@ class UnitPanicBState : public BattleState
 {
 private:
 	BattleUnit *_unit;
+	bool _berserking;
+	int _shotsFired;
 public:
 	/// Creates a new UnitPanicBState class
 	UnitPanicBState(BattlescapeGame *parent, BattleUnit *unit);

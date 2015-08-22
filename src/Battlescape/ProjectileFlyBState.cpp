@@ -270,9 +270,17 @@ bool ProjectileFlyBState::createNewProjectile()
 
 	// let it calculate a trajectory
 	_projectileImpact = V_EMPTY;
+
+	double accuracyDivider = 100.0;
+	// berserking units are half as accurate
+	if (!_parent->getPanicHandled())
+	{
+		accuracyDivider = 200.0;
+	}
+
 	if (_action.type == BA_THROW)
 	{
-		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy() / 100.0);
+		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy() / accuracyDivider);
 		if (_projectileImpact == V_FLOOR || _projectileImpact == V_UNIT || _projectileImpact == V_OBJECT)
 		{
 			if (_unit->getFaction() != FACTION_PLAYER && _projectileItem->getRules()->getBattleType() == BT_GRENADE)
@@ -298,7 +306,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	}
 	else if (_action.weapon->getRules()->getArcingShot()) // special code for the "spit" trajectory
 	{
-		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon) / 100.0);
+		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon) / accuracyDivider);
 		if (_projectileImpact != V_EMPTY && _projectileImpact != V_OUTOFBOUNDS)
 		{
 			// set the soldier in an aiming position
@@ -325,7 +333,14 @@ bool ProjectileFlyBState::createNewProjectile()
 			// no line of fire
 			delete projectile;
 			_parent->getMap()->setProjectile(0);
-			_action.result = "STR_NO_LINE_OF_FIRE";
+			if (_parent->getPanicHandled())
+			{
+				_action.result = "STR_NO_LINE_OF_FIRE";
+			}
+			else
+			{
+				_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU); // refund shot TUs for berserking
+			}
 			_unit->abortTurn();
 			_parent->popState();
 			return false;
@@ -335,11 +350,11 @@ bool ProjectileFlyBState::createNewProjectile()
 	{
 		if (_originVoxel != Position(-1,-1,-1))
 		{
-			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon) / 100.0, _originVoxel);
+			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon) / accuracyDivider, _originVoxel);
 		}
 		else
 		{
-			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon) / 100.0);
+			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon) / accuracyDivider);
 		}
 		if (_projectileImpact != V_EMPTY || _action.type == BA_LAUNCH)
 		{
@@ -367,7 +382,14 @@ bool ProjectileFlyBState::createNewProjectile()
 			// no line of fire
 			delete projectile;
 			_parent->getMap()->setProjectile(0);
-			_action.result = "STR_NO_LINE_OF_FIRE";
+			if (_parent->getPanicHandled())
+			{
+				_action.result = "STR_NO_LINE_OF_FIRE";
+			}
+			else
+			{
+				_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU); // refund shot TUs for berserking
+			}
 			_unit->abortTurn();
 			_parent->popState();
 			return false;
@@ -412,7 +434,7 @@ void ProjectileFlyBState::think()
 				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
 				_parent->getMap()->invalidate();
 			}
-			if (!_parent->getSave()->getUnitsFalling())
+			if (!_parent->getSave()->getUnitsFalling() && !_parent->getPanicHandled())
 			{
 				_parent->getTileEngine()->checkReactionFire(_unit);
 			}
