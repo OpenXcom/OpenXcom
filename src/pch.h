@@ -6,31 +6,7 @@
 //#include <stdlib.h>
 //#include <crtdbg.h>
 
-#ifndef __NO_OPENGL
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <OpenGL/glext.h>
-#include <GLUT/glut.h>
-#endif
-#include <SDL_opengl.h>
-#endif
-
-#include <SDL.h>
-#include <SDL_endian.h>
-#include <SDL_gfxPrimitives.h>
-#include <SDL_image.h>
-#include <SDL_keysym.h>
-#include <SDL_mixer.h>
-#include <SDL_opengl.h>
-#include <SDL_syswm.h>
-#include <SDL_thread.h>
-#include <SDL_types.h>
-#include <SDL_video.h>
-#include <yaml-cpp/yaml.h>
-#include "./dirent.h"
-#include "./lodepng.h"
-
+// c++ headers
 #define _USE_MATH_DEFINES
 #include <algorithm>
 #include <assert.h>
@@ -117,12 +93,39 @@
 #include <emmintrin.h> // for SSE2 intrinsics; see http://msdn.microsoft.com/en-us/library/has3d153%28v=vs.71%29.aspx
 #endif
 
+// library headers
+#ifndef __NO_OPENGL
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <OpenGL/glext.h>
+#include <GLUT/glut.h>
+#endif
+#include <SDL_opengl.h>
+#endif
+
+#include <SDL.h>
+#include <SDL_endian.h>
+#include <SDL_gfxPrimitives.h>
+#include <SDL_image.h>
+#include <SDL_keysym.h>
+#include <SDL_mixer.h>
+#include <SDL_opengl.h>
+#include <SDL_syswm.h>
+#include <SDL_thread.h>
+#include <SDL_types.h>
+#include <SDL_video.h>
+#include <yaml-cpp/yaml.h>
+#include "./dirent.h"
+#include "./lodepng.h"
+
 // uncomment to check memory leaks in VS
 //#ifndef DBG_NEW
 //#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
 //#define new DBG_NEW
 //#endif
 
+// openxcom headers
 #include "./fmath.h"
 #include "./version.h"
 

@@ -323,6 +323,8 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 
 	if (!Options::mute)
 	{
+		const std::set<std::string> &soundFiles(FileMap::getVFolderContents("SOUND"));
+
 #ifndef __NO_MUSIC
 		// Load musics
 		const std::map<std::string, RuleMusic *> musics = *rules->getMusic();
@@ -331,7 +333,6 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 		CatFile *adlibcat = 0, *aintrocat = 0;
 		GMCatFile *gmcat = 0;
 
-		const std::set<std::string> &soundFiles(FileMap::getVFolderContents("SOUND"));
 		for (std::set<std::string>::iterator i = soundFiles.begin(); i != soundFiles.end(); ++i)
 		{
 			if (0 == i->compare("adlib.cat"))
@@ -369,9 +370,9 @@ XcomResourcePack::XcomResourcePack(Ruleset *rules) : ResourcePack()
 		delete aintrocat;
 #endif
 
+		// Load sounds
 		if (rules->getSoundDefinitions()->empty())
 		{
-			// Load sounds
 			std::string catsId[] = {"GEO.CAT", "BATTLE.CAT"};
 			std::string catsDos[] = {"SOUND2.CAT", "SOUND1.CAT"};
 			std::string catsWin[] = {"SAMPLE.CAT", "SAMPLE2.CAT"};
