@@ -173,7 +173,7 @@ std::vector<std::string> findDataFolders()
 		}
 	}
 #ifdef __APPLE__
-	list.push_back("Users/Shared/OpenXcom/");
+	list.push_back("/Users/Shared/OpenXcom/");
 #else
 	list.push_back("/usr/local/share/openxcom/");
 #ifndef __FreeBSD__

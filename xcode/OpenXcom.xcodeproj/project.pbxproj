@@ -18,8 +18,34 @@
 		6BB58D561936FB7500DF3F68 /* libSDL_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BB58D511936FB7500DF3F68 /* libSDL_mixer.a */; };
 		6BB58D571936FB7500DF3F68 /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BB58D521936FB7500DF3F68 /* libSDL.a */; };
 		6BB58D581936FB7500DF3F68 /* libyaml-cpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BB58D531936FB7500DF3F68 /* libyaml-cpp.a */; };
-		6BB590D71937A60800DF3F68 /* data in Resources */ = {isa = PBXBuildFile; fileRef = 6BB590D61937A60800DF3F68 /* data */; };
+		F21366471B89937900657DCE /* standard in Resources */ = {isa = PBXBuildFile; fileRef = F21366461B89937900657DCE /* standard */; };
+		F21366491B89939000657DCE /* standard in CopyFiles */ = {isa = PBXBuildFile; fileRef = F21366461B89937900657DCE /* standard */; };
+		F213664B1B8993A500657DCE /* common in Resources */ = {isa = PBXBuildFile; fileRef = F213664A1B8993A500657DCE /* common */; };
+		F213664D1B8993BC00657DCE /* common in CopyFiles */ = {isa = PBXBuildFile; fileRef = F213664A1B8993A500657DCE /* common */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F21365801B8992B400657DCE /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = standard;
+			dstSubfolderSpec = 7;
+			files = (
+				F21366491B89939000657DCE /* standard in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F213664C1B8993B000657DCE /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = common;
+			dstSubfolderSpec = 7;
+			files = (
+				F213664D1B8993BC00657DCE /* common in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		5E5BA7D91974481400F8E44F /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -40,7 +66,8 @@
 		6BB58D511936FB7500DF3F68 /* libSDL_mixer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL_mixer.a; path = ../../../../../../../../../usr/local/lib/libSDL_mixer.a; sourceTree = SDKROOT; };
 		6BB58D521936FB7500DF3F68 /* libSDL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL.a; path = ../../../../../../../../../usr/local/lib/libSDL.a; sourceTree = SDKROOT; };
 		6BB58D531936FB7500DF3F68 /* libyaml-cpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libyaml-cpp.a"; path = "../../../../../../../../../usr/local/lib/libyaml-cpp.a"; sourceTree = SDKROOT; };
-		6BB590D61937A60800DF3F68 /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = data; path = ../bin/data; sourceTree = "<group>"; };
+		F21366461B89937900657DCE /* standard */ = {isa = PBXFileReference; lastKnownFileType = folder; name = standard; path = ../bin/standard; sourceTree = "<group>"; };
+		F213664A1B8993A500657DCE /* common */ = {isa = PBXFileReference; lastKnownFileType = folder; name = common; path = ../bin/common; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,7 +91,8 @@
 		6BACF5EF19350F9700E1A981 = {
 			isa = PBXGroup;
 			children = (
-				6BB590D61937A60800DF3F68 /* data */,
+				F213664A1B8993A500657DCE /* common */,
+				F21366461B89937900657DCE /* standard */,
 				6BACF60119350F9700E1A981 /* OpenXcom */,
 				6BACF5FA19350F9700E1A981 /* Frameworks */,
 				6BACF5F919350F9700E1A981 /* Products */,
@@ -136,6 +164,8 @@
 				6BACF5F419350F9700E1A981 /* Sources */,
 				6BACF5F519350F9700E1A981 /* Frameworks */,
 				6BACF5F619350F9700E1A981 /* Resources */,
+				F21365801B8992B400657DCE /* CopyFiles */,
+				F213664C1B8993B000657DCE /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -178,9 +208,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F213664B1B8993A500657DCE /* common in Resources */,
 				6BACF61419350F9700E1A981 /* Images.xcassets in Resources */,
+				F21366471B89937900657DCE /* standard in Resources */,
 				6BB58D4E1936FADC00DF3F68 /* README.md in Resources */,
-				6BB590D71937A60800DF3F68 /* data in Resources */,
 				6BB58D4D1936FADC00DF3F68 /* CHANGELOG.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
