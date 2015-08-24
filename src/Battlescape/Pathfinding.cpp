@@ -118,6 +118,8 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 		endPosition.z--;
 		destinationTile = _save->getTile(endPosition);
 	}
+	// check if destination is not blocked
+	if (isBlocked(destinationTile, O_FLOOR, target) || isBlocked(destinationTile, O_OBJECT, target)) return;
 	int size = unit->getArmor()->getSize()-1;
 	if (size >= 1)
 	{
@@ -259,6 +261,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	int numberOfPartsGoingDown = 0;
 	int numberOfPartsFalling = 0;
 	int numberOfPartsChangingHeight = 0;
+	int numberOfPartsMovingOnAir = 0;
 	int totalCost = 0;
 
 	for (int x = 0; x <= size; ++x)
@@ -266,6 +269,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 		{
 			Position offset = Position (x, y, 0);
 			Tile *startTile = _save->getTile(startPosition + offset);
+			Tile *belowStartTile = _save->getTile(startPosition + offset + Position(0,0,-1));
 			Tile *destinationTile = _save->getTile(*endPosition + offset);
 			Tile *belowDestination = _save->getTile(*endPosition + offset + Position(0,0,-1));
 			Tile *aboveDestination = _save->getTile(*endPosition + offset + Position(0,0,1));
@@ -273,7 +277,22 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			// this means the destination is probably outside the map
 			if (startTile == 0 || destinationTile == 0)
 				return 255;
-
+			if (direction != DIR_DOWN && startTile->hasNoFloor(belowStartTile) &&  _movementType != MT_FLY)
+			{
+				numberOfPartsMovingOnAir++;
+				if (numberOfPartsMovingOnAir == (size + 1)*(size + 1))
+				{
+					return 255; //cannot walk on air
+				}
+			}
+			else if (direction == DIR_DOWN && startTile->hasNoFloor(belowStartTile) &&  _movementType != MT_FLY)
+			{
+				numberOfPartsMovingOnAir++;
+				if (numberOfPartsMovingOnAir == (size + 1)*(size + 1))
+				{
+					fellDown = true;
+				}
+			}
 			if (direction < DIR_UP && startTile->getTerrainLevel() > - 16)
 			{
 				// check if we can go this way
@@ -333,7 +352,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				if (startTile->getTerrainLevel() - destinationTile->getTerrainLevel() > 8)
 					return 255;
 			}
-			else if (direction >= DIR_UP)
+			else if (direction >= DIR_UP && !fellDown)
 			{
 				// check if we can go up or down through gravlift or fly
 				if (validateUpDown(unit, startPosition + offset, direction))
@@ -351,13 +370,9 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			{
 				numberOfPartsFalling++;
 
-				if (numberOfPartsFalling == (size+1)*(size+1))
+				if (numberOfPartsFalling == (size+1)*(size+1) && direction != DIR_DOWN)
 				{
-					*endPosition = startPosition + Position(0,0,-1);
-					destinationTile = _save->getTile(*endPosition + offset);
-					belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
-					fellDown = true;
-					direction = DIR_DOWN;
+						return false;
 				}
 			}
 			startTile = _save->getTile(startTile->getPosition() + verticalOffset);
