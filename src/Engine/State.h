@@ -107,7 +107,7 @@ public:
 	/// Changes the state's 8bpp palette with certain resources.
 	void setPalette(const std::string &palette, int backpals = -1);
 	/// Gets the state's 8bpp palette.
-	SDL_Color *const getPalette();
+	SDL_Color *getPalette();
 	/// Let the state know the window has been resized.
 	virtual void resize(int &dX, int &dY);
 	/// Re-orients all the surfaces in the state.

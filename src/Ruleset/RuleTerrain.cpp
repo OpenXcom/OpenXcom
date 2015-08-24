@@ -209,7 +209,7 @@ std::vector<std::string> RuleTerrain::getCivilianTypes() const
  * Gets the min depth.
  * @return The min depth.
  */
-const int RuleTerrain::getMinDepth() const
+int RuleTerrain::getMinDepth() const
 {
 	return _minDepth;
 }
@@ -218,7 +218,7 @@ const int RuleTerrain::getMinDepth() const
  * Gets the max depth.
  * @return max depth.
  */
-const int RuleTerrain::getMaxDepth() const
+int RuleTerrain::getMaxDepth() const
 {
 	return _maxDepth;
 }
@@ -227,7 +227,7 @@ const int RuleTerrain::getMaxDepth() const
  * Gets The ambient sound effect.
  * @return The ambient sound effect.
  */
-const int RuleTerrain::getAmbience() const
+int RuleTerrain::getAmbience() const
 {
 	return _ambience;
 }
@@ -236,7 +236,7 @@ const int RuleTerrain::getAmbience() const
  * Gets The generation script name.
  * @return The name of the script to use.
  */
-const std::string RuleTerrain::getScript()
+std::string RuleTerrain::getScript()
 {
 	return _script;
 }
@@ -251,7 +251,7 @@ const std::vector<std::string> &RuleTerrain::getMusic()
 }
 
 
-const double RuleTerrain::getAmbientVolume() const
+double RuleTerrain::getAmbientVolume() const
 {
 	return _ambientVolume;
 }

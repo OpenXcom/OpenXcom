@@ -291,7 +291,7 @@ void MapScript::init()
  * If all the max uses are used up, it will return "undefined".
  * @return Group number.
  */
-const int MapScript::getGroupNumber()
+int MapScript::getGroupNumber()
 {
 	if (!_groups.size())
 	{
@@ -329,7 +329,7 @@ const int MapScript::getGroupNumber()
  * If no blocks are defined, it will use a group instead.
  * @return Block number.
  */
-const int MapScript::getBlockNumber()
+int MapScript::getBlockNumber()
 {
 	if (_cumulativeFrequency > 0)
 	{

@@ -104,55 +104,38 @@ namespace OpenXcom
 		{
 			case UFOPAEDIA_TYPE_CRAFT:
 				return new ArticleStateCraft(dynamic_cast<ArticleDefinitionCraft *> (article));
-				break;
 			case UFOPAEDIA_TYPE_CRAFT_WEAPON:
 				return new ArticleStateCraftWeapon(dynamic_cast<ArticleDefinitionCraftWeapon *> (article));
-				break;
 			case UFOPAEDIA_TYPE_VEHICLE:
 				return new ArticleStateVehicle(dynamic_cast<ArticleDefinitionVehicle *> (article));
-				break;
 			case UFOPAEDIA_TYPE_ITEM:
 				return new ArticleStateItem(dynamic_cast<ArticleDefinitionItem *> (article));
-				break;
 			case UFOPAEDIA_TYPE_ARMOR:
 				return new ArticleStateArmor(dynamic_cast<ArticleDefinitionArmor *> (article));
-				break;
 			case UFOPAEDIA_TYPE_BASE_FACILITY:
 				return new ArticleStateBaseFacility(dynamic_cast<ArticleDefinitionBaseFacility *> (article));
-				break;
 			case UFOPAEDIA_TYPE_TEXT:
 				return new ArticleStateText(dynamic_cast<ArticleDefinitionText *> (article));
-				break;
 			case UFOPAEDIA_TYPE_TEXTIMAGE:
 				return new ArticleStateTextImage(dynamic_cast<ArticleDefinitionTextImage *> (article));
-				break;
 			case UFOPAEDIA_TYPE_UFO:
 				return new ArticleStateUfo(dynamic_cast<ArticleDefinitionUfo *> (article));
-				break;
 			case UFOPAEDIA_TYPE_TFTD:
 				return new ArticleStateTFTD(dynamic_cast<ArticleDefinitionTFTD *> (article));
-				break;
 			case UFOPAEDIA_TYPE_TFTD_CRAFT:
 				return new ArticleStateTFTDCraft(dynamic_cast<ArticleDefinitionTFTD *> (article));
-				break;
 			case UFOPAEDIA_TYPE_TFTD_CRAFT_WEAPON:
 				return new ArticleStateTFTDCraftWeapon(dynamic_cast<ArticleDefinitionTFTD *> (article));
-				break;
 			case UFOPAEDIA_TYPE_TFTD_VEHICLE:
 				return new ArticleStateTFTDVehicle(dynamic_cast<ArticleDefinitionTFTD *> (article));
-				break;
 			case UFOPAEDIA_TYPE_TFTD_ITEM:
 				return new ArticleStateTFTDItem(dynamic_cast<ArticleDefinitionTFTD *> (article));
-				break;
 			case UFOPAEDIA_TYPE_TFTD_ARMOR:
 				return new ArticleStateTFTDArmor(dynamic_cast<ArticleDefinitionTFTD *> (article));
-				break;
 			case UFOPAEDIA_TYPE_TFTD_BASE_FACILITY:
 				return new ArticleStateTFTDFacility(dynamic_cast<ArticleDefinitionTFTD *> (article));
-				break;
 			case UFOPAEDIA_TYPE_TFTD_USO:
 				return new ArticleStateTFTDUso(dynamic_cast<ArticleDefinitionTFTD *> (article));
-				break;
 			default: break;
 		}
 		return 0;

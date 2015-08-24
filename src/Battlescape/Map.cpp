@@ -1709,7 +1709,7 @@ void Map::setWidth(int width)
  * Get the hidden movement screen's vertical position.
  * @return the vertical position of the hidden movement window.
  */
-const int Map::getMessageY()
+int Map::getMessageY()
 {
 	return _message->getY();
 }
@@ -1717,7 +1717,7 @@ const int Map::getMessageY()
 /**
  * Get the icon height.
  */
-const int Map::getIconHeight()
+int Map::getIconHeight()
 {
 	return _iconHeight;
 }
@@ -1725,7 +1725,7 @@ const int Map::getIconHeight()
 /**
  * Get the icon width.
  */
-const int Map::getIconWidth()
+int Map::getIconWidth()
 {
 	return _iconWidth;
 }
@@ -1736,7 +1736,7 @@ const int Map::getIconWidth()
  * @param pos the map position to calculate the sound angle from.
  * @return the angle of the sound (280 to 440).
  */
-const int Map::getSoundAngle(Position pos)
+int Map::getSoundAngle(Position pos)
 {
 	int midPoint = getWidth() / 2;
 	Position relativePosition;

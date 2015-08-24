@@ -455,7 +455,7 @@ bool AlienDeployment::getObjectiveFailedInfo(std::string &text, int &score)
  * Gets the score penalty XCom receives for letting this mission despawn.
  * @return the score for letting this site despawn.
  */
-const int AlienDeployment::getDespawnPenalty() const
+int AlienDeployment::getDespawnPenalty() const
 {
 	return _despawnPenalty;
 }
@@ -464,7 +464,7 @@ const int AlienDeployment::getDespawnPenalty() const
  * Gets the (half hourly) score penalty against XCom for this site existing.
  * @return the number of points the aliens get per half hour.
  */
-const int AlienDeployment::getPoints() const
+int AlienDeployment::getPoints() const
 {
 	return _points;
 }

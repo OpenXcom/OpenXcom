@@ -1685,7 +1685,7 @@ Soldier *Ruleset::genSoldier(SavedGame *save) const
  * Gets the name of the item to be used as alien fuel.
  * @return the name of the fuel.
  */
-const std::string Ruleset::getAlienFuelName() const
+std::string Ruleset::getAlienFuelName() const
 {
 	return _alienFuel.first;
 }
@@ -1694,7 +1694,7 @@ const std::string Ruleset::getAlienFuelName() const
  * Gets the amount of alien fuel to recover.
  * @return the amount to recover.
  */
-const int Ruleset::getAlienFuelQuantity() const
+int Ruleset::getAlienFuelQuantity() const
 {
 	return _alienFuel.second;
 }
@@ -1703,7 +1703,7 @@ const int Ruleset::getAlienFuelQuantity() const
  * Gets name of font collection.
  * @return the name of YAML-file with font data
  */
-const std::string Ruleset::getFontName() const
+std::string Ruleset::getFontName() const
 {
 	return _fontName;
 }
@@ -1791,7 +1791,7 @@ RuleMissionScript *Ruleset::getMissionScript(const std::string &name) const
 	std::map<std::string, RuleMissionScript*>::const_iterator i = _missionScripts.find(name);
 	if (_missionScripts.end() != i) return i->second; else return 0;
 }
-const std::string Ruleset::getFinalResearch() const
+std::string Ruleset::getFinalResearch() const
 {
 	return _finalResearch; 
 }

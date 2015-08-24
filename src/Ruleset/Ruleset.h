@@ -252,11 +252,11 @@ public:
 	/// Generates a new soldier.
 	Soldier *genSoldier(SavedGame *save) const;
 	/// Gets the item to be used as fuel for ships.
-	const std::string getAlienFuelName() const;
+	std::string getAlienFuelName() const;
 	/// Gets the amount of alien fuel to recover
-	const int getAlienFuelQuantity() const;
+	int getAlienFuelQuantity() const;
 	/// Gets the font name.
-	const std::string getFontName() const;
+	std::string getFontName() const;
 	/// Gets first turn when AI can use grenade.
 	int getTurnAIUseGrenade() const {return _turnAIUseGrenade;}
 	/// Gets first turn when AI can use Blaster launcher.
@@ -277,7 +277,7 @@ public:
 	const std::map<std::string, RuleMusic *> *getMusic() const;
 	const std::vector<std::string> *getMissionScriptList() const;
 	RuleMissionScript *getMissionScript(const std::string &name) const;
-	const std::string getFinalResearch() const;
+	std::string getFinalResearch() const;
 };
 
 }

@@ -60,7 +60,7 @@ void StatString::load(const YAML::Node &node)
  * @param node YAML node.
  * @return New StatStringCondition.
  */
-StatStringCondition *StatString::getCondition(const std::string &conditionName, const YAML::Node &node)
+StatStringCondition *StatString::getCondition(const std::string &conditionName, const YAML::Node &node) const
 {
 	// These are the defaults from xcomutil
 	int minValue = 0, maxValue = 255;
@@ -80,7 +80,7 @@ StatStringCondition *StatString::getCondition(const std::string &conditionName, 
  * Returns the conditions associated with this StatString.
  * @return List of StatStringConditions.
  */
-const std::vector< StatStringCondition* > StatString::getConditions()
+std::vector< StatStringCondition* > StatString::getConditions() const
 {
 	return _conditions;
 }
@@ -89,7 +89,7 @@ const std::vector< StatStringCondition* > StatString::getConditions()
  * Returns the string to add to a name for this StatString.
  * @return StatString... string.
  */
-const std::string StatString::getString()
+std::string StatString::getString() const
 {
 	return _stringToBeAddedIfAllConditionsAreMet;
 }
@@ -101,7 +101,7 @@ const std::string StatString::getString()
  * @param psiStrengthEval Are psi stats available?
  * @return Resulting string of all valid StatStrings.
  */
-const std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings, bool psiStrengthEval)
+std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings, bool psiStrengthEval)
 {
 	size_t conditionsMet;
 	int minVal, maxVal;

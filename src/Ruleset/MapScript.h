@@ -63,9 +63,9 @@ private:
 	TunnelData *_tunnelData;
 
 	/// Randomly generate a group from within the array.
-	const int getGroupNumber();
+	int getGroupNumber();
 	/// Randomly generate a block number from within the array.
-	const int getBlockNumber();
+	int getBlockNumber();
 public:
 	MapScript();
 	~MapScript();
@@ -78,17 +78,17 @@ public:
 	/// Gets the rects, describing the areas this command applies to.
 	const std::vector<SDL_Rect*> *getRects() const {return &_rects;};
 	/// Gets the X size for this command.
-	const int getSizeX() const {return _sizeX;};
+	int getSizeX() const {return _sizeX;};
 	/// Gets the Y size for this command.
-	const int getSizeY() const {return _sizeY;};
+	int getSizeY() const {return _sizeY;};
 	/// Gets the Z size for this command.
-	const int getSizeZ() const {return _sizeZ;};
+	int getSizeZ() const {return _sizeZ;};
 	/// Get the chances of this command executing.
-	const int getChancesOfExecution() const {return _executionChances;};
+	int getChancesOfExecution() const {return _executionChances;};
 	/// Gets the label for this command.
-	const int getLabel() const {return _label;};
+	int getLabel() const {return _label;};
 	/// Gets how many times this command repeats (1 repeat means 2 executions)
-	const int getExecutions() const {return _executions;};
+	int getExecutions() const {return _executions;};
 	/// Gets what conditions apply to this command.
 	const std::vector<int> *getConditionals() const {return &_conditionals;};
 	/// Gets the groups vector for iteration.
@@ -96,7 +96,7 @@ public:
 	/// Gets the blocks vector for iteration.
 	const std::vector<int> *getBlocks() const {return &_blocks;};
 	/// Gets the direction this command goes (for lines and tunnels).
-   	const MapDirection getDirection() const {return _direction;};
+   	MapDirection getDirection() const {return _direction;};
 	/// Gets the mcd replacement data for tunnel replacements.
 	TunnelData *getTunnelData() {return _tunnelData;};
 	/// Randomly generate a block from within either the array of groups or blocks.

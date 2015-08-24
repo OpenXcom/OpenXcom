@@ -889,7 +889,7 @@ int RuleItem::getMeleeAnimation() const
  * Can this item be used on land or is it underwater only?
  * @return if this is an underwater weapon or not.
  */
-const bool RuleItem::isWaterOnly() const
+bool RuleItem::isWaterOnly() const
 {
 	return _underwaterOnly;
 }
@@ -901,7 +901,7 @@ const bool RuleItem::isWaterOnly() const
  * so try not to use those ones.
  * @return special type.
  */
-const int RuleItem::getSpecialType() const
+int RuleItem::getSpecialType() const
 {
 	return _specialType;
 }
@@ -910,7 +910,7 @@ const int RuleItem::getSpecialType() const
  * Gets the color offset to use for the vapor trail.
  * @return the color offset.
  */
-const int RuleItem::getVaporColor() const
+int RuleItem::getVaporColor() const
 {
 	return _vaporColor;
 }
@@ -919,7 +919,7 @@ const int RuleItem::getVaporColor() const
  * Gets the vapor cloud density for the vapor trail.
  * @return the vapor density.
  */
-const int RuleItem::getVaporDensity() const
+int RuleItem::getVaporDensity() const
 {
 	return _vaporDensity;
 }
@@ -928,7 +928,7 @@ const int RuleItem::getVaporDensity() const
  * Gets the vapor cloud probability for the vapor trail.
  * @return the vapor probability.
  */
-const int RuleItem::getVaporProbability() const
+int RuleItem::getVaporProbability() const
 {
 	return _vaporProbability;
 }

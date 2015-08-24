@@ -120,8 +120,6 @@ public:
 	void setStateInterval(Uint32 interval);
 	/// Checks for casualties in battle.
 	void checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion = false, bool terrainExplosion = false);
-	/// Checks if a unit panics.
-	void checkForPanic(BattleUnit *unit);
 	/// Checks reserved tu.
 	bool checkReservedTU(BattleUnit *bu, int tu, bool justChecking = false);
 	/// Handles unit AI.
@@ -192,7 +190,7 @@ public:
 	/// Cleans up all the deleted states.
 	void cleanupDeleted();
 	/// Get the depth of the saved game.
-	const int getDepth() const;
+	int getDepth() const;
 	/// Sets up a mission complete notification.
 	void missionComplete();
 };

@@ -138,9 +138,9 @@ public:
 	/// Fills out the objective failed info.
 	bool getObjectiveFailedInfo(std::string &text, int &score);
 	/// Gets the score penalty XCom receives for ignoring this site.
-	const int getDespawnPenalty() const;
+	int getDespawnPenalty() const;
 	/// Gets the (half hourly) score penalty XCom receives for this site existing.
-	const int getPoints() const;
+	int getPoints() const;
 };
 
 }

@@ -542,7 +542,7 @@ void State::setPalette(const std::string &palette, int backpals)
  * Returns the state's 8bpp palette.
  * @return Pointer to the palette's colors.
  */
-SDL_Color *const State::getPalette()
+SDL_Color *State::getPalette()
 {
 	return _palette;
 }

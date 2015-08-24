@@ -75,9 +75,9 @@ public:
 	/// Gets the mission's type.
 	const std::string &getType() const { return _type; }
 	/// Gets a race based on the game time and the racial distribution.
-	const std::string generateRace(const size_t monthsPassed) const;
+	std::string generateRace(const size_t monthsPassed) const;
 	/// Gets the most likely race based on the game time and the racial distribution.
-	const std::string getTopRace(const size_t monthsPassed) const;
+	std::string getTopRace(const size_t monthsPassed) const;
 	/// Loads alien mission data from YAML.
 	void load(const YAML::Node &node);
 	/// Gets the number of waves.

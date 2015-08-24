@@ -64,7 +64,7 @@ public:
 	/// Gets the list of ResearchProjects granted at random for free by this research.
 	const std::vector<std::string> & getGetOneFree() const;
 	/// Gets what to look up in the ufopedia.
-	const std::string getLookup() const;
+	std::string getLookup() const;
 	/// Gets the requirements for this ResearchProject.
 	const std::vector<std::string> & getRequirements() const;
 	/// Gets the list weight for this research item.

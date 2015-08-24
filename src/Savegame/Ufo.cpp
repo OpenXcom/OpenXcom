@@ -273,13 +273,10 @@ std::wstring Ufo::getName(Language *lang) const
 	case FLYING:
 	case DESTROYED: // Destroyed also means leaving Earth.
 		return lang->getString("STR_UFO_").arg(_id);
-		break;
 	case LANDED:
 		return lang->getString("STR_LANDING_SITE_").arg(_landId);
-		break;
 	case CRASHED:
 		return lang->getString("STR_CRASH_SITE_").arg(_crashId);
-		break;
 	default:
 		return L"";
 	}

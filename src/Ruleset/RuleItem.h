@@ -220,15 +220,15 @@ public:
 	/// Check if LOS is required to use this item (only applies to psionic type items)
 	bool isLOSRequired() const;
 	/// Is this item restricted to use underwater?
-	const bool isWaterOnly() const;
+	bool isWaterOnly() const;
 	/// Get the associated special type of this item.
-	const int getSpecialType() const;
+	int getSpecialType() const;
 	/// Get the color offset to use for the vapor trail.
-	const int getVaporColor() const;
+	int getVaporColor() const;
 	/// Gets the vapor cloud density.
-	const int getVaporDensity() const;
+	int getVaporDensity() const;
 	/// Gets the vapor cloud probability.
-	const int getVaporProbability() const;
+	int getVaporProbability() const;
 
 };
 

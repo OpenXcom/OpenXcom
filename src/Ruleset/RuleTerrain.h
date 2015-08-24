@@ -67,16 +67,16 @@ public:
 	/// Gets the civilian types to use.
 	std::vector<std::string> getCivilianTypes() const;
 	/// Gets the minimum depth.
-	const int getMinDepth() const;
+	int getMinDepth() const;
 	/// Gets the maximum depth.
-	const int getMaxDepth() const;
+	 int getMaxDepth() const;
 	/// Gets the ambient sound effect.
-	const int getAmbience() const;
+	int getAmbience() const;
 	/// Gets the generation script name.
-	const std::string getScript();
+	std::string getScript();
 	/// Gets the list of music to pick from.
 	const std::vector<std::string> &getMusic();
-	const double getAmbientVolume() const;
+	double getAmbientVolume() const;
 };
 
 }

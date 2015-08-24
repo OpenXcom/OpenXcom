@@ -51,7 +51,7 @@ const std::vector<int> &SoundDefinition::getSoundList() const
 	return _soundList;
 }
 
-const std::string SoundDefinition::getCATFile() const
+std::string SoundDefinition::getCATFile() const
 {
 	return _catFile;
 }

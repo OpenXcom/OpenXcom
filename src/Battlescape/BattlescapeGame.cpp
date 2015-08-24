@@ -979,10 +979,10 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 		}
 		switch (effectiveTuReserved)
 		{
-		case BA_SNAPSHOT: return tu + (bu->getBaseStats()->tu / 3) <= bu->getTimeUnits(); break; // 33%
-		case BA_AUTOSHOT: return tu + ((bu->getBaseStats()->tu / 5)*2) <= bu->getTimeUnits(); break; // 40%
-		case BA_AIMEDSHOT: return tu + (bu->getBaseStats()->tu / 2) <= bu->getTimeUnits(); break; // 50%
-		default: return tu <= bu->getTimeUnits(); break;
+		case BA_SNAPSHOT: return tu + (bu->getBaseStats()->tu / 3) <= bu->getTimeUnits(); // 33%
+		case BA_AUTOSHOT: return tu + ((bu->getBaseStats()->tu / 5)*2) <= bu->getTimeUnits(); // 40%
+		case BA_AIMEDSHOT: return tu + (bu->getBaseStats()->tu / 2) <= bu->getTimeUnits(); // 50%
+		default: return tu <= bu->getTimeUnits();
 		}
 	}
 
@@ -1783,7 +1783,6 @@ bool BattlescapeGame::worthTaking(BattleItem* item, BattleAction *action)
  */
 int BattlescapeGame::takeItemFromGround(BattleItem* item, BattleAction *action)
 {
-	const int unhandledError = -1;
 	const int success = 0;
 	const int notEnoughTimeUnits = 1;
 	const int notEnoughSpace = 2;
@@ -1821,8 +1820,6 @@ int BattlescapeGame::takeItemFromGround(BattleItem* item, BattleAction *action)
 			}
 		}
 	}
-	// shouldn't ever end up here
-	return unhandledError;
 }
 
 
@@ -2052,7 +2049,7 @@ void BattlescapeGame::cleanupDeleted()
  * Gets the depth of the battlescape.
  * @return the depth of the battlescape.
  */
-const int BattlescapeGame::getDepth() const
+int BattlescapeGame::getDepth() const
 {
 	return _save->getDepth();
 }

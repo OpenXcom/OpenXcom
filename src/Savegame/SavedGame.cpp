@@ -441,19 +441,19 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	const YAML::Node &research = doc["poppedResearch"];
 	for (YAML::const_iterator it = research.begin(); it != research.end(); ++it)
 	{
-		std::string research = it->as<std::string>();
-		if (rule->getResearch(research))
+		std::string id = it->as<std::string>();
+		if (rule->getResearch(id))
 		{
-			_poppedResearch.push_back(rule->getResearch(research));
+			_poppedResearch.push_back(rule->getResearch(id));
 		}
 	}
 	_alienStrategy->load(rule, doc["alienStrategy"]);
 
 	for (YAML::const_iterator i = doc["deadSoldiers"].begin(); i != doc["deadSoldiers"].end(); ++i)
 	{
-		Soldier *s = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
-		s->load(*i, rule, this);
-		_deadSoldiers.push_back(s);
+		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
+		soldier->load(*i, rule, this);
+		_deadSoldiers.push_back(soldier);
 	}
 
 	if (const YAML::Node &battle = doc["battleGame"])
