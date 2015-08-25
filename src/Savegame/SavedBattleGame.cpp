@@ -1490,6 +1490,7 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 			{
 				return false;
 			}
+			// move the unit up to the next level (desert and seabed terrains)
 			if (t && t->getTerrainLevel() == -24)
 			{
 				zOffset.z += 1;

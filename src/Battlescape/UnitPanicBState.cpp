@@ -103,16 +103,16 @@ void UnitPanicBState::think()
 						turnCost = 8-turnCost;
 					}
 
+					_parent->statePushFront(new UnitTurnBState(_parent, ba, false));
 					// even if we don't have enough TUs to turn AND shoot, we still want to turn.
 					if (_unit->spendTimeUnits(ba.TU + turnCost))
 					{
-						_parent->statePushFront(new ProjectileFlyBState(_parent, ba));
+						_parent->statePushNext(new ProjectileFlyBState(_parent, ba));
 					}
 					else
 					{
 						_unit->spendTimeUnits(turnCost);
 					}
-					_parent->statePushFront(new UnitTurnBState(_parent, ba, false));
 				}
 			}
 			return;
