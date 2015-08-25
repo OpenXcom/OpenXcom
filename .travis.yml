@@ -1,0 +1,26 @@
+
+language: cpp
+
+env:
+  - BUILD_TYPE=Debug EXTRA_WARNING_FLAGS=""
+  - BUILD_TYPE=Release EXTRA_WARNING_FLAGS=""
+  - BUILD_TYPE=Debug EXTRA_WARNING_FLAGS="-Wall -Wextra"
+  - BUILD_TYPE=Release EXTRA_WARNING_FLAGS="-Wall -Wextra"
+
+before_install:
+  - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install yaml-cpp sdl sdl_gfx sdl_image sdl_mixer --with-flac --with-libmikmod --with-libvorbis --with-static-lib; fi
+  - if [ $TRAVIS_OS_NAME == linux ]; then sudo add-apt-repository ppa:knapsu/openxcom -y; fi
+  - if [ $TRAVIS_OS_NAME == linux ]; then sudo apt-get update && sudo apt-get install -y libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-gfx1.2-dev libyaml-cpp-dev libboost-dev; fi 
+      
+before_script:
+  - cmake . -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" -DCMAKE_CXX_FLAGS="${EXTRA_WARNING_FLAGS}" -DCMAKE_C_FLAGS="${EXTRA_WARNING_FLAGS}"
+
+script: make -j2
+
+compiler:
+  - clang
+  - gcc
+
+os:
+  - linux
+  - osx
