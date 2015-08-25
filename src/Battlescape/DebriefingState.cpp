@@ -470,6 +470,11 @@ void DebriefingState::prepareDebriefing()
 				{
 					(*j)->returnToBase();
 				}
+				MissionSite* ms = dynamic_cast<MissionSite*>((*j)->getDestination());
+				if (ms != 0 && ms->isInBattlescape())
+				{
+					(*j)->returnToBase();
+				}
 			}
 		}
 		// in case we DON'T have a craft (base defense)
@@ -589,11 +594,7 @@ void DebriefingState::prepareDebriefing()
 				if (!battle->allObjectivesDestroyed())
 					destroyAlienBase = false;
 			}
-			
-			if (deployment && !deployment->getNextStage().empty())
-			{
-				destroyAlienBase = false;
-			}
+
 			success = destroyAlienBase;
 			if (destroyAlienBase)
 			{
@@ -604,6 +605,15 @@ void DebriefingState::prepareDebriefing()
 				// Take care to remove supply missions for this base.
 				std::for_each(save->getAlienMissions().begin(), save->getAlienMissions().end(),
 							ClearAlienBase(*i));
+				
+				for (std::vector<Target*>::iterator j = (*i)->getFollowers()->begin(); j != (*i)->getFollowers()->end(); ++j)
+				{
+					Craft* c = dynamic_cast<Craft*>(*j);
+					if (c != 0) // not sure what else this could be but safety can't hurt.
+					{
+						c->returnToBase();
+					}
+				}
 				delete *i;
 				save->getAlienBases()->erase(i);
 				break;
