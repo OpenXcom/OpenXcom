@@ -261,7 +261,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	int numberOfPartsGoingDown = 0;
 	int numberOfPartsFalling = 0;
 	int numberOfPartsChangingHeight = 0;
-	int numberOfPartsMovingOnAir = 0;
 	int totalCost = 0;
 
 	for (int x = 0; x <= size; ++x)
@@ -277,18 +276,13 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			// this means the destination is probably outside the map
 			if (startTile == 0 || destinationTile == 0)
 				return 255;
-			if (direction != DIR_DOWN && startTile->hasNoFloor(belowStartTile) &&  _movementType != MT_FLY)
+			if (!x && !y && _movementType != MT_FLY && canFallDown(startTile, size))
 			{
-				numberOfPartsMovingOnAir++;
-				if (numberOfPartsMovingOnAir == (size + 1)*(size + 1))
+				if (direction != DIR_DOWN)
 				{
 					return 255; //cannot walk on air
 				}
-			}
-			else if (direction == DIR_DOWN && startTile->hasNoFloor(belowStartTile) &&  _movementType != MT_FLY)
-			{
-				numberOfPartsMovingOnAir++;
-				if (numberOfPartsMovingOnAir == (size + 1)*(size + 1))
+				else
 				{
 					fellDown = true;
 				}
