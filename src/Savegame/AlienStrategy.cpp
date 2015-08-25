@@ -117,7 +117,7 @@ YAML::Node AlienStrategy::save() const
  * @param rules Pointer to the ruleset.
  * @return The region id.
  */
-const std::string AlienStrategy::chooseRandomRegion(const Ruleset *rules)
+std::string AlienStrategy::chooseRandomRegion(const Ruleset *rules)
 {
 	std::string chosen = _regionChances.choose();
 	if (chosen.empty())
@@ -143,7 +143,7 @@ const std::string AlienStrategy::chooseRandomRegion(const Ruleset *rules)
  * @param region The region id.
  * @return The mission id.
  */
-const std::string AlienStrategy::chooseRandomMission(const std::string &region) const
+std::string AlienStrategy::chooseRandomMission(const std::string &region) const
 {
 	MissionsByRegion::const_iterator found = _regionMissions.find(region);
 	assert(found != _regionMissions.end());
@@ -201,7 +201,7 @@ void AlienStrategy::addMissionRun(const std::string &varName)
  * @param zoneNumber the number of the zone within that region we're using.
  * @param maximum the maximum size of the list we want to maintain.
  */
-void AlienStrategy::addMissionLocation(const std::string varName, const std::string regionName, int zoneNumber, int maximum)
+void AlienStrategy::addMissionLocation(const std::string &varName, const std::string &regionName, int zoneNumber, int maximum)
 {
 	if (maximum <= 0) return;
 	_missionLocations[varName].push_back(std::make_pair(regionName, zoneNumber));
@@ -218,7 +218,7 @@ void AlienStrategy::addMissionLocation(const std::string varName, const std::str
  * @param zoneNumber the number in the region that we want to check.
  * @return if the region is valid (meaning it is not in our table).
  */
-bool AlienStrategy::validMissionLocation(const std::string varName, const std::string regionName, int zoneNumber)
+bool AlienStrategy::validMissionLocation(const std::string &varName, const std::string &regionName, int zoneNumber)
 {
 	if (_missionLocations.find(varName) != _missionLocations.end())
 	{
@@ -237,7 +237,7 @@ bool AlienStrategy::validMissionLocation(const std::string varName, const std::s
  * @param region the region we want to check for validity.
  * @return if the region appears in the table or not.
  */
-bool AlienStrategy::validMissionRegion(const std::string region)
+bool AlienStrategy::validMissionRegion(const std::string &region)
 {
 	std::map<std::string, WeightedOptions*>::iterator i = _regionMissions.find(region);
 	return (i != _regionMissions.end());

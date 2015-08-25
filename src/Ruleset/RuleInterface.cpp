@@ -82,7 +82,7 @@ void RuleInterface::load(const YAML::Node& node)
  * Retrieves info on an element
  * @param id String defining the element.
  */
-Element *RuleInterface::getElement(const std::string id)
+Element *RuleInterface::getElement(const std::string &id)
 {
 	std::map<std::string, Element>::iterator i = _elements.find(id);
 	if (_elements.end() != i) return &i->second; else return 0;

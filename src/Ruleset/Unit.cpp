@@ -240,7 +240,7 @@ int Unit::getAggroSound() const
  * How much energy does this unit recover per turn?
  * @return energy recovery amount.
  */
-const int Unit::getEnergyRecovery() const
+int Unit::getEnergyRecovery() const
 {
 	return _energyRecovery;
 }
@@ -251,7 +251,7 @@ const int Unit::getEnergyRecovery() const
  * its rank and uses the one associated with its race.
  * @return True if this unit is a living weapon.
  */
-const bool Unit::isLivingWeapon() const
+bool Unit::isLivingWeapon() const
 {
 	return _livingWeapon;
 }
@@ -260,7 +260,7 @@ const bool Unit::isLivingWeapon() const
  * What is this unit's built in melee weapon (if any).
  * @return the name of the weapon.
  */
-const std::string Unit::getMeleeWeapon() const
+std::string Unit::getMeleeWeapon() const
 {
 	return _meleeWeapon;
 }
@@ -283,8 +283,9 @@ const std::vector<std::string> &Unit::getBuiltInWeapons() const
  * only really relevant to the scream in the case of civilians.
  * @return female or not.
  */
-const bool Unit::isFemale() const
+bool Unit::isFemale() const
 {
 	return _female;
 }
+
 }

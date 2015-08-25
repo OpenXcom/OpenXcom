@@ -32,11 +32,11 @@ private:
 	int _maxVal;
 public:
 	/// Creates a blank StatStringCondition.
-	StatStringCondition(const std::string conditionName, int minVal, int maxVal);
+	StatStringCondition(const std::string &conditionName, int minVal, int maxVal);
 	/// Cleans up the StatStringCondition.
 	virtual ~StatStringCondition();
 	/// Get MinVal.
-	const std::string getConditionName();
+	std::string getConditionName();
 	/// Get MinVal.
 	int getMinVal();
 	/// Get MaxVal.

@@ -234,7 +234,7 @@ public:
 	/// Gets the game starting time.
 	const GameTime &getStartingTime() const;
 	/// Gets an MCDPatch.
-	MCDPatch *getMCDPatch(const std::string name) const;
+	MCDPatch *getMCDPatch(const std::string &name) const;
 	/// Gets the list of external Sprites.
 	std::vector<std::pair<std::string, ExtraSprites *> > getExtraSprites() const;
 	/// Gets the list of external Sounds.
@@ -264,7 +264,7 @@ public:
 	/// Gets the minimum radar's range.
 	int getMinRadarRange() const;
 	/// Gets information on an interface element.
-	RuleInterface *getInterface(const std::string id) const;
+	RuleInterface *getInterface(const std::string &id) const;
 	/// Gets the ruleset for the globe
 	RuleGlobe *getGlobe() const;
 	/// Gets the list of selective files for insertion into our cat files.

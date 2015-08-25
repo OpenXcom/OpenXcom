@@ -43,9 +43,9 @@ public:
 	/// Saves the data to YAML.
 	YAML::Node save() const;
 	/// Choose a random region for a regular mission.
-	const std::string chooseRandomRegion(const Ruleset *rules);
+	std::string chooseRandomRegion(const Ruleset *rules);
 	/// Choose a random mission for a region.
-	const std::string chooseRandomMission(const std::string &region) const;
+	std::string chooseRandomMission(const std::string &region) const;
 	/// Remove a region and mission from the list of posibilities.
 	bool removeMission(const std::string &region, const std::string &mission);
 	/// Checks the number of missions run labelled as "varName".
@@ -53,11 +53,11 @@ public:
 	/// Increments the number of missions run labelled as "varName".
 	void addMissionRun(const std::string &varName);
 	/// Adds a mission location to our storage array.
-	void addMissionLocation(const std::string varName, const std::string regionName, int zoneNumber, int maximum);
+	void addMissionLocation(const std::string &varName, const std::string &regionName, int zoneNumber, int maximum);
 	/// Checks that a given mission location (city or whatever) isn't stored in our list of previously attacked locations.
-	bool validMissionLocation(const std::string varName, const std::string regionName, int zoneNumber);
+	bool validMissionLocation(const std::string &varName, const std::string &regionName, int zoneNumber);
 	/// Checks that a given region appears in our strategy table.
-	bool validMissionRegion(const std::string regionName);
+	bool validMissionRegion(const std::string &regionName);
 private:
 	/// The chances of each region to be targeted for a mission.
 	WeightedOptions _regionChances;

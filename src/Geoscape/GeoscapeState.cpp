@@ -725,7 +725,7 @@ void GeoscapeState::time5Seconds()
 			{
 				AlienMission *mission = (*i)->getMission();
 				bool detected = (*i)->getDetected();
-				mission->ufoLifting(**i, *_game->getSavedGame(), *_globe);
+				mission->ufoLifting(**i, *_game->getSavedGame());
 				if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 				{
 					popup(new UfoLostState((*i)->getName(_game->getLanguage())));

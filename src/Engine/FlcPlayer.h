@@ -92,12 +92,6 @@ private:
 
 	AudioData _audioData;
 
-	Uint16 sampleRate;
-
-	SDL_AudioSpec _requestedAudioSpec;
-	SDL_AudioSpec _returnedAudioSpec;
-	SDL_sem *audioVideoSync;
-
 	Game *_game;
 
 	void readU16(Uint16 &dst, const Uint8 *const src);

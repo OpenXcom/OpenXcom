@@ -103,15 +103,15 @@ public:
 	/// Gets the unit's war cry.
 	int getAggroSound() const;
 	/// Gets how much energy this unit recovers per turn.
-	const int getEnergyRecovery() const;
+	int getEnergyRecovery() const;
 	/// Checks if this unit has a built in weapon.
-	const bool isLivingWeapon() const;
+	bool isLivingWeapon() const;
 	/// Gets the name of any melee weapon that may be built in to this unit.
-	const std::string getMeleeWeapon() const;
+	std::string getMeleeWeapon() const;
 	/// Gets a vector of integrated items this unit has available.
 	const std::vector<std::string> &getBuiltInWeapons() const;
 	/// Is this unit a female?
-	const bool isFemale() const;
+	bool isFemale() const;
 };
 
 }

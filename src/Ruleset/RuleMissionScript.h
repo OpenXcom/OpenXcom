@@ -41,7 +41,7 @@ private:
 	bool _useTable, _siteType;
 public:
 	/// Creates a new mission script.
-	RuleMissionScript(const std::string type);
+	RuleMissionScript(const std::string &type);
 	/// Deletes a mission script.
 	~RuleMissionScript();
 	/// Loads a mission script from yaml.

@@ -29,10 +29,11 @@ namespace OpenXcom
 class RuleMusic
 {
 private:
+	std::string _type;
 	int _catPos;
 	float _normalization;
 public:
-	RuleMusic(const std::string id);
+	RuleMusic(const std::string &type);
 	~RuleMusic();
 	void load(const YAML::Node& node);
 	int getCatPos();

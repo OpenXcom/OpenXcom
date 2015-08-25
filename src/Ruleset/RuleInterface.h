@@ -51,7 +51,7 @@ public:
 	/// Load from YAML.
 	void load(const YAML::Node& node);
 	/// Get an element.
-	Element *getElement(const std::string id);
+	Element *getElement(const std::string &id);
 	/// Get palette.
 	const std::string &getPalette() const;
 	/// Get parent interface rule.

@@ -118,7 +118,7 @@ void AdlibMusic::load(const void *data, int size)
  * Plays the contained music track.
  * @param loop Amount of times to loop the track. -1 = infinite
  */
-void AdlibMusic::play(int loop) const
+void AdlibMusic::play(int) const
 {
 #ifndef __NO_MUSIC
 	if (!Options::mute)

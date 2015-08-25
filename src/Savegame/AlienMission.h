@@ -105,7 +105,7 @@ public:
 	/// Handle UFO reaching a waypoint.
 	void ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe);
 	/// Handle UFO lifting from the ground.
-	void ufoLifting(Ufo &ufo, SavedGame &game, const Globe &globe);
+	void ufoLifting(Ufo &ufo, SavedGame &game);
 	/// Handle UFO shot down.
 	void ufoShotDown(Ufo &ufo);
 	/// Handle Points for mission successes.

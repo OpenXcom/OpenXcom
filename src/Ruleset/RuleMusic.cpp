@@ -28,8 +28,9 @@ namespace OpenXcom
  * of said files, should they be present.
  * default normalization value is 0.76, this only applies to the adlib mixer as far as i know.
  * also, 0.76 is roughly optimal for all the TFTD tracks.
+ * @param type String defining the type.
  */
-RuleMusic::RuleMusic(const std::string id) : _catPos(INT_MAX), _normalization(0.76) 
+RuleMusic::RuleMusic(const std::string &type) : _type(type), _catPos(INT_MAX), _normalization(0.76) 
 {
 }
 

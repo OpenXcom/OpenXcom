@@ -504,9 +504,8 @@ void AlienMission::ufoShotDown(Ufo &ufo)
  * It must set the game data in a way that the rest of the code understands what to do.
  * @param ufo The UFO that reached it's waypoint.
  * @param game The saved game information.
- * @param globe The earth globe, required to get access to land checks.
  */
-void AlienMission::ufoLifting(Ufo &ufo, SavedGame &game, const Globe &globe)
+void AlienMission::ufoLifting(Ufo &ufo, SavedGame &game)
 {
 	switch (ufo.getStatus())
 	{

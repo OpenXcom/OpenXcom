@@ -147,18 +147,6 @@ std::string RuleAlienMission::generateRace(const size_t monthsPassed) const
 }
 
 /**
- * Chooses the most likely race for this mission.
- * The racial distribution may vary based on the current game date.
- * @param monthsPassed The number of months that have passed in the game world.
- * @return The string id of the race.
- */
-std::string RuleAlienMission::getTopRace(const size_t monthsPassed) const
-{
-	std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator rc = _raceDistribution.begin();
-	return rc->second->top();
-}
-
-/**
  * Returns the Alien score for this mission.
  * @return Amount of points.
  */

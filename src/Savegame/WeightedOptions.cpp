@@ -28,7 +28,7 @@ namespace OpenXcom
  * Each time this is called, the returned value can be different.
  * @return The key of the selected choice.
  */
-const std::string WeightedOptions::choose() const
+std::string WeightedOptions::choose() const
 {
 	if (_totalWeight == 0)
 	{
@@ -44,31 +44,6 @@ const std::string WeightedOptions::choose() const
 	}
 	// We always have a valid iterator here.
 	return ii->first;
-}
-
-/**
- * Select the most likely option.
- * This MUST be called on non-empty objects.
- * @return The key of the selected choice.
- */
-const std::string WeightedOptions::top() const
-{
-	if (_totalWeight == 0)
-	{
-		return "";
-	}
-	size_t max = 0;
-	std::map<std::string, size_t>::const_iterator i = _choices.begin();
-	for (std::map<std::string, size_t>::const_iterator ii = _choices.begin(); ii != _choices.end(); ++ii)
-	{
-		if (ii->second >= max)
-		{
-			max = ii->second;
-			i = ii;
-		}
-	}
-	// We always have a valid iterator here.
-	return i->first;
 }
 
 /**

@@ -1440,7 +1440,7 @@ const GameTime &Ruleset::getStartingTime() const
  * @param id The ID of the MCDPatch we want.
  * @return The MCDPatch based on ID, or 0 if none defined.
  */
-MCDPatch *Ruleset::getMCDPatch(const std::string id) const
+MCDPatch *Ruleset::getMCDPatch(const std::string &id) const
 {
 	std::map<std::string, MCDPatch*>::const_iterator i = _MCDPatches.find(id);
 	if (_MCDPatches.end() != i) return i->second; else return 0;
@@ -1740,7 +1740,7 @@ std::string Ruleset::getFontName() const
  * @param id the interface we want info on.
  * @return the interface.
  */
-RuleInterface *Ruleset::getInterface(const std::string id) const
+RuleInterface *Ruleset::getInterface(const std::string &id) const
 {
 	std::map<std::string, RuleInterface*>::const_iterator i = _interfaces.find(id);
 	if (_interfaces.end() != i) return i->second; else return 0;
