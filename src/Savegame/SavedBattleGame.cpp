@@ -1474,14 +1474,14 @@ void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit *bu)
 bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly)
 {
 	int size = bu->getArmor()->getSize() - 1;
-
+	Position zOffset (0,0,0);
 	// first check if the tiles are occupied
 	for (int x = size; x >= 0; x--)
 	{
 		for (int y = size; y >= 0; y--)
 		{
-			Tile *t = getTile(position + Position(x,y,0));
-			Tile *tb = getTile(position + Position(x,y,-1));
+			Tile *t = getTile(position + Position(x,y,0) + zOffset);
+			Tile *tb = getTile(position + Position(x,y,-1) + zOffset);
 			if (t == 0 ||
 				(t->getUnit() != 0 && t->getUnit() != bu) ||
 				t->getTUCost(O_OBJECT, bu->getMovementType()) == 255 ||
@@ -1489,6 +1489,12 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 				(t->getMapData(O_OBJECT) && t->getMapData(O_OBJECT)->getBigWall() && t->getMapData(O_OBJECT)->getBigWall() <= 3))
 			{
 				return false;
+			}
+			if (t && t->getTerrainLevel() == -24)
+			{
+				zOffset.z += 1;
+				x = size;
+				y = size + 1;
 			}
 		}
 	}
@@ -1498,7 +1504,7 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 		getPathfinding()->setUnit(bu);
 		for (int dir = 2; dir <= 4; ++dir)
 		{
-			if (getPathfinding()->isBlocked(getTile(position), 0, dir, 0))
+			if (getPathfinding()->isBlocked(getTile(position + zOffset), 0, dir, 0))
 				return false;
 		}
 	}
@@ -1511,9 +1517,9 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 		{
 			if (x==0 && y==0)
 			{
-				bu->setPosition(position);
+				bu->setPosition(position + zOffset);
 			}
-			getTile(position + Position(x,y,0))->setUnit(bu, getTile(position + Position(x,y,-1)));
+			getTile(position + Position(x,y,0) + zOffset)->setUnit(bu, getTile(position + Position(x,y,-1) + zOffset));
 		}
 	}
 
