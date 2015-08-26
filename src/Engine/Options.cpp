@@ -632,6 +632,7 @@ bool init(int argc, char *argv[])
 	}
 
 	mapResources();
+	userSplitMasters();
 
 	return true;
 }
@@ -768,35 +769,72 @@ void setFolders()
 	}
 	if (!_userFolder.empty())
 	{
-		// create subfolders if they don't already exist
+		// create mod folder if it doesn't already exist
 		CrossPlatform::createFolder(_userFolder + "mods");
-		CrossPlatform::createFolder(_userFolder + "xcom1");
-		CrossPlatform::createFolder(_userFolder + "xcom2");
-		// move any old saves to the appropriate folders
-		std::vector<std::string> saves = CrossPlatform::getFolderContents(_userFolder, "sav");
-		std::vector<std::string> autosaves = CrossPlatform::getFolderContents(_userFolder, "asav");
-		saves.insert(saves.end(), autosaves.begin(), autosaves.end());
-		for (std::vector<std::string>::iterator i = saves.begin(); i != saves.end(); ++i)
-		{
-			std::string srcFile = _userFolder + (*i);
-			std::string dstFile = srcFile;
-			YAML::Node doc = YAML::LoadFile(srcFile);
-			std::vector<std::string> mods = doc["mods"].as<std::vector< std::string> >(std::vector<std::string>());
-			if (std::find(mods.begin(), mods.end(), "xcom2") == mods.end())
-			{
-				dstFile = _userFolder + "xcom1/" + (*i);
-			}
-			else
-			{
-				dstFile = _userFolder + "xcom2/" + (*i);
-			}
-			CrossPlatform::moveFile(srcFile, dstFile);
-		}
 	}
 
 	if (_configFolder.empty())
 	{
 		_configFolder = _userFolder;
+	}
+}
+
+/**
+ * Splits the game's User folder by master mod,
+ * creating a subfolder for each one and moving
+ * the apppropriate user data among them.
+ */
+void userSplitMasters()
+{
+	// get list of master mods
+	const std::map<std::string, ModInfo> &modInfos(Options::getModInfos());
+	if (modInfos.empty())
+	{
+		return;
+	}
+	std::vector<std::string> masters;
+	for (std::vector< std::pair<std::string, bool> >::const_iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
+	{
+		std::string modId = i->first;
+		ModInfo modInfo = modInfos.find(modId)->second;
+		if (modInfo.isMaster())
+		{
+			masters.push_back(modId);
+		}
+	}
+
+	// create master subfolders if they don't already exist
+	std::vector<std::string> saves;
+	for (std::vector<std::string>::const_iterator i = masters.begin(); i != masters.end(); ++i)
+	{
+		std::string masterFolder = _userFolder + (*i);
+		if (!CrossPlatform::folderExists(masterFolder))
+		{
+			CrossPlatform::createFolder(masterFolder);
+			// move any old saves to the appropriate folders
+			if (saves.empty())
+			{
+				saves = CrossPlatform::getFolderContents(_userFolder, "sav");
+				std::vector<std::string> autosaves = CrossPlatform::getFolderContents(_userFolder, "asav");
+				saves.insert(saves.end(), autosaves.begin(), autosaves.end());				
+			}
+			for (std::vector<std::string>::const_iterator j = saves.begin(); j != saves.end();)
+			{
+				std::string srcFile = _userFolder + (*j);
+				YAML::Node doc = YAML::LoadFile(srcFile);
+				std::vector<std::string> mods = doc["mods"].as<std::vector< std::string> >(std::vector<std::string>());
+				if (std::find(mods.begin(), mods.end(), (*i)) != mods.end())
+				{
+					std::string dstFile = masterFolder + "/" + (*j);
+					CrossPlatform::moveFile(srcFile, dstFile);
+					j = saves.erase(j);
+				}
+				else
+				{
+					++j;
+				}
+			}
+		}
 	}
 }
 

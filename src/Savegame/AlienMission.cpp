@@ -226,7 +226,7 @@ void AlienMission::think(Game &engine, const Globe &globe)
  */
 Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const Globe &globe, const MissionWave &wave, const UfoTrajectory &trajectory)
 {
-	RuleUfo &ufoRule = *ruleset.getUfo(wave.ufoType);
+	RuleUfo *ufoRule = ruleset.getUfo(wave.ufoType);
 	if (_rule.getObjective() == OBJECTIVE_RETALIATION)
 	{
 		const RuleRegion &regionRules = *ruleset.getRegion(_region);
@@ -262,13 +262,13 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 	}
 	else if (_rule.getObjective() == OBJECTIVE_SUPPLY)
 	{
-		if (&ufoRule == 0 || (wave.objective && !_base))
+		if (ufoRule == 0 || (wave.objective && !_base))
 		{
 			// No base to supply!
 			return 0;
 		}
 		// Our destination is always an alien base.
-		Ufo *ufo = new Ufo(&ufoRule);
+		Ufo *ufo = new Ufo(ufoRule);
 		ufo->setMissionInfo(this, &trajectory);
 		const RuleRegion &regionRules = *ruleset.getRegion(_region);
 		std::pair<double, double> pos;
@@ -281,7 +281,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 			pos = regionRules.getRandomPoint(trajectory.getZone(0));
 		}
 		ufo->setAltitude(trajectory.getAltitude(0));
-		ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
+		ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule->getMaxSpeed());
 		ufo->setLongitude(pos.first);
 		ufo->setLatitude(pos.second);
 		Waypoint *wp = new Waypoint();
@@ -308,10 +308,10 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 		ufo->setDestination(wp);
 		return ufo;
 	}
-	if (&ufoRule == 0)
+	if (ufoRule == 0)
 		return 0;
 	// Spawn according to sequence.
-	Ufo *ufo = new Ufo(&ufoRule);
+	Ufo *ufo = new Ufo(ufoRule);
 	ufo->setMissionInfo(this, &trajectory);
 	const RuleRegion &regionRules = *ruleset.getRegion(_region);
 	std::pair<double, double> pos = getWaypoint(trajectory, 0, globe, regionRules);
@@ -320,7 +320,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 	{
 		ufo->setSecondsRemaining(trajectory.groundTimer()*5);
 	}
-	ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
+	ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule->getMaxSpeed());
 	ufo->setLongitude(pos.first);
 	ufo->setLatitude(pos.second);
 	Waypoint *wp = new Waypoint();
