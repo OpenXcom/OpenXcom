@@ -818,7 +818,7 @@ void userSplitMasters()
 				std::vector<std::string> autosaves = CrossPlatform::getFolderContents(_userFolder, "asav");
 				saves.insert(saves.end(), autosaves.begin(), autosaves.end());				
 			}
-			for (std::vector<std::string>::const_iterator j = saves.begin(); j != saves.end();)
+			for (std::vector<std::string>::iterator j = saves.begin(); j != saves.end();)
 			{
 				std::string srcFile = _userFolder + (*j);
 				YAML::Node doc = YAML::LoadFile(srcFile);
