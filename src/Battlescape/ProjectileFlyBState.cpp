@@ -123,6 +123,7 @@ void ProjectileFlyBState::init()
 	}
 	
 	Tile *endTile = _parent->getSave()->getTile(_action.target);
+	int distance = _parent->getTileEngine()->distance(_action.actor->getPosition(), _action.target);
 	switch (_action.type)
 	{
 	case BA_SNAPSHOT:
@@ -141,8 +142,25 @@ void ProjectileFlyBState::init()
 			_parent->popState();
 			return;
 		}
-		if (_parent->getTileEngine()->distance(_action.actor->getPosition(), _action.target) > weapon->getRules()->getMaxRange())
+		if (distance > weapon->getRules()->getMaxRange())
 		{
+			// special handling for short ranges and diagonals
+			if (_action.actor->directionTo(_action.target) % 2 == 1)
+			{
+				// special handling for maxRange 1: allow it to target diagonally adjacent tiles, even though they are technically 2 tiles away.
+				if (weapon->getRules()->getMaxRange() == 1
+					&& distance == 2)
+				{
+					break;
+				}
+				// special handling for maxRange 2: allow it to target diagonally adjacent tiles on a level above/below, even though they are technically 3 tiles away.
+				else if (weapon->getRules()->getMaxRange() == 2
+					&& distance == 3
+					&& _action.target.z != _action.actor->getPosition().z)
+				{
+					break;
+				}
+			}
 			// out of range
 			_action.result = "STR_OUT_OF_RANGE";
 			_parent->popState();
