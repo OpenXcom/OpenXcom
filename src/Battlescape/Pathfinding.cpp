@@ -268,7 +268,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 		{
 			Position offset = Position (x, y, 0);
 			Tile *startTile = _save->getTile(startPosition + offset);
-			Tile *belowStartTile = _save->getTile(startPosition + offset + Position(0,0,-1));
 			Tile *destinationTile = _save->getTile(*endPosition + offset);
 			Tile *belowDestination = _save->getTile(*endPosition + offset + Position(0,0,-1));
 			Tile *aboveDestination = _save->getTile(*endPosition + offset + Position(0,0,1));
@@ -276,7 +275,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			// this means the destination is probably outside the map
 			if (startTile == 0 || destinationTile == 0)
 				return 255;
-			if (!x && !y && _movementType != MT_FLY && canFallDown(startTile, size))
+			if (!x && !y && _movementType != MT_FLY && canFallDown(startTile, size+1))
 			{
 				if (direction != DIR_DOWN)
 				{
