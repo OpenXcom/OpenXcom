@@ -1073,8 +1073,12 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 	BattleUnit *unit = new BattleUnit(rules, FACTION_HOSTILE, _unitSequence++, _game->getRuleset()->getArmor(rules->getArmor()), difficulty, _save->getDepth());
 	Node *node = 0;
 
+	// safety to avoid index out of bounds errors
+	if (alienRank > 7)
+		alienRank = 7;
 	/* following data is the order in which certain alien ranks spawn on certain node ranks */
 	/* note that they all can fall back to rank 0 nodes - which is scout (outside ufo) */
+
 
 	for (int i = 0; i < 7 && node == 0; ++i)
 	{
