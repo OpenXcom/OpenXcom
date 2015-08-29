@@ -41,4 +41,11 @@ before_script:
 script: make -j2
 
 notifications:
-  irc: "chat.freenode.net#openxcom"
+  channels:
+    - "chat.freenode.net#openxcom"
+  template:
+    - "(%{commit_subject} : %{author}): %{message}"
+    - "Change view : %{compare_url}"
+    - "Build details : %{build_url}"
+  on_success: change
+  on_failure: change
