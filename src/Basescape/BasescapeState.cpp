@@ -18,7 +18,7 @@
  */
 #include "BasescapeState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
@@ -29,9 +29,9 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
-#include "../Ruleset/RuleBaseFacility.h"
+#include "../Mod/RuleBaseFacility.h"
 #include "../Savegame/Region.h"
-#include "../Ruleset/RuleRegion.h"
+#include "../Mod/RuleRegion.h"
 #include "../Menu/ErrorMessageState.h"
 #include "DismantleFacilityState.h"
 #include "../Geoscape/BuildNewBaseState.h"
@@ -49,8 +49,8 @@
 #include "TransferBaseState.h"
 #include "CraftInfoState.h"
 #include "../Geoscape/AllocatePsiTrainingState.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleInterface.h"
+#include "../Mod/Ruleset.h"
+#include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
 {

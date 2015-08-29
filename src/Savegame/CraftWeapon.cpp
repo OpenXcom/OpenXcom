@@ -17,9 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CraftWeapon.h"
-#include "../Ruleset/RuleCraftWeapon.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/RuleCraftWeapon.h"
+#include "../Mod/Ruleset.h"
+#include "../Mod/RuleItem.h"
 #include "CraftWeaponProjectile.h"
 
 namespace OpenXcom

@@ -23,7 +23,7 @@
 #include "../Engine/Action.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/RuleItem.h"
 #include "ActionMenuItem.h"
 #include "PrimeGrenadeState.h"
 #include "MedikitState.h"

@@ -25,7 +25,7 @@
 #include <time.h>
 #include <stdint.h>
 #include "CraftId.h"
-#include "../Ruleset/RuleAlienMission.h"
+#include "../Mod/RuleAlienMission.h"
 
 namespace OpenXcom
 {

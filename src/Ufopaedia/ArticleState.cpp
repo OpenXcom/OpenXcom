@@ -24,7 +24,7 @@
 #include "../Engine/Surface.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/RuleItem.h"
 
 namespace OpenXcom
 {

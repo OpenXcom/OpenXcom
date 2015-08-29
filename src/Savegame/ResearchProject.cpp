@@ -17,7 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ResearchProject.h"
-#include "../Ruleset/RuleResearch.h"
+#include "../Mod/RuleResearch.h"
 
 namespace OpenXcom
 {

@@ -20,7 +20,7 @@
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/Bar.h"
@@ -33,13 +33,13 @@
 #include "../Savegame/Craft.h"
 #include "../Savegame/Soldier.h"
 #include "../Engine/SurfaceSet.h"
-#include "../Ruleset/Armor.h"
+#include "../Mod/Armor.h"
 #include "../Menu/ErrorMessageState.h"
 #include "SellState.h"
 #include "SoldierArmorState.h"
 #include "SackSoldierState.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleInterface.h"
+#include "../Mod/Ruleset.h"
+#include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
 {

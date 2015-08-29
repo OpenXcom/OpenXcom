@@ -17,9 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../Ruleset/ArticleDefinition.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleCraft.h"
+#include "../Mod/ArticleDefinition.h"
+#include "../Mod/Ruleset.h"
+#include "../Mod/RuleCraft.h"
 #include "ArticleStateTFTD.h"
 #include "ArticleStateTFTDCraft.h"
 #include "../Engine/Game.h"

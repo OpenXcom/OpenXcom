@@ -19,7 +19,7 @@
 #include "AbortMissionState.h"
 #include <vector>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -28,9 +28,9 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "BattlescapeState.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/AlienDeployment.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/MapScript.h"
+#include "../Mod/AlienDeployment.h"
+#include "../Mod/Ruleset.h"
+#include "../Mod/MapScript.h"
 #include "../Savegame/Tile.h"
 
 namespace OpenXcom

@@ -19,9 +19,9 @@
 
 #include "ArticleStateTFTD.h"
 #include "ArticleStateTFTDCraftWeapon.h"
-#include "../Ruleset/ArticleDefinition.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleCraftWeapon.h"
+#include "../Mod/ArticleDefinition.h"
+#include "../Mod/Ruleset.h"
+#include "../Mod/RuleCraftWeapon.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/LocalizedText.h"

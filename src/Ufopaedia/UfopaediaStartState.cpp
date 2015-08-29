@@ -27,7 +27,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 
 namespace OpenXcom
 {

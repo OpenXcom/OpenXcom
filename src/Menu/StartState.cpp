@@ -33,7 +33,7 @@
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
-#include "../Resource/XcomResourcePack.h"
+#include "../Mod/XcomResourcePack.h"
 #include "MainMenuState.h"
 #include "CutsceneState.h"
 #include <SDL_mixer.h>

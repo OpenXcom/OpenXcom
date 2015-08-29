@@ -17,8 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ItemContainer.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/Ruleset.h"
+#include "../Mod/RuleItem.h"
 
 namespace OpenXcom
 {

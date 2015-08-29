@@ -28,9 +28,9 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Music.h"
 #include "../Engine/Sound.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleVideo.h"
+#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
+#include "../Mod/RuleVideo.h"
 #include "CutsceneState.h"
 #include "../Interface/Cursor.h"
 

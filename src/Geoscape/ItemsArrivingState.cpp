@@ -20,7 +20,7 @@
 #include <sstream>
 #include <algorithm>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -33,12 +33,12 @@
 #include "../Savegame/Craft.h"
 #include "../Savegame/CraftWeapon.h"
 #include "../Savegame/Vehicle.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleCraftWeapon.h"
+#include "../Mod/RuleItem.h"
+#include "../Mod/RuleCraftWeapon.h"
 #include "GeoscapeState.h"
 #include "../Engine/Options.h"
 #include "../Basescape/BasescapeState.h"
-#include "../Ruleset/Ruleset.h"
+#include "../Mod/Ruleset.h"
 
 namespace OpenXcom
 {

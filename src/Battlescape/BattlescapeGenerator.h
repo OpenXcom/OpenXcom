@@ -20,8 +20,8 @@
 #define OPENXCOM_BATTLESCAPEGENERATOR_H
 
 #include <vector>
-#include "../Ruleset/RuleTerrain.h"
-#include "../Ruleset/MapScript.h"
+#include "../Mod/RuleTerrain.h"
+#include "../Mod/MapScript.h"
 
 namespace OpenXcom
 {

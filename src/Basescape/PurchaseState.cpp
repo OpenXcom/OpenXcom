@@ -24,7 +24,7 @@
 #include <iomanip>
 #include "../fmath.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
@@ -33,16 +33,16 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Savegame/SavedGame.h"
-#include "../Ruleset/RuleCraft.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/RuleCraft.h"
+#include "../Mod/RuleItem.h"
 #include "../Savegame/Base.h"
 #include "../Engine/Action.h"
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Menu/ErrorMessageState.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleInterface.h"
+#include "../Mod/Ruleset.h"
+#include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
 {

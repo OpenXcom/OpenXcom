@@ -26,7 +26,7 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Options.h"
 #include "../Savegame/BattleUnit.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 

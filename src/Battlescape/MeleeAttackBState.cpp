@@ -33,8 +33,8 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Engine/Sound.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/ResourcePack.h"
+#include "../Mod/RuleItem.h"
 
 namespace OpenXcom
 {

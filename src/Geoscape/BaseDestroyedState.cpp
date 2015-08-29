@@ -18,7 +18,7 @@
  */
 #include "BaseDestroyedState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -28,7 +28,7 @@
 #include "../Savegame/Region.h"
 #include "../Savegame/AlienMission.h"
 #include "../Savegame/Ufo.h"
-#include "../Ruleset/RuleRegion.h"
+#include "../Mod/RuleRegion.h"
 #include "../Engine/Options.h"
 
 namespace OpenXcom

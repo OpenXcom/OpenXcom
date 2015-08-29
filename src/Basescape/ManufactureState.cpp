@@ -19,7 +19,7 @@
 #include "ManufactureState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
@@ -28,7 +28,7 @@
 #include "../Interface/TextList.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
-#include "../Ruleset/RuleManufacture.h"
+#include "../Mod/RuleManufacture.h"
 #include "../Savegame/Production.h"
 #include "NewManufactureListState.h"
 #include "ManufactureInfoState.h"

@@ -19,19 +19,19 @@
 #include "SoldierArmorState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
-#include "../Ruleset/Armor.h"
+#include "../Mod/Armor.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
-#include "../Ruleset/Ruleset.h"
+#include "../Mod/Ruleset.h"
 
 namespace OpenXcom
 {

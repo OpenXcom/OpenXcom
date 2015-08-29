@@ -18,7 +18,7 @@
  */
 #include "AlienBaseState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -28,8 +28,8 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/Country.h"
-#include "../Ruleset/RuleRegion.h"
-#include "../Ruleset/RuleCountry.h"
+#include "../Mod/RuleRegion.h"
+#include "../Mod/RuleCountry.h"
 #include "../Savegame/AlienBase.h"
 #include "../Engine/Options.h"
 

@@ -22,8 +22,8 @@
 #include <algorithm>
 #include <yaml-cpp/yaml.h>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/ResourcePack.h"
+#include "../Mod/RuleItem.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -41,18 +41,18 @@
 #include "../Savegame/Ufo.h"
 #include "../Savegame/MissionSite.h"
 #include "../Savegame/AlienBase.h"
-#include "../Ruleset/RuleCraft.h"
-#include "../Ruleset/RuleTerrain.h"
-#include "../Ruleset/AlienDeployment.h"
+#include "../Mod/RuleCraft.h"
+#include "../Mod/RuleTerrain.h"
+#include "../Mod/AlienDeployment.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
 #include "../Engine/Logger.h"
 #include "../Basescape/CraftInfoState.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Ruleset/RuleAlienMission.h"
-#include "../Ruleset/RuleGlobe.h"
-#include "../Ruleset/Ruleset.h"
+#include "../Mod/RuleAlienMission.h"
+#include "../Mod/RuleGlobe.h"
+#include "../Mod/Ruleset.h"
 
 namespace OpenXcom
 {

@@ -19,7 +19,7 @@
 #include "ScannerView.h"
 #include "../Engine/Game.h"
 #include "../Engine/SurfaceSet.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/Action.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Tile.h"

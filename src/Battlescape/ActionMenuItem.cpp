@@ -20,9 +20,9 @@
 #include "../Interface/Text.h"
 #include "../Interface/Frame.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleInterface.h"
+#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
+#include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
 {

@@ -28,7 +28,7 @@
 #include "Exception.h"
 #include "Options.h"
 #include "LanguagePlurality.h"
-#include "../Ruleset/ExtraStrings.h"
+#include "../Mod/ExtraStrings.h"
 #include "../Interface/TextList.h"
 #ifdef _WIN32
 #ifndef NOMINMAX

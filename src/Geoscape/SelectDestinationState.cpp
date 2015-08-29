@@ -21,7 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Action.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Surface.h"
 #include "../Interface/Window.h"
@@ -32,10 +32,10 @@
 #include "MultipleTargetsState.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Craft.h"
-#include "../Ruleset/RuleCraft.h"
+#include "../Mod/RuleCraft.h"
 #include "ConfirmCydoniaState.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/Ruleset.h"
+#include "../Mod/Ruleset.h"
 
 namespace OpenXcom
 {

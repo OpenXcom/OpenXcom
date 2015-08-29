@@ -19,14 +19,14 @@
 #include "FundingState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Savegame/Country.h"
-#include "../Ruleset/RuleCountry.h"
+#include "../Mod/RuleCountry.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
 

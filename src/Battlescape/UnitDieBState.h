@@ -20,7 +20,7 @@
 #define OPENXCOM_UNITDIEBSTATE_H
 
 #include "BattleState.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/RuleItem.h"
 
 namespace OpenXcom
 {

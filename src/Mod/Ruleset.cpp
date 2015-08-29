@@ -69,7 +69,7 @@
 #include "../Engine/Logger.h"
 #include "StatString.h"
 #include "RuleGlobe.h"
-#include "../Resource/ResourcePack.h"
+#include "ResourcePack.h"
 #include "RuleVideo.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Palette.h"

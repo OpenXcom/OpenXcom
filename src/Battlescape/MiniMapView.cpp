@@ -27,8 +27,8 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Engine/Game.h"
 #include "../Engine/SurfaceSet.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/Armor.h"
+#include "../Mod/ResourcePack.h"
+#include "../Mod/Armor.h"
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
 

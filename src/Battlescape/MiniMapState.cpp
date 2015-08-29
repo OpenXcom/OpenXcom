@@ -20,7 +20,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
 #include "../Interface/BattlescapeButton.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Text.h"

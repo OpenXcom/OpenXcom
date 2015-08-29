@@ -18,8 +18,8 @@
  */
 #include "MissionSite.h"
 #include "../Engine/Language.h"
-#include "../Ruleset/RuleAlienMission.h"
-#include "../Ruleset/AlienDeployment.h"
+#include "../Mod/RuleAlienMission.h"
+#include "../Mod/AlienDeployment.h"
 
 namespace OpenXcom
 {

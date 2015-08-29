@@ -18,7 +18,7 @@
  */
 #include "NewResearchListState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
@@ -27,7 +27,7 @@
 #include "../Interface/TextList.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
-#include "../Ruleset/RuleResearch.h"
+#include "../Mod/RuleResearch.h"
 #include "ResearchInfoState.h"
 
 namespace OpenXcom

@@ -23,7 +23,7 @@
 #include <iomanip>
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -36,16 +36,16 @@
 #include "../Savegame/Craft.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/Vehicle.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Armor.h"
-#include "../Ruleset/RuleCraft.h"
+#include "../Mod/RuleItem.h"
+#include "../Mod/Armor.h"
+#include "../Mod/RuleCraft.h"
 #include "../Savegame/CraftWeapon.h"
 #include "../Savegame/Transfer.h"
-#include "../Ruleset/RuleCraftWeapon.h"
+#include "../Mod/RuleCraftWeapon.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleInterface.h"
+#include "../Mod/Ruleset.h"
+#include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
 {

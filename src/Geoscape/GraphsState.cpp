@@ -19,15 +19,15 @@
 #include "GraphsState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Screen.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Savegame/Country.h"
 #include "../Savegame/Region.h"
-#include "../Ruleset/RuleCountry.h"
-#include "../Ruleset/RuleRegion.h"
+#include "../Mod/RuleCountry.h"
+#include "../Mod/RuleRegion.h"
 #include "../Interface/Text.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
@@ -37,8 +37,8 @@
 #include "../Interface/TextList.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleInterface.h"
+#include "../Mod/Ruleset.h"
+#include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
 {

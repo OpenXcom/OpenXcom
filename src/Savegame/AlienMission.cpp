@@ -26,14 +26,14 @@
 #include "../Engine/Logger.h"
 #include "../Engine/RNG.h"
 #include "../Geoscape/Globe.h"
-#include "../Ruleset/RuleAlienMission.h"
-#include "../Ruleset/RuleRegion.h"
-#include "../Ruleset/RuleCountry.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleUfo.h"
-#include "../Ruleset/UfoTrajectory.h"
-#include "../Ruleset/RuleGlobe.h"
-#include "../Ruleset/Texture.h"
+#include "../Mod/RuleAlienMission.h"
+#include "../Mod/RuleRegion.h"
+#include "../Mod/RuleCountry.h"
+#include "../Mod/Ruleset.h"
+#include "../Mod/RuleUfo.h"
+#include "../Mod/UfoTrajectory.h"
+#include "../Mod/RuleGlobe.h"
+#include "../Mod/Texture.h"
 #include "SavedGame.h"
 #include "MissionSite.h"
 #include "Ufo.h"
@@ -44,7 +44,7 @@
 #include <assert.h>
 #include <algorithm>
 #include <math.h>
-#include "../Ruleset/AlienDeployment.h"
+#include "../Mod/AlienDeployment.h"
 
 namespace OpenXcom
 {

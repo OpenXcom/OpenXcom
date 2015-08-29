@@ -19,11 +19,11 @@
 #include "ResearchCompleteState.h"
 #include "../Engine/Game.h"
 #include "../Engine/LocalizedText.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
-#include "../Ruleset/RuleResearch.h"
+#include "../Mod/RuleResearch.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../Engine/Options.h"
 

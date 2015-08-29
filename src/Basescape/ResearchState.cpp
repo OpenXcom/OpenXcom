@@ -19,7 +19,7 @@
 #include "ResearchState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
@@ -29,7 +29,7 @@
 #include "../Savegame/Base.h"
 #include "NewResearchListState.h"
 #include "../Savegame/ResearchProject.h"
-#include "../Ruleset/RuleResearch.h"
+#include "../Mod/RuleResearch.h"
 #include "ResearchInfoState.h"
 
 namespace OpenXcom

@@ -23,9 +23,9 @@
 #include <string>
 #include "../Battlescape/Position.h"
 #include "../Battlescape/BattlescapeGame.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Unit.h"
-#include "../Ruleset/MapData.h"
+#include "../Mod/RuleItem.h"
+#include "../Mod/Unit.h"
+#include "../Mod/MapData.h"
 #include "Soldier.h"
 #include "BattleItem.h"
 

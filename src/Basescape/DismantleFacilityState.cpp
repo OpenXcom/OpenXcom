@@ -18,7 +18,7 @@
  */
 #include "DismantleFacilityState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
@@ -26,8 +26,8 @@
 #include "../Interface/Text.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
-#include "../Basescape/BaseView.h"
-#include "../Ruleset/RuleBaseFacility.h"
+#include "BaseView.h"
+#include "../Mod/RuleBaseFacility.h"
 #include "../Savegame/SavedGame.h"
 
 namespace OpenXcom

@@ -27,8 +27,8 @@
 #include "../Engine/Screen.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/RuleItem.h"
+#include "../Mod/ResourcePack.h"
 #include <sstream>
 #include "../Engine/Options.h"
 #include "../Savegame/SavedGame.h"

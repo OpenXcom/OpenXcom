@@ -17,17 +17,17 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../Ruleset/ArticleDefinition.h"
+#include "../Mod/ArticleDefinition.h"
 #include "ArticleStateTFTDVehicle.h"
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextList.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/Unit.h"
-#include "../Ruleset/Armor.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/Ruleset.h"
+#include "../Mod/Unit.h"
+#include "../Mod/Armor.h"
+#include "../Mod/RuleItem.h"
 
 namespace OpenXcom
 {

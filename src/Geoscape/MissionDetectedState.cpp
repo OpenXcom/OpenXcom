@@ -18,7 +18,7 @@
  */
 #include "MissionDetectedState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -28,7 +28,7 @@
 #include "../Savegame/MissionSite.h"
 #include "../Engine/Options.h"
 #include "InterceptState.h"
-#include "../Ruleset/AlienDeployment.h"
+#include "../Mod/AlienDeployment.h"
 
 namespace OpenXcom
 {

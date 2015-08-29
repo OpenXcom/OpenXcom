@@ -30,7 +30,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
 #include "../Engine/Sound.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 
 namespace OpenXcom
 {

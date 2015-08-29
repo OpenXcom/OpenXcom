@@ -25,14 +25,14 @@
 #include "../Engine/Game.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleManufacture.h"
+#include "../Mod/ResourcePack.h"
+#include "../Mod/RuleManufacture.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "ManufactureStartState.h"
 #include "../Menu/ErrorMessageState.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleInterface.h"
+#include "../Mod/Ruleset.h"
+#include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
 {

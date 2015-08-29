@@ -24,7 +24,7 @@
 #include <yaml-cpp/yaml.h>
 #include "../version.h"
 #include "../Engine/Logger.h"
-#include "../Ruleset/Ruleset.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
 #include "../Engine/Exception.h"
@@ -39,18 +39,18 @@
 #include "Region.h"
 #include "Ufo.h"
 #include "Waypoint.h"
-#include "../Ruleset/RuleResearch.h"
+#include "../Mod/RuleResearch.h"
 #include "ResearchProject.h"
 #include "ItemContainer.h"
 #include "Soldier.h"
 #include "Transfer.h"
-#include "../Ruleset/RuleManufacture.h"
+#include "../Mod/RuleManufacture.h"
 #include "Production.h"
 #include "MissionSite.h"
 #include "AlienBase.h"
 #include "AlienStrategy.h"
 #include "AlienMission.h"
-#include "../Ruleset/RuleRegion.h"
+#include "../Mod/RuleRegion.h"
 
 namespace OpenXcom
 {

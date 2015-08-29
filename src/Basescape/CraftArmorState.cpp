@@ -18,7 +18,7 @@
  */
 #include "CraftArmorState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Engine/Action.h"
@@ -29,12 +29,12 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Craft.h"
-#include "../Ruleset/Armor.h"
+#include "../Mod/Armor.h"
 #include "SoldierArmorState.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/ItemContainer.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleInterface.h"
+#include "../Mod/Ruleset.h"
+#include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
 {

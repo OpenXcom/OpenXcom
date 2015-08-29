@@ -22,10 +22,10 @@
 #include "PathfindingOpenSet.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
-#include "../Ruleset/Armor.h"
+#include "../Mod/Armor.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Engine/Options.h"
-#include "../Battlescape/BattlescapeGame.h"
+#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {

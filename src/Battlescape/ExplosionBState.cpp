@@ -27,11 +27,11 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/ResourcePack.h"
 #include "../Engine/Sound.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/Armor.h"
+#include "../Mod/RuleItem.h"
+#include "../Mod/Ruleset.h"
+#include "../Mod/Armor.h"
 #include "../Engine/RNG.h"
 
 namespace OpenXcom
