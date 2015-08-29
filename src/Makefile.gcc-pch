@@ -68,10 +68,7 @@ $(OBJDIR)%.o:: Interface/%.cpp
 $(OBJDIR)%.o:: Menu/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 	
-$(OBJDIR)%.o:: Resource/%.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
-	
-$(OBJDIR)%.o:: Ruleset/%.cpp
+$(OBJDIR)%.o:: Mod/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 	
 $(OBJDIR)%.o:: Savegame/%.cpp
