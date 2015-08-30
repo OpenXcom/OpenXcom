@@ -312,7 +312,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 						triedStairs = true;
 					}
 			}
-			else if (!fellDown && _movementType != MT_FLY && belowDestination && canFallDown(destinationTile) && belowDestination->getTerrainLevel() <= -12)
+			else if (direction < DIR_UP && !fellDown && _movementType != MT_FLY && belowDestination && canFallDown(destinationTile) && belowDestination->getTerrainLevel() <= -12)
 			{
 					numberOfPartsGoingDown++;
 
