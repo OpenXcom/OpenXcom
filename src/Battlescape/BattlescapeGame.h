@@ -127,7 +127,7 @@ public:
 	/// Drops an item and affects it with gravity.
 	void dropItem(const Position &position, BattleItem *item, bool newItem = false, bool removeItem = false);
 	/// Converts a unit into a unit of another type.
-	BattleUnit *convertUnit(BattleUnit *unit, const std::string &newType);
+	BattleUnit *convertUnit(BattleUnit *unit);
 	/// Handles kneeling action.
 	bool kneel(BattleUnit *bu);
 	/// Cancels the current action.

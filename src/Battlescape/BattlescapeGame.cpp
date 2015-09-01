@@ -1491,11 +1491,11 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 /**
  * Converts a unit into a unit of another type.
  * @param unit The unit to convert.
- * @param newType The type of unit to convert to.
  * @return Pointer to the new unit.
  */
-BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, const std::string &newType)
+BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit)
 {
+	const std::string newType = unit->getSpawnUnit();
 	bool visible = unit->getVisible();
 	getSave()->getBattleState()->showPsiButton(false);
 	// in case the unit was unconscious
@@ -1965,7 +1965,7 @@ bool BattlescapeGame::convertInfected()
 				game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_BEEN_KILLED", (*i)->getGender()).arg((*i)->getName(game->getLanguage()))));
 			}
 		
-			convertUnit((*i), (*i)->getSpawnUnit());
+			convertUnit((*i));
 			i = _save->getUnits()->begin();
 		}
 	}
