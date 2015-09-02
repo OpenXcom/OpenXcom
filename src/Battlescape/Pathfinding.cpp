@@ -469,13 +469,20 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			cost = 0;
 		}
 
-	// for bigger sized units, check the path between part 1,1 and part 0,0 at end position
+	// for bigger sized units, check the path between parts in an X shape at the end position
 	if (size)
 	{
 		totalCost /= (size+1)*(size+1);
 		Tile *startTile = _save->getTile(*endPosition + Position(1,1,0));
 		Tile *destinationTile = _save->getTile(*endPosition);
 		int tmpDirection = 7;
+		if (isBlocked(startTile, destinationTile, tmpDirection, target))
+			return 255;
+		if (!fellDown && abs(startTile->getTerrainLevel() - destinationTile->getTerrainLevel()) > 10)
+			return 255;
+		startTile = _save->getTile(*endPosition + Position(1,0,0));
+		destinationTile = _save->getTile(*endPosition + Position(0,1,0));
+		tmpDirection = 5;
 		if (isBlocked(startTile, destinationTile, tmpDirection, target))
 			return 255;
 		if (!fellDown && abs(startTile->getTerrainLevel() - destinationTile->getTerrainLevel()) > 10)
