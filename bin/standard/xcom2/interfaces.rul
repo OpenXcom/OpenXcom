@@ -982,7 +982,7 @@ interfaces: #done
       - id: button
         color: 1   # white
   - type: soldierMemorial
-    music: GMLOSE
+    music: GMDEBPOR
     palette: PAL_BASESCAPE
     elements:
       - id: palette
