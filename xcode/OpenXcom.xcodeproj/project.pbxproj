@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		5E5BA7DA1974481400F8E44F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E5BA7D91974481400F8E44F /* OpenGL.framework */; };
+		6B13748C1B9639EE00A43B58 /* TFTD in Resources */ = {isa = PBXBuildFile; fileRef = 6B13748A1B9639EE00A43B58 /* TFTD */; };
+		6B13748D1B9639EE00A43B58 /* UFO in Resources */ = {isa = PBXBuildFile; fileRef = 6B13748B1B9639EE00A43B58 /* UFO */; };
 		6BACF5FC19350F9700E1A981 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BACF5FB19350F9700E1A981 /* Cocoa.framework */; };
 		6BACF61419350F9700E1A981 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BACF61319350F9700E1A981 /* Images.xcassets */; };
 		6BACF63119350FF800E1A981 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BACF63019350FF800E1A981 /* SDLMain.m */; };
@@ -19,36 +21,13 @@
 		6BB58D571936FB7500DF3F68 /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BB58D521936FB7500DF3F68 /* libSDL.a */; };
 		6BB58D581936FB7500DF3F68 /* libyaml-cpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BB58D531936FB7500DF3F68 /* libyaml-cpp.a */; };
 		F21366471B89937900657DCE /* standard in Resources */ = {isa = PBXBuildFile; fileRef = F21366461B89937900657DCE /* standard */; };
-		F21366491B89939000657DCE /* standard in CopyFiles */ = {isa = PBXBuildFile; fileRef = F21366461B89937900657DCE /* standard */; };
 		F213664B1B8993A500657DCE /* common in Resources */ = {isa = PBXBuildFile; fileRef = F213664A1B8993A500657DCE /* common */; };
-		F213664D1B8993BC00657DCE /* common in CopyFiles */ = {isa = PBXBuildFile; fileRef = F213664A1B8993A500657DCE /* common */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		F21365801B8992B400657DCE /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 12;
-			dstPath = standard;
-			dstSubfolderSpec = 7;
-			files = (
-				F21366491B89939000657DCE /* standard in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F213664C1B8993B000657DCE /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = common;
-			dstSubfolderSpec = 7;
-			files = (
-				F213664D1B8993BC00657DCE /* common in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		5E5BA7D91974481400F8E44F /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		6B13748A1B9639EE00A43B58 /* TFTD */ = {isa = PBXFileReference; lastKnownFileType = folder; name = TFTD; path = ../bin/TFTD; sourceTree = "<group>"; };
+		6B13748B1B9639EE00A43B58 /* UFO */ = {isa = PBXFileReference; lastKnownFileType = folder; name = UFO; path = ../bin/UFO; sourceTree = "<group>"; };
 		6BACF5F819350F9700E1A981 /* OpenXcom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenXcom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BACF5FB19350F9700E1A981 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		6BACF5FE19350F9700E1A981 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -91,6 +70,8 @@
 		6BACF5EF19350F9700E1A981 = {
 			isa = PBXGroup;
 			children = (
+				6B13748A1B9639EE00A43B58 /* TFTD */,
+				6B13748B1B9639EE00A43B58 /* UFO */,
 				F213664A1B8993A500657DCE /* common */,
 				F21366461B89937900657DCE /* standard */,
 				6BACF60119350F9700E1A981 /* OpenXcom */,
@@ -164,8 +145,6 @@
 				6BACF5F419350F9700E1A981 /* Sources */,
 				6BACF5F519350F9700E1A981 /* Frameworks */,
 				6BACF5F619350F9700E1A981 /* Resources */,
-				F21365801B8992B400657DCE /* CopyFiles */,
-				F213664C1B8993B000657DCE /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -208,11 +187,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B13748C1B9639EE00A43B58 /* TFTD in Resources */,
 				F213664B1B8993A500657DCE /* common in Resources */,
 				6BACF61419350F9700E1A981 /* Images.xcassets in Resources */,
 				F21366471B89937900657DCE /* standard in Resources */,
 				6BB58D4E1936FADC00DF3F68 /* README.md in Resources */,
 				6BB58D4D1936FADC00DF3F68 /* CHANGELOG.txt in Resources */,
+				6B13748D1B9639EE00A43B58 /* UFO in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
