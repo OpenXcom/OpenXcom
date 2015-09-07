@@ -1412,7 +1412,7 @@ items: #done
     size: 0.8
     costSell: 115000
   - type: STR_BIODRONE_MELEE_WEAPON
-    bigSprite: 26
+    bigSprite: -2
     meleeSound: 26
     strengthApplied: true
     damageType: 7
@@ -1420,12 +1420,12 @@ items: #done
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
-    invWidth: 1
+    invWidth: 2
     invHeight: 3
     clipSize: -1
     recover: false
   - type: HALLUCINOID_WEAPON
-    bigSprite: 26
+    bigSprite: -7
     meleeSound: 26
     strengthApplied: true
     damageType: 7
@@ -1433,12 +1433,12 @@ items: #done
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
-    invWidth: 1
+    invWidth: 2
     invHeight: 3
     clipSize: -1
     recover: false
   - type: STR_LOBSTERMAN_MELEE_WEAPON
-    bigSprite: 26
+    bigSprite: -5
     meleeSound: 42
     strengthApplied: true
     damageType: 7
@@ -1446,12 +1446,12 @@ items: #done
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
-    invWidth: 1
+    invWidth: 2
     invHeight: 3
     clipSize: -1
     recover: false
   - type: CALCINITE_WEAPON
-    bigSprite: 26
+    bigSprite: -9
     meleeSound: 16
     strengthApplied: true
     damageType: 7
@@ -1459,12 +1459,12 @@ items: #done
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
-    invWidth: 1
+    invWidth: 2
     invHeight: 3
     clipSize: -1
     recover: false
   - type: DEEP_ONE_WEAPON 
-    bigSprite: 34
+    bigSprite: -3
     bulletSprite: 8
     fireSound: 40
     hitSound: 41
@@ -1485,7 +1485,7 @@ items: #done
     arcingShot: true
     hitAnimation: -1
   - type: STR_TRISCENE_MELEE_WEAPON
-    bigSprite: 26
+    bigSprite: -6
     handSprite: 41
     meleeSound: 44
     strengthApplied: true
@@ -1494,13 +1494,13 @@ items: #done
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
-    invWidth: 1
+    invWidth: 2
     invHeight: 3
     clipSize: -1
     recover: false
   - type: STR_TRIBIO_SONIC_WEAPON
     weight: 3
-    bigSprite: 30
+    bigSprite: -8
     floorSprite: 29
     handSprite: 40
     fireSound: 36
@@ -1523,7 +1523,7 @@ items: #done
     vaporDensity: 30
   - type: XARQUID_WEAPON
     weight: 3
-    bigSprite: 30
+    bigSprite: -8
     floorSprite: 29
     handSprite: 40
     fireSound: 37
@@ -1545,7 +1545,7 @@ items: #done
     vaporColor: 3
     vaporDensity: 30
   - type: TENTACULAT_WEAPON
-    bigSprite: 26
+    bigSprite: -4
     meleeSound: 42
     strengthApplied: true
     damageType: 7
@@ -1553,13 +1553,13 @@ items: #done
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
-    invWidth: 1
+    invWidth: 2
     invHeight: 3
     clipSize: -1
     recover: false
     zombieUnit: STR_ZOMBIE
   - type: ZOMBIE_WEAPON
-    bigSprite: 26
+    bigSprite: -1
     meleeSound: 42
     strengthApplied: true
     damageType: 7
@@ -1567,7 +1567,7 @@ items: #done
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
-    invWidth: 1
+    invWidth: 2
     invHeight: 3
     clipSize: -1
     recover: false
