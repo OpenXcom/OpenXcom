@@ -457,7 +457,7 @@ public:
 	/// Puts the unit in the corner to think about what he's done.
 	void goToTimeOut();
 	/// Create special weapon for unit.
-	void setSpecialWeapon(SavedBattleGame *save, const Ruleset *rule);
+	void setSpecialWeapon(SavedBattleGame *save, const Mod *mod);
 	/// Get special weapon.
 	BattleItem *getSpecialWeapon(BattleType type) const;
 	/// Recovers the unit's time units and energy.

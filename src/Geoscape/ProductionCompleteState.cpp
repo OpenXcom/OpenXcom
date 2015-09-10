@@ -62,7 +62,7 @@ ProductionCompleteState::ProductionCompleteState(Base *base, const std::wstring 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK17.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK17.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ProductionCompleteState::btnOkClick);

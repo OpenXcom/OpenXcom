@@ -103,7 +103,7 @@ void ResearchInfoState::buildUi()
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK05.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK05.SCR"));
 
 	_txtTitle->setBig();
 
@@ -121,7 +121,7 @@ void ResearchInfoState::buildUi()
 	{
 		_base->addResearch(_project);
 		if (_rule->needItem() &&
-				(_game->getRuleset()->getUnit(_rule->getName()) ||
+				(_game->getMod()->getUnit(_rule->getName()) ||
 				 Options::spendResearchedItems))
 		{
 			_base->getItems()->removeItem(_rule->getName(), 1);
@@ -184,7 +184,7 @@ void ResearchInfoState::btnCancelClick(Action *)
 {
 	const RuleResearch *ruleResearch = _rule ? _rule : _project->getRules();
 	if (ruleResearch->needItem() &&
-			(_game->getRuleset()->getUnit(ruleResearch->getName()) ||
+			(_game->getMod()->getUnit(ruleResearch->getName()) ||
 			 Options::spendResearchedItems))
 	{
 		_base->getItems()->addItem(ruleResearch->getName(), 1);

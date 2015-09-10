@@ -77,7 +77,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState *state) : _state(state), _b
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK13.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK13.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ItemsArrivingState::btnOkClick);
@@ -113,7 +113,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState *state) : _state(state), _b
 				// Check if we have an automated use for an item
 				if ((*j)->getType() == TRANSFER_ITEM)
 				{
-					RuleItem *item = _game->getRuleset()->getItem((*j)->getItems());
+					RuleItem *item = _game->getMod()->getItem((*j)->getItems());
 					for (std::vector<Craft*>::iterator c = (*i)->getCrafts()->begin(); c != (*i)->getCrafts()->end(); ++c)
 					{
 						// Check if it's ammo to reload a craft

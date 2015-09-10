@@ -33,7 +33,7 @@ enum SoldierLook { LOOK_BLONDE, LOOK_BROWNHAIR, LOOK_ORIENTAL, LOOK_AFRICAN };
 
 class Craft;
 class SoldierNamePool;
-class Ruleset;
+class Mod;
 class RuleSoldier;
 class Armor;
 class Language;
@@ -69,7 +69,7 @@ public:
 	/// Cleans up the soldier.
 	~Soldier();
 	/// Loads the soldier from YAML.
-	void load(const YAML::Node& node, const Ruleset *rule, SavedGame *save);
+	void load(const YAML::Node& node, const Mod *mod, SavedGame *save);
 	/// Saves the soldier to YAML.
 	YAML::Node save() const;
 	/// Gets the soldier's name.

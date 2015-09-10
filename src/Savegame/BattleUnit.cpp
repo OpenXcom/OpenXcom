@@ -2981,27 +2981,27 @@ static inline BattleItem *createItem(SavedBattleGame *save, BattleUnit *unit, Ru
  * Set special weapon that is handled outside inventory.
  * @param save
  */
-void BattleUnit::setSpecialWeapon(SavedBattleGame *save, const Ruleset *rule)
+void BattleUnit::setSpecialWeapon(SavedBattleGame *save, const Mod *mod)
 {
 	RuleItem *item = 0;
 	int i = 0;
 
 	if (getUnitRules())
 	{
-		item = rule->getItem(getUnitRules()->getMeleeWeapon());
+		item = mod->getItem(getUnitRules()->getMeleeWeapon());
 		if (item)
 		{
 			_specWeapon[i++] = createItem(save, this, item);
 		}
 	}
-	item = rule->getItem(getArmor()->getSpecialWeapon());
+	item = mod->getItem(getArmor()->getSpecialWeapon());
 	if (item)
 	{
 		_specWeapon[i++] = createItem(save, this, item);
 	}
 	if (getBaseStats()->psiSkill > 0 && getOriginalFaction() == FACTION_HOSTILE)
 	{
-		item = rule->getItem("ALIEN_PSI_WEAPON");
+		item = mod->getItem("ALIEN_PSI_WEAPON");
 		if (item)
 		{
 			_specWeapon[i++] = createItem(save, this, item);

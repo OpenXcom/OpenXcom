@@ -207,7 +207,7 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	centerAllSurfaces();
 
 	// Set up objects
-	_game->getRuleset()->getSurface("BACK06.SCR")->blit(_bg);
+	_game->getMod()->getSurface("BACK06.SCR")->blit(_bg);
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldierInfoState::btnOkClick);
@@ -327,7 +327,7 @@ void SoldierInfoState::init()
 	UnitStats withArmor(*current);
 	withArmor += *(_soldier->getArmor()->getStats());
 
-	SurfaceSet *texture = _game->getRuleset()->getSurfaceSet("BASEBITS.PCK");
+	SurfaceSet *texture = _game->getMod()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(_soldier->getRankSprite())->setX(0);
 	texture->getFrame(_soldier->getRankSprite())->setY(0);
 	texture->getFrame(_soldier->getRankSprite())->blit(_rank);
@@ -438,7 +438,7 @@ void SoldierInfoState::init()
 
 	_txtPsionic->setVisible(_soldier->isInPsiTraining());
 
-	if (current->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+	if (current->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getMod()->getPsiRequirements())))
 	{
 		std::wstringstream ss14;
 		ss14 << withArmor.psiStrength;
@@ -522,7 +522,7 @@ void SoldierInfoState::btnOkClick(Action *)
 	if (_game->getSavedGame()->getMonthsPassed() > -1 && Options::storageLimitsEnforced && _base != 0 && _base->storesOverfull())
 	{
 		_game->pushState(new SellState(_base));
-		_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, _game->getRuleset()->getInterface("soldierInfo")->getElement("errorMessage")->color, "BACK01.SCR", _game->getRuleset()->getInterface("soldierInfo")->getElement("errorPalette")->color));
+		_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, _game->getMod()->getInterface("soldierInfo")->getElement("errorMessage")->color, "BACK01.SCR", _game->getMod()->getInterface("soldierInfo")->getElement("errorPalette")->color));
 	}
 }
 

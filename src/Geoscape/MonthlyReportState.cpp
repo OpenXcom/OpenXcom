@@ -82,7 +82,7 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK13.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK13.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&MonthlyReportState::btnOkClick);
@@ -267,7 +267,7 @@ void MonthlyReportState::btnOkClick(Action *)
 		}
 		else
 		{
-			_window->setColor(_game->getRuleset()->getInterface("monthlyReport")->getElement("window")->color2);
+			_window->setColor(_game->getMod()->getInterface("monthlyReport")->getElement("window")->color2);
 			_txtTitle->setVisible(false);
 			_txtMonth->setVisible(false);
 			_txtRating->setVisible(false);
@@ -278,7 +278,7 @@ void MonthlyReportState::btnOkClick(Action *)
 			_btnOk->setVisible(false);
 			_btnBigOk->setVisible(true);
 			_txtFailure->setVisible(true);
-			_game->getRuleset()->playMusic("GMLOSE");
+			_game->getMod()->playMusic("GMLOSE");
 		}
 	}
 }

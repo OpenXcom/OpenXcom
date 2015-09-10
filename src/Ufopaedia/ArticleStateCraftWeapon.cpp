@@ -36,7 +36,7 @@ namespace OpenXcom
 
 	ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon *defs) : ArticleState(defs->id)
 	{
-		RuleCraftWeapon *weapon = _game->getRuleset()->getCraftWeapon(defs->id);
+		RuleCraftWeapon *weapon = _game->getMod()->getCraftWeapon(defs->id);
 
 		// add screen elements
 		_txtTitle = new Text(200, 32, 5, 24);
@@ -50,7 +50,7 @@ namespace OpenXcom
 		add(_txtTitle);
 
 		// Set up objects
-		_game->getRuleset()->getSurface(defs->image_id)->blit(_bg);
+		_game->getMod()->getSurface(defs->image_id)->blit(_bg);
 		_btnOk->setColor(Palette::blockOffset(1));
 		_btnPrev->setColor(Palette::blockOffset(1));
 		_btnNext->setColor(Palette::blockOffset(1));

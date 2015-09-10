@@ -69,12 +69,12 @@ CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft) :  _base(base),
 	add(_txtUsed, "text", "craftSoldiers");
 	add(_lstSoldiers, "list", "craftSoldiers");
 
-	_otherCraftColor = _game->getRuleset()->getInterface("craftSoldiers")->getElement("otherCraft")->color;
+	_otherCraftColor = _game->getMod()->getInterface("craftSoldiers")->getElement("otherCraft")->color;
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK02.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK02.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftSoldiersState::btnOkClick);

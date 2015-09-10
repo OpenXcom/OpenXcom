@@ -27,7 +27,7 @@ namespace OpenXcom
 {
 
 class RuleTerrain;
-class Ruleset;
+class Mod;
 
 struct ItemSet
 {

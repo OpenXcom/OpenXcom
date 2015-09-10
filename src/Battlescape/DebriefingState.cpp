@@ -111,7 +111,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&DebriefingState::btnOkClick);
@@ -237,11 +237,11 @@ void DebriefingState::init()
 	State::init();
 	if (_positiveScore)
 	{
-		_game->getRuleset()->playMusic(Ruleset::DEBRIEF_MUSIC_GOOD);
+		_game->getMod()->playMusic(Mod::DEBRIEF_MUSIC_GOOD);
 	}
 	else
 	{
-		_game->getRuleset()->playMusic(Ruleset::DEBRIEF_MUSIC_BAD);
+		_game->getMod()->playMusic(Mod::DEBRIEF_MUSIC_BAD);
 	}
 }
 /**
@@ -284,12 +284,12 @@ void DebriefingState::btnOkClick(Action *)
 			else if (_manageContainment)
 			{
 				_game->pushState(new ManageAlienContainmentState(_base, OPT_BATTLESCAPE));
-				_game->pushState(new ErrorMessageState(tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(), _palette, _game->getRuleset()->getInterface("debriefing")->getElement("errorMessage")->color, "BACK01.SCR", _game->getRuleset()->getInterface("debriefing")->getElement("errorPalette")->color));
+				_game->pushState(new ErrorMessageState(tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(), _palette, _game->getMod()->getInterface("debriefing")->getElement("errorMessage")->color, "BACK01.SCR", _game->getMod()->getInterface("debriefing")->getElement("errorPalette")->color));
 			}
 			if (!_manageContainment && Options::storageLimitsEnforced && _base->storesOverfull())
 			{
 				_game->pushState(new SellState(_base, OPT_BATTLESCAPE));
-				_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, _game->getRuleset()->getInterface("debriefing")->getElement("errorMessage")->color, "BACK01.SCR", _game->getRuleset()->getInterface("debriefing")->getElement("errorPalette")->color));
+				_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, _game->getMod()->getInterface("debriefing")->getElement("errorMessage")->color, "BACK01.SCR", _game->getMod()->getInterface("debriefing")->getElement("errorPalette")->color));
 			}
 		}
 
@@ -359,20 +359,20 @@ void ClearAlienBase::operator()(AlienMission *am) const
  */
 void DebriefingState::prepareDebriefing()
 {
-	for (std::vector<std::string>::const_iterator i = _game->getRuleset()->getItemsList().begin(); i != _game->getRuleset()->getItemsList().end(); ++i)
+	for (std::vector<std::string>::const_iterator i = _game->getMod()->getItemsList().begin(); i != _game->getMod()->getItemsList().end(); ++i)
 	{
-		if (_game->getRuleset()->getItem(*i)->getSpecialType() > 1)
+		if (_game->getMod()->getItem(*i)->getSpecialType() > 1)
 		{
 			RecoveryItem *item = new RecoveryItem();
 			item->name = *i;
-			item->value = _game->getRuleset()->getItem(*i)->getRecoveryPoints();
-			_recoveryStats[_game->getRuleset()->getItem(*i)->getSpecialType()] = item;
+			item->value = _game->getMod()->getItem(*i)->getRecoveryPoints();
+			_recoveryStats[_game->getMod()->getItem(*i)->getSpecialType()] = item;
 		}
 	}
 
 	SavedGame *save = _game->getSavedGame();
 	SavedBattleGame *battle = save->getSavedBattle();
-	AlienDeployment *deployment = _game->getRuleset()->getDeployment(battle->getMissionType());
+	AlienDeployment *deployment = _game->getMod()->getDeployment(battle->getMissionType());
 
 	bool aborted = battle->isAborted();
 	bool success = !aborted || battle->allObjectivesDestroyed();
@@ -419,7 +419,7 @@ void DebriefingState::prepareDebriefing()
 		_stats.push_back(new DebriefingStat((*i).second->name, true));
 	}
 
-	_stats.push_back(new DebriefingStat(_game->getRuleset()->getAlienFuelName(), true));
+	_stats.push_back(new DebriefingStat(_game->getMod()->getAlienFuelName(), true));
 
 	for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
 	{
@@ -708,12 +708,12 @@ void DebriefingState::prepareDebriefing()
 					{
 						recoverItems((*j)->getInventory(), base);
 						// calculate new statString
-						soldier->calcStatString(_game->getRuleset()->getStatStrings(), (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())));
+						soldier->calcStatString(_game->getMod()->getStatStrings(), (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getMod()->getPsiRequirements())));
 					}
 					else
 					{ // non soldier player = tank
 						base->getItems()->addItem((*j)->getType());
-						RuleItem *tankRule = _game->getRuleset()->getItem((*j)->getType());
+						RuleItem *tankRule = _game->getMod()->getItem((*j)->getType());
 						if ((*j)->getItem("STR_RIGHT_HAND"))
 						{
 							BattleItem *ammoItem = (*j)->getItem("STR_RIGHT_HAND")->getAmmoItem();
@@ -776,7 +776,7 @@ void DebriefingState::prepareDebriefing()
 				{
 					if (!(*k)->getRules()->isFixed())
 					{
-						(*j)->getTile()->addItem(*k, _game->getRuleset()->getInventory("STR_GROUND"));
+						(*j)->getTile()->addItem(*k, _game->getMod()->getInventory("STR_GROUND"));
 					}
 				}
 				recoverAlien(*j, base);
@@ -1055,11 +1055,11 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 	for (std::map<std::string, int>::iterator i = craftVehicles.getContents()->begin(); i != craftVehicles.getContents()->end(); ++i)
 	{
 		int qty = base->getItems()->getItem(i->first);
-		RuleItem *tankRule = _game->getRuleset()->getItem(i->first);
+		RuleItem *tankRule = _game->getMod()->getItem(i->first);
 		int size = 4;
-		if (_game->getRuleset()->getUnit(tankRule->getType()))
+		if (_game->getMod()->getUnit(tankRule->getType()))
 		{
-			size = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(tankRule->getType())->getArmor())->getSize();
+			size = _game->getMod()->getArmor(_game->getMod()->getUnit(tankRule->getType())->getArmor())->getSize();
 			size *= size;
 		}
 		int canBeAdded = std::min(qty, i->second);
@@ -1077,7 +1077,7 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 		}
 		else
 		{ // so this tank requires ammo
-			RuleItem *ammo = _game->getRuleset()->getItem(tankRule->getCompatibleAmmo()->front());
+			RuleItem *ammo = _game->getMod()->getItem(tankRule->getCompatibleAmmo()->front());
 			int ammoPerVehicle = ammo->getClipSize();
 			if (ammoPerVehicle > 0 && tankRule->getClipSize() > 0)
 			{
@@ -1115,10 +1115,10 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 {
 	for (std::vector<BattleItem*>::iterator it = from->begin(); it != from->end(); ++it)
 	{
-		if ((*it)->getRules()->getName() == _game->getRuleset()->getAlienFuelName())
+		if ((*it)->getRules()->getName() == _game->getMod()->getAlienFuelName())
 		{
 			// special case of an item counted as a stat
-			addStat(_game->getRuleset()->getAlienFuelName(), _game->getRuleset()->getAlienFuelQuantity(), 5);
+			addStat(_game->getMod()->getAlienFuelName(), _game->getMod()->getAlienFuelQuantity(), 5);
 		}
 		else
 		{
@@ -1216,7 +1216,7 @@ void DebriefingState::recoverAlien(BattleUnit *from, Base *base)
 	}
 	else
 	{
-		RuleResearch *research = _game->getRuleset()->getResearch(type);
+		RuleResearch *research = _game->getMod()->getResearch(type);
 		if (research != 0 && !_game->getSavedGame()->isResearched(type))
 		{
 			// more points if it's not researched

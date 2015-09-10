@@ -75,7 +75,7 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK12.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK12.SCR"));
 
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&InterceptState::btnCancelClick);

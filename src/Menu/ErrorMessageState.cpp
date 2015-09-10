@@ -86,7 +86,7 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 	// Set palette
 	setPalette(palette);
 	if (bgColor != -1)
-		setPalette(_game->getRuleset()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(bgColor)), Palette::backPos, 16);
+		setPalette(_game->getMod()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(bgColor)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);
@@ -96,7 +96,7 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 
 	// Set up objects
 	_window->setColor(color);
-	_window->setBackground(_game->getRuleset()->getSurface(bg));
+	_window->setBackground(_game->getMod()->getSurface(bg));
 
 	_btnOk->setColor(color);
 	_btnOk->setText(tr("STR_OK"));

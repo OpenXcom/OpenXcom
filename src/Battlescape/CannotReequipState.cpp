@@ -60,7 +60,7 @@ CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CannotReequipState::btnOkClick);

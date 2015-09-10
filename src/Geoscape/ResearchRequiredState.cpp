@@ -55,7 +55,7 @@ ResearchRequiredState::ResearchRequiredState(RuleItem *item)
 	std::string clip = item->getCompatibleAmmo()->front();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK05.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK05.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchRequiredState::btnOkClick);

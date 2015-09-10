@@ -64,8 +64,8 @@ ScannerState::ScannerState (BattleAction *action) : _action(action)
 
 	centerAllSurfaces();
 
-	_game->getRuleset()->getSurface("DETBORD.PCK")->blit(_bg);
-	_game->getRuleset()->getSurface("DETBORD2.PCK")->blit(_scan);
+	_game->getMod()->getSurface("DETBORD.PCK")->blit(_bg);
+	_game->getMod()->getSurface("DETBORD2.PCK")->blit(_scan);
 	_bg->onMouseClick((ActionHandler)&ScannerState::exitClick);
 	_bg->onKeyboardPress((ActionHandler)&ScannerState::exitClick, Options::keyCancel);
 

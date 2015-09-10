@@ -72,7 +72,7 @@ MainMenuState::MainMenuState()
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnNewGame->setText(tr("STR_NEW_GAME"));
 	_btnNewGame->onMouseClick((ActionHandler)&MainMenuState::btnNewGameClick);

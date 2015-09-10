@@ -135,15 +135,15 @@ int ItemContainer::getTotalQuantity() const
 
 /**
  * Returns the total size of the items in the container.
- * @param rule Pointer to ruleset.
+ * @param mod Pointer to mod.
  * @return Total item size.
  */
-double ItemContainer::getTotalSize(const Ruleset *rule) const
+double ItemContainer::getTotalSize(const Mod *mod) const
 {
 	double total = 0;
 	for (std::map<std::string, int>::const_iterator i = _qty.begin(); i != _qty.end(); ++i)
 	{
-		total += rule->getItem(i->first)->getSize() * i->second;
+		total += mod->getItem(i->first)->getSize() * i->second;
 	}
 	return total;
 }

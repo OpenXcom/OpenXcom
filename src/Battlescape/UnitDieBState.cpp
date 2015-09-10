@@ -278,7 +278,7 @@ void UnitDieBState::convertUnitToCorpse()
 		{
 			if ((*it)->getUnit() == _unit)
 			{
-				RuleItem *corpseRules = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[0]); // we're in an inventory, so we must be a 1x1 unit
+				RuleItem *corpseRules = _parent->getMod()->getItem(_unit->getArmor()->getCorpseBattlescape()[0]); // we're in an inventory, so we must be a 1x1 unit
 				(*it)->convertToCorpse(corpseRules);
 				break;
 			}
@@ -292,7 +292,7 @@ void UnitDieBState::convertUnitToCorpse()
 		{
 			for (int x = 0; x < size; x++)
 			{
-				BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[i]), _parent->getSave()->getCurrentItemId());
+				BattleItem *corpse = new BattleItem(_parent->getMod()->getItem(_unit->getArmor()->getCorpseBattlescape()[i]), _parent->getSave()->getCurrentItemId());
 				corpse->setUnit(_unit);
 				if (_parent->getSave()->getTile(lastPosition + Position(x,y,0))->getUnit() == _unit) // check in case unit was displaced by another unit
 				{
@@ -314,16 +314,16 @@ void UnitDieBState::playDeathSound()
 	{
 		if (_unit->getGender() == GENDER_MALE)
 		{
-			_parent->getRuleset()->getSoundByDepth(_parent->getDepth(), Ruleset::MALE_SCREAM[RNG::generate(0, 2)])->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
+			_parent->getMod()->getSoundByDepth(_parent->getDepth(), Mod::MALE_SCREAM[RNG::generate(0, 2)])->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 		}
 		else
 		{
-			_parent->getRuleset()->getSoundByDepth(_parent->getDepth(), Ruleset::FEMALE_SCREAM[RNG::generate(0, 2)])->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
+			_parent->getMod()->getSoundByDepth(_parent->getDepth(), Mod::FEMALE_SCREAM[RNG::generate(0, 2)])->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 		}
 	}
 	else if (_unit->getDeathSound() >= 0)
 	{
-		_parent->getRuleset()->getSoundByDepth(_parent->getDepth(), _unit->getDeathSound())->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
+		_parent->getMod()->getSoundByDepth(_parent->getDepth(), _unit->getDeathSound())->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 	}
 }
 

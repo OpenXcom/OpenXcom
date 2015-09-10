@@ -62,7 +62,7 @@ NewPossibleResearchState::NewPossibleResearchState(Base * base, const std::vecto
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK05.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK05.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewPossibleResearchState::btnOkClick);
@@ -80,7 +80,7 @@ NewPossibleResearchState::NewPossibleResearchState(Base * base, const std::vecto
 	size_t tally(0);
 	for (std::vector<RuleResearch *>::const_iterator iter = possibilities.begin(); iter != possibilities.end(); ++iter)
 	{
-		bool liveAlien = _game->getRuleset()->getUnit((*iter)->getName()) != 0;
+		bool liveAlien = _game->getMod()->getUnit((*iter)->getName()) != 0;
 		if (!_game->getSavedGame()->wasResearchPopped(*iter) && (*iter)->getRequirements().empty() && !liveAlien)
 		{
 			_game->getSavedGame()->addPoppedResearch((*iter));

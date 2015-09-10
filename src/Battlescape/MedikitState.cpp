@@ -166,7 +166,7 @@ MedikitState::MedikitState (BattleUnit *targetUnit, BattleAction *action) : _tar
 
 	centerAllSurfaces();
 
-	_game->getRuleset()->getSurface("MEDIBORD.PCK")->blit(_bg);
+	_game->getMod()->getSurface("MEDIBORD.PCK")->blit(_bg);
 	_pkText->setBig();
 	_stimulantTxt->setBig();
 	_healTxt->setBig();

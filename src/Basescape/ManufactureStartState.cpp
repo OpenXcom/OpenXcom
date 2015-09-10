@@ -80,7 +80,7 @@ ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item
 
 	centerAllSurfaces();
 
-	_window->setBackground(_game->getRuleset()->getSurface("BACK17.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK17.SCR"));
 
 	_txtTitle->setText(tr(_item->getName()));
 	_txtTitle->setBig();

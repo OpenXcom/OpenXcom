@@ -62,7 +62,7 @@ TransferConfirmState::TransferConfirmState(Base *base, TransferItemsState *state
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK13.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK13.SCR"));
 
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferConfirmState::btnCancelClick);

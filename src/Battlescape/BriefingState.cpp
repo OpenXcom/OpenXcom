@@ -60,14 +60,14 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 	_txtBriefing = new Text(274, 64, 16, 72);
 
 	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
-	AlienDeployment *deployment = _game->getRuleset()->getDeployment(mission);
+	AlienDeployment *deployment = _game->getMod()->getDeployment(mission);
 	Ufo * ufo = 0;
 	if (!deployment && craft)
 	{
 		ufo = dynamic_cast <Ufo*> (craft->getDestination());
 		if (ufo) // landing site or crash site.
 		{
-			deployment = _game->getRuleset()->getDeployment(ufo->getRules()->getType());
+			deployment = _game->getMod()->getDeployment(ufo->getRules()->getType());
 		}
 	}
 
@@ -77,13 +77,13 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 	{
 		setPalette("PAL_GEOSCAPE", 0);
 		_musicId = "GMDEFEND";
-		_window->setBackground(_game->getRuleset()->getSurface("BACK16.SCR"));
+		_window->setBackground(_game->getMod()->getSurface("BACK16.SCR"));
 	}
 	else
 	{
 		BriefingData data = deployment->getBriefingData();
 		setPalette("PAL_GEOSCAPE", data.palette);
-		_window->setBackground(_game->getRuleset()->getSurface(data.background));
+		_window->setBackground(_game->getMod()->getSurface(data.background));
 		_txtCraft->setY(56 + data.textOffset);
 		_txtBriefing->setY(72 + data.textOffset);
 		_txtTarget->setVisible(data.showTarget);
@@ -168,7 +168,7 @@ void BriefingState::init()
 	}
 	else
 	{
-		_game->getRuleset()->playMusic(_musicId);
+		_game->getMod()->playMusic(_musicId);
 	}
 }
 

@@ -48,7 +48,7 @@ ScannerView::ScannerView (int w, int h, int x, int y, Game * game, BattleUnit *u
  */
 void ScannerView::draw()
 {
-	SurfaceSet *set = _game->getRuleset()->getSurfaceSet("DETBLOB.DAT");
+	SurfaceSet *set = _game->getMod()->getSurfaceSet("DETBLOB.DAT");
 	Surface *surface = 0;
 
 	clear();

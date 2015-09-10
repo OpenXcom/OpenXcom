@@ -38,7 +38,7 @@ struct SaveOriginal
 };
 
 class SavedGame;
-class Ruleset;
+class Mod;
 class Language;
 class Target;
 class Soldier;
@@ -54,7 +54,7 @@ private:
 	std::string _saveName, _savePath;
 	std::vector<std::string> _idMarkers, _idCountries, _idRegions, _idFacilities, _idItems, _idCrews, _idCrafts, _idUfos, _idCraftWeapons, _idMissions, _idArmor, _idAlienRaces, _idAlienRanks, _idResearch, _idManufacture, _idUfopaedia;
 	SavedGame *_save;
-	Ruleset *_rule;
+	Mod *_mod;
 	int _year, _funds;
 	std::vector<Target*> _targets;
 	std::vector<int> _targetDat;
@@ -113,7 +113,7 @@ public:
 	static const int NUM_SAVES = 10;
 
 	/// Creates a converter for the specified save.
-	SaveConverter(int save, Ruleset *rule);
+	SaveConverter(int save, Mod *mod);
 	/// Cleans up the converter.
 	~SaveConverter();
 	/// Gets list of saves in the user directory.

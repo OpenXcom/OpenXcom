@@ -47,16 +47,16 @@ RuleTerrain::~RuleTerrain()
 /**
  * Loads the terrain from a YAML file.
  * @param node YAML node.
- * @param ruleset Ruleset for the terrain.
+ * @param mod Mod for the terrain.
  */
-void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
+void RuleTerrain::load(const YAML::Node &node, Mod *mod)
 {
 	if (const YAML::Node &map = node["mapDataSets"])
 	{
 		_mapDataSets.clear();
 		for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
 		{
-			_mapDataSets.push_back(ruleset->getMapDataSet(i->as<std::string>()));
+			_mapDataSets.push_back(mod->getMapDataSet(i->as<std::string>()));
 		}
 	}
 	if (const YAML::Node &map = node["mapBlocks"])

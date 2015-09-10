@@ -72,7 +72,7 @@ SlideshowState::SlideshowState(const SlideshowHeader &slideshowHeader,
 	_transitionTimer = new Timer(transitionSeconds * 1000);
 	_transitionTimer->onTimer((StateHandler)&SlideshowState::screenTimer);
 
-	_game->getRuleset()->playMusic(_slideshowHeader.musicId);
+	_game->getMod()->playMusic(_slideshowHeader.musicId);
 	_game->getCursor()->setVisible(false);
 	screenClick(0);
 }

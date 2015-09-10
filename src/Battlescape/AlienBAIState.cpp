@@ -1495,9 +1495,9 @@ bool AlienBAIState::findFirePoint()
 bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff, bool grenade) const
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
-	Ruleset *ruleset = _save->getBattleState()->getGame()->getRuleset();
-	if ((!grenade && _save->getTurn() < ruleset->getTurnAIUseBlaster()) ||
-		 (grenade && _save->getTurn() < ruleset->getTurnAIUseGrenade()))
+	Mod *mod = _save->getBattleState()->getGame()->getMod();
+	if ((!grenade && _save->getTurn() < mod->getTurnAIUseBlaster()) ||
+		 (grenade && _save->getTurn() < mod->getTurnAIUseGrenade()))
 	{
 		return false;
 	}
@@ -2057,7 +2057,7 @@ void AlienBAIState::selectMeleeOrRanged()
 bool AlienBAIState::getNodeOfBestEfficacy(BattleAction *action)
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
-	if (_save->getTurn() < _save->getBattleState()->getGame()->getRuleset()->getTurnAIUseGrenade())
+	if (_save->getTurn() < _save->getBattleState()->getGame()->getMod()->getTurnAIUseGrenade())
 		return false;
 
 	int bestScore = 2;

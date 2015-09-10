@@ -56,13 +56,13 @@ PlaceLiftState::PlaceLiftState(Base *base, Globe *globe, bool first) : _base(bas
 	centerAllSurfaces();
 
 	// Set up objects
-	_view->setTexture(_game->getRuleset()->getSurfaceSet("BASEBITS.PCK"));
+	_view->setTexture(_game->getMod()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
-	for (std::vector<std::string>::const_iterator i = _game->getRuleset()->getBaseFacilitiesList().begin(); i != _game->getRuleset()->getBaseFacilitiesList().end(); ++i)
+	for (std::vector<std::string>::const_iterator i = _game->getMod()->getBaseFacilitiesList().begin(); i != _game->getMod()->getBaseFacilitiesList().end(); ++i)
 	{
-		if (_game->getRuleset()->getBaseFacility(*i)->isLift())
+		if (_game->getMod()->getBaseFacility(*i)->isLift())
 		{
-			_lift = _game->getRuleset()->getBaseFacility(*i);
+			_lift = _game->getMod()->getBaseFacility(*i);
 			break;
 		}
 	}

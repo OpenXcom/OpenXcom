@@ -35,7 +35,7 @@ namespace OpenXcom
 
 	ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft *defs) : ArticleState(defs->id)
 	{
-		RuleCraft *craft = _game->getRuleset()->getCraft(defs->id);
+		RuleCraft *craft = _game->getMod()->getCraft(defs->id);
 
 		// add screen elements
 		_txtTitle = new Text(210, 32, 5, 24);
@@ -49,7 +49,7 @@ namespace OpenXcom
 		add(_txtTitle);
 
 		// Set up objects
-		_game->getRuleset()->getSurface(defs->image_id)->blit(_bg);
+		_game->getMod()->getSurface(defs->image_id)->blit(_bg);
 		_btnOk->setColor(Palette::blockOffset(15)-1);
 		_btnPrev->setColor(Palette::blockOffset(15)-1);
 		_btnNext->setColor(Palette::blockOffset(15)-1);

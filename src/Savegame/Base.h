@@ -27,14 +27,14 @@
 namespace OpenXcom
 {
 
-class Ruleset;
+class Mod;
 class BaseFacility;
 class Soldier;
 class Craft;
 class ItemContainer;
 class Transfer;
 class Language;
-class Ruleset;
+class Mod;
 class SavedGame;
 class ResearchProject;
 class Production;
@@ -48,7 +48,7 @@ class Base : public Target
 {
 private:
 	static const int BASE_SIZE = 6;
-	const Ruleset *_rule;
+	const Mod *_mod;
 	std::wstring _name;
 	std::vector<BaseFacility*> _facilities;
 	std::vector<Soldier*> _soldiers;
@@ -66,7 +66,7 @@ private:
 	double getIgnoredStores();
 public:
 	/// Creates a new base.
-	Base(const Ruleset *rule);
+	Base(const Mod *mod);
 	/// Cleans up the base.
 	~Base();
 	/// Loads the base from YAML.

@@ -91,7 +91,7 @@ OptionsBaseState::OptionsBaseState(OptionsOrigin origin) : _origin(origin)
 	add(_txtTooltip, "tooltip", "optionsMenu");
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnVideo->setText(tr("STR_VIDEO"));
 	_btnVideo->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress, SDL_BUTTON_LEFT);

@@ -77,7 +77,7 @@ PauseState::PauseState(OptionsOrigin origin) : _origin(origin)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnLoad->setText(tr("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&PauseState::btnLoadClick);

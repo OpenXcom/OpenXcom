@@ -42,9 +42,9 @@ RuleUfo::~RuleUfo()
 /**
  * Loads the UFO from a YAML file.
  * @param node YAML node.
- * @param ruleset Ruleset for the UFO.
+ * @param mod Mod for the UFO.
  */
-void RuleUfo::load(const YAML::Node &node, Ruleset *ruleset)
+void RuleUfo::load(const YAML::Node &node, Mod *mod)
 {
 	_type = node["type"].as<std::string>(_type);
 	_size = node["size"].as<std::string>(_size);
@@ -64,7 +64,7 @@ void RuleUfo::load(const YAML::Node &node, Ruleset *ruleset)
 		if (_battlescapeTerrainData)
 			delete _battlescapeTerrainData;
 		RuleTerrain *rule = new RuleTerrain(terrain["name"].as<std::string>());
-		rule->load(terrain, ruleset);
+		rule->load(terrain, mod);
 		_battlescapeTerrainData = rule;
 	}
 	_modSprite = node["modSprite"].as<std::string>(_modSprite);

@@ -51,25 +51,25 @@ Transfer::~Transfer()
  * Loads the transfer from a YAML file.
  * @param node YAML node.
  * @param base Destination base.
- * @param rule Game ruleset.
+ * @param rule Game mod.
  * @param save Pointer to savegame.
  * @return Was the transfer content valid?
  */
-bool Transfer::load(const YAML::Node& node, Base *base, const Ruleset *rule, SavedGame *save)
+bool Transfer::load(const YAML::Node& node, Base *base, const Mod *mod, SavedGame *save)
 {
 	_hours = node["hours"].as<int>(_hours);
 	if (const YAML::Node &soldier = node["soldier"])
 	{
-		_soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
-		_soldier->load(soldier, rule, save);
+		_soldier = new Soldier(mod->getSoldier("XCOM"), mod->getArmor("STR_NONE_UC"));
+		_soldier->load(soldier, mod, save);
 	}
 	if (const YAML::Node &craft = node["craft"])
 	{
 		std::string type = craft["type"].as<std::string>();
-		if (rule->getCraft(type) != 0)
+		if (mod->getCraft(type) != 0)
 		{
-			_craft = new Craft(rule->getCraft(type), base);
-			_craft->load(craft, rule, 0);
+			_craft = new Craft(mod->getCraft(type), base);
+			_craft->load(craft, mod, 0);
 		}
 		else
 		{
@@ -81,7 +81,7 @@ bool Transfer::load(const YAML::Node& node, Base *base, const Ruleset *rule, Sav
 	if (const YAML::Node &item = node["itemId"])
 	{
 		_itemId = item.as<std::string>(_itemId);
-		if (rule->getItem(_itemId) == 0)
+		if (mod->getItem(_itemId) == 0)
 		{
 			delete this;
 			return false;

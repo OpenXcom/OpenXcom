@@ -56,7 +56,7 @@ ConfirmLoadState::ConfirmLoadState(OptionsOrigin origin, const std::string &file
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&ConfirmLoadState::btnYesClick);

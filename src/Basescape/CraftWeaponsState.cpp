@@ -70,7 +70,7 @@ CraftWeaponsState::CraftWeaponsState(Base *base, size_t craft, size_t weapon) : 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK14.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK14.SCR"));
 
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&CraftWeaponsState::btnCancelClick);
@@ -96,10 +96,10 @@ CraftWeaponsState::CraftWeaponsState(Base *base, size_t craft, size_t weapon) : 
 	_lstWeapons->addRow(1, tr("STR_NONE_UC").c_str());
 	_weapons.push_back(0);
 
-	const std::vector<std::string> &weapons = _game->getRuleset()->getCraftWeaponsList();
+	const std::vector<std::string> &weapons = _game->getMod()->getCraftWeaponsList();
 	for (std::vector<std::string>::const_iterator i = weapons.begin(); i != weapons.end(); ++i)
 	{
-		RuleCraftWeapon *w = _game->getRuleset()->getCraftWeapon(*i);
+		RuleCraftWeapon *w = _game->getMod()->getCraftWeapon(*i);
 		if (_base->getItems()->getItem(w->getLauncherItem()) > 0)
 		{
 			_weapons.push_back(w);
@@ -147,7 +147,7 @@ void CraftWeaponsState::lstWeaponsClick(Action *)
 	if (current != 0)
 	{
 		_base->getItems()->addItem(current->getRules()->getLauncherItem());
-		_base->getItems()->addItem(current->getRules()->getClipItem(), current->getClipsLoaded(_game->getRuleset()));
+		_base->getItems()->addItem(current->getRules()->getClipItem(), current->getClipsLoaded(_game->getMod()));
 		delete current;
 		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = 0;
 	}

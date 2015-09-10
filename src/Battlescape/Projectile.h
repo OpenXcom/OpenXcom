@@ -30,7 +30,7 @@ class BattleItem;
 class SavedBattleGame;
 class Surface;
 class Tile;
-class Ruleset;
+class Mod;
 
 /**
  * A class that represents a projectile. Map is the owner of an instance of this class during its short life.
@@ -39,7 +39,7 @@ class Ruleset;
 class Projectile
 {
 private:
-	Ruleset *_rules;
+	Mod *_mod;
 	SavedBattleGame *_save;
 	BattleAction _action;
 	Position _origin, _targetVoxel;
@@ -53,7 +53,7 @@ private:
 	void applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, bool extendLine);
 public:
 	/// Creates a new Projectile.
-	Projectile(Ruleset *rules, SavedBattleGame *save, BattleAction action, Position origin, Position target, BattleItem *ammo);
+	Projectile(Mod *mod, SavedBattleGame *save, BattleAction action, Position origin, Position target, BattleItem *ammo);
 	/// Cleans up the Projectile.
 	~Projectile();
 	/// Calculates the trajectory for a straight path.

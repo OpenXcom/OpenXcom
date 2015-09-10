@@ -64,7 +64,7 @@ MultipleTargetsState::MultipleTargetsState(std::vector<Target*> targets, Craft *
 		add(_window, "window", "UFOInfo");
 
 		// Set up objects
-		_window->setBackground(_game->getRuleset()->getSurface("BACK15.SCR"));
+		_window->setBackground(_game->getMod()->getSurface("BACK15.SCR"));
 
 		int y = btnY;
 		for (size_t i = 0; i < _targets.size(); ++i)

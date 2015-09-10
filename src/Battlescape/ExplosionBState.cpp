@@ -87,7 +87,7 @@ void ExplosionBState::init()
 	}
 	else if (_unit && (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 	{
-		_power = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getPower();
+		_power = _parent->getMod()->getItem(_unit->getArmor()->getCorpseGeoscape())->getPower();
 		_areaOfEffect = true;
 	}
 	else
@@ -101,7 +101,7 @@ void ExplosionBState::init()
 	{
 		if (_power)
 		{
-			int frame = Ruleset::EXPLOSION_OFFSET;
+			int frame = Mod::EXPLOSION_OFFSET;
 			if (_item)
 			{
 				frame = _item->getRules()->getHitAnimation();
@@ -130,9 +130,9 @@ void ExplosionBState::init()
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED/2);
 			// explosion sound
 			if (_power <= 80)
-				_parent->getRuleset()->getSoundByDepth(_parent->getDepth(), Ruleset::SMALL_EXPLOSION)->play();
+				_parent->getMod()->getSoundByDepth(_parent->getDepth(), Mod::SMALL_EXPLOSION)->play();
 			else
-				_parent->getRuleset()->getSoundByDepth(_parent->getDepth(), Ruleset::LARGE_EXPLOSION)->play();
+				_parent->getMod()->getSoundByDepth(_parent->getDepth(), Mod::LARGE_EXPLOSION)->play();
 
 			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
 		}
@@ -168,7 +168,7 @@ void ExplosionBState::init()
 		if (sound != -1 && !_cosmetic)
 		{
 			// bullet hit sound
-			_parent->getRuleset()->getSoundByDepth(_parent->getDepth(), sound)->play(-1, _parent->getMap()->getSoundAngle(_center / Position(16,16,24)));
+			_parent->getMod()->getSoundByDepth(_parent->getDepth(), sound)->play(-1, _parent->getMap()->getSoundAngle(_center / Position(16,16,24)));
 		}
 	}
 }
@@ -281,7 +281,7 @@ void ExplosionBState::explode()
 		// explosion not caused by terrain or an item, must be by a unit (cyberdisc)
 		if (_unit && (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 		{
-			radius = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getExplosionRadius();
+			radius = _parent->getMod()->getItem(_unit->getArmor()->getCorpseGeoscape())->getExplosionRadius();
 		}
 		save->getTileEngine()->explode(_center, _power, DT_HE, radius);
 		terrainExplosion = true;

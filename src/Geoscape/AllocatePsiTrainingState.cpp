@@ -71,7 +71,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base *base) : _sel(0)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&AllocatePsiTrainingState::btnOkClick);
@@ -104,7 +104,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base *base) : _sel(0)
 		std::wostringstream ssStr;
 		std::wostringstream ssSkl;
 		_soldiers.push_back(*s);
-		if ((*s)->getCurrentStats()->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+		if ((*s)->getCurrentStats()->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getMod()->getPsiRequirements())))
 		{
 			ssStr << L"   " << (*s)->getCurrentStats()->psiStrength;
 			if (Options::allowPsiStrengthImprovement) ssStr << "/+" << (*s)->getPsiStrImprovement();

@@ -30,7 +30,7 @@
 namespace OpenXcom
 {
 
-class Ruleset;
+class Mod;
 class GameTime;
 class Country;
 class Base;
@@ -122,7 +122,7 @@ private:
 	size_t _selectedBase;
 	std::string _lastselectedArmor; //contains the last selected armour
 
-	void getDependableResearchBasic (std::vector<RuleResearch*> & dependables, const RuleResearch *research, const Ruleset *ruleset, Base *base) const;
+	void getDependableResearchBasic (std::vector<RuleResearch*> & dependables, const RuleResearch *research, const Mod *mod, Base *base) const;
 	static SaveInfo getSaveInfo(const std::string &file, Language *lang);
 public:
 	static const std::string AUTOSAVE_GEOSCAPE, AUTOSAVE_BATTLESCAPE, QUICKSAVE;
@@ -134,7 +134,7 @@ public:
 	/// Gets list of saves in the user directory.
 	static std::vector<SaveInfo> getList(Language *lang, bool autoquick);
 	/// Loads a saved game from YAML.
-	void load(const std::string &filename, Ruleset *rule);
+	void load(const std::string &filename, Mod *mod);
 	/// Saves a saved game to YAML.
 	void save(const std::string &filename) const;
 	/// Gets the game name.
@@ -201,19 +201,19 @@ public:
 	/// Sets the current battle game.
 	void setBattleGame(SavedBattleGame *battleGame);
 	/// Add a finished ResearchProject
-	void addFinishedResearch(const RuleResearch *r, const Ruleset *ruleset = 0, bool score = true);
+	void addFinishedResearch(const RuleResearch *r, const Mod *mod = 0, bool score = true);
 	/// Get the list of already discovered research projects
 	const std::vector<const RuleResearch*> & getDiscoveredResearch() const;
 	/// Get the list of ResearchProject which can be researched in a Base
-	void getAvailableResearchProjects(std::vector<RuleResearch*> & projects, const Ruleset *ruleset, Base *base) const;
+	void getAvailableResearchProjects(std::vector<RuleResearch*> & projects, const Mod *mod, Base *base) const;
 	/// Get the list of Productions which can be manufactured in a Base
-	void getAvailableProductions(std::vector<RuleManufacture*> & productions, const Ruleset *ruleset, Base *base) const;
+	void getAvailableProductions(std::vector<RuleManufacture*> & productions, const Mod *mod, Base *base) const;
 	/// Get the list of newly available research projects once a research has been completed.
-	void getDependableResearch(std::vector<RuleResearch*> & dependables, const RuleResearch *research, const Ruleset *ruleset, Base *base) const;
+	void getDependableResearch(std::vector<RuleResearch*> & dependables, const RuleResearch *research, const Mod *mod, Base *base) const;
 	/// Get the list of newly available manufacture projects once a research has been completed.
-	void getDependableManufacture(std::vector<RuleManufacture*> & dependables, const RuleResearch *research, const Ruleset *ruleset, Base *base) const;
+	void getDependableManufacture(std::vector<RuleManufacture*> & dependables, const RuleResearch *research, const Mod *mod, Base *base) const;
 	/// Check whether a ResearchProject can be researched
-	bool isResearchAvailable(RuleResearch *r, const std::vector<const RuleResearch*> & unlocked, const Ruleset *ruleset) const;
+	bool isResearchAvailable(RuleResearch *r, const std::vector<const RuleResearch*> & unlocked, const Mod *mod) const;
 	/// Gets if a research has been unlocked.
 	bool isResearched(const std::string &research) const;
 	/// Gets if a list of research has been unlocked.

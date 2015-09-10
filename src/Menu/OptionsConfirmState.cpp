@@ -62,7 +62,7 @@ OptionsConfirmState::OptionsConfirmState(OptionsOrigin origin) : _origin(origin)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&OptionsConfirmState::btnYesClick);

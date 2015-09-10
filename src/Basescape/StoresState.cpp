@@ -64,7 +64,7 @@ StoresState::StoresState(Base *base) : _base(base)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK13.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK13.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&StoresState::btnOkClick);
@@ -86,13 +86,13 @@ StoresState::StoresState(Base *base) : _base(base)
 	_lstStores->setBackground(_window);
 	_lstStores->setMargin(2);
 
-	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
+	const std::vector<std::string> &items = _game->getMod()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		int qty = _base->getItems()->getItem(*i);
 		if (qty > 0)
 		{
-			RuleItem *rule = _game->getRuleset()->getItem(*i);
+			RuleItem *rule = _game->getMod()->getItem(*i);
 			std::wostringstream ss, ss2;
 			ss << qty;
 			ss2 << qty * rule->getSize();

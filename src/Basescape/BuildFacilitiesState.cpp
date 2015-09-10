@@ -60,7 +60,7 @@ BuildFacilitiesState::BuildFacilitiesState(Base *base, State *state) : _base(bas
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK05.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK05.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BuildFacilitiesState::btnOkClick);
@@ -94,10 +94,10 @@ BuildFacilitiesState::~BuildFacilitiesState()
  */
 void BuildFacilitiesState::PopulateBuildList()
 {
-	const std::vector<std::string> &facilities = _game->getRuleset()->getBaseFacilitiesList();
+	const std::vector<std::string> &facilities = _game->getMod()->getBaseFacilitiesList();
 	for (std::vector<std::string>::const_iterator i = facilities.begin(); i != facilities.end(); ++i)
 	{
-		RuleBaseFacility *rule = _game->getRuleset()->getBaseFacility(*i);
+		RuleBaseFacility *rule = _game->getMod()->getBaseFacility(*i);
 		if (_game->getSavedGame()->isResearched(rule->getRequirements()) && !rule->isLift())
 			_facilities.push_back(rule);
 	}

@@ -260,9 +260,9 @@ struct CreateShadow
 Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _rotLon(0.0), _rotLat(0.0), _hoverLon(0.0), _hoverLat(0.0), _cenX(cenX), _cenY(cenY), _game(game), _hover(false), _blink(-1),
 																					_isMouseScrolling(false), _isMouseScrolled(false), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _lonBeforeMouseScrolling(0.0), _latBeforeMouseScrolling(0.0), _mouseScrollingStartTime(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(false)
 {
-	_rules = game->getRuleset()->getGlobe();
-	_texture = new SurfaceSet(*_game->getRuleset()->getSurfaceSet("TEXTURE.DAT"));
-	_markerSet = new SurfaceSet(*_game->getRuleset()->getSurfaceSet("GlobeMarkers"));
+	_rules = game->getMod()->getGlobe();
+	_texture = new SurfaceSet(*_game->getMod()->getSurfaceSet("TEXTURE.DAT"));
+	_markerSet = new SurfaceSet(*_game->getMod()->getSurfaceSet("GlobeMarkers"));
 
 	_countries = new Surface(width, height, x, y);
 	_markers = new Surface(width, height, x, y);
@@ -1094,10 +1094,10 @@ void Globe::drawRadars()
 
 	if (_hover)
 	{
-		const std::vector<std::string> &facilities = _game->getRuleset()->getBaseFacilitiesList();
+		const std::vector<std::string> &facilities = _game->getMod()->getBaseFacilitiesList();
 		for (std::vector<std::string>::const_iterator i = facilities.begin(); i != facilities.end(); ++i)
 		{
-			range=_game->getRuleset()->getBaseFacility(*i)->getRadarRange();
+			range=_game->getMod()->getBaseFacility(*i)->getRadarRange();
 			range = range * (1 / 60.0) * (M_PI / 180);
 			drawGlobeCircle(_hoverLat,_hoverLon,range,48);
 			if (Options::globeAllRadarsOnBaseBuild) ranges.push_back(range);
@@ -1284,7 +1284,7 @@ void Globe::drawDetail()
 	{
 		Text *label = new Text(100, 9, 0, 0);
 		label->setPalette(getPalette());
-		label->initText(_game->getRuleset()->getFont("FONT_BIG"), _game->getRuleset()->getFont("FONT_SMALL"), _game->getLanguage());
+		label->initText(_game->getMod()->getFont("FONT_BIG"), _game->getMod()->getFont("FONT_SMALL"), _game->getLanguage());
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(COUNTRY_LABEL_COLOR);
 
@@ -1312,7 +1312,7 @@ void Globe::drawDetail()
 	{
 		Text *label = new Text(100, 9, 0, 0);
 		label->setPalette(getPalette());
-		label->initText(_game->getRuleset()->getFont("FONT_BIG"), _game->getRuleset()->getFont("FONT_SMALL"), _game->getLanguage());
+		label->initText(_game->getMod()->getFont("FONT_BIG"), _game->getMod()->getFont("FONT_SMALL"), _game->getLanguage());
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(CITY_LABEL_COLOR);
 

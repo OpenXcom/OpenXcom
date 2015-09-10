@@ -112,7 +112,7 @@ ListGamesState::ListGamesState(OptionsOrigin origin, int firstValidRow, bool aut
 	add(_sortDate, "text", "saveMenus");
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ListGamesState::btnCancelClick);

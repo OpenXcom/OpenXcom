@@ -84,7 +84,7 @@ NextTurnState::NextTurnState(SavedBattleGame *battleGame, BattlescapeState *stat
 	// Set up objects
 	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast(true);
-	_window->setBackground(_game->getRuleset()->getSurface("TAC00.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("TAC00.SCR"));
 
 
 	_txtTitle->setBig();

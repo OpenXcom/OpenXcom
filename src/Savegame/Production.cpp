@@ -99,7 +99,7 @@ bool Production::haveEnoughMaterialsForOneMoreUnit(Base * b)
 	return true;
 }
 
-productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
+productionProgress_e Production::step(Base * b, SavedGame * g, const Mod *m)
 {
 	int done = getAmountProduced();
 	_timeSpent += _engineers;
@@ -128,7 +128,7 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 			{
 				if (_rules->getCategory() == "STR_CRAFT")
 				{
-					Craft *craft = new Craft(r->getCraft(i->first), b, g->getId(i->first));
+					Craft *craft = new Craft(m->getCraft(i->first), b, g->getId(i->first));
 					craft->setStatus("STR_REFUELLING");
 					b->getCrafts()->push_back(craft);
 					break;
@@ -136,7 +136,7 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 				else
 				{
 					// Check if it's ammo to reload a craft
-					if (r->getItem(i->first)->getBattleType() == BT_NONE)
+					if (m->getItem(i->first)->getBattleType() == BT_NONE)
 					{
 						for (std::vector<Craft*>::iterator c = b->getCrafts()->begin(); c != b->getCrafts()->end(); ++c)
 						{
@@ -153,7 +153,7 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 						}
 					}
 					// Check if it's fuel to refuel a craft
-					if (r->getItem(i->first)->getBattleType() == BT_NONE)
+					if (m->getItem(i->first)->getBattleType() == BT_NONE)
 					{
 						for (std::vector<Craft*>::iterator c = b->getCrafts()->begin(); c != b->getCrafts()->end(); ++c)
 						{
@@ -164,7 +164,7 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 						}
 					}
 					if (getSellItems())
-						g->setFunds(g->getFunds() + (r->getItem(i->first)->getSellCost() * i->second));
+						g->setFunds(g->getFunds() + (m->getItem(i->first)->getSellCost() * i->second));
 					else
 						b->getItems()->addItem(i->first, i->second);
 				}

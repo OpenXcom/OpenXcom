@@ -34,9 +34,9 @@ namespace OpenXcom
 
 	ArticleStateTFTDVehicle::ArticleStateTFTDVehicle(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs)
 	{
-		Unit *unit = _game->getRuleset()->getUnit(defs->id);
-		Armor *armor = _game->getRuleset()->getArmor(unit->getArmor());
-		RuleItem *item = _game->getRuleset()->getItem(defs->id);
+		Unit *unit = _game->getMod()->getUnit(defs->id);
+		Armor *armor = _game->getMod()->getArmor(unit->getArmor());
+		RuleItem *item = _game->getMod()->getItem(defs->id);
 
 		_lstStats = new TextList(150, 65, 168, 106);
 
@@ -86,7 +86,7 @@ namespace OpenXcom
 				
 		if (!item->getCompatibleAmmo()->empty())
 		{
-			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+			RuleItem *ammo = _game->getMod()->getItem(item->getCompatibleAmmo()->front());
 
 			std::wostringstream ss8;
 			ss8 << ammo->getPower();

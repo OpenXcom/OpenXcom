@@ -64,15 +64,15 @@ MedikitView::MedikitView (int w, int h, int x, int y, Game * game, BattleUnit *u
  */
 void MedikitView::draw()
 {
-	SurfaceSet *set = _game->getRuleset()->getSurfaceSet("MEDIBITS.DAT");
+	SurfaceSet *set = _game->getMod()->getSurfaceSet("MEDIBITS.DAT");
 	int fatal_wound = _unit->getFatalWound(_selectedPart);
 	std::wostringstream ss, ss1;
 	int green = 0;
 	int red = 3;
-	if (_game->getRuleset()->getInterface("medikit") && _game->getRuleset()->getInterface("medikit")->getElement("body"))
+	if (_game->getMod()->getInterface("medikit") && _game->getMod()->getInterface("medikit")->getElement("body"))
 	{
-		green = _game->getRuleset()->getInterface("medikit")->getElement("body")->color;
-		red = _game->getRuleset()->getInterface("medikit")->getElement("body")->color2;
+		green = _game->getMod()->getInterface("medikit")->getElement("body")->color;
+		red = _game->getMod()->getInterface("medikit")->getElement("body")->color2;
 	}
 	this->lock();
 	for (unsigned int i = 0; i < set->getTotalFrames(); i++)
@@ -102,7 +102,7 @@ void MedikitView::draw()
  */
 void MedikitView::mouseClick (Action *action, State *)
 {
-	SurfaceSet *set = _game->getRuleset()->getSurfaceSet("MEDIBITS.DAT");
+	SurfaceSet *set = _game->getMod()->getSurfaceSet("MEDIBITS.DAT");
 	int x = action->getRelativeXMouse() / action->getXScale();
 	int y = action->getRelativeYMouse() / action->getYScale();
 	for (unsigned int i = 0; i < set->getTotalFrames(); i++)

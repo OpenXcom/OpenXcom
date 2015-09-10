@@ -70,7 +70,7 @@ SoldierMemorialState::SoldierMemorialState()
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK02.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK02.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldierMemorialState::btnOkClick);
@@ -130,7 +130,7 @@ SoldierMemorialState::~SoldierMemorialState()
 void SoldierMemorialState::btnOkClick(Action *)
 {
 	_game->popState();
-	_game->getRuleset()->playMusic("GMGEO");
+	_game->getMod()->playMusic("GMGEO");
 }
 
 /**

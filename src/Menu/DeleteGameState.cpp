@@ -61,7 +61,7 @@ DeleteGameState::DeleteGameState(OptionsOrigin origin, const std::string &save) 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&DeleteGameState::btnYesClick);
@@ -102,9 +102,9 @@ void DeleteGameState::btnYesClick(Action *)
 	{
 		std::wstring error = tr("STR_DELETE_UNSUCCESSFUL");
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(error, _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
+			_game->pushState(new ErrorMessageState(error, _palette, _game->getMod()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getMod()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 		else
-			_game->pushState(new ErrorMessageState(error, _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color, "TAC00.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
+			_game->pushState(new ErrorMessageState(error, _palette, _game->getMod()->getInterface("errorMessages")->getElement("battlescapeColor")->color, "TAC00.SCR", _game->getMod()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
 	}
 }
 

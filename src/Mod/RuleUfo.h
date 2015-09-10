@@ -26,7 +26,7 @@ namespace OpenXcom
 {
 
 class RuleTerrain;
-class Ruleset;
+class Mod;
 
 /**
  * Represents a specific type of UFO.
@@ -48,7 +48,7 @@ public:
 	/// Cleans up the UFO ruleset.
 	~RuleUfo();
 	/// Loads UFO data from YAML.
-	void load(const YAML::Node& node, Ruleset *ruleset);
+	void load(const YAML::Node& node, Mod *mod);
 	/// Gets the UFO's type.
 	std::string getType() const;
 	/// Gets the UFO's size.

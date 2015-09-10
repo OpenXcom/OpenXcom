@@ -27,7 +27,7 @@ namespace OpenXcom
 {
 
 class RuleTerrain;
-class Ruleset;
+class Mod;
 
 /**
  * Represents a specific type of craft.
@@ -54,7 +54,7 @@ public:
 	/// Cleans up the craft ruleset.
 	~RuleCraft();
 	/// Loads craft data from YAML.
-	void load(const YAML::Node& node, Ruleset *ruleset, int modIndex, int nextCraftIndex);
+	void load(const YAML::Node& node, Mod *mod, int modIndex, int nextCraftIndex);
 	/// Gets the craft's type.
 	std::string getType() const;
 	/// Gets the craft's requirements.

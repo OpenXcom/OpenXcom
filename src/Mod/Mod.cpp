@@ -89,76 +89,76 @@
 namespace OpenXcom
 {
 
-int Ruleset::DOOR_OPEN;
-int Ruleset::SLIDING_DOOR_OPEN;
-int Ruleset::SLIDING_DOOR_CLOSE;
-int Ruleset::SMALL_EXPLOSION;
-int Ruleset::LARGE_EXPLOSION;
-int Ruleset::EXPLOSION_OFFSET;
-int Ruleset::SMOKE_OFFSET;
-int Ruleset::UNDERWATER_SMOKE_OFFSET;
-int Ruleset::ITEM_DROP;
-int Ruleset::ITEM_THROW;
-int Ruleset::ITEM_RELOAD;
-int Ruleset::WALK_OFFSET;
-int Ruleset::FLYING_SOUND;
-int Ruleset::MALE_SCREAM[3];
-int Ruleset::FEMALE_SCREAM[3];
-int Ruleset::BUTTON_PRESS;
-int Ruleset::WINDOW_POPUP[3];
-int Ruleset::UFO_FIRE;
-int Ruleset::UFO_HIT;
-int Ruleset::UFO_CRASH;
-int Ruleset::UFO_EXPLODE;
-int Ruleset::INTERCEPTOR_HIT;
-int Ruleset::INTERCEPTOR_EXPLODE;
-int Ruleset::GEOSCAPE_CURSOR;
-int Ruleset::BASESCAPE_CURSOR;
-int Ruleset::BATTLESCAPE_CURSOR;
-int Ruleset::UFOPAEDIA_CURSOR;
-int Ruleset::GRAPHS_CURSOR;
-std::string Ruleset::DEBRIEF_MUSIC_GOOD;
-std::string Ruleset::DEBRIEF_MUSIC_BAD;
-int Ruleset::DIFFICULTY_COEFFICIENT[5];
+int Mod::DOOR_OPEN;
+int Mod::SLIDING_DOOR_OPEN;
+int Mod::SLIDING_DOOR_CLOSE;
+int Mod::SMALL_EXPLOSION;
+int Mod::LARGE_EXPLOSION;
+int Mod::EXPLOSION_OFFSET;
+int Mod::SMOKE_OFFSET;
+int Mod::UNDERWATER_SMOKE_OFFSET;
+int Mod::ITEM_DROP;
+int Mod::ITEM_THROW;
+int Mod::ITEM_RELOAD;
+int Mod::WALK_OFFSET;
+int Mod::FLYING_SOUND;
+int Mod::MALE_SCREAM[3];
+int Mod::FEMALE_SCREAM[3];
+int Mod::BUTTON_PRESS;
+int Mod::WINDOW_POPUP[3];
+int Mod::UFO_FIRE;
+int Mod::UFO_HIT;
+int Mod::UFO_CRASH;
+int Mod::UFO_EXPLODE;
+int Mod::INTERCEPTOR_HIT;
+int Mod::INTERCEPTOR_EXPLODE;
+int Mod::GEOSCAPE_CURSOR;
+int Mod::BASESCAPE_CURSOR;
+int Mod::BATTLESCAPE_CURSOR;
+int Mod::UFOPAEDIA_CURSOR;
+int Mod::GRAPHS_CURSOR;
+std::string Mod::DEBRIEF_MUSIC_GOOD;
+std::string Mod::DEBRIEF_MUSIC_BAD;
+int Mod::DIFFICULTY_COEFFICIENT[5];
 
-void Ruleset::resetGlobalStatics()
+void Mod::resetGlobalStatics()
 {
-	Ruleset::DOOR_OPEN = 3;
-	Ruleset::SLIDING_DOOR_OPEN = 20;
-	Ruleset::SLIDING_DOOR_CLOSE = 21;
-	Ruleset::SMALL_EXPLOSION = 2;
-	Ruleset::LARGE_EXPLOSION = 5;
-	Ruleset::EXPLOSION_OFFSET = 0;
-	Ruleset::SMOKE_OFFSET = 8;
-	Ruleset::UNDERWATER_SMOKE_OFFSET = 0;
-	Ruleset::ITEM_DROP = 38;
-	Ruleset::ITEM_THROW = 39;
-	Ruleset::ITEM_RELOAD = 17;
-	Ruleset::WALK_OFFSET = 22;
-	Ruleset::FLYING_SOUND = 15;
-	Ruleset::MALE_SCREAM[0] = 41;
-	Ruleset::MALE_SCREAM[1] = 42;
-	Ruleset::MALE_SCREAM[2] = 43;
-	Ruleset::FEMALE_SCREAM[0] = 44;
-	Ruleset::FEMALE_SCREAM[1] = 45;
-	Ruleset::FEMALE_SCREAM[2] = 46;
-	Ruleset::BUTTON_PRESS = 0;
-	Ruleset::WINDOW_POPUP[0] = 1;
-	Ruleset::WINDOW_POPUP[1] = 2;
-	Ruleset::WINDOW_POPUP[2] = 3;
-	Ruleset::UFO_FIRE = 8;
-	Ruleset::UFO_HIT = 12;
-	Ruleset::UFO_CRASH = 10;
-	Ruleset::UFO_EXPLODE = 11;
-	Ruleset::INTERCEPTOR_HIT = 10;
-	Ruleset::INTERCEPTOR_EXPLODE = 13;
-	Ruleset::GEOSCAPE_CURSOR = 252;
-	Ruleset::BASESCAPE_CURSOR = 252;
-	Ruleset::BATTLESCAPE_CURSOR = 144;
-	Ruleset::UFOPAEDIA_CURSOR = 252;
-	Ruleset::GRAPHS_CURSOR = 252;
-	Ruleset::DEBRIEF_MUSIC_GOOD = "GMMARS";
-	Ruleset::DEBRIEF_MUSIC_BAD = "GMMARS";
+	Mod::DOOR_OPEN = 3;
+	Mod::SLIDING_DOOR_OPEN = 20;
+	Mod::SLIDING_DOOR_CLOSE = 21;
+	Mod::SMALL_EXPLOSION = 2;
+	Mod::LARGE_EXPLOSION = 5;
+	Mod::EXPLOSION_OFFSET = 0;
+	Mod::SMOKE_OFFSET = 8;
+	Mod::UNDERWATER_SMOKE_OFFSET = 0;
+	Mod::ITEM_DROP = 38;
+	Mod::ITEM_THROW = 39;
+	Mod::ITEM_RELOAD = 17;
+	Mod::WALK_OFFSET = 22;
+	Mod::FLYING_SOUND = 15;
+	Mod::MALE_SCREAM[0] = 41;
+	Mod::MALE_SCREAM[1] = 42;
+	Mod::MALE_SCREAM[2] = 43;
+	Mod::FEMALE_SCREAM[0] = 44;
+	Mod::FEMALE_SCREAM[1] = 45;
+	Mod::FEMALE_SCREAM[2] = 46;
+	Mod::BUTTON_PRESS = 0;
+	Mod::WINDOW_POPUP[0] = 1;
+	Mod::WINDOW_POPUP[1] = 2;
+	Mod::WINDOW_POPUP[2] = 3;
+	Mod::UFO_FIRE = 8;
+	Mod::UFO_HIT = 12;
+	Mod::UFO_CRASH = 10;
+	Mod::UFO_EXPLODE = 11;
+	Mod::INTERCEPTOR_HIT = 10;
+	Mod::INTERCEPTOR_EXPLODE = 13;
+	Mod::GEOSCAPE_CURSOR = 252;
+	Mod::BASESCAPE_CURSOR = 252;
+	Mod::BATTLESCAPE_CURSOR = 144;
+	Mod::UFOPAEDIA_CURSOR = 252;
+	Mod::GRAPHS_CURSOR = 252;
+	Mod::DEBRIEF_MUSIC_GOOD = "GMMARS";
+	Mod::DEBRIEF_MUSIC_BAD = "GMMARS";
 
 	Globe::OCEAN_COLOR = Palette::blockOffset(12);
 	Globe::COUNTRY_LABEL_COLOR = 239;
@@ -184,9 +184,9 @@ void Ruleset::resetGlobalStatics()
 }
 
 /**
- * Creates a ruleset with blank sets of rules.
+ * Creates an empty mod.
  */
-Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _turnAIUseGrenade(3), _turnAIUseBlaster(3), _startingTime(6, 1, 1, 1999, 12, 0, 0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
+Mod::Mod() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _turnAIUseGrenade(3), _turnAIUseBlaster(3), _startingTime(6, 1, 1, 1999, 12, 0, 0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
 {
 	_muteMusic = new Music();
 	_muteSound = new Sound();
@@ -194,9 +194,9 @@ Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _time
 }
 
 /**
- * Deletes all the contained rules from memory.
+ * Deletes all the mod data from memory.
  */
-Ruleset::~Ruleset()
+Mod::~Mod()
 {
 	delete _muteMusic;
 	delete _muteSound;
@@ -359,44 +359,44 @@ Ruleset::~Ruleset()
 }
 
 /**
- * Returns a specific font from the resource set.
+ * Returns a specific font from the mod.
  * @param name Name of the font.
  * @return Pointer to the font.
  */
-Font *Ruleset::getFont(const std::string &name) const
+Font *Mod::getFont(const std::string &name) const
 {
 	std::map<std::string, Font*>::const_iterator i = _fonts.find(name);
 	if (_fonts.end() != i) return i->second; else return 0;
 }
 
 /**
- * Returns a specific surface from the resource set.
+ * Returns a specific surface from the mod.
  * @param name Name of the surface.
  * @return Pointer to the surface.
  */
-Surface *Ruleset::getSurface(const std::string &name) const
+Surface *Mod::getSurface(const std::string &name) const
 {
 	std::map<std::string, Surface*>::const_iterator i = _surfaces.find(name);
 	if (_surfaces.end() != i) return i->second; else return 0;
 }
 
 /**
- * Returns a specific surface set from the resource set.
+ * Returns a specific surface set from the mod.
  * @param name Name of the surface set.
  * @return Pointer to the surface set.
  */
-SurfaceSet *Ruleset::getSurfaceSet(const std::string &name) const
+SurfaceSet *Mod::getSurfaceSet(const std::string &name) const
 {
 	std::map<std::string, SurfaceSet*>::const_iterator i = _sets.find(name);
 	if (_sets.end() != i) return i->second; else return 0;
 }
 
 /**
- * Returns a specific music from the resource set.
+ * Returns a specific music from the mod.
  * @param name Name of the music.
  * @return Pointer to the music.
  */
-Music *Ruleset::getMusic(const std::string &name) const
+Music *Mod::getMusic(const std::string &name) const
 {
 	if (Options::mute)
 	{
@@ -410,11 +410,11 @@ Music *Ruleset::getMusic(const std::string &name) const
 }
 
 /**
- * Returns a random music from the resource set.
+ * Returns a random music from the mod.
  * @param name Name of the music to pick from.
  * @return Pointer to the music.
  */
-Music *Ruleset::getRandomMusic(const std::string &name) const
+Music *Mod::getRandomMusic(const std::string &name) const
 {
 	if (Options::mute)
 	{
@@ -442,7 +442,7 @@ Music *Ruleset::getRandomMusic(const std::string &name) const
  * @param name Name of the music.
  * @param id Id of the music, 0 for random.
  */
-void Ruleset::playMusic(const std::string &name, int id)
+void Mod::playMusic(const std::string &name, int id)
 {
 	if (!Options::mute && _playingMusic != name)
 	{
@@ -472,12 +472,12 @@ void Ruleset::playMusic(const std::string &name, int id)
 }
 
 /**
- * Returns a specific sound from the resource set.
+ * Returns a specific sound from the mod.
  * @param set Name of the sound set.
  * @param sound ID of the sound.
  * @return Pointer to the sound.
  */
-Sound *Ruleset::getSound(const std::string &set, unsigned int sound) const
+Sound *Mod::getSound(const std::string &set, unsigned int sound) const
 {
 	if (Options::mute)
 	{
@@ -491,23 +491,23 @@ Sound *Ruleset::getSound(const std::string &set, unsigned int sound) const
 }
 
 /**
- * Returns a specific palette from the resource set.
+ * Returns a specific palette from the mod.
  * @param name Name of the palette.
  * @return Pointer to the palette.
  */
-Palette *Ruleset::getPalette(const std::string &name) const
+Palette *Mod::getPalette(const std::string &name) const
 {
 	std::map<std::string, Palette*>::const_iterator i = _palettes.find(name);
 	if (_palettes.end() != i) return i->second; else return 0;
 }
 
 /**
- * Changes the palette of all the graphics in the resource set.
+ * Changes the palette of all the graphics in the mod.
  * @param colors Pointer to the set of colors.
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void Ruleset::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+void Mod::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); ++i)
 	{
@@ -525,21 +525,21 @@ void Ruleset::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 }
 
 /**
- * Returns the list of voxeldata in the resource set.
+ * Returns the list of voxeldata in the mod.
  * @return Pointer to the list of voxeldata.
  */
-std::vector<Uint16> *Ruleset::getVoxelData()
+std::vector<Uint16> *Mod::getVoxelData()
 {
 	return &_voxelData;
 }
 
 /**
- * Returns a specific sound from either the land or underwater resource set.
+ * Returns a specific sound from either the land or underwater sounds.
  * @param depth the depth of the battlescape.
  * @param sound ID of the sound.
  * @return Pointer to the sound.
  */
-Sound *Ruleset::getSoundByDepth(unsigned int depth, unsigned int sound) const
+Sound *Mod::getSoundByDepth(unsigned int depth, unsigned int sound) const
 {
 	if (depth == 0)
 		return getSound("BATTLE.CAT", sound);
@@ -547,16 +547,16 @@ Sound *Ruleset::getSoundByDepth(unsigned int depth, unsigned int sound) const
 		return getSound("BATTLE2.CAT", sound);
 }
 
-const std::vector<std::vector<Uint8> > *Ruleset::getLUTs() const
+const std::vector<std::vector<Uint8> > *Mod::getLUTs() const
 {
 	return &_transparencyLUTs;
 }
-bool Ruleset::isMusicPlaying()
+bool Mod::isMusicPlaying()
 {
 	return _musics[_playingMusic]->isPlaying();
 }
 
-void Ruleset::loadModRulesets(const std::vector<std::string> &rulesetFiles, size_t modIdx)
+void Mod::loadRulesets(const std::vector<std::string> &rulesetFiles, size_t modIdx)
 {
 	size_t spriteOffset = 1000 * modIdx;
 
@@ -601,7 +601,7 @@ void Ruleset::loadModRulesets(const std::vector<std::string> &rulesetFiles, size
  * Rules that match pre-existing rules overwrite them.
  * @param filename YAML filename.
  */
-void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
+void Mod::loadFile(const std::string &filename, size_t spriteOffset)
 {
 	YAML::Node doc = YAML::LoadFile(filename);
 
@@ -942,25 +942,25 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 	}
 	for (YAML::const_iterator i = doc["constants"].begin(); i != doc["constants"].end(); ++i)
 	{
-		Ruleset::DOOR_OPEN = (*i)["doorSound"].as<int>(Ruleset::DOOR_OPEN);
-		Ruleset::SLIDING_DOOR_OPEN = (*i)["slidingDoorSound"].as<int>(Ruleset::SLIDING_DOOR_OPEN);
-		Ruleset::SLIDING_DOOR_CLOSE = (*i)["slidingDoorClose"].as<int>(Ruleset::SLIDING_DOOR_CLOSE);
-		Ruleset::SMALL_EXPLOSION = (*i)["smallExplosion"].as<int>(Ruleset::SMALL_EXPLOSION);
-		Ruleset::LARGE_EXPLOSION = (*i)["largeExplosion"].as<int>(Ruleset::LARGE_EXPLOSION);
-		Ruleset::EXPLOSION_OFFSET = (*i)["explosionOffset"].as<int>(Ruleset::EXPLOSION_OFFSET);
-		Ruleset::SMOKE_OFFSET = (*i)["smokeOffset"].as<int>(Ruleset::SMOKE_OFFSET);
-		Ruleset::UNDERWATER_SMOKE_OFFSET = (*i)["underwaterSmokeOffset"].as<int>(Ruleset::UNDERWATER_SMOKE_OFFSET);
-		Ruleset::ITEM_DROP = (*i)["itemDrop"].as<int>(Ruleset::ITEM_DROP);
-		Ruleset::ITEM_THROW = (*i)["itemThrow"].as<int>(Ruleset::ITEM_THROW);
-		Ruleset::ITEM_RELOAD = (*i)["itemReload"].as<int>(Ruleset::ITEM_RELOAD);
-		Ruleset::WALK_OFFSET = (*i)["walkOffset"].as<int>(Ruleset::WALK_OFFSET);
-		Ruleset::FLYING_SOUND = (*i)["flyingSound"].as<int>(Ruleset::FLYING_SOUND);
+		Mod::DOOR_OPEN = (*i)["doorSound"].as<int>(Mod::DOOR_OPEN);
+		Mod::SLIDING_DOOR_OPEN = (*i)["slidingDoorSound"].as<int>(Mod::SLIDING_DOOR_OPEN);
+		Mod::SLIDING_DOOR_CLOSE = (*i)["slidingDoorClose"].as<int>(Mod::SLIDING_DOOR_CLOSE);
+		Mod::SMALL_EXPLOSION = (*i)["smallExplosion"].as<int>(Mod::SMALL_EXPLOSION);
+		Mod::LARGE_EXPLOSION = (*i)["largeExplosion"].as<int>(Mod::LARGE_EXPLOSION);
+		Mod::EXPLOSION_OFFSET = (*i)["explosionOffset"].as<int>(Mod::EXPLOSION_OFFSET);
+		Mod::SMOKE_OFFSET = (*i)["smokeOffset"].as<int>(Mod::SMOKE_OFFSET);
+		Mod::UNDERWATER_SMOKE_OFFSET = (*i)["underwaterSmokeOffset"].as<int>(Mod::UNDERWATER_SMOKE_OFFSET);
+		Mod::ITEM_DROP = (*i)["itemDrop"].as<int>(Mod::ITEM_DROP);
+		Mod::ITEM_THROW = (*i)["itemThrow"].as<int>(Mod::ITEM_THROW);
+		Mod::ITEM_RELOAD = (*i)["itemReload"].as<int>(Mod::ITEM_RELOAD);
+		Mod::WALK_OFFSET = (*i)["walkOffset"].as<int>(Mod::WALK_OFFSET);
+		Mod::FLYING_SOUND = (*i)["flyingSound"].as<int>(Mod::FLYING_SOUND);
 		if ((*i)["maleScream"])
 		{
 			int k = 0;
 			for (YAML::const_iterator j = (*i)["maleScream"].begin(); j != (*i)["maleScream"].end() && k < 3; ++j, ++k)
 			{
-				Ruleset::MALE_SCREAM[k] = (*j).as<int>(Ruleset::MALE_SCREAM[k]);
+				Mod::MALE_SCREAM[k] = (*j).as<int>(Mod::MALE_SCREAM[k]);
 			}
 		}
 		if ((*i)["femaleScream"])
@@ -968,31 +968,31 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 			int k = 0;
 			for (YAML::const_iterator j = (*i)["femaleScream"].begin(); j != (*i)["femaleScream"].end() && k < 3; ++j, ++k)
 			{
-				Ruleset::FEMALE_SCREAM[k] = (*j).as<int>(Ruleset::FEMALE_SCREAM[k]);
+				Mod::FEMALE_SCREAM[k] = (*j).as<int>(Mod::FEMALE_SCREAM[k]);
 			}
 		}
-		Ruleset::BUTTON_PRESS = (*i)["buttonPress"].as<int>(Ruleset::BUTTON_PRESS);
+		Mod::BUTTON_PRESS = (*i)["buttonPress"].as<int>(Mod::BUTTON_PRESS);
 		if ((*i)["windowPopup"])
 		{
 			int k = 0;
 			for (YAML::const_iterator j = (*i)["windowPopup"].begin(); j != (*i)["windowPopup"].end() && k < 3; ++j, ++k)
 			{
-				Ruleset::WINDOW_POPUP[k] = (*j).as<int>(Ruleset::WINDOW_POPUP[k]);
+				Mod::WINDOW_POPUP[k] = (*j).as<int>(Mod::WINDOW_POPUP[k]);
 			}
 		}
-		Ruleset::UFO_FIRE = (*i)["ufoFire"].as<int>(Ruleset::UFO_FIRE);
-		Ruleset::UFO_HIT = (*i)["ufoHit"].as<int>(Ruleset::UFO_HIT);
-		Ruleset::UFO_CRASH = (*i)["ufoCrash"].as<int>(Ruleset::UFO_CRASH);
-		Ruleset::UFO_EXPLODE = (*i)["ufoExplode"].as<int>(Ruleset::UFO_EXPLODE);
-		Ruleset::INTERCEPTOR_HIT = (*i)["interceptorHit"].as<int>(Ruleset::INTERCEPTOR_HIT);
-		Ruleset::INTERCEPTOR_EXPLODE = (*i)["interceptorExplode"].as<int>(Ruleset::INTERCEPTOR_EXPLODE);
-		Ruleset::GEOSCAPE_CURSOR = (*i)["geoscapeCursor"].as<int>(Ruleset::GEOSCAPE_CURSOR);
-		Ruleset::BASESCAPE_CURSOR = (*i)["basescapeCursor"].as<int>(Ruleset::BASESCAPE_CURSOR);
-		Ruleset::BATTLESCAPE_CURSOR = (*i)["battlescapeCursor"].as<int>(Ruleset::BATTLESCAPE_CURSOR);
-		Ruleset::UFOPAEDIA_CURSOR = (*i)["ufopaediaCursor"].as<int>(Ruleset::UFOPAEDIA_CURSOR);
-		Ruleset::GRAPHS_CURSOR = (*i)["graphsCursor"].as<int>(Ruleset::GRAPHS_CURSOR);
-		Ruleset::DEBRIEF_MUSIC_GOOD = (*i)["goodDebriefingMusic"].as<std::string>(Ruleset::DEBRIEF_MUSIC_GOOD);
-		Ruleset::DEBRIEF_MUSIC_BAD = (*i)["badDebriefingMusic"].as<std::string>(Ruleset::DEBRIEF_MUSIC_BAD);
+		Mod::UFO_FIRE = (*i)["ufoFire"].as<int>(Mod::UFO_FIRE);
+		Mod::UFO_HIT = (*i)["ufoHit"].as<int>(Mod::UFO_HIT);
+		Mod::UFO_CRASH = (*i)["ufoCrash"].as<int>(Mod::UFO_CRASH);
+		Mod::UFO_EXPLODE = (*i)["ufoExplode"].as<int>(Mod::UFO_EXPLODE);
+		Mod::INTERCEPTOR_HIT = (*i)["interceptorHit"].as<int>(Mod::INTERCEPTOR_HIT);
+		Mod::INTERCEPTOR_EXPLODE = (*i)["interceptorExplode"].as<int>(Mod::INTERCEPTOR_EXPLODE);
+		Mod::GEOSCAPE_CURSOR = (*i)["geoscapeCursor"].as<int>(Mod::GEOSCAPE_CURSOR);
+		Mod::BASESCAPE_CURSOR = (*i)["basescapeCursor"].as<int>(Mod::BASESCAPE_CURSOR);
+		Mod::BATTLESCAPE_CURSOR = (*i)["battlescapeCursor"].as<int>(Mod::BATTLESCAPE_CURSOR);
+		Mod::UFOPAEDIA_CURSOR = (*i)["ufopaediaCursor"].as<int>(Mod::UFOPAEDIA_CURSOR);
+		Mod::GRAPHS_CURSOR = (*i)["graphsCursor"].as<int>(Mod::GRAPHS_CURSOR);
+		Mod::DEBRIEF_MUSIC_GOOD = (*i)["goodDebriefingMusic"].as<std::string>(Mod::DEBRIEF_MUSIC_GOOD);
+		Mod::DEBRIEF_MUSIC_BAD = (*i)["badDebriefingMusic"].as<std::string>(Mod::DEBRIEF_MUSIC_BAD);
 	}
 	for (YAML::const_iterator i = doc["transparencyLUTs"].begin(); i != doc["transparencyLUTs"].end(); ++i)
 	{
@@ -1075,7 +1075,7 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
  * @return Pointer to new rule if one was created, or NULL if one was removed.
  */
 template <typename T>
-T *Ruleset::loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index, const std::string &key)
+T *Mod::loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index, const std::string &key)
 {
 	T *rule = 0;
 	if (node[key])
@@ -1120,7 +1120,7 @@ T *Ruleset::loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std
  * Generates a brand new saved game with starting data.
  * @return A new saved game.
  */
-SavedGame *Ruleset::newSave() const
+SavedGame *Mod::newSave() const
 {
 	SavedGame *save = new SavedGame();
 
@@ -1183,7 +1183,7 @@ SavedGame *Ruleset::newSave() const
  * Returns the list of soldier name pools.
  * @return Pointer to soldier name pool list.
  */
-const std::vector<SoldierNamePool*> &Ruleset::getPools() const
+const std::vector<SoldierNamePool*> &Mod::getPools() const
 {
 	return _names;
 }
@@ -1193,7 +1193,7 @@ const std::vector<SoldierNamePool*> &Ruleset::getPools() const
  * @param id Country type.
  * @return Rules for the country.
  */
-RuleCountry *Ruleset::getCountry(const std::string &id) const
+RuleCountry *Mod::getCountry(const std::string &id) const
 {
 	std::map<std::string, RuleCountry*>::const_iterator i = _countries.find(id);
 	if (_countries.end() != i) return i->second; else return 0;
@@ -1201,10 +1201,10 @@ RuleCountry *Ruleset::getCountry(const std::string &id) const
 
 /**
  * Returns the list of all countries
- * provided by the ruleset.
+ * provided by the mod.
  * @return List of countries.
  */
-const std::vector<std::string> &Ruleset::getCountriesList() const
+const std::vector<std::string> &Mod::getCountriesList() const
 {
 	return _countriesIndex;
 }
@@ -1214,7 +1214,7 @@ const std::vector<std::string> &Ruleset::getCountriesList() const
  * @param id Region type.
  * @return Rules for the region.
  */
-RuleRegion *Ruleset::getRegion(const std::string &id) const
+RuleRegion *Mod::getRegion(const std::string &id) const
 {
 	std::map<std::string, RuleRegion*>::const_iterator i = _regions.find(id);
 	if (_regions.end() != i) return i->second; else return 0;
@@ -1222,10 +1222,10 @@ RuleRegion *Ruleset::getRegion(const std::string &id) const
 
 /**
  * Returns the list of all regions
- * provided by the ruleset.
+ * provided by the mod.
  * @return List of regions.
  */
-const std::vector<std::string> &Ruleset::getRegionsList() const
+const std::vector<std::string> &Mod::getRegionsList() const
 {
 	return _regionsIndex;
 }
@@ -1235,7 +1235,7 @@ const std::vector<std::string> &Ruleset::getRegionsList() const
  * @param id Facility type.
  * @return Rules for the facility.
  */
-RuleBaseFacility *Ruleset::getBaseFacility(const std::string &id) const
+RuleBaseFacility *Mod::getBaseFacility(const std::string &id) const
 {
 	std::map<std::string, RuleBaseFacility*>::const_iterator i = _facilities.find(id);
 	if (_facilities.end() != i) return i->second; else return 0;
@@ -1243,10 +1243,10 @@ RuleBaseFacility *Ruleset::getBaseFacility(const std::string &id) const
 
 /**
  * Returns the list of all base facilities
- * provided by the ruleset.
+ * provided by the mod.
  * @return List of base facilities.
  */
-const std::vector<std::string> &Ruleset::getBaseFacilitiesList() const
+const std::vector<std::string> &Mod::getBaseFacilitiesList() const
 {
 	return _facilitiesIndex;
 }
@@ -1256,7 +1256,7 @@ const std::vector<std::string> &Ruleset::getBaseFacilitiesList() const
  * @param id Craft type.
  * @return Rules for the craft.
  */
-RuleCraft *Ruleset::getCraft(const std::string &id) const
+RuleCraft *Mod::getCraft(const std::string &id) const
 {
 	std::map<std::string, RuleCraft*>::const_iterator i = _crafts.find(id);
 	if (_crafts.end() != i) return i->second; else return 0;
@@ -1264,10 +1264,10 @@ RuleCraft *Ruleset::getCraft(const std::string &id) const
 
 /**
  * Returns the list of all crafts
- * provided by the ruleset.
+ * provided by the mod.
  * @return List of crafts.
  */
-const std::vector<std::string> &Ruleset::getCraftsList() const
+const std::vector<std::string> &Mod::getCraftsList() const
 {
 	return _craftsIndex;
 }
@@ -1277,7 +1277,7 @@ const std::vector<std::string> &Ruleset::getCraftsList() const
  * @param id Craft weapon type.
  * @return Rules for the craft weapon.
  */
-RuleCraftWeapon *Ruleset::getCraftWeapon(const std::string &id) const
+RuleCraftWeapon *Mod::getCraftWeapon(const std::string &id) const
 {
 	std::map<std::string, RuleCraftWeapon*>::const_iterator i = _craftWeapons.find(id);
 	if (_craftWeapons.end() != i) return i->second; else return 0;
@@ -1285,10 +1285,10 @@ RuleCraftWeapon *Ruleset::getCraftWeapon(const std::string &id) const
 
 /**
  * Returns the list of all craft weapons
- * provided by the ruleset.
+ * provided by the mod.
  * @return List of craft weapons.
  */
-const std::vector<std::string> &Ruleset::getCraftWeaponsList() const
+const std::vector<std::string> &Mod::getCraftWeaponsList() const
 {
 	return _craftWeaponsIndex;
 }
@@ -1298,7 +1298,7 @@ const std::vector<std::string> &Ruleset::getCraftWeaponsList() const
  * @param id Item type.
  * @return Rules for the item, or 0 when the item is not found.
  */
-RuleItem *Ruleset::getItem(const std::string &id) const
+RuleItem *Mod::getItem(const std::string &id) const
 {
 	if (_items.find(id) != _items.end())
 		return _items.find(id)->second;
@@ -1308,10 +1308,10 @@ RuleItem *Ruleset::getItem(const std::string &id) const
 
 /**
  * Returns the list of all items
- * provided by the ruleset.
+ * provided by the mod.
  * @return List of items.
  */
-const std::vector<std::string> &Ruleset::getItemsList() const
+const std::vector<std::string> &Mod::getItemsList() const
 {
 	return _itemsIndex;
 }
@@ -1321,7 +1321,7 @@ const std::vector<std::string> &Ruleset::getItemsList() const
  * @param id UFO type.
  * @return Rules for the UFO.
  */
-RuleUfo *Ruleset::getUfo(const std::string &id) const
+RuleUfo *Mod::getUfo(const std::string &id) const
 {
 	std::map<std::string, RuleUfo*>::const_iterator i = _ufos.find(id);
 	if (_ufos.end() != i) return i->second; else return 0;
@@ -1329,20 +1329,20 @@ RuleUfo *Ruleset::getUfo(const std::string &id) const
 
 /**
  * Returns the list of all ufos
- * provided by the ruleset.
+ * provided by the mod.
  * @return List of ufos.
  */
-const std::vector<std::string> &Ruleset::getUfosList() const
+const std::vector<std::string> &Mod::getUfosList() const
 {
 	return _ufosIndex;
 }
 
 /**
  * Returns the list of all terrains
- * provided by the ruleset.
+ * provided by the mod.
  * @return List of terrains.
  */
-const std::vector<std::string> &Ruleset::getTerrainList() const
+const std::vector<std::string> &Mod::getTerrainList() const
 {
 	return _terrainIndex;
 }
@@ -1352,7 +1352,7 @@ const std::vector<std::string> &Ruleset::getTerrainList() const
  * @param name Terrain name.
  * @return Rules for the terrain.
  */
-RuleTerrain *Ruleset::getTerrain(const std::string &name) const
+RuleTerrain *Mod::getTerrain(const std::string &name) const
 {
 	std::map<std::string, RuleTerrain*>::const_iterator i = _terrains.find(name);
 	if (_terrains.end() != i) return i->second; else return 0;
@@ -1363,7 +1363,7 @@ RuleTerrain *Ruleset::getTerrain(const std::string &name) const
  * @param name Datafile name.
  * @return Rules for the datafile.
  */
-MapDataSet *Ruleset::getMapDataSet(const std::string &name)
+MapDataSet *Mod::getMapDataSet(const std::string &name)
 {
 	std::map<std::string, MapDataSet*>::iterator map = _mapDataSets.find(name);
 	if (map == _mapDataSets.end())
@@ -1383,7 +1383,7 @@ MapDataSet *Ruleset::getMapDataSet(const std::string &name)
  * @param name Unit name.
  * @return Rules for the units.
  */
-RuleSoldier *Ruleset::getSoldier(const std::string &name) const
+RuleSoldier *Mod::getSoldier(const std::string &name) const
 {
 	std::map<std::string, RuleSoldier*>::const_iterator i = _soldiers.find(name);
 	if (_soldiers.end() != i) return i->second; else return 0;
@@ -1394,7 +1394,7 @@ RuleSoldier *Ruleset::getSoldier(const std::string &name) const
  * @param name Unit name.
  * @return Rules for the units.
  */
-Unit *Ruleset::getUnit(const std::string &name) const
+Unit *Mod::getUnit(const std::string &name) const
 {
 	std::map<std::string, Unit*>::const_iterator i = _units.find(name);
 	if (_units.end() != i) return i->second; else return 0;
@@ -1405,7 +1405,7 @@ Unit *Ruleset::getUnit(const std::string &name) const
  * @param name Race name.
  * @return Rules for the race.
  */
-AlienRace *Ruleset::getAlienRace(const std::string &name) const
+AlienRace *Mod::getAlienRace(const std::string &name) const
 {
 	std::map<std::string, AlienRace*>::const_iterator i = _alienRaces.find(name);
 	if (_alienRaces.end() != i) return i->second; else return 0;
@@ -1413,10 +1413,10 @@ AlienRace *Ruleset::getAlienRace(const std::string &name) const
 
 /**
  * Returns the list of all alien races.
- * provided by the ruleset.
+ * provided by the mod.
  * @return List of alien races.
  */
-const std::vector<std::string> &Ruleset::getAlienRacesList() const
+const std::vector<std::string> &Mod::getAlienRacesList() const
 {
 	return _aliensIndex;
 }
@@ -1426,7 +1426,7 @@ const std::vector<std::string> &Ruleset::getAlienRacesList() const
  * @param name Deployment name.
  * @return Rules for the deployment.
  */
-AlienDeployment *Ruleset::getDeployment(const std::string &name) const
+AlienDeployment *Mod::getDeployment(const std::string &name) const
 {
 	std::map<std::string, AlienDeployment*>::const_iterator i = _alienDeployments.find(name);
 	if (_alienDeployments.end() != i) return i->second; else return 0;
@@ -1434,10 +1434,10 @@ AlienDeployment *Ruleset::getDeployment(const std::string &name) const
 
 /**
  * Returns the list of all alien deployments
- * provided by the ruleset.
+ * provided by the mod.
  * @return List of alien deployments.
  */
-const std::vector<std::string> &Ruleset::getDeploymentsList() const
+const std::vector<std::string> &Mod::getDeploymentsList() const
 {
 	return _deploymentsIndex;
 }
@@ -1447,7 +1447,7 @@ const std::vector<std::string> &Ruleset::getDeploymentsList() const
  * @param name Armor name.
  * @return Rules for the armor.
  */
-Armor *Ruleset::getArmor(const std::string &name) const
+Armor *Mod::getArmor(const std::string &name) const
 {
 	std::map<std::string, Armor*>::const_iterator i = _armors.find(name);
 	if (_armors.end() != i) return i->second; else return 0;
@@ -1455,10 +1455,10 @@ Armor *Ruleset::getArmor(const std::string &name) const
 
 /**
  * Returns the list of all armors
- * provided by the ruleset.
+ * provided by the mod.
  * @return List of armors.
  */
-const std::vector<std::string> &Ruleset::getArmorsList() const
+const std::vector<std::string> &Mod::getArmorsList() const
 {
 	return _armorsIndex;
 }
@@ -1468,7 +1468,7 @@ const std::vector<std::string> &Ruleset::getArmorsList() const
  * for purchase/maintenance.
  * @return Cost.
  */
-int Ruleset::getSoldierCost() const
+int Mod::getSoldierCost() const
 {
 	return _costSoldier;
 }
@@ -1478,7 +1478,7 @@ int Ruleset::getSoldierCost() const
  * for purchase/maintenance.
  * @return Cost.
  */
-int Ruleset::getEngineerCost() const
+int Mod::getEngineerCost() const
 {
 	return _costEngineer;
 }
@@ -1488,7 +1488,7 @@ int Ruleset::getEngineerCost() const
  * for purchase/maintenance.
  * @return Cost.
  */
-int Ruleset::getScientistCost() const
+int Mod::getScientistCost() const
 {
 	return _costScientist;
 }
@@ -1498,7 +1498,7 @@ int Ruleset::getScientistCost() const
  * between bases.
  * @return Time in hours.
  */
-int Ruleset::getPersonnelTime() const
+int Mod::getPersonnelTime() const
 {
 	return _timePersonnel;
 }
@@ -1508,7 +1508,7 @@ int Ruleset::getPersonnelTime() const
  * @param name Article name.
  * @return Article definition.
  */
-ArticleDefinition *Ruleset::getUfopaediaArticle(const std::string &name) const
+ArticleDefinition *Mod::getUfopaediaArticle(const std::string &name) const
 {
 	std::map<std::string, ArticleDefinition*>::const_iterator i = _ufopaediaArticles.find(name);
 	if (_ufopaediaArticles.end() != i) return i->second; else return 0;
@@ -1516,10 +1516,10 @@ ArticleDefinition *Ruleset::getUfopaediaArticle(const std::string &name) const
 
 /**
  * Returns the list of all articles
- * provided by the ruleset.
+ * provided by the mod.
  * @return List of articles.
  */
-const std::vector<std::string> &Ruleset::getUfopaediaList() const
+const std::vector<std::string> &Mod::getUfopaediaList() const
 {
 	return _ufopaediaIndex;
 }
@@ -1528,7 +1528,7 @@ const std::vector<std::string> &Ruleset::getUfopaediaList() const
  * Returns the list of inventories.
  * @return Pointer to inventory list.
  */
-std::map<std::string, RuleInventory*> *Ruleset::getInventories()
+std::map<std::string, RuleInventory*> *Mod::getInventories()
 {
 	return &_invs;
 }
@@ -1538,7 +1538,7 @@ std::map<std::string, RuleInventory*> *Ruleset::getInventories()
  * @param id Inventory type.
  * @return Inventory ruleset.
  */
-RuleInventory *Ruleset::getInventory(const std::string &id) const
+RuleInventory *Mod::getInventory(const std::string &id) const
 {
 	std::map<std::string, RuleInventory*>::const_iterator i = _invs.find(id);
 	if (_invs.end() != i) return i->second; else return 0;
@@ -1548,7 +1548,7 @@ RuleInventory *Ruleset::getInventory(const std::string &id) const
  * Returns the list of inventories.
  * @return The list of inventories.
  */
-const std::vector<std::string> &Ruleset::getInvsList() const
+const std::vector<std::string> &Mod::getInvsList() const
 {
 	return _invsIndex;
 }
@@ -1558,7 +1558,7 @@ const std::vector<std::string> &Ruleset::getInvsList() const
  * @param id Research project type.
  * @return Rules for the research project.
  */
-RuleResearch *Ruleset::getResearch (const std::string &id) const
+RuleResearch *Mod::getResearch (const std::string &id) const
 {
 	std::map<std::string, RuleResearch *>::const_iterator i = _research.find(id);
 	if (_research.end() != i) return i->second; else return 0;
@@ -1568,7 +1568,7 @@ RuleResearch *Ruleset::getResearch (const std::string &id) const
  * Returns the list of research projects.
  * @return The list of research projects.
  */
-const std::vector<std::string> &Ruleset::getResearchList() const
+const std::vector<std::string> &Mod::getResearchList() const
 {
 	return _researchIndex;
 }
@@ -1578,7 +1578,7 @@ const std::vector<std::string> &Ruleset::getResearchList() const
  * @param id Manufacture project type.
  * @return Rules for the manufacture project.
  */
-RuleManufacture *Ruleset::getManufacture (const std::string &id) const
+RuleManufacture *Mod::getManufacture (const std::string &id) const
 {
 	std::map<std::string, RuleManufacture *>::const_iterator i = _manufacture.find(id);
 	if (_manufacture.end() != i) return i->second; else return 0;
@@ -1588,7 +1588,7 @@ RuleManufacture *Ruleset::getManufacture (const std::string &id) const
  * Returns the list of manufacture projects.
  * @return The list of manufacture projects.
  */
-const std::vector<std::string> &Ruleset::getManufactureList() const
+const std::vector<std::string> &Mod::getManufactureList() const
 {
 	return _manufactureIndex;
 }
@@ -1600,7 +1600,7 @@ const std::vector<std::string> &Ruleset::getManufactureList() const
  * part of the ruleset.
  * @return The list of facilities for custom bases.
  */
-std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() const
+std::vector<OpenXcom::RuleBaseFacility*> Mod::getCustomBaseFacilities() const
 {
 	std::vector<OpenXcom::RuleBaseFacility*> placeList;
 
@@ -1621,7 +1621,7 @@ std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() cons
  * @param id Ufo trajectory id.
  * @return A pointer to the data for the specified ufo trajectory.
  */
-const UfoTrajectory *Ruleset::getUfoTrajectory(const std::string &id) const
+const UfoTrajectory *Mod::getUfoTrajectory(const std::string &id) const
 {
 	std::map<std::string, UfoTrajectory *>::const_iterator i = _ufoTrajectories.find(id);
 	if (_ufoTrajectories.end() != i) return i->second; else return 0;
@@ -1632,7 +1632,7 @@ const UfoTrajectory *Ruleset::getUfoTrajectory(const std::string &id) const
  * @param id Alien mission type.
  * @return Rules for the alien mission.
  */
-const RuleAlienMission *Ruleset::getAlienMission(const std::string &id) const
+const RuleAlienMission *Mod::getAlienMission(const std::string &id) const
 {
 	std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.find(id);
 	if (_alienMissions.end() != i) return i->second; else return 0;
@@ -1643,7 +1643,7 @@ const RuleAlienMission *Ruleset::getAlienMission(const std::string &id) const
  * @param objective Alien mission objective.
  * @return Rules for the alien mission.
  */
-const RuleAlienMission *Ruleset::getRandomMission(MissionObjective objective, size_t monthsPassed) const
+const RuleAlienMission *Mod::getRandomMission(MissionObjective objective, size_t monthsPassed) const
 {
 	int totalWeight = 0;
 	std::map<int, RuleAlienMission*> possibilities;
@@ -1670,7 +1670,7 @@ const RuleAlienMission *Ruleset::getRandomMission(MissionObjective objective, si
  * Returns the list of alien mission types.
  * @return The list of alien mission types.
  */
-const std::vector<std::string> &Ruleset::getAlienMissionList() const
+const std::vector<std::string> &Mod::getAlienMissionList() const
 {
 	return _alienMissionsIndex;
 }
@@ -1679,7 +1679,7 @@ const std::vector<std::string> &Ruleset::getAlienMissionList() const
  * Gets the alien item level table.
  * @return A deep array containing the alien item levels.
  */
-const std::vector<std::vector<int> > &Ruleset::getAlienItemLevels() const
+const std::vector<std::vector<int> > &Mod::getAlienItemLevels() const
 {
 	return _alienItemLevels;
 }
@@ -1688,7 +1688,7 @@ const std::vector<std::vector<int> > &Ruleset::getAlienItemLevels() const
  * Gets the defined starting base.
  * @return The starting base definition.
  */
-const YAML::Node &Ruleset::getStartingBase() const
+const YAML::Node &Mod::getStartingBase() const
 {
 	return _startingBase;
 }
@@ -1697,7 +1697,7 @@ const YAML::Node &Ruleset::getStartingBase() const
  * Gets the defined starting time.
  * @return The time the game starts in.
  */
-const GameTime &Ruleset::getStartingTime() const
+const GameTime &Mod::getStartingTime() const
 {
 	return _startingTime;
 }
@@ -1707,7 +1707,7 @@ const GameTime &Ruleset::getStartingTime() const
  * @param id The ID of the MCDPatch we want.
  * @return The MCDPatch based on ID, or 0 if none defined.
  */
-MCDPatch *Ruleset::getMCDPatch(const std::string &id) const
+MCDPatch *Mod::getMCDPatch(const std::string &id) const
 {
 	std::map<std::string, MCDPatch*>::const_iterator i = _MCDPatches.find(id);
 	if (_MCDPatches.end() != i) return i->second; else return 0;
@@ -1717,7 +1717,7 @@ MCDPatch *Ruleset::getMCDPatch(const std::string &id) const
  * Gets the list of external sprites.
  * @return The list of external sprites.
  */
-std::vector<std::pair<std::string, ExtraSprites *> > Ruleset::getExtraSprites() const
+std::vector<std::pair<std::string, ExtraSprites *> > Mod::getExtraSprites() const
 {
 	return _extraSprites;
 }
@@ -1726,7 +1726,7 @@ std::vector<std::pair<std::string, ExtraSprites *> > Ruleset::getExtraSprites() 
  * Gets the list of external sounds.
  * @return The list of external sounds.
  */
-std::vector<std::pair<std::string, ExtraSounds *> > Ruleset::getExtraSounds() const
+std::vector<std::pair<std::string, ExtraSounds *> > Mod::getExtraSounds() const
 {
 	return _extraSounds;
 }
@@ -1734,7 +1734,7 @@ std::vector<std::pair<std::string, ExtraSounds *> > Ruleset::getExtraSounds() co
  * Gets the list of external strings.
  * @return The list of external strings.
  */
-std::map<std::string, ExtraStrings *> Ruleset::getExtraStrings() const
+std::map<std::string, ExtraStrings *> Mod::getExtraStrings() const
 {
 	return _extraStrings;
 }
@@ -1743,7 +1743,7 @@ std::map<std::string, ExtraStrings *> Ruleset::getExtraStrings() const
  * Gets the list of StatStrings.
  * @return The list of StatStrings.
  */
-std::vector<StatString *> Ruleset::getStatStrings() const
+std::vector<StatString *> Mod::getStatStrings() const
 {
 	return _statStrings;
 }
@@ -1754,18 +1754,18 @@ std::vector<StatString *> Ruleset::getStatStrings() const
 template <typename T>
 struct compareRule : public std::binary_function<const std::string&, const std::string&, bool>
 {
-	Ruleset *_ruleset;
-	typedef T*(Ruleset::*RuleLookup)(const std::string &id);
+	Mod *_mod;
+	typedef T*(Mod::*RuleLookup)(const std::string &id);
 	RuleLookup _lookup;
 
-	compareRule(Ruleset *ruleset, RuleLookup lookup) : _ruleset(ruleset), _lookup(lookup)
+	compareRule(Mod *mod, RuleLookup lookup) : _mod(mod), _lookup(lookup)
 	{
 	}
 
 	bool operator()(const std::string &r1, const std::string &r2) const
 	{
-		T *rule1 = (_ruleset->*_lookup)(r1);
-		T *rule2 = (_ruleset->*_lookup)(r2);
+		T *rule1 = (_mod->*_lookup)(r1);
+		T *rule2 = (_mod->*_lookup)(r2);
 		return (rule1->getListOrder() < rule2->getListOrder());
 	}
 };
@@ -1776,16 +1776,16 @@ struct compareRule : public std::binary_function<const std::string&, const std::
 template <>
 struct compareRule<RuleCraftWeapon> : public std::binary_function<const std::string&, const std::string&, bool>
 {
-	Ruleset *_ruleset;
+	Mod *_mod;
 
-	compareRule(Ruleset *ruleset) : _ruleset(ruleset)
+	compareRule(Mod *mod) : _mod(mod)
 	{
 	}
 
 	bool operator()(const std::string &r1, const std::string &r2) const
 	{
-		RuleItem *rule1 = _ruleset->getItem(_ruleset->getCraftWeapon(r1)->getLauncherItem());
-		RuleItem *rule2 = _ruleset->getItem(_ruleset->getCraftWeapon(r2)->getLauncherItem());
+		RuleItem *rule1 = _mod->getItem(_mod->getCraftWeapon(r1)->getLauncherItem());
+		RuleItem *rule2 = _mod->getItem(_mod->getCraftWeapon(r2)->getLauncherItem());
 		return (rule1->getListOrder() < rule2->getListOrder());
 	}
 };
@@ -1797,18 +1797,18 @@ struct compareRule<RuleCraftWeapon> : public std::binary_function<const std::str
 template <>
 struct compareRule<Armor> : public std::binary_function<const std::string&, const std::string&, bool>
 {
-	Ruleset *_ruleset;
+	Mod *_mod;
 
-	compareRule(Ruleset *ruleset) : _ruleset(ruleset)
+	compareRule(Mod *mod) : _mod(mod)
 	{
 	}
 
 	bool operator()(const std::string &r1, const std::string &r2) const
 	{
-		Armor* armor1 = _ruleset->getArmor(r1);
-		Armor* armor2 = _ruleset->getArmor(r2);
-		RuleItem *rule1 = _ruleset->getItem(armor1->getStoreItem());
-		RuleItem *rule2 = _ruleset->getItem(armor2->getStoreItem());
+		Armor* armor1 = _mod->getArmor(r1);
+		Armor* armor2 = _mod->getArmor(r2);
+		RuleItem *rule1 = _mod->getItem(armor1->getStoreItem());
+		RuleItem *rule2 = _mod->getItem(armor2->getStoreItem());
 		if (!rule1 && !rule2)
 			return (armor1 < armor2); // tiebreaker, don't care about order, pointers are as good as any
 		else if (!rule1)
@@ -1826,10 +1826,10 @@ struct compareRule<Armor> : public std::binary_function<const std::string&, cons
 template <>
 struct compareRule<ArticleDefinition> : public std::binary_function<const std::string&, const std::string&, bool>
 {
-	Ruleset *_ruleset;
+	Mod *_mod;
 	static std::map<std::string, int> _sections;
 
-	compareRule(Ruleset *ruleset) : _ruleset(ruleset)
+	compareRule(Mod *mod) : _mod(mod)
 	{
 		_sections[UFOPAEDIA_XCOM_CRAFT_ARMAMENT] = 0;
 		_sections[UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS] = 1;
@@ -1845,8 +1845,8 @@ struct compareRule<ArticleDefinition> : public std::binary_function<const std::s
 
 	bool operator()(const std::string &r1, const std::string &r2) const
 	{
-		ArticleDefinition *rule1 = _ruleset->getUfopaediaArticle(r1);
-		ArticleDefinition *rule2 = _ruleset->getUfopaediaArticle(r2);
+		ArticleDefinition *rule1 = _mod->getUfopaediaArticle(r1);
+		ArticleDefinition *rule2 = _mod->getUfopaediaArticle(r2);
 		if (_sections[rule1->section] == _sections[rule2->section])
 			return (rule1->getListOrder() < rule2->getListOrder());
 		else
@@ -1865,14 +1865,14 @@ static void addSoldierNamePool(std::vector<SoldierNamePool*> &names, const std::
 /**
  * Sorts all our lists according to their weight.
  */
-void Ruleset::sortLists()
+void Mod::sortLists()
 {
-	std::sort(_itemsIndex.begin(), _itemsIndex.end(), compareRule<RuleItem>(this, (compareRule<RuleItem>::RuleLookup)&Ruleset::getItem));
-	std::sort(_craftsIndex.begin(), _craftsIndex.end(), compareRule<RuleCraft>(this, (compareRule<RuleCraft>::RuleLookup)&Ruleset::getCraft));
-	std::sort(_facilitiesIndex.begin(), _facilitiesIndex.end(), compareRule<RuleBaseFacility>(this, (compareRule<RuleBaseFacility>::RuleLookup)&Ruleset::getBaseFacility));
-	std::sort(_researchIndex.begin(), _researchIndex.end(), compareRule<RuleResearch>(this, (compareRule<RuleResearch>::RuleLookup)&Ruleset::getResearch));
-	std::sort(_manufactureIndex.begin(), _manufactureIndex.end(), compareRule<RuleManufacture>(this, (compareRule<RuleManufacture>::RuleLookup)&Ruleset::getManufacture));
-	std::sort(_invsIndex.begin(), _invsIndex.end(), compareRule<RuleInventory>(this, (compareRule<RuleInventory>::RuleLookup)&Ruleset::getInventory));
+	std::sort(_itemsIndex.begin(), _itemsIndex.end(), compareRule<RuleItem>(this, (compareRule<RuleItem>::RuleLookup)&Mod::getItem));
+	std::sort(_craftsIndex.begin(), _craftsIndex.end(), compareRule<RuleCraft>(this, (compareRule<RuleCraft>::RuleLookup)&Mod::getCraft));
+	std::sort(_facilitiesIndex.begin(), _facilitiesIndex.end(), compareRule<RuleBaseFacility>(this, (compareRule<RuleBaseFacility>::RuleLookup)&Mod::getBaseFacility));
+	std::sort(_researchIndex.begin(), _researchIndex.end(), compareRule<RuleResearch>(this, (compareRule<RuleResearch>::RuleLookup)&Mod::getResearch));
+	std::sort(_manufactureIndex.begin(), _manufactureIndex.end(), compareRule<RuleManufacture>(this, (compareRule<RuleManufacture>::RuleLookup)&Mod::getManufacture));
+	std::sort(_invsIndex.begin(), _invsIndex.end(), compareRule<RuleInventory>(this, (compareRule<RuleInventory>::RuleLookup)&Mod::getInventory));
 	// special cases
 	std::sort(_craftWeaponsIndex.begin(), _craftWeaponsIndex.end(), compareRule<RuleCraftWeapon>(this));
 	std::sort(_armorsIndex.begin(), _armorsIndex.end(), compareRule<Armor>(this));
@@ -1900,7 +1900,7 @@ void Ruleset::sortLists()
 /**
  * Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
  */
-std::vector<std::string> Ruleset::getPsiRequirements() const
+std::vector<std::string> Mod::getPsiRequirements() const
 {
 	return _psiRequirements;
 }
@@ -1910,7 +1910,7 @@ std::vector<std::string> Ruleset::getPsiRequirements() const
  * @param save Saved game the soldier belongs to.
  * @return Newly generated soldier.
  */
-Soldier *Ruleset::genSoldier(SavedGame *save) const
+Soldier *Mod::genSoldier(SavedGame *save) const
 {
 	Soldier *soldier = 0;
 	int newId = save->getId("STR_SOLDIER");
@@ -1952,7 +1952,7 @@ Soldier *Ruleset::genSoldier(SavedGame *save) const
  * Gets the name of the item to be used as alien fuel.
  * @return the name of the fuel.
  */
-std::string Ruleset::getAlienFuelName() const
+std::string Mod::getAlienFuelName() const
 {
 	return _alienFuel.first;
 }
@@ -1961,7 +1961,7 @@ std::string Ruleset::getAlienFuelName() const
  * Gets the amount of alien fuel to recover.
  * @return the amount to recover.
  */
-int Ruleset::getAlienFuelQuantity() const
+int Mod::getAlienFuelQuantity() const
 {
 	return _alienFuel.second;
 }
@@ -1970,7 +1970,7 @@ int Ruleset::getAlienFuelQuantity() const
  * Gets name of font collection.
  * @return the name of YAML-file with font data
  */
-std::string Ruleset::getFontName() const
+std::string Mod::getFontName() const
 {
 	return _fontName;
 }
@@ -1979,7 +1979,7 @@ std::string Ruleset::getFontName() const
  * Returns the minimum facilitie's radar range.
  * @return The minimum range.
  */
- int Ruleset::getMinRadarRange() const
+ int Mod::getMinRadarRange() const
  {
 	static int minRadarRange = -1;
 
@@ -2007,7 +2007,7 @@ std::string Ruleset::getFontName() const
  * @param id the interface we want info on.
  * @return the interface.
  */
-RuleInterface *Ruleset::getInterface(const std::string &id) const
+RuleInterface *Mod::getInterface(const std::string &id) const
 {
 	std::map<std::string, RuleInterface*>::const_iterator i = _interfaces.find(id);
 	if (_interfaces.end() != i) return i->second; else return 0;
@@ -2017,48 +2017,48 @@ RuleInterface *Ruleset::getInterface(const std::string &id) const
  * Gets the rules for the Geoscape globe.
  * @return Pointer to globe rules.
  */
-RuleGlobe *Ruleset::getGlobe() const
+RuleGlobe *Mod::getGlobe() const
 {
 	return _globe;
 }
 
-const std::map<std::string, SoundDefinition *> *Ruleset::getSoundDefinitions() const
+const std::map<std::string, SoundDefinition *> *Mod::getSoundDefinitions() const
 {
 	return &_soundDefs;
 }
 
-const std::vector<SDL_Color> *Ruleset::getTransparencies() const
+const std::vector<SDL_Color> *Mod::getTransparencies() const
 {
 	return &_transparencies;
 }
 
-const std::vector<MapScript*> *Ruleset::getMapScript(std::string id) const
+const std::vector<MapScript*> *Mod::getMapScript(std::string id) const
 {
 	std::map<std::string, std::vector<MapScript*> >::const_iterator i = _mapScripts.find(id);
 	if (_mapScripts.end() != i) return &i->second; else return 0;
 }
 
-const std::map<std::string, RuleVideo *> *Ruleset::getVideos() const
+const std::map<std::string, RuleVideo *> *Mod::getVideos() const
 {
 	return &_videos;
 }
 
-const std::map<std::string, RuleMusic *> *Ruleset::getMusic() const
+const std::map<std::string, RuleMusic *> *Mod::getMusic() const
 {
 	return &_musicDefs;
 }
 
-const std::vector<std::string> *Ruleset::getMissionScriptList() const
+const std::vector<std::string> *Mod::getMissionScriptList() const
 {
 	return &_missionScriptIndex;
 }
 
-RuleMissionScript *Ruleset::getMissionScript(const std::string &name) const
+RuleMissionScript *Mod::getMissionScript(const std::string &name) const
 {
 	std::map<std::string, RuleMissionScript*>::const_iterator i = _missionScripts.find(name);
 	if (_missionScripts.end() != i) return i->second; else return 0;
 }
-std::string Ruleset::getFinalResearch() const
+std::string Mod::getFinalResearch() const
 {
 	return _finalResearch; 
 }
@@ -2167,7 +2167,7 @@ namespace
 /**
  * Loads the resources required by the game.
  */
-void Ruleset::loadResources()
+void Mod::loadResources()
 {
 	// Load palettes
 	const char *pal[] = { "PAL_GEOSCAPE", "PAL_BASESCAPE", "PAL_GRAPHS", "PAL_UFOPAEDIA", "PAL_BATTLEPEDIA" };
@@ -2461,10 +2461,10 @@ void Ruleset::loadResources()
 		}
 	}
 
-	TextButton::soundPress = getSound("GEO.CAT", Ruleset::BUTTON_PRESS);
-	Window::soundPopup[0] = getSound("GEO.CAT", Ruleset::WINDOW_POPUP[0]);
-	Window::soundPopup[1] = getSound("GEO.CAT", Ruleset::WINDOW_POPUP[1]);
-	Window::soundPopup[2] = getSound("GEO.CAT", Ruleset::WINDOW_POPUP[2]);
+	TextButton::soundPress = getSound("GEO.CAT", Mod::BUTTON_PRESS);
+	Window::soundPopup[0] = getSound("GEO.CAT", Mod::WINDOW_POPUP[0]);
+	Window::soundPopup[1] = getSound("GEO.CAT", Mod::WINDOW_POPUP[1]);
+	Window::soundPopup[2] = getSound("GEO.CAT", Mod::WINDOW_POPUP[2]);
 
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
 
@@ -2726,7 +2726,7 @@ void Ruleset::loadResources()
 /**
  * Loads the resources required by the Battlescape.
  */
-void Ruleset::loadBattlescapeResources()
+void Mod::loadBattlescapeResources()
 {
 	// Load Battlescape ICONS
 	_sets["SPICONS.DAT"] = new SurfaceSet(32, 24);
@@ -3019,7 +3019,7 @@ void Ruleset::loadBattlescapeResources()
  * @param extension Image file extension.
  * @return True/false
  */
-bool Ruleset::isImageFile(std::string extension) const
+bool Mod::isImageFile(std::string extension) const
 {
 	std::transform(extension.begin(), extension.end(), extension.begin(), toupper);
 
@@ -3060,7 +3060,7 @@ bool Ruleset::isImageFile(std::string extension) const
  * @param gmcat Pointer to GM.CAT if available.
  * @return Pointer to the music file, or NULL if it couldn't be loaded.
  */
-Music *Ruleset::loadMusic(MusicFormat fmt, const std::string &file, int track, float volume, CatFile *adlibcat, CatFile *aintrocat, GMCatFile *gmcat) const
+Music *Mod::loadMusic(MusicFormat fmt, const std::string &file, int track, float volume, CatFile *adlibcat, CatFile *aintrocat, GMCatFile *gmcat) const
 {
 	/* MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI */
 	static const std::string exts[] = { "", ".flac", ".ogg", ".mp3", ".mod", ".wav", "", ".mid" };
@@ -3138,12 +3138,12 @@ Music *Ruleset::loadMusic(MusicFormat fmt, const std::string &file, int track, f
  * Preamble:
  * this is the most horrible function i've ever written, and it makes me sad.
  * this is, however, a necessary evil, in order to save massive amounts of time in the draw function.
- * when used with the default TFTD ruleset, this function loops 4,194,304 times
+ * when used with the default TFTD mod, this function loops 4,194,304 times
  * (4 palettes, 4 tints, 4 levels of opacity, 256 colors, 256 comparisons per)
  * each additional tint in the rulesets will result in over a million iterations more.
  * @param pal the palette to base the lookup table on.
  */
-void Ruleset::createTransparencyLUT(Palette *pal)
+void Mod::createTransparencyLUT(Palette *pal)
 {
 	SDL_Color desiredColor;
 	std::vector<Uint8> lookUpTable;

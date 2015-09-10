@@ -252,7 +252,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	{
 		if (unit->getAggroSound() != -1 && !_playedAggroSound)
 		{
-			getRuleset()->getSoundByDepth(_save->getDepth(), unit->getAggroSound())->play(-1, getMap()->getSoundAngle(unit->getPosition()));
+			getMod()->getSoundByDepth(_save->getDepth(), unit->getAggroSound())->play(-1, getMap()->getSoundAngle(unit->getPosition()));
 			_playedAggroSound = true;
 		}
 	}
@@ -371,9 +371,9 @@ void BattlescapeGame::endTurn()
 
 	if (!_endTurnProcessed)
 	{
-		if (_save->getTileEngine()->closeUfoDoors() && Ruleset::SLIDING_DOOR_CLOSE != -1)
+		if (_save->getTileEngine()->closeUfoDoors() && Mod::SLIDING_DOOR_CLOSE != -1)
 		{
-			getRuleset()->getSoundByDepth(_save->getDepth(), Ruleset::SLIDING_DOOR_CLOSE)->play(); // ufo door closed
+			getMod()->getSoundByDepth(_save->getDepth(), Mod::SLIDING_DOOR_CLOSE)->play(); // ufo door closed
 		}
 
 		// check for hot grenades on the ground
@@ -615,9 +615,9 @@ void BattlescapeGame::showInfoBoxQueue()
 void BattlescapeGame::missionComplete()
 {
 	Game *game = _parentState->getGame();
-	if (game->getRuleset()->getDeployment(_save->getMissionType()))
+	if (game->getMod()->getDeployment(_save->getMissionType()))
 	{
-		std::string missionComplete = game->getRuleset()->getDeployment(_save->getMissionType())->getObjectivePopup();
+		std::string missionComplete = game->getMod()->getDeployment(_save->getMissionType())->getObjectivePopup();
 		if (missionComplete != "")
 		{
 			_infoboxQueue.push_back(new InfoboxOKState(game->getLanguage()->getString(missionComplete)));
@@ -1228,7 +1228,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				{
 					if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 					{
-						_parentState->getGame()->getRuleset()->getSoundByDepth(_save->getDepth(), _currentAction.weapon->getRules()->getHitSound())->play(-1, getMap()->getSoundAngle(pos));
+						_parentState->getGame()->getMod()->getSoundByDepth(_save->getDepth(), _currentAction.weapon->getRules()->getHitSound())->play(-1, getMap()->getSoundAngle(pos));
 						_parentState->getGame()->pushState (new UnitInfoState(_save->selectUnit(pos), _parentState, false, true));
 						cancelCurrentAction();
 					}
@@ -1453,7 +1453,7 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 	if (item->getRules()->isFixed())
 		return;
 
-	_save->getTile(p)->addItem(item, getRuleset()->getInventory("STR_GROUND"));
+	_save->getTile(p)->addItem(item, getMod()->getInventory("STR_GROUND"));
 
 	if (item->getUnit())
 	{
@@ -1516,13 +1516,13 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit)
 
 	getSave()->getTile(unit->getPosition())->setUnit(0);
 	std::ostringstream newArmor;
-	newArmor << getRuleset()->getUnit(newType)->getArmor();
-	std::string terroristWeapon = getRuleset()->getUnit(newType)->getRace().substr(4);
+	newArmor << getMod()->getUnit(newType)->getArmor();
+	std::string terroristWeapon = getMod()->getUnit(newType)->getRace().substr(4);
 	terroristWeapon += "_WEAPON";
-	RuleItem *newItem = getRuleset()->getItem(terroristWeapon);
+	RuleItem *newItem = getMod()->getItem(terroristWeapon);
 	int difficulty = _parentState->getGame()->getSavedGame()->getDifficultyCoefficient();
 
-	BattleUnit *newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()), difficulty, getDepth());
+	BattleUnit *newUnit = new BattleUnit(getMod()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getMod()->getArmor(newArmor.str()), difficulty, getDepth());
 
 	if (!difficulty)
 	{
@@ -1534,12 +1534,12 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit)
 	newUnit->setDirection(unit->getDirection());
 	newUnit->setCache(0);
 	newUnit->setTimeUnits(0);
-	newUnit->setSpecialWeapon(getSave(), getRuleset());
+	newUnit->setSpecialWeapon(getSave(), getMod());
 	getSave()->getUnits()->push_back(newUnit);
 	newUnit->setAIState(new AlienBAIState(getSave(), newUnit, 0));
 	BattleItem *bi = new BattleItem(newItem, getSave()->getCurrentItemId());
 	bi->moveToOwner(newUnit);
-	bi->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
+	bi->setSlot(getMod()->getInventory("STR_RIGHT_HAND"));
 	getSave()->getItems()->push_back(bi);
 	newUnit->setVisible(visible);
 	getTileEngine()->calculateFOV(newUnit->getPosition());
@@ -1584,12 +1584,12 @@ Pathfinding *BattlescapeGame::getPathfinding()
 	return _save->getPathfinding();
 }
 /**
- * Gets the ruleset.
- * @return ruleset.
+ * Gets the mod.
+ * @return mod.
  */
-Ruleset *BattlescapeGame::getRuleset()
+Mod *BattlescapeGame::getMod()
 {
-	return _parentState->getGame()->getRuleset();
+	return _parentState->getGame()->getMod();
 }
 
 
@@ -1824,7 +1824,7 @@ int BattlescapeGame::takeItemFromGround(BattleItem* item, BattleAction *action)
 bool BattlescapeGame::takeItem(BattleItem* item, BattleAction *action)
 {
 	bool placed = false;
-	Ruleset* rules = _parentState->getGame()->getRuleset();
+	Mod *mod = _parentState->getGame()->getMod();
 	switch (item->getRules()->getBattleType())
 	{
 	case BT_AMMO:
@@ -1843,7 +1843,7 @@ bool BattlescapeGame::takeItem(BattleItem* item, BattleAction *action)
 				if (!action->actor->getItem("STR_BELT", i))
 				{
 					item->moveToOwner(action->actor);
-					item->setSlot(rules->getInventory("STR_BELT"));
+					item->setSlot(mod->getInventory("STR_BELT"));
 					item->setSlotX(i);
 					placed = true;
 					break;
@@ -1858,7 +1858,7 @@ bool BattlescapeGame::takeItem(BattleItem* item, BattleAction *action)
 			if (!action->actor->getItem("STR_BELT", i))
 			{
 				item->moveToOwner(action->actor);
-				item->setSlot(rules->getInventory("STR_BELT"));
+				item->setSlot(mod->getInventory("STR_BELT"));
 				item->setSlotX(i);
 				placed = true;
 				break;
@@ -1870,7 +1870,7 @@ bool BattlescapeGame::takeItem(BattleItem* item, BattleAction *action)
 		if (!action->actor->getItem("STR_RIGHT_HAND"))
 		{
 			item->moveToOwner(action->actor);
-			item->setSlot(rules->getInventory("STR_RIGHT_HAND"));
+			item->setSlot(mod->getInventory("STR_RIGHT_HAND"));
 			placed = true;
 		}
 		break;
@@ -1879,7 +1879,7 @@ bool BattlescapeGame::takeItem(BattleItem* item, BattleAction *action)
 		if (!action->actor->getItem("STR_BACK_PACK"))
 		{
 			item->moveToOwner(action->actor);
-			item->setSlot(rules->getInventory("STR_BACK_PACK"));
+			item->setSlot(mod->getInventory("STR_BACK_PACK"));
 			placed = true;
 		}
 		break;
@@ -1887,7 +1887,7 @@ bool BattlescapeGame::takeItem(BattleItem* item, BattleAction *action)
 		if (!action->actor->getItem("STR_LEFT_HAND"))
 		{
 			item->moveToOwner(action->actor);
-			item->setSlot(rules->getInventory("STR_LEFT_HAND"));
+			item->setSlot(mod->getInventory("STR_LEFT_HAND"));
 			placed = true;
 		}
 		break;

@@ -57,7 +57,7 @@ NewResearchListState::NewResearchListState(Base *base) : _base(base)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK05.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK05.SCR"));
 
 	_btnOK->setText(tr("STR_OK"));
 	_btnOK->onMouseClick((ActionHandler)&NewResearchListState::btnOKClick);
@@ -108,7 +108,7 @@ void NewResearchListState::fillProjectList()
 {
 	_projects.clear();
 	_lstResearch->clearList();
-	_game->getSavedGame()->getAvailableResearchProjects(_projects, _game->getRuleset() , _base);
+	_game->getSavedGame()->getAvailableResearchProjects(_projects, _game->getMod() , _base);
 	std::vector<RuleResearch*>::iterator it = _projects.begin();
 	while (it != _projects.end())
 	{

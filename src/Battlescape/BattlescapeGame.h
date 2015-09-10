@@ -36,7 +36,7 @@ class BattlescapeState;
 class Map;
 class TileEngine;
 class Pathfinding;
-class Ruleset;
+class Mod;
 class InfoboxOKState;
 
 enum BattleActionType { BA_NONE, BA_TURN, BA_WALK, BA_PRIME, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_HIT, BA_USE, BA_LAUNCH, BA_MINDCONTROL, BA_PANIC, BA_RETHINK };
@@ -159,8 +159,8 @@ public:
 	TileEngine *getTileEngine();
 	/// Gets the pathfinding.
 	Pathfinding *getPathfinding();
-	/// Gets the ruleset.
-	Ruleset *getRuleset();
+	/// Gets the mod.
+	Mod *getMod();
 	/// Returns whether panic has been handled.
 	bool getPanicHandled() { return _playerPanicHandled; }
 	/// Tries to find an item and pick it up if possible.

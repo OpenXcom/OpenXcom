@@ -31,7 +31,7 @@ class Screen;
 class Cursor;
 class Language;
 class SavedGame;
-class Ruleset;
+class Mod;
 class FpsCounter;
 
 /**
@@ -49,7 +49,7 @@ private:
 	Language *_lang;
 	std::list<State*> _states, _deleted;
 	SavedGame *_save;
-	Ruleset *_rules;
+	Mod *_mod;
 	bool _quit, _init;
 	FpsCounter *_fpsCounter;
 	bool _mouseActive;
@@ -90,10 +90,10 @@ public:
 	SavedGame *getSavedGame() const;
 	/// Sets a new saved game for the game.
 	void setSavedGame(SavedGame *save);
-	/// Gets the currently loaded ruleset.
-	Ruleset *getRuleset() const;
-	/// Loads the rulesets specified in the game options.
-	void loadRulesets();
+	/// Gets the currently loaded mod.
+	Mod *getMod() const;
+	/// Loads the mods specified in the game options.
+	void loadMods();
 	/// Sets whether the mouse cursor is activated.
 	void setMouseActive(bool active);
 	/// Returns whether current state is the param state

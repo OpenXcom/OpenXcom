@@ -52,10 +52,10 @@ void CutsceneState::init()
 	// pop self off stack and replace with actual player state
 	_game->popState();
 
-	const std::map<std::string, RuleVideo*> *videoRulesets = _game->getRuleset()->getVideos();
-	std::map<std::string, RuleVideo*>::const_iterator videoRuleIt = videoRulesets->find(_cutsceneId);
+	const std::map<std::string, RuleVideo*> *videoMods = _game->getMod()->getVideos();
+	std::map<std::string, RuleVideo*>::const_iterator videoRuleIt = videoMods->find(_cutsceneId);
 
-	if (videoRuleIt == videoRulesets->end())
+	if (videoRuleIt == videoMods->end())
 	{
 		Log(LOG_WARNING) << "cutscene definition not found: " << _cutsceneId;
 		return;

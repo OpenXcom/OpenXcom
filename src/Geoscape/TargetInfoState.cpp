@@ -61,7 +61,7 @@ TargetInfoState::TargetInfoState(Target *target, Globe *globe) : _target(target)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)&TargetInfoState::btnInterceptClick);

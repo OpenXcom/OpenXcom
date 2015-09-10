@@ -43,11 +43,11 @@ RuleCraft::~RuleCraft()
 /**
  * Loads the craft from a YAML file.
  * @param node YAML node.
- * @param ruleset Ruleset for the craft.
+ * @param mod Mod for the craft.
  * @param modIndex A value that offsets the sounds and sprite values to avoid conflicts.
  * @param listOrder The list weight for this craft.
  */
-void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset, int modIndex, int listOrder)
+void RuleCraft::load(const YAML::Node &node, Mod *mod, int modIndex, int listOrder)
 {
 	_type = node["type"].as<std::string>(_type);
 	_requires = node["requires"].as< std::vector<std::string> >(_requires);
@@ -79,7 +79,7 @@ void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset, int modIndex, int
 	if (const YAML::Node &terrain = node["battlescapeTerrainData"])
 	{
 		RuleTerrain *rule = new RuleTerrain(terrain["name"].as<std::string>());
-		rule->load(terrain, ruleset);
+		rule->load(terrain, mod);
 		_battlescapeTerrainData = rule;
 		
 		if (const YAML::Node &deployment = node["deployment"])

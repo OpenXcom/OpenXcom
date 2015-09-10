@@ -61,14 +61,14 @@ namespace OpenXcom
 	 * Gets the index of the selected article_id in the visible list.
 	 * If the id is not found, returns -1.
 	 * @param save Pointer to saved game.
-	 * @param rule Pointer to ruleset.
+	 * @param mod Pointer to mod.
 	 * @param article_id Article id to find.
 	 * @returns Index of the given article id in the internal list, -1 if not found.
 	 */
-	size_t Ufopaedia::getArticleIndex(SavedGame *save, Ruleset *rule, std::string &article_id)
+	size_t Ufopaedia::getArticleIndex(SavedGame *save, Mod *mod, std::string &article_id)
 	{
 		std::string UC_ID = article_id + "_UC";
-		ArticleDefinitionList articles = getAvailableArticles(save, rule);
+		ArticleDefinitionList articles = getAvailableArticles(save, mod);
 		for (size_t it=0; it<articles.size(); ++it)
 		{
 			for (std::vector<std::string>::iterator j = articles[it]->requires.begin(); j != articles[it]->requires.end(); ++j)
@@ -148,7 +148,7 @@ namespace OpenXcom
 	 */
 	void Ufopaedia::openArticle(Game *game, ArticleDefinition *article)
 	{
-		_current_index = getArticleIndex(game->getSavedGame(), game->getRuleset(), article->id);
+		_current_index = getArticleIndex(game->getSavedGame(), game->getMod(), article->id);
 		if (_current_index != (size_t) -1)
 		{
 			game->pushState(createArticleState(article));
@@ -163,10 +163,10 @@ namespace OpenXcom
 	 */
 	void Ufopaedia::openArticle(Game *game, std::string &article_id)
 	{
-		_current_index = getArticleIndex(game->getSavedGame(), game->getRuleset(), article_id);
+		_current_index = getArticleIndex(game->getSavedGame(), game->getMod(), article_id);
 		if (_current_index != (size_t) -1)
 		{
-			ArticleDefinition *article = game->getRuleset()->getUfopaediaArticle(article_id);
+			ArticleDefinition *article = game->getMod()->getUfopaediaArticle(article_id);
 			game->pushState(createArticleState(article));
 		}
 	}
@@ -186,7 +186,7 @@ namespace OpenXcom
 	 */
 	void Ufopaedia::next(Game *game)
 	{
-		ArticleDefinitionList articles = getAvailableArticles(game->getSavedGame(), game->getRuleset());
+		ArticleDefinitionList articles = getAvailableArticles(game->getSavedGame(), game->getMod());
 		if (_current_index >= articles.size() - 1)
 		{
 			// goto first
@@ -206,7 +206,7 @@ namespace OpenXcom
 	 */
 	void Ufopaedia::prev(Game *game)
 	{
-		ArticleDefinitionList articles = getAvailableArticles(game->getSavedGame(), game->getRuleset());
+		ArticleDefinitionList articles = getAvailableArticles(game->getSavedGame(), game->getMod());
 		if (_current_index == 0)
 		{
 			// goto last
@@ -223,13 +223,13 @@ namespace OpenXcom
 	/**
 	 * Fill an ArticleList with the currently visible ArticleIds of the given section.
 	 * @param save Pointer to saved game.
-	 * @param rule Pointer to ruleset.
+	 * @param mod Pointer to mod.
 	 * @param section Article section to find, e.g. "XCOM Crafts & Armaments", "Alien Lifeforms", etc.
 	 * @param data Article definition list object to fill data in.
 	 */
-	void Ufopaedia::list(SavedGame *save, Ruleset *rule, const std::string &section, ArticleDefinitionList &data)
+	void Ufopaedia::list(SavedGame *save, Mod *mod, const std::string &section, ArticleDefinitionList &data)
 	{
-		ArticleDefinitionList articles = getAvailableArticles(save, rule);
+		ArticleDefinitionList articles = getAvailableArticles(save, mod);
 		for (ArticleDefinitionList::iterator it=articles.begin(); it!=articles.end(); ++it)
 		{
 			if ((*it)->section == section)
@@ -242,16 +242,16 @@ namespace OpenXcom
 	/**
 	 * Return an ArticleList with all the currently visible ArticleIds.
 	 * @param save Pointer to saved game.
-	 * @param rule Pointer to ruleset.
+	 * @param mod Pointer to mod.
 	 * @return List of visible ArticleDefinitions.
 	 */
-	ArticleDefinitionList Ufopaedia::getAvailableArticles(SavedGame *save, Ruleset *rule)
+	ArticleDefinitionList Ufopaedia::getAvailableArticles(SavedGame *save, Mod *mod)
 	{
-		const std::vector<std::string> &list = rule->getUfopaediaList();
+		const std::vector<std::string> &list = mod->getUfopaediaList();
 		ArticleDefinitionList articles;
 		for (std::vector<std::string>::const_iterator it=list.begin(); it!=list.end(); ++it)
 		{
-			ArticleDefinition *article = rule->getUfopaediaArticle(*it);
+			ArticleDefinition *article = mod->getUfopaediaArticle(*it);
 			if (isArticleAvailable(save, article) && article->section != UFOPAEDIA_NOT_AVAILABLE)
 			{
 				articles.push_back(article);

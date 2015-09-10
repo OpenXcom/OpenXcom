@@ -26,7 +26,7 @@
 namespace OpenXcom
 {
 
-class Ruleset;
+class Mod;
 
 /**
  * Represents the items contained by a certain entity,
@@ -55,7 +55,7 @@ public:
 	/// Gets the total quantity of items in the container.
 	int getTotalQuantity() const;
 	/// Gets the total size of items in the container.
-	double getTotalSize(const Ruleset *rule) const;
+	double getTotalSize(const Mod *mod) const;
 	/// Gets all the items in the container.
 	std::map<std::string, int> *getContents();
 };

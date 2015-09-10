@@ -26,7 +26,7 @@
 namespace OpenXcom
 {
 class SavedBattleGame;
-class Ruleset;
+class Mod;
 class Craft;
 class Ufo;
 class RuleTerrain;
@@ -54,7 +54,7 @@ class BattlescapeGenerator
 private:
 	Game *_game;
 	SavedBattleGame *_save;
-	Ruleset *_rules;
+	Mod *_mod;
 	Craft *_craft;
 	Ufo *_ufo;
 	Base *_base;

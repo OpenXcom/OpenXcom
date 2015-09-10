@@ -44,7 +44,7 @@ namespace OpenXcom
 		add(_txtTitle);
 
 		// Set up objects
-		_game->getRuleset()->getSurface(defs->image_id)->blit(_bg);
+		_game->getMod()->getSurface(defs->image_id)->blit(_bg);
 		_btnOk->setColor(Palette::blockOffset(5)+3);
 		_btnPrev->setColor(Palette::blockOffset(5)+3);
 		_btnNext->setColor(Palette::blockOffset(5)+3);

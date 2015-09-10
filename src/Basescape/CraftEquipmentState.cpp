@@ -77,7 +77,7 @@ CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _c
 	// Set palette
 	setInterface("craftEquipment");
 
-	_ammoColor = _game->getRuleset()->getInterface("craftEquipment")->getElement("ammoColor")->color;
+	_ammoColor = _game->getMod()->getInterface("craftEquipment")->getElement("ammoColor")->color;
 
 	add(_window, "window", "craftEquipment");
 	add(_btnOk, "button", "craftEquipment");
@@ -94,7 +94,7 @@ CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _c
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getRuleset()->getSurface("BACK04.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK04.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftEquipmentState::btnOkClick);
@@ -137,10 +137,10 @@ CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _c
 	_lstEquipment->onMousePress((ActionHandler)&CraftEquipmentState::lstEquipmentMousePress);
 
 	int row = 0;
-	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
+	const std::vector<std::string> &items = _game->getMod()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
-		RuleItem *rule = _game->getRuleset()->getItem(*i);
+		RuleItem *rule = _game->getMod()->getItem(*i);
 		int cQty = 0;
 		if (rule->isFixed())
 		{
@@ -355,7 +355,7 @@ void CraftEquipmentState::lstEquipmentMousePress(Action *action)
 void CraftEquipmentState::updateQuantity()
 {
 	Craft *c = _base->getCrafts()->at(_craft);
-	RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
+	RuleItem *item = _game->getMod()->getItem(_items[_sel]);
 	int cQty = 0;
 	if (item->isFixed())
 	{
@@ -379,7 +379,7 @@ void CraftEquipmentState::updateQuantity()
 	Uint8 color;
 	if (cQty == 0)
 	{
-		RuleItem *rule = _game->getRuleset()->getItem(_items[_sel]);
+		RuleItem *rule = _game->getMod()->getItem(_items[_sel]);
 		if (rule->getBattleType() == BT_AMMO)
 		{
 			color = _ammoColor;
@@ -418,7 +418,7 @@ void CraftEquipmentState::moveLeft()
 void CraftEquipmentState::moveLeftByValue(int change)
 {
 	Craft *c = _base->getCrafts()->at(_craft);
-	RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
+	RuleItem *item = _game->getMod()->getItem(_items[_sel]);
 	int cQty = 0;
 	if (item->isFixed()) cQty = c->getVehicleCount(_items[_sel]);
 	else cQty = c->getItems()->getItem(_items[_sel]);
@@ -430,7 +430,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 		if (!item->getCompatibleAmmo()->empty())
 		{
 			// First we remove all vehicles because we want to redistribute the ammo
-			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+			RuleItem *ammo = _game->getMod()->getItem(item->getCompatibleAmmo()->front());
 			for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); )
 			{
 				if ((*i)->getRules() == item)
@@ -495,7 +495,7 @@ void CraftEquipmentState::moveRight()
 void CraftEquipmentState::moveRightByValue(int change)
 {
 	Craft *c = _base->getCrafts()->at(_craft);
-	RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
+	RuleItem *item = _game->getMod()->getItem(_items[_sel]);
 	int bqty = _base->getItems()->getItem(_items[_sel]);
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
 	{
@@ -511,9 +511,9 @@ void CraftEquipmentState::moveRightByValue(int change)
 	if (item->isFixed())
 	{
 		int size = 4;
-		if (_game->getRuleset()->getUnit(item->getType()))
+		if (_game->getMod()->getUnit(item->getType()))
 		{
-			size = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(item->getType())->getArmor())->getSize();
+			size = _game->getMod()->getArmor(_game->getMod()->getUnit(item->getType())->getArmor())->getSize();
 			size *= size;
 		}
 		// Check if there's enough room
@@ -524,7 +524,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 			if (!item->getCompatibleAmmo()->empty())
 			{
 				// And now let's see if we can add the total number of vehicles.
-				RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+				RuleItem *ammo = _game->getMod()->getItem(item->getCompatibleAmmo()->front());
 				int ammoPerVehicle = ammo->getClipSize();
 				if (ammoPerVehicle > 0 && item->getClipSize() > 0)
 				{
@@ -551,7 +551,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 					// So we haven't managed to increase the count of vehicles because of the ammo
 					_timerRight->stop();
 					LocalizedText msg(tr("STR_NOT_ENOUGH_AMMO_TO_ARM_HWP").arg(tr(ammo->getType())));
-					_game->pushState(new ErrorMessageState(msg, _palette, _game->getRuleset()->getInterface("craftEquipment")->getElement("errorMessage")->color, "BACK04.SCR", _game->getRuleset()->getInterface("craftEquipment")->getElement("errorPalette")->color));
+					_game->pushState(new ErrorMessageState(msg, _palette, _game->getMod()->getInterface("craftEquipment")->getElement("errorMessage")->color, "BACK04.SCR", _game->getMod()->getInterface("craftEquipment")->getElement("errorPalette")->color));
 				}
 			}
 			else
@@ -571,7 +571,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 		{
 			_timerRight->stop();
 			LocalizedText msg(tr("STR_NO_MORE_EQUIPMENT_ALLOWED", c->getRules()->getMaxItems()));
-			_game->pushState(new ErrorMessageState(msg, _palette, _game->getRuleset()->getInterface("craftEquipment")->getElement("errorMessage")->color, "BACK04.SCR", _game->getRuleset()->getInterface("craftEquipment")->getElement("errorPalette")->color));
+			_game->pushState(new ErrorMessageState(msg, _palette, _game->getMod()->getInterface("craftEquipment")->getElement("errorMessage")->color, "BACK04.SCR", _game->getMod()->getInterface("craftEquipment")->getElement("errorPalette")->color));
 			change = c->getRules()->getMaxItems() - _totalItems;
 		}
 		c->getItems()->addItem(_items[_sel],change);

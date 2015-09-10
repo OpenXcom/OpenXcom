@@ -77,11 +77,11 @@ void UnitTurnBState::init()
 			int door = _parent->getTileEngine()->unitOpensDoor(_unit, true);
 			if (door == 0)
 			{
-				_parent->getRuleset()->getSoundByDepth(_parent->getDepth(), Ruleset::DOOR_OPEN)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition())); // normal door
+				_parent->getMod()->getSoundByDepth(_parent->getDepth(), Mod::DOOR_OPEN)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition())); // normal door
 			}
 			if (door == 1)
 			{
-				_parent->getRuleset()->getSoundByDepth(_parent->getDepth(), Ruleset::SLIDING_DOOR_OPEN)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition())); // ufo door
+				_parent->getMod()->getSoundByDepth(_parent->getDepth(), Mod::SLIDING_DOOR_OPEN)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition())); // ufo door
 			}
 			if (door == 4)
 			{

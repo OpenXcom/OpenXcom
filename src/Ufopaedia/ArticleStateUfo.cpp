@@ -37,7 +37,7 @@ namespace OpenXcom
 
 	ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo *defs) : ArticleState(defs->id)
 	{
-		RuleUfo *ufo = _game->getRuleset()->getUfo(defs->id);
+		RuleUfo *ufo = _game->getMod()->getUfo(defs->id);
 
 		// add screen elements
 		_txtTitle = new Text(155, 32, 5, 24);
@@ -51,7 +51,7 @@ namespace OpenXcom
 		add(_txtTitle);
 
 		// Set up objects
-		_game->getRuleset()->getSurface("BACK11.SCR")->blit(_bg);
+		_game->getMod()->getSurface("BACK11.SCR")->blit(_bg);
 		_btnOk->setColor(Palette::blockOffset(8)+5);
 		_btnPrev->setColor(Palette::blockOffset(8)+5);
 		_btnNext->setColor(Palette::blockOffset(8)+5);
@@ -64,8 +64,8 @@ namespace OpenXcom
 		_image = new Surface(160, 52, 160, 6);
 		add(_image);
 
-		RuleInterface *dogfightInterface = _game->getRuleset()->getInterface("dogfight");
-		Surface *graphic = _game->getRuleset()->getSurface("INTERWIN.DAT");
+		RuleInterface *dogfightInterface = _game->getMod()->getInterface("dogfight");
+		Surface *graphic = _game->getMod()->getSurface("INTERWIN.DAT");
 		graphic->setX(0);
 		graphic->setY(0);
 		graphic->getCrop()->x = 0;
@@ -82,7 +82,7 @@ namespace OpenXcom
 		}
 		else
 		{
-			graphic = _game->getRuleset()->getSurface(ufo->getModSprite());
+			graphic = _game->getMod()->getSurface(ufo->getModSprite());
 		}
 		graphic->setX(0);
 		graphic->setY(0);

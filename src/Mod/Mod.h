@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_RULESET_H
-#define OPENXCOM_RULESET_H
+#ifndef OPENXCOM_MOD_H
+#define OPENXCOM_MOD_H
 
 #include <map>
 #include <vector>
@@ -80,12 +80,10 @@ class RuleMusic;
 class RuleMissionScript;
 
 /**
- * Set of rules and stats for a game.
- * A ruleset holds all the constant info that never changes
- * throughout a game, like stats of all the in-game items,
- * countries, research tree, soldier names, starting base, etc.
+ * Contains all the game-specific static data that never changes
+ * throughout the game, like rulesets and resources.
  */
-class Ruleset
+class Mod
 {
 private:
 	Music *_muteMusic;
@@ -198,11 +196,10 @@ public:
 	static int DIFFICULTY_COEFFICIENT[5];
 	// reset all the statics in all classes to default values
 	static void resetGlobalStatics();
-
-	/// Creates a blank ruleset.
-	Ruleset();
-	/// Cleans up the ruleset.
-	~Ruleset();
+	/// Creates a blank mod.
+	Mod();
+	/// Cleans up the mod.
+	~Mod();
 
 	/// Gets a particular font.
 	Font *getFont(const std::string &name) const;
@@ -231,7 +228,7 @@ public:
 
 	/// Loads a list of rulesets from YAML files for the mod at the specified index.  The first
 	/// mod loaded should be the master at index 0, then 1, and so on.
-	void loadModRulesets(const std::vector<std::string> &rulesetFiles, size_t modIdx);
+	void loadRulesets(const std::vector<std::string> &rulesetFiles, size_t modIdx);
 	/// Generates the starting saved game.
 	SavedGame *newSave() const;
 	/// Gets the pool list for soldier names.
