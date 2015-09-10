@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <yaml-cpp/yaml.h>
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Mod/RuleItem.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
@@ -138,7 +138,7 @@ NewBattleState::NewBattleState() : _craft(0)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
 
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();

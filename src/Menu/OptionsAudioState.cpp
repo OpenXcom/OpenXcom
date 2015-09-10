@@ -20,7 +20,7 @@
 #include <sstream>
 #include <SDL_mixer.h>
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/ComboBox.h"
 #include "../Interface/Text.h"
@@ -230,7 +230,7 @@ void OptionsAudioState::slrSoundVolumeChange(Action *)
  */
 void OptionsAudioState::slrSoundVolumeRelease(Action *)
 {
-	_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_FIRE)->play();
+	_game->getRuleset()->getSound("GEO.CAT", Ruleset::UFO_FIRE)->play();
 }
 
 /**

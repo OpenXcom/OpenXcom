@@ -27,7 +27,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 
 namespace OpenXcom
 {
@@ -74,7 +74,7 @@ namespace OpenXcom
 
 		centerAllSurfaces();
 
-		_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+		_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
 
 		_txtTitle->setBig();
 		_txtTitle->setAlign(ALIGN_CENTER);

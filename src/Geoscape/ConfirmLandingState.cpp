@@ -19,7 +19,7 @@
 #include "ConfirmLandingState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -71,7 +71,7 @@ ConfirmLandingState::ConfirmLandingState(Craft *craft, Texture *texture, int sha
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK15.SCR"));
 
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&ConfirmLandingState::btnYesClick);

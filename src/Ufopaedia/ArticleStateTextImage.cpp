@@ -23,7 +23,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/LocalizedText.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 
@@ -44,7 +44,7 @@ namespace OpenXcom
 		add(_txtTitle);
 
 		// Set up objects
-		_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
+		_game->getRuleset()->getSurface(defs->image_id)->blit(_bg);
 		_btnOk->setColor(Palette::blockOffset(5)+3);
 		_btnPrev->setColor(Palette::blockOffset(5)+3);
 		_btnNext->setColor(Palette::blockOffset(5)+3);

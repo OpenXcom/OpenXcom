@@ -18,7 +18,7 @@
  */
 #include "BaseDefenseState.h"
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -73,7 +73,7 @@ BaseDefenseState::BaseDefenseState(Base *base, Ufo *ufo, GeoscapeState *state) :
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK04.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseDefenseState::btnOkClick);
@@ -136,7 +136,7 @@ void BaseDefenseState::nextStep()
 					_lstDefenses->scrollDown(true);
 				}
 			}
-			_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_EXPLODE)->play();
+			_game->getRuleset()->getSound("GEO.CAT", Ruleset::UFO_EXPLODE)->play();
 			if (++_explosionCount == 3)
 			{
 				_action = BDA_END;
@@ -184,7 +184,7 @@ void BaseDefenseState::nextStep()
 			return;
 		case BDA_FIRE:
 			_lstDefenses->setCellText(_row, 1, tr("STR_FIRING").c_str());
-			_game->getResourcePack()->getSound("GEO.CAT", (def)->getRules()->getFireSound())->play();
+			_game->getRuleset()->getSound("GEO.CAT", (def)->getRules()->getFireSound())->play();
 			_timer->setInterval(333);
 			_action = BDA_RESOLVE;
 			return;
@@ -196,7 +196,7 @@ void BaseDefenseState::nextStep()
 			else
 			{
 				_lstDefenses->setCellText(_row, 2, tr("STR_HIT").c_str());
-				_game->getResourcePack()->getSound("GEO.CAT", (def)->getRules()->getHitSound())->play();
+				_game->getRuleset()->getSound("GEO.CAT", (def)->getRules()->getHitSound())->play();
 				int dmg = (def)->getRules()->getDefenseValue();
 				_ufo->setDamage(_ufo->getDamage() + (dmg / 2 + RNG::generate(0, dmg)));
 			}

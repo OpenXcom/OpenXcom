@@ -28,7 +28,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/LocalizedText.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -52,7 +52,7 @@ namespace OpenXcom
 		add(_txtTitle);
 
 		// Set up objects
-		_game->getResourcePack()->getSurface("BACK08.SCR")->blit(_bg);
+		_game->getRuleset()->getSurface("BACK08.SCR")->blit(_bg);
 		_btnOk->setColor(Palette::blockOffset(9));
 		_btnPrev->setColor(Palette::blockOffset(9));
 		_btnNext->setColor(Palette::blockOffset(9));
@@ -66,7 +66,7 @@ namespace OpenXcom
 		_image = new Surface(32, 48, 157, 5);
 		add(_image);
 
-		item->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _image);
+		item->drawHandSprite(_game->getRuleset()->getSurfaceSet("BIGOBS.PCK"), _image);
 
 		std::vector<std::string> *ammo_data = item->getCompatibleAmmo();
 
@@ -227,7 +227,7 @@ namespace OpenXcom
 							}
 							_txtAmmoDamage[i]->setText(ss.str());
 
-							ammo_rule->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _imageAmmo[i]);
+							ammo_rule->drawHandSprite(_game->getRuleset()->getSurfaceSet("BIGOBS.PCK"), _imageAmmo[i]);
 						}
 					}
 				}

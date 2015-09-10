@@ -53,16 +53,13 @@
 #include "../Mod/AlienRace.h"
 #include "../Mod/AlienDeployment.h"
 #include "../Mod/RuleBaseFacility.h"
-#include "../Mod/RuleGlobe.h"
 #include "../Mod/Texture.h"
-#include "../Mod/XcomResourcePack.h"
 #include "../Savegame/Vehicle.h"
 #include "../Savegame/MissionSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/EquipmentLayoutItem.h"
 #include "CivilianBAIState.h"
 #include "AlienBAIState.h"
-#include "Pathfinding.h"
 
 namespace OpenXcom
 {
@@ -71,7 +68,7 @@ namespace OpenXcom
  * Sets up a BattlescapeGenerator.
  * @param game pointer to Game object.
  */
-BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game), _save(game->getSavedGame()->getSavedBattle()), _res(_game->getResourcePack()), _craft(0), _ufo(0), _base(0), _mission(0), _alienBase(0), _terrain(0),
+BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game), _save(game->getSavedGame()->getSavedBattle()), _rules(game->getRuleset()), _craft(0), _ufo(0), _base(0), _mission(0), _alienBase(0), _terrain(0),
 														 _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienItemLevel(0), _baseInventory(false), _generateFuel(true), _craftDeployed(false), _craftZ(0)
 {
 	_allowAutoLoadout = !Options::disableAutoEquip;
@@ -103,7 +100,7 @@ void BattlescapeGenerator::init()
 	_blocksToDo = (_mapsize_x / 10) * (_mapsize_y / 10);
 	// creates the tile objects
 	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
-	_save->initUtilities(_res);
+	_save->initUtilities(_rules);
 }
 /**
  * Sets the XCom craft involved in the battle.

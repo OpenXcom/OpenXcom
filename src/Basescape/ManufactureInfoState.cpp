@@ -26,7 +26,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Mod/RuleManufacture.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Production.h"
@@ -121,7 +121,7 @@ void ManufactureInfoState::buildUi()
 
 	centerAllSurfaces();
 
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK17.SCR"));
 
 	_txtTitle->setText(tr(_item ? _item->getName() : _production->getRules()->getName()));
 	_txtTitle->setBig();

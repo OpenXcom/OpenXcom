@@ -27,7 +27,6 @@
 namespace OpenXcom
 {
 
-class ResourcePack;
 class SavedBattleGame;
 class Surface;
 class SurfaceSet;
@@ -51,7 +50,6 @@ private:
 	Timer *_scrollMouseTimer, *_scrollKeyTimer;
 	Game *_game;
 	SavedBattleGame *_save;
-	ResourcePack *_res;
 	Surface *_arrow;
 	int _spriteWidth, _spriteHeight;
 	int _selectorX, _selectorY;

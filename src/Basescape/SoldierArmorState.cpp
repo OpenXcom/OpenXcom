@@ -19,7 +19,7 @@
 #include "SoldierArmorState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
@@ -67,7 +67,7 @@ SoldierArmorState::SoldierArmorState(Base *base, size_t soldier) : _base(base), 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK14.SCR"));
 
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&SoldierArmorState::btnCancelClick);

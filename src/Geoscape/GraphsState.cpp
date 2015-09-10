@@ -19,7 +19,7 @@
 #include "GraphsState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Screen.h"
@@ -281,13 +281,13 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 	btnUfoRegionClick(0);
 
 	// Set up objects
-	if (_game->getResourcePack()->getSurface("GRAPH.BDY"))
+	if (_game->getRuleset()->getSurface("GRAPH.BDY"))
 	{
-		_game->getResourcePack()->getSurface("GRAPH.BDY")->blit(_bg);
+		_game->getRuleset()->getSurface("GRAPH.BDY")->blit(_bg);
 	}
 	else
 	{
-		_game->getResourcePack()->getSurface("GRAPHS.SPK")->blit(_bg);
+		_game->getRuleset()->getSurface("GRAPHS.SPK")->blit(_bg);
 	}
 
 	_txtTitle->setAlign(ALIGN_CENTER);

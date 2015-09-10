@@ -18,7 +18,7 @@
  */
 #include "BasescapeState.h"
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
@@ -106,13 +106,13 @@ BasescapeState::BasescapeState(Base *base, Globe *globe) : _base(base), _globe(g
 	centerAllSurfaces();
 
 	// Set up objects
-	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
+	_view->setTexture(_game->getRuleset()->getSurfaceSet("BASEBITS.PCK"));
 	_view->onMouseClick((ActionHandler)&BasescapeState::viewLeftClick, SDL_BUTTON_LEFT);
 	_view->onMouseClick((ActionHandler)&BasescapeState::viewRightClick, SDL_BUTTON_RIGHT);
 	_view->onMouseOver((ActionHandler)&BasescapeState::viewMouseOver);
 	_view->onMouseOut((ActionHandler)&BasescapeState::viewMouseOut);
 
-	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
+	_mini->setTexture(_game->getRuleset()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
 	_mini->onMouseClick((ActionHandler)&BasescapeState::miniClick);
 	_mini->onKeyboardPress((ActionHandler)&BasescapeState::handleKeyPress);

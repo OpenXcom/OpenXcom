@@ -25,7 +25,7 @@
 #include "Language.h"
 #include "LocalizedText.h"
 #include "Palette.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Interface/Window.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
@@ -107,7 +107,7 @@ void State::setInterface(const std::string& category, bool alterPal, SavedBattle
 		}
 		if (!_ruleInterface->getMusic().empty())
 		{
-			_game->getResourcePack()->playMusic(_ruleInterface->getMusic());
+			_game->getRuleset()->playMusic(_ruleInterface->getMusic());
 		}
 	}
 	if (battleGame)
@@ -141,8 +141,8 @@ void State::add(Surface *surface)
 	surface->setPalette(_palette);
 
 	// Set default text resources
-	if (_game->getLanguage() && _game->getResourcePack())
-		surface->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
+	if (_game->getLanguage() && _game->getRuleset())
+		surface->initText(_game->getRuleset()->getFont("FONT_BIG"), _game->getRuleset()->getFont("FONT_SMALL"), _game->getLanguage());
 
 	_surfaces.push_back(surface);
 }
@@ -207,8 +207,8 @@ void State::add(Surface *surface, const std::string &id, const std::string &cate
 	}
 
 	// Set default text resources
-	if (_game->getLanguage() && _game->getResourcePack())
-		surface->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
+	if (_game->getLanguage() && _game->getRuleset())
+		surface->initText(_game->getRuleset()->getFont("FONT_BIG"), _game->getRuleset()->getFont("FONT_SMALL"), _game->getLanguage());
 
 	_surfaces.push_back(surface);
 }
@@ -252,9 +252,9 @@ void State::init()
 	_game->getFpsCounter()->setPalette(_palette);
 	_game->getFpsCounter()->setColor(_cursorColor);
 	_game->getFpsCounter()->draw();
-	if (_game->getResourcePack() != 0)
+	if (_game->getRuleset() != 0)
 	{
-		_game->getResourcePack()->setPalette(_palette);
+		_game->getRuleset()->setPalette(_palette);
 	}
 }
 
@@ -394,7 +394,7 @@ void State::applyBattlescapeTheme()
 		{
 			window->setColor(element->color);
 			window->setHighContrast(true);
-			window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
+			window->setBackground(_game->getRuleset()->getSurface("TAC00.SCR"));
 			continue;
 		}
 		Text* text = dynamic_cast<Text*>(*i);
@@ -498,9 +498,9 @@ void State::setPalette(SDL_Color *colors, int firstcolor, int ncolors, bool imme
 		_game->getCursor()->draw();
 		_game->getFpsCounter()->setPalette(_palette);
 		_game->getFpsCounter()->draw();
-		if (_game->getResourcePack() != 0)
+		if (_game->getRuleset() != 0)
 		{
-			_game->getResourcePack()->setPalette(_palette);
+			_game->getRuleset()->setPalette(_palette);
 		}
 	}
 }
@@ -512,29 +512,29 @@ void State::setPalette(SDL_Color *colors, int firstcolor, int ncolors, bool imme
  */
 void State::setPalette(const std::string &palette, int backpals)
 {
-	setPalette(_game->getResourcePack()->getPalette(palette)->getColors(), 0, 256, false);
+	setPalette(_game->getRuleset()->getPalette(palette)->getColors(), 0, 256, false);
 	if (palette == "PAL_GEOSCAPE")
 	{
-		_cursorColor = ResourcePack::GEOSCAPE_CURSOR;
+		_cursorColor = Ruleset::GEOSCAPE_CURSOR;
 	}
 	else if (palette == "PAL_BASESCAPE")
 	{
-		_cursorColor = ResourcePack::BASESCAPE_CURSOR;
+		_cursorColor = Ruleset::BASESCAPE_CURSOR;
 	}
 	else if (palette == "PAL_UFOPAEDIA")
 	{
-		_cursorColor = ResourcePack::UFOPAEDIA_CURSOR;
+		_cursorColor = Ruleset::UFOPAEDIA_CURSOR;
 	}
 	else if (palette == "PAL_GRAPHS")
 	{
-		_cursorColor = ResourcePack::GRAPHS_CURSOR;
+		_cursorColor = Ruleset::GRAPHS_CURSOR;
 	}
 	else
 	{
-		_cursorColor = ResourcePack::BATTLESCAPE_CURSOR;
+		_cursorColor = Ruleset::BATTLESCAPE_CURSOR;
 	}
 	if (backpals != -1)
-		setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(backpals)), Palette::backPos, 16, false);
+		setPalette(_game->getRuleset()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(backpals)), Palette::backPos, 16, false);
 	setPalette(NULL); // delay actual update to the end
 }
 

@@ -30,7 +30,7 @@
 #include "../Battlescape/BattlescapeState.h"
 #include "../Battlescape/BattlescapeGame.h"
 #include "../Battlescape/Position.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Mod/Ruleset.h"
 #include "../Mod/Armor.h"
 #include "../Engine/Game.h"
@@ -326,17 +326,16 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 
 /**
  * Loads the resources required by the map in the battle save.
- * @param game Pointer to the game.
+ * @param rules Pointer to the ruleset.
  */
-void SavedBattleGame::loadMapResources(Game *game)
+void SavedBattleGame::loadMapResources(Ruleset *rules)
 {
-	ResourcePack *res = game->getResourcePack();
 	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
 		(*i)->loadData();
-		if (game->getRuleset()->getMCDPatch((*i)->getName()))
+		if (rules->getMCDPatch((*i)->getName()))
 		{
-			game->getRuleset()->getMCDPatch((*i)->getName())->modifyData(*i);
+			rules->getMCDPatch((*i)->getName())->modifyData(*i);
 		}
 	}
 
@@ -354,7 +353,7 @@ void SavedBattleGame::loadMapResources(Game *game)
 		}
 	}
 
-	initUtilities(res);
+	initUtilities(rules);
 	getTileEngine()->calculateSunShading();
 	getTileEngine()->calculateTerrainLighting();
 	getTileEngine()->calculateUnitLighting();
@@ -508,12 +507,12 @@ void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
  * Initializes the map utilities.
  * @param res Pointer to resource pack.
  */
-void SavedBattleGame::initUtilities(ResourcePack *res)
+void SavedBattleGame::initUtilities(Ruleset *rules)
 {
 	delete _pathfinding;
 	delete _tileEngine;
 	_pathfinding = new Pathfinding(this);
-	_tileEngine = new TileEngine(this, res->getVoxelData());
+	_tileEngine = new TileEngine(this, rules->getVoxelData());
 }
 
 /**

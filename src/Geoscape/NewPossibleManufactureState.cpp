@@ -19,7 +19,7 @@
 #include "NewPossibleManufactureState.h"
 #include "../Engine/Game.h"
 #include "../Engine/LocalizedText.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -59,7 +59,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(Base * base, const std:
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK17.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewPossibleManufactureState::btnOkClick);

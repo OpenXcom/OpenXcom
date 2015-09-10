@@ -24,7 +24,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Mod/Polygon.h"
 #include "../Mod/Polyline.h"
 #include "../Engine/FastLineClip.h"
@@ -261,8 +261,8 @@ Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y
 																					_isMouseScrolling(false), _isMouseScrolled(false), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _lonBeforeMouseScrolling(0.0), _latBeforeMouseScrolling(0.0), _mouseScrollingStartTime(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(false)
 {
 	_rules = game->getRuleset()->getGlobe();
-	_texture = new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
-	_markerSet = new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("GlobeMarkers"));
+	_texture = new SurfaceSet(*_game->getRuleset()->getSurfaceSet("TEXTURE.DAT"));
+	_markerSet = new SurfaceSet(*_game->getRuleset()->getSurfaceSet("GlobeMarkers"));
 
 	_countries = new Surface(width, height, x, y);
 	_markers = new Surface(width, height, x, y);
@@ -1284,7 +1284,7 @@ void Globe::drawDetail()
 	{
 		Text *label = new Text(100, 9, 0, 0);
 		label->setPalette(getPalette());
-		label->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
+		label->initText(_game->getRuleset()->getFont("FONT_BIG"), _game->getRuleset()->getFont("FONT_SMALL"), _game->getLanguage());
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(COUNTRY_LABEL_COLOR);
 
@@ -1312,7 +1312,7 @@ void Globe::drawDetail()
 	{
 		Text *label = new Text(100, 9, 0, 0);
 		label->setPalette(getPalette());
-		label->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
+		label->initText(_game->getRuleset()->getFont("FONT_BIG"), _game->getRuleset()->getFont("FONT_SMALL"), _game->getLanguage());
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(CITY_LABEL_COLOR);
 

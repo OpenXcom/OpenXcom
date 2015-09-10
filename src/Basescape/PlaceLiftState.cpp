@@ -18,7 +18,7 @@
  */
 #include "PlaceLiftState.h"
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
@@ -56,7 +56,7 @@ PlaceLiftState::PlaceLiftState(Base *base, Globe *globe, bool first) : _base(bas
 	centerAllSurfaces();
 
 	// Set up objects
-	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
+	_view->setTexture(_game->getRuleset()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
 	for (std::vector<std::string>::const_iterator i = _game->getRuleset()->getBaseFacilitiesList().begin(); i != _game->getRuleset()->getBaseFacilitiesList().end(); ++i)
 	{

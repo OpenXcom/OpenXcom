@@ -26,7 +26,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/LocalizedText.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -51,7 +51,7 @@ namespace OpenXcom
 		add(_txtTitle);
 
 		// Set up objects
-		_game->getResourcePack()->getSurface("BACK11.SCR")->blit(_bg);
+		_game->getRuleset()->getSurface("BACK11.SCR")->blit(_bg);
 		_btnOk->setColor(Palette::blockOffset(8)+5);
 		_btnPrev->setColor(Palette::blockOffset(8)+5);
 		_btnNext->setColor(Palette::blockOffset(8)+5);
@@ -65,7 +65,7 @@ namespace OpenXcom
 		add(_image);
 
 		RuleInterface *dogfightInterface = _game->getRuleset()->getInterface("dogfight");
-		Surface *graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
+		Surface *graphic = _game->getRuleset()->getSurface("INTERWIN.DAT");
 		graphic->setX(0);
 		graphic->setY(0);
 		graphic->getCrop()->x = 0;
@@ -82,7 +82,7 @@ namespace OpenXcom
 		}
 		else
 		{
-			graphic = _game->getResourcePack()->getSurface(ufo->getModSprite());
+			graphic = _game->getRuleset()->getSurface(ufo->getModSprite());
 		}
 		graphic->setX(0);
 		graphic->setY(0);

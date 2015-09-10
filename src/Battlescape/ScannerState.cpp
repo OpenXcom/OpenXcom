@@ -26,7 +26,7 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Options.h"
 #include "../Savegame/BattleUnit.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 
@@ -64,8 +64,8 @@ ScannerState::ScannerState (BattleAction *action) : _action(action)
 
 	centerAllSurfaces();
 
-	_game->getResourcePack()->getSurface("DETBORD.PCK")->blit(_bg);
-	_game->getResourcePack()->getSurface("DETBORD2.PCK")->blit(_scan);
+	_game->getRuleset()->getSurface("DETBORD.PCK")->blit(_bg);
+	_game->getRuleset()->getSurface("DETBORD2.PCK")->blit(_scan);
 	_bg->onMouseClick((ActionHandler)&ScannerState::exitClick);
 	_bg->onKeyboardPress((ActionHandler)&ScannerState::exitClick, Options::keyCancel);
 

@@ -26,7 +26,7 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Mod/Ruleset.h"
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
@@ -314,16 +314,16 @@ void UnitDieBState::playDeathSound()
 	{
 		if (_unit->getGender() == GENDER_MALE)
 		{
-			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::MALE_SCREAM[RNG::generate(0, 2)])->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
+			_parent->getRuleset()->getSoundByDepth(_parent->getDepth(), Ruleset::MALE_SCREAM[RNG::generate(0, 2)])->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 		}
 		else
 		{
-			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::FEMALE_SCREAM[RNG::generate(0, 2)])->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
+			_parent->getRuleset()->getSoundByDepth(_parent->getDepth(), Ruleset::FEMALE_SCREAM[RNG::generate(0, 2)])->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 		}
 	}
 	else if (_unit->getDeathSound() >= 0)
 	{
-		_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _unit->getDeathSound())->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
+		_parent->getRuleset()->getSoundByDepth(_parent->getDepth(), _unit->getDeathSound())->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 	}
 }
 

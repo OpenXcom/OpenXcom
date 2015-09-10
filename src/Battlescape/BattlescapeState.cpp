@@ -59,7 +59,7 @@
 #include "../Menu/PauseState.h"
 #include "../Menu/LoadGameState.h"
 #include "../Menu/SaveGameState.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Mod/RuleItem.h"
 #include "../Mod/AlienDeployment.h"
 #include "../Mod/Armor.h"
@@ -176,10 +176,10 @@ BattlescapeState::BattlescapeState() : _reserve(0), _xBeforeMouseScrolling(0), _
 	add(_icons);
 	
 	// Add in custom reserve buttons
-	Surface *icons = _game->getResourcePack()->getSurface("ICONS.PCK");
-	if (_game->getResourcePack()->getSurface("TFTDReserve"))
+	Surface *icons = _game->getRuleset()->getSurface("ICONS.PCK");
+	if (_game->getRuleset()->getSurface("TFTDReserve"))
 	{
-		Surface *tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve");
+		Surface *tftdIcons = _game->getRuleset()->getSurface("TFTDReserve");
 		tftdIcons->setX(48);
 		tftdIcons->setY(176);
 		tftdIcons->blit(icons);
@@ -245,9 +245,9 @@ BattlescapeState::BattlescapeState() : _reserve(0), _xBeforeMouseScrolling(0), _
 	add(_txtDebug);
 	add(_txtTooltip, "textTooltip", "battlescape", _icons);
 	add(_btnLaunch);
-	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(0)->blit(_btnLaunch);
+	_game->getRuleset()->getSurfaceSet("SPICONS.DAT")->getFrame(0)->blit(_btnLaunch);
 	add(_btnPsi);
-	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
+	_game->getRuleset()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
 
 	// Set up objects
 	_save = _game->getSavedGame()->getSavedBattle();
@@ -457,11 +457,11 @@ BattlescapeState::BattlescapeState() : _reserve(0), _xBeforeMouseScrolling(0), _
 	// Set music
 	if (_save->getMusic() == "")
 	{
-		_game->getResourcePack()->playMusic("GMTACTIC");
+		_game->getRuleset()->playMusic("GMTACTIC");
 	}
 	else
 	{
-		_game->getResourcePack()->playMusic(_save->getMusic());
+		_game->getRuleset()->playMusic(_save->getMusic());
 	}
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);
@@ -495,7 +495,7 @@ void BattlescapeState::init()
 {
 	if (_save->getAmbientSound() != -1)
 	{
-		_game->getResourcePack()->getSoundByDepth(_save->getDepth(), _save->getAmbientSound())->loop();
+		_game->getRuleset()->getSoundByDepth(_save->getDepth(), _save->getAmbientSound())->loop();
 		_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 	}
 
@@ -1208,7 +1208,7 @@ void BattlescapeState::btnReloadClick(Action *)
 {
 	if (playableUnitSelected() && _save->getSelectedUnit()->checkAmmo())
 	{
-		_game->getResourcePack()->getSoundByDepth(_save->getDepth(), ResourcePack::ITEM_RELOAD)->play(-1, getMap()->getSoundAngle(_save->getSelectedUnit()->getPosition()));
+		_game->getRuleset()->getSoundByDepth(_save->getDepth(), Ruleset::ITEM_RELOAD)->play(-1, getMap()->getSoundAngle(_save->getSelectedUnit()->getPosition()));
 		updateSoldierInfo();
 	}
 }
@@ -1276,7 +1276,7 @@ void BattlescapeState::updateSoldierInfo()
 	Soldier *soldier = battleUnit->getGeoscapeSoldier();
 	if (soldier != 0)
 	{
-		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
+		SurfaceSet *texture = _game->getRuleset()->getSurfaceSet("SMOKE.PCK");
 		texture->getFrame(20 + soldier->getRank())->blit(_rank);
 	}
 	else
@@ -1302,7 +1302,7 @@ void BattlescapeState::updateSoldierInfo()
 	_numAmmoLeft->setVisible(false);
 	if (leftHandItem)
 	{
-		leftHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnLeftHandItem);
+		leftHandItem->getRules()->drawHandSprite(_game->getRuleset()->getSurfaceSet("BIGOBS.PCK"), _btnLeftHandItem);
 		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM && (leftHandItem->needsAmmo() || leftHandItem->getRules()->getClipSize() > 0))
 		{
 			_numAmmoLeft->setVisible(true);
@@ -1317,7 +1317,7 @@ void BattlescapeState::updateSoldierInfo()
 	_numAmmoRight->setVisible(false);
 	if (rightHandItem)
 	{
-		rightHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnRightHandItem);
+		rightHandItem->getRules()->drawHandSprite(_game->getRuleset()->getSurfaceSet("BIGOBS.PCK"), _btnRightHandItem);
 		if (rightHandItem->getRules()->getBattleType() == BT_FIREARM && (rightHandItem->needsAmmo() || rightHandItem->getRules()->getClipSize() > 0))
 		{
 			_numAmmoRight->setVisible(true);
@@ -1903,7 +1903,7 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 	_game->getCursor()->setVisible(true);
 	if (_save->getAmbientSound() != -1)
 	{
-		_game->getResourcePack()->getSoundByDepth(0, _save->getAmbientSound())->stopLoop();
+		_game->getRuleset()->getSoundByDepth(0, _save->getAmbientSound())->stopLoop();
 	}
 	std::string nextStage;
 	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")

@@ -24,7 +24,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Action.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
@@ -86,7 +86,7 @@ ListLoadOriginalState::ListLoadOriginalState()
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
 
 	_btnNew->setText(tr("STR_OPENXCOM"));
 	_btnNew->onMouseClick((ActionHandler)&ListLoadOriginalState::btnNewClick);
@@ -183,7 +183,7 @@ void ListLoadOriginalState::btnSlotClick(Action *action)
 			_game->setState(new GeoscapeState);
 			if (_game->getSavedGame()->getSavedBattle() != 0)
 			{
-				_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
+				_game->getSavedGame()->getSavedBattle()->loadMapResources(_game->getRuleset());
 				Options::baseXResolution = Options::baseXBattlescape;
 				Options::baseYResolution = Options::baseYBattlescape;
 				_game->getScreen()->resetDisplay(false);

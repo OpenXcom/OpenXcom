@@ -18,7 +18,7 @@
  */
 #include "MissionDetectedState.h"
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -64,7 +64,7 @@ MissionDetectedState::MissionDetectedState(MissionSite *mission, GeoscapeState *
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK03.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK03.SCR"));
 
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)&MissionDetectedState::btnInterceptClick);

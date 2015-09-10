@@ -42,7 +42,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Sound.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Interface/Cursor.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -252,7 +252,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	{
 		if (unit->getAggroSound() != -1 && !_playedAggroSound)
 		{
-			getResourcePack()->getSoundByDepth(_save->getDepth(), unit->getAggroSound())->play(-1, getMap()->getSoundAngle(unit->getPosition()));
+			getRuleset()->getSoundByDepth(_save->getDepth(), unit->getAggroSound())->play(-1, getMap()->getSoundAngle(unit->getPosition()));
 			_playedAggroSound = true;
 		}
 	}
@@ -371,9 +371,9 @@ void BattlescapeGame::endTurn()
 
 	if (!_endTurnProcessed)
 	{
-		if (_save->getTileEngine()->closeUfoDoors() && ResourcePack::SLIDING_DOOR_CLOSE != -1)
+		if (_save->getTileEngine()->closeUfoDoors() && Ruleset::SLIDING_DOOR_CLOSE != -1)
 		{
-			getResourcePack()->getSoundByDepth(_save->getDepth(), ResourcePack::SLIDING_DOOR_CLOSE)->play(); // ufo door closed
+			getRuleset()->getSoundByDepth(_save->getDepth(), Ruleset::SLIDING_DOOR_CLOSE)->play(); // ufo door closed
 		}
 
 		// check for hot grenades on the ground
@@ -1228,7 +1228,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				{
 					if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 					{
-						_parentState->getGame()->getResourcePack()->getSoundByDepth(_save->getDepth(), _currentAction.weapon->getRules()->getHitSound())->play(-1, getMap()->getSoundAngle(pos));
+						_parentState->getGame()->getRuleset()->getSoundByDepth(_save->getDepth(), _currentAction.weapon->getRules()->getHitSound())->play(-1, getMap()->getSoundAngle(pos));
 						_parentState->getGame()->pushState (new UnitInfoState(_save->selectUnit(pos), _parentState, false, true));
 						cancelCurrentAction();
 					}
@@ -1584,18 +1584,10 @@ Pathfinding *BattlescapeGame::getPathfinding()
 	return _save->getPathfinding();
 }
 /**
- * Gets the resourcepack.
- * @return resourcepack.
- */
-ResourcePack *BattlescapeGame::getResourcePack()
-{
-	return _parentState->getGame()->getResourcePack();
-}
-/**
  * Gets the ruleset.
  * @return ruleset.
  */
-const Ruleset *BattlescapeGame::getRuleset() const
+Ruleset *BattlescapeGame::getRuleset()
 {
 	return _parentState->getGame()->getRuleset();
 }

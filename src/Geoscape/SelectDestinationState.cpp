@@ -21,7 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Action.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Surface.h"
 #include "../Interface/Window.h"
@@ -119,7 +119,7 @@ SelectDestinationState::SelectDestinationState(Craft *craft, Globe *globe) : _cr
 	_btnRotateUp->setListButton();
 	_btnRotateDown->setListButton();
 
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
 
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&SelectDestinationState::btnCancelClick);

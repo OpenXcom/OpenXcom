@@ -26,7 +26,7 @@
 #include "../Interface/Window.h"
 #include "InventoryState.h"
 #include "NextTurnState.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -77,13 +77,13 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 	{
 		setPalette("PAL_GEOSCAPE", 0);
 		_musicId = "GMDEFEND";
-		_window->setBackground(_game->getResourcePack()->getSurface("BACK16.SCR"));
+		_window->setBackground(_game->getRuleset()->getSurface("BACK16.SCR"));
 	}
 	else
 	{
 		BriefingData data = deployment->getBriefingData();
 		setPalette("PAL_GEOSCAPE", data.palette);
-		_window->setBackground(_game->getResourcePack()->getSurface(data.background));
+		_window->setBackground(_game->getRuleset()->getSurface(data.background));
 		_txtCraft->setY(56 + data.textOffset);
 		_txtBriefing->setY(72 + data.textOffset);
 		_txtTarget->setVisible(data.showTarget);
@@ -168,7 +168,7 @@ void BriefingState::init()
 	}
 	else
 	{
-		_game->getResourcePack()->playMusic(_musicId);
+		_game->getRuleset()->playMusic(_musicId);
 	}
 }
 

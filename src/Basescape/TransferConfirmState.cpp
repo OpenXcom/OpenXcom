@@ -19,7 +19,7 @@
 #include <sstream>
 #include "TransferConfirmState.h"
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
@@ -62,7 +62,7 @@ TransferConfirmState::TransferConfirmState(Base *base, TransferItemsState *state
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK13.SCR"));
 
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferConfirmState::btnCancelClick);

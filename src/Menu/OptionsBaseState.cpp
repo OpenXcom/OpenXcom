@@ -22,7 +22,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Screen.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Interface/Window.h"
@@ -91,7 +91,7 @@ OptionsBaseState::OptionsBaseState(OptionsOrigin origin) : _origin(origin)
 	add(_txtTooltip, "tooltip", "optionsMenu");
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
 
 	_btnVideo->setText(tr("STR_VIDEO"));
 	_btnVideo->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress, SDL_BUTTON_LEFT);

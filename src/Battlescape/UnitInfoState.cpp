@@ -24,7 +24,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Engine/Screen.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/Bar.h"
 #include "../Interface/Text.h"
@@ -250,7 +250,7 @@ UnitInfoState::UnitInfoState(BattleUnit *unit, BattlescapeState *parent, bool fr
 	centerAllSurfaces();
 
 	// Set up objects
-	_game->getResourcePack()->getSurface("UNIBORD.PCK")->blit(_bg);
+	_game->getRuleset()->getSurface("UNIBORD.PCK")->blit(_bg);
 
 	_exit->onMouseClick((ActionHandler)&UnitInfoState::exitClick);
 	_exit->onKeyboardPress((ActionHandler)&UnitInfoState::exitClick, Options::keyCancel);

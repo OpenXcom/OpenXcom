@@ -19,7 +19,7 @@
 #include "ScannerView.h"
 #include "../Engine/Game.h"
 #include "../Engine/SurfaceSet.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/Action.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Tile.h"
@@ -48,7 +48,7 @@ ScannerView::ScannerView (int w, int h, int x, int y, Game * game, BattleUnit *u
  */
 void ScannerView::draw()
 {
-	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("DETBLOB.DAT");
+	SurfaceSet *set = _game->getRuleset()->getSurfaceSet("DETBLOB.DAT");
 	Surface *surface = 0;
 
 	clear();

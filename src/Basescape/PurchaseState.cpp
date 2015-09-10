@@ -24,7 +24,7 @@
 #include <iomanip>
 #include "../fmath.h"
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
@@ -87,7 +87,7 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _itemOffset(0),
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK13.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&PurchaseState::btnOkClick);

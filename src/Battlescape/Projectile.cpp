@@ -25,7 +25,7 @@
 #include "Particle.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Mod/RuleItem.h"
 #include "../Mod/MapData.h"
 #include "../Savegame/BattleUnit.h"
@@ -40,14 +40,14 @@ namespace OpenXcom
 
 /**
  * Sets up a UnitSprite with the specified size and position.
- * @param res Pointer to resourcepack.
+ * @param rules Pointer to ruleset.
  * @param save Pointer to battlesavegame.
  * @param action An action.
  * @param origin Position the projectile originates from.
  * @param targetVoxel Position the projectile is targeting.
  * @param ammo the ammo that produced this projectile, where applicable.
  */
-Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin, Position targetVoxel, BattleItem *ammo) : _res(res), _save(save), _action(action), _origin(origin), _targetVoxel(targetVoxel), _position(0), _bulletSprite(-1), _reversed(false), _vaporColor(-1), _vaporDensity(-1), _vaporProbability(5)
+Projectile::Projectile(Ruleset *rules, SavedBattleGame *save, BattleAction action, Position origin, Position targetVoxel, BattleItem *ammo) : _rules(rules), _save(save), _action(action), _origin(origin), _targetVoxel(targetVoxel), _position(0), _bulletSprite(-1), _reversed(false), _vaporColor(-1), _vaporDensity(-1), _vaporProbability(5)
 {
 	// this is the number of pixels the sprite will move between frames
 	_speed = Options::battleFireSpeed;
@@ -55,7 +55,7 @@ Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction ac
 	{
 		if (_action.type == BA_THROW)
 		{
-			_sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
+			_sprite = _rules->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
 		}
 		else
 		{

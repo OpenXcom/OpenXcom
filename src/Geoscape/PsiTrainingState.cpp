@@ -20,7 +20,7 @@
 #include "PsiTrainingState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -52,7 +52,7 @@ PsiTrainingState::PsiTrainingState()
 	add(_txtTitle, "text", "psiTraining");
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&PsiTrainingState::btnOkClick);

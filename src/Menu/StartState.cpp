@@ -33,7 +33,6 @@
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
-#include "../Mod/XcomResourcePack.h"
 #include "MainMenuState.h"
 #include "CutsceneState.h"
 #include <SDL_mixer.h>
@@ -128,7 +127,6 @@ void StartState::init()
 	// Silence!
 	Sound::stop();
 	Music::stop();
-	_game->setResourcePack(0);
 	if (!Options::mute && Options::reload)
 	{
 		Mix_CloseAudio();
@@ -280,12 +278,9 @@ int StartState::load(void *game_ptr)
 	Game *game = (Game*)game_ptr;
 	try
 	{
-		Log(LOG_INFO) << "Loading rulesets...";
+		Log(LOG_INFO) << "Loading data...";
 		game->loadRulesets();
-		Log(LOG_INFO) << "Rulesets loaded successfully.";
-		Log(LOG_INFO) << "Loading resources...";
-		game->setResourcePack(new XcomResourcePack(game->getRuleset()));
-		Log(LOG_INFO) << "Resources loaded successfully.";
+		Log(LOG_INFO) << "Data loaded successfully.";
 		Log(LOG_INFO) << "Loading language...";
 		game->defaultLanguage();
 		Log(LOG_INFO) << "Language loaded successfully.";

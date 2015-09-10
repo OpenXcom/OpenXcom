@@ -18,7 +18,7 @@
  */
 #include "BuildFacilitiesState.h"
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
@@ -60,7 +60,7 @@ BuildFacilitiesState::BuildFacilitiesState(Base *base, State *state) : _base(bas
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK05.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BuildFacilitiesState::btnOkClick);

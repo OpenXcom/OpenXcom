@@ -21,7 +21,7 @@
 #include "../fmath.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Timer.h"
@@ -127,7 +127,7 @@ BuildNewBaseState::BuildNewBaseState(Base *base, Globe *globe, bool first) : _ba
 	_btnRotateUp->setListButton();
 	_btnRotateDown->setListButton();
 
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
 
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&BuildNewBaseState::btnCancelClick);

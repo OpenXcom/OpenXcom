@@ -18,7 +18,7 @@
  */
 #include "PauseState.h"
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -77,7 +77,7 @@ PauseState::PauseState(OptionsOrigin origin) : _origin(origin)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
 
 	_btnLoad->setText(tr("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&PauseState::btnLoadClick);

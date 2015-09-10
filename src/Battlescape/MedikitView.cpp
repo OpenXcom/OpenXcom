@@ -21,7 +21,7 @@
 #include "../Mod/Ruleset.h"
 #include "../Mod/RuleInterface.h"
 #include "../Engine/SurfaceSet.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/Action.h"
 #include "../Engine/Language.h"
 #include "../Savegame/BattleUnit.h"
@@ -64,7 +64,7 @@ MedikitView::MedikitView (int w, int h, int x, int y, Game * game, BattleUnit *u
  */
 void MedikitView::draw()
 {
-	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
+	SurfaceSet *set = _game->getRuleset()->getSurfaceSet("MEDIBITS.DAT");
 	int fatal_wound = _unit->getFatalWound(_selectedPart);
 	std::wostringstream ss, ss1;
 	int green = 0;
@@ -102,7 +102,7 @@ void MedikitView::draw()
  */
 void MedikitView::mouseClick (Action *action, State *)
 {
-	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
+	SurfaceSet *set = _game->getRuleset()->getSurfaceSet("MEDIBITS.DAT");
 	int x = action->getRelativeXMouse() / action->getXScale();
 	int y = action->getRelativeYMouse() / action->getYScale();
 	for (unsigned int i = 0; i < set->getTotalFrames(); i++)

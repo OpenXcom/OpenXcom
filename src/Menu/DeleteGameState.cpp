@@ -23,7 +23,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/Window.h"
 #include "../Interface/TextButton.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/Options.h"
 #include "ErrorMessageState.h"
 #include "../Savegame/SavedGame.h"
@@ -61,7 +61,7 @@ DeleteGameState::DeleteGameState(OptionsOrigin origin, const std::string &save) 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
 
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&DeleteGameState::btnYesClick);

@@ -24,7 +24,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Mod/RuleManufacture.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
@@ -80,7 +80,7 @@ ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item
 
 	centerAllSurfaces();
 
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK17.SCR"));
 
 	_txtTitle->setText(tr(_item->getName()));
 	_txtTitle->setBig();

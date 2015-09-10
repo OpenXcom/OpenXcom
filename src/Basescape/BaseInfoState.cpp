@@ -20,7 +20,7 @@
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/Bar.h"
@@ -164,9 +164,9 @@ BaseInfoState::BaseInfoState(Base *base, BasescapeState *state) : _base(base), _
 		ss << "ALT";
 	}
 	ss << "BACK07.SCR";
-	_game->getResourcePack()->getSurface(ss.str())->blit(_bg);
+	_game->getRuleset()->getSurface(ss.str())->blit(_bg);
 
-	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
+	_mini->setTexture(_game->getRuleset()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
 	for (size_t i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
 	{

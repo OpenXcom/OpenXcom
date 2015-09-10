@@ -28,7 +28,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Mod/RuleItem.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include <sstream>
 #include "../Engine/Options.h"
 #include "../Savegame/SavedGame.h"
@@ -166,7 +166,7 @@ MedikitState::MedikitState (BattleUnit *targetUnit, BattleAction *action) : _tar
 
 	centerAllSurfaces();
 
-	_game->getResourcePack()->getSurface("MEDIBORD.PCK")->blit(_bg);
+	_game->getRuleset()->getSurface("MEDIBORD.PCK")->blit(_bg);
 	_pkText->setBig();
 	_stimulantTxt->setBig();
 	_healTxt->setBig();

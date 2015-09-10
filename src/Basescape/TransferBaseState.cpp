@@ -19,7 +19,7 @@
 #include "TransferBaseState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
@@ -65,7 +65,7 @@ TransferBaseState::TransferBaseState(Base *base) : _base(base)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK13.SCR"));
 
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferBaseState::btnCancelClick);

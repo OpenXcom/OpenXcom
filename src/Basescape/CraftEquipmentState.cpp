@@ -24,7 +24,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Timer.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
@@ -94,7 +94,7 @@ CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _c
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK04.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftEquipmentState::btnOkClick);

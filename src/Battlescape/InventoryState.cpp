@@ -20,7 +20,7 @@
 #include "Inventory.h"
 #include "../Engine/Game.h"
 #include "../Engine/FileMap.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Palette.h"
@@ -104,7 +104,7 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	add(_bg);
 
 	// Set up objects
-	_game->getResourcePack()->getSurface("TAC01.SCR")->blit(_bg);
+	_game->getRuleset()->getSurface("TAC01.SCR")->blit(_bg);
 
 	add(_soldier);
 	add(_txtName, "textName", "inventory", _bg);
@@ -315,7 +315,7 @@ void InventoryState::init()
 	Soldier *s = unit->getGeoscapeSoldier();
 	if (s)
 	{
-		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
+		SurfaceSet *texture = _game->getRuleset()->getSurfaceSet("SMOKE.PCK");
 		texture->getFrame(20 + s->getRank())->setX(0);
 		texture->getFrame(20 + s->getRank())->setY(0);
 		texture->getFrame(20 + s->getRank())->blit(_btnRank);
@@ -337,15 +337,15 @@ void InventoryState::init()
 		const std::set<std::string> &ufographContents = FileMap::getVFolderContents("UFOGRAPH");
 		std::string lcaseLook = look;
 		std::transform(lcaseLook.begin(), lcaseLook.end(), lcaseLook.begin(), tolower);
-		if (ufographContents.find("lcaseLook") == ufographContents.end() && !_game->getResourcePack()->getSurface(look))
+		if (ufographContents.find("lcaseLook") == ufographContents.end() && !_game->getRuleset()->getSurface(look))
 		{
 			look = s->getArmor()->getSpriteInventory() + ".SPK";
 		}
-		_game->getResourcePack()->getSurface(look)->blit(_soldier);
+		_game->getRuleset()->getSurface(look)->blit(_soldier);
 	}
 	else
 	{
-		Surface *armorSurface = _game->getResourcePack()->getSurface(unit->getArmor()->getSpriteInventory());
+		Surface *armorSurface = _game->getRuleset()->getSurface(unit->getArmor()->getSpriteInventory());
 		if (armorSurface)
 		{
 			armorSurface->blit(_soldier);
@@ -530,7 +530,7 @@ void InventoryState::btnUnloadClick(Action *)
 		_txtAmmo->setText(L"");
 		_selAmmo->clear();
 		updateStats();
-		_game->getResourcePack()->getSoundByDepth(0, ResourcePack::ITEM_DROP)->play();
+		_game->getRuleset()->getSoundByDepth(0, Ruleset::ITEM_DROP)->play();
 	}
 }
 
@@ -589,7 +589,7 @@ void InventoryState::btnCreateTemplateClick(Action *)
 	}
 
 	// give audio feedback
-	_game->getResourcePack()->getSoundByDepth(_battleGame->getDepth(), ResourcePack::ITEM_DROP)->play();
+	_game->getRuleset()->getSoundByDepth(_battleGame->getDepth(), Ruleset::ITEM_DROP)->play();
 	_refreshMouse();
 }
 
@@ -723,7 +723,7 @@ void InventoryState::btnApplyTemplateClick(Action *)
 	_refreshMouse();
 
 	// give audio feedback
-	_game->getResourcePack()->getSoundByDepth(_battleGame->getDepth(), ResourcePack::ITEM_DROP)->play();
+	_game->getRuleset()->getSoundByDepth(_battleGame->getDepth(), Ruleset::ITEM_DROP)->play();
 }
 
 void InventoryState::_refreshMouse()
@@ -757,7 +757,7 @@ void InventoryState::onClearInventory(Action *)
 	_refreshMouse();
 
 	// give audio feedback
-	_game->getResourcePack()->getSoundByDepth(_battleGame->getDepth(), ResourcePack::ITEM_DROP)->play();
+	_game->getRuleset()->getSoundByDepth(_battleGame->getDepth(), Ruleset::ITEM_DROP)->play();
 }
 
 /**
@@ -813,7 +813,7 @@ void InventoryState::invMouseOver(Action *)
 			r.w -= 2;
 			r.h -= 2;
 			_selAmmo->drawRect(&r, Palette::blockOffset(0)+15);
-			item->getAmmoItem()->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selAmmo);
+			item->getAmmoItem()->getRules()->drawHandSprite(_game->getRuleset()->getSurfaceSet("BIGOBS.PCK"), _selAmmo);
 			_updateTemplateButtons(false);
 		}
 		else
@@ -915,15 +915,15 @@ void InventoryState::_updateTemplateButtons(bool isVisible)
 		if (_curInventoryTemplate.empty())
 		{
 			// use "empty template" icons
-			_game->getResourcePack()->getSurface("InvCopy")->blit(_btnCreateTemplate);
-			_game->getResourcePack()->getSurface("InvPasteEmpty")->blit(_btnApplyTemplate);
+			_game->getRuleset()->getSurface("InvCopy")->blit(_btnCreateTemplate);
+			_game->getRuleset()->getSurface("InvPasteEmpty")->blit(_btnApplyTemplate);
 			_btnApplyTemplate->setTooltip("STR_CLEAR_INVENTORY");
 		}
 		else
 		{
 			// use "active template" icons
-			_game->getResourcePack()->getSurface("InvCopyActive")->blit(_btnCreateTemplate);
-			_game->getResourcePack()->getSurface("InvPaste")->blit(_btnApplyTemplate);
+			_game->getRuleset()->getSurface("InvCopyActive")->blit(_btnCreateTemplate);
+			_game->getRuleset()->getSurface("InvPaste")->blit(_btnApplyTemplate);
 			_btnApplyTemplate->setTooltip("STR_APPLY_INVENTORY_TEMPLATE");
 		}
 		_btnCreateTemplate->initSurfaces();

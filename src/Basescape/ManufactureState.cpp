@@ -19,7 +19,7 @@
 #include "ManufactureState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
@@ -80,7 +80,7 @@ ManufactureState::ManufactureState(Base *base) : _base(base)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK17.SCR"));
 
 	_btnNew->setText(tr("STR_NEW_PRODUCTION"));
 	_btnNew->onMouseClick((ActionHandler)&ManufactureState::btnNewProductionClick);

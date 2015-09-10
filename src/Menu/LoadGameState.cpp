@@ -30,7 +30,7 @@
 #include "../Geoscape/GeoscapeState.h"
 #include "ErrorMessageState.h"
 #include "../Battlescape/BattlescapeState.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/Sound.h"
 #include "../Mod/Ruleset.h"
 #include "../Mod/RuleInterface.h"
@@ -106,7 +106,7 @@ void LoadGameState::buildUi(SDL_Color *palette)
 		_txtStatus->setHighContrast(true);
 		if (_game->getSavedGame()->getSavedBattle()->getAmbientSound() != -1)
 		{
-			_game->getResourcePack()->getSoundByDepth(0, _game->getSavedGame()->getSavedBattle()->getAmbientSound())->stopLoop();
+			_game->getRuleset()->getSoundByDepth(0, _game->getSavedGame()->getSavedBattle()->getAmbientSound())->stopLoop();
 		}
 	}
 	else
@@ -163,7 +163,7 @@ void LoadGameState::think()
 			_game->setState(new GeoscapeState);
 			if (_game->getSavedGame()->getSavedBattle() != 0)
 			{
-				_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
+				_game->getSavedGame()->getSavedBattle()->loadMapResources(_game->getRuleset());
 				Options::baseXResolution = Options::baseXBattlescape;
 				Options::baseYResolution = Options::baseYBattlescape;
 				_game->getScreen()->resetDisplay(false);

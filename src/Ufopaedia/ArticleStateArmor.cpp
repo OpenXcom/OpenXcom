@@ -29,7 +29,7 @@
 #include "../Engine/LocalizedText.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/FileMap.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -66,11 +66,11 @@ namespace OpenXcom
 
 		std::string look = armor->getSpriteInventory();
 		look += "M0.SPK";
-		if (!CrossPlatform::fileExists(FileMap::getFilePath("UFOGRAPH/" + look)) && !_game->getResourcePack()->getSurface(look))
+		if (!CrossPlatform::fileExists(FileMap::getFilePath("UFOGRAPH/" + look)) && !_game->getRuleset()->getSurface(look))
 		{
 			look = armor->getSpriteInventory() + ".SPK";
 		}
-		_game->getResourcePack()->getSurface(look)->blit(_image);
+		_game->getRuleset()->getSurface(look)->blit(_image);
 
 
 		_lstInfo = new TextList(150, 96, 150, 46);

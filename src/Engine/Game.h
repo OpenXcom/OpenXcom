@@ -30,7 +30,6 @@ class State;
 class Screen;
 class Cursor;
 class Language;
-class ResourcePack;
 class SavedGame;
 class Ruleset;
 class FpsCounter;
@@ -49,7 +48,6 @@ private:
 	Cursor *_cursor;
 	Language *_lang;
 	std::list<State*> _states, _deleted;
-	ResourcePack *_res;
 	SavedGame *_save;
 	Ruleset *_rules;
 	bool _quit, _init;
@@ -88,10 +86,6 @@ public:
 	Language *getLanguage() const;
 	/// Loads a new language for the game.
 	void loadLanguage(const std::string &filename);
-	/// Gets the currently loaded resource pack.
-	ResourcePack *getResourcePack() const;
-	/// Sets a new resource pack for the game.
-	void setResourcePack(ResourcePack *res);
 	/// Gets the currently loaded saved game.
 	SavedGame *getSavedGame() const;
 	/// Sets a new saved game for the game.

@@ -19,7 +19,7 @@
 #include <assert.h>
 #include "ProductionCompleteState.h"
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -62,7 +62,7 @@ ProductionCompleteState::ProductionCompleteState(Base *base, const std::wstring 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK17.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ProductionCompleteState::btnOkClick);

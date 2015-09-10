@@ -28,7 +28,7 @@
 #include "../Engine/Font.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Engine/SurfaceSet.h"
@@ -63,7 +63,7 @@ Inventory::Inventory(Game *game, int width, int height, int x, int y, bool base)
 	_stackNumber = new NumberText(15, 15, 0, 0);
 	_stackNumber->setBordered(true);
 
-	_warning->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
+	_warning->initText(_game->getRuleset()->getFont("FONT_BIG"), _game->getRuleset()->getFont("FONT_SMALL"), _game->getLanguage());
 	_warning->setColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color2);
 	_warning->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color);
 
@@ -140,7 +140,7 @@ void Inventory::drawGrid()
 	_grid->clear();
 	Text text = Text(80, 9, 0, 0);
 	text.setPalette(_grid->getPalette());
-	text.initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
+	text.initText(_game->getRuleset()->getFont("FONT_BIG"), _game->getRuleset()->getFont("FONT_SMALL"), _game->getLanguage());
 
 	RuleInterface *rule = _game->getRuleset()->getInterface("inventory");
 
@@ -222,7 +222,7 @@ void Inventory::drawItems()
 	Uint8 color = _game->getRuleset()->getInterface("inventory")->getElement("numStack")->color;
 	if (_selUnit != 0)
 	{
-		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
+		SurfaceSet *texture = _game->getRuleset()->getSurfaceSet("BIGOBS.PCK");
 		// Soldier items
 		for (std::vector<BattleItem*>::iterator i = _selUnit->getInventory()->begin(); i != _selUnit->getInventory()->end(); ++i)
 		{
@@ -420,7 +420,7 @@ void Inventory::setSelectedItem(BattleItem *item)
 		{
 			_stackLevel[_selItem->getSlotX()][_selItem->getSlotY()] -= 1;
 		}
-		_selItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selection);
+		_selItem->getRules()->drawHandSprite(_game->getRuleset()->getSurfaceSet("BIGOBS.PCK"), _selection);
 	}
 	drawItems();
 }
@@ -587,7 +587,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							{
 								placed = true;
 								moveItem(item, newSlot, 0, 0);
-								_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_DROP)->play();
+								_game->getRuleset()->getSoundByDepth(_depth, Ruleset::ITEM_DROP)->play();
 								arrangeGround(false);
 							}
 							else
@@ -641,7 +641,7 @@ void Inventory::mouseClick(Action *action, State *state)
 								_stackLevel[x][y] += 1;
 							}
 							setSelectedItem(0);
-							_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_DROP)->play();
+							_game->getRuleset()->getSoundByDepth(_depth, Ruleset::ITEM_DROP)->play();
 						}
 						else
 						{
@@ -655,7 +655,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							moveItem(_selItem, slot, item->getSlotX(), item->getSlotY());
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(0);
-							_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_DROP)->play();
+							_game->getRuleset()->getSoundByDepth(_depth, Ruleset::ITEM_DROP)->play();
 						}
 						else
 						{
@@ -691,7 +691,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							item->setAmmoItem(_selItem);
 							_selItem->moveToOwner(0);
 							setSelectedItem(0);
-							_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_RELOAD)->play();
+							_game->getRuleset()->getSoundByDepth(_depth, Ruleset::ITEM_RELOAD)->play();
 							if (item->getSlot()->getType() == INV_GROUND)
 							{
 								arrangeGround(false);
@@ -722,7 +722,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							moveItem(_selItem, slot, item->getSlotX(), item->getSlotY());
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(0);
-							_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_DROP)->play();
+							_game->getRuleset()->getSoundByDepth(_depth, Ruleset::ITEM_DROP)->play();
 						}
 						else
 						{
@@ -960,7 +960,7 @@ bool Inventory::fitItem(RuleInventory *newSlot, BattleItem *item, std::string &w
 				{
 					placed = true;
 					moveItem(item, newSlot, x2, y2);
-					_game->getResourcePack()->getSoundByDepth(_depth, ResourcePack::ITEM_DROP)->play();
+					_game->getRuleset()->getSoundByDepth(_depth, Ruleset::ITEM_DROP)->play();
 					drawItems();
 				}
 				else
@@ -1023,7 +1023,7 @@ void Inventory::drawPrimers()
 	{
 		_animFrame = 0;
 	}
-	Surface *tempSurface = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(6);
+	Surface *tempSurface = _game->getRuleset()->getSurfaceSet("SCANG.DAT")->getFrame(6);
 	for (std::vector<std::pair<int, int> >::const_iterator i = _grenadeIndicators.begin(); i != _grenadeIndicators.end(); ++i)
 	{
 		tempSurface->blitNShade(_items, (*i).first, (*i).second, Pulsate[_animFrame]);

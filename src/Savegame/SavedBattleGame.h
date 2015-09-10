@@ -31,7 +31,6 @@ class Tile;
 class SavedGame;
 class MapDataSet;
 class Node;
-class Game;
 class BattlescapeState;
 class Position;
 class Pathfinding;
@@ -91,7 +90,7 @@ public:
 	/// Sets the dimensions of the map and initializes it.
 	void initMap(int mapsize_x, int mapsize_y, int mapsize_z);
 	/// Initialises the pathfinding and tileengine.
-	void initUtilities(ResourcePack *res);
+	void initUtilities(Ruleset *rules);
 	/// Gets the game's mapdatafiles.
 	std::vector<MapDataSet*> *getMapDataSets();
 	/// Sets the mission type.
@@ -174,7 +173,7 @@ public:
 	/// Gets debug mode.
 	bool getDebugMode() const;
 	/// Load map resources.
-	void loadMapResources(Game *game);
+	void loadMapResources(Ruleset *rules);
 	/// Resets tiles units are standing on
 	void resetUnitTiles();
 	/// Removes an item from the game.

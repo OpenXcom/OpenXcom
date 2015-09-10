@@ -26,7 +26,7 @@
 #include "../Interface/Window.h"
 #include "NoContainmentState.h"
 #include "PromotionsState.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Mod/Ruleset.h"
 #include "../Mod/RuleCountry.h"
 #include "../Mod/RuleCraft.h"
@@ -111,7 +111,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&DebriefingState::btnOkClick);
@@ -237,11 +237,11 @@ void DebriefingState::init()
 	State::init();
 	if (_positiveScore)
 	{
-		_game->getResourcePack()->playMusic(ResourcePack::DEBRIEF_MUSIC_GOOD);
+		_game->getRuleset()->playMusic(Ruleset::DEBRIEF_MUSIC_GOOD);
 	}
 	else
 	{
-		_game->getResourcePack()->playMusic(ResourcePack::DEBRIEF_MUSIC_BAD);
+		_game->getRuleset()->playMusic(Ruleset::DEBRIEF_MUSIC_BAD);
 	}
 }
 /**

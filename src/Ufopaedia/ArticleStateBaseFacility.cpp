@@ -27,7 +27,7 @@
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/LocalizedText.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -51,7 +51,7 @@ namespace OpenXcom
 		add(_txtTitle);
 
 		// Set up objects
-		_game->getResourcePack()->getSurface("BACK09.SCR")->blit(_bg);
+		_game->getRuleset()->getSurface("BACK09.SCR")->blit(_bg);
 		_btnOk->setColor(Palette::blockOffset(4));
 		_btnPrev->setColor(Palette::blockOffset(4));
 		_btnNext->setColor(Palette::blockOffset(4));
@@ -65,7 +65,7 @@ namespace OpenXcom
 		_image = new Surface(tile_size*2, tile_size*2, 232, 16);
 		add(_image);
 
-		SurfaceSet *graphic = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+		SurfaceSet *graphic = _game->getRuleset()->getSurfaceSet("BASEBITS.PCK");
 		Surface *frame;
 		int x_offset, y_offset;
 		int x_pos, y_pos;

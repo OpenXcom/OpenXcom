@@ -18,7 +18,7 @@
  */
 #include "AlienBaseState.h"
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -59,7 +59,7 @@ AlienBaseState::AlienBaseState(AlienBase *base, GeoscapeState *state) : _state(s
 
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK13.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&AlienBaseState::btnOkClick);

@@ -20,7 +20,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/Frame.h"
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Mod/Ruleset.h"
 #include "../Mod/RuleInterface.h"
 
@@ -36,7 +36,7 @@ namespace OpenXcom
  */
 ActionMenuItem::ActionMenuItem(int id, Game *game, int x, int y) : InteractiveSurface(272, 40, x + 24, y - (id*40)), _highlighted(false), _action(BA_NONE), _tu(0)
 {
-	Font *big = game->getResourcePack()->getFont("FONT_BIG"), *small = game->getResourcePack()->getFont("FONT_SMALL");
+	Font *big = game->getRuleset()->getFont("FONT_BIG"), *small = game->getRuleset()->getFont("FONT_SMALL");
 	Language *lang = game->getLanguage();
 
 	Element *actionMenu = game->getRuleset()->getInterface("battlescape")->getElement("actionMenu");

@@ -30,7 +30,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
 #include "../Engine/Sound.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 
 namespace OpenXcom
 {
@@ -92,7 +92,7 @@ void PsiAttackBState::init()
 	}
 	else if (_item->getRules()->getHitSound() != -1)
 	{
-		_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _item->getRules()->getHitSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
+		_parent->getRuleset()->getSoundByDepth(_parent->getDepth(), _item->getRules()->getHitSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
 	}
 
 	// make a cosmetic explosion

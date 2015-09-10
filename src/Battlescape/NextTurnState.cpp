@@ -21,7 +21,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Screen.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Window.h"
@@ -84,7 +84,7 @@ NextTurnState::NextTurnState(SavedBattleGame *battleGame, BattlescapeState *stat
 	// Set up objects
 	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast(true);
-	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("TAC00.SCR"));
 
 
 	_txtTitle->setBig();

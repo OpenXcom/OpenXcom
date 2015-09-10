@@ -22,7 +22,7 @@
 #include "Map.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Options.h"
 
@@ -77,11 +77,11 @@ void UnitTurnBState::init()
 			int door = _parent->getTileEngine()->unitOpensDoor(_unit, true);
 			if (door == 0)
 			{
-				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::DOOR_OPEN)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition())); // normal door
+				_parent->getRuleset()->getSoundByDepth(_parent->getDepth(), Ruleset::DOOR_OPEN)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition())); // normal door
 			}
 			if (door == 1)
 			{
-				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::SLIDING_DOOR_OPEN)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition())); // ufo door
+				_parent->getRuleset()->getSoundByDepth(_parent->getDepth(), Ruleset::SLIDING_DOOR_OPEN)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition())); // ufo door
 			}
 			if (door == 4)
 			{

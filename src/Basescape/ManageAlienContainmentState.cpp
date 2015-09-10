@@ -22,7 +22,7 @@
 #include <algorithm>
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -96,7 +96,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrig
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface((origin == OPT_BATTLESCAPE)? "BACK01.SCR" : "BACK05.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface((origin == OPT_BATTLESCAPE)? "BACK01.SCR" : "BACK05.SCR"));
 
 	_btnOk->setText(tr("STR_REMOVE_SELECTED"));
 	_btnOk->onMouseClick((ActionHandler)&ManageAlienContainmentState::btnOkClick);

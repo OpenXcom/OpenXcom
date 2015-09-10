@@ -17,12 +17,35 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Ruleset.h"
-#include <fstream>
 #include <algorithm>
-#include "../Battlescape/Pathfinding.h"
-#include "../Engine/Options.h"
-#include "../Engine/Exception.h"
+#include <sstream>
+#include "../Engine/CrossPlatform.h"
 #include "../Engine/FileMap.h"
+#include "../Engine/Palette.h"
+#include "../Engine/Font.h"
+#include "../Engine/Surface.h"
+#include "../Engine/SurfaceSet.h"
+#include "../Engine/Language.h"
+#include "../Engine/Music.h"
+#include "../Engine/GMCat.h"
+#include "../Engine/SoundSet.h"
+#include "../Engine/Sound.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/Window.h"
+#include "MapDataSet.h"
+#include "RuleMusic.h"
+#include "../Engine/ShaderDraw.h"
+#include "../Engine/ShaderMove.h"
+#include "../Engine/Exception.h"
+#include "../Engine/Logger.h"
+#include "SoundDefinition.h"
+#include "ExtraSprites.h"
+#include "ExtraSounds.h"
+#include "../Engine/AdlibMusic.h"
+#include "../fmath.h"
+#include "../Engine/RNG.h"
+#include "../Engine/Options.h"
+#include "../Battlescape/Pathfinding.h"
 #include "SoldierNamePool.h"
 #include "RuleCountry.h"
 #include "RuleRegion.h"
@@ -32,7 +55,6 @@
 #include "RuleItem.h"
 #include "RuleUfo.h"
 #include "RuleTerrain.h"
-#include "MapDataSet.h"
 #include "MapScript.h"
 #include "RuleSoldier.h"
 #include "Unit.h"
@@ -43,16 +65,10 @@
 #include "RuleInventory.h"
 #include "RuleResearch.h"
 #include "RuleManufacture.h"
-#include "ExtraSprites.h"
-#include "ExtraSounds.h"
 #include "ExtraStrings.h"
 #include "RuleInterface.h"
-#include "SoundDefinition.h"
-#include "RuleMusic.h"
 #include "RuleMissionScript.h"
 #include "../Geoscape/Globe.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/Base.h"
@@ -66,58 +82,83 @@
 #include "UfoTrajectory.h"
 #include "RuleAlienMission.h"
 #include "MCDPatch.h"
-#include "../Engine/Logger.h"
 #include "StatString.h"
 #include "RuleGlobe.h"
-#include "ResourcePack.h"
 #include "RuleVideo.h"
-#include "../Engine/RNG.h"
-#include "../Engine/Palette.h"
 
 namespace OpenXcom
 {
 
-
+int Ruleset::DOOR_OPEN;
+int Ruleset::SLIDING_DOOR_OPEN;
+int Ruleset::SLIDING_DOOR_CLOSE;
+int Ruleset::SMALL_EXPLOSION;
+int Ruleset::LARGE_EXPLOSION;
+int Ruleset::EXPLOSION_OFFSET;
+int Ruleset::SMOKE_OFFSET;
+int Ruleset::UNDERWATER_SMOKE_OFFSET;
+int Ruleset::ITEM_DROP;
+int Ruleset::ITEM_THROW;
+int Ruleset::ITEM_RELOAD;
+int Ruleset::WALK_OFFSET;
+int Ruleset::FLYING_SOUND;
+int Ruleset::MALE_SCREAM[3];
+int Ruleset::FEMALE_SCREAM[3];
+int Ruleset::BUTTON_PRESS;
+int Ruleset::WINDOW_POPUP[3];
+int Ruleset::UFO_FIRE;
+int Ruleset::UFO_HIT;
+int Ruleset::UFO_CRASH;
+int Ruleset::UFO_EXPLODE;
+int Ruleset::INTERCEPTOR_HIT;
+int Ruleset::INTERCEPTOR_EXPLODE;
+int Ruleset::GEOSCAPE_CURSOR;
+int Ruleset::BASESCAPE_CURSOR;
+int Ruleset::BATTLESCAPE_CURSOR;
+int Ruleset::UFOPAEDIA_CURSOR;
+int Ruleset::GRAPHS_CURSOR;
+std::string Ruleset::DEBRIEF_MUSIC_GOOD;
+std::string Ruleset::DEBRIEF_MUSIC_BAD;
 int Ruleset::DIFFICULTY_COEFFICIENT[5];
 
 void Ruleset::resetGlobalStatics()
 {
-	ResourcePack::DOOR_OPEN = 3;
-	ResourcePack::SLIDING_DOOR_OPEN = 20;
-	ResourcePack::SLIDING_DOOR_CLOSE = 21;
-	ResourcePack::SMALL_EXPLOSION = 2;
-	ResourcePack::LARGE_EXPLOSION = 5;
-	ResourcePack::EXPLOSION_OFFSET = 0;
-	ResourcePack::SMOKE_OFFSET = 8;
-	ResourcePack::UNDERWATER_SMOKE_OFFSET = 0;
-	ResourcePack::ITEM_DROP = 38;
-	ResourcePack::ITEM_THROW = 39;
-	ResourcePack::ITEM_RELOAD = 17;
-	ResourcePack::WALK_OFFSET = 22;
-	ResourcePack::FLYING_SOUND = 15;
-	ResourcePack::MALE_SCREAM[0] = 41;
-	ResourcePack::MALE_SCREAM[1] = 42;
-	ResourcePack::MALE_SCREAM[2] = 43;
-	ResourcePack::FEMALE_SCREAM[0] = 44;
-	ResourcePack::FEMALE_SCREAM[1] = 45;
-	ResourcePack::FEMALE_SCREAM[2] = 46;
-	ResourcePack::BUTTON_PRESS = 0;
-	ResourcePack::WINDOW_POPUP[0] = 1;
-	ResourcePack::WINDOW_POPUP[1] = 2;
-	ResourcePack::WINDOW_POPUP[2] = 3;
-	ResourcePack::UFO_FIRE = 8;
-	ResourcePack::UFO_HIT = 12;
-	ResourcePack::UFO_CRASH = 10;
-	ResourcePack::UFO_EXPLODE = 11;
-	ResourcePack::INTERCEPTOR_HIT = 10;
-	ResourcePack::INTERCEPTOR_EXPLODE = 13;
-	ResourcePack::GEOSCAPE_CURSOR = 252;
-	ResourcePack::BASESCAPE_CURSOR = 252;
-	ResourcePack::BATTLESCAPE_CURSOR = 144;
-	ResourcePack::UFOPAEDIA_CURSOR = 252;
-	ResourcePack::GRAPHS_CURSOR = 252;
-	ResourcePack::DEBRIEF_MUSIC_GOOD = "GMMARS";
-	ResourcePack::DEBRIEF_MUSIC_BAD = "GMMARS";
+	Ruleset::DOOR_OPEN = 3;
+	Ruleset::SLIDING_DOOR_OPEN = 20;
+	Ruleset::SLIDING_DOOR_CLOSE = 21;
+	Ruleset::SMALL_EXPLOSION = 2;
+	Ruleset::LARGE_EXPLOSION = 5;
+	Ruleset::EXPLOSION_OFFSET = 0;
+	Ruleset::SMOKE_OFFSET = 8;
+	Ruleset::UNDERWATER_SMOKE_OFFSET = 0;
+	Ruleset::ITEM_DROP = 38;
+	Ruleset::ITEM_THROW = 39;
+	Ruleset::ITEM_RELOAD = 17;
+	Ruleset::WALK_OFFSET = 22;
+	Ruleset::FLYING_SOUND = 15;
+	Ruleset::MALE_SCREAM[0] = 41;
+	Ruleset::MALE_SCREAM[1] = 42;
+	Ruleset::MALE_SCREAM[2] = 43;
+	Ruleset::FEMALE_SCREAM[0] = 44;
+	Ruleset::FEMALE_SCREAM[1] = 45;
+	Ruleset::FEMALE_SCREAM[2] = 46;
+	Ruleset::BUTTON_PRESS = 0;
+	Ruleset::WINDOW_POPUP[0] = 1;
+	Ruleset::WINDOW_POPUP[1] = 2;
+	Ruleset::WINDOW_POPUP[2] = 3;
+	Ruleset::UFO_FIRE = 8;
+	Ruleset::UFO_HIT = 12;
+	Ruleset::UFO_CRASH = 10;
+	Ruleset::UFO_EXPLODE = 11;
+	Ruleset::INTERCEPTOR_HIT = 10;
+	Ruleset::INTERCEPTOR_EXPLODE = 13;
+	Ruleset::GEOSCAPE_CURSOR = 252;
+	Ruleset::BASESCAPE_CURSOR = 252;
+	Ruleset::BATTLESCAPE_CURSOR = 144;
+	Ruleset::UFOPAEDIA_CURSOR = 252;
+	Ruleset::GRAPHS_CURSOR = 252;
+	Ruleset::DEBRIEF_MUSIC_GOOD = "GMMARS";
+	Ruleset::DEBRIEF_MUSIC_BAD = "GMMARS";
 
 	Globe::OCEAN_COLOR = Palette::blockOffset(12);
 	Globe::COUNTRY_LABEL_COLOR = 239;
@@ -147,6 +188,8 @@ void Ruleset::resetGlobalStatics()
  */
 Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _turnAIUseGrenade(3), _turnAIUseBlaster(3), _startingTime(6, 1, 1, 1999, 12, 0, 0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0)
 {
+	_muteMusic = new Music();
+	_muteSound = new Sound();
 	_globe = new RuleGlobe();
 }
 
@@ -155,7 +198,33 @@ Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _time
  */
 Ruleset::~Ruleset()
 {
+	delete _muteMusic;
+	delete _muteSound;
 	delete _globe;
+	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, Palette*>::iterator i = _palettes.begin(); i != _palettes.end(); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, Music*>::iterator i = _musics.begin(); i != _musics.end(); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, SoundSet*>::iterator i = _sounds.begin(); i != _sounds.end(); ++i)
+	{
+		delete i->second;
+	}
 	for (std::vector<SoldierNamePool*>::iterator i = _names.begin(); i != _names.end(); ++i)
 	{
 		delete *i;
@@ -271,7 +340,7 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, RuleMusic *>::const_iterator i = _musics.begin(); i != _musics.end(); ++i)
+	for (std::map<std::string, RuleMusic *>::const_iterator i = _musicDefs.begin(); i != _musicDefs.end(); ++i)
 	{
 		delete i->second;
 	}
@@ -287,6 +356,204 @@ Ruleset::~Ruleset()
 	{
 		delete (*i);
 	}
+}
+
+/**
+ * Returns a specific font from the resource set.
+ * @param name Name of the font.
+ * @return Pointer to the font.
+ */
+Font *Ruleset::getFont(const std::string &name) const
+{
+	std::map<std::string, Font*>::const_iterator i = _fonts.find(name);
+	if (_fonts.end() != i) return i->second; else return 0;
+}
+
+/**
+ * Returns a specific surface from the resource set.
+ * @param name Name of the surface.
+ * @return Pointer to the surface.
+ */
+Surface *Ruleset::getSurface(const std::string &name) const
+{
+	std::map<std::string, Surface*>::const_iterator i = _surfaces.find(name);
+	if (_surfaces.end() != i) return i->second; else return 0;
+}
+
+/**
+ * Returns a specific surface set from the resource set.
+ * @param name Name of the surface set.
+ * @return Pointer to the surface set.
+ */
+SurfaceSet *Ruleset::getSurfaceSet(const std::string &name) const
+{
+	std::map<std::string, SurfaceSet*>::const_iterator i = _sets.find(name);
+	if (_sets.end() != i) return i->second; else return 0;
+}
+
+/**
+ * Returns a specific music from the resource set.
+ * @param name Name of the music.
+ * @return Pointer to the music.
+ */
+Music *Ruleset::getMusic(const std::string &name) const
+{
+	if (Options::mute)
+	{
+		return _muteMusic;
+	}
+	else
+	{
+		std::map<std::string, Music*>::const_iterator i = _musics.find(name);
+		if (_musics.end() != i) return i->second; else return _muteMusic;
+	}
+}
+
+/**
+ * Returns a random music from the resource set.
+ * @param name Name of the music to pick from.
+ * @return Pointer to the music.
+ */
+Music *Ruleset::getRandomMusic(const std::string &name) const
+{
+	if (Options::mute)
+	{
+		return _muteMusic;
+	}
+	else
+	{
+		std::vector<Music*> music;
+		for (std::map<std::string, Music*>::const_iterator i = _musics.begin(); i != _musics.end(); ++i)
+		{
+			if (i->first.find(name) != std::string::npos)
+			{
+				music.push_back(i->second);
+			}
+		}
+		if (music.empty())
+			return _muteMusic;
+		else
+			return music[RNG::seedless(0, music.size() - 1)];
+	}
+}
+
+/**
+ * Plays the specified track if it's not already playing.
+ * @param name Name of the music.
+ * @param id Id of the music, 0 for random.
+ */
+void Ruleset::playMusic(const std::string &name, int id)
+{
+	if (!Options::mute && _playingMusic != name)
+	{
+		int loop = -1;
+		// hacks
+		if (!Options::musicAlwaysLoop &&
+			(name == "GMSTORY" || name == "GMWIN" || name == "GMLOSE"))
+			loop = 0;
+
+		Music *music = 0;
+		if (id == 0)
+		{
+			music = getRandomMusic(name);
+		}
+		else
+		{
+			std::ostringstream ss;
+			ss << name << id;
+			music = getMusic(ss.str());
+		}
+		music->play(loop);
+		if (music != _muteMusic)
+		{
+			_playingMusic = name;
+		}
+	}
+}
+
+/**
+ * Returns a specific sound from the resource set.
+ * @param set Name of the sound set.
+ * @param sound ID of the sound.
+ * @return Pointer to the sound.
+ */
+Sound *Ruleset::getSound(const std::string &set, unsigned int sound) const
+{
+	if (Options::mute)
+	{
+		return _muteSound;
+	}
+	else
+	{
+		std::map<std::string, SoundSet*>::const_iterator i = _sounds.find(set);
+		if (_sounds.end() != i) return i->second->getSound(sound); else return 0;
+	}
+}
+
+/**
+ * Returns a specific palette from the resource set.
+ * @param name Name of the palette.
+ * @return Pointer to the palette.
+ */
+Palette *Ruleset::getPalette(const std::string &name) const
+{
+	std::map<std::string, Palette*>::const_iterator i = _palettes.find(name);
+	if (_palettes.end() != i) return i->second; else return 0;
+}
+
+/**
+ * Changes the palette of all the graphics in the resource set.
+ * @param colors Pointer to the set of colors.
+ * @param firstcolor Offset of the first color to replace.
+ * @param ncolors Amount of colors to replace.
+ */
+void Ruleset::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+{
+	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); ++i)
+	{
+		i->second->getSurface()->setPalette(colors, firstcolor, ncolors);
+	}
+	for (std::map<std::string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		if (i->first.substr(i->first.length() - 3, i->first.length()) != "LBM")
+			i->second->setPalette(colors, firstcolor, ncolors);
+	}
+	for (std::map<std::string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); ++i)
+	{
+		i->second->setPalette(colors, firstcolor, ncolors);
+	}
+}
+
+/**
+ * Returns the list of voxeldata in the resource set.
+ * @return Pointer to the list of voxeldata.
+ */
+std::vector<Uint16> *Ruleset::getVoxelData()
+{
+	return &_voxelData;
+}
+
+/**
+ * Returns a specific sound from either the land or underwater resource set.
+ * @param depth the depth of the battlescape.
+ * @param sound ID of the sound.
+ * @return Pointer to the sound.
+ */
+Sound *Ruleset::getSoundByDepth(unsigned int depth, unsigned int sound) const
+{
+	if (depth == 0)
+		return getSound("BATTLE.CAT", sound);
+	else
+		return getSound("BATTLE2.CAT", sound);
+}
+
+const std::vector<std::vector<Uint8> > *Ruleset::getLUTs() const
+{
+	return &_transparencyLUTs;
+}
+bool Ruleset::isMusicPlaying()
+{
+	return _musics[_playingMusic]->isPlaying();
 }
 
 void Ruleset::loadModRulesets(const std::vector<std::string> &rulesetFiles, size_t modIdx)
@@ -675,25 +942,25 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 	}
 	for (YAML::const_iterator i = doc["constants"].begin(); i != doc["constants"].end(); ++i)
 	{
-		ResourcePack::DOOR_OPEN = (*i)["doorSound"].as<int>(ResourcePack::DOOR_OPEN);
-		ResourcePack::SLIDING_DOOR_OPEN = (*i)["slidingDoorSound"].as<int>(ResourcePack::SLIDING_DOOR_OPEN);
-		ResourcePack::SLIDING_DOOR_CLOSE = (*i)["slidingDoorClose"].as<int>(ResourcePack::SLIDING_DOOR_CLOSE);
-		ResourcePack::SMALL_EXPLOSION = (*i)["smallExplosion"].as<int>(ResourcePack::SMALL_EXPLOSION);
-		ResourcePack::LARGE_EXPLOSION = (*i)["largeExplosion"].as<int>(ResourcePack::LARGE_EXPLOSION);
-		ResourcePack::EXPLOSION_OFFSET = (*i)["explosionOffset"].as<int>(ResourcePack::EXPLOSION_OFFSET);
-		ResourcePack::SMOKE_OFFSET = (*i)["smokeOffset"].as<int>(ResourcePack::SMOKE_OFFSET);
-		ResourcePack::UNDERWATER_SMOKE_OFFSET = (*i)["underwaterSmokeOffset"].as<int>(ResourcePack::UNDERWATER_SMOKE_OFFSET);
-		ResourcePack::ITEM_DROP = (*i)["itemDrop"].as<int>(ResourcePack::ITEM_DROP);
-		ResourcePack::ITEM_THROW = (*i)["itemThrow"].as<int>(ResourcePack::ITEM_THROW);
-		ResourcePack::ITEM_RELOAD = (*i)["itemReload"].as<int>(ResourcePack::ITEM_RELOAD);
-		ResourcePack::WALK_OFFSET = (*i)["walkOffset"].as<int>(ResourcePack::WALK_OFFSET);
-		ResourcePack::FLYING_SOUND = (*i)["flyingSound"].as<int>(ResourcePack::FLYING_SOUND);
+		Ruleset::DOOR_OPEN = (*i)["doorSound"].as<int>(Ruleset::DOOR_OPEN);
+		Ruleset::SLIDING_DOOR_OPEN = (*i)["slidingDoorSound"].as<int>(Ruleset::SLIDING_DOOR_OPEN);
+		Ruleset::SLIDING_DOOR_CLOSE = (*i)["slidingDoorClose"].as<int>(Ruleset::SLIDING_DOOR_CLOSE);
+		Ruleset::SMALL_EXPLOSION = (*i)["smallExplosion"].as<int>(Ruleset::SMALL_EXPLOSION);
+		Ruleset::LARGE_EXPLOSION = (*i)["largeExplosion"].as<int>(Ruleset::LARGE_EXPLOSION);
+		Ruleset::EXPLOSION_OFFSET = (*i)["explosionOffset"].as<int>(Ruleset::EXPLOSION_OFFSET);
+		Ruleset::SMOKE_OFFSET = (*i)["smokeOffset"].as<int>(Ruleset::SMOKE_OFFSET);
+		Ruleset::UNDERWATER_SMOKE_OFFSET = (*i)["underwaterSmokeOffset"].as<int>(Ruleset::UNDERWATER_SMOKE_OFFSET);
+		Ruleset::ITEM_DROP = (*i)["itemDrop"].as<int>(Ruleset::ITEM_DROP);
+		Ruleset::ITEM_THROW = (*i)["itemThrow"].as<int>(Ruleset::ITEM_THROW);
+		Ruleset::ITEM_RELOAD = (*i)["itemReload"].as<int>(Ruleset::ITEM_RELOAD);
+		Ruleset::WALK_OFFSET = (*i)["walkOffset"].as<int>(Ruleset::WALK_OFFSET);
+		Ruleset::FLYING_SOUND = (*i)["flyingSound"].as<int>(Ruleset::FLYING_SOUND);
 		if ((*i)["maleScream"])
 		{
 			int k = 0;
 			for (YAML::const_iterator j = (*i)["maleScream"].begin(); j != (*i)["maleScream"].end() && k < 3; ++j, ++k)
 			{
-				ResourcePack::MALE_SCREAM[k] = (*j).as<int>(ResourcePack::MALE_SCREAM[k]);
+				Ruleset::MALE_SCREAM[k] = (*j).as<int>(Ruleset::MALE_SCREAM[k]);
 			}
 		}
 		if ((*i)["femaleScream"])
@@ -701,31 +968,31 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 			int k = 0;
 			for (YAML::const_iterator j = (*i)["femaleScream"].begin(); j != (*i)["femaleScream"].end() && k < 3; ++j, ++k)
 			{
-				ResourcePack::FEMALE_SCREAM[k] = (*j).as<int>(ResourcePack::FEMALE_SCREAM[k]);
+				Ruleset::FEMALE_SCREAM[k] = (*j).as<int>(Ruleset::FEMALE_SCREAM[k]);
 			}
 		}
-		ResourcePack::BUTTON_PRESS = (*i)["buttonPress"].as<int>(ResourcePack::BUTTON_PRESS);
+		Ruleset::BUTTON_PRESS = (*i)["buttonPress"].as<int>(Ruleset::BUTTON_PRESS);
 		if ((*i)["windowPopup"])
 		{
 			int k = 0;
 			for (YAML::const_iterator j = (*i)["windowPopup"].begin(); j != (*i)["windowPopup"].end() && k < 3; ++j, ++k)
 			{
-				ResourcePack::WINDOW_POPUP[k] = (*j).as<int>(ResourcePack::WINDOW_POPUP[k]);
+				Ruleset::WINDOW_POPUP[k] = (*j).as<int>(Ruleset::WINDOW_POPUP[k]);
 			}
 		}
-		ResourcePack::UFO_FIRE = (*i)["ufoFire"].as<int>(ResourcePack::UFO_FIRE);
-		ResourcePack::UFO_HIT = (*i)["ufoHit"].as<int>(ResourcePack::UFO_HIT);
-		ResourcePack::UFO_CRASH = (*i)["ufoCrash"].as<int>(ResourcePack::UFO_CRASH);
-		ResourcePack::UFO_EXPLODE = (*i)["ufoExplode"].as<int>(ResourcePack::UFO_EXPLODE);
-		ResourcePack::INTERCEPTOR_HIT = (*i)["interceptorHit"].as<int>(ResourcePack::INTERCEPTOR_HIT);
-		ResourcePack::INTERCEPTOR_EXPLODE = (*i)["interceptorExplode"].as<int>(ResourcePack::INTERCEPTOR_EXPLODE);
-		ResourcePack::GEOSCAPE_CURSOR = (*i)["geoscapeCursor"].as<int>(ResourcePack::GEOSCAPE_CURSOR);
-		ResourcePack::BASESCAPE_CURSOR = (*i)["basescapeCursor"].as<int>(ResourcePack::BASESCAPE_CURSOR);
-		ResourcePack::BATTLESCAPE_CURSOR = (*i)["battlescapeCursor"].as<int>(ResourcePack::BATTLESCAPE_CURSOR);
-		ResourcePack::UFOPAEDIA_CURSOR = (*i)["ufopaediaCursor"].as<int>(ResourcePack::UFOPAEDIA_CURSOR);
-		ResourcePack::GRAPHS_CURSOR = (*i)["graphsCursor"].as<int>(ResourcePack::GRAPHS_CURSOR);
-		ResourcePack::DEBRIEF_MUSIC_GOOD = (*i)["goodDebriefingMusic"].as<std::string>(ResourcePack::DEBRIEF_MUSIC_GOOD);
-		ResourcePack::DEBRIEF_MUSIC_BAD = (*i)["badDebriefingMusic"].as<std::string>(ResourcePack::DEBRIEF_MUSIC_BAD);
+		Ruleset::UFO_FIRE = (*i)["ufoFire"].as<int>(Ruleset::UFO_FIRE);
+		Ruleset::UFO_HIT = (*i)["ufoHit"].as<int>(Ruleset::UFO_HIT);
+		Ruleset::UFO_CRASH = (*i)["ufoCrash"].as<int>(Ruleset::UFO_CRASH);
+		Ruleset::UFO_EXPLODE = (*i)["ufoExplode"].as<int>(Ruleset::UFO_EXPLODE);
+		Ruleset::INTERCEPTOR_HIT = (*i)["interceptorHit"].as<int>(Ruleset::INTERCEPTOR_HIT);
+		Ruleset::INTERCEPTOR_EXPLODE = (*i)["interceptorExplode"].as<int>(Ruleset::INTERCEPTOR_EXPLODE);
+		Ruleset::GEOSCAPE_CURSOR = (*i)["geoscapeCursor"].as<int>(Ruleset::GEOSCAPE_CURSOR);
+		Ruleset::BASESCAPE_CURSOR = (*i)["basescapeCursor"].as<int>(Ruleset::BASESCAPE_CURSOR);
+		Ruleset::BATTLESCAPE_CURSOR = (*i)["battlescapeCursor"].as<int>(Ruleset::BATTLESCAPE_CURSOR);
+		Ruleset::UFOPAEDIA_CURSOR = (*i)["ufopaediaCursor"].as<int>(Ruleset::UFOPAEDIA_CURSOR);
+		Ruleset::GRAPHS_CURSOR = (*i)["graphsCursor"].as<int>(Ruleset::GRAPHS_CURSOR);
+		Ruleset::DEBRIEF_MUSIC_GOOD = (*i)["goodDebriefingMusic"].as<std::string>(Ruleset::DEBRIEF_MUSIC_GOOD);
+		Ruleset::DEBRIEF_MUSIC_BAD = (*i)["badDebriefingMusic"].as<std::string>(Ruleset::DEBRIEF_MUSIC_BAD);
 	}
 	for (YAML::const_iterator i = doc["transparencyLUTs"].begin(); i != doc["transparencyLUTs"].end(); ++i)
 	{
@@ -791,7 +1058,7 @@ void Ruleset::loadFile(const std::string &filename, size_t spriteOffset)
 	}
 	for (YAML::const_iterator i = doc["musics"].begin(); i != doc["musics"].end(); ++i)
 	{
-		RuleMusic *rule = loadRule(*i, &_musics);
+		RuleMusic *rule = loadRule(*i, &_musicDefs);
 		if (rule != 0)
 		{
 			rule->load(*i);
@@ -1778,7 +2045,7 @@ const std::map<std::string, RuleVideo *> *Ruleset::getVideos() const
 
 const std::map<std::string, RuleMusic *> *Ruleset::getMusic() const
 {
-	return &_musics;
+	return &_musicDefs;
 }
 
 const std::vector<std::string> *Ruleset::getMissionScriptList() const
@@ -1794,6 +2061,1129 @@ RuleMissionScript *Ruleset::getMissionScript(const std::string &name) const
 std::string Ruleset::getFinalResearch() const
 {
 	return _finalResearch; 
+}
+
+namespace
+{
+	const Uint8 ShadeMax = 15;
+	/**
+	* Recolor class used in UFO
+	*/
+	struct HairXCOM1
+	{
+		static const Uint8 Hair = 9 << 4;
+		static const Uint8 Face = 6 << 4;
+		static inline void func(Uint8& src, const Uint8& cutoff, int, int, int)
+		{
+			if (src > cutoff && src <= Face + ShadeMax)
+			{
+				src = Hair + (src & ShadeMax) - 6; //make hair color like male in xcom_0.pck
+			}
+		}
+	};
+
+	/**
+	* Recolor class used in TFTD
+	*/
+	struct HairXCOM2
+	{
+		static const Uint8 ManHairColor = 4 << 4;
+		static const Uint8 WomanHairColor = 1 << 4;
+		static inline void func(Uint8& src, int, int, int, int)
+		{
+			if (src >= WomanHairColor && src <= WomanHairColor + ShadeMax)
+			{
+				src = ManHairColor + (src & ShadeMax);
+			}
+		}
+	};
+
+	/**
+	* Recolor class used in TFTD
+	*/
+	struct FaceXCOM2
+	{
+		static const Uint8 FaceColor = 10 << 4;
+		static const Uint8 PinkColor = 14 << 4;
+		static inline void func(Uint8& src, int, int, int, int)
+		{
+			if (src >= FaceColor && src <= FaceColor + ShadeMax)
+			{
+				src = PinkColor + (src & ShadeMax);
+			}
+		}
+	};
+
+	/**
+	* Recolor class used in TFTD
+	*/
+	struct BodyXCOM2
+	{
+		static const Uint8 IonArmorColor = 8 << 4;
+		static inline void func(Uint8& src, int, int, int, int)
+		{
+			if (src == 153)
+			{
+				src = IonArmorColor + 12;
+			}
+			else if (src == 151)
+			{
+				src = IonArmorColor + 10;
+			}
+			else if (src == 148)
+			{
+				src = IonArmorColor + 4;
+			}
+			else if (src == 147)
+			{
+				src = IonArmorColor + 2;
+			}
+			else if (src >= HairXCOM2::WomanHairColor && src <= HairXCOM2::WomanHairColor + ShadeMax)
+			{
+				src = IonArmorColor + (src & ShadeMax);
+			}
+		}
+	};
+	/**
+	* Recolor class used in TFTD
+	*/
+	struct FallXCOM2
+	{
+		static const Uint8 RoguePixel = 151;
+		static inline void func(Uint8& src, int, int, int, int)
+		{
+			if (src == RoguePixel)
+			{
+				src = FaceXCOM2::PinkColor + (src & ShadeMax) + 2;
+			}
+			else if (src >= BodyXCOM2::IonArmorColor && src <= BodyXCOM2::IonArmorColor + ShadeMax)
+			{
+				src = FaceXCOM2::PinkColor + (src & ShadeMax);
+			}
+		}
+	};
+}
+
+/**
+ * Loads the resources required by the game.
+ */
+void Ruleset::loadResources()
+{
+	// Load palettes
+	const char *pal[] = { "PAL_GEOSCAPE", "PAL_BASESCAPE", "PAL_GRAPHS", "PAL_UFOPAEDIA", "PAL_BATTLEPEDIA" };
+	for (size_t i = 0; i < sizeof(pal) / sizeof(pal[0]); ++i)
+	{
+		std::string s = "GEODATA/PALETTES.DAT";
+		_palettes[pal[i]] = new Palette();
+		_palettes[pal[i]]->loadDat(FileMap::getFilePath(s), 256, Palette::palOffset(i));
+	}
+	{
+		std::string s1 = "GEODATA/BACKPALS.DAT";
+		std::string s2 = "BACKPALS.DAT";
+		_palettes[s2] = new Palette();
+		_palettes[s2]->loadDat(FileMap::getFilePath(s1), 128);
+	}
+
+	// Correct Battlescape palette
+	{
+		std::string s1 = "GEODATA/PALETTES.DAT";
+		std::string s2 = "PAL_BATTLESCAPE";
+		_palettes[s2] = new Palette();
+		_palettes[s2]->loadDat(FileMap::getFilePath(s1), 256, Palette::palOffset(4));
+
+		// Last 16 colors are a greyish gradient
+		SDL_Color gradient[] = { { 140, 152, 148, 255 },
+		{ 132, 136, 140, 255 },
+		{ 116, 124, 132, 255 },
+		{ 108, 116, 124, 255 },
+		{ 92, 104, 108, 255 },
+		{ 84, 92, 100, 255 },
+		{ 76, 80, 92, 255 },
+		{ 56, 68, 84, 255 },
+		{ 48, 56, 68, 255 },
+		{ 40, 48, 56, 255 },
+		{ 32, 36, 48, 255 },
+		{ 24, 28, 32, 255 },
+		{ 16, 20, 24, 255 },
+		{ 8, 12, 16, 255 },
+		{ 3, 4, 8, 255 },
+		{ 3, 3, 6, 255 } };
+		for (size_t i = 0; i < sizeof(gradient) / sizeof(gradient[0]); ++i)
+		{
+			SDL_Color *color = _palettes[s2]->getColors(Palette::backPos + 16 + i);
+			*color = gradient[i];
+		}
+	}
+
+	// Load fonts
+	YAML::Node doc = YAML::LoadFile(FileMap::getFilePath("Language/" + _fontName));
+	Log(LOG_INFO) << "Loading font... " << _fontName;
+	Font::setIndex(Language::utf8ToWstr(doc["chars"].as<std::string>()));
+	for (YAML::const_iterator i = doc["fonts"].begin(); i != doc["fonts"].end(); ++i)
+	{
+		std::string id = (*i)["id"].as<std::string>();
+		Font *font = new Font();
+		font->load(*i);
+		_fonts[id] = font;
+	}
+
+	// Load surfaces
+	{
+		std::ostringstream s;
+		s << "GEODATA/" << "INTERWIN.DAT";
+		_surfaces["INTERWIN.DAT"] = new Surface(160, 600);
+		_surfaces["INTERWIN.DAT"]->loadScr(FileMap::getFilePath(s.str()));
+	}
+
+	const std::set<std::string> &geographFiles(FileMap::getVFolderContents("GEOGRAPH"));
+	std::set<std::string> scrs = FileMap::filterFiles(geographFiles, "SCR");
+	for (std::set<std::string>::iterator i = scrs.begin(); i != scrs.end(); ++i)
+	{
+		std::string fname = *i;
+		std::transform(i->begin(), i->end(), fname.begin(), toupper);
+		_surfaces[fname] = new Surface(320, 200);
+		_surfaces[fname]->loadScr(FileMap::getFilePath("GEOGRAPH/" + fname));
+	}
+	std::set<std::string> bdys = FileMap::filterFiles(geographFiles, "BDY");
+	for (std::set<std::string>::iterator i = bdys.begin(); i != bdys.end(); ++i)
+	{
+		std::string fname = *i;
+		std::transform(i->begin(), i->end(), fname.begin(), toupper);
+		_surfaces[fname] = new Surface(320, 200);
+		_surfaces[fname]->loadBdy(FileMap::getFilePath("GEOGRAPH/" + fname));
+	}
+
+	// bigger geoscape background
+	int newWidth = 320 - 64, newHeight = 200;
+	Surface *newGeo = new Surface(newWidth * 3, newHeight * 3);
+	Surface *oldGeo = _surfaces["GEOBORD.SCR"];
+	for (int x = 0; x < newWidth; ++x)
+	{
+		for (int y = 0; y < newHeight; ++y)
+		{
+			newGeo->setPixel(newWidth + x, newHeight + y, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth - x - 1, newHeight + y, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth * 3 - x - 1, newHeight + y, oldGeo->getPixel(x, y));
+
+			newGeo->setPixel(newWidth + x, newHeight - y - 1, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth - x - 1, newHeight - y - 1, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth * 3 - x - 1, newHeight - y - 1, oldGeo->getPixel(x, y));
+
+			newGeo->setPixel(newWidth + x, newHeight * 3 - y - 1, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth - x - 1, newHeight * 3 - y - 1, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth * 3 - x - 1, newHeight * 3 - y - 1, oldGeo->getPixel(x, y));
+		}
+	}
+	_surfaces["ALTGEOBORD.SCR"] = newGeo;
+
+	// here we create an "alternate" background surface for the base info screen.
+	_surfaces["ALTBACK07.SCR"] = new Surface(320, 200);
+	_surfaces["ALTBACK07.SCR"]->loadScr(FileMap::getFilePath("GEOGRAPH/BACK07.SCR"));
+	for (int y = 172; y >= 152; --y)
+		for (int x = 5; x <= 314; ++x)
+			_surfaces["ALTBACK07.SCR"]->setPixel(x, y + 4, _surfaces["ALTBACK07.SCR"]->getPixel(x, y));
+	for (int y = 147; y >= 134; --y)
+		for (int x = 5; x <= 314; ++x)
+			_surfaces["ALTBACK07.SCR"]->setPixel(x, y + 9, _surfaces["ALTBACK07.SCR"]->getPixel(x, y));
+	for (int y = 132; y >= 109; --y)
+		for (int x = 5; x <= 314; ++x)
+			_surfaces["ALTBACK07.SCR"]->setPixel(x, y + 10, _surfaces["ALTBACK07.SCR"]->getPixel(x, y));
+
+	std::set<std::string> spks = FileMap::filterFiles(geographFiles, "SPK");
+	for (std::set<std::string>::iterator i = spks.begin(); i != spks.end(); ++i)
+	{
+		std::string fname = *i;
+		std::transform(i->begin(), i->end(), fname.begin(), toupper);
+		_surfaces[fname] = new Surface(320, 200);
+		_surfaces[fname]->loadSpk(FileMap::getFilePath("GEOGRAPH/" + fname));
+	}
+
+	// Load surface sets
+	std::string sets[] = { "BASEBITS.PCK",
+		"INTICON.PCK",
+		"TEXTURE.DAT" };
+
+	for (size_t i = 0; i < sizeof(sets) / sizeof(sets[0]); ++i)
+	{
+		std::ostringstream s;
+		s << "GEOGRAPH/" << sets[i];
+
+		std::string ext = sets[i].substr(sets[i].find_last_of('.') + 1, sets[i].length());
+		if (ext == "PCK")
+		{
+			std::string tab = CrossPlatform::noExt(sets[i]) + ".TAB";
+			std::ostringstream s2;
+			s2 << "GEOGRAPH/" << tab;
+			_sets[sets[i]] = new SurfaceSet(32, 40);
+			_sets[sets[i]]->loadPck(FileMap::getFilePath(s.str()), FileMap::getFilePath(s2.str()));
+		}
+		else
+		{
+			_sets[sets[i]] = new SurfaceSet(32, 32);
+			_sets[sets[i]]->loadDat(FileMap::getFilePath(s.str()));
+		}
+	}
+	_sets["SCANG.DAT"] = new SurfaceSet(4, 4);
+	std::ostringstream scang;
+	scang << "GEODATA/" << "SCANG.DAT";
+	_sets["SCANG.DAT"]->loadDat(FileMap::getFilePath(scang.str()));
+
+	if (!Options::mute)
+	{
+		const std::set<std::string> &soundFiles(FileMap::getVFolderContents("SOUND"));
+
+#ifndef __NO_MUSIC
+		// Load musics
+
+		// Check which music version is available
+		CatFile *adlibcat = 0, *aintrocat = 0;
+		GMCatFile *gmcat = 0;
+
+		for (std::set<std::string>::iterator i = soundFiles.begin(); i != soundFiles.end(); ++i)
+		{
+			if (0 == i->compare("adlib.cat"))
+			{
+				adlibcat = new CatFile(FileMap::getFilePath("SOUND/" + *i).c_str());
+			}
+			else if (0 == i->compare("aintro.cat"))
+			{
+				aintrocat = new CatFile(FileMap::getFilePath("SOUND/" + *i).c_str());
+			}
+			else if (0 == i->compare("gm.cat"))
+			{
+				gmcat = new GMCatFile(FileMap::getFilePath("SOUND/" + *i).c_str());
+			}
+		}
+
+		// Try the preferred format first, otherwise use the default priority
+		MusicFormat priority[] = { Options::preferredMusic, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI };
+		for (std::map<std::string, RuleMusic *>::const_iterator i = _musicDefs.begin(); i != _musicDefs.end(); ++i)
+		{
+			Music *music = 0;
+			for (size_t j = 0; j < sizeof(priority) / sizeof(priority[0]) && music == 0; ++j)
+			{
+				music = loadMusic(priority[j], (*i).first, (*i).second->getCatPos(), (*i).second->getNormalization(), adlibcat, aintrocat, gmcat);
+			}
+			if (music)
+			{
+				_musics[(*i).first] = music;
+			}
+
+		}
+
+		delete gmcat;
+		delete adlibcat;
+		delete aintrocat;
+#endif
+
+		// Load sounds
+		if (_soundDefs.empty())
+		{
+			std::string catsId[] = { "GEO.CAT", "BATTLE.CAT" };
+			std::string catsDos[] = { "SOUND2.CAT", "SOUND1.CAT" };
+			std::string catsWin[] = { "SAMPLE.CAT", "SAMPLE2.CAT" };
+
+			// Try the preferred format first, otherwise use the default priority
+			std::string *cats[] = { 0, catsWin, catsDos };
+			if (Options::preferredSound == SOUND_14)
+				cats[0] = catsWin;
+			else if (Options::preferredSound == SOUND_10)
+				cats[1] = catsDos;
+
+			Options::currentSound = SOUND_AUTO;
+			for (size_t i = 0; i < sizeof(catsId) / sizeof(catsId[0]); ++i)
+			{
+				SoundSet *sound = 0;
+				for (size_t j = 0; j < sizeof(cats) / sizeof(cats[0]) && sound == 0; ++j)
+				{
+					bool wav = true;
+					if (cats[j] == 0)
+						continue;
+					else if (cats[j] == catsDos)
+						wav = false;
+					std::string fname = cats[j][i];
+					std::transform(fname.begin(), fname.end(), fname.begin(), tolower);
+					std::set<std::string>::iterator file = soundFiles.find(fname);
+					if (file != soundFiles.end())
+					{
+						sound = new SoundSet();
+						sound->loadCat(FileMap::getFilePath("SOUND/" + cats[j][i]), wav);
+						Options::currentSound = (wav) ? SOUND_14 : SOUND_10;
+					}
+				}
+				if (sound == 0)
+				{
+					throw Exception(catsWin[i] + " not found");
+				}
+				else
+				{
+					_sounds[catsId[i]] = sound;
+				}
+			}
+		}
+		else
+		{
+			for (std::map<std::string, SoundDefinition*>::const_iterator i = _soundDefs.begin(); i != _soundDefs.end(); ++i)
+			{
+				std::string fname = i->second->getCATFile();
+				std::transform(fname.begin(), fname.end(), fname.begin(), tolower);
+				std::set<std::string>::iterator file = soundFiles.find(fname);
+				if (file != soundFiles.end())
+				{
+					if (_sounds.find((*i).first) == _sounds.end())
+					{
+						_sounds[(*i).first] = new SoundSet();
+					}
+					for (std::vector<int>::const_iterator j = (*i).second->getSoundList().begin(); j != (*i).second->getSoundList().end(); ++j)
+					{
+						_sounds[(*i).first]->loadCatbyIndex(FileMap::getFilePath("SOUND/" + fname), *j);
+					}
+				}
+				else
+				{
+					throw Exception(fname + " not found");
+				}
+			}
+		}
+
+		std::set<std::string>::iterator file = soundFiles.find("intro.cat");
+		if (file != soundFiles.end())
+		{
+			SoundSet *s = _sounds["INTRO.CAT"] = new SoundSet();
+			s->loadCat(FileMap::getFilePath("SOUND/INTRO.CAT"), false);
+		}
+
+		file = soundFiles.find("sample3.cat");
+		if (file != soundFiles.end())
+		{
+			SoundSet *s = _sounds["SAMPLE3.CAT"] = new SoundSet();
+			s->loadCat(FileMap::getFilePath("SOUND/SAMPLE3.CAT"), true);
+		}
+	}
+
+	TextButton::soundPress = getSound("GEO.CAT", Ruleset::BUTTON_PRESS);
+	Window::soundPopup[0] = getSound("GEO.CAT", Ruleset::WINDOW_POPUP[0]);
+	Window::soundPopup[1] = getSound("GEO.CAT", Ruleset::WINDOW_POPUP[1]);
+	Window::soundPopup[2] = getSound("GEO.CAT", Ruleset::WINDOW_POPUP[2]);
+
+	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
+
+
+								// we create extra rows on the soldier stat screens by shrinking them all down one pixel.
+								// this is done after loading them, but BEFORE loading the extraSprites, in case a modder wants to replace them.
+
+								// first, let's do the base info screen
+								// erase the old lines, copying from a +2 offset to account for the dithering
+	for (int y = 91; y < 199; y += 12)
+		for (int x = 0; x < 149; ++x)
+			_surfaces["BACK06.SCR"]->setPixel(x, y, _surfaces["BACK06.SCR"]->getPixel(x, y + 2));
+	// drawn new lines, use the bottom row of pixels as a basis
+	for (int y = 89; y < 199; y += 11)
+		for (int x = 0; x < 149; ++x)
+			_surfaces["BACK06.SCR"]->setPixel(x, y, _surfaces["BACK06.SCR"]->getPixel(x, 199));
+	// finally, move the top of the graph up by one pixel, offset for the last iteration again due to dithering.
+	for (int y = 72; y < 80; ++y)
+		for (int x = 0; x < 320; ++x)
+		{
+			_surfaces["BACK06.SCR"]->setPixel(x, y, _surfaces["BACK06.SCR"]->getPixel(x, y + (y == 79 ? 2 : 1)));
+		}
+
+	// now, let's adjust the battlescape info screen.
+	// erase the old lines, no need to worry about dithering on this one.
+	for (int y = 39; y < 199; y += 10)
+		for (int x = 0; x < 169; ++x)
+			_surfaces["UNIBORD.PCK"]->setPixel(x, y, _surfaces["UNIBORD.PCK"]->getPixel(x, 30));
+	// drawn new lines, use the bottom row of pixels as a basis
+	for (int y = 190; y > 37; y -= 9)
+		for (int x = 0; x < 169; ++x)
+			_surfaces["UNIBORD.PCK"]->setPixel(x, y, _surfaces["UNIBORD.PCK"]->getPixel(x, 199));
+	// move the top of the graph down by eight pixels to erase the row we don't need (we actually created ~1.8 extra rows earlier)
+	for (int y = 37; y > 29; --y)
+		for (int x = 0; x < 320; ++x)
+		{
+			_surfaces["UNIBORD.PCK"]->setPixel(x, y, _surfaces["UNIBORD.PCK"]->getPixel(x, y - 8));
+			_surfaces["UNIBORD.PCK"]->setPixel(x, y - 8, 0);
+		}
+
+	Log(LOG_INFO) << "Loading extra resources from ruleset...";
+	for (std::vector< std::pair<std::string, ExtraSprites *> >::const_iterator i = _extraSprites.begin(); i != _extraSprites.end(); ++i)
+	{
+		std::string sheetName = i->first;
+		ExtraSprites *spritePack = i->second;
+		bool subdivision = (spritePack->getSubX() != 0 && spritePack->getSubY() != 0);
+		if (spritePack->getSingleImage())
+		{
+			if (_surfaces.find(sheetName) == _surfaces.end())
+			{
+				Log(LOG_VERBOSE) << "Creating new single image: " << sheetName;
+				_surfaces[sheetName] = new Surface(spritePack->getWidth(), spritePack->getHeight());
+			}
+			else
+			{
+				Log(LOG_VERBOSE) << "Adding/Replacing single image: " << sheetName;
+				delete _surfaces[sheetName];
+				_surfaces[sheetName] = new Surface(spritePack->getWidth(), spritePack->getHeight());
+			}
+			_surfaces[sheetName]->loadImage(FileMap::getFilePath(spritePack->getSprites()->operator[](0)));
+		}
+		else
+		{
+			bool adding = false;
+			if (_sets.find(sheetName) == _sets.end())
+			{
+				Log(LOG_VERBOSE) << "Creating new surface set: " << sheetName;
+				adding = true;
+				if (subdivision)
+				{
+					_sets[sheetName] = new SurfaceSet(spritePack->getSubX(), spritePack->getSubY());
+				}
+				else
+				{
+					_sets[sheetName] = new SurfaceSet(spritePack->getWidth(), spritePack->getHeight());
+				}
+			}
+			else
+			{
+				Log(LOG_VERBOSE) << "Adding/Replacing items in surface set: " << sheetName;
+			}
+
+			if (subdivision)
+			{
+				int frames = (spritePack->getWidth() / spritePack->getSubX())*(spritePack->getHeight() / spritePack->getSubY());
+				Log(LOG_VERBOSE) << "Subdividing into " << frames << " frames.";
+			}
+
+			for (std::map<int, std::string>::iterator j = spritePack->getSprites()->begin(); j != spritePack->getSprites()->end(); ++j)
+			{
+				int startFrame = j->first;
+				std::string fileName = j->second;
+				if (fileName.substr(fileName.length() - 1, 1) == "/")
+				{
+					Log(LOG_VERBOSE) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
+					int offset = startFrame;
+					std::set<std::string> contents = FileMap::getVFolderContents(fileName);
+					for (std::set<std::string>::iterator k = contents.begin(); k != contents.end(); ++k)
+					{
+						if (!isImageFile((*k).substr((*k).length() - 4, (*k).length())))
+							continue;
+						try
+						{
+							std::string fullPath = FileMap::getFilePath(fileName + *k);
+							if (_sets[sheetName]->getFrame(offset))
+							{
+								Log(LOG_VERBOSE) << "Replacing frame: " << offset;
+								_sets[sheetName]->getFrame(offset)->loadImage(fullPath);
+							}
+							else
+							{
+								if (adding)
+								{
+									_sets[sheetName]->addFrame(offset)->loadImage(fullPath);
+								}
+								else
+								{
+									Log(LOG_VERBOSE) << "Adding frame: " << offset + spritePack->getModIndex();
+									_sets[sheetName]->addFrame(offset + spritePack->getModIndex())->loadImage(fullPath);
+								}
+							}
+							offset++;
+						}
+						catch (Exception &e)
+						{
+							Log(LOG_WARNING) << e.what();
+						}
+					}
+				}
+				else
+				{
+					if (spritePack->getSubX() == 0 && spritePack->getSubY() == 0)
+					{
+						std::string fullPath = FileMap::getFilePath(fileName);
+						if (_sets[sheetName]->getFrame(startFrame))
+						{
+							Log(LOG_VERBOSE) << "Replacing frame: " << startFrame;
+							_sets[sheetName]->getFrame(startFrame)->loadImage(fullPath);
+						}
+						else
+						{
+							Log(LOG_VERBOSE) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
+							_sets[sheetName]->addFrame(startFrame + spritePack->getModIndex())->loadImage(fullPath);
+						}
+					}
+					else
+					{
+						Surface *temp = new Surface(spritePack->getWidth(), spritePack->getHeight());
+						temp->loadImage(FileMap::getFilePath(spritePack->getSprites()->operator[](startFrame)));
+						int xDivision = spritePack->getWidth() / spritePack->getSubX();
+						int yDivision = spritePack->getHeight() / spritePack->getSubY();
+						int offset = startFrame;
+
+						for (int y = 0; y != yDivision; ++y)
+						{
+							for (int x = 0; x != xDivision; ++x)
+							{
+								if (_sets[sheetName]->getFrame(offset))
+								{
+									Log(LOG_VERBOSE) << "Replacing frame: " << offset;
+									_sets[sheetName]->getFrame(offset)->clear();
+									// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
+									temp->blitNShade(_sets[sheetName]->getFrame(offset), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
+								}
+								else
+								{
+									if (adding)
+									{
+										// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
+										temp->blitNShade(_sets[sheetName]->addFrame(offset), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
+									}
+									else
+									{
+										Log(LOG_VERBOSE) << "Adding frame: " << offset + spritePack->getModIndex();
+										// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
+										temp->blitNShade(_sets[sheetName]->addFrame(offset + spritePack->getModIndex()), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
+									}
+								}
+								++offset;
+							}
+						}
+						delete temp;
+					}
+				}
+			}
+		}
+	}
+
+	// copy constructor doesn't like doing this directly, so let's make a second handobs file the old fashioned way.
+	// handob2 is used for all the left handed sprites.
+	_sets["HANDOB2.PCK"] = new SurfaceSet(_sets["HANDOB.PCK"]->getWidth(), _sets["HANDOB.PCK"]->getHeight());
+	std::map<int, Surface*> *handob = _sets["HANDOB.PCK"]->getFrames();
+	for (std::map<int, Surface*>::const_iterator i = handob->begin(); i != handob->end(); ++i)
+	{
+		Surface *surface1 = _sets["HANDOB2.PCK"]->addFrame(i->first);
+		Surface *surface2 = i->second;
+		surface1->setPalette(surface2->getPalette());
+		surface2->blit(surface1);
+	}
+
+	for (std::vector< std::pair<std::string, ExtraSounds *> >::const_iterator i = _extraSounds.begin(); i != _extraSounds.end(); ++i)
+	{
+		std::string setName = i->first;
+		ExtraSounds *soundPack = i->second;
+		if (_sounds.find(setName) == _sounds.end())
+		{
+			Log(LOG_VERBOSE) << "Creating new sound set: " << setName << ", this will likely have no in-game use.";
+			_sounds[setName] = new SoundSet();
+		}
+		else Log(LOG_VERBOSE) << "Adding/Replacing items in sound set: " << setName;
+		for (std::map<int, std::string>::iterator j = soundPack->getSounds()->begin(); j != soundPack->getSounds()->end(); ++j)
+		{
+			int startSound = j->first;
+			std::string fileName = j->second;
+			if (fileName.substr(fileName.length() - 1, 1) == "/")
+			{
+				Log(LOG_VERBOSE) << "Loading sound set from folder: " << fileName << " starting at index: " << startSound;
+				int offset = startSound;
+				std::set<std::string> contents = FileMap::getVFolderContents(fileName);
+				for (std::set<std::string>::iterator k = contents.begin(); k != contents.end(); ++k)
+				{
+					try
+					{
+						std::string fullPath = FileMap::getFilePath(fileName + *k);
+						if (_sounds[setName]->getSound(offset))
+						{
+							_sounds[setName]->getSound(offset)->load(fullPath);
+						}
+						else
+						{
+							_sounds[setName]->addSound(offset + soundPack->getModIndex())->load(fullPath);
+						}
+						offset++;
+					}
+					catch (Exception &e)
+					{
+						Log(LOG_WARNING) << e.what();
+					}
+				}
+			}
+			else
+			{
+				std::string fullPath = FileMap::getFilePath(fileName);
+				if (_sounds[setName]->getSound(startSound))
+				{
+					Log(LOG_VERBOSE) << "Replacing index: " << startSound;
+					_sounds[setName]->getSound(startSound)->load(fullPath);
+				}
+				else
+				{
+					Log(LOG_VERBOSE) << "Adding index: " << startSound;
+					_sounds[setName]->addSound(startSound + soundPack->getModIndex())->load(fullPath);
+				}
+			}
+		}
+	}
+}
+
+/**
+ * Loads the resources required by the Battlescape.
+ */
+void Ruleset::loadBattlescapeResources()
+{
+	// Load Battlescape ICONS
+	_sets["SPICONS.DAT"] = new SurfaceSet(32, 24);
+	_sets["SPICONS.DAT"]->loadDat(FileMap::getFilePath("UFOGRAPH/SPICONS.DAT"));
+	_sets["CURSOR.PCK"] = new SurfaceSet(32, 40);
+	_sets["CURSOR.PCK"]->loadPck(FileMap::getFilePath("UFOGRAPH/CURSOR.PCK"), FileMap::getFilePath("UFOGRAPH/CURSOR.TAB"));
+	_sets["SMOKE.PCK"] = new SurfaceSet(32, 40);
+	_sets["SMOKE.PCK"]->loadPck(FileMap::getFilePath("UFOGRAPH/SMOKE.PCK"), FileMap::getFilePath("UFOGRAPH/SMOKE.TAB"));
+	_sets["HIT.PCK"] = new SurfaceSet(32, 40);
+	_sets["HIT.PCK"]->loadPck(FileMap::getFilePath("UFOGRAPH/HIT.PCK"), FileMap::getFilePath("UFOGRAPH/HIT.TAB"));
+	_sets["X1.PCK"] = new SurfaceSet(128, 64);
+	_sets["X1.PCK"]->loadPck(FileMap::getFilePath("UFOGRAPH/X1.PCK"), FileMap::getFilePath("UFOGRAPH/X1.TAB"));
+	_sets["MEDIBITS.DAT"] = new SurfaceSet(52, 58);
+	_sets["MEDIBITS.DAT"]->loadDat(FileMap::getFilePath("UFOGRAPH/MEDIBITS.DAT"));
+	_sets["DETBLOB.DAT"] = new SurfaceSet(16, 16);
+	_sets["DETBLOB.DAT"]->loadDat(FileMap::getFilePath("UFOGRAPH/DETBLOB.DAT"));
+
+	// Load Battlescape Terrain (only blanks are loaded, others are loaded just in time)
+	_sets["BLANKS.PCK"] = new SurfaceSet(32, 40);
+	_sets["BLANKS.PCK"]->loadPck(FileMap::getFilePath("TERRAIN/BLANKS.PCK"), FileMap::getFilePath("TERRAIN/BLANKS.TAB"));
+
+	// Load Battlescape units
+	std::set<std::string> unitsContents = FileMap::getVFolderContents("UNITS");
+	std::set<std::string> usets = FileMap::filterFiles(unitsContents, "PCK");
+	for (std::set<std::string>::iterator i = usets.begin(); i != usets.end(); ++i)
+	{
+		std::string path = FileMap::getFilePath("UNITS/" + *i);
+		std::string tab = FileMap::getFilePath("UNITS/" + CrossPlatform::noExt(*i) + ".TAB");
+		std::string fname = *i;
+		std::transform(i->begin(), i->end(), fname.begin(), toupper);
+		if (fname != "BIGOBS.PCK")
+			_sets[fname] = new SurfaceSet(32, 40);
+		else
+			_sets[fname] = new SurfaceSet(32, 48);
+		_sets[fname]->loadPck(path, tab);
+	}
+	// incomplete chryssalid set: 1.0 data: stop loading.
+	if (_sets.find("CHRYS.PCK") != _sets.end() && !_sets["CHRYS.PCK"]->getFrame(225))
+	{
+		Log(LOG_FATAL) << "Version 1.0 data detected";
+		throw Exception("Invalid CHRYS.PCK, please patch your X-COM data to the latest version");
+	}
+	// TFTD uses the loftemps dat from the terrain folder, but still has enemy unknown's version in the geodata folder, which is short by 2 entries.
+	std::set<std::string> terrainContents = FileMap::getVFolderContents("TERRAIN");
+	if (terrainContents.find("loftemps.dat") != terrainContents.end())
+	{
+		MapDataSet::loadLOFTEMPS(FileMap::getFilePath("TERRAIN/LOFTEMPS.DAT"), &_voxelData);
+	}
+	else
+	{
+		MapDataSet::loadLOFTEMPS(FileMap::getFilePath("GEODATA/LOFTEMPS.DAT"), &_voxelData);
+	}
+
+	std::string scrs[] = { "TAC00.SCR" };
+
+	for (size_t i = 0; i < sizeof(scrs) / sizeof(scrs[0]); ++i)
+	{
+		_surfaces[scrs[i]] = new Surface(320, 200);
+		_surfaces[scrs[i]]->loadScr(FileMap::getFilePath("UFOGRAPH/" + scrs[i]));
+	}
+
+	// lower case so we can find them in the contents map
+	std::string lbms[] = { "d0.lbm",
+		"d1.lbm",
+		"d2.lbm",
+		"d3.lbm" };
+	std::string pals[] = { "PAL_BATTLESCAPE",
+		"PAL_BATTLESCAPE_1",
+		"PAL_BATTLESCAPE_2",
+		"PAL_BATTLESCAPE_3" };
+
+	SDL_Color backPal[] = { { 0, 5, 4, 255 },
+	{ 0, 10, 34, 255 },
+	{ 2, 9, 24, 255 },
+	{ 2, 0, 24, 255 } };
+
+	std::set<std::string> ufographContents = FileMap::getVFolderContents("UFOGRAPH");
+	for (size_t i = 0; i < sizeof(lbms) / sizeof(lbms[0]); ++i)
+	{
+		if (ufographContents.find(lbms[i]) == ufographContents.end())
+		{
+			continue;
+		}
+
+		if (!i)
+		{
+			delete _palettes["PAL_BATTLESCAPE"];
+		}
+
+		Surface *tempSurface = new Surface(1, 1);
+		tempSurface->loadImage(FileMap::getFilePath("UFOGRAPH/" + lbms[i]));
+		_palettes[pals[i]] = new Palette();
+		SDL_Color *colors = tempSurface->getPalette();
+		colors[255] = backPal[i];
+		_palettes[pals[i]]->setColors(colors, 256);
+		createTransparencyLUT(_palettes[pals[i]]);
+		delete tempSurface;
+	}
+
+	std::string spks[] = { "TAC01.SCR",
+		"DETBORD.PCK",
+		"DETBORD2.PCK",
+		"ICONS.PCK",
+		"MEDIBORD.PCK",
+		"SCANBORD.PCK",
+		"UNIBORD.PCK" };
+
+	for (size_t i = 0; i < sizeof(spks) / sizeof(spks[0]); ++i)
+	{
+		std::string fname = spks[i];
+		std::transform(fname.begin(), fname.end(), fname.begin(), tolower);
+		if (ufographContents.find(fname) == ufographContents.end())
+		{
+			continue;
+		}
+
+		_surfaces[spks[i]] = new Surface(320, 200);
+		_surfaces[spks[i]]->loadSpk(FileMap::getFilePath("UFOGRAPH/" + spks[i]));
+	}
+
+
+	std::set<std::string> bdys = FileMap::filterFiles(ufographContents, "BDY");
+	for (std::set<std::string>::iterator i = bdys.begin(); i != bdys.end(); ++i)
+	{
+		std::string idxName = *i;
+		std::transform(i->begin(), i->end(), idxName.begin(), toupper);
+		idxName = idxName.substr(0, idxName.length() - 3);
+		if (idxName.substr(0, 3) == "MAN")
+		{
+			idxName = idxName + "SPK";
+		}
+		else if (idxName == "TAC01.")
+		{
+			idxName = idxName + "SCR";
+		}
+		else
+		{
+			idxName = idxName + "PCK";
+		}
+		_surfaces[idxName] = new Surface(320, 200);
+		_surfaces[idxName]->loadBdy(FileMap::getFilePath("UFOGRAPH/" + *i));
+	}
+
+	// Load Battlescape inventory
+	std::set<std::string> invs = FileMap::filterFiles(ufographContents, "SPK");
+	for (std::set<std::string>::iterator i = invs.begin(); i != invs.end(); ++i)
+	{
+		std::string fname = *i;
+		std::transform(i->begin(), i->end(), fname.begin(), toupper);
+		_surfaces[fname] = new Surface(320, 200);
+		_surfaces[fname]->loadSpk(FileMap::getFilePath("UFOGRAPH/" + fname));
+	}
+
+	//"fix" of color index in original solders sprites
+	if (Options::battleHairBleach)
+	{
+		std::string name;
+
+		//personal armor
+		name = "XCOM_1.PCK";
+		if (_sets.find(name) != _sets.end())
+		{
+			SurfaceSet *xcom_1 = _sets[name];
+
+			for (int i = 0; i < 8; ++i)
+			{
+				//chest frame
+				Surface *surf = xcom_1->getFrame(4 * 8 + i);
+				ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
+				GraphSubset dim = head.getBaseDomain();
+				surf->lock();
+				dim.beg_y = 6;
+				dim.end_y = 9;
+				head.setDomain(dim);
+				ShaderDraw<HairXCOM1>(head, ShaderScalar<Uint8>(HairXCOM1::Face + 5));
+				dim.beg_y = 9;
+				dim.end_y = 10;
+				head.setDomain(dim);
+				ShaderDraw<HairXCOM1>(head, ShaderScalar<Uint8>(HairXCOM1::Face + 6));
+				surf->unlock();
+			}
+
+			for (int i = 0; i < 3; ++i)
+			{
+				//fall frame
+				Surface *surf = xcom_1->getFrame(264 + i);
+				ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
+				GraphSubset dim = head.getBaseDomain();
+				dim.beg_y = 0;
+				dim.end_y = 24;
+				dim.beg_x = 11;
+				dim.end_x = 20;
+				head.setDomain(dim);
+				surf->lock();
+				ShaderDraw<HairXCOM1>(head, ShaderScalar<Uint8>(HairXCOM1::Face + 6));
+				surf->unlock();
+			}
+		}
+
+		//all TFDT armors
+		name = "TDXCOM_?.PCK";
+		for (int j = 0; j < 3; ++j)
+		{
+			name[7] = '0' + j;
+			if (_sets.find(name) != _sets.end())
+			{
+				SurfaceSet *xcom_2 = _sets[name];
+				for (int i = 0; i < 16; ++i)
+				{
+					//chest frame without helm
+					Surface *surf = xcom_2->getFrame(262 + i);
+					surf->lock();
+					if (i < 8)
+					{
+						//female chest frame
+						ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
+						GraphSubset dim = head.getBaseDomain();
+						dim.beg_y = 6;
+						dim.end_y = 18;
+						head.setDomain(dim);
+						ShaderDraw<HairXCOM2>(head);
+
+						if (j == 2)
+						{
+							//fix some pixels in ION armor that was overwrite by previous function
+							if (i == 0)
+							{
+								surf->setPixel(18, 14, 16);
+							}
+							else if (i == 3)
+							{
+								surf->setPixel(19, 12, 20);
+							}
+							else if (i == 6)
+							{
+								surf->setPixel(13, 14, 16);
+							}
+						}
+					}
+
+					//we change face to pink, to prevent mixup with ION armor backpack that have same color group.
+					ShaderDraw<FaceXCOM2>(ShaderMove<Uint8>(surf));
+					surf->unlock();
+				}
+
+				for (int i = 0; i < 2; ++i)
+				{
+					//fall frame (first and second)
+					Surface *surf = xcom_2->getFrame(256 + i);
+					surf->lock();
+
+					ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
+					GraphSubset dim = head.getBaseDomain();
+					dim.beg_y = 0;
+					if (j == 3)
+					{
+						dim.end_y = 11 + 5 * i;
+					}
+					else
+					{
+						dim.end_y = 17;
+					}
+					head.setDomain(dim);
+					ShaderDraw<FallXCOM2>(head);
+
+					//we change face to pink, to prevent mixup with ION armor backpack that have same color group.
+					ShaderDraw<FaceXCOM2>(ShaderMove<Uint8>(surf));
+					surf->unlock();
+				}
+
+				//Palette fix for ION armor
+				if (j == 2)
+				{
+					int size = xcom_2->getTotalFrames();
+					for (int i = 0; i < size; ++i)
+					{
+						Surface *surf = xcom_2->getFrame(i);
+						surf->lock();
+						ShaderDraw<BodyXCOM2>(ShaderMove<Uint8>(surf));
+						surf->unlock();
+					}
+				}
+			}
+		}
+	}
+}
+
+/**
+ * Determines if an image file is an acceptable format for the game.
+ * @param extension Image file extension.
+ * @return True/false
+ */
+bool Ruleset::isImageFile(std::string extension) const
+{
+	std::transform(extension.begin(), extension.end(), extension.begin(), toupper);
+
+	return (
+		// arbitrary limitation: let's not use these ones (although they're officially supported by sdl)
+		/*
+		extension == ".ICO" ||
+		extension == ".CUR" ||
+		extension == ".PNM" ||
+		extension == ".PPM" ||
+		extension == ".PGM" ||
+		extension == ".PBM" ||
+		extension == ".XPM" ||
+		extension == "ILBM" ||
+		// excluding jpeg to avoid inevitable issues due to compression
+		extension == ".JPG" ||
+		extension == "JPEG" ||
+		*/
+		extension == ".BMP" ||
+		extension == ".LBM" ||
+		extension == ".IFF" ||
+		extension == ".PCX" ||
+		extension == ".GIF" ||
+		extension == ".PNG" ||
+		extension == ".TGA" ||
+		extension == ".TIF" ||
+		extension == "TIFF");
+}
+
+/**
+ * Loads the specified music file format.
+ * @param fmt Format of the music.
+ * @param file Filename of the music.
+ * @param track Track number of the music, if stored in a CAT.
+ * @param volume Volume modifier of the music, if stored in a CAT.
+ * @param adlibcat Pointer to ADLIB.CAT if available.
+ * @param aintrocat Pointer to AINTRO.CAT if available.
+ * @param gmcat Pointer to GM.CAT if available.
+ * @return Pointer to the music file, or NULL if it couldn't be loaded.
+ */
+Music *Ruleset::loadMusic(MusicFormat fmt, const std::string &file, int track, float volume, CatFile *adlibcat, CatFile *aintrocat, GMCatFile *gmcat) const
+{
+	/* MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI */
+	static const std::string exts[] = { "", ".flac", ".ogg", ".mp3", ".mod", ".wav", "", ".mid" };
+	Music *music = 0;
+	std::set<std::string> soundContents = FileMap::getVFolderContents("SOUND");
+	try
+	{
+		std::string fname = file + exts[fmt];
+		std::transform(fname.begin(), fname.end(), fname.begin(), tolower);
+
+		// Try Adlib music
+		if (fmt == MUSIC_ADLIB)
+		{
+			if (adlibcat && Options::audioBitDepth == 16)
+			{
+				music = new AdlibMusic(volume);
+				if (track < adlibcat->getAmount())
+				{
+					music->load(adlibcat->load(track, true), adlibcat->getObjectSize(track));
+				}
+				// separate intro music
+				else if (aintrocat)
+				{
+					track -= adlibcat->getAmount();
+					if (track < aintrocat->getAmount())
+					{
+						music->load(aintrocat->load(track, true), aintrocat->getObjectSize(track));
+					}
+					else
+					{
+						delete music;
+						music = 0;
+					}
+				}
+			}
+		}
+		// Try MIDI music
+		else if (fmt == MUSIC_MIDI)
+		{
+			// DOS MIDI
+			if (gmcat && track < gmcat->getAmount())
+			{
+				music = gmcat->loadMIDI(track);
+			}
+			// Windows MIDI
+			else
+			{
+				if (soundContents.find(fname) != soundContents.end())
+				{
+					music = new Music();
+					music->load(FileMap::getFilePath("SOUND/" + fname));
+				}
+			}
+		}
+		// Try digital tracks
+		else
+		{
+			if (soundContents.find(fname) != soundContents.end())
+			{
+				music = new Music();
+				music->load(FileMap::getFilePath("SOUND/" + fname));
+			}
+		}
+	}
+	catch (Exception &e)
+	{
+		Log(LOG_INFO) << e.what();
+		if (music) delete music;
+		music = 0;
+	}
+	return music;
+}
+
+/**
+ * Preamble:
+ * this is the most horrible function i've ever written, and it makes me sad.
+ * this is, however, a necessary evil, in order to save massive amounts of time in the draw function.
+ * when used with the default TFTD ruleset, this function loops 4,194,304 times
+ * (4 palettes, 4 tints, 4 levels of opacity, 256 colors, 256 comparisons per)
+ * each additional tint in the rulesets will result in over a million iterations more.
+ * @param pal the palette to base the lookup table on.
+ */
+void Ruleset::createTransparencyLUT(Palette *pal)
+{
+	SDL_Color desiredColor;
+	std::vector<Uint8> lookUpTable;
+	// start with the color sets
+	for (std::vector<SDL_Color>::const_iterator tint = _transparencies.begin(); tint != _transparencies.end(); ++tint)
+	{
+		// then the opacity levels, using the alpha channel as the step
+		for (int opacity = 1; opacity < 1 + tint->unused * 4; opacity += tint->unused)
+		{
+			// then the palette itself
+			for (int currentColor = 0; currentColor < 256; ++currentColor)
+			{
+				// add the RGB values from the ruleset to those of the colors contained in the palette
+				// in order to determine the desired color
+				// yes all this casting and clamping is required, we're dealing with Uint8s here, and there's
+				// a lot of potential for values to wrap around, which would be very bad indeed.
+				desiredColor.r = std::min(255, (int)(pal->getColors(currentColor)->r) + (tint->r * opacity));
+				desiredColor.g = std::min(255, (int)(pal->getColors(currentColor)->g) + (tint->g * opacity));
+				desiredColor.b = std::min(255, (int)(pal->getColors(currentColor)->b) + (tint->b * opacity));
+
+				Uint8 closest = 0;
+				int lowestDifference = INT_MAX;
+				// now compare each color in the palette to find the closest match to our desired one
+				for (int comparator = 0; comparator < 256; ++comparator)
+				{
+					int currentDifference = Sqr(desiredColor.r - pal->getColors(comparator)->r) +
+						Sqr(desiredColor.g - pal->getColors(comparator)->g) +
+						Sqr(desiredColor.b - pal->getColors(comparator)->b);
+
+					if (currentDifference < lowestDifference)
+					{
+						closest = comparator;
+						lowestDifference = currentDifference;
+					}
+				}
+				lookUpTable.push_back(closest);
+			}
+		}
+	}
+	_transparencyLUTs.push_back(lookUpTable);
 }
 
 }

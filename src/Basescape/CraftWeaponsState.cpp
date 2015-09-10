@@ -19,7 +19,7 @@
 #include "CraftWeaponsState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
@@ -70,7 +70,7 @@ CraftWeaponsState::CraftWeaponsState(Base *base, size_t craft, size_t weapon) : 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK14.SCR"));
 
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&CraftWeaponsState::btnCancelClick);

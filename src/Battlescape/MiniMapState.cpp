@@ -20,7 +20,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
 #include "../Interface/BattlescapeButton.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Text.h"
@@ -59,7 +59,7 @@ MiniMapState::MiniMapState (Camera * camera, SavedBattleGame * battleGame)
 	battleGame->setPaletteByDepth(this);
 
 	add(_bg);
-	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_bg);
+	_game->getRuleset()->getSurface("SCANBORD.PCK")->blit(_bg);
 	add(_miniMapView);
 	add(_btnLvlUp, "buttonUp", "minimap", _bg);
 	add(_btnLvlDwn, "buttonDown", "minimap", _bg);

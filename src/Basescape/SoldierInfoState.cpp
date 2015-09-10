@@ -20,7 +20,7 @@
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/Bar.h"
@@ -207,7 +207,7 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	centerAllSurfaces();
 
 	// Set up objects
-	_game->getResourcePack()->getSurface("BACK06.SCR")->blit(_bg);
+	_game->getRuleset()->getSurface("BACK06.SCR")->blit(_bg);
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldierInfoState::btnOkClick);
@@ -327,7 +327,7 @@ void SoldierInfoState::init()
 	UnitStats withArmor(*current);
 	withArmor += *(_soldier->getArmor()->getStats());
 
-	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+	SurfaceSet *texture = _game->getRuleset()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(_soldier->getRankSprite())->setX(0);
 	texture->getFrame(_soldier->getRankSprite())->setY(0);
 	texture->getFrame(_soldier->getRankSprite())->blit(_rank);

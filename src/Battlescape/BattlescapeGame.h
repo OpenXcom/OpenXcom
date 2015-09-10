@@ -33,7 +33,6 @@ class SavedBattleGame;
 class BattleItem;
 class BattleState;
 class BattlescapeState;
-class ResourcePack;
 class Map;
 class TileEngine;
 class Pathfinding;
@@ -160,10 +159,8 @@ public:
 	TileEngine *getTileEngine();
 	/// Gets the pathfinding.
 	Pathfinding *getPathfinding();
-	/// Gets the resourcepack.
-	ResourcePack *getResourcePack();
 	/// Gets the ruleset.
-	const Ruleset *getRuleset() const;
+	Ruleset *getRuleset();
 	/// Returns whether panic has been handled.
 	bool getPanicHandled() { return _playerPanicHandled; }
 	/// Tries to find an item and pick it up if possible.

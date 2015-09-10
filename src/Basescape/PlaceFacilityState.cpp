@@ -18,7 +18,7 @@
  */
 #include "PlaceFacilityState.h"
 #include "../Engine/Game.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -76,9 +76,9 @@ PlaceFacilityState::PlaceFacilityState(Base *base, RuleBaseFacility *rule) : _ba
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getRuleset()->getSurface("BACK01.SCR"));
 
-	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
+	_view->setTexture(_game->getRuleset()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
 	_view->setSelectable(rule->getSize());
 	_view->onMouseClick((ActionHandler)&PlaceFacilityState::viewClick);

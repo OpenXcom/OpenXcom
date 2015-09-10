@@ -28,7 +28,7 @@
 #include "Logger.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Mod/Ruleset.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -49,7 +49,7 @@ const double Game::VOLUME_GRADIENT = 10.0;
  * creates the display screen and sets up the cursor.
  * @param title Title of the game window.
  */
-Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _res(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true), _timeUntilNextFrame(0)
+Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true), _timeUntilNextFrame(0)
 {
 	Options::reload = false;
 	Options::mute = false;
@@ -121,7 +121,6 @@ Game::~Game()
 
 	delete _cursor;
 	delete _lang;
-	delete _res;
 	delete _save;
 	delete _rules;
 	delete _screen;
@@ -485,25 +484,6 @@ void Game::loadLanguage(const std::string &filename)
 }
 
 /**
- * Returns the resource pack currently in use by the game.
- * @return Pointer to the resource pack.
- */
-ResourcePack *Game::getResourcePack() const
-{
-	return _res;
-}
-
-/**
- * Sets a new resource pack for the game to use.
- * @param res Pointer to the resource pack.
- */
-void Game::setResourcePack(ResourcePack *res)
-{
-	delete _res;
-	_res = res;
-}
-
-/**
  * Returns the saved game currently in use by the game.
  * @return Pointer to the saved game.
  */
@@ -572,6 +552,7 @@ void Game::loadRulesets()
 		}
 	}
 	_rules->sortLists();
+	_rules->loadResources();
 }
 
 /**

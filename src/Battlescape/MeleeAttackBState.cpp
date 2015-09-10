@@ -33,7 +33,7 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Engine/Sound.h"
-#include "../Mod/ResourcePack.h"
+#include "../Mod/Ruleset.h"
 #include "../Mod/RuleItem.h"
 
 namespace OpenXcom
@@ -193,11 +193,11 @@ void MeleeAttackBState::performMeleeAttack()
 	// make some noise
 	if (_ammo && _ammo->getRules()->getMeleeAttackSound() != -1)
 	{
-		_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _ammo->getRules()->getMeleeAttackSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
+		_parent->getRuleset()->getSoundByDepth(_parent->getDepth(), _ammo->getRules()->getMeleeAttackSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
 	}
 	else if (_weapon->getRules()->getMeleeAttackSound() != -1)
 	{
-		_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _weapon->getRules()->getMeleeAttackSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
+		_parent->getRuleset()->getSoundByDepth(_parent->getDepth(), _weapon->getRules()->getMeleeAttackSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
 	}
 	// use up ammo if applicable
 	if (!_parent->getSave()->getDebugMode() && _weapon->getRules()->getBattleType() == BT_MELEE && _ammo && _ammo->spendBullet() == false)
@@ -254,7 +254,7 @@ void MeleeAttackBState::resolveHit()
 		// make some noise to signal the hit.
 		if (_weapon->getRules()->getMeleeHitSound() != -1)
 		{
-			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _action.weapon->getRules()->getMeleeHitSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
+			_parent->getRuleset()->getSoundByDepth(_parent->getDepth(), _action.weapon->getRules()->getMeleeHitSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
 		}
 		
 		// offset the damage voxel ever so slightly so that the target knows which side the attack came from

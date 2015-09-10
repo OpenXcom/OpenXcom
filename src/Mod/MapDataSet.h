@@ -29,7 +29,6 @@ namespace OpenXcom
 
 class MapData;
 class SurfaceSet;
-class ResourcePack;
 
 /**
  * Represents a Terrain Map Datafile.
