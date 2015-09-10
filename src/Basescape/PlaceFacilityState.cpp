@@ -18,7 +18,7 @@
  */
 #include "PlaceFacilityState.h"
 #include "../Engine/Game.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -30,7 +30,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Menu/ErrorMessageState.h"
 #include "../Engine/Options.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 #include <limits>
 

@@ -45,7 +45,7 @@
 #include "../Mod/RuleUfo.h"
 #include "../Mod/RuleCraft.h"
 #include "../Mod/RuleInventory.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/MapData.h"
 #include "../Mod/MCDPatch.h"
 #include "../Mod/Armor.h"

@@ -25,7 +25,7 @@
 #include "Language.h"
 #include "LocalizedText.h"
 #include "Palette.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Interface/Window.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
@@ -37,7 +37,7 @@
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom

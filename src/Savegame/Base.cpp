@@ -28,7 +28,7 @@
 #include "CraftWeapon.h"
 #include "../Mod/RuleCraft.h"
 #include "../Mod/RuleCraftWeapon.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "ItemContainer.h"
 #include "Soldier.h"
 #include "../Engine/Language.h"

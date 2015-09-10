@@ -18,7 +18,7 @@
  */
 #include "ErrorMessageState.h"
 #include "../Engine/Game.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"

@@ -18,7 +18,7 @@
  */
 #include "CraftWeapon.h"
 #include "../Mod/RuleCraftWeapon.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleItem.h"
 #include "CraftWeaponProjectile.h"
 

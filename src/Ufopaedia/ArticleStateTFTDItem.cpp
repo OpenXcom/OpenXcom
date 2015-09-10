@@ -20,7 +20,7 @@
 #include <sstream>
 #include "Ufopaedia.h"
 #include "ArticleStateTFTDItem.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/ArticleDefinition.h"
 #include "../Mod/RuleItem.h"
 #include "../Engine/Game.h"

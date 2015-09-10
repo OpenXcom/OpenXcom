@@ -23,11 +23,11 @@
 #include "../Interface/Text.h"
 #include "../Interface/Window.h"
 #include "../Interface/TextButton.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Options.h"
 #include "ErrorMessageState.h"
 #include "../Savegame/SavedGame.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom

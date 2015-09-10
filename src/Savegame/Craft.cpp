@@ -23,7 +23,7 @@
 #include "../Mod/RuleCraft.h"
 #include "CraftWeapon.h"
 #include "../Mod/RuleCraftWeapon.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "SavedGame.h"
 #include "ItemContainer.h"
 #include "Soldier.h"

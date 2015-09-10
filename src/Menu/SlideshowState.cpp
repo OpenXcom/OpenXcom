@@ -25,7 +25,7 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Timer.h"
 #include "../Interface/Text.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Options.h"
 #include "../Interface/Cursor.h"
 

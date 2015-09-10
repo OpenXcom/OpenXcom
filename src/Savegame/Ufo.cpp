@@ -26,7 +26,7 @@
 #include "AlienMission.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Language.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleUfo.h"
 #include "../Mod/UfoTrajectory.h"
 #include "../Mod/RuleAlienMission.h"

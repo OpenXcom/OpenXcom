@@ -24,7 +24,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleManufacture.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"

@@ -30,7 +30,7 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Language.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleItem.h"
 #include "SavedGame.h"
 #include "GameTime.h"

@@ -25,7 +25,7 @@
 #include "Particle.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleItem.h"
 #include "../Mod/MapData.h"
 #include "../Savegame/BattleUnit.h"

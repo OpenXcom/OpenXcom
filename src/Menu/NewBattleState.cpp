@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <yaml-cpp/yaml.h>
 #include "../Engine/Game.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleItem.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
@@ -52,7 +52,7 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Mod/RuleAlienMission.h"
 #include "../Mod/RuleGlobe.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 
 namespace OpenXcom
 {

@@ -26,7 +26,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
@@ -106,7 +106,7 @@
 #include "../Mod/AlienDeployment.h"
 #include "../Savegame/CraftWeapon.h"
 #include "../Mod/RuleCraftWeapon.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom

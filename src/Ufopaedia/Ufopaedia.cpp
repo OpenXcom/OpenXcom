@@ -20,7 +20,7 @@
 #include "Ufopaedia.h"
 #include "UfopaediaStartState.h"
 #include "../Savegame/SavedGame.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/ArticleDefinition.h"
 #include "ArticleState.h"
 #include "ArticleStateBaseFacility.h"

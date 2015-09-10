@@ -22,7 +22,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Screen.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Interface/Window.h"

@@ -29,7 +29,7 @@
 #include "../Mod/RuleAlienMission.h"
 #include "../Mod/RuleRegion.h"
 #include "../Mod/RuleCountry.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleUfo.h"
 #include "../Mod/UfoTrajectory.h"
 #include "../Mod/RuleGlobe.h"

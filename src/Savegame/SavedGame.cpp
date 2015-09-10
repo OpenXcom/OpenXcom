@@ -24,7 +24,7 @@
 #include <yaml-cpp/yaml.h>
 #include "../version.h"
 #include "../Engine/Logger.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
 #include "../Engine/Exception.h"

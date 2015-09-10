@@ -19,7 +19,7 @@
 #include <sstream>
 #include "SackSoldierState.h"
 #include "../Engine/Game.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"

@@ -18,7 +18,7 @@
  */
 
 #include "../Mod/ArticleDefinition.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleBaseFacility.h"
 #include "ArticleStateTFTD.h"
 #include "ArticleStateTFTDFacility.h"

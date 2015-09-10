@@ -18,7 +18,7 @@
  */
 #include "ConfirmCydoniaState.h"
 #include "../Engine/Game.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -29,7 +29,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Mod/AlienDeployment.h"
 #include "../Engine/Options.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 
 namespace OpenXcom
 {

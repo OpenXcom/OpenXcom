@@ -427,8 +427,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Mod\ResourcePack.cpp" />
-    <ClCompile Include="Mod\XcomResourcePack.cpp" />
     <ClCompile Include="Mod\ExtraSounds.cpp" />
     <ClCompile Include="Mod\ExtraSprites.cpp" />
     <ClCompile Include="Mod\ExtraStrings.cpp" />
@@ -464,7 +462,7 @@
     <ClCompile Include="Mod\RuleManufacture.cpp" />
     <ClCompile Include="Mod\RuleRegion.cpp" />
     <ClCompile Include="Mod\RuleResearch.cpp" />
-    <ClCompile Include="Mod\Ruleset.cpp" />
+    <ClCompile Include="Mod\Mod.cpp" />
     <ClCompile Include="Mod\RuleSoldier.cpp" />
     <ClCompile Include="Mod\RuleUfo.cpp" />
     <ClCompile Include="Mod\RuleTerrain.cpp" />
@@ -748,8 +746,6 @@
     <ClInclude Include="Menu\VideoState.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Mod\ResourcePack.h" />
-    <ClInclude Include="Mod\XcomResourcePack.h" />
     <ClInclude Include="Mod\ArticleDefinition.h" />
     <ClInclude Include="Mod\City.h" />
     <ClInclude Include="Mod\ExtraSounds.h" />
@@ -785,7 +781,7 @@
     <ClInclude Include="Mod\RuleManufacture.h" />
     <ClInclude Include="Mod\RuleRegion.h" />
     <ClInclude Include="Mod\RuleResearch.h" />
-    <ClInclude Include="Mod\Ruleset.h" />
+    <ClInclude Include="Mod\Mod.h" />
     <ClInclude Include="Mod\RuleSoldier.h" />
     <ClInclude Include="Mod\RuleUfo.h" />
     <ClInclude Include="Mod\RuleTerrain.h" />

@@ -28,7 +28,7 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Music.h"
 #include "../Engine/Sound.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleVideo.h"
 #include "CutsceneState.h"
 #include "../Interface/Cursor.h"

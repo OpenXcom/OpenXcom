@@ -20,7 +20,7 @@
 #include "ArticleStateTFTD.h"
 #include "ArticleStateTFTDCraftWeapon.h"
 #include "../Mod/ArticleDefinition.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleCraftWeapon.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"

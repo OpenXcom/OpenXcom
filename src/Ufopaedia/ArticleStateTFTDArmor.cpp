@@ -22,7 +22,7 @@
 #include "ArticleStateTFTD.h"
 #include "ArticleStateTFTDArmor.h"
 #include "../Mod/ArticleDefinition.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/Armor.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"

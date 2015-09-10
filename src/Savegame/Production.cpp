@@ -23,7 +23,7 @@
 #include "ItemContainer.h"
 #include "Craft.h"
 #include "CraftWeapon.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleItem.h"
 #include "../Mod/RuleCraft.h"
 #include "../Mod/RuleCraftWeapon.h"

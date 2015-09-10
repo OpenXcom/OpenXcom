@@ -24,7 +24,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Engine/Screen.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/Bar.h"
 #include "../Interface/Text.h"
@@ -35,7 +35,7 @@
 #include "../Engine/Options.h"
 #include "BattlescapeGame.h"
 #include "BattlescapeState.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom

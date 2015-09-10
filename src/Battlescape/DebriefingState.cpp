@@ -26,8 +26,8 @@
 #include "../Interface/Window.h"
 #include "NoContainmentState.h"
 #include "PromotionsState.h"
-#include "../Mod/Ruleset.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleCountry.h"
 #include "../Mod/RuleCraft.h"
 #include "../Mod/RuleItem.h"
@@ -60,7 +60,7 @@
 #include "../Basescape/SellState.h"
 #include "../Menu/SaveGameState.h"
 #include "../Mod/AlienDeployment.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom

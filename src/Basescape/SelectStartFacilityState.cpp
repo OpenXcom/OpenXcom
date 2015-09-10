@@ -21,7 +21,7 @@
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleBaseFacility.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"

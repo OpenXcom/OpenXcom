@@ -18,7 +18,7 @@
  */
 
 #include "../Mod/ArticleDefinition.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleUfo.h"
 #include "ArticleStateTFTD.h"
 #include "ArticleStateTFTDUso.h"

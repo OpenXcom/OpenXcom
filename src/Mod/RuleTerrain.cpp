@@ -21,7 +21,7 @@
 #include "MapBlock.h"
 #include "MapDataSet.h"
 #include "../Engine/RNG.h"
-#include "Ruleset.h"
+#include "Mod.h"
 
 namespace OpenXcom
 {

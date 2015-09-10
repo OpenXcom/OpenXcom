@@ -18,7 +18,7 @@
  */
 #include "Inventory.h"
 #include <cmath>
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleInventory.h"
 #include "../Mod/RuleInterface.h"
 #include "../Engine/Game.h"
@@ -28,7 +28,7 @@
 #include "../Engine/Font.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Engine/SurfaceSet.h"

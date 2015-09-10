@@ -22,7 +22,7 @@
 #include "Craft.h"
 #include "ItemContainer.h"
 #include "../Engine/Language.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 
 namespace OpenXcom
 {

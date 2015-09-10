@@ -19,7 +19,7 @@
 #include "AbortMissionState.h"
 #include <vector>
 #include "../Engine/Game.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -29,7 +29,7 @@
 #include "BattlescapeState.h"
 #include "../Engine/Options.h"
 #include "../Mod/AlienDeployment.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/MapScript.h"
 #include "../Savegame/Tile.h"
 

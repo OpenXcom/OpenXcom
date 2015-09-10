@@ -464,10 +464,6 @@ openxcom_SOURCES = \
 	src/Menu/TestState.h \
 	src/Menu/VideoState.cpp \
 	src/Menu/VideoState.h \
-	src/Mod/ResourcePack.cpp \
-	src/Mod/ResourcePack.h \
-	src/Mod/XcomResourcePack.cpp \
-	src/Mod/XcomResourcePack.h \
 	src/Mod/AlienDeployment.cpp \
 	src/Mod/AlienDeployment.h \
 	src/Mod/AlienRace.cpp \
@@ -534,8 +530,8 @@ openxcom_SOURCES = \
 	src/Mod/RuleUfo.h \
 	src/Mod/RuleVideo.cpp \
 	src/Mod/RuleVideo.h \
-	src/Mod/Ruleset.cpp \
-	src/Mod/Ruleset.h \
+	src/Mod/Mod.cpp \
+	src/Mod/Mod.h \
 	src/Mod/SoldierNamePool.cpp \
 	src/Mod/SoldierNamePool.h \
 	src/Mod/SoundDefinition.cpp \

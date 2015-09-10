@@ -34,7 +34,7 @@
 #include "../Engine/RNG.h"
 #include "../Mod/RuleInventory.h"
 #include "../Mod/RuleSoldier.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "Tile.h"
 #include "SavedGame.h"
 #include "SavedBattleGame.h"

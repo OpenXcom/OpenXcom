@@ -21,7 +21,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Screen.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Window.h"

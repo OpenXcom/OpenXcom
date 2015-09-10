@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "Ruleset.h"
+#include "Mod.h"
 #include <algorithm>
 #include <sstream>
 #include "../Engine/CrossPlatform.h"

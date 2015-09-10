@@ -20,7 +20,7 @@
 #include <climits>
 #include <algorithm>
 #include "../Engine/Game.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Language.h"
 #include "../Interface/Window.h"
 #include "../Interface/TextList.h"

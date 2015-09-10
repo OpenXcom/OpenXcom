@@ -27,7 +27,7 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Options.h"
 #include "../Mod/Armor.h"

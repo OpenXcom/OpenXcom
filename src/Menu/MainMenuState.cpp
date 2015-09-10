@@ -20,7 +20,7 @@
 #include <sstream>
 #include "../version.h"
 #include "../Engine/Game.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Language.h"
 #include "../Engine/Screen.h"
 #include "../Interface/TextButton.h"

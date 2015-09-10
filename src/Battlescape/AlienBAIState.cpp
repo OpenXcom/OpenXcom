@@ -35,7 +35,7 @@
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Mod/Armor.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleItem.h"
 
 namespace OpenXcom

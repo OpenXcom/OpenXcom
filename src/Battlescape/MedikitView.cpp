@@ -18,10 +18,10 @@
  */
 #include "MedikitView.h"
 #include "../Engine/Game.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 #include "../Engine/SurfaceSet.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Action.h"
 #include "../Engine/Language.h"
 #include "../Savegame/BattleUnit.h"

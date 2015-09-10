@@ -29,7 +29,7 @@
 #include "../Engine/Screen.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/FileMap.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 
 namespace OpenXcom
 {

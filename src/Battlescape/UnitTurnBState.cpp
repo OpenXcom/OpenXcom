@@ -22,7 +22,7 @@
 #include "Map.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Options.h"
 

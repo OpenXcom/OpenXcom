@@ -18,7 +18,7 @@
  */
 #include "PlaceLiftState.h"
 #include "../Engine/Game.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
@@ -26,7 +26,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
 #include "../Mod/RuleBaseFacility.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "BasescapeState.h"
 #include "SelectStartFacilityState.h"
 #include "../Savegame/SavedGame.h"

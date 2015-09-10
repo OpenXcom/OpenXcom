@@ -20,7 +20,7 @@
 #include <sstream>
 #include "GeoscapeState.h"
 #include "../Engine/Game.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Screen.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/SurfaceSet.h"
@@ -46,7 +46,7 @@
 #include "../Mod/RuleRegion.h"
 #include "../Savegame/AlienMission.h"
 #include "DogfightErrorState.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom

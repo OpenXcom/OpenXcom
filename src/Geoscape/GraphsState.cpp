@@ -19,7 +19,7 @@
 #include "GraphsState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Screen.h"
@@ -37,7 +37,7 @@
 #include "../Interface/TextList.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom

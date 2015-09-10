@@ -451,10 +451,6 @@ set ( menu_src
 )
 
 set ( mod_src
-  Mod/ResourcePack.h
-  Mod/ResourcePack.cpp
-  Mod/XcomResourcePack.cpp
-  Mod/XcomResourcePack.h
   Mod/RuleCraft.cpp
   Mod/RuleCraft.h
   Mod/Armor.cpp
@@ -483,8 +479,8 @@ set ( mod_src
   Mod/RuleBaseFacility.h
   Mod/SoldierNamePool.h
   Mod/SoldierNamePool.cpp
-  Mod/Ruleset.h
-  Mod/Ruleset.cpp
+  Mod/Mod.h
+  Mod/Mod.cpp
   Mod/RuleCountry.cpp
   Mod/RuleCountry.h
   Mod/RuleUfo.h

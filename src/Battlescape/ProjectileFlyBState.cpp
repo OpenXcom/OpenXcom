@@ -28,7 +28,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
-#include "../Mod/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Sound.h"
 #include "../Mod/RuleItem.h"
 #include "../Engine/Options.h"
