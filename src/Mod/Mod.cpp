@@ -19,6 +19,7 @@
 #include "Mod.h"
 #include <algorithm>
 #include <sstream>
+#include <climits>
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/FileMap.h"
 #include "../Engine/Palette.h"
