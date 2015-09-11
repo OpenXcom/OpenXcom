@@ -57,9 +57,9 @@ const std::set<std::string> &getVFolderContents(const std::string &relativePath)
 	std::string canonicalRelativePath = _canonicalize(relativePath);
 	
 	// trim of trailing '/' characters
-    while (!canonicalRelativePath.empty() && '/' == canonicalRelativePath.at(canonicalRelativePath.length() - 1))
+	while (!canonicalRelativePath.empty() && '/' == canonicalRelativePath.at(canonicalRelativePath.length() - 1))
 	{
-        canonicalRelativePath.resize(canonicalRelativePath.length() - 1);
+		canonicalRelativePath.resize(canonicalRelativePath.length() - 1);
 	}
 	
 	if (_vdirs.find(canonicalRelativePath) == _vdirs.end())
