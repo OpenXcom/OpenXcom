@@ -1,0 +1,7 @@
+# Based on XcomUtil by Scott Jones and BladeFireLight
+items:
+  - type: STR_GAUSS_RIFLE_CLIP
+    clipSize: 30
+  - type: STR_HEAVY_GAUSS_CLIP
+    power: 80
+    clipSize: 20
