@@ -54,7 +54,7 @@ public:
 	/// Cleans up the craft ruleset.
 	~RuleCraft();
 	/// Loads craft data from YAML.
-	void load(const YAML::Node& node, Mod *mod, int modIndex, int nextCraftIndex);
+	void load(const YAML::Node& node, Mod *mod, int listOrder);
 	/// Gets the craft's type.
 	std::string getType() const;
 	/// Gets the craft's requirements.

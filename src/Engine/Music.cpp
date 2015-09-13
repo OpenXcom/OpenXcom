@@ -148,6 +148,9 @@ void Music::resume()
 #endif
 }
 
+/**
+ * Checks if any music is playing.
+ */
 bool Music::isPlaying()
 {
 #ifndef __NO_MUSIC
@@ -158,4 +161,5 @@ bool Music::isPlaying()
 #endif
 	return false;
 }
+
 }

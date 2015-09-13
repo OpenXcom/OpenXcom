@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleCraftWeapon.h"
+#include "Mod.h"
 
 namespace OpenXcom
 {
@@ -39,9 +40,9 @@ RuleCraftWeapon::~RuleCraftWeapon()
 /**
  * Loads the craft weapon from a YAML file.
  * @param node YAML node.
- * @param modIndex A value that offsets the sounds and sprite values to avoid conflicts.
+ * @param mod Mod for the craft weapon.
  */
-void RuleCraftWeapon::load(const YAML::Node &node, int modIndex)
+void RuleCraftWeapon::load(const YAML::Node &node, Mod *mod)
 {
 	_type = node["type"].as<std::string>(_type);
 	if (node["sprite"])
@@ -49,14 +50,11 @@ void RuleCraftWeapon::load(const YAML::Node &node, int modIndex)
 		_sprite = node["sprite"].as<int>(_sprite);
 		// this one is an offset within INTICONS.PCK
 		if (_sprite > 5)
-			_sprite += modIndex;
+			_sprite += mod->getModOffset();
 	}
 	if (node["sound"])
 	{	
-		_sound = node["sound"].as<int>(_sound);
-		// 14 entries in GEO.CAT
-		if (_sound > 13)
-			_sound += modIndex;
+		_sound = mod->getSoundOffset(node["sound"].as<int>(_sound), "GEO.CAT");
 	}
 	_damage = node["damage"].as<int>(_damage);
 	_range = node["range"].as<int>(_range);

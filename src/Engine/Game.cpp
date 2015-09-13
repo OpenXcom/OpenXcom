@@ -29,7 +29,6 @@
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "../Mod/Mod.h"
-#include "../Mod/Mod.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "Action.h"
@@ -519,40 +518,7 @@ void Game::loadMods()
 	Mod::resetGlobalStatics();
 	delete _mod;
 	_mod = new Mod();
-	const std::vector<std::pair<std::string, std::vector<std::string> > > &rulesets(FileMap::getRulesets());
-	for (size_t i = 0; rulesets.size() > i; ++i)
-	{
-		try
-		{
-			_mod->loadRulesets(rulesets[i].second, i);
-		}
-		catch (YAML::Exception &e)
-		{
-			const std::string &modId = rulesets[i].first;
-			Log(LOG_WARNING) << "disabling mod with invalid ruleset: " << modId;
-			std::vector<std::pair<std::string, bool> >::iterator it =
-				std::find(Options::mods.begin(), Options::mods.end(),
-					  std::pair<std::string, bool>(modId, true));
-			if (it == Options::mods.end())
-			{
-				Log(LOG_ERROR) << "cannot find broken mod in mods list: " << modId;
-				Log(LOG_ERROR) << "clearing mods list";
-				Options::mods.clear();
-			}
-			else
-			{
-				it->second = false;
-			}
-			Options::save();
-
-			throw Exception("failed to load ruleset from mod '" +
-				Options::getModInfos().at(modId).getName() +
-				"' (" + std::string(e.what()) +
-				"); disabling mod for next startup");
-		}
-	}
-	_mod->sortLists();
-	_mod->loadResources();
+	_mod->loadAll(FileMap::getRulesets());
 }
 
 /**

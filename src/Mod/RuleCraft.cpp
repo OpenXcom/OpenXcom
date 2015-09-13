@@ -18,6 +18,7 @@
  */
 #include "RuleCraft.h"
 #include "RuleTerrain.h"
+#include "Mod.h"
 
 namespace OpenXcom
 {
@@ -47,7 +48,7 @@ RuleCraft::~RuleCraft()
  * @param modIndex A value that offsets the sounds and sprite values to avoid conflicts.
  * @param listOrder The list weight for this craft.
  */
-void RuleCraft::load(const YAML::Node &node, Mod *mod, int modIndex, int listOrder)
+void RuleCraft::load(const YAML::Node &node, Mod *mod, int listOrder)
 {
 	_type = node["type"].as<std::string>(_type);
 	_requires = node["requires"].as< std::vector<std::string> >(_requires);
@@ -56,7 +57,7 @@ void RuleCraft::load(const YAML::Node &node, Mod *mod, int modIndex, int listOrd
 		_sprite = node["sprite"].as<int>(_sprite);
 		// this is an offset in BASEBITS.PCK, and two in INTICONS.PCK
 		if (_sprite > 4)
-			_sprite += modIndex;
+			_sprite += mod->getModOffset();
 	}
 	_marker = node["marker"].as<int>(_marker);
 	_fuelMax = node["fuelMax"].as<int>(_fuelMax);

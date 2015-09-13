@@ -26,6 +26,8 @@
 namespace OpenXcom
 {
 
+class Mod;
+
 /**
  * Represents a specific type of craft weapon.
  * Contains constant info about a craft weapon like
@@ -46,7 +48,7 @@ public:
 	/// Cleans up the craft weapon ruleset.
 	~RuleCraftWeapon();
 	/// Loads craft weapon data from YAML.
-	void load(const YAML::Node& node, int modIndex);
+	void load(const YAML::Node& node, Mod *mod);
 	/// Gets the craft weapon's type.
 	std::string getType() const;
 	/// Gets the craft weapon's sprite.

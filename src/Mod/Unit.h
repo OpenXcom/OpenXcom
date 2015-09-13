@@ -42,6 +42,8 @@ public:
 	void merge(const UnitStats& stats) { tu = (stats.tu ? stats.tu : tu); stamina = (stats.stamina ? stats.stamina : stamina); health = (stats.health ? stats.health : health); bravery = (stats.bravery ? stats.bravery : bravery); reactions = (stats.reactions ? stats.reactions : reactions); firing = (stats.firing ? stats.firing : firing); throwing = (stats.throwing ? stats.throwing : throwing); strength = (stats.strength ? stats.strength : strength); psiStrength = (stats.psiStrength ? stats.psiStrength : psiStrength); psiSkill = (stats.psiSkill ? stats.psiSkill : psiSkill); melee = (stats.melee ? stats.melee : melee); };
 };
 
+class Mod;
+
 /**
  * Represents the static data for a unit that is generated on the battlescape, this includes: HWPs, aliens and civilians.
  * @sa Soldier BattleUnit
@@ -69,7 +71,7 @@ public:
 	/// Cleans up the unit ruleset.
 	~Unit();
 	/// Loads the unit data from YAML.
-	void load(const YAML::Node& node, int modIndex);
+	void load(const YAML::Node& node, Mod *mod);
 	/// Gets the unit's type.
 	std::string getType() const;
 	/// Gets the unit's stats.

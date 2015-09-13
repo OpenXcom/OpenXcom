@@ -31,6 +31,7 @@ enum BattleType { BT_NONE, BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXIMI
 
 class SurfaceSet;
 class Surface;
+class Mod;
 
 /**
  * Represents a specific type of item.
@@ -74,7 +75,7 @@ public:
 	/// Cleans up the item ruleset.
 	~RuleItem();
 	/// Loads item data from YAML.
-	void load(const YAML::Node& node, int modIndex, int listIndex);
+	void load(const YAML::Node& node, Mod *mod, int listIndex);
 	/// Gets the item's type.
 	std::string getType() const;
 	/// Gets the item's name.

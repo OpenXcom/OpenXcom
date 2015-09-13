@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleBaseFacility.h"
+#include "Mod.h"
 
 namespace OpenXcom
 {
@@ -40,26 +41,20 @@ RuleBaseFacility::~RuleBaseFacility()
 /**
  * Loads the base facility type from a YAML file.
  * @param node YAML node.
- * @param modIndex A value that offsets the sounds and sprite values to avoid conflicts.
+ * @param mod Mod for the facility.
  * @param listOrder The list weight for this facility.
  */
-void RuleBaseFacility::load(const YAML::Node &node, int modIndex, int listOrder)
+void RuleBaseFacility::load(const YAML::Node &node, Mod *mod, int listOrder)
 {
 	_type = node["type"].as<std::string>(_type);
 	_requires = node["requires"].as< std::vector<std::string> >(_requires);
 	if (node["spriteShape"])
 	{
-		_spriteShape = node["spriteShape"].as<int>(_spriteShape);
-		// BASEBITS.PCK: 34 entries
-		if (_spriteShape > 33)
-			_spriteShape += modIndex;
+		_spriteShape = mod->getSpriteOffset(node["spriteShape"].as<int>(_spriteShape), "BASEBITS.PCK");
 	}
 	if (node["spriteFacility"])
 	{
-		_spriteFacility = node["spriteFacility"].as<int>(_spriteFacility);
-		// BASEBITS.PCK: 34 entries
-		if (_spriteFacility > 33)
-			_spriteFacility += modIndex;
+		_spriteFacility = mod->getSpriteOffset(node["spriteFacility"].as<int>(_spriteFacility), "BASEBITS.PCK");
 	}
 	_lift = node["lift"].as<bool>(_lift);
 	_hyper = node["hyper"].as<bool>(_hyper);
@@ -82,17 +77,11 @@ void RuleBaseFacility::load(const YAML::Node &node, int modIndex, int listOrder)
 	_hitRatio = node["hitRatio"].as<int>(_hitRatio);
 	if (node["fireSound"])
 	{
-		_fireSound = node["fireSound"].as<int>(_fireSound);
-		// GEO.CAT: 14 entries
-		if (_fireSound > 13)
-			_fireSound += modIndex;
+		_fireSound = mod->getSoundOffset(node["fireSound"].as<int>(_fireSound), "GEO.CAT");
 	}
 	if (node["hitSound"])
 	{		
-		_hitSound = node["hitSound"].as<int>(_hitSound);
-		// GEO.CAT: 14 entries
-		if (_hitSound > 13)
-			_hitSound += modIndex;
+		_hitSound = mod->getSoundOffset(node["hitSound"].as<int>(_hitSound), "GEO.CAT");
 	}
 	_mapName = node["mapName"].as<std::string>(_mapName);
 	_listOrder = node["listOrder"].as<int>(_listOrder);

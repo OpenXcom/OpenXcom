@@ -20,6 +20,7 @@
 #include "RuleInventory.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
+#include "Mod.h"
 
 namespace OpenXcom
 {
@@ -46,10 +47,10 @@ RuleItem::~RuleItem()
 /**
  * Loads the item from a YAML file.
  * @param node YAML node.
- * @param modIndex Offsets the sounds and sprite values to avoid conflicts.
+ * @param mod Mod for the item.
  * @param listOrder The list weight for this item.
  */
-void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
+void RuleItem::load(const YAML::Node &node, Mod *mod, int listOrder)
 {
 	_type = node["type"].as<std::string>(_type);
 	_name = node["name"].as<std::string>(_name);
@@ -61,73 +62,46 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	_weight = node["weight"].as<int>(_weight);
 	if (node["bigSprite"])
 	{
-		_bigSprite = node["bigSprite"].as<int>(_bigSprite);
-		// BIGOBS.PCK: 57 entries
-		if (_bigSprite > 56)
-			_bigSprite += modIndex;
+		_bigSprite = mod->getSpriteOffset(node["bigSprite"].as<int>(_bigSprite), "BIGOBS.PCK");
 	}
 	if (node["floorSprite"])
 	{
-		_floorSprite = node["floorSprite"].as<int>(_floorSprite);
-		// FLOOROB.PCK: 73 entries
-		if (_floorSprite > 72)
-			_floorSprite += modIndex;
+		_floorSprite = mod->getSpriteOffset(node["floorSprite"].as<int>(_floorSprite), "FLOOROB.PCK");
 	}
 	if (node["handSprite"])
 	{
-		_handSprite = node["handSprite"].as<int>(_handSprite);
-		// HANDOBS.PCK: 128 entries
-		if (_handSprite > 127)
-			_handSprite += modIndex;
+		_handSprite = mod->getSpriteOffset(node["handSprite"].as<int>(_handSprite), "HANDOBS.PCK");
 	}
 	if (node["bulletSprite"])
 	{
 		// Projectiles: 385 entries ((105*33) / (3*3)) (35 sprites per projectile(0-34), 11 projectiles (0-10))
 		_bulletSprite = node["bulletSprite"].as<int>(_bulletSprite) * 35;
 		if (_bulletSprite >= 385)
-			_bulletSprite += modIndex;
+			_bulletSprite += mod->getModOffset();
 	}
 	if (node["fireSound"])
 	{
-		_fireSound = node["fireSound"].as<int>(_fireSound);
-		// BATTLE.CAT: 55 entries
-		if (_fireSound > 54)
-			_fireSound += modIndex;
+		_fireSound = mod->getSoundOffset(node["fireSound"].as<int>(_fireSound), "BATTLE.CAT");
 	}
 	if (node["hitSound"])
-	{		
-		_hitSound = node["hitSound"].as<int>(_hitSound);
-		// BATTLE.CAT: 55 entries
-		if (_hitSound > 54)
-			_hitSound += modIndex;
+	{
+		_hitSound = mod->getSoundOffset(node["hitSound"].as<int>(_hitSound), "BATTLE.CAT");
 	}
 	if (node["meleeSound"])
 	{
-		_meleeSound = node["meleeSound"].as<int>(_meleeSound);
-		// BATTLE.CAT: 55 entries
-		if (_meleeSound > 54)
-			_meleeSound += modIndex;
+		_meleeSound = mod->getSoundOffset(node["meleeSound"].as<int>(_meleeSound), "BATTLE.CAT");
 	}
 	if (node["hitAnimation"])
-	{		
-		_hitAnimation = node["hitAnimation"].as<int>(_hitAnimation);
-		// SMOKE.PCK: 56 entries
-		if (_hitAnimation > 55)
-			_hitAnimation += modIndex;
+	{
+		_hitAnimation = mod->getSpriteOffset(node["hitAnimation"].as<int>(_hitAnimation), "SMOKE.PCK");
 	}
 	if (node["meleeAnimation"])
 	{
-		_meleeAnimation = node["meleeAnimation"].as<int>(_meleeAnimation);
-		// HIT.PCK: 4 entries
-		if (_meleeAnimation > 3)
-			_meleeAnimation += modIndex;
+		_meleeAnimation = mod->getSpriteOffset(node["meleeAnimation"].as<int>(_meleeAnimation), "HIT.PCK");
 	}
 	if (node["meleeHitSound"])
 	{
-		_meleeHitSound = node["meleeHitSound"].as<int>(_meleeHitSound);
-		// BATTLE.CAT: 55 entries
-		if (_meleeHitSound > 54)
-			_meleeHitSound += modIndex;
+		_meleeHitSound = mod->getSoundOffset(node["meleeHitSound"].as<int>(_meleeHitSound), "BATTLE.CAT");
 	}
 	_power = node["power"].as<int>(_power);
 	_compatibleAmmo = node["compatibleAmmo"].as< std::vector<std::string> >(_compatibleAmmo);
@@ -185,7 +159,6 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	_vaporColor = node["vaporColor"].as<int>(_vaporColor);
 	_vaporDensity = node["vaporDensity"].as<int>(_vaporDensity);
 	_vaporProbability = node["vaporProbability"].as<int>(_vaporProbability);
-
 	if (!_listOrder)
 	{
 		_listOrder = listOrder;

@@ -145,15 +145,18 @@ private:
 	std::vector<std::vector<int> > _alienItemLevels;
 	std::vector<SDL_Color> _transparencies;
 	int _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder, _invListOrder;
+	size_t _modOffset;
 	std::vector<std::string> _psiRequirements; // it's a cache for psiStrengthEval
 
 	/// Loads a ruleset from a YAML file.
-	void loadFile(const std::string &filename, size_t spriteOffset);
+	void loadFile(const std::string &filename);
 	/// Loads a ruleset element.
 	template <typename T>
 	T *loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index = 0, const std::string &key = "type");
-	/// Gets a random music. this is private to prevent access, use playMusic(name, true) instead.
+	/// Gets a random music. This is private to prevent access, use playMusic(name, true) instead.
 	Music *getRandomMusic(const std::string &name) const;
+	/// Gets a particular sound set. This is private to prevent access, use getSound(name, id) instead.
+	SoundSet *getSoundSet(const std::string &name) const;
 	/// Loads battlescape specific resources.
 	void loadBattlescapeResources();
 	/// Checks if an extension is a valid image file.
@@ -162,6 +165,16 @@ private:
 	Music *loadMusic(MusicFormat fmt, const std::string &file, int track, float volume, CatFile *adlibcat, CatFile *aintrocat, GMCatFile *gmcat) const;
 	/// Creates a transparency lookup table for a given palette.
 	void createTransparencyLUT(Palette *pal);
+	/// Loads a specified mod content.
+	void loadMod(const std::vector<std::string> &rulesetFiles, size_t modIdx);
+	/// Loads resources from vanilla.
+	void loadVanillaResources();
+	/// Loads resources from extra rulesets.
+	void loadExtraResources();
+	/// Applies mods to vanilla resources.
+	void modResources();
+	/// Sorts all our lists according to their weight.
+	void sortLists();
 public:
 	static int DOOR_OPEN;
 	static int SLIDING_DOOR_OPEN;
@@ -219,16 +232,19 @@ public:
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Gets list of voxel data.
 	std::vector<Uint16> *getVoxelData();
-	/// Returns a specific sound from either the land or underwater resource set.
+	/// Returns a specific sound from either the land or underwater sound set.
 	Sound *getSoundByDepth(unsigned int depth, unsigned int sound) const;
+	/// Gets list of LUT data.
 	const std::vector<std::vector<Uint8> > *getLUTs() const;
-	bool isMusicPlaying();
-	/// Loads vanilla resources.
-	void loadResources();
+	/// Gets the mod offset.
+	int getModOffset() const;
+	/// Gets the mod offset for a certain sprite.
+	int getSpriteOffset(int sprite, const std::string &set) const;
+	/// Gets the mod offset for a certain sound.
+	int getSoundOffset(int sound, const std::string &set) const;
 
-	/// Loads a list of rulesets from YAML files for the mod at the specified index.  The first
-	/// mod loaded should be the master at index 0, then 1, and so on.
-	void loadRulesets(const std::vector<std::string> &rulesetFiles, size_t modIdx);
+	/// Loads a list of mods.
+	void loadAll(const std::vector< std::pair< std::string, std::vector<std::string> > > &mods);
 	/// Generates the starting saved game.
 	SavedGame *newSave() const;
 	/// Gets the pool list for soldier names.
@@ -332,9 +348,7 @@ public:
 	/// Gets the list of external Strings.
 	std::map<std::string, ExtraStrings *> getExtraStrings() const;
 	/// Gets the list of StatStrings.
-	std::vector<StatString *> getStatStrings() const;    
-	/// Sorts all our lists according to their weight.
-	void sortLists();
+	std::vector<StatString *> getStatStrings() const;
 	/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
 	std::vector<std::string> getPsiRequirements() const;
 	/// Returns the sorted list of inventories.
