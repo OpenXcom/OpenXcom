@@ -70,7 +70,7 @@ void RuleItem::load(const YAML::Node &node, Mod *mod, int listOrder)
 	}
 	if (node["handSprite"])
 	{
-		_handSprite = mod->getSpriteOffset(node["handSprite"].as<int>(_handSprite), "HANDOBS.PCK");
+		_handSprite = mod->getSpriteOffset(node["handSprite"].as<int>(_handSprite), "HANDOB.PCK");
 	}
 	if (node["bulletSprite"])
 	{
