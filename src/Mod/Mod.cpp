@@ -2738,7 +2738,7 @@ void Mod::loadBattlescapeResources()
 			}
 		}
 
-		//all TFDT armors
+		//all TFTD armors
 		name = "TDXCOM_?.PCK";
 		for (int j = 0; j < 3; ++j)
 		{
