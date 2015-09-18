@@ -50,11 +50,11 @@ void RuleBaseFacility::load(const YAML::Node &node, Mod *mod, int listOrder)
 	_requires = node["requires"].as< std::vector<std::string> >(_requires);
 	if (node["spriteShape"])
 	{
-		_spriteShape = mod->getSpriteOffset(node["spriteShape"].as<int>(_spriteShape), "BASEBITS.PCK");
+		_spriteShape = mod->getSpriteOffset(node["spriteShape"].as<size_t>(_spriteShape), "BASEBITS.PCK");
 	}
 	if (node["spriteFacility"])
 	{
-		_spriteFacility = mod->getSpriteOffset(node["spriteFacility"].as<int>(_spriteFacility), "BASEBITS.PCK");
+		_spriteFacility = mod->getSpriteOffset(node["spriteFacility"].as<size_t>(_spriteFacility), "BASEBITS.PCK");
 	}
 	_lift = node["lift"].as<bool>(_lift);
 	_hyper = node["hyper"].as<bool>(_hyper);
@@ -77,11 +77,11 @@ void RuleBaseFacility::load(const YAML::Node &node, Mod *mod, int listOrder)
 	_hitRatio = node["hitRatio"].as<int>(_hitRatio);
 	if (node["fireSound"])
 	{
-		_fireSound = mod->getSoundOffset(node["fireSound"].as<int>(_fireSound), "GEO.CAT");
+		_fireSound = mod->getSoundOffset(node["fireSound"].as<size_t>(_fireSound), "GEO.CAT");
 	}
 	if (node["hitSound"])
-	{		
-		_hitSound = mod->getSoundOffset(node["hitSound"].as<int>(_hitSound), "GEO.CAT");
+	{
+		_hitSound = mod->getSoundOffset(node["hitSound"].as<size_t>(_hitSound), "GEO.CAT");
 	}
 	_mapName = node["mapName"].as<std::string>(_mapName);
 	_listOrder = node["listOrder"].as<int>(_listOrder);

@@ -70,15 +70,15 @@ void Unit::load(const YAML::Node &node, Mod *mod)
 	_female = node["female"].as<bool>(_female);	
 	if (node["deathSound"])
 	{
-		_deathSound = mod->getSoundOffset(node["deathSound"].as<int>(_deathSound), "BATTLE.CAT");
+		_deathSound = mod->getSoundOffset(node["deathSound"].as<size_t>(_deathSound), "BATTLE.CAT");
 	}
 	if (node["aggroSound"])
 	{
-		_aggroSound = mod->getSoundOffset(node["aggroSound"].as<int>(_aggroSound), "BATTLE.CAT");
+		_aggroSound = mod->getSoundOffset(node["aggroSound"].as<size_t>(_aggroSound), "BATTLE.CAT");
 	}
 	if (node["moveSound"])
 	{
-		_moveSound = mod->getSoundOffset(node["moveSound"].as<int>(_moveSound), "BATTLE.CAT");
+		_moveSound = mod->getSoundOffset(node["moveSound"].as<size_t>(_moveSound), "BATTLE.CAT");
 	}
 }
 
