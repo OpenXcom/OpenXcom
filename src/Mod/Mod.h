@@ -237,11 +237,11 @@ public:
 	/// Gets list of LUT data.
 	const std::vector<std::vector<Uint8> > *getLUTs() const;
 	/// Gets the mod offset.
-	int getModOffset() const;
+	size_t getModOffset() const;
 	/// Gets the mod offset for a certain sprite.
-	int getSpriteOffset(size_t sprite, const std::string &set) const;
+	size_t getSpriteOffset(size_t sprite, const std::string &set) const;
 	/// Gets the mod offset for a certain sound.
-	int getSoundOffset(size_t sound, const std::string &set) const;
+	size_t getSoundOffset(size_t sound, const std::string &set) const;
 
 	/// Loads a list of mods.
 	void loadAll(const std::vector< std::pair< std::string, std::vector<std::string> > > &mods);
