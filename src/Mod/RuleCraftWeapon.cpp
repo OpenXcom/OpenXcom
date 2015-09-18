@@ -54,7 +54,7 @@ void RuleCraftWeapon::load(const YAML::Node &node, Mod *mod)
 	}
 	if (node["sound"])
 	{	
-		_sound = mod->getSoundOffset(node["sound"].as<int>(_sound), "GEO.CAT");
+		_sound = mod->getSoundOffset(node["sound"].as<size_t>(_sound), "GEO.CAT");
 	}
 	_damage = node["damage"].as<int>(_damage);
 	_range = node["range"].as<int>(_range);

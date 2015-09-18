@@ -62,15 +62,15 @@ void RuleItem::load(const YAML::Node &node, Mod *mod, int listOrder)
 	_weight = node["weight"].as<int>(_weight);
 	if (node["bigSprite"])
 	{
-		_bigSprite = mod->getSpriteOffset(node["bigSprite"].as<int>(_bigSprite), "BIGOBS.PCK");
+		_bigSprite = mod->getSpriteOffset(node["bigSprite"].as<size_t>(_bigSprite), "BIGOBS.PCK");
 	}
 	if (node["floorSprite"])
 	{
-		_floorSprite = mod->getSpriteOffset(node["floorSprite"].as<int>(_floorSprite), "FLOOROB.PCK");
+		_floorSprite = mod->getSpriteOffset(node["floorSprite"].as<size_t>(_floorSprite), "FLOOROB.PCK");
 	}
 	if (node["handSprite"])
 	{
-		_handSprite = mod->getSpriteOffset(node["handSprite"].as<int>(_handSprite), "HANDOB.PCK");
+		_handSprite = mod->getSpriteOffset(node["handSprite"].as<size_t>(_handSprite), "HANDOB.PCK");
 	}
 	if (node["bulletSprite"])
 	{
@@ -81,27 +81,27 @@ void RuleItem::load(const YAML::Node &node, Mod *mod, int listOrder)
 	}
 	if (node["fireSound"])
 	{
-		_fireSound = mod->getSoundOffset(node["fireSound"].as<int>(_fireSound), "BATTLE.CAT");
+		_fireSound = mod->getSoundOffset(node["fireSound"].as<size_t>(_fireSound), "BATTLE.CAT");
 	}
 	if (node["hitSound"])
 	{
-		_hitSound = mod->getSoundOffset(node["hitSound"].as<int>(_hitSound), "BATTLE.CAT");
+		_hitSound = mod->getSoundOffset(node["hitSound"].as<size_t>(_hitSound), "BATTLE.CAT");
 	}
 	if (node["meleeSound"])
 	{
-		_meleeSound = mod->getSoundOffset(node["meleeSound"].as<int>(_meleeSound), "BATTLE.CAT");
+		_meleeSound = mod->getSoundOffset(node["meleeSound"].as<size_t>(_meleeSound), "BATTLE.CAT");
 	}
 	if (node["hitAnimation"])
 	{
-		_hitAnimation = mod->getSpriteOffset(node["hitAnimation"].as<int>(_hitAnimation), "SMOKE.PCK");
+		_hitAnimation = mod->getSpriteOffset(node["hitAnimation"].as<size_t>(_hitAnimation), "SMOKE.PCK");
 	}
 	if (node["meleeAnimation"])
 	{
-		_meleeAnimation = mod->getSpriteOffset(node["meleeAnimation"].as<int>(_meleeAnimation), "HIT.PCK");
+		_meleeAnimation = mod->getSpriteOffset(node["meleeAnimation"].as<size_t>(_meleeAnimation), "HIT.PCK");
 	}
 	if (node["meleeHitSound"])
 	{
-		_meleeHitSound = mod->getSoundOffset(node["meleeHitSound"].as<int>(_meleeHitSound), "BATTLE.CAT");
+		_meleeHitSound = mod->getSoundOffset(node["meleeHitSound"].as<size_t>(_meleeHitSound), "BATTLE.CAT");
 	}
 	_power = node["power"].as<int>(_power);
 	_compatibleAmmo = node["compatibleAmmo"].as< std::vector<std::string> >(_compatibleAmmo);

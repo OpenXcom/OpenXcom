@@ -572,7 +572,7 @@ const std::vector<std::vector<Uint8> > *Mod::getLUTs() const
  * Returns the current mod-based offset for resources.
  * @return Mod offset.
  */
-int Mod::getModOffset() const
+size_t Mod::getModOffset() const
 {
 	return _modOffset;
 }
@@ -583,7 +583,7 @@ int Mod::getModOffset() const
  * @param id Numeric ID of the sprite.
  * @param resource Name of the surfaceset to lookup.
  */
-int Mod::getSpriteOffset(int sprite, const std::string& set) const
+size_t Mod::getSpriteOffset(size_t sprite, const std::string& set) const
 {
 	SurfaceSet *ss = getSurfaceSet(set);
 	if (ss != 0 && sprite >= ss->getTotalFrames())
@@ -598,7 +598,7 @@ int Mod::getSpriteOffset(int sprite, const std::string& set) const
 * @param id Numeric ID of the sound.
 * @param resource Name of the soundset to lookup.
 */
-int Mod::getSoundOffset(int sound, const std::string& set) const
+size_t Mod::getSoundOffset(size_t sound, const std::string& set) const
 {
 	SoundSet *ss = getSoundSet(set);
 	if (ss != 0 && sound >= ss->getTotalSounds())
