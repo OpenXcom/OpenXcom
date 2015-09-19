@@ -80,7 +80,7 @@ NewPossibleResearchState::NewPossibleResearchState(Base * base, const std::vecto
 	size_t tally(0);
 	for (std::vector<RuleResearch *>::const_iterator iter = possibilities.begin(); iter != possibilities.end(); ++iter)
 	{
-		bool liveAlien = _game->getMod()->getUnit((*iter)->getName()) != 0;
+		bool liveAlien = (*iter)->needItem() && _game->getMod()->getUnit((*iter)->getName()) != 0;
 		if (!_game->getSavedGame()->wasResearchPopped(*iter) && (*iter)->getRequirements().empty() && !liveAlien)
 		{
 			_game->getSavedGame()->addPoppedResearch((*iter));

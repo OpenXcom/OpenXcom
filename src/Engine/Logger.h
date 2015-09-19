@@ -90,7 +90,7 @@ inline std::ostringstream& Logger::get(SeverityLevel level)
 inline Logger::~Logger()
 {
     os << std::endl;
-	if (reportingLevel() == LOG_DEBUG)
+	if (reportingLevel() == LOG_DEBUG || reportingLevel() == LOG_VERBOSE)
 	{
 		fprintf(stderr, "%s", os.str().c_str());
 		fflush(stderr);
@@ -117,7 +117,7 @@ inline std::string& Logger::logFile()
 
 inline std::string Logger::toString(SeverityLevel level)
 {
-	static const char* const buffer[] = {"FATAL", "ERROR", "WARN", "INFO", "DEBUG"};
+    static const char* const buffer[] = {"FATAL", "ERROR", "WARN", "INFO", "DEBUG", "VERBOSE"};
     return buffer[level];
 }
 
