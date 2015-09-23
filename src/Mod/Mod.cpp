@@ -586,7 +586,7 @@ int Mod::getModOffset() const
 int Mod::getSpriteOffset(int sprite, const std::string& set) const
 {
 	SurfaceSet *ss = getSurfaceSet(set);
-	if (ss != 0 && sprite >= ss->getTotalFrames())
+	if (ss != 0 && sprite >= (int)ss->getTotalFrames())
 		return sprite + _modOffset;
 	else
 		return sprite;
@@ -601,7 +601,7 @@ int Mod::getSpriteOffset(int sprite, const std::string& set) const
 int Mod::getSoundOffset(int sound, const std::string& set) const
 {
 	SoundSet *ss = getSoundSet(set);
-	if (ss != 0 && sound >= ss->getTotalSounds())
+	if (ss != 0 && sound >= (int)ss->getTotalSounds())
 		return sound + _modOffset;
 	else
 		return sound;
