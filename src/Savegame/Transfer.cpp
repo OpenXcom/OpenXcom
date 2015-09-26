@@ -299,7 +299,7 @@ void Transfer::advance(Base *base)
 		}
 		else if (_itemQty != 0)
 		{
-			base->getItems()->addItem(_itemId, _itemQty);
+			base->getStorageItems()->addItem(_itemId, _itemQty);
 		}
 		else if (_scientists != 0)
 		{

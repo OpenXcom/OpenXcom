@@ -812,7 +812,7 @@ std::string Craft::rearm(Mod *mod)
 		if (*i != 0 && (*i)->isRearming())
 		{
 			std::string clip = (*i)->getRules()->getClipItem();
-			int available = _base->getItems()->getItem(clip);
+			int available = _base->getStorageItems()->getItem(clip);
 			if (clip.empty())
 			{
 				(*i)->rearm(0, 0);
@@ -827,7 +827,7 @@ std::string Craft::rearm(Mod *mod)
 					(*i)->setRearming(false);
 				}
 
-				_base->getItems()->removeItem(clip, used);
+				_base->getStorageItems()->removeItem(clip, used);
 			}
 			else
 			{

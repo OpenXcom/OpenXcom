@@ -168,7 +168,7 @@ TransferItemsState::TransferItemsState(Base *baseFrom, Base *baseTo) : _baseFrom
 	const std::vector<std::string> &items = _game->getMod()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
-		int qty = _baseFrom->getItems()->getItem(*i);
+		int qty = _baseFrom->getStorageItems()->getItem(*i);
 		if (qty > 0)
 		{
 			_baseQty.push_back(qty);
@@ -177,7 +177,7 @@ TransferItemsState::TransferItemsState(Base *baseFrom, Base *baseTo) : _baseFrom
 			RuleItem *rule = _game->getMod()->getItem(*i);
 			std::wostringstream ss, ss2;
 			ss << qty;
-			ss2 << _baseTo->getItems()->getItem(*i);
+			ss2 << _baseTo->getStorageItems()->getItem(*i);
 			std::wstring item = tr(*i);
 			if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
 			{
@@ -345,7 +345,7 @@ void TransferItemsState::completeTransfer()
 			// Transfer items
 			else
 			{
-				_baseFrom->getItems()->removeItem(_items[ getItemIndex(i) ], _transferQty[i]);
+				_baseFrom->getStorageItems()->removeItem(_items[ getItemIndex(i) ], _transferQty[i]);
 				Transfer *t = new Transfer(time);
 				t->setItems(_items[getItemIndex(i)], _transferQty[i]);
 				_baseTo->getTransfers()->push_back(t);
@@ -511,7 +511,7 @@ int TransferItemsState::getQuantity() const
 	case TRANSFER_ENGINEER:
 		return _baseFrom->getAvailableEngineers();
 	case TRANSFER_ITEM:
-		return _baseFrom->getItems()->getItem(_items[getItemIndex(_sel)]);
+		return _baseFrom->getStorageItems()->getItem(_items[getItemIndex(_sel)]);
 	}
 	return 1;
 }

@@ -173,7 +173,7 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _itemOffset(0),
 			_items.push_back(*i);
 			_qtys.push_back(0);
 			std::wostringstream ss5;
-			ss5 << _base->getItems()->getItem(*i);
+			ss5 << _base->getStorageItems()->getItem(*i);
 			std::wstring item = tr(*i);
 			if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
 			{

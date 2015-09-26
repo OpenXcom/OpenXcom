@@ -335,10 +335,11 @@ std::vector<Transfer*> *Base::getTransfers()
 }
 
 /**
- * Returns the list of items in the base.
+ * Returns the list of items in the base storage rooms.
+ * Does NOT return items assigned to craft or in transfer.
  * @return Pointer to the item list.
  */
-ItemContainer *Base::getItems()
+ItemContainer *Base::getStorageItems()
 {
 	return _items;
 }
@@ -458,7 +459,7 @@ int Base::getAvailableSoldiers(bool checkCombatReadiness) const
 		{
 			total++;
 		}
-		else if (checkCombatReadiness && (((*i)->getCraft() != 0 && (*i)->getCraft()->getStatus() != "STR_OUT") || 
+		else if (checkCombatReadiness && (((*i)->getCraft() != 0 && (*i)->getCraft()->getStatus() != "STR_OUT") ||
 			((*i)->getCraft() == 0 && (*i)->getWoundRecovery() == 0)))
 		{
 			total++;
@@ -662,7 +663,7 @@ double Base::getIgnoredStores()
 				if (*w != 0 && (*w)->isRearming())
 				{
 					std::string clip = (*w)->getRules()->getClipItem();
-					int available = getItems()->getItem(clip);
+					int available = getStorageItems()->getItem(clip);
 					if (!clip.empty() && available > 0)
 					{
 						int clipSize = _mod->getItem(clip)->getClipSize();
@@ -1073,7 +1074,7 @@ bool Base::getHyperDetection() const
 		if ((*i)->getRules()->isHyperwave() && (*i)->getBuildTime() == 0)
 		{
 			return true;
-		}		
+		}
 	}
 	return false;
 }
@@ -1115,7 +1116,7 @@ int Base::getUsedPsiLabs() const
 }
 
 /**
- * Returns the total amount of used 
+ * Returns the total amount of used
  * Containment Space in the base.
  * @return Containment Lab space.
  */

@@ -90,7 +90,7 @@ public:
 	/// Gets the base's transfers.
 	std::vector<Transfer*> *getTransfers();
 	/// Gets the base's items.
-	ItemContainer *getItems();
+	ItemContainer *getStorageItems();
 	/// Gets the base's scientists.
 	int getScientists() const;
 	/// Sets the base's scientists.

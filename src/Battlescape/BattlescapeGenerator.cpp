@@ -647,7 +647,7 @@ void BattlescapeGenerator::deployXCOM()
 		if (_game->getSavedGame()->getMonthsPassed() != -1)
 		{
 			// add items that are in the base
-			for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end();)
+			for (std::map<std::string, int>::iterator i = _base->getStorageItems()->getContents()->begin(); i != _base->getStorageItems()->getContents()->end();)
 			{
 				// only put items in the battlescape that make sense (when the item got a sprite, it's probably ok)
 				RuleItem *rule = _game->getMod()->getItem(i->first);
@@ -659,7 +659,7 @@ void BattlescapeGenerator::deployXCOM()
 					}
 					std::map<std::string, int>::iterator tmp = i;
 					++i;
-					_base->getItems()->removeItem(tmp->first, tmp->second);
+					_base->getStorageItems()->removeItem(tmp->first, tmp->second);
 				}
 				else
 				{
@@ -2098,7 +2098,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 	}
 
 	delete _dummy;
-	
+
 	// special hacks to fill in empty floors on level 0
 	for (int x = 0; x < _mapsize_x; ++x)
 	{
