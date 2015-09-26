@@ -53,7 +53,7 @@ namespace YAML
 namespace OpenXcom
 {
 
-RuleAlienMission::RuleAlienMission(const std::string &type) : _type(type), _points(0), _objective(OBJECTIVE_SCORE), _spawnZone(-1)
+RuleAlienMission::RuleAlienMission(const std::string &type) : _type(type), _points(0), _objective(OBJECTIVE_SCORE), _spawnZone(-1), _retaliationOdds(-1)
 {
 }
 
@@ -81,6 +81,7 @@ void RuleAlienMission::load(const YAML::Node &node)
 	_spawnUfo = node["spawnUfo"].as<std::string>(_spawnUfo);
 	_spawnZone = node["spawnZone"].as<int>(_spawnZone);
 	_weights = node["missionWeights"].as< std::map<size_t, int> >(_weights);
+	_retaliationOdds = node["retaliationOdds"].as<int>(_retaliationOdds);
 	//Only allow full replacement of mission racial distribution.
 	if (const YAML::Node &weights = node["raceWeights"])
 	{
@@ -178,4 +179,12 @@ int RuleAlienMission::getWeight(const size_t monthsPassed) const
 	return weight;
 }
 
+/**
+ * Returns the Alien score for this mission.
+ * @return Amount of points.
+ */
+int RuleAlienMission::getRetaliationOdds() const
+{
+	return _retaliationOdds;
+}
 }
