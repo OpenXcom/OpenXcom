@@ -25,6 +25,7 @@
 #include <SDL_endian.h>
 #include "Palette.h"
 #include "Exception.h"
+#include "Logger.h"
 #include "ShaderMove.h"
 #include <stdlib.h>
 #ifdef _WIN32
@@ -259,7 +260,9 @@ void Surface::loadImage(const std::string &filename)
 	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
 
 	// Load file
+	Log(LOG_VERBOSE) << "Loading image: " << utf8;
 	_surface = IMG_Load(utf8.c_str());
+
 	if (!_surface)
 	{
 		std::string err = filename + ":" + IMG_GetError();
