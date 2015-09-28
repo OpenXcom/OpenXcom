@@ -832,7 +832,7 @@ void Tile::prepareNewTurn()
 					// try to set the unit on fire.
 					if (RNG::percent(40 * _unit->getArmor()->getDamageModifier(DT_IN)))
 					{
-						int burnTime = RNG::generate(0, int(5 * _unit->getArmor()->getDamageModifier(DT_IN)));
+						int burnTime = RNG::generate(0, int(5.0f * _unit->getArmor()->getDamageModifier(DT_IN)));
 						if (_unit->getFire() < burnTime)
 						{
 							_unit->setFire(burnTime);
