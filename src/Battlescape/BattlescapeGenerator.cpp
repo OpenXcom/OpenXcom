@@ -1823,6 +1823,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 		mapDataSetIDOffset++;
 	}
 
+	RuleTerrain* ufoTerrain = 0;
 	// lets generate the map now and store it inside the tile objects
 
 	// this mission type is "hard-coded" in terms of map layout
@@ -1926,7 +1927,8 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 					// TODO: make _ufopos a vector ;)
 					if (_ufo)
 					{
-						ufoMap = _ufo->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, 999, 0, false);
+						ufoTerrain = _ufo->getRules()->getBattlescapeTerrainData();
+						ufoMap = ufoTerrain->getRandomMapBlock(999, 999, 0, false);
 						if (addCraft(ufoMap, command, _ufoPos))
 						{
 							for (x = _ufoPos.x; x < _ufoPos.x + _ufoPos.w; ++x)
@@ -2024,9 +2026,10 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 					init();
 					break;
 				case MSC_SETUFO:
-					if (_game->getMod()->getUfo(command->getUFOName()))
+					if (_game->getMod()->getUfo(command->getUFOName()) && ufoTerrain == 0)
 					{
-						ufoMap = _game->getMod()->getUfo(command->getUFOName())->getBattlescapeTerrainData()->getRandomMapBlock(999, 999, 0, false);
+						ufoTerrain = _game->getMod()->getUfo(command->getUFOName())->getBattlescapeTerrainData();
+						ufoMap = ufoTerrain->getRandomMapBlock(999, 999, 0, false);
 						if (addCraft(ufoMap, command, _ufoPos))
 						{
 							for (x = _ufoPos.x; x < _ufoPos.x + _ufoPos.w; ++x)
@@ -2057,9 +2060,9 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 
 	loadNodes();
 
-	if (ufoMap)
+	if (ufoMap && ufoTerrain)
 	{
-		for (std::vector<MapDataSet*>::iterator i = _ufo->getRules()->getBattlescapeTerrainData()->getMapDataSets()->begin(); i != _ufo->getRules()->getBattlescapeTerrainData()->getMapDataSets()->end(); ++i)
+		for (std::vector<MapDataSet*>::iterator i = ufoTerrain->getMapDataSets()->begin(); i != ufoTerrain->getMapDataSets()->end(); ++i)
 		{
 			(*i)->loadData();
 			if (_game->getMod()->getMCDPatch((*i)->getName()))
@@ -2071,7 +2074,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 		}
 		// TODO: put ufo positions in a vector rather than a single rect, and iterate here?
 		// will probably need to make ufomap a vector too i suppose.
-		loadMAP(ufoMap, _ufoPos.x * 10, _ufoPos.y * 10, _ufo->getRules()->getBattlescapeTerrainData(), mapDataSetIDOffset);
+		loadMAP(ufoMap, _ufoPos.x * 10, _ufoPos.y * 10, ufoTerrain, mapDataSetIDOffset);
 		loadRMP(ufoMap, _ufoPos.x * 10, _ufoPos.y * 10, Node::UFOSEGMENT);
 		for (int i = 0; i < ufoMap->getSizeX() / 10; ++i)
 		{

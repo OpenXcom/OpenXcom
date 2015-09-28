@@ -76,7 +76,10 @@ void MapScript::load(const YAML::Node& node)
 			_sizeX = _sizeY = 0; // defaults: don't resize anything unless specified.
 		}
 		else if (command == "setUFO")
+		{
 			_type = MSC_SETUFO;
+			_groups.push_back(1); // this is a default, and can be overridden
+		}
 		else
 		{
 			throw Exception("Unknown command: " + command);
