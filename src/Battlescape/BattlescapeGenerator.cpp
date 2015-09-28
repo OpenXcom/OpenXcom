@@ -1925,9 +1925,17 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 				case MSC_ADDUFO:
 					// as above, note that the craft and the ufo will never be allowed to overlap.
 					// TODO: make _ufopos a vector ;)
-					if (_ufo)
+					if (_game->getMod()->getUfo(command->getUFOName()))
+					{
+						ufoTerrain = _game->getMod()->getUfo(command->getUFOName())->getBattlescapeTerrainData();
+					}
+					else if (_ufo)
 					{
 						ufoTerrain = _ufo->getRules()->getBattlescapeTerrainData();
+					}
+
+					if (ufoTerrain)
+					{
 						ufoMap = ufoTerrain->getRandomMapBlock(999, 999, 0, false);
 						if (addCraft(ufoMap, command, _ufoPos))
 						{
@@ -2024,27 +2032,6 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 						_mapsize_z = command->getSizeZ();
 					}
 					init();
-					break;
-				case MSC_SETUFO:
-					if (_game->getMod()->getUfo(command->getUFOName()) && ufoTerrain == 0)
-					{
-						ufoTerrain = _game->getMod()->getUfo(command->getUFOName())->getBattlescapeTerrainData();
-						ufoMap = ufoTerrain->getRandomMapBlock(999, 999, 0, false);
-						if (addCraft(ufoMap, command, _ufoPos))
-						{
-							for (x = _ufoPos.x; x < _ufoPos.x + _ufoPos.w; ++x)
-							{
-								for (y = _ufoPos.y; y < _ufoPos.y + _ufoPos.h; ++y)
-								{
-									if (_blocks[x][y])
-									{
-										loadMAP(_blocks[x][y], x * 10, y * 10, _terrain, 0);
-									}
-								}
-							}
-							success = true;
-						}
-					}
 					break;
 				default:
 					break;
