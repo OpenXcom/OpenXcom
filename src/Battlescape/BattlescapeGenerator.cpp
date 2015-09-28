@@ -2023,6 +2023,26 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 					}
 					init();
 					break;
+				case MSC_SETUFO:
+					if (_game->getMod()->getUfo(command->getUFOName()))
+					{
+						ufoMap = _game->getMod()->getUfo(command->getUFOName())->getBattlescapeTerrainData()->getRandomMapBlock(999, 999, 0, false);
+						if (addCraft(ufoMap, command, _ufoPos))
+						{
+							for (x = _ufoPos.x; x < _ufoPos.x + _ufoPos.w; ++x)
+							{
+								for (y = _ufoPos.y; y < _ufoPos.y + _ufoPos.h; ++y)
+								{
+									if (_blocks[x][y])
+									{
+										loadMAP(_blocks[x][y], x * 10, y * 10, _terrain, 0);
+									}
+								}
+							}
+							success = true;
+						}
+					}
+					break;
 				default:
 					break;
 				}
