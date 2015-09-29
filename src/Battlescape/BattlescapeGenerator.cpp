@@ -1804,7 +1804,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 	init();
 
 	MapBlock* craftMap = 0;
-	MapBlock* ufoMap = 0;
+	std::vector<MapBlock*> ufoMaps;
 
 	int mapDataSetIDOffset = 0;
 	int craftDataSetIDOffset = 0;
@@ -1936,12 +1936,15 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 
 					if (ufoTerrain)
 					{
-						ufoMap = ufoTerrain->getRandomMapBlock(999, 999, 0, false);
-						if (addCraft(ufoMap, command, _ufoPos))
+						MapBlock *ufoMap = ufoTerrain->getRandomMapBlock(999, 999, 0, false);
+						SDL_Rect ufoPosTemp;
+						if (addCraft(ufoMap, command, ufoPosTemp))
 						{
-							for (x = _ufoPos.x; x < _ufoPos.x + _ufoPos.w; ++x)
+							_ufoPos.push_back(ufoPosTemp);
+							ufoMaps.push_back(ufoMap);
+							for (x = ufoPosTemp.x; x < ufoPosTemp.x + ufoPosTemp.w; ++x)
 							{
-								for (y = _ufoPos.y; y < _ufoPos.y + _ufoPos.h; ++y)
+								for (y = ufoPosTemp.y; y < ufoPosTemp.y + ufoPosTemp.h; ++y)
 								{
 									if (_blocks[x][y])
 									{
@@ -2047,7 +2050,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 
 	loadNodes();
 
-	if (ufoMap && ufoTerrain)
+	if (!ufoMaps.empty() && ufoTerrain)
 	{
 		for (std::vector<MapDataSet*>::iterator i = ufoTerrain->getMapDataSets()->begin(); i != ufoTerrain->getMapDataSets()->end(); ++i)
 		{
@@ -2061,13 +2064,16 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 		}
 		// TODO: put ufo positions in a vector rather than a single rect, and iterate here?
 		// will probably need to make ufomap a vector too i suppose.
-		loadMAP(ufoMap, _ufoPos.x * 10, _ufoPos.y * 10, ufoTerrain, mapDataSetIDOffset);
-		loadRMP(ufoMap, _ufoPos.x * 10, _ufoPos.y * 10, Node::UFOSEGMENT);
-		for (int i = 0; i < ufoMap->getSizeX() / 10; ++i)
+		for (size_t i = 0; i < ufoMaps.size(); ++i)
 		{
-			for (int j = 0; j < ufoMap->getSizeY() / 10; j++)
+			loadMAP(ufoMaps[i], _ufoPos[i].x * 10, _ufoPos[i].y * 10, ufoTerrain, mapDataSetIDOffset);
+			loadRMP(ufoMaps[i], _ufoPos[i].x * 10, _ufoPos[i].y * 10, Node::UFOSEGMENT);
+			for (int i = 0; i < ufoMaps[i]->getSizeX() / 10; ++i)
 			{
-				_segments[_ufoPos.x + i][_ufoPos.y + j] = Node::UFOSEGMENT;
+				for (int j = 0; j < ufoMaps[i]->getSizeY() / 10; j++)
+				{
+					_segments[_ufoPos[i].x + i][_ufoPos[i].y + j] = Node::UFOSEGMENT;
+				}
 			}
 		}
 	}

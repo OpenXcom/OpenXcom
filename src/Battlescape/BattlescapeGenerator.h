@@ -70,7 +70,8 @@ private:
 	int _alienItemLevel;
 	bool _allowAutoLoadout, _baseInventory, _generateFuel, _craftDeployed;
 	int _craftZ;
-	SDL_Rect _craftPos, _ufoPos;
+	SDL_Rect _craftPos;
+	std::vector<SDL_Rect> _ufoPos;
 	int _blocksToDo;
 	std::vector< std::vector<MapBlock*> > _blocks;
 	std::vector< std::vector<bool> > _landingzone;
