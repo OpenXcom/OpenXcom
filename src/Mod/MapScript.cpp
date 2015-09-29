@@ -260,6 +260,7 @@ void MapScript::load(const YAML::Node& node)
 
 	_executionChances = node["executionChances"].as<int>(_executionChances);
 	_executions = node["executions"].as<int>(_executions);
+	_ufoName = node["UFOName"].as<std::string>(_ufoName);
 	// take no chances, don't accept negative values here.
 	_label = std::abs(node["label"].as<int>(_label));
 }
@@ -375,6 +376,15 @@ MapBlock *MapScript::getNextBlock(RuleTerrain *terrain)
 		return terrain->getMapBlocks()->at((size_t)(result));
 	}
 	return 0;
+}
+
+/**
+ * Gets the name of the UFO in the case of "setUFO"
+ * @return the UFO name.
+ */
+std::string MapScript::getUFOName()
+{
+	return _ufoName;
 }
 
 }

@@ -712,7 +712,7 @@ dist-hook:
 install-data-local:
 	mkdir -p $(DESTDIR)$(pkgdatadir)
 	cp -r $(top_srcdir)/bin/* $(DESTDIR)$(pkgdatadir)/ ; \
-	find $(DESTDIR)$(pkgdatadir) | xargs chmod a=rX,u+w
+	find $(DESTDIR)$(pkgdatadir) -exec chmod a=rX,u+w {} \;
 
 # NOTE: this might wipe user unpacked xcom if it is in the dir, as there
 #       is no way of distinguishing between our content and their.

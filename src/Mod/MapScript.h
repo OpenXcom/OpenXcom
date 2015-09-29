@@ -61,6 +61,7 @@ private:
 	int _sizeX, _sizeY, _sizeZ, _executionChances, _executions, _cumulativeFrequency, _label;
 	MapDirection _direction;
 	TunnelData *_tunnelData;
+	std::string _ufoName;
 
 	/// Randomly generate a group from within the array.
 	int getGroupNumber();
@@ -101,6 +102,8 @@ public:
 	TunnelData *getTunnelData() {return _tunnelData;};
 	/// Randomly generate a block from within either the array of groups or blocks.
 	MapBlock *getNextBlock(RuleTerrain *terrain);
+	/// Gets the UFO's name (for setUFO)
+	std::string getUFOName();
 };
 }
 #endif
