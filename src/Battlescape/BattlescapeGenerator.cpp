@@ -2068,11 +2068,11 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 		{
 			loadMAP(ufoMaps[i], _ufoPos[i].x * 10, _ufoPos[i].y * 10, ufoTerrain, mapDataSetIDOffset);
 			loadRMP(ufoMaps[i], _ufoPos[i].x * 10, _ufoPos[i].y * 10, Node::UFOSEGMENT);
-			for (int i = 0; i < ufoMaps[i]->getSizeX() / 10; ++i)
+			for (int j = 0; j < ufoMaps[i]->getSizeX() / 10; ++j)
 			{
-				for (int j = 0; j < ufoMaps[i]->getSizeY() / 10; j++)
+				for (int k = 0; k < ufoMaps[i]->getSizeY() / 10; k++)
 				{
-					_segments[_ufoPos[i].x + i][_ufoPos[i].y + j] = Node::UFOSEGMENT;
+					_segments[_ufoPos[i].x + j][_ufoPos[i].y + k] = Node::UFOSEGMENT;
 				}
 			}
 		}
