@@ -85,7 +85,10 @@ endif()
 # Find OpenGL
 find_package ( OpenGL )
 if ( NOT OPENGL_FOUND )
-  message ( FATAL_ERROR "Can't find OpenGL; how does that even happen?" )
+  message ( WARNING "Can't find OpenGL; how does that even happen?\n"
+    "Continuing building without OpenGL support."
+    )
+  add_definitions(-D__NO_OPENGL)
 endif ()
 
 # Read version number
