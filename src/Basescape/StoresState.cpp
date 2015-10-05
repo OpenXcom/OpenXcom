@@ -89,7 +89,7 @@ StoresState::StoresState(Base *base) : _base(base)
 	const std::vector<std::string> &items = _game->getMod()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
-		int qty = _base->getItems()->getItem(*i);
+		int qty = _base->getStorageItems()->getItem(*i);
 		if (qty > 0)
 		{
 			RuleItem *rule = _game->getMod()->getItem(*i);

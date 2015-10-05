@@ -1237,9 +1237,9 @@ void GeoscapeState::time30Minutes()
 				}
 				else
 				{
-					if ((*i)->getItems()->getItem(item) > 0)
+					if ((*i)->getStorageItems()->getItem(item) > 0)
 					{
-						(*i)->getItems()->removeItem(item);
+						(*i)->getStorageItems()->removeItem(item);
 						(*j)->refuel();
 						(*j)->setLowFuel(false);
 					}
@@ -1534,7 +1534,7 @@ void GeoscapeState::time1Day()
 			// If "researched" the live alien, his body sent to the stores.
 			if (Options::spendResearchedItems && research->needItem() && _game->getMod()->getUnit(research->getName()))
 			{
-				(*i)->getItems()->addItem(
+				(*i)->getStorageItems()->addItem(
 					_game->getMod()->getArmor(
 						_game->getMod()->getUnit(
 							research->getName()
@@ -2214,7 +2214,7 @@ void GeoscapeState::determineAlienMissions()
 					ss << (*j)->getType() << ", ";
 				}
 			}
-			ss  << "are sharing the same label: " << command->getLabel(); 
+			ss  << "are sharing the same label: " << command->getLabel();
 			throw Exception(ss.str());
 		}
 		// level four condition check: does random chance favour this command's execution?

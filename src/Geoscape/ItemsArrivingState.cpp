@@ -137,7 +137,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState *state) : _state(state), _b
 								int used = std::min((*j)->getQuantity(), item->getClipSize() - (*v)->getAmmo());
 								(*v)->setAmmo((*v)->getAmmo() + used);
 								// Note that the items have already been delivered, so we remove them from the base, not the transfer
-								_base->getItems()->removeItem(item->getType(), used);
+								_base->getStorageItems()->removeItem(item->getType(), used);
 							}
 						}
 					}

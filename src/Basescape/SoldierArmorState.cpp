@@ -90,13 +90,13 @@ SoldierArmorState::SoldierArmorState(Base *base, size_t soldier) : _base(base), 
 	for (std::vector<std::string>::const_iterator i = armors.begin(); i != armors.end(); ++i)
 	{
 		Armor *a = _game->getMod()->getArmor(*i);
-		if (_base->getItems()->getItem(a->getStoreItem()) > 0)
+		if (_base->getStorageItems()->getItem(a->getStoreItem()) > 0)
 		{
 			_armors.push_back(a);
 			std::wostringstream ss;
 			if (_game->getSavedGame()->getMonthsPassed() > -1)
 			{
-				ss << _base->getItems()->getItem(a->getStoreItem());
+				ss << _base->getStorageItems()->getItem(a->getStoreItem());
 			}
 			else
 			{
@@ -141,11 +141,11 @@ void SoldierArmorState::lstArmorClick(Action *)
 	{
 		if (soldier->getArmor()->getStoreItem() != "STR_NONE")
 		{
-			_base->getItems()->addItem(soldier->getArmor()->getStoreItem());
+			_base->getStorageItems()->addItem(soldier->getArmor()->getStoreItem());
 		}
 		if (_armors[_lstArmor->getSelectedRow()]->getStoreItem() != "STR_NONE")
 		{
-			_base->getItems()->removeItem(_armors[_lstArmor->getSelectedRow()]->getStoreItem());
+			_base->getStorageItems()->removeItem(_armors[_lstArmor->getSelectedRow()]->getStoreItem());
 		}
 	}
 	soldier->setArmor(_armors[_lstArmor->getSelectedRow()]);

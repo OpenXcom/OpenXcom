@@ -168,15 +168,15 @@ void CraftArmorState::lstSoldiersClick(Action *action)
 			Armor *a = _game->getMod()->getArmor(save->getLastSelectedArmor());
 			if (save->getMonthsPassed() != -1)
 			{
-				if (_base->getItems()->getItem(a->getStoreItem()) > 0 || a->getStoreItem() == "STR_NONE")
+				if (_base->getStorageItems()->getItem(a->getStoreItem()) > 0 || a->getStoreItem() == "STR_NONE")
 				{
 					if (s->getArmor()->getStoreItem() != "STR_NONE")
 					{
-						_base->getItems()->addItem(s->getArmor()->getStoreItem());
+						_base->getStorageItems()->addItem(s->getArmor()->getStoreItem());
 					}
 					if (a->getStoreItem() != "STR_NONE")
 					{
-						_base->getItems()->removeItem(a->getStoreItem());
+						_base->getStorageItems()->removeItem(a->getStoreItem());
 					}
 
 					s->setArmor(a);

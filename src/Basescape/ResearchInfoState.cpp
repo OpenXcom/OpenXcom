@@ -124,7 +124,7 @@ void ResearchInfoState::buildUi()
 				(_game->getMod()->getUnit(_rule->getName()) ||
 				 Options::spendResearchedItems))
 		{
-			_base->getItems()->removeItem(_rule->getName(), 1);
+			_base->getStorageItems()->removeItem(_rule->getName(), 1);
 		}
 	}
 	setAssignedScientist();
@@ -187,7 +187,7 @@ void ResearchInfoState::btnCancelClick(Action *)
 			(_game->getMod()->getUnit(ruleResearch->getName()) ||
 			 Options::spendResearchedItems))
 	{
-		_base->getItems()->addItem(ruleResearch->getName(), 1);
+		_base->getStorageItems()->addItem(ruleResearch->getName(), 1);
 	}
 	_base->removeResearch(_project);
 	_game->popState();

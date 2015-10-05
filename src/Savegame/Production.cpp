@@ -94,7 +94,7 @@ bool Production::haveEnoughMoneyForOneMoreUnit(SavedGame * g)
 bool Production::haveEnoughMaterialsForOneMoreUnit(Base * b)
 {
 	for (std::map<std::string,int>::const_iterator iter = _rules->getRequiredItems().begin(); iter != _rules->getRequiredItems().end(); ++iter)
-		if (b->getItems()->getItem(iter->first) < iter->second)
+		if (b->getStorageItems()->getItem(iter->first) < iter->second)
 			return false;
 	return true;
 }
@@ -166,7 +166,7 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Mod *m)
 					if (getSellItems())
 						g->setFunds(g->getFunds() + (m->getItem(i->first)->getSellCost() * i->second));
 					else
-						b->getItems()->addItem(i->first, i->second);
+						b->getStorageItems()->addItem(i->first, i->second);
 				}
 			}
 			count++;
@@ -206,7 +206,7 @@ void Production::startItem(Base * b, SavedGame * g)
 	g->setFunds(g->getFunds() - _rules->getManufactureCost());
 	for (std::map<std::string,int>::const_iterator iter = _rules->getRequiredItems().begin(); iter != _rules->getRequiredItems().end(); ++iter)
 	{
-		b->getItems()->removeItem(iter->first, iter->second);
+		b->getStorageItems()->removeItem(iter->first, iter->second);
 	}
 }
 

@@ -1074,7 +1074,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 		{
 			continue;
 		}
-		if (research->needItem() && base->getItems()->getItem(research->getName()) == 0)
+		if (research->needItem() && base->getStorageItems()->getItem(research->getName()) == 0)
 		{
 			continue;
 		}
