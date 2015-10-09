@@ -20,13 +20,13 @@
 #define OPENXCOM_SELLSTATE_H
 
 #include "../Engine/State.h"
+#include "../Savegame/Transfer.h"
 #include "../Menu/OptionsBaseState.h"
 #include <vector>
 #include <string>
 
 namespace OpenXcom
 {
-enum SellType { SELL_SOLDIER, SELL_CRAFT, SELL_ITEM, SELL_SCIENTIST, SELL_ENGINEER };
 
 class TextButton;
 class Window;
@@ -53,7 +53,7 @@ private:
 	std::vector<Soldier*> _soldiers;
 	std::vector<Craft*> _crafts;
 	std::vector<std::string> _items;
-	size_t _sel, _itemOffset;
+	size_t _sel;
 	int _total, _hasSci, _hasEng;
 	double _spaceChange;
 	Timer *_timerInc, *_timerDec;
@@ -64,7 +64,7 @@ private:
 	/// Gets selected quantity.
 	int getQuantity();
 	/// Gets the Type of the selected item.
-	enum SellType getType(size_t selected) const;
+	TransferType getType(size_t selected) const;
 	/// Gets the index of selected item.
 	size_t getItemIndex(size_t selected) const;
 	/// Gets the index of the selected craft.

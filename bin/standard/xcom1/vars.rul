@@ -8,7 +8,6 @@ startingTime:
   day: 1
   month: 1
   year: 1999
-costSoldier: 20000
 costEngineer: 25000
 costScientist: 30000
 timePersonnel: 72

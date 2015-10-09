@@ -109,7 +109,7 @@ void Soldier::load(const YAML::Node& node, const Mod *mod, SavedGame *save)
 	Armor *armor = mod->getArmor(node["armor"].as<std::string>());
 	if (armor == 0)
 	{
-		armor = mod->getArmor("STR_NONE_UC");
+		armor = mod->getArmor(mod->getSoldier(mod->getSoldiersList().front())->getArmor());
 	}
 	_armor = armor;
 	_psiTraining = node["psiTraining"].as<bool>(_psiTraining);
@@ -145,6 +145,7 @@ void Soldier::load(const YAML::Node& node, const Mod *mod, SavedGame *save)
 YAML::Node Soldier::save() const
 {
 	YAML::Node node;
+	node["type"] = _rules->getType();
 	node["id"] = _id;
 	node["name"] = Language::wstrToUtf8(_name);
 	node["initialStats"] = _initialStats;

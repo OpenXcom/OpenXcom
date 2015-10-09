@@ -23,6 +23,7 @@
 #include "ItemContainer.h"
 #include "../Engine/Language.h"
 #include "../Mod/Mod.h"
+#include "../Mod/RuleSoldier.h"
 
 namespace OpenXcom
 {
@@ -60,8 +61,17 @@ bool Transfer::load(const YAML::Node& node, Base *base, const Mod *mod, SavedGam
 	_hours = node["hours"].as<int>(_hours);
 	if (const YAML::Node &soldier = node["soldier"])
 	{
-		_soldier = new Soldier(mod->getSoldier("XCOM"), mod->getArmor("STR_NONE_UC"));
-		_soldier->load(soldier, mod, save);
+		std::string type = soldier["type"].as<std::string>(mod->getSoldiersList().front());
+		if (mod->getSoldier(type) != 0)
+		{
+			_soldier = new Soldier(mod->getSoldier(type), 0);
+			_soldier->load(soldier, mod, save);
+		}
+		else
+		{
+			delete this;
+			return false;
+		}
 	}
 	if (const YAML::Node &craft = node["craft"])
 	{

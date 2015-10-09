@@ -10,7 +10,6 @@ startingTime: #done
   month: 1
   year: 2040
 
-costSoldier: 20000
 costEngineer: 25000
 costScientist: 30000
 timePersonnel: 72

@@ -29,7 +29,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
 #include "../Mod/RuleCraft.h"
-#include "../Mod/Mod.h"
+#include "../Mod/RuleSoldier.h"
 
 namespace OpenXcom
 {
@@ -117,7 +117,7 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 		if (craft->getRentCost() != 0 && _game->getSavedGame()->isResearched(craft->getRequirements()))
 		{
 			std::wostringstream ss3;
-			ss3 << _base->getCraftCount((*i));
+			ss3 << _base->getCraftCount(*i);
 			_lstCrafts->addRow(4, tr(*i).c_str(), Text::formatFunding(craft->getRentCost()).c_str(), ss3.str().c_str(), Text::formatFunding(_base->getCraftCount(*i) * craft->getRentCost()).c_str());
 		}
 	}
@@ -125,9 +125,19 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 	_lstSalaries->setColumns(4, 125, 70, 44, 60);
 	_lstSalaries->setDot(true);
 
-	std::wostringstream ss4;
-	ss4 << _base->getSoldiers()->size();
-	_lstSalaries->addRow(4, tr("STR_SOLDIERS").c_str(), Text::formatFunding(_game->getMod()->getSoldierCost()).c_str(), ss4.str().c_str(), Text::formatFunding(_base->getSoldiers()->size() * _game->getMod()->getSoldierCost()).c_str());
+	const std::vector<std::string> &soldiers = _game->getMod()->getSoldiersList();
+	for (std::vector<std::string>::const_iterator i = soldiers.begin(); i != soldiers.end(); ++i)
+	{
+		RuleSoldier *soldier = _game->getMod()->getSoldier(*i);
+		std::wostringstream ss4;
+		ss4 << _base->getSoldierCount(*i);
+		std::string name = (*i);
+		if (soldiers.size() == 1)
+		{
+			name = "STR_SOLDIERS";
+		}
+		_lstSalaries->addRow(4, tr(name).c_str(), Text::formatFunding(soldier->getSalaryCost()).c_str(), ss4.str().c_str(), Text::formatFunding(_base->getSoldierCount(*i) * soldier->getSalaryCost()).c_str());
+	}	
 	std::wostringstream ss5;
 	ss5 << _base->getTotalEngineers();
 	_lstSalaries->addRow(4, tr("STR_ENGINEERS").c_str(), Text::formatFunding(_game->getMod()->getEngineerCost()).c_str(), ss5.str().c_str(), Text::formatFunding(_base->getTotalEngineers() * _game->getMod()->getEngineerCost()).c_str());

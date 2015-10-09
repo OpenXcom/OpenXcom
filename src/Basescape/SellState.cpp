@@ -40,11 +40,9 @@
 #include "../Mod/Armor.h"
 #include "../Mod/RuleCraft.h"
 #include "../Savegame/CraftWeapon.h"
-#include "../Savegame/Transfer.h"
 #include "../Mod/RuleCraftWeapon.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
-#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
@@ -56,7 +54,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param origin Game section that originated this state.
  */
-SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _itemOffset(0), _total(0), _hasSci(0), _hasEng(0), _spaceChange(0), _origin(origin)
+SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _total(0), _hasSci(0), _hasEng(0), _spaceChange(0), _origin(origin)
 {
 	bool overfull = Options::storageLimitsEnforced && _base->storesOverfull();
 
@@ -154,7 +152,6 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 			_qtys.push_back(0);
 			_soldiers.push_back(*i);
 			_lstItems->addRow(4, (*i)->getName(true).c_str(), L"1", L"0", Text::formatFunding(0).c_str());
-			++_itemOffset;
 		}
 	}
 	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
@@ -164,7 +161,6 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 			_qtys.push_back(0);
 			_crafts.push_back(*i);
 			_lstItems->addRow(4, (*i)->getName(_game->getLanguage()).c_str(), L"1", L"0", Text::formatFunding((*i)->getRules()->getSellCost()).c_str());
-			++_itemOffset;
 		}
 	}
 	if (_base->getAvailableScientists() > 0)
@@ -174,7 +170,6 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 		std::wostringstream ss;
 		ss << _base->getAvailableScientists();
 		_lstItems->addRow(4, tr("STR_SCIENTIST").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
-		++_itemOffset;
 	}
 	if (_base->getAvailableEngineers() > 0)
 	{
@@ -183,7 +178,6 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 		std::wostringstream ss;
 		ss << _base->getAvailableEngineers();
 		_lstItems->addRow(4, tr("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
-		++_itemOffset;
 	}
 	const std::vector<std::string> &items = _game->getMod()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
@@ -251,16 +245,6 @@ void SellState::think()
 }
 
 /**
- * Gets the index of selected craft.
- * @param selected Selected craft.
- * @return Index of the selected craft.
- */
-size_t SellState::getCraftIndex(size_t selected) const
-{
-	return selected - _soldiers.size();
-}
-
-/**
  * Sells the selected items.
  * @param action Pointer to an action.
  */
@@ -273,7 +257,7 @@ void SellState::btnOkClick(Action *)
 		{
 			switch (getType(i))
 			{
-			case SELL_SOLDIER:
+			case TRANSFER_SOLDIER:
 				for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
 				{
 					if (*s == _soldiers[i])
@@ -289,7 +273,7 @@ void SellState::btnOkClick(Action *)
 				delete _soldiers[i];
 				break;
 
-			case SELL_CRAFT:
+			case TRANSFER_CRAFT:
 				{
 				Craft *craft = _crafts[getCraftIndex(i)];
 
@@ -351,15 +335,15 @@ void SellState::btnOkClick(Action *)
 				}
 				break;
 
-			case SELL_SCIENTIST:
+			case TRANSFER_SCIENTIST:
 				_base->setScientists(_base->getScientists() - _qtys[i]);
 				break;
 
-			case SELL_ENGINEER:
+			case TRANSFER_ENGINEER:
 				_base->setEngineers(_base->getEngineers() - _qtys[i]);
 				break;
 
-			case SELL_ITEM:
+			case TRANSFER_ITEM:
 				if (_base->getItems()->getItem(_items[getItemIndex(i)]) < _qtys[i])
 				{
 					const std::string itemName = _items[getItemIndex(i)];
@@ -539,13 +523,13 @@ int SellState::getPrice()
 	// Personnel/craft aren't worth anything
 	switch(getType(_sel))
 	{
-	case SELL_SOLDIER:
-	case SELL_ENGINEER:
-	case SELL_SCIENTIST:
+	case TRANSFER_SOLDIER:
+	case TRANSFER_ENGINEER:
+	case TRANSFER_SCIENTIST:
 		return 0;
-	case SELL_ITEM:
+	case TRANSFER_ITEM:
 		return _game->getMod()->getItem(_items[getItemIndex(_sel)])->getSellCost();
-	case SELL_CRAFT:
+	case TRANSFER_CRAFT:
 		Craft *craft =  _crafts[getCraftIndex(_sel)];
 		return craft->getRules()->getSellCost();
 	}
@@ -563,14 +547,14 @@ int SellState::getQuantity()
 	// Soldiers/crafts are individual
 	switch(getType(_sel))
 	{
-	case SELL_SOLDIER:
-	case SELL_CRAFT:
+	case TRANSFER_SOLDIER:
+	case TRANSFER_CRAFT:
 		return 1;
-	case SELL_SCIENTIST:
+	case TRANSFER_SCIENTIST:
 		return _base->getAvailableScientists();
-	case SELL_ENGINEER:
+	case TRANSFER_ENGINEER:
 		return _base->getAvailableEngineers();
-	case SELL_ITEM:
+	case TRANSFER_ITEM:
 		qty = _base->getItems()->getItem(_items[getItemIndex(_sel)]);
 		if (Options::storageLimitsEnforced && _origin == OPT_BATTLESCAPE)
 		{
@@ -588,8 +572,7 @@ int SellState::getQuantity()
 		}
 		return qty;
 	}
-
-	return 0;
+	return qty;
 }
 
 /**
@@ -628,14 +611,14 @@ void SellState::changeByValue(int change, int dir)
 	double total = 0.0;
 	switch (getType(_sel))
 	{
-	case SELL_SOLDIER:
+	case TRANSFER_SOLDIER:
 		if (_soldiers[_sel]->getArmor()->getStoreItem() != "STR_NONE")
 		{
 			armor = _game->getMod()->getItem(_soldiers[_sel]->getArmor()->getStoreItem());
 			_spaceChange += dir * armor->getSize();
 		}
 		break;
-	case SELL_CRAFT:
+	case TRANSFER_CRAFT:
 		craft = _crafts[getCraftIndex(_sel)];
 		for (std::vector<CraftWeapon*>::iterator w = craft->getWeapons()->begin(); w != craft->getWeapons()->end(); ++w)
 		{
@@ -650,7 +633,7 @@ void SellState::changeByValue(int change, int dir)
 		}
 		_spaceChange += dir * total;
 		break;
-	case SELL_ITEM:
+	case TRANSFER_ITEM:
 		item = _game->getMod()->getItem(_items[getItemIndex(_sel)]);
 		_spaceChange -= dir * change * item->getSize();
 		break;
@@ -690,9 +673,9 @@ void SellState::updateItemStrings()
 	else
 	{
 		_lstItems->setRowColor(_sel, _lstItems->getColor());
-		if (_sel > _itemOffset)
+		if (getType(_sel) == TRANSFER_ITEM)
 		{
-			RuleItem *rule = _game->getMod()->getItem(_items[_sel - _itemOffset]);
+			RuleItem *rule = _game->getMod()->getItem(_items[getItemIndex(_sel)]);
 			if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
 			{
 				_lstItems->setRowColor(_sel, _ammoColor);
@@ -721,20 +704,20 @@ void SellState::updateItemStrings()
  * @param selected Currently selected item.
  * @return The type of the selected item.
  */
-enum SellType SellState::getType(size_t selected) const
+TransferType SellState::getType(size_t selected) const
 {
 	size_t max = _soldiers.size();
 
 	if (selected < max)
-		return SELL_SOLDIER;
+		return TRANSFER_SOLDIER;
 	if (selected < (max += _crafts.size()) )
-		return SELL_CRAFT;
+		return TRANSFER_CRAFT;
 	if (selected < (max += _hasSci))
-		return SELL_SCIENTIST;
+		return TRANSFER_SCIENTIST;
 	if (selected < (max += _hasEng))
-		return SELL_ENGINEER;
+		return TRANSFER_ENGINEER;
 
-	return SELL_ITEM;
+	return TRANSFER_ITEM;
 }
 
 /**
@@ -745,6 +728,16 @@ enum SellType SellState::getType(size_t selected) const
 size_t SellState::getItemIndex(size_t selected) const
 {
 	return selected - _soldiers.size() - _crafts.size() - _hasSci - _hasEng;
+}
+
+/**
+ * Gets the index of selected craft.
+ * @param selected Selected craft.
+ * @return Index of the selected craft.
+ */
+size_t SellState::getCraftIndex(size_t selected) const
+{
+	return selected - _soldiers.size();
 }
 
 }

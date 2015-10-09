@@ -1,5 +1,7 @@
 soldiers:
-  - type: XCOM
+  - type: STR_SOLDIER
+    costBuy: 40000
+    costSalary: 20000
     minStats:
       tu: 50
       stamina: 40

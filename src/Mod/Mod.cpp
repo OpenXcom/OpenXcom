@@ -187,7 +187,7 @@ void Mod::resetGlobalStatics()
 /**
  * Creates an empty mod.
  */
-Mod::Mod() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _turnAIUseGrenade(3), _turnAIUseBlaster(3), _startingTime(6, 1, 1, 1999, 12, 0, 0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0), _modOffset(0)
+Mod::Mod() : _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _turnAIUseGrenade(3), _turnAIUseBlaster(3), _startingTime(6, 1, 1, 1999, 12, 0, 0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0), _modOffset(0)
 {
 	_muteMusic = new Music();
 	_muteSound = new Sound();
@@ -795,7 +795,7 @@ void Mod::loadFile(const std::string &filename)
 	}
 	for (YAML::const_iterator i = doc["soldiers"].begin(); i != doc["soldiers"].end(); ++i)
 	{
-		RuleSoldier *rule = loadRule(*i, &_soldiers);
+		RuleSoldier *rule = loadRule(*i, &_soldiers, &_soldiersIndex);
 		if (rule != 0)
 		{
 			rule->load(*i);
@@ -929,7 +929,6 @@ void Mod::loadFile(const std::string &filename)
 	{
 		_startingTime.load(doc["startingTime"]);
 	}
-	_costSoldier = doc["costSoldier"].as<int>(_costSoldier);
 	_costEngineer = doc["costEngineer"].as<int>(_costEngineer);
 	_costScientist = doc["costScientist"].as<int>(_costScientist);
 	_timePersonnel = doc["timePersonnel"].as<int>(_timePersonnel);
@@ -1440,16 +1439,6 @@ const std::vector<std::string> &Mod::getUfosList() const
 }
 
 /**
- * Returns the list of all terrains
- * provided by the mod.
- * @return List of terrains.
- */
-const std::vector<std::string> &Mod::getTerrainList() const
-{
-	return _terrainIndex;
-}
-
-/**
  * Returns the rules for the specified terrain.
  * @param name Terrain name.
  * @return Rules for the terrain.
@@ -1458,6 +1447,16 @@ RuleTerrain *Mod::getTerrain(const std::string &name) const
 {
 	std::map<std::string, RuleTerrain*>::const_iterator i = _terrains.find(name);
 	if (_terrains.end() != i) return i->second; else return 0;
+}
+
+/**
+ * Returns the list of all terrains
+ * provided by the mod.
+ * @return List of terrains.
+ */
+const std::vector<std::string> &Mod::getTerrainList() const
+{
+	return _terrainIndex;
 }
 
 /**
@@ -1489,6 +1488,16 @@ RuleSoldier *Mod::getSoldier(const std::string &name) const
 {
 	std::map<std::string, RuleSoldier*>::const_iterator i = _soldiers.find(name);
 	if (_soldiers.end() != i) return i->second; else return 0;
+}
+
+/**
+ * Returns the list of all soldiers
+ * provided by the mod.
+ * @return List of soldiers.
+ */
+const std::vector<std::string> &Mod::getSoldiersList() const
+{
+	return _soldiersIndex;
 }
 
 /**
@@ -1563,16 +1572,6 @@ Armor *Mod::getArmor(const std::string &name) const
 const std::vector<std::string> &Mod::getArmorsList() const
 {
 	return _armorsIndex;
-}
-
-/**
- * Returns the cost of an individual soldier
- * for purchase/maintenance.
- * @return Cost.
- */
-int Mod::getSoldierCost() const
-{
-	return _costSoldier;
 }
 
 /**
@@ -2010,12 +2009,17 @@ std::vector<std::string> Mod::getPsiRequirements() const
 /**
  * Creates a new randomly-generated soldier.
  * @param save Saved game the soldier belongs to.
+ * @param type The soldier type to generate.
  * @return Newly generated soldier.
  */
-Soldier *Mod::genSoldier(SavedGame *save) const
+Soldier *Mod::genSoldier(SavedGame *save, std::string type) const
 {
 	Soldier *soldier = 0;
 	int newId = save->getId("STR_SOLDIER");
+	if (type.empty())
+	{
+		type = _soldiersIndex.front();
+	}
 
 	// Check for duplicates
 	// Original X-COM gives up after 10 tries so might as well do the same here
@@ -2023,7 +2027,7 @@ Soldier *Mod::genSoldier(SavedGame *save) const
 	for (int i = 0; i < 10 && duplicate; i++)
 	{
 		delete soldier;
-		soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names, newId);
+		soldier = new Soldier(getSoldier(type), getArmor(getSoldier(type)->getArmor()), &_names, newId);
 		duplicate = false;
 		for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end() && !duplicate; ++i)
 		{

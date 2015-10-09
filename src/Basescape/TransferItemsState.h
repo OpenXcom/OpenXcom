@@ -52,7 +52,7 @@ private:
 	std::vector<Soldier*> _soldiers;
 	std::vector<Craft*> _crafts;
 	std::vector<std::string> _items;
-	size_t _sel, _itemOffset;
+	size_t _sel;
 	int _total, _pQty, _cQty, _aQty;
 	double _iQty;
 	int _hasSci, _hasEng;
@@ -66,9 +66,11 @@ private:
 	/// Gets distance between bases.
 	double getDistance() const;
 	/// Gets type of selected item.
-	enum TransferType getType(size_t selected) const;
+	TransferType getType(size_t selected) const;
 	/// Gets item Index.
 	size_t getItemIndex(size_t selected) const;
+	/// Gets the index of the selected craft.
+	size_t getCraftIndex(size_t selected) const;
 public:
 	/// Creates the Transfer Items state.
 	TransferItemsState(Base *baseFrom, Base *baseTo);

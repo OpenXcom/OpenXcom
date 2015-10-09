@@ -37,12 +37,12 @@
 #include "../Mod/RuleItem.h"
 #include "../Savegame/Base.h"
 #include "../Engine/Action.h"
-#include "../Savegame/Transfer.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Menu/ErrorMessageState.h"
-#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
+#include "../Mod/RuleSoldier.h"
+#include "../Savegame/Soldier.h"
 
 namespace OpenXcom
 {
@@ -52,7 +52,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _itemOffset(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0), _ammoColor(0)
+PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0), _ammoColor(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -106,10 +106,9 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _itemOffset(0),
 	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES").arg(Text::formatFunding(_total)));
 
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
-	std::wostringstream ss5;
-	ss5 << _base->getUsedStores() << ":" << _base->getAvailableStores();
-	_txtSpaceUsed->setText(ss5.str());
-	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss5.str()));
+	std::wostringstream ss1;
+	ss1 << _base->getUsedStores() << ":" << _base->getAvailableStores();
+	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss1.str()));
 
 	_txtItem->setText(tr("STR_ITEM"));
 
@@ -130,10 +129,19 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _itemOffset(0),
 	_lstItems->onRightArrowClick((ActionHandler)&PurchaseState::lstItemsRightArrowClick);
 	_lstItems->onMousePress((ActionHandler)&PurchaseState::lstItemsMousePress);
 
-	_qtys.push_back(0);
-	std::wostringstream ss;
-	ss << _base->getTotalSoldiers();
-	_lstItems->addRow(4, tr("STR_SOLDIER").c_str(), Text::formatFunding(_game->getMod()->getSoldierCost() * 2).c_str(), ss.str().c_str(), L"0");
+	const std::vector<std::string> &soldiers = _game->getMod()->getSoldiersList();
+	for (std::vector<std::string>::const_iterator i = soldiers.begin(); i != soldiers.end(); ++i)
+	{
+		RuleSoldier *rule = _game->getMod()->getSoldier(*i);
+		{
+			_soldiers.push_back(*i);
+			_qtys.push_back(0);
+			std::wostringstream ss;
+			ss << _base->getSoldierCount(*i);
+			_lstItems->addRow(4, tr(*i).c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss.str().c_str(), L"0");
+		}
+	}
+
 	_qtys.push_back(0);
 	std::wostringstream ss2;
 	ss2 << _base->getTotalScientists();
@@ -143,7 +151,6 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _itemOffset(0),
 	ss3 << _base->getTotalEngineers();
 	_lstItems->addRow(4, tr("STR_ENGINEER").c_str(), Text::formatFunding(_game->getMod()->getEngineerCost() * 2).c_str(), ss3.str().c_str(), L"0");
 
-	_itemOffset = 3;
 	const std::vector<std::string> &crafts = _game->getMod()->getCraftsList();
 	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
@@ -152,19 +159,12 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _itemOffset(0),
 		{
 			_crafts.push_back(*i);
 			_qtys.push_back(0);
-			int crafts = 0;
-			++_itemOffset;
-			for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
-			{
-				if ((*c)->getRules()->getType() == *i)
-					crafts++;
-			}
-			std::wostringstream ss4;
-			ss4 << crafts;
-			_lstItems->addRow(4, tr(*i).c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss4.str().c_str(), L"0");
+			std::wostringstream ss;
+			ss << _base->getCraftCount(*i);
+			_lstItems->addRow(4, tr(*i).c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss.str().c_str(), L"0");
 		}
 	}
-	std::vector<std::string> items = _game->getMod()->getItemsList();
+	const std::vector<std::string> &items = _game->getMod()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		RuleItem *rule = _game->getMod()->getItem(*i);
@@ -172,18 +172,18 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _itemOffset(0),
 		{
 			_items.push_back(*i);
 			_qtys.push_back(0);
-			std::wostringstream ss5;
-			ss5 << _base->getItems()->getItem(*i);
+			std::wostringstream ss;
+			ss << _base->getItems()->getItem(*i);
 			std::wstring item = tr(*i);
 			if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
 			{
 				item.insert(0, L"  ");
-				_lstItems->addRow(4, item.c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+				_lstItems->addRow(4, item.c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss.str().c_str(), L"0");
 				_lstItems->setRowColor(_qtys.size() - 1, _ammoColor);
 			}
 			else
 			{
-				_lstItems->addRow(4, item.c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+				_lstItems->addRow(4, item.c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss.str().c_str(), L"0");
 			}
 		}
 	}
@@ -242,50 +242,44 @@ void PurchaseState::btnOkClick(Action *)
 	{
 		if (_qtys[i] > 0)
 		{
-			// Buy soldiers
-			if (i == 0)
+			Transfer *t = 0;
+			switch (getType(i))
 			{
+			case TRANSFER_SOLDIER:
 				for (int s = 0; s < _qtys[i]; s++)
 				{
-					Transfer *t = new Transfer(_game->getMod()->getPersonnelTime());
-					t->setSoldier(_game->getMod()->genSoldier(_game->getSavedGame()));
+					t = new Transfer(_game->getMod()->getPersonnelTime());
+					t->setSoldier(_game->getMod()->genSoldier(_game->getSavedGame(), _soldiers[i]));
 					_base->getTransfers()->push_back(t);
 				}
-			}
-			// Buy scientists
-			else if (i == 1)
-			{
-				Transfer *t = new Transfer(_game->getMod()->getPersonnelTime());
+				break;
+			case TRANSFER_SCIENTIST:
+				t = new Transfer(_game->getMod()->getPersonnelTime());
 				t->setScientists(_qtys[i]);
 				_base->getTransfers()->push_back(t);
-			}
-			// Buy engineers
-			else if (i == 2)
-			{
-				Transfer *t = new Transfer(_game->getMod()->getPersonnelTime());
+				break;
+			case TRANSFER_ENGINEER:
+				t = new Transfer(_game->getMod()->getPersonnelTime());
 				t->setEngineers(_qtys[i]);
 				_base->getTransfers()->push_back(t);
-			}
-			// Buy crafts
-			else if (i >= 3 && i < 3 + _crafts.size())
-			{
+				break;
+			case TRANSFER_CRAFT:
 				for (int c = 0; c < _qtys[i]; c++)
 				{
-					RuleCraft *rc = _game->getMod()->getCraft(_crafts[i - 3]);
-					Transfer *t = new Transfer(rc->getTransferTime());
-					Craft *craft = new Craft(rc, _base, _game->getSavedGame()->getId(_crafts[i - 3]));
+					RuleCraft *rc = _game->getMod()->getCraft(_crafts[getCraftIndex(i)]);
+					t = new Transfer(rc->getTransferTime());
+					Craft *craft = new Craft(rc, _base, _game->getSavedGame()->getId(_crafts[getCraftIndex(i)]));
 					craft->setStatus("STR_REFUELLING");
 					t->setCraft(craft);
 					_base->getTransfers()->push_back(t);
 				}
-			}
-			// Buy items
-			else
-			{
-				RuleItem *ri = _game->getMod()->getItem(_items[i - 3 - _crafts.size()]);
-				Transfer *t = new Transfer(ri->getTransferTime());
-				t->setItems(_items[i - 3 - _crafts.size()], _qtys[i]);
+				break;
+			case TRANSFER_ITEM:
+				RuleItem *ri = _game->getMod()->getItem(_items[getItemIndex(i)]);
+				t = new Transfer(ri->getTransferTime());
+				t->setItems(_items[getItemIndex(i)], _qtys[i]);
 				_base->getTransfers()->push_back(t);
+				break;
 			}
 		}
 	}
@@ -412,31 +406,20 @@ void PurchaseState::lstItemsMousePress(Action *action)
  */
 int PurchaseState::getPrice()
 {
-	// Soldier cost
-	if (_sel == 0)
+	switch (getType(_sel))
 	{
-		return _game->getMod()->getSoldierCost() * 2;
-	}
-	// Scientist cost
-	else if (_sel == 1)
-	{
+	case TRANSFER_SOLDIER:
+		return _game->getMod()->getSoldier(_soldiers[_sel])->getBuyCost();
+	case TRANSFER_ENGINEER:
 		return _game->getMod()->getScientistCost() * 2;
-	}
-	// Engineer cost
-	else if (_sel == 2)
-	{
+	case TRANSFER_SCIENTIST:
 		return _game->getMod()->getEngineerCost() * 2;
+	case TRANSFER_ITEM:
+		return _game->getMod()->getItem(_items[getItemIndex(_sel)])->getBuyCost();
+	case TRANSFER_CRAFT:
+		return _game->getMod()->getCraft(_crafts[getCraftIndex(_sel)])->getBuyCost();
 	}
-	// Craft cost
-	else if (_sel >= 3 && _sel < 3 + _crafts.size())
-	{
-		return _game->getMod()->getCraft(_crafts[_sel - 3])->getBuyCost();
-	}
-	// Item cost
-	else
-	{
-		return _game->getMod()->getItem(_items[_sel - 3 - _crafts.size()])->getBuyCost();
-	}
+	return 0;
 }
 
 /**
@@ -457,67 +440,84 @@ void PurchaseState::increaseByValue(int change)
 {
 	if (0 >= change) return;
 	std::wstring errorMessage;
+
 	if (_total + getPrice() > _game->getSavedGame()->getFunds())
 	{
-		_timerInc->stop();
 		errorMessage = tr("STR_NOT_ENOUGH_MONEY");
-	}
-	else if (_sel <= 2 && _pQty + 1 > _base->getAvailableQuarters() - _base->getUsedQuarters())
-	{
-		_timerInc->stop();
-		errorMessage = tr("STR_NOT_ENOUGH_LIVING_SPACE");
-	}
-	else if (_sel >= 3 && _sel < 3 + _crafts.size() && _cQty + 1 > _base->getAvailableHangars() - _base->getUsedHangars())
-	{
-		_timerInc->stop();
-		errorMessage = tr("STR_NO_FREE_HANGARS_FOR_PURCHASE");
-	}
-	else if (_sel >= 3 + _crafts.size()
-		&& _iQty + _game->getMod()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() > _base->getAvailableStores() - _base->getUsedStores())
-	{
-		_timerInc->stop();
-		errorMessage = tr("STR_NOT_ENOUGH_STORE_SPACE");
 	}
 	else
 	{
+		switch (getType(_sel))
+		{
+		case TRANSFER_SOLDIER:
+		case TRANSFER_SCIENTIST:
+		case TRANSFER_ENGINEER:
+			if (_pQty + 1 > _base->getAvailableQuarters() - _base->getUsedQuarters())
+			{
+				errorMessage = tr("STR_NOT_ENOUGH_LIVING_SPACE");
+			}
+			break;
+		case TRANSFER_CRAFT:
+			if (_cQty + 1 > _base->getAvailableHangars() - _base->getUsedHangars())
+			{
+				errorMessage = tr("STR_NO_FREE_HANGARS_FOR_PURCHASE");
+			}
+			break;
+		case TRANSFER_ITEM:
+			if (_iQty + _game->getMod()->getItem(_items[getItemIndex(_sel)])->getSize() > _base->getAvailableStores() - _base->getUsedStores())
+			{
+				errorMessage = tr("STR_NOT_ENOUGH_STORE_SPACE");
+			}
+			break;
+		}
+	}
+
+	if (errorMessage.empty())
+	{
 		int maxByMoney = (_game->getSavedGame()->getFunds() - _total) / getPrice();
 		change = std::min(maxByMoney, change);
-		if (_sel <= 2)
+		switch (getType(_sel))
 		{
-			// Personnel count
-			int maxByQuarters = _base->getAvailableQuarters() - _base->getUsedQuarters() - _pQty;
-			change = std::min(maxByQuarters, change);
-			_pQty += change;
-		}
-		else if (_sel >= 3 && _sel < 3 + _crafts.size())
-		{
-			// Craft count
-			int maxByHangars = _base->getAvailableHangars() - _base->getUsedHangars() - _cQty;
-			change = std::min(maxByHangars, change);
-			_cQty += change;
-		}
-		else
-		{
-			RuleItem *rule = _game->getMod()->getItem(_items[_sel - 3 - _crafts.size()]);
-
-			// Item count
-			double storesNeededPerItem = rule->getSize();
-			double freeStores = _base->getAvailableStores() - _base->getUsedStores() - _iQty;
-			double maxByStores = (double)(INT_MAX);
-			if (!AreSame(storesNeededPerItem, 0.0))
+		case TRANSFER_SOLDIER:
+		case TRANSFER_SCIENTIST:
+		case TRANSFER_ENGINEER:
 			{
-				maxByStores = (freeStores + 0.05) / storesNeededPerItem;
+				int maxByQuarters = _base->getAvailableQuarters() - _base->getUsedQuarters() - _pQty;
+				change = std::min(maxByQuarters, change);
+				_pQty += change;
 			}
-			change = std::min((int)maxByStores, change);
-			_iQty += change * storesNeededPerItem;
+			break;
+		case TRANSFER_CRAFT:
+			{
+				int maxByHangars = _base->getAvailableHangars() - _base->getUsedHangars() - _cQty;
+				change = std::min(maxByHangars, change);
+				_cQty += change;
+			}
+			break;
+		case TRANSFER_ITEM:
+			{
+				double storesNeededPerItem = _game->getMod()->getItem(_items[getItemIndex(_sel)])->getSize();
+				double freeStores = _base->getAvailableStores() - _base->getUsedStores() - _iQty;
+				double maxByStores = (double)(INT_MAX);
+				if (!AreSame(storesNeededPerItem, 0.0))
+				{
+					maxByStores = (freeStores + 0.05) / storesNeededPerItem;
+				}
+				change = std::min((int)maxByStores, change);
+				_iQty += change * storesNeededPerItem;
+			}
+			break;
 		}
 		_qtys[_sel] += change;
 		_total += getPrice() * change;
 		updateItemStrings();
-		return;
 	}
-	RuleInterface *menuInterface = _game->getMod()->getInterface("buyMenu");
-	_game->pushState(new ErrorMessageState(errorMessage, _palette, menuInterface->getElement("errorMessage")->color, "BACK13.SCR", menuInterface->getElement("errorPalette")->color));
+	else
+	{
+		_timerInc->stop();
+		RuleInterface *menuInterface = _game->getMod()->getInterface("buyMenu");
+		_game->pushState(new ErrorMessageState(errorMessage, _palette, menuInterface->getElement("errorMessage")->color, "BACK13.SCR", menuInterface->getElement("errorPalette")->color));
+	}
 }
 
 /**
@@ -539,20 +539,19 @@ void PurchaseState::decreaseByValue(int change)
 	if (0 >= change || 0 >= _qtys[_sel]) return;
 	change = std::min(_qtys[_sel], change);
 
-	// Personnel count
-	if (_sel <= 2)
+	switch (getType(_sel))
 	{
+	case TRANSFER_SOLDIER:
+	case TRANSFER_SCIENTIST:
+	case TRANSFER_ENGINEER:
 		_pQty -= change;
-	}
-	// Craft count
-	else if (_sel >= 3 && _sel < 3 + _crafts.size())
-	{
+		break;
+	case TRANSFER_CRAFT:
 		_cQty -= change;
-	}
-	// Item count
-	else
-	{
-		_iQty -= _game->getMod()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() * change;
+		break;
+	case TRANSFER_ITEM:
+		_iQty -= _game->getMod()->getItem(_items[getItemIndex(_sel)])->getSize() * change;
+		break;
 	}
 	_qtys[_sel] -= change;
 	_total -= getPrice() * change;
@@ -575,9 +574,9 @@ void PurchaseState::updateItemStrings()
 	else
 	{
 		_lstItems->setRowColor(_sel, _lstItems->getColor());
-		if (_sel > _itemOffset)
+		if(getType(_sel) == TRANSFER_ITEM)
 		{
-			RuleItem *rule = _game->getMod()->getItem(_items[_sel - _itemOffset]);
+			RuleItem *rule = _game->getMod()->getItem(_items[getItemIndex(_sel)]);
 			if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
 			{
 				_lstItems->setRowColor(_sel, _ammoColor);
@@ -594,6 +593,47 @@ void PurchaseState::updateItemStrings()
 	}
 	ss5 << ":" << _base->getAvailableStores();
 	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss5.str()));
+}
+
+/**
+* Gets the Type of the selected item.
+* @param selected Currently selected item.
+* @return The type of the selected item.
+*/
+TransferType PurchaseState::getType(size_t selected) const
+{
+	size_t max = _soldiers.size();
+
+	if (selected < max)
+		return TRANSFER_SOLDIER;
+	if (selected < (max += 1))
+		return TRANSFER_SCIENTIST;
+	if (selected < (max += 1))
+		return TRANSFER_ENGINEER;
+	if (selected < (max += _crafts.size()))
+		return TRANSFER_CRAFT;
+
+	return TRANSFER_ITEM;
+}
+
+/**
+ * Gets the index of the selected item.
+ * @param selected Currently selected item.
+ * @return Index of the selected item.
+ */
+size_t PurchaseState::getItemIndex(size_t selected) const
+{
+	return selected - _soldiers.size() - _crafts.size() - 2;
+}
+
+/**
+ * Gets the index of selected craft.
+ * @param selected Selected craft.
+ * @return Index of the selected craft.
+ */
+size_t PurchaseState::getCraftIndex(size_t selected) const
+{
+	return selected - _soldiers.size() - 2;
 }
 
 }

@@ -36,7 +36,7 @@ private:
 	std::string _type;
 	UnitStats _minStats, _maxStats, _statCaps;
 	std::string _armor;
-	int _standHeight, _kneelHeight, _floatHeight, _femaleFrequency;
+	int _costBuy, _costSalary, _standHeight, _kneelHeight, _floatHeight, _femaleFrequency;
 public:
 	/// Creates a blank unit ruleset.
 	RuleSoldier(const std::string &type);
@@ -52,6 +52,10 @@ public:
 	UnitStats getMaxStats() const;
 	/// Gets the stat caps.
 	UnitStats getStatCaps() const;
+	/// Gets the cost of the soldier.
+	int getBuyCost() const;
+	/// Gets the monthly salary of the soldier.
+	int getSalaryCost() const;
 	/// Gets the height of the soldier when it's standing.
 	int getStandHeight() const;
 	/// Gets the height of the soldier when it's kneeling.

@@ -26,7 +26,7 @@ namespace OpenXcom
  * type of soldier.
  * @param type String defining the type.
  */
-RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _standHeight(0), _kneelHeight(0), _floatHeight(0), _femaleFrequency(50)
+RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _costBuy(0), _costSalary(0), _standHeight(0), _kneelHeight(0), _floatHeight(0), _femaleFrequency(50)
 {
 }
 
@@ -49,6 +49,8 @@ void RuleSoldier::load(const YAML::Node &node)
 	_maxStats.merge(node["maxStats"].as<UnitStats>(_maxStats));
 	_statCaps.merge(node["statCaps"].as<UnitStats>(_statCaps));
 	_armor = node["armor"].as<std::string>(_armor);
+	_costBuy = node["costBuy"].as<int>(_costBuy);
+	_costSalary = node["costSalary"].as<int>(_costSalary);
 	_standHeight = node["standHeight"].as<int>(_standHeight);
 	_kneelHeight = node["kneelHeight"].as<int>(_kneelHeight);
 	_floatHeight = node["floatHeight"].as<int>(_floatHeight);
@@ -90,6 +92,24 @@ UnitStats RuleSoldier::getMaxStats() const
 UnitStats RuleSoldier::getStatCaps() const
 {
 	return _statCaps;
+}
+
+/**
+ * Gets the cost of hiring this soldier.
+ * @return The cost.
+ */
+int RuleSoldier::getBuyCost() const
+{
+	return _costBuy;
+}
+
+/**
+ * Gets the cost of salary for a month.
+ * @return The cost.
+ */
+int RuleSoldier::getSalaryCost() const
+{
+	return _costSalary;
 }
 
 /**

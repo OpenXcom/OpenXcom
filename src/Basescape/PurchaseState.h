@@ -20,6 +20,7 @@
 #define OPENXCOM_PURCHASESTATE_H
 
 #include "../Engine/State.h"
+#include "../Savegame/Transfer.h"
 #include <vector>
 #include <string>
 
@@ -46,15 +47,21 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtFunds, *_txtPurchases, *_txtItem, *_txtCost, *_txtQuantity, *_txtSpaceUsed;
 	TextList *_lstItems;
-	std::vector<std::string> _crafts, _items;
+	std::vector<std::string> _soldiers, _crafts, _items;
 	std::vector<int> _qtys;
-	size_t _sel, _itemOffset;
+	size_t _sel;
 	int _total, _pQty, _cQty;
 	double _iQty;
 	Uint8 _ammoColor;
 	Timer *_timerInc, *_timerDec;
 	/// Gets selected price.
 	int getPrice();
+	/// Gets the Type of the selected item.
+	TransferType getType(size_t selected) const;
+	/// Gets the index of selected item.
+	size_t getItemIndex(size_t selected) const;
+	/// Gets the index of the selected craft.
+	size_t getCraftIndex(size_t selected) const;
 	/// Is it excluded in the options file?
 	bool isExcluded(const std::string &item);
 public:

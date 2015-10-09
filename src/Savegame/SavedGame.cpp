@@ -51,6 +51,7 @@
 #include "AlienStrategy.h"
 #include "AlienMission.h"
 #include "../Mod/RuleRegion.h"
+#include "../Mod/RuleSoldier.h"
 
 namespace OpenXcom
 {
@@ -451,9 +452,13 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 
 	for (YAML::const_iterator i = doc["deadSoldiers"].begin(); i != doc["deadSoldiers"].end(); ++i)
 	{
-		Soldier *soldier = new Soldier(mod->getSoldier("XCOM"), mod->getArmor("STR_NONE_UC"));
-		soldier->load(*i, mod, this);
-		_deadSoldiers.push_back(soldier);
+		std::string type = (*i)["type"].as<std::string>(mod->getSoldiersList().front());
+		if (mod->getSoldier(type))
+		{
+			Soldier *soldier = new Soldier(mod->getSoldier(type), 0);
+			soldier->load(*i, mod, this);
+			_deadSoldiers.push_back(soldier);
+		}
 	}
 
 	if (const YAML::Node &battle = doc["battleGame"])

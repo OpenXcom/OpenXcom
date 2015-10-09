@@ -44,6 +44,7 @@
 #include "Ufo.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
+#include "../Mod/RuleSoldier.h"
 
 namespace OpenXcom
 {
@@ -135,22 +136,26 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 
 	for (YAML::const_iterator i = node["soldiers"].begin(); i != node["soldiers"].end(); ++i)
 	{
-		Soldier *s = new Soldier(_mod->getSoldier("XCOM"), _mod->getArmor("STR_NONE_UC"));
-		s->load(*i, _mod, save);
-		s->setCraft(0);
-		if (const YAML::Node &craft = (*i)["craft"])
+		std::string type = (*i)["type"].as<std::string>(_mod->getSoldiersList().front());
+		if (_mod->getSoldier(type))
 		{
-			CraftId craftId = Craft::loadId(craft);
-			for (std::vector<Craft*>::iterator j = _crafts.begin(); j != _crafts.end(); ++j)
+			Soldier *s = new Soldier(_mod->getSoldier(type), 0);
+			s->load(*i, _mod, save);
+			s->setCraft(0);
+			if (const YAML::Node &craft = (*i)["craft"])
 			{
-				if ((*j)->getUniqueId() == craftId)
+				CraftId craftId = Craft::loadId(craft);
+				for (std::vector<Craft*>::iterator j = _crafts.begin(); j != _crafts.end(); ++j)
 				{
-					s->setCraft(*j);
-					break;
+					if ((*j)->getUniqueId() == craftId)
+					{
+						s->setCraft(*j);
+						break;
+					}
 				}
 			}
+			_soldiers.push_back(s);
 		}
-		_soldiers.push_back(s);
 	}
 
 	_items->load(node["items"]);
@@ -752,7 +757,7 @@ int Base::getAvailableWorkshops() const
 /**
  * Returns the amount of hangars used up
  * by crafts in the base.
- * @return Storage space.
+ * @return Number of hangars.
  */
 int Base::getUsedHangars() const
 {
@@ -928,6 +933,13 @@ int Base::getLongRangeDetection() const
 int Base::getCraftCount(const std::string &craft) const
 {
 	int total = 0;
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
+	{
+		if ((*i)->getType() == TRANSFER_CRAFT && (*i)->getCraft()->getRules()->getType() == craft)
+		{
+			total++;
+		}
+	}
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
 		if ((*i)->getRules()->getType() == craft)
@@ -946,9 +958,42 @@ int Base::getCraftCount(const std::string &craft) const
 int Base::getCraftMaintenance() const
 {
 	int total = 0;
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
+	{
+		if ((*i)->getType() == TRANSFER_CRAFT)
+		{
+			total += (*i)->getCraft()->getRules()->getRentCost();
+		}
+	}
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
 		total += (*i)->getRules()->getRentCost();
+	}
+	return total;
+}
+
+/**
+ * Returns the total amount of soldiers of
+ * a certain type stored in the base.
+ * @param soldier Soldier type.
+ * @return Number of soldiert.
+ */
+int Base::getSoldierCount(const std::string &soldier) const
+{
+	int total = 0;
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
+	{
+		if ((*i)->getType() == TRANSFER_SOLDIER && (*i)->getSoldier()->getRules()->getType() == soldier)
+		{
+			total++;
+		}
+	}
+	for (std::vector<Soldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
+	{
+		if ((*i)->getRules()->getType() == soldier)
+		{
+			total++;
+		}
 	}
 	return total;
 }
@@ -960,8 +1005,18 @@ int Base::getCraftMaintenance() const
  */
 int Base::getPersonnelMaintenance() const
 {
-	size_t total = 0;
-	total += getTotalSoldiers() * _mod->getSoldierCost();
+	int total = 0;
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
+	{
+		if ((*i)->getType() == TRANSFER_SOLDIER)
+		{
+			total += (*i)->getSoldier()->getRules()->getSalaryCost();
+		}
+	}
+	for (std::vector<Soldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
+	{
+		total += (*i)->getRules()->getSalaryCost();
+	}
 	total += getTotalEngineers() * _mod->getEngineerCost();
 	total += getTotalScientists() * _mod->getScientistCost();
 	return total;
