@@ -26,7 +26,6 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
 #include "../Mod/RuleBaseFacility.h"
-#include "../Mod/Mod.h"
 #include "BasescapeState.h"
 #include "SelectStartFacilityState.h"
 #include "../Savegame/SavedGame.h"

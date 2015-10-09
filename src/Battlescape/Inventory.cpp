@@ -28,7 +28,6 @@
 #include "../Engine/Font.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
-#include "../Mod/Mod.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Engine/SurfaceSet.h"

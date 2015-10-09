@@ -30,7 +30,6 @@
 #include "BaseNameState.h"
 #include "../Menu/ErrorMessageState.h"
 #include "../Engine/Options.h"
-#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom

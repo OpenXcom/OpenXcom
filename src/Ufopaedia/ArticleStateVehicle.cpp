@@ -28,7 +28,6 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
-#include "../Mod/Mod.h"
 #include "../Mod/Unit.h"
 #include "../Mod/Armor.h"
 #include "../Mod/RuleItem.h"

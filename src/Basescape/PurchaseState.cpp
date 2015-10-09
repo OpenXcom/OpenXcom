@@ -596,10 +596,10 @@ void PurchaseState::updateItemStrings()
 }
 
 /**
-* Gets the Type of the selected item.
-* @param selected Currently selected item.
-* @return The type of the selected item.
-*/
+ * Gets the Type of the selected item.
+ * @param selected Currently selected item.
+ * @return The type of the selected item.
+ */
 TransferType PurchaseState::getType(size_t selected) const
 {
 	size_t max = _soldiers.size();

@@ -861,10 +861,10 @@ std::string Surface::getTooltip() const
 }
 
 /**
-* Changes the help description of this surface,
-* for example for showing in tooltips.
-* @param tooltip String ID.
-*/
+ * Changes the help description of this surface,
+ * for example for showing in tooltips.
+ * @param tooltip String ID.
+ */
 void Surface::setTooltip(const std::string &tooltip)
 {
 	_tooltip = tooltip;

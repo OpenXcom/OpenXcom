@@ -28,7 +28,6 @@
 #include "../Mod/RuleBaseFacility.h"
 #include "../Savegame/SavedGame.h"
 #include "PlaceFacilityState.h"
-#include "../Mod/Mod.h"
 
 namespace OpenXcom
 {

@@ -31,7 +31,6 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Craft.h"
 #include "SoldierInfoState.h"
-#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom

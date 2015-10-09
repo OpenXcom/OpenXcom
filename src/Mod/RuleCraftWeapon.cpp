@@ -219,9 +219,9 @@ int RuleCraftWeapon::getProjectileSpeed() const
 }
 
 /**
-* Can this item be used on land or is it underwater only?
-* @return if this is an underwater weapon or not.
-*/
+ * Can this item be used on land or is it underwater only?
+ * @return if this is an underwater weapon or not.
+ */
 bool RuleCraftWeapon::isWaterOnly() const
 {
 	return _underwaterOnly;

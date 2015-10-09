@@ -1297,8 +1297,8 @@ void UnitSprite::drawRoutine9()
 }
 
 /**
-* Drawing routine for tftd tanks.
-*/
+ * Drawing routine for tftd tanks.
+ */
 void UnitSprite::drawRoutine11()
 {
 	if (_unit->isOut())
@@ -1339,8 +1339,8 @@ void UnitSprite::drawRoutine11()
 }
 
 /**
-* Drawing routine for hallucinoids (routine 12) and biodrones (routine 16).
-*/
+ * Drawing routine for hallucinoids (routine 12) and biodrones (routine 16).
+ */
 void UnitSprite::drawRoutine12()
 {
 	const int die = 8;

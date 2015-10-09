@@ -81,9 +81,9 @@ TextList::~TextList()
 }
 
 /**
-* Changes the position of the surface in the X axis.
-* @param x X position in pixels.
-*/
+ * Changes the position of the surface in the X axis.
+ * @param x X position in pixels.
+ */
 void TextList::setX(int x)
 {
 	Surface::setX(x);
@@ -95,9 +95,9 @@ void TextList::setX(int x)
 }
 
 /**
-* Changes the position of the surface in the Y axis.
-* @param y Y position in pixels.
-*/
+ * Changes the position of the surface in the Y axis.
+ * @param y Y position in pixels.
+ */
 void TextList::setY(int y)
 {
 	Surface::setY(y);

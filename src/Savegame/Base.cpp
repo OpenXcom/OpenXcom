@@ -801,7 +801,7 @@ int Base::getAvailableHangars() const
 /**
  * Return laboratories space not used by a ResearchProject
  * @return laboratories space not used by a ResearchProject
-*/
+ */
 int Base::getFreeLaboratories() const
 {
 	return getAvailableLaboratories() - getUsedLaboratories();
@@ -810,7 +810,7 @@ int Base::getFreeLaboratories() const
 /**
  * Return workshop space not used by a Production
  * @return workshop space not used by a Production
-*/
+ */
 int Base::getFreeWorkshops() const
 {
 	return getAvailableWorkshops() - getUsedWorkshops();
@@ -819,7 +819,7 @@ int Base::getFreeWorkshops() const
 /**
  * Return psilab space not in use
  * @return psilab space not in use
-*/
+ */
 int Base::getFreePsiLabs() const
 {
 	return getAvailablePsiLabs() - getUsedPsiLabs();
@@ -828,7 +828,7 @@ int Base::getFreePsiLabs() const
 /**
  * Return containment space not in use
  * @return containment space not in use
-*/
+ */
 int Base::getFreeContainment() const
 {
 	return getAvailableContainment() - getUsedContainment();
@@ -837,7 +837,7 @@ int Base::getFreeContainment() const
 /**
  * Returns the amount of scientists currently in use.
  * @return Amount of scientists.
-*/
+ */
 int Base::getAllocatedScientists() const
 {
 	int total = 0;
@@ -854,7 +854,7 @@ int Base::getAllocatedScientists() const
 /**
  * Returns the amount of engineers currently in use.
  * @return Amount of engineers.
-*/
+ */
 int Base::getAllocatedEngineers() const
 {
 	int total = 0;
@@ -1053,7 +1053,7 @@ int Base::getMonthlyMaintenace() const
 /**
  * Returns the list of all base's ResearchProject
  * @return list of base's ResearchProject
-*/
+ */
 const std::vector<ResearchProject *> & Base::getResearch() const
 {
 	return _research;
@@ -1062,7 +1062,7 @@ const std::vector<ResearchProject *> & Base::getResearch() const
 /**
  * Add a new Production to the Base
  * @param p A pointer to a Production
-*/
+ */
 void Base::addProduction (Production * p)
 {
 	_productions.push_back(p);
@@ -1071,7 +1071,7 @@ void Base::addProduction (Production * p)
 /**
  * Add A new ResearchProject to Base
  * @param project The project to add
-*/
+ */
 void Base::addResearch(ResearchProject * project)
 {
 	_research.push_back(project);
@@ -1080,7 +1080,7 @@ void Base::addResearch(ResearchProject * project)
 /**
  * Remove a ResearchProject from base
  * @param project the project to remove
-*/
+ */
 void Base::removeResearch(ResearchProject * project)
 {
 	_scientists += project->getAssigned();
@@ -1094,7 +1094,7 @@ void Base::removeResearch(ResearchProject * project)
 /**
  * Remove a Production from the Base
  * @param p A pointer to a Production
-*/
+ */
 void Base::removeProduction (Production * p)
 {
 	_engineers += p->getAssignedEngineers();

@@ -31,7 +31,6 @@
 #include "../Savegame/Soldier.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
-#include "../Mod/Mod.h"
 
 namespace OpenXcom
 {

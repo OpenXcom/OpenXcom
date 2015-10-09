@@ -41,7 +41,6 @@
 #include "TransferConfirmState.h"
 #include "../Engine/Options.h"
 #include "../fmath.h"
-#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
@@ -764,10 +763,10 @@ size_t TransferItemsState::getItemIndex(size_t selected) const
 }
 
 /**
-* Gets the index of selected craft.
-* @param selected Selected craft.
-* @return Index of the selected craft.
-*/
+ * Gets the index of selected craft.
+ * @param selected Selected craft.
+ * @return Index of the selected craft.
+ */
 size_t TransferItemsState::getCraftIndex(size_t selected) const
 {
 	return selected - _soldiers.size();

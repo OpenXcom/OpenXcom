@@ -52,7 +52,6 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Mod/RuleAlienMission.h"
 #include "../Mod/RuleGlobe.h"
-#include "../Mod/Mod.h"
 
 namespace OpenXcom
 {

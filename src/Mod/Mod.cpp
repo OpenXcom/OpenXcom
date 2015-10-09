@@ -560,9 +560,9 @@ Sound *Mod::getSoundByDepth(unsigned int depth, unsigned int sound) const
 }
 
 /**
-* Returns the list of color LUTs in the mod.
-* @return Pointer to the list of LUTs.
-*/
+ * Returns the list of color LUTs in the mod.
+ * @return Pointer to the list of LUTs.
+ */
 const std::vector<std::vector<Uint8> > *Mod::getLUTs() const
 {
 	return &_transparencyLUTs;
@@ -593,11 +593,11 @@ int Mod::getSpriteOffset(int sprite, const std::string& set) const
 }
 
 /**
-* Returns the appropriate mod-based offset for a sound.
-* If the ID is bigger than the soundset contents, the mod offset is applied.
-* @param id Numeric ID of the sound.
-* @param resource Name of the soundset to lookup.
-*/
+ * Returns the appropriate mod-based offset for a sound.
+ * If the ID is bigger than the soundset contents, the mod offset is applied.
+ * @param id Numeric ID of the sound.
+ * @param resource Name of the soundset to lookup.
+ */
 int Mod::getSoundOffset(int sound, const std::string& set) const
 {
 	SoundSet *ss = getSoundSet(set);

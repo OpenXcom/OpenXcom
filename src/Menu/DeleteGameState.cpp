@@ -27,7 +27,6 @@
 #include "../Engine/Options.h"
 #include "ErrorMessageState.h"
 #include "../Savegame/SavedGame.h"
-#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom

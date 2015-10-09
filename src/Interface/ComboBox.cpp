@@ -79,9 +79,9 @@ ComboBox::~ComboBox()
 }
 
 /**
-* Changes the position of the surface in the X axis.
-* @param x X position in pixels.
-*/
+ * Changes the position of the surface in the X axis.
+ * @param x X position in pixels.
+ */
 void ComboBox::setX(int x)
 {
 	Surface::setX(x);
@@ -92,9 +92,9 @@ void ComboBox::setX(int x)
 }
 
 /**
-* Changes the position of the surface in the Y axis.
-* @param y Y position in pixels.
-*/
+ * Changes the position of the surface in the Y axis.
+ * @param y Y position in pixels.
+ */
 void ComboBox::setY(int y)
 {
 	Surface::setY(y);

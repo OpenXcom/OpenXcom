@@ -102,7 +102,7 @@ will be reduced to the size at the moment that the / statid was
 encountered.  XcomUtil will again check the length of the name, reducing
 or eliminating the first name as needed.  If this string is still too
 long, nothing will be changed.
-*/
+ */
 
 class StatString
 {

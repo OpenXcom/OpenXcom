@@ -29,7 +29,7 @@ class Mod;
 /**
    Represent a ResearchProject
    Contain information about assigned scientist, time already spent and cost of the project.
-*/
+ */
 class ResearchProject
 {
 	RuleResearch * _project;

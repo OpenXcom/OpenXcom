@@ -29,7 +29,6 @@
 #include "../Engine/LocalizedText.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/FileMap.h"
-#include "../Mod/Mod.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"

@@ -39,7 +39,6 @@
 #include "../Engine/Options.h"
 #include "../Menu/ErrorMessageState.h"
 #include "SellState.h"
-#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom

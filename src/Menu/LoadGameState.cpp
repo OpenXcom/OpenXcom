@@ -32,7 +32,6 @@
 #include "../Battlescape/BattlescapeState.h"
 #include "../Mod/Mod.h"
 #include "../Engine/Sound.h"
-#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom

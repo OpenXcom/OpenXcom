@@ -147,9 +147,9 @@ void PauseState::btnSaveClick(Action *)
 }
 
 /**
-* Opens the Game Options screen.
-* @param action Pointer to an action.
-*/
+ * Opens the Game Options screen.
+ * @param action Pointer to an action.
+ */
 void PauseState::btnOptionsClick(Action *)
 {
 	Options::backupDisplay();

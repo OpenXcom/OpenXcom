@@ -33,7 +33,6 @@
 #include "CraftInfoState.h"
 #include "SellState.h"
 #include "../Savegame/SavedGame.h"
-#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom

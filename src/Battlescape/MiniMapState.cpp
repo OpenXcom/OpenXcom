@@ -150,7 +150,7 @@ void MiniMapState::btnLevelDownClick(Action *)
 
 /**
  * Animation handler. Updates the minimap view animation.
-*/
+ */
 void MiniMapState::animate()
 {
 	_miniMapView->animate();
@@ -158,7 +158,7 @@ void MiniMapState::animate()
 
 /**
  * Handles timers.
-*/
+ */
 void MiniMapState::think()
 {
 	State::think();

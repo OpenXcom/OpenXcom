@@ -104,7 +104,7 @@ void ScannerState::update()
 
 /**
  * Animation handler. Updates the minimap view animation.
-*/
+ */
 void ScannerState::animate()
 {
 	_scannerView->animate();
@@ -112,7 +112,7 @@ void ScannerState::animate()
 
 /**
  * Handles timers.
-*/
+ */
 void ScannerState::think()
 {
 	State::think();

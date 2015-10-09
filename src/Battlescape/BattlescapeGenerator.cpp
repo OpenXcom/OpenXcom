@@ -551,10 +551,10 @@ void BattlescapeGenerator::run()
 }
 
 /**
-* Deploys all the X-COM units and equipment based
-* on the Geoscape base / craft.
-* @param inventoryTile The tile to place all the extra equipment on.
-*/
+ * Deploys all the X-COM units and equipment based
+ * on the Geoscape base / craft.
+ * @param inventoryTile The tile to place all the extra equipment on.
+ */
 void BattlescapeGenerator::deployXCOM()
 {
 	RuleInventory *ground = _game->getMod()->getInventory("STR_GROUND");
@@ -1720,10 +1720,10 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit *unit)
 
 
 /**
-* Creates a mini-battle-save for managing inventory from the Geoscape.
-* Kids, don't try this at home!
-* @param craft Pointer to craft to manage.
-*/
+ * Creates a mini-battle-save for managing inventory from the Geoscape.
+ * Kids, don't try this at home!
+ * @param craft Pointer to craft to manage.
+ */
 void BattlescapeGenerator::runInventory(Craft *craft)
 {
 	// we need to fake a map for soldier placement

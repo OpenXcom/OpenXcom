@@ -36,7 +36,7 @@ class InteractiveSurface;
 
 /**
  * Screen that allows changing of Production settings (assigned engineer, units to build).
-*/
+ */
 class ManufactureInfoState : public State
 {
 private:

@@ -28,7 +28,6 @@
 #include "../Geoscape/BuildNewBaseState.h"
 #include "../Engine/Options.h"
 #include "../Savegame/SavedGame.h"
-#include "../Mod/Mod.h"
 
 namespace OpenXcom
 {

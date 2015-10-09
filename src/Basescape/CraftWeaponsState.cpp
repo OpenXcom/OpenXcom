@@ -31,7 +31,6 @@
 #include "../Mod/RuleCraftWeapon.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/Base.h"
-#include "../Mod/Mod.h"
 
 namespace OpenXcom
 {

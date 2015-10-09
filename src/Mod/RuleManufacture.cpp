@@ -89,7 +89,7 @@ const std::vector<std::string> &RuleManufacture::getRequirements() const
 /**
  * Gets the required workspace to start production.
  * @return The required workspace.
-*/
+ */
 int RuleManufacture::getRequiredSpace() const
 {
 	return _space;
@@ -98,7 +98,7 @@ int RuleManufacture::getRequiredSpace() const
 /**
  * Gets the time needed to manufacture one object.
  * @return The time needed to manufacture one object (in man/hour).
-*/
+ */
 int RuleManufacture::getManufactureTime() const
 {
 	return _time;
@@ -108,7 +108,7 @@ int RuleManufacture::getManufactureTime() const
 /**
  * Gets the cost of manufacturing one object.
  * @return The cost of manufacturing one object.
-*/
+ */
 int RuleManufacture::getManufactureCost() const
 {
 	return _cost;
@@ -117,7 +117,7 @@ int RuleManufacture::getManufactureCost() const
 /**
  * Gets the list of items required to manufacture one object.
  * @return The list of items required to manufacture one object.
-*/
+ */
 const std::map<std::string, int> & RuleManufacture::getRequiredItems() const
 {
 	return _requiredItems;
@@ -126,7 +126,7 @@ const std::map<std::string, int> & RuleManufacture::getRequiredItems() const
 /**
  * Gets the list of items produced by completing "one object" of this project.
  * @return The list of items produced by completing "one object" of this project.
-*/
+ */
 const std::map<std::string, int> & RuleManufacture::getProducedItems() const
 {
 	return _producedItems;

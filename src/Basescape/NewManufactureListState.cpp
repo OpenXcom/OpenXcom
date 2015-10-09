@@ -31,7 +31,6 @@
 #include "../Savegame/Base.h"
 #include "ManufactureStartState.h"
 #include "../Menu/ErrorMessageState.h"
-#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
@@ -134,7 +133,7 @@ void NewManufactureListState::btnOkClick(Action *)
 /**
  * Opens the Production settings screen.
  * @param action A pointer to an Action.
-*/
+ */
 void NewManufactureListState::lstProdClick(Action *)
 {
 	RuleManufacture *rule = 0;

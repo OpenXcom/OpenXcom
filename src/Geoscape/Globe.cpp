@@ -52,7 +52,6 @@
 #include "../Savegame/BaseFacility.h"
 #include "../Mod/RuleBaseFacility.h"
 #include "../Mod/RuleCraft.h"
-#include "../Mod/Mod.h"
 #include "../Mod/RuleGlobe.h"
 #include "../Interface/Cursor.h"
 #include "../Engine/Screen.h"

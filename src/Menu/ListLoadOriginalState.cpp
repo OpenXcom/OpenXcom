@@ -33,7 +33,6 @@
 #include "../Geoscape/GeoscapeState.h"
 #include "../Battlescape/BattlescapeState.h"
 #include "ErrorMessageState.h"
-#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom

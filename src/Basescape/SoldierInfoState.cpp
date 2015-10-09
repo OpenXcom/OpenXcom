@@ -38,7 +38,6 @@
 #include "SellState.h"
 #include "SoldierArmorState.h"
 #include "SackSoldierState.h"
-#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 #include "../Mod/RuleSoldier.h"
 

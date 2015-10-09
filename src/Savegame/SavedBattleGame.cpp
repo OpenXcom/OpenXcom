@@ -31,7 +31,6 @@
 #include "../Battlescape/BattlescapeGame.h"
 #include "../Battlescape/Position.h"
 #include "../Mod/Mod.h"
-#include "../Mod/Mod.h"
 #include "../Mod/Armor.h"
 #include "../Engine/Game.h"
 #include "../Mod/RuleInventory.h"
@@ -620,13 +619,13 @@ void SavedBattleGame::setSelectedUnit(BattleUnit *unit)
 }
 
 /**
-* Selects the previous player unit.
-* @param checkReselect Whether to check if we should reselect a unit.
-* @param setReselect Don't reselect a unit.
-* @param checkInventory Whether to check if the unit has an inventory.
-* @return Pointer to new selected BattleUnit, NULL if none can be selected.
-* @sa selectPlayerUnit
-*/
+ * Selects the previous player unit.
+ * @param checkReselect Whether to check if we should reselect a unit.
+ * @param setReselect Don't reselect a unit.
+ * @param checkInventory Whether to check if the unit has an inventory.
+ * @return Pointer to new selected BattleUnit, NULL if none can be selected.
+ * @sa selectPlayerUnit
+ */
 BattleUnit *SavedBattleGame::selectPreviousPlayerUnit(bool checkReselect, bool setReselect, bool checkInventory)
 {
 	return selectPlayerUnit(-1, checkReselect, setReselect, checkInventory);
@@ -777,9 +776,9 @@ TileEngine *SavedBattleGame::getTileEngine() const
 }
 
 /**
-* Gets the array of mapblocks.
-* @return Pointer to the array of mapblocks.
-*/
+ * Gets the array of mapblocks.
+ * @return Pointer to the array of mapblocks.
+ */
 std::vector<MapDataSet*> *SavedBattleGame::getMapDataSets()
 {
 	return &_mapDataSets;

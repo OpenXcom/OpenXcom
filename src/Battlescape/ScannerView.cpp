@@ -95,7 +95,7 @@ void ScannerView::mouseClick (Action *, State *)
 
 /**
  * Updates the scanner animation.
-*/
+ */
 void ScannerView::animate()
 {
 	_frame++;

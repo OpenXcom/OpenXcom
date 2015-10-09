@@ -52,18 +52,18 @@ uint64_t next()
 }
 
 /**
-* Returns the current seed in use by the generator.
-* @return Current seed.
-*/
+ * Returns the current seed in use by the generator.
+ * @return Current seed.
+ */
 uint64_t getSeed()
 {
 	return x;
 }
 
 /**
-* Changes the current seed in use by the generator.
-* @param n New seed.
-*/
+ * Changes the current seed in use by the generator.
+ * @param n New seed.
+ */
 void setSeed(uint64_t n)
 {
 	x = n;

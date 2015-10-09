@@ -29,7 +29,6 @@
 #include "BattlescapeState.h"
 #include "../Engine/Options.h"
 #include "../Mod/AlienDeployment.h"
-#include "../Mod/Mod.h"
 #include "../Mod/MapScript.h"
 #include "../Savegame/Tile.h"
 

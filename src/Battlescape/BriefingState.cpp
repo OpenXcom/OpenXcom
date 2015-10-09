@@ -32,7 +32,6 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Ufo.h"
-#include "../Mod/Mod.h"
 #include "../Mod/AlienDeployment.h"
 #include "../Mod/RuleUfo.h"
 #include "../Engine/Options.h"

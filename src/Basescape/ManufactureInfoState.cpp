@@ -32,7 +32,6 @@
 #include "../Savegame/Production.h"
 #include "../Engine/Timer.h"
 #include "../Menu/ErrorMessageState.h"
-#include "../Mod/Mod.h"
 #include "../Mod/RuleInterface.h"
 #include <limits>
 
@@ -193,8 +192,8 @@ void ManufactureInfoState::buildUi()
 }
 
 /**
-* Frees up memory that's not automatically cleaned on exit
-*/
+ * Frees up memory that's not automatically cleaned on exit
+ */
 ManufactureInfoState::~ManufactureInfoState()
 {
 	delete _timerMoreEngineer;

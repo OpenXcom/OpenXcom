@@ -29,7 +29,6 @@
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
 #include "../Engine/Sound.h"
-#include "../Mod/Mod.h"
 
 namespace OpenXcom
 {

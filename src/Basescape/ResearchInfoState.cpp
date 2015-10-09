@@ -32,7 +32,6 @@
 #include "../Interface/ArrowButton.h"
 #include "../Engine/Timer.h"
 #include "../Engine/RNG.h"
-#include "../Mod/Mod.h"
 #include <limits>
 
 namespace OpenXcom
@@ -158,8 +157,8 @@ void ResearchInfoState::buildUi()
 }
 
 /**
-* Frees up memory that's not automatically cleaned on exit
-*/
+ * Frees up memory that's not automatically cleaned on exit
+ */
 ResearchInfoState::~ResearchInfoState()
 {
 	delete _timerLess;
