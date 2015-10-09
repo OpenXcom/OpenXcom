@@ -295,7 +295,7 @@ void SaveConverter::graphVector(std::vector<T> &vector, int month, bool year)
 	{
 		std::vector<T> newVector;
 		int i = month;
-		do 
+		do
 		{
 			newVector.push_back(vector[i]);
 			i = (i + 1) % vector.size();
@@ -534,7 +534,7 @@ void SaveConverter::loadDatDiplom()
 		}
 		bool pact = satisfaction == 0;
 		bool newPact = load<Sint16>(cdata + 0x1E) != 0;
-		
+
 		if (pact)
 			country->setPact();
 		if (newPact)
@@ -775,7 +775,7 @@ void SaveConverter::loadDatBase()
 				int qty = load<Uint16>(bdata + 0x60 + j * 2);
 				if (qty != 0 && !_idItems[j].empty())
 				{
-					base->getItems()->addItem(_idItems[j], qty);
+					base->getStorageItems()->addItem(_idItems[j], qty);
 				}
 			}
 			base->setEngineers(engineers);
@@ -818,7 +818,7 @@ void SaveConverter::loadDatAStore()
 			if (base != 0xFF)
 			{
 				Base *b = dynamic_cast<Base*>(_targets[base]);
-				b->getItems()->addItem(liveAlien);
+				b->getStorageItems()->addItem(liveAlien);
 			}
 		}
 		_aliens.push_back(liveAlien);
@@ -1262,7 +1262,7 @@ void SaveConverter::loadDatXBases()
 			}
 		}
 	}
-	
+
 }
 
 }

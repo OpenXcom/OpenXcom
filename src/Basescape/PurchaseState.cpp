@@ -135,8 +135,8 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 		RuleSoldier *rule = _game->getMod()->getSoldier(*i);
 		{
 			_soldiers.push_back(*i);
-			_qtys.push_back(0);
-			std::wostringstream ss;
+	_qtys.push_back(0);
+	std::wostringstream ss;
 			ss << _base->getSoldierCount(*i);
 			_lstItems->addRow(4, tr(*i).c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss.str().c_str(), L"0");
 		}
@@ -162,8 +162,8 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 			std::wostringstream ss;
 			ss << _base->getCraftCount(*i);
 			_lstItems->addRow(4, tr(*i).c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss.str().c_str(), L"0");
+			}
 		}
-	}
 	const std::vector<std::string> &items = _game->getMod()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
@@ -173,7 +173,7 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 			_items.push_back(*i);
 			_qtys.push_back(0);
 			std::wostringstream ss;
-			ss << _base->getItems()->getItem(*i);
+			ss << _base->getStorageItems()->getItem(*i);
 			std::wstring item = tr(*i);
 			if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
 			{
@@ -420,7 +420,7 @@ int PurchaseState::getPrice()
 		return _game->getMod()->getCraft(_crafts[getCraftIndex(_sel)])->getBuyCost();
 	}
 	return 0;
-}
+	}
 
 /**
  * Increases the quantity of the selected item to buy by one.
@@ -454,20 +454,20 @@ void PurchaseState::increaseByValue(int change)
 		case TRANSFER_ENGINEER:
 			if (_pQty + 1 > _base->getAvailableQuarters() - _base->getUsedQuarters())
 			{
-				errorMessage = tr("STR_NOT_ENOUGH_LIVING_SPACE");
-			}
+		errorMessage = tr("STR_NOT_ENOUGH_LIVING_SPACE");
+	}
 			break;
 		case TRANSFER_CRAFT:
 			if (_cQty + 1 > _base->getAvailableHangars() - _base->getUsedHangars())
-			{
-				errorMessage = tr("STR_NO_FREE_HANGARS_FOR_PURCHASE");
-			}
+	{
+		errorMessage = tr("STR_NO_FREE_HANGARS_FOR_PURCHASE");
+	}
 			break;
 		case TRANSFER_ITEM:
 			if (_iQty + _game->getMod()->getItem(_items[getItemIndex(_sel)])->getSize() > _base->getAvailableStores() - _base->getUsedStores())
-			{
-				errorMessage = tr("STR_NOT_ENOUGH_STORE_SPACE");
-			}
+	{
+		errorMessage = tr("STR_NOT_ENOUGH_STORE_SPACE");
+	}
 			break;
 		}
 	}
@@ -482,30 +482,30 @@ void PurchaseState::increaseByValue(int change)
 		case TRANSFER_SCIENTIST:
 		case TRANSFER_ENGINEER:
 			{
-				int maxByQuarters = _base->getAvailableQuarters() - _base->getUsedQuarters() - _pQty;
-				change = std::min(maxByQuarters, change);
-				_pQty += change;
-			}
+			int maxByQuarters = _base->getAvailableQuarters() - _base->getUsedQuarters() - _pQty;
+			change = std::min(maxByQuarters, change);
+			_pQty += change;
+		}
 			break;
 		case TRANSFER_CRAFT:
-			{
-				int maxByHangars = _base->getAvailableHangars() - _base->getUsedHangars() - _cQty;
-				change = std::min(maxByHangars, change);
-				_cQty += change;
-			}
+		{
+			int maxByHangars = _base->getAvailableHangars() - _base->getUsedHangars() - _cQty;
+			change = std::min(maxByHangars, change);
+			_cQty += change;
+		}
 			break;
 		case TRANSFER_ITEM:
-			{
+		{
 				double storesNeededPerItem = _game->getMod()->getItem(_items[getItemIndex(_sel)])->getSize();
-				double freeStores = _base->getAvailableStores() - _base->getUsedStores() - _iQty;
-				double maxByStores = (double)(INT_MAX);
-				if (!AreSame(storesNeededPerItem, 0.0))
-				{
-					maxByStores = (freeStores + 0.05) / storesNeededPerItem;
-				}
-				change = std::min((int)maxByStores, change);
-				_iQty += change * storesNeededPerItem;
+			double freeStores = _base->getAvailableStores() - _base->getUsedStores() - _iQty;
+			double maxByStores = (double)(INT_MAX);
+			if (!AreSame(storesNeededPerItem, 0.0))
+			{
+				maxByStores = (freeStores + 0.05) / storesNeededPerItem;
 			}
+			change = std::min((int)maxByStores, change);
+			_iQty += change * storesNeededPerItem;
+		}
 			break;
 		}
 		_qtys[_sel] += change;
@@ -515,9 +515,9 @@ void PurchaseState::increaseByValue(int change)
 	else
 	{
 		_timerInc->stop();
-		RuleInterface *menuInterface = _game->getMod()->getInterface("buyMenu");
-		_game->pushState(new ErrorMessageState(errorMessage, _palette, menuInterface->getElement("errorMessage")->color, "BACK13.SCR", menuInterface->getElement("errorPalette")->color));
-	}
+	RuleInterface *menuInterface = _game->getMod()->getInterface("buyMenu");
+	_game->pushState(new ErrorMessageState(errorMessage, _palette, menuInterface->getElement("errorMessage")->color, "BACK13.SCR", menuInterface->getElement("errorPalette")->color));
+}
 }
 
 /**

@@ -100,7 +100,7 @@ void SackSoldierState::btnOkClick(Action *)
 	Soldier *soldier = _base->getSoldiers()->at(_soldierId);
 	if (soldier->getArmor()->getStoreItem() != "STR_NONE")
 	{
-		_base->getItems()->addItem(soldier->getArmor()->getStoreItem());
+		_base->getStorageItems()->addItem(soldier->getArmor()->getStoreItem());
 	}
 	_base->getSoldiers()->erase(_base->getSoldiers()->begin() + _soldierId);
 	delete soldier;

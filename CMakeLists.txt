@@ -1,7 +1,8 @@
 project ( OpenXcom )
 
-cmake_minimum_required ( VERSION 2.8 )
+cmake_minimum_required ( VERSION 2.8.5 )
 set ( CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" )
+include(GNUInstallDirs)
 
 option ( DEV_BUILD "Development Build. Disable this for release builds" ON )
 option ( BUILD_PACKAGE "Prepares build for creation of a package with CPack" ON )
@@ -84,7 +85,10 @@ endif()
 # Find OpenGL
 find_package ( OpenGL )
 if ( NOT OPENGL_FOUND )
-  message ( FATAL_ERROR "Can't find OpenGL; how does that even happen?" )
+  message ( WARNING "Can't find OpenGL; how does that even happen?\n"
+    "Continuing building without OpenGL support."
+    )
+  add_definitions(-D__NO_OPENGL)
 endif ()
 
 # Read version number

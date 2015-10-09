@@ -182,7 +182,7 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 	const std::vector<std::string> &items = _game->getMod()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
-		int qty = _base->getItems()->getItem(*i);
+		int qty = _base->getStorageItems()->getItem(*i);
 		if (Options::storageLimitsEnforced && origin == OPT_BATTLESCAPE)
 		{
 			for (std::vector<Transfer*>::iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end(); ++j)
@@ -264,7 +264,7 @@ void SellState::btnOkClick(Action *)
 					{
 						if ((*s)->getArmor()->getStoreItem() != "STR_NONE")
 						{
-							_base->getItems()->addItem((*s)->getArmor()->getStoreItem());
+							_base->getStorageItems()->addItem((*s)->getArmor()->getStoreItem());
 						}
 						_base->getSoldiers()->erase(s);
 						break;
@@ -282,24 +282,24 @@ void SellState::btnOkClick(Action *)
 				{
 					if ((*w) != 0)
 					{
-						_base->getItems()->addItem((*w)->getRules()->getLauncherItem());
-						_base->getItems()->addItem((*w)->getRules()->getClipItem(), (*w)->getClipsLoaded(_game->getMod()));
+						_base->getStorageItems()->addItem((*w)->getRules()->getLauncherItem());
+						_base->getStorageItems()->addItem((*w)->getRules()->getClipItem(), (*w)->getClipsLoaded(_game->getMod()));
 					}
 				}
 
 				// Remove items from craft
 				for (std::map<std::string, int>::iterator it = craft->getItems()->getContents()->begin(); it != craft->getItems()->getContents()->end(); ++it)
 				{
-					_base->getItems()->addItem(it->first, it->second);
+					_base->getStorageItems()->addItem(it->first, it->second);
 				}
 
 				// Remove vehicles from craft
 				for (std::vector<Vehicle*>::iterator v = craft->getVehicles()->begin(); v != craft->getVehicles()->end(); ++v)
 				{
-					_base->getItems()->addItem((*v)->getRules()->getType());
+					_base->getStorageItems()->addItem((*v)->getRules()->getType());
 					if (!(*v)->getRules()->getCompatibleAmmo()->empty())
 					{
-						_base->getItems()->addItem((*v)->getRules()->getCompatibleAmmo()->front(), (*v)->getAmmo());
+						_base->getStorageItems()->addItem((*v)->getRules()->getCompatibleAmmo()->front(), (*v)->getAmmo());
 					}
 				}
 
@@ -344,13 +344,13 @@ void SellState::btnOkClick(Action *)
 				break;
 
 			case TRANSFER_ITEM:
-				if (_base->getItems()->getItem(_items[getItemIndex(i)]) < _qtys[i])
+				if (_base->getStorageItems()->getItem(_items[getItemIndex(i)]) < _qtys[i])
 				{
 					const std::string itemName = _items[getItemIndex(i)];
-					int toRemove = _qtys[i] - _base->getItems()->getItem(itemName);
+					int toRemove = _qtys[i] - _base->getStorageItems()->getItem(itemName);
 
 					// remove all of said items from base
-					_base->getItems()->removeItem(itemName, INT_MAX);
+					_base->getStorageItems()->removeItem(itemName, INT_MAX);
 
 					// if we still need to remove any, remove them from the crafts first, and keep a running tally
 					for (std::vector<Craft*>::iterator j = _base->getCrafts()->begin(); j != _base->getCrafts()->end() && toRemove; ++j)
@@ -392,7 +392,7 @@ void SellState::btnOkClick(Action *)
 				}
 				else
 				{
-					_base->getItems()->removeItem(_items[getItemIndex(i)], _qtys[i]);
+					_base->getStorageItems()->removeItem(_items[getItemIndex(i)], _qtys[i]);
 				}
 			}
 		}
@@ -555,7 +555,7 @@ int SellState::getQuantity()
 	case TRANSFER_ENGINEER:
 		return _base->getAvailableEngineers();
 	case TRANSFER_ITEM:
-		qty = _base->getItems()->getItem(_items[getItemIndex(_sel)]);
+		qty = _base->getStorageItems()->getItem(_items[getItemIndex(_sel)]);
 		if (Options::storageLimitsEnforced && _origin == OPT_BATTLESCAPE)
 		{
 			for (std::vector<Transfer*>::iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end(); ++j)

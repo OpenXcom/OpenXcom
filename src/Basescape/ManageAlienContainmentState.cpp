@@ -149,7 +149,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrig
 	const std::vector<std::string> &items = _game->getMod()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
-		int qty = _base->getItems()->getItem(*i);
+		int qty = _base->getStorageItems()->getItem(*i);
 		if (qty > 0 && _game->getMod()->getItem(*i)->isAlien())
 		{
 			_qtys.push_back(0);
@@ -215,7 +215,7 @@ void ManageAlienContainmentState::btnOkClick(Action *)
 		if (_qtys[i] > 0)
 		{
 			// remove the aliens
-			_base->getItems()->removeItem(_aliens[i], _qtys[i]);
+			_base->getStorageItems()->removeItem(_aliens[i], _qtys[i]);
 
 			if (Options::canSellLiveAliens)
 			{
@@ -224,7 +224,7 @@ void ManageAlienContainmentState::btnOkClick(Action *)
 			else
 			{
 				// add the corpses
-				_base->getItems()->addItem(
+				_base->getStorageItems()->addItem(
 					_game->getMod()->getArmor(
 						_game->getMod()->getUnit(
 							_aliens[i]
@@ -366,7 +366,7 @@ void ManageAlienContainmentState::lstItemsMousePress(Action *action)
  */
 int ManageAlienContainmentState::getQuantity()
 {
-	return _base->getItems()->getItem(_aliens[_sel]);
+	return _base->getStorageItems()->getItem(_aliens[_sel]);
 }
 
 /**

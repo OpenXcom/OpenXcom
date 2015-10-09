@@ -116,7 +116,7 @@ ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item
 	_lstRequiredItems->setColumns(3, 140, 75, 55);
 	_lstRequiredItems->setBackground(_window);
 
-	ItemContainer * itemContainer (base->getItems());
+	ItemContainer * itemContainer (base->getStorageItems());
 	int row = 0;
 	for (std::map<std::string, int>::const_iterator iter = requiredItems.begin();
 		iter != requiredItems.end();
