@@ -478,9 +478,12 @@ int RuleItem::getClipSize() const
 void RuleItem::drawHandSprite(SurfaceSet *texture, Surface *surface) const
 {
 	Surface *frame = texture->getFrame(this->getBigSprite());
-	frame->setX((RuleInventory::HAND_W - this->getInventoryWidth()) * RuleInventory::SLOT_W/2);
-	frame->setY((RuleInventory::HAND_H - this->getInventoryHeight()) * RuleInventory::SLOT_H/2);
-	texture->getFrame(this->getBigSprite())->blit(surface);
+	if(frame)
+	{
+		frame->setX((RuleInventory::HAND_W - this->getInventoryWidth()) * RuleInventory::SLOT_W/2);
+		frame->setY((RuleInventory::HAND_H - this->getInventoryHeight()) * RuleInventory::SLOT_H/2);
+		texture->getFrame(this->getBigSprite())->blit(surface);
+	}
 }
 
 /**
