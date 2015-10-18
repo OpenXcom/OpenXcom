@@ -410,9 +410,9 @@ int PurchaseState::getPrice()
 	{
 	case TRANSFER_SOLDIER:
 		return _game->getMod()->getSoldier(_soldiers[_sel])->getBuyCost();
-	case TRANSFER_ENGINEER:
-		return _game->getMod()->getScientistCost() * 2;
 	case TRANSFER_SCIENTIST:
+		return _game->getMod()->getScientistCost() * 2;
+	case TRANSFER_ENGINEER:
 		return _game->getMod()->getEngineerCost() * 2;
 	case TRANSFER_ITEM:
 		return _game->getMod()->getItem(_items[getItemIndex(_sel)])->getBuyCost();
