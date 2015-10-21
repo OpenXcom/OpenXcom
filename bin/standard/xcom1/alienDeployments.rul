@@ -833,6 +833,7 @@ alienDeployments:
     terrains:
       - URBAN
     alert: STR_ALIENS_TERRORISE
+    alertBackground: BACK03.SCR
     briefing:
       palette: 2
       music: GMENBASE    

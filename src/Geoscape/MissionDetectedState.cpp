@@ -64,7 +64,7 @@ MissionDetectedState::MissionDetectedState(MissionSite *mission, GeoscapeState *
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getMod()->getSurface("BACK03.SCR"));
+	_window->setBackground(_game->getMod()->getSurface(mission->getDeployment()->getAlertBackground()));
 
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)&MissionDetectedState::btnInterceptClick);

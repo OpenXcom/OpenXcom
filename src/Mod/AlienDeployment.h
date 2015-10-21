@@ -69,7 +69,7 @@ private:
 	std::string _nextStage, _race, _script;
 	bool _finalDestination;
 	std::string _winCutscene, _loseCutscene;
-	std::string _alert;
+	std::string _alert, _alertBackground;
 	BriefingData _briefingData;
 	std::string _markerName, _objectivePopup, _objectiveCompleteText, _objectiveFailedText;
 	int _markerIcon, _durationMin, _durationMax, _minDepth, _maxDepth, _minSiteDepth, _maxSiteDepth;
@@ -107,6 +107,8 @@ public:
 	std::string getLoseCutscene() const;
 	/// Gets the alert message for this mission type.
 	std::string getAlertMessage() const;
+	/// Gets the alert background for this mission type.
+	std::string getAlertBackground() const;
 	/// Gets the briefing data for this mission type.
 	BriefingData getBriefingData() const;
 	/// Gets the marker name for this mission.

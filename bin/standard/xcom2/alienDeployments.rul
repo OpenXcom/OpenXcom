@@ -945,6 +945,7 @@ alienDeployments: #done
       palette: 4
       music: GMISPOSH
     alert: STR_ALIENS_LAUNCH_PORT_TERROR
+    alertBackground: BACK03.SCR
     markerName: STR_TERROR_SITE
     duration: [4, 10]
     despawnPenalty: 1000
@@ -1085,6 +1086,7 @@ alienDeployments: #done
       palette: 4
       music: GMISPOSH
     alert: STR_ALIENS_LAUNCH_ISLAND_TERROR
+    alertBackground: BACK03.SCR
     markerName: STR_TERROR_SITE
     duration: [4, 10]
     despawnPenalty: 1000
@@ -1228,6 +1230,7 @@ alienDeployments: #done
       palette: 4
       music: GMISPOSH
     alert: STR_ALIENS_ATTACK_SHIPPING_ROUTE
+    alertBackground: BACK03.SCR
     markerName: STR_TERROR_SITE
     duration: [4, 10]
     despawnPenalty: 1000
@@ -1512,6 +1515,7 @@ alienDeployments: #done
       palette: 4
       music: GMISPOSH
     alert: STR_ALIENS_ATTACK_SHIPPING_ROUTE
+    alertBackground: BACK03.SCR
     markerName: STR_TERROR_SITE
     duration: [4, 10]
     despawnPenalty: 1000
@@ -1801,6 +1805,7 @@ alienDeployments: #done
       palette: 4
       music: GMATTBAS
     alert: STR_ALIEN_ACTIVITY_DETECTED
+    alertBackground: BACK03.SCR
     markerName: STR_ARTIFACT_SITE
     duration: [4, 10]
     despawnPenalty: 2000

@@ -146,6 +146,7 @@ void AlienDeployment::load(const YAML::Node &node)
 	_loseCutscene = node["loseCutscene"].as<std::string>(_loseCutscene);
 	_script = node["script"].as<std::string>(_script);
 	_alert = node["alert"].as<std::string>(_alert);
+	_alertBackground = node["alertBackground"].as<std::string>(_alertBackground);
 	_briefingData = node["briefing"].as<BriefingData>(_briefingData);
 	_markerName = node["markerName"].as<std::string>(_markerName);
 	_markerIcon = node["markerIcon"].as<int>(_markerIcon);
@@ -306,6 +307,15 @@ std::string AlienDeployment::getLoseCutscene() const
 std::string AlienDeployment::getAlertMessage() const
 {
 	return _alert;
+}
+
+/**
+* Gets the alert background displayed when this mission spawns.
+* @return Sprite ID for the background.
+*/
+std::string AlienDeployment::getAlertBackground() const
+{
+	return _alertBackground;
 }
 
 /**
