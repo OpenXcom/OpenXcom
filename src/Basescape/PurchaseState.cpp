@@ -142,19 +142,26 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 		RuleSoldier *rule = _game->getMod()->getSoldier(*i);
 		if (rule->getBuyCost() != 0)
 		{
-			_items.push_back({ TRANSFER_SOLDIER, rule, rule->getType(), rule->getBuyCost(), _base->getSoldierCount(rule->getType()), 0, 0 });
+			TransferRow row = { TRANSFER_SOLDIER, rule, rule->getType(), rule->getBuyCost(), _base->getSoldierCount(rule->getType()), 0, 0 };
+			_items.push_back(row);
 		}
 	}
-	_items.push_back({ TRANSFER_SCIENTIST, 0, "STR_SCIENTIST", _game->getMod()->getScientistCost() * 2, _base->getTotalScientists(), 0, 0 });
-	_items.push_back({ TRANSFER_ENGINEER, 0, "STR_ENGINEER", _game->getMod()->getEngineerCost() * 2, _base->getTotalEngineers(), 0, 0 });
-
+	{
+		TransferRow row = { TRANSFER_SCIENTIST, 0, "STR_SCIENTIST", _game->getMod()->getScientistCost() * 2, _base->getTotalScientists(), 0, 0 };
+		_items.push_back(row);
+	}
+	{
+		TransferRow row = { TRANSFER_SCIENTIST, 0, "STR_SCIENTIST", _game->getMod()->getScientistCost() * 2, _base->getTotalScientists(), 0, 0 };
+		_items.push_back(row);		
+	}
 	const std::vector<std::string> &crafts = _game->getMod()->getCraftsList();
 	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
 		RuleCraft *rule = _game->getMod()->getCraft(*i);
 		if (rule->getBuyCost() != 0 && _game->getSavedGame()->isResearched(rule->getRequirements()))
 		{
-			_items.push_back({ TRANSFER_CRAFT, rule, rule->getType(), rule->getBuyCost(), _base->getCraftCount(rule->getType()), 0, 0 });
+			TransferRow row = { TRANSFER_CRAFT, rule, rule->getType(), rule->getBuyCost(), _base->getCraftCount(rule->getType()), 0, 0 };
+			_items.push_back(row);
 		}
 	}
 	const std::vector<std::string> &items = _game->getMod()->getItemsList();
@@ -163,7 +170,8 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 		RuleItem *rule = _game->getMod()->getItem(*i);
 		if (rule->getBuyCost() != 0 && _game->getSavedGame()->isResearched(rule->getRequirements()))
 		{
-			_items.push_back({ TRANSFER_ITEM, rule, rule->getType(), rule->getBuyCost(), _base->getStorageItems()->getItem(rule->getType()), 0, 0 });
+			TransferRow row = { TRANSFER_ITEM, rule, rule->getType(), rule->getBuyCost(), _base->getStorageItems()->getItem(rule->getType()), 0, 0 };
+			_items.push_back(row);
 		}
 	}
 
