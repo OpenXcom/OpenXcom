@@ -151,7 +151,7 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 		_items.push_back(row);
 	}
 	{
-		TransferRow row = { TRANSFER_SCIENTIST, 0, "STR_SCIENTIST", _game->getMod()->getScientistCost() * 2, _base->getTotalScientists(), 0, 0 };
+		TransferRow row = { TRANSFER_ENGINEER, 0, "STR_ENGINEER", _game->getMod()->getEngineerCost() * 2, _base->getTotalEngineers(), 0, 0 };
 		_items.push_back(row);		
 	}
 	const std::vector<std::string> &crafts = _game->getMod()->getCraftsList();
