@@ -65,7 +65,7 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 	_txtSpaceUsed = new Text(150, 9, 160, 34);
 	_txtCost = new Text(102, 9, 152, 44);
 	_txtQuantity = new Text(60, 9, 256, 44);
-	_cbxCategory = new ComboBox(this, 120, 16, 10, 36);
+	_cbxCategory = new ComboBox(this, 110, 16, 10, 36);
 	_lstItems = new TextList(287, 120, 8, 54);
 
 	// Set palette
@@ -107,9 +107,9 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES").arg(Text::formatFunding(_total)));
 
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
-	std::wostringstream ss1;
-	ss1 << _base->getUsedStores() << ":" << _base->getAvailableStores();
-	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss1.str()));
+	std::wostringstream ss;
+	ss << _base->getUsedStores() << ":" << _base->getAvailableStores();
+	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss.str()));
 
 	_txtCost->setText(tr("STR_COST_PER_UNIT_UC"));
 
@@ -140,18 +140,18 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 	for (std::vector<std::string>::const_iterator i = soldiers.begin(); i != soldiers.end(); ++i)
 	{
 		RuleSoldier *rule = _game->getMod()->getSoldier(*i);
-		if (rule->getBuyCost() != 0)
+		if (rule->getBuyCost() != 0 && _game->getSavedGame()->isResearched(rule->getRequirements()))
 		{
-			TransferRow row = { TRANSFER_SOLDIER, rule, rule->getType(), rule->getBuyCost(), _base->getSoldierCount(rule->getType()), 0, 0 };
+			TransferRow row = { TRANSFER_SOLDIER, rule, tr(rule->getType()), rule->getBuyCost(), _base->getSoldierCount(rule->getType()), 0, 0 };
 			_items.push_back(row);
 		}
 	}
 	{
-		TransferRow row = { TRANSFER_SCIENTIST, 0, "STR_SCIENTIST", _game->getMod()->getScientistCost() * 2, _base->getTotalScientists(), 0, 0 };
+		TransferRow row = { TRANSFER_SCIENTIST, 0, tr("STR_SCIENTIST"), _game->getMod()->getScientistCost() * 2, _base->getTotalScientists(), 0, 0 };
 		_items.push_back(row);
 	}
 	{
-		TransferRow row = { TRANSFER_ENGINEER, 0, "STR_ENGINEER", _game->getMod()->getEngineerCost() * 2, _base->getTotalEngineers(), 0, 0 };
+		TransferRow row = { TRANSFER_ENGINEER, 0, tr("STR_ENGINEER"), _game->getMod()->getEngineerCost() * 2, _base->getTotalEngineers(), 0, 0 };
 		_items.push_back(row);		
 	}
 	const std::vector<std::string> &crafts = _game->getMod()->getCraftsList();
@@ -160,7 +160,7 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 		RuleCraft *rule = _game->getMod()->getCraft(*i);
 		if (rule->getBuyCost() != 0 && _game->getSavedGame()->isResearched(rule->getRequirements()))
 		{
-			TransferRow row = { TRANSFER_CRAFT, rule, rule->getType(), rule->getBuyCost(), _base->getCraftCount(rule->getType()), 0, 0 };
+			TransferRow row = { TRANSFER_CRAFT, rule, tr(rule->getType()), rule->getBuyCost(), _base->getCraftCount(rule->getType()), 0, 0 };
 			_items.push_back(row);
 		}
 	}
@@ -170,7 +170,7 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 		RuleItem *rule = _game->getMod()->getItem(*i);
 		if (rule->getBuyCost() != 0 && _game->getSavedGame()->isResearched(rule->getRequirements()))
 		{
-			TransferRow row = { TRANSFER_ITEM, rule, rule->getType(), rule->getBuyCost(), _base->getStorageItems()->getItem(rule->getType()), 0, 0 };
+			TransferRow row = { TRANSFER_ITEM, rule, tr(rule->getType()), rule->getBuyCost(), _base->getStorageItems()->getItem(rule->getType()), 0, 0 };
 			_items.push_back(row);
 		}
 	}
@@ -213,7 +213,7 @@ void PurchaseState::updateList()
 	for (size_t i = 0; i < _items.size(); ++i)
 	{
 		std::string cat = _cats[_cbxCategory->getSelected()];
-		std::wstring name = tr(_items[i].name);
+		std::wstring name = _items[i].name;
 		switch (_items[i].type)
 		{
 		case TRANSFER_SOLDIER:
@@ -245,10 +245,10 @@ void PurchaseState::updateList()
 			}
 			break;
 		}
-		std::wostringstream ssQtyOld, ssQtyNew;
-		ssQtyOld << _items[i].qtySrc;
-		ssQtyNew << _items[i].amount;
-		_lstItems->addRow(4, name.c_str(), Text::formatFunding(_items[i].cost).c_str(), ssQtyOld.str().c_str(), ssQtyNew.str().c_str());
+		std::wostringstream ssQty, ssAmount;
+		ssQty << _items[i].qtySrc;
+		ssAmount << _items[i].amount;
+		_lstItems->addRow(4, name.c_str(), Text::formatFunding(_items[i].cost).c_str(), ssQty.str().c_str(), ssAmount.str().c_str());
 		_rows.push_back(i);
 		if (_items[i].amount > 0)
 		{

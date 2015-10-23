@@ -21,6 +21,8 @@
 namespace OpenXcom
 {
 
+const std::string Armor::NONE = "STR_NONE";
+
 /**
  * Creates a blank ruleset for a certain
  * type of armor.
@@ -117,6 +119,7 @@ void Armor::load(const YAML::Node &node)
 	_hairColor = node["spriteHairColor"].as<std::vector<int> >(_hairColor);
 	_rankColor = node["spriteRankColor"].as<std::vector<int> >(_rankColor);
 	_utileColor = node["spriteUtileColor"].as<std::vector<int> >(_utileColor);
+	_units = node["units"].as< std::vector<std::string> >(_units);
 }
 
 /**
@@ -205,7 +208,8 @@ const std::vector<std::string> &Armor::getCorpseBattlescape() const
 
 /**
  * Gets the storage item needed to equip this.
- * @return The name of the store item.
+ * Every soldier armor needs an item.
+ * @return The name of the store item (STR_NONE for infinite armor).
  */
 std::string Armor::getStoreItem() const
 {
@@ -431,6 +435,15 @@ int Armor::getRankColor(int i) const
 bool Armor::hasInventory() const
 {
 	return _hasInventory;
+}
+
+/**
+* Gets the list of units this armor applies to.
+* @return The list of unit IDs (empty = applies to all).
+*/
+const std::vector<std::string> &Armor::getUnits() const
+{
+	return _units;
 }
 
 }

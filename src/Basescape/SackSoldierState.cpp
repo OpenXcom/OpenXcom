@@ -98,7 +98,7 @@ SackSoldierState::~SackSoldierState()
 void SackSoldierState::btnOkClick(Action *)
 {
 	Soldier *soldier = _base->getSoldiers()->at(_soldierId);
-	if (soldier->getArmor()->getStoreItem() != "STR_NONE")
+	if (soldier->getArmor()->getStoreItem() != Armor::NONE)
 	{
 		_base->getStorageItems()->addItem(soldier->getArmor()->getStoreItem());
 	}

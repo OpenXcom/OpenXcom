@@ -18,6 +18,7 @@
  */
 #include "SoldierArmorState.h"
 #include <sstream>
+#include <algorithm>
 #include "../Engine/Game.h"
 #include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
@@ -31,6 +32,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
+#include "../Mod/RuleSoldier.h"
 
 namespace OpenXcom
 {
@@ -46,12 +48,12 @@ SoldierArmorState::SoldierArmorState(Base *base, size_t soldier) : _base(base), 
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 192, 120, 64, 40, POPUP_BOTH);
-	_btnCancel = new TextButton(140, 16, 90, 136);
-	_txtTitle = new Text(182, 16, 69, 48);
-	_txtType = new Text(90, 9, 80, 72);
-	_txtQuantity = new Text(70, 9, 190, 72);
-	_lstArmor = new TextList(160, 40, 73, 88);
+	_window = new Window(this, 192, 160, 64, 20, POPUP_BOTH);
+	_btnCancel = new TextButton(140, 16, 90, 156);
+	_txtTitle = new Text(182, 16, 69, 28);
+	_txtType = new Text(90, 9, 80, 52);
+	_txtQuantity = new Text(70, 9, 190, 52);
+	_lstArmor = new TextList(160, 80, 73, 68);
 
 	// Set palette
 	setInterface("soldierArmor");
@@ -89,6 +91,9 @@ SoldierArmorState::SoldierArmorState(Base *base, size_t soldier) : _base(base), 
 	for (std::vector<std::string>::const_iterator i = armors.begin(); i != armors.end(); ++i)
 	{
 		Armor *a = _game->getMod()->getArmor(*i);
+		if (!a->getUnits().empty() &&
+			std::find(a->getUnits().begin(), a->getUnits().end(), s->getRules()->getType()) == a->getUnits().end())
+			continue;
 		if (_base->getStorageItems()->getItem(a->getStoreItem()) > 0)
 		{
 			_armors.push_back(a);
@@ -103,7 +108,7 @@ SoldierArmorState::SoldierArmorState(Base *base, size_t soldier) : _base(base), 
 			}
 			_lstArmor->addRow(2, tr(a->getType()).c_str(), ss.str().c_str());
 		}
-		else if (a->getStoreItem() == "STR_NONE")
+		else if (a->getStoreItem() == Armor::NONE)
 		{
 			_armors.push_back(a);
 			_lstArmor->addRow(1, tr(a->getType()).c_str());
@@ -138,11 +143,11 @@ void SoldierArmorState::lstArmorClick(Action *)
 	Soldier *soldier = _base->getSoldiers()->at(_soldier);
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
 	{
-		if (soldier->getArmor()->getStoreItem() != "STR_NONE")
+		if (soldier->getArmor()->getStoreItem() != Armor::NONE)
 		{
 			_base->getStorageItems()->addItem(soldier->getArmor()->getStoreItem());
 		}
-		if (_armors[_lstArmor->getSelectedRow()]->getStoreItem() != "STR_NONE")
+		if (_armors[_lstArmor->getSelectedRow()]->getStoreItem() != Armor::NONE)
 		{
 			_base->getStorageItems()->removeItem(_armors[_lstArmor->getSelectedRow()]->getStoreItem());
 		}

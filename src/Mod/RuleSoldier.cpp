@@ -39,12 +39,16 @@ RuleSoldier::~RuleSoldier()
 }
 
 /**
- * Loads the unit from a YAML file.
+ * Loads the soldier from a YAML file.
  * @param node YAML node.
  */
 void RuleSoldier::load(const YAML::Node &node)
 {
 	_type = node["type"].as<std::string>(_type);
+	// Just in case
+	if (_type == "XCOM")
+		_type = "STR_SOLDIER";
+	_requires = node["requires"].as< std::vector<std::string> >(_requires);
 	_minStats.merge(node["minStats"].as<UnitStats>(_minStats));
 	_maxStats.merge(node["maxStats"].as<UnitStats>(_maxStats));
 	_statCaps.merge(node["statCaps"].as<UnitStats>(_statCaps));
@@ -59,12 +63,22 @@ void RuleSoldier::load(const YAML::Node &node)
 
 /**
  * Returns the language string that names
- * this unit. Each unit type has a unique name.
- * @return Unit name.
+ * this soldier. Each soldier type has a unique name.
+ * @return Soldier name.
  */
 std::string RuleSoldier::getType() const
 {
 	return _type;
+}
+
+/**
+ * Gets the list of research required to
+ * acquire this soldier.
+ * @return The list of research IDs.
+*/
+const std::vector<std::string> &RuleSoldier::getRequirements() const
+{
+	return _requires;
 }
 
 /**
@@ -140,7 +154,7 @@ int RuleSoldier::getFloatHeight() const
 }
 
 /**
- * Gets the armor name.
+ * Gets the default armor name.
  * @return The armor name.
  */
 std::string RuleSoldier::getArmor() const
@@ -150,6 +164,7 @@ std::string RuleSoldier::getArmor() const
 
 /**
  * Gets the female appearance ratio.
+ * @return The percentage ratio.
  */
 int RuleSoldier::getFemaleFrequency() const
 {

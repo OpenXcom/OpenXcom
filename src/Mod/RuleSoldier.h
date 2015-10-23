@@ -20,32 +20,36 @@
 #define OPENXCOM_RULESOLDIER_H
 
 #include <string>
+#include <yaml-cpp/yaml.h>
 #include "Unit.h"
 
 namespace OpenXcom
 {
 
 /**
- * Represents the creation data for a specific type of unit.
- * This info is copied to either Soldier for XCom soldiers or BattleUnit for aliens and civilians.
+ * Represents the creation data for an X-COM unit.
+ * This info is copied to either Soldier for Geoscape or BattleUnit for Battlescape.
  * @sa Soldier BattleUnit
  */
 class RuleSoldier
 {
 private:
 	std::string _type;
+	std::vector<std::string> _requires;
 	UnitStats _minStats, _maxStats, _statCaps;
 	std::string _armor;
 	int _costBuy, _costSalary, _standHeight, _kneelHeight, _floatHeight, _femaleFrequency;
 public:
-	/// Creates a blank unit ruleset.
+	/// Creates a blank soldier ruleset.
 	RuleSoldier(const std::string &type);
-	/// Cleans up the unit ruleset.
+	/// Cleans up the soldier ruleset.
 	~RuleSoldier();
-	/// Loads the unit data from YAML.
+	/// Loads the soldier data from YAML.
 	void load(const YAML::Node& node);
-	/// Gets the unit's type.
+	/// Gets the soldier's type.
 	std::string getType() const;
+	/// Gets the soldier's requirements.
+	const std::vector<std::string> &getRequirements() const;
 	/// Gets the minimum stats for the random stats generator.
 	UnitStats getMinStats() const;
 	/// Gets the maximum stats for the random stats generator.
@@ -62,7 +66,7 @@ public:
 	int getKneelHeight() const;
 	/// Gets the elevation of the soldier when it's flying.
 	int getFloatHeight() const;
-	/// Gets the armor name.
+	/// Gets the default-equipped armor.
 	std::string getArmor() const;
 	/// Gets the female appearance ratio.
 	int getFemaleFrequency() const;
