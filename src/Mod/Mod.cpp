@@ -619,7 +619,7 @@ void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::st
 		{
 			loadMod(mods[i].second, i);
 		}
-		catch (YAML::Exception &e)
+		catch (Exception &e)
 		{
 			const std::string &modId = mods[i].first;
 			Log(LOG_WARNING) << "disabling mod with invalid ruleset: " << modId;
@@ -638,10 +638,10 @@ void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::st
 			}
 			Options::save();
 
-			throw Exception("failed to load ruleset from mod '" +
+			throw Exception("failed to load '" +
 				Options::getModInfos().at(modId).getName() +
-				"' (" + std::string(e.what()) +
-				"); disabling mod for next startup");
+				"'; mod disabled for next startup\n" +
+				e.what());
 		}
 	}
 	sortLists();
@@ -662,7 +662,14 @@ void Mod::loadMod(const std::vector<std::string> &rulesetFiles, size_t modIdx)
 	for (std::vector<std::string>::const_iterator i = rulesetFiles.begin(); i != rulesetFiles.end(); ++i)
 	{
 		Log(LOG_VERBOSE) << "- " << *i;
-		loadFile(*i);
+		try
+		{
+			loadFile(*i);
+		}
+		catch (YAML::Exception &e)
+		{
+			throw Exception((*i) + " (" + std::string(e.what()) + ")");
+		}
 	}
 
 	// these need to be validated, otherwise we're gonna get into some serious trouble down the line.
