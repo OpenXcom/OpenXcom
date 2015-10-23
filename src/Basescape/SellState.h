@@ -32,10 +32,9 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
+class ComboBox;
 class Timer;
 class Base;
-class Soldier;
-class Craft;
 
 /**
  * Sell/Sack screen that lets the player sell
@@ -47,28 +46,20 @@ private:
 	Base *_base;
 	TextButton *_btnOk, *_btnCancel;
 	Window *_window;
-	Text *_txtTitle, *_txtSales, *_txtFunds, *_txtItem, *_txtQuantity, *_txtSell, *_txtValue, *_txtSpaceUsed;
+	Text *_txtTitle, *_txtSales, *_txtFunds, *_txtQuantity, *_txtSell, *_txtValue, *_txtSpaceUsed;
+	ComboBox *_cbxCategory;
 	TextList *_lstItems;
-	std::vector<int> _qtys;
-	std::vector<Soldier*> _soldiers;
-	std::vector<Craft*> _crafts;
-	std::vector<std::string> _items;
+	std::vector<TransferRow> _items;
+	std::vector<int> _rows;
+	std::vector<std::string> _cats;
 	size_t _sel;
-	int _total, _hasSci, _hasEng;
+	int _total;
 	double _spaceChange;
 	Timer *_timerInc, *_timerDec;
 	Uint8 _ammoColor;
 	OptionsOrigin _origin;
-	/// Gets selected price.
-	int getPrice();
-	/// Gets selected quantity.
-	int getQuantity();
-	/// Gets the Type of the selected item.
-	TransferType getType(size_t selected) const;
-	/// Gets the index of selected item.
-	size_t getItemIndex(size_t selected) const;
-	/// Gets the index of the selected craft.
-	size_t getCraftIndex(size_t selected) const;
+	/// Gets the row of the current selection.
+	TransferRow &getRow() { return _items[_rows[_sel]]; }
 public:
 	/// Creates the Sell state.
 	SellState(Base *base, OptionsOrigin origin = OPT_GEOSCAPE);
@@ -76,6 +67,8 @@ public:
 	~SellState();
 	/// Runs the timers.
 	void think();
+	/// Updates the item list.
+	void updateList();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.
@@ -102,6 +95,8 @@ public:
 	void changeByValue(int change, int dir);
 	/// Updates the quantity-strings of the selected item.
 	void updateItemStrings();
+	/// Handler for changing the category filter.
+	void cbxCategoryChange(Action *action);
 };
 
 }

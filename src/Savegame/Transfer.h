@@ -31,9 +31,9 @@ struct TransferRow
 {
 	TransferType type;
 	void *rule;
-	std::string name;
+	std::wstring name;
 	int cost;
-	int qtySrc, qtyDest;
+	int qtySrc, qtyDst;
 	int amount;
 };
 
