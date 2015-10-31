@@ -31,8 +31,6 @@ constants: #done
   - itemReload: 45
   - walkOffset: 0
   - flyingSound: 66
-  - maleScream: [48, 48, 48]
-  - femaleScream: [48, 48, 48]
   - buttonPress: 0
   - windowPopup: [1, 1, 1]
   - ufoFire: 5

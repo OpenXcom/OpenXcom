@@ -27,7 +27,7 @@ namespace OpenXcom
  * Creates a certain type of unit.
  * @param type String defining the type.
  */
-Unit::Unit(const std::string &type) : _type(type), _standHeight(0), _kneelHeight(0), _floatHeight(0), _value(0), _deathSound(-1), _aggroSound(-1), _moveSound(-1), _intelligence(0), _aggression(0), _energyRecovery(30), _specab(SPECAB_NONE), _livingWeapon(false), _female(false)
+Unit::Unit(const std::string &type) : _type(type), _standHeight(0), _kneelHeight(0), _floatHeight(0), _value(0), _aggroSound(-1), _moveSound(-1), _intelligence(0), _aggression(0), _energyRecovery(30), _specab(SPECAB_NONE), _livingWeapon(false)
 {
 }
 
@@ -67,10 +67,20 @@ void Unit::load(const YAML::Node &node, Mod *mod)
 	_livingWeapon = node["livingWeapon"].as<bool>(_livingWeapon);
 	_meleeWeapon = node["meleeWeapon"].as<std::string>(_meleeWeapon);
 	_builtInWeapons = node["builtInWeapons"].as<std::vector<std::string> >(_builtInWeapons);
-	_female = node["female"].as<bool>(_female);	
 	if (node["deathSound"])
 	{
-		_deathSound = mod->getSoundOffset(node["deathSound"].as<int>(_deathSound), "BATTLE.CAT");
+		_deathSound.clear();
+		if (node["deathSound"].IsSequence())
+		{
+			for (YAML::const_iterator i = node["deathSound"].begin(); i != node["deathSound"].end(); ++i)
+			{
+				_deathSound.push_back(mod->getSoundOffset(i->as<int>(), "BATTLE.CAT"));
+			}
+		}
+		else
+		{
+			_deathSound.push_back(mod->getSoundOffset(node["deathSound"].as<int>(), "BATTLE.CAT"));
+		}
 	}
 	if (node["aggroSound"])
 	{
@@ -165,10 +175,10 @@ int Unit::getValue() const
 }
 
 /**
- * Gets the unit's death sound.
- * @return The id of the unit's death sound.
- */
-int Unit::getDeathSound() const
+* Get the unit's death sounds.
+* @return List of sound IDs.
+*/
+const std::vector<int> &Unit::getDeathSounds() const
 {
 	return _deathSound;
 }
@@ -267,16 +277,6 @@ std::string Unit::getMeleeWeapon() const
 const std::vector<std::string> &Unit::getBuiltInWeapons() const
 {
 	return _builtInWeapons;
-}
-
-/**
- * Is this unit a female?
- * only really relevant to the scream in the case of civilians.
- * @return female or not.
- */
-bool Unit::isFemale() const
-{
-	return _female;
 }
 
 }

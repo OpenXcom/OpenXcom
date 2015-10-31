@@ -51,3 +51,5 @@ soldiers: #done
     femaleFrequency: 25    
     soldierNames:
       - SoldierName/
+    deathMale: 48
+    deathFemale: 48

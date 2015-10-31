@@ -44,3 +44,5 @@ soldiers:
     femaleFrequency: 25
     soldierNames:
       - SoldierName/
+    deathMale: [41, 42, 43]
+    deathFemale: [44, 45, 46]

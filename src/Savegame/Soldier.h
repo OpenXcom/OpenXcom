@@ -65,7 +65,7 @@ private:
 	std::wstring _statString;
 public:
 	/// Creates a new soldier.
-	Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names = 0, int id = 0);
+	Soldier(RuleSoldier *rules, Armor *armor, int id = 0);
 	/// Cleans up the soldier.
 	~Soldier();
 	/// Loads the soldier from YAML.

@@ -64,7 +64,7 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) :
 	_standHeight = soldier->getRules()->getStandHeight();
 	_kneelHeight = soldier->getRules()->getKneelHeight();
 	_floatHeight = soldier->getRules()->getFloatHeight();
-	_deathSound = -1; // this one is hardcoded
+	_deathSound = std::vector<int>(); // this one is hardcoded
 	_aggroSound = -1;
 	_moveSound = -1;  // this one is hardcoded
 	_intelligence = 2;
@@ -170,7 +170,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_kneelHeight = unit->getKneelHeight();
 	_floatHeight = unit->getFloatHeight();
 	_loftempsSet = _armor->getLoftempsSet();
-	_deathSound = unit->getDeathSound();
+	_deathSound = unit->getDeathSounds();
 	_aggroSound = unit->getAggroSound();
 	_moveSound = unit->getMoveSound();
 	_intelligence = unit->getIntelligence();
@@ -178,14 +178,6 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_specab = (SpecialAbility) unit->getSpecialAbility();
 	_spawnUnit = unit->getSpawnUnit();
 	_value = unit->getValue();
-	if (unit->isFemale())
-	{
-		_gender = GENDER_FEMALE;
-	}
-	else
-	{
-		_gender = GENDER_MALE;
-	}
 	_faceDirection = -1;
 
 	_movementType = _armor->getMovementType();
@@ -245,6 +237,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 		_specWeapon[i] = 0;
 
 	_activeHand = "STR_RIGHT_HAND";
+	_gender = GENDER_MALE;
 
 	lastCover = Position(-1, -1, -1);
 
@@ -2395,11 +2388,18 @@ int BattleUnit::getValue() const
 }
 
 /**
- * Get the unit's death sound.
- * @return id.
+ * Get the unit's death sounds.
+ * @return List of sound IDs.
  */
-int BattleUnit::getDeathSound() const
+const std::vector<int> &BattleUnit::getDeathSounds() const
 {
+	if (_deathSound.empty() && _geoscapeSoldier != 0)
+	{
+		if (_gender == GENDER_MALE)
+			return _geoscapeSoldier->getRules()->getMaleDeathSounds();
+		else
+			return _geoscapeSoldier->getRules()->getFemaleDeathSounds();
+	}
 	return _deathSound;
 }
 

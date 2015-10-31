@@ -103,8 +103,6 @@ int Mod::ITEM_THROW;
 int Mod::ITEM_RELOAD;
 int Mod::WALK_OFFSET;
 int Mod::FLYING_SOUND;
-int Mod::MALE_SCREAM[3];
-int Mod::FEMALE_SCREAM[3];
 int Mod::BUTTON_PRESS;
 int Mod::WINDOW_POPUP[3];
 int Mod::UFO_FIRE;
@@ -137,12 +135,6 @@ void Mod::resetGlobalStatics()
 	Mod::ITEM_RELOAD = 17;
 	Mod::WALK_OFFSET = 22;
 	Mod::FLYING_SOUND = 15;
-	Mod::MALE_SCREAM[0] = 41;
-	Mod::MALE_SCREAM[1] = 42;
-	Mod::MALE_SCREAM[2] = 43;
-	Mod::FEMALE_SCREAM[0] = 44;
-	Mod::FEMALE_SCREAM[1] = 45;
-	Mod::FEMALE_SCREAM[2] = 46;
 	Mod::BUTTON_PRESS = 0;
 	Mod::WINDOW_POPUP[0] = 1;
 	Mod::WINDOW_POPUP[1] = 2;
@@ -225,10 +217,6 @@ Mod::~Mod()
 	for (std::map<std::string, SoundSet*>::iterator i = _sounds.begin(); i != _sounds.end(); ++i)
 	{
 		delete i->second;
-	}
-	for (std::vector<SoldierNamePool*>::iterator i = _names.begin(); i != _names.end(); ++i)
-	{
-		delete *i;
 	}
 	for (std::map<std::string, RuleCountry*>::iterator i = _countries.begin(); i != _countries.end(); ++i)
 	{
@@ -805,19 +793,7 @@ void Mod::loadFile(const std::string &filename)
 		RuleSoldier *rule = loadRule(*i, &_soldiers, &_soldiersIndex);
 		if (rule != 0)
 		{
-			rule->load(*i);
-		}
-		for (YAML::const_iterator j = (*i)["soldierNames"].begin(); j != (*i)["soldierNames"].end(); ++j)
-		{
-			std::string fileName = (*j).as<std::string>();
-			if (fileName == "delete")
-			{
-				_soldierNames.clear();
-			}
-			else
-			{
-				_soldierNames.push_back(fileName);
-			}
+			rule->load(*i, this);
 		}
 	}
 	for (YAML::const_iterator i = doc["units"].begin(); i != doc["units"].end(); ++i)
@@ -1063,22 +1039,6 @@ void Mod::loadFile(const std::string &filename)
 		Mod::ITEM_RELOAD = (*i)["itemReload"].as<int>(Mod::ITEM_RELOAD);
 		Mod::WALK_OFFSET = (*i)["walkOffset"].as<int>(Mod::WALK_OFFSET);
 		Mod::FLYING_SOUND = (*i)["flyingSound"].as<int>(Mod::FLYING_SOUND);
-		if ((*i)["maleScream"])
-		{
-			int k = 0;
-			for (YAML::const_iterator j = (*i)["maleScream"].begin(); j != (*i)["maleScream"].end() && k < 3; ++j, ++k)
-			{
-				Mod::MALE_SCREAM[k] = (*j).as<int>(Mod::MALE_SCREAM[k]);
-			}
-		}
-		if ((*i)["femaleScream"])
-		{
-			int k = 0;
-			for (YAML::const_iterator j = (*i)["femaleScream"].begin(); j != (*i)["femaleScream"].end() && k < 3; ++j, ++k)
-			{
-				Mod::FEMALE_SCREAM[k] = (*j).as<int>(Mod::FEMALE_SCREAM[k]);
-			}
-		}
 		Mod::BUTTON_PRESS = (*i)["buttonPress"].as<int>(Mod::BUTTON_PRESS);
 		if ((*i)["windowPopup"])
 		{
@@ -1285,15 +1245,6 @@ SavedGame *Mod::newSave() const
 	save->setTime(_startingTime);
 
 	return save;
-}
-
-/**
- * Returns the list of soldier name pools.
- * @return Pointer to soldier name pool list.
- */
-const std::vector<SoldierNamePool*> &Mod::getPools() const
-{
-	return _names;
 }
 
 /**
@@ -1963,13 +1914,6 @@ struct compareRule<ArticleDefinition> : public std::binary_function<const std::s
 };
 std::map<std::string, int> compareRule<ArticleDefinition>::_sections;
 
-static void addSoldierNamePool(std::vector<SoldierNamePool*> &names, const std::string &namFile)
-{
-	SoldierNamePool *pool = new SoldierNamePool();
-	pool->load(FileMap::getFilePath(namFile));
-	names.push_back(pool);
-}
-
 /**
  * Sorts all our lists according to their weight.
  */
@@ -1985,24 +1929,6 @@ void Mod::sortLists()
 	std::sort(_craftWeaponsIndex.begin(), _craftWeaponsIndex.end(), compareRule<RuleCraftWeapon>(this));
 	std::sort(_armorsIndex.begin(), _armorsIndex.end(), compareRule<Armor>(this));
 	std::sort(_ufopaediaIndex.begin(), _ufopaediaIndex.end(), compareRule<ArticleDefinition>(this));
-
-	for (std::vector<std::string>::iterator i = _soldierNames.begin(); i != _soldierNames.end(); ++i)
-	{
-		if (i->substr(i->length() - 1, 1) == "/")
-		{
-			// load all *.nam files in given directory
-			std::set<std::string> names = FileMap::filterFiles(FileMap::getVFolderContents(*i), "nam");
-			for (std::set<std::string>::iterator j = names.begin(); j != names.end(); ++j)
-			{
-				addSoldierNamePool(_names, *i + *j);
-			}
-		}
-		else
-		{
-			// load given file
-			addSoldierNamePool(_names, *i);
-		}
-	}
 }
 
 /**
@@ -2034,7 +1960,7 @@ Soldier *Mod::genSoldier(SavedGame *save, std::string type) const
 	for (int i = 0; i < 10 && duplicate; i++)
 	{
 		delete soldier;
-		soldier = new Soldier(getSoldier(type), getArmor(getSoldier(type)->getArmor()), &_names, newId);
+		soldier = new Soldier(getSoldier(type), getArmor(getSoldier(type)->getArmor()), newId);
 		duplicate = false;
 		for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end() && !duplicate; ++i)
 		{

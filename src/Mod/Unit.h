@@ -20,6 +20,7 @@
 #define OPENXCOM_UNIT_H
 
 #include <string>
+#include <vector>
 #include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
@@ -57,14 +58,14 @@ private:
 	UnitStats _stats;
 	std::string _armor;
 	int _standHeight, _kneelHeight, _floatHeight;
-	int _value, _deathSound, _aggroSound, _moveSound;
+	std::vector<int> _deathSound;
+	int _value, _aggroSound, _moveSound;
 	int _intelligence, _aggression, _energyRecovery;
 	SpecialAbility _specab;
 	std::string _spawnUnit;
 	bool _livingWeapon;
 	std::string _meleeWeapon;
 	std::vector<std::string> _builtInWeapons;
-	bool _female;
 public:
 	/// Creates a blank unit ruleset.
 	Unit(const std::string &type);
@@ -91,7 +92,7 @@ public:
 	/// Gets the value - for score calculation.
 	int getValue() const;
 	/// Gets the death sound id.
-	int getDeathSound() const;
+	const std::vector<int> &getDeathSounds() const;
 	/// Gets the move sound id.
 	int getMoveSound() const;
 	/// Gets the intelligence. This is the number of turns AI remembers your troop positions.
@@ -112,8 +113,6 @@ public:
 	std::string getMeleeWeapon() const;
 	/// Gets a vector of integrated items this unit has available.
 	const std::vector<std::string> &getBuiltInWeapons() const;
-	/// Is this unit a female?
-	bool isFemale() const;
 };
 
 }

@@ -26,6 +26,9 @@
 namespace OpenXcom
 {
 
+class Mod;
+class SoldierNamePool;
+
 /**
  * Represents the creation data for an X-COM unit.
  * This info is copied to either Soldier for Geoscape or BattleUnit for Battlescape.
@@ -39,13 +42,17 @@ private:
 	UnitStats _minStats, _maxStats, _statCaps;
 	std::string _armor;
 	int _costBuy, _costSalary, _standHeight, _kneelHeight, _floatHeight, _femaleFrequency;
+	std::vector<int> _deathSoundMale, _deathSoundFemale;
+	std::vector<SoldierNamePool*> _names;
+
+	void addSoldierNamePool(const std::string &namFile);
 public:
 	/// Creates a blank soldier ruleset.
 	RuleSoldier(const std::string &type);
 	/// Cleans up the soldier ruleset.
 	~RuleSoldier();
 	/// Loads the soldier data from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, Mod *mod);
 	/// Gets the soldier's type.
 	std::string getType() const;
 	/// Gets the soldier's requirements.
@@ -70,7 +77,12 @@ public:
 	std::string getArmor() const;
 	/// Gets the female appearance ratio.
 	int getFemaleFrequency() const;
-
+	/// Gets the soldier's male death sounds.
+	const std::vector<int> &getMaleDeathSounds() const;
+	/// Gets the soldier's female death sounds.
+	const std::vector<int> &getFemaleDeathSounds() const;
+	/// Gets the pool list for soldier names.
+	const std::vector<SoldierNamePool*> &getNames() const;
 };
 
 }
