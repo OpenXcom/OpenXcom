@@ -1194,3 +1194,6 @@ en-US:
   STR_UNABLE_TO_ENGAGE_AIRBORNE: "UNABLE TO ENGAGE ENEMY{NEWLINE}WHEN AIRBORNE"
   STR_UNDERWATER_EQUIPMENT: "This equipment will not function above water!"
   STR_LEVEL_SHORT: "L{0}"
+  STR_PERSONNEL: "Personnel"
+  STR_CRAFT_ARMAMENT: "Craft & Armament"
+  STR_COMPONENTS: "Components"

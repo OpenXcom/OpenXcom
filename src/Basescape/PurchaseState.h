@@ -23,6 +23,7 @@
 #include "../Savegame/Transfer.h"
 #include <vector>
 #include <string>
+#include <set>
 
 namespace OpenXcom
 {
@@ -52,11 +53,14 @@ private:
 	std::vector<TransferRow> _items;
 	std::vector<int> _rows;
 	std::vector<std::string> _cats;
+	std::set<std::string> _craftWeapons, _armors;
 	size_t _sel;
 	int _total, _pQty, _cQty;
 	double _iQty;
 	Uint8 _ammoColor;
 	Timer *_timerInc, *_timerDec;
+	/// Gets the category of the current selection.
+	std::string getCategory(int sel) const;
 	/// Gets the row of the current selection.
 	TransferRow &getRow() { return _items[_rows[_sel]]; }
 public:

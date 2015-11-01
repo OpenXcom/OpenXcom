@@ -1062,3 +1062,6 @@ en-GB:
   STR_CONTROL_CENTER_DESTROYED: "{SMALLLINE}CONTROL CENTER DESTROYED{NEWLINE}Make your way to the entrance and abort."
   STR_XCOM_BASE_CANNOT_BE_BUILT: "X-Com facilities cannot be built underwater"
   STR_LEVEL_SHORT: "{0}"
+  STR_PERSONNEL: "Personnel"
+  STR_CRAFT_ARMAMENT: "Craft & Armament"
+  STR_COMPONENTS: "Components"

@@ -44,6 +44,8 @@
 #include "../Mod/RuleInterface.h"
 #include "../Mod/RuleSoldier.h"
 #include "../Savegame/Soldier.h"
+#include "../Mod/RuleCraftWeapon.h"
+#include "../Mod/Armor.h"
 
 namespace OpenXcom
 {
@@ -65,7 +67,7 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 	_txtSpaceUsed = new Text(150, 9, 160, 34);
 	_txtCost = new Text(102, 9, 152, 44);
 	_txtQuantity = new Text(60, 9, 256, 44);
-	_cbxCategory = new ComboBox(this, 110, 16, 10, 36);
+	_cbxCategory = new ComboBox(this, 120, 16, 10, 36);
 	_lstItems = new TextList(287, 120, 8, 54);
 
 	// Set palette
@@ -83,7 +85,7 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 	add(_txtCost, "text", "buyMenu");
 	add(_txtQuantity, "text", "buyMenu");
 	add(_lstItems, "list", "buyMenu");
-	add(_cbxCategory, "button", "buyMenu");
+	add(_cbxCategory, "text", "buyMenu");
 
 	centerAllSurfaces();
 
@@ -129,12 +131,20 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 	_lstItems->onMousePress((ActionHandler)&PurchaseState::lstItemsMousePress);
 
 	_cats.push_back("STR_ALL_ITEMS");
-	_cats.push_back("STR_PERSONNEL");
-	_cats.push_back("STR_CRAFT");
-	_cats.push_back("STR_ITEM");
 
-	_cbxCategory->setOptions(_cats);
-	_cbxCategory->onChange((ActionHandler)&PurchaseState::cbxCategoryChange);
+	const std::vector<std::string> &cw = _game->getMod()->getCraftWeaponsList();
+	for (std::vector<std::string>::const_iterator i = cw.begin(); i != cw.end(); ++i)
+	{
+		RuleCraftWeapon *rule = _game->getMod()->getCraftWeapon(*i);
+		_craftWeapons.insert(rule->getLauncherItem());
+		_craftWeapons.insert(rule->getClipItem());
+	}
+	const std::vector<std::string> &ar = _game->getMod()->getArmorsList();
+	for (std::vector<std::string>::const_iterator i = ar.begin(); i != ar.end(); ++i)
+	{
+		Armor *rule = _game->getMod()->getArmor(*i);
+		_armors.insert(rule->getStoreItem());
+	}
 
 	const std::vector<std::string> &soldiers = _game->getMod()->getSoldiersList();
 	for (std::vector<std::string>::const_iterator i = soldiers.begin(); i != soldiers.end(); ++i)
@@ -144,15 +154,30 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 		{
 			TransferRow row = { TRANSFER_SOLDIER, rule, tr(rule->getType()), rule->getBuyCost(), _base->getSoldierCount(rule->getType()), 0, 0 };
 			_items.push_back(row);
+			std::string cat = getCategory(_items.size() - 1);
+			if (std::find(_cats.begin(), _cats.end(), cat) == _cats.end())
+			{
+				_cats.push_back(cat);
+			}
 		}
 	}
 	{
 		TransferRow row = { TRANSFER_SCIENTIST, 0, tr("STR_SCIENTIST"), _game->getMod()->getScientistCost() * 2, _base->getTotalScientists(), 0, 0 };
 		_items.push_back(row);
+		std::string cat = getCategory(_items.size() - 1);
+		if (std::find(_cats.begin(), _cats.end(), cat) == _cats.end())
+		{
+			_cats.push_back(cat);
+		}
 	}
 	{
 		TransferRow row = { TRANSFER_ENGINEER, 0, tr("STR_ENGINEER"), _game->getMod()->getEngineerCost() * 2, _base->getTotalEngineers(), 0, 0 };
-		_items.push_back(row);		
+		_items.push_back(row);
+		std::string cat = getCategory(_items.size() - 1);
+		if (std::find(_cats.begin(), _cats.end(), cat) == _cats.end())
+		{
+			_cats.push_back(cat);
+		}
 	}
 	const std::vector<std::string> &crafts = _game->getMod()->getCraftsList();
 	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
@@ -162,6 +187,11 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 		{
 			TransferRow row = { TRANSFER_CRAFT, rule, tr(rule->getType()), rule->getBuyCost(), _base->getCraftCount(rule->getType()), 0, 0 };
 			_items.push_back(row);
+			std::string cat = getCategory(_items.size() - 1);
+			if (std::find(_cats.begin(), _cats.end(), cat) == _cats.end())
+			{
+				_cats.push_back(cat);
+			}
 		}
 	}
 	const std::vector<std::string> &items = _game->getMod()->getItemsList();
@@ -172,8 +202,16 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 		{
 			TransferRow row = { TRANSFER_ITEM, rule, tr(rule->getType()), rule->getBuyCost(), _base->getStorageItems()->getItem(rule->getType()), 0, 0 };
 			_items.push_back(row);
+			std::string cat = getCategory(_items.size() - 1);
+			if (std::find(_cats.begin(), _cats.end(), cat) == _cats.end())
+			{
+				_cats.push_back(cat);
+			}
 		}
 	}
+
+	_cbxCategory->setOptions(_cats);
+	_cbxCategory->onChange((ActionHandler)&PurchaseState::cbxCategoryChange);
 
 	updateList();
 
@@ -204,6 +242,45 @@ void PurchaseState::think()
 }
 
 /**
+ * Determines the category a row item belongs in.
+ * @param sel Selected row.
+ * @returns Item category.
+ */
+std::string PurchaseState::getCategory(int sel) const
+{
+	RuleItem *rule = 0;
+	switch (_items[sel].type)
+	{
+	case TRANSFER_SOLDIER:
+	case TRANSFER_SCIENTIST:
+	case TRANSFER_ENGINEER:
+		return "STR_PERSONNEL";
+	case TRANSFER_CRAFT:
+		return "STR_CRAFT_ARMAMENT";
+	case TRANSFER_ITEM:
+		rule = (RuleItem*)_items[sel].rule;
+		if (rule->getBattleType() == BT_CORPSE || rule->isAlien())
+		{
+			return "STR_ALIENS";
+		}
+		if (rule->getBattleType() == BT_NONE)
+		{
+			if (_craftWeapons.find(rule->getType()) != _craftWeapons.end())
+			{
+				return "STR_CRAFT_ARMAMENT";
+			}
+			if (_armors.find(rule->getType()) != _armors.end())
+			{
+				return "STR_EQUIPMENT";
+			}
+			return "STR_COMPONENTS";
+		}
+		return "STR_EQUIPMENT";
+	}
+	return "STR_ALL_ITEMS";
+}
+
+/**
  * Filters the current list of items.
  */
 void PurchaseState::updateList()
@@ -213,37 +290,20 @@ void PurchaseState::updateList()
 	for (size_t i = 0; i < _items.size(); ++i)
 	{
 		std::string cat = _cats[_cbxCategory->getSelected()];
-		std::wstring name = _items[i].name;
-		switch (_items[i].type)
+		if (cat != "STR_ALL_ITEMS" && cat != getCategory(i))
 		{
-		case TRANSFER_SOLDIER:
-		case TRANSFER_SCIENTIST:
-		case TRANSFER_ENGINEER:
-			if (cat != "STR_ALL_ITEMS" && cat != "STR_PERSONNEL")
+			continue;
+		}
+		std::wstring name = _items[i].name;
+		bool ammo = false;
+		if (_items[i].type == TRANSFER_ITEM)
+		{
+			RuleItem *rule = (RuleItem*)_items[i].rule;
+			ammo = (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0));
+			if (ammo)
 			{
-				continue;
+				name.insert(0, L"  ");
 			}
-			break;
-		case TRANSFER_CRAFT:
-			if (cat != "STR_ALL_ITEMS" && cat != "STR_CRAFT")
-			{
-				continue;
-			}
-			break;
-		case TRANSFER_ITEM:
-			if (cat != "STR_ALL_ITEMS" && cat != "STR_ITEM")
-			{
-				continue;
-			}
-			else
-			{
-				RuleItem *rule = (RuleItem*)_items[i].rule;
-				if (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0))
-				{
-					name.insert(0, L"  ");
-				}
-			}
-			break;
 		}
 		std::wostringstream ssQty, ssAmount;
 		ssQty << _items[i].qtySrc;
@@ -254,7 +314,7 @@ void PurchaseState::updateList()
 		{
 			_lstItems->setRowColor(_rows.size() - 1, _lstItems->getSecondaryColor());
 		}
-		else if (name[0] == ' ')
+		else if (ammo)
 		{
 			_lstItems->setRowColor(_rows.size() - 1, _ammoColor);
 		}
