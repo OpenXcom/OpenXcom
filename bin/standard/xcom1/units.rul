@@ -853,4 +853,4 @@ units:
     energyRecovery: 20
     spawnUnit: STR_CHRYSSALID_TERRORIST
     livingWeapon: true
-    deathSound: -2
+    # Zombies are silent on death, no deathSound
