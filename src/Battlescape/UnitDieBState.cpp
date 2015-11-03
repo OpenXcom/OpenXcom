@@ -312,10 +312,10 @@ void UnitDieBState::playDeathSound()
 	const std::vector<int> &sounds = _unit->getDeathSounds();
 	if (!sounds.empty())
 	{
-		int i = RNG::generate(0, sounds.size() - 1);
+		int i = sounds[RNG::generate(0, sounds.size() - 1)];
 		if (i >= 0)
 		{
-			_parent->getMod()->getSoundByDepth(_parent->getDepth(), sounds[i])->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
+			_parent->getMod()->getSoundByDepth(_parent->getDepth(), i)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 		}
 	}
 }
