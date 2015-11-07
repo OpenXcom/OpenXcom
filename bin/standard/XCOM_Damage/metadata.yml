@@ -1,0 +1,9 @@
+#
+# metadata.yaml for UFO Defense Damage Model
+
+name: "UFO Defense Damage Model"
+version: 1.0
+description: "Direct-fire weapons do 50-150% of their damage instead of 0-200%."
+author: the OpenXcom team
+
+master: xcom2

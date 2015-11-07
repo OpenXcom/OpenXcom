@@ -1610,7 +1610,7 @@ void BattleUnit::prepareNewTurn(bool fullProcess)
 	// suffer from fire
 	if (!_hitByFire && _fire > 0)
 	{
-		_health -= _armor->getDamageModifier(DT_IN) * RNG::generate(5, 10);
+		_health -= _armor->getDamageModifier(DT_IN) * RNG::generate(Mod::FIRE_DAMAGE_RANGE, Mod::FIRE_DAMAGE_RANGE * 2);
 		_fire--;
 	}
 

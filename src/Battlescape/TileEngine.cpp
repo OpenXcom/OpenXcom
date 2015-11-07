@@ -37,6 +37,7 @@
 #include "../Mod/MapDataSet.h"
 #include "../Mod/MapData.h"
 #include "../Mod/Unit.h"
+#include "../Mod/Mod.h"
 #include "../Mod/Armor.h"
 #include "Pathfinding.h"
 #include "../Engine/Options.h"
@@ -1059,7 +1060,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 	}
 	else if (part == V_UNIT)
 	{
-		int dmgRng = (type == DT_HE || Options::TFTDDamage) ? 50 : 100;
+		int dmgRng = type == DT_HE ? Mod::EXPLOSIVE_DAMAGE_RANGE : Mod::DAMAGE_RANGE;
 		int min = power * (100 - dmgRng) / 100;
 		int max = power * (100 + dmgRng) / 100;
 		const int rndPower = RNG::generate(min, max);
@@ -1152,7 +1153,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 
 	int exHeight = std::max(0, std::min(3, Options::battleExplosionHeight));
 	int vertdec = 1000; //default flat explosion
-	int dmgRng = (type == DT_HE || Options::TFTDDamage) ? 50 : 100;
+	int dmgRng = type == DT_HE ? Mod::EXPLOSIVE_DAMAGE_RANGE : Mod::DAMAGE_RANGE;
 
 	switch (exHeight)
 	{
@@ -1287,7 +1288,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 									float resistance = bu->getArmor()->getDamageModifier(DT_IN);
 									if (resistance > 0.0)
 									{
-										bu->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
+										bu->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(Mod::FIRE_DAMAGE_RANGE, Mod::FIRE_DAMAGE_RANGE * 2), DT_IN, true);
 										int burnTime = RNG::generate(0, int(5.0f * resistance));
 										if (bu->getFire() < burnTime)
 										{

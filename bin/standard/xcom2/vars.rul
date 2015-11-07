@@ -46,6 +46,7 @@ constants: #done
   - graphsCursor: 144
   - goodDebriefingMusic: GMDEBGOO
   - badDebriefingMusic: GMDEBPOR
+  - damageRange: 50
 
 soundDefs: #done: double check explosions.
   - type: GEO.CAT

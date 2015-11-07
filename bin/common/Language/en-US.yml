@@ -150,8 +150,6 @@ en-US:
   STR_DISABLEAUTOEQUIP_DESC: "Disable auto-equipping of new soldiers before battle."
   STR_ALLOWPSISTRENGTHIMPROVEMENT: "Allow Psi-Strength Improvement"
   STR_ALLOWPSISTRENGTHIMPROVEMENT_DESC: "Psionic strength of the soldiers can be improved by experience and training."
-  STR_TFTDDAMAGE: "TFTD Damage Formula"
-  STR_TFTDDAMAGE_DESC: "Weapons will do between 50% and 150% of their rated damage as opposed to X-COM: UFO Defense's 0% to 200%"
   STR_BATTLESMOOTHCAMERA: "Smooth Bullet Camera"
   STR_BATTLESMOOTHCAMERA_DESC: "The Battlescape camera will remain centered on projectiles while in flight."
   STR_BATTLECONFIRMFIREMODE: "Confirm Fire mode"

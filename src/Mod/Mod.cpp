@@ -116,6 +116,9 @@ int Mod::BASESCAPE_CURSOR;
 int Mod::BATTLESCAPE_CURSOR;
 int Mod::UFOPAEDIA_CURSOR;
 int Mod::GRAPHS_CURSOR;
+int Mod::DAMAGE_RANGE;
+int Mod::EXPLOSIVE_DAMAGE_RANGE;
+int Mod::FIRE_DAMAGE_RANGE;
 std::string Mod::DEBRIEF_MUSIC_GOOD;
 std::string Mod::DEBRIEF_MUSIC_BAD;
 int Mod::DIFFICULTY_COEFFICIENT[5];
@@ -150,6 +153,9 @@ void Mod::resetGlobalStatics()
 	Mod::BATTLESCAPE_CURSOR = 144;
 	Mod::UFOPAEDIA_CURSOR = 252;
 	Mod::GRAPHS_CURSOR = 252;
+	Mod::DAMAGE_RANGE = 100;
+	Mod::EXPLOSIVE_DAMAGE_RANGE = 50;
+	Mod::FIRE_DAMAGE_RANGE = 5;
 	Mod::DEBRIEF_MUSIC_GOOD = "GMMARS";
 	Mod::DEBRIEF_MUSIC_BAD = "GMMARS";
 
@@ -1059,6 +1065,9 @@ void Mod::loadFile(const std::string &filename)
 		Mod::BATTLESCAPE_CURSOR = (*i)["battlescapeCursor"].as<int>(Mod::BATTLESCAPE_CURSOR);
 		Mod::UFOPAEDIA_CURSOR = (*i)["ufopaediaCursor"].as<int>(Mod::UFOPAEDIA_CURSOR);
 		Mod::GRAPHS_CURSOR = (*i)["graphsCursor"].as<int>(Mod::GRAPHS_CURSOR);
+		Mod::DAMAGE_RANGE = (*i)["damageRange"].as<int>(Mod::DAMAGE_RANGE);
+		Mod::EXPLOSIVE_DAMAGE_RANGE = (*i)["explosiveDamageRange"].as<int>(Mod::EXPLOSIVE_DAMAGE_RANGE);
+		Mod::FIRE_DAMAGE_RANGE = (*i)["fireDamageRange"].as<int>(Mod::FIRE_DAMAGE_RANGE);
 		Mod::DEBRIEF_MUSIC_GOOD = (*i)["goodDebriefingMusic"].as<std::string>(Mod::DEBRIEF_MUSIC_GOOD);
 		Mod::DEBRIEF_MUSIC_BAD = (*i)["badDebriefingMusic"].as<std::string>(Mod::DEBRIEF_MUSIC_BAD);
 	}

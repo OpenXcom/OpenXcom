@@ -199,6 +199,9 @@ public:
 	static int BATTLESCAPE_CURSOR;
 	static int UFOPAEDIA_CURSOR;
 	static int GRAPHS_CURSOR;
+	static int DAMAGE_RANGE;
+	static int EXPLOSIVE_DAMAGE_RANGE;
+	static int FIRE_DAMAGE_RANGE;
 	static std::string DEBRIEF_MUSIC_GOOD;
 	static std::string DEBRIEF_MUSIC_BAD;
 	static int DIFFICULTY_COEFFICIENT[5];
