@@ -368,7 +368,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	{
 		if (_originVoxel != Position(-1,-1,-1))
 		{
-			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon) / accuracyDivider, _originVoxel);
+			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon) / accuracyDivider, _originVoxel, false);
 		}
 		else
 		{
