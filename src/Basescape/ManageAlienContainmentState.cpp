@@ -17,11 +17,12 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ManageAlienContainmentState.h"
+#include <climits>
 #include <sstream>
 #include <algorithm>
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -31,13 +32,14 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleResearch.h"
-#include "../Ruleset/Armor.h"
+#include "../Mod/RuleItem.h"
+#include "../Mod/RuleResearch.h"
+#include "../Mod/Armor.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
 #include "../Menu/ErrorMessageState.h"
 #include "SellState.h"
+#include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
 {
@@ -55,7 +57,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrig
 	for (std::vector<ResearchProject*>::const_iterator iter = _base->getResearch().begin(); iter != _base->getResearch().end(); ++iter)
 	{
 		const RuleResearch *research = (*iter)->getRules();
-		RuleItem *item = _game->getRuleset()->getItem(research->getName());
+		RuleItem *item = _game->getMod()->getItem(research->getName());
 		if (item && item->isAlien())
 		{
 			researchList.push_back(research->getName());
@@ -93,7 +95,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrig
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface((origin == OPT_BATTLESCAPE)? "BACK01.SCR" : "BACK05.SCR"));
+	_window->setBackground(_game->getMod()->getSurface((origin == OPT_BATTLESCAPE)? "BACK01.SCR" : "BACK05.SCR"));
 
 	_btnOk->setText(tr("STR_REMOVE_SELECTED"));
 	_btnOk->onMouseClick((ActionHandler)&ManageAlienContainmentState::btnOkClick);
@@ -144,11 +146,11 @@ ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrig
 	_lstAliens->onRightArrowClick((ActionHandler)&ManageAlienContainmentState::lstItemsRightArrowClick);
 	_lstAliens->onMousePress((ActionHandler)&ManageAlienContainmentState::lstItemsMousePress);
 
-	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
+	const std::vector<std::string> &items = _game->getMod()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
-		int qty = _base->getItems()->getItem(*i);
-		if (qty > 0 && _game->getRuleset()->getItem(*i)->isAlien())
+		int qty = _base->getStorageItems()->getItem(*i);
+		if (qty > 0 && _game->getMod()->getItem(*i)->isAlien())
 		{
 			_qtys.push_back(0);
 			_aliens.push_back(*i);
@@ -213,18 +215,18 @@ void ManageAlienContainmentState::btnOkClick(Action *)
 		if (_qtys[i] > 0)
 		{
 			// remove the aliens
-			_base->getItems()->removeItem(_aliens[i], _qtys[i]);
+			_base->getStorageItems()->removeItem(_aliens[i], _qtys[i]);
 
 			if (Options::canSellLiveAliens)
 			{
-				_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getRuleset()->getItem(_aliens[i])->getSellCost() * _qtys[i]);
+				_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _game->getMod()->getItem(_aliens[i])->getSellCost() * _qtys[i]);
 			}
 			else
 			{
 				// add the corpses
-				_base->getItems()->addItem(
-					_game->getRuleset()->getArmor(
-						_game->getRuleset()->getUnit(
+				_base->getStorageItems()->addItem(
+					_game->getMod()->getArmor(
+						_game->getMod()->getUnit(
 							_aliens[i]
 						)->getArmor()
 					)->getCorpseGeoscape(), _qtys[i]
@@ -238,9 +240,9 @@ void ManageAlienContainmentState::btnOkClick(Action *)
 	{
 		_game->pushState(new SellState(_base, _origin));
 		if (_origin == OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, _game->getRuleset()->getInterface("manageContainment")->getElement("errorMessage")->color, "BACK01.SCR", _game->getRuleset()->getInterface("manageContainment")->getElement("errorPalette")->color));
+			_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, _game->getMod()->getInterface("manageContainment")->getElement("errorMessage")->color, "BACK01.SCR", _game->getMod()->getInterface("manageContainment")->getElement("errorPalette")->color));
 		else
-			_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, _game->getRuleset()->getInterface("manageContainment")->getElement("errorMessage")->color, "BACK13.SCR", _game->getRuleset()->getInterface("manageContainment")->getElement("errorPalette")->color));
+			_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, _game->getMod()->getInterface("manageContainment")->getElement("errorMessage")->color, "BACK13.SCR", _game->getMod()->getInterface("manageContainment")->getElement("errorPalette")->color));
  	}
 }
 
@@ -364,7 +366,7 @@ void ManageAlienContainmentState::lstItemsMousePress(Action *action)
  */
 int ManageAlienContainmentState::getQuantity()
 {
-	return _base->getItems()->getItem(_aliens[_sel]);
+	return _base->getStorageItems()->getItem(_aliens[_sel]);
 }
 
 /**

@@ -21,7 +21,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Screen.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Window.h"
@@ -84,7 +84,7 @@ NextTurnState::NextTurnState(SavedBattleGame *battleGame, BattlescapeState *stat
 	// Set up objects
 	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast(true);
-	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("TAC00.SCR"));
 
 
 	_txtTitle->setBig();
@@ -164,7 +164,8 @@ void NextTurnState::close()
 	int liveAliens = 0;
 	int liveSoldiers = 0;
 	_state->getBattleGame()->tallyUnits(liveAliens, liveSoldiers);
-	if (liveAliens == 0 || liveSoldiers == 0)
+
+	if ((_battleGame->getObjectiveType() != MUST_DESTROY && liveAliens == 0) || liveSoldiers == 0)		// not the final mission and all aliens dead.
 	{
 		_state->finishBattle(false, liveSoldiers);
 	}

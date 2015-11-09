@@ -22,7 +22,7 @@
 #include "GameTime.h"
 #include "BattleUnit.h"
 #include "SavedGame.h"
-#include "../Ruleset/Ruleset.h"
+#include "../Mod/Mod.h"
 namespace OpenXcom
 {
 class GameTime;
@@ -93,7 +93,7 @@ public:
 	/// Save a diary.
 	YAML::Node save() const;
 	/// Update the diary statistics.
-	void updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics, Ruleset *rules);
+	void updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics, Mod *rules);
 	/// Get the list of kills, mapped by rank.
 	std::map<std::string, int> getAlienRankTotal();
 	/// Get the list of kills, mapped by race.
@@ -129,7 +129,7 @@ public:
 	/// Get the solder's commendations.
 	std::vector<SoldierCommendations*> *getSoldierCommendations();
 	/// Manage commendations, return true if a medal is awarded.
-	bool manageCommendations(Ruleset *rules);
+	bool manageCommendations(Mod *rules);
 	/// Increment the soldier's service time.
 	void addMonthlyService();
     /// Get the mission id list.

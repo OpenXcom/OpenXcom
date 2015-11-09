@@ -540,7 +540,7 @@ interfaces:
       - id: errorPalette
         color: 6     # brown
       - id: errorMessage
-        color: 241   # pink
+        color: 239   # bright green
   - type: sellMenu
     palette: PAL_BASESCAPE
     elements:

@@ -121,8 +121,6 @@ public:
 	void polarToCart(double lon, double lat, double *x, double *y) const;
 	/// Converts cartesian coordinates to polar coordinates.
 	void cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const;
-	/// Sets the texture set for the globe's polygons.
-	void setTexture(SurfaceSet *texture);
 	/// Starts rotating the globe left.
 	void rotateLeft();
 	/// Starts rotating the globe right.
@@ -201,10 +199,6 @@ public:
 	void keyboardPress(Action *action, State *state);
 	/// Get the polygons texture and shade at the given point.
 	void getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade) const;
-	/// Get the localized text.
-	const LocalizedText &tr(const std::string &id) const;
-	/// Get the localized text.
-	LocalizedText tr(const std::string &id, unsigned n) const;
 	/// Sets hover base position.
 	void setNewBaseHoverPos(double lon, double lat);
 	/// Turns on new base hover mode.
@@ -213,8 +207,6 @@ public:
 	void unsetNewBaseHover(void);
 	/// Gets state of base hover mode
 	bool getNewBaseHover(void);
-	/// Gets _detail variable
-	bool getShowRadar(void);
 	/// set the _radarLines variable
 	void toggleRadarLines();
 	/// Update the resolution settings, we just resized the window.

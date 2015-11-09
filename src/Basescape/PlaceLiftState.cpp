@@ -18,15 +18,14 @@
  */
 #include "PlaceLiftState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
 #include "BaseView.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
-#include "../Ruleset/RuleBaseFacility.h"
-#include "../Ruleset/Ruleset.h"
+#include "../Mod/RuleBaseFacility.h"
 #include "BasescapeState.h"
 #include "SelectStartFacilityState.h"
 #include "../Savegame/SavedGame.h"
@@ -56,13 +55,13 @@ PlaceLiftState::PlaceLiftState(Base *base, Globe *globe, bool first) : _base(bas
 	centerAllSurfaces();
 
 	// Set up objects
-	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
+	_view->setTexture(_game->getMod()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
-	for (std::vector<std::string>::const_iterator i = _game->getRuleset()->getBaseFacilitiesList().begin(); i != _game->getRuleset()->getBaseFacilitiesList().end(); ++i)
+	for (std::vector<std::string>::const_iterator i = _game->getMod()->getBaseFacilitiesList().begin(); i != _game->getMod()->getBaseFacilitiesList().end(); ++i)
 	{
-		if (_game->getRuleset()->getBaseFacility(*i)->isLift())
+		if (_game->getMod()->getBaseFacility(*i)->isLift())
 		{
-			_lift = _game->getRuleset()->getBaseFacility(*i);
+			_lift = _game->getMod()->getBaseFacility(*i);
 			break;
 		}
 	}

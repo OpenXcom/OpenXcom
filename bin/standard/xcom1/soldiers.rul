@@ -1,5 +1,7 @@
 soldiers:
-  - type: XCOM
+  - type: STR_SOLDIER
+    costBuy: 40000
+    costSalary: 20000
     minStats:
       tu: 50
       stamina: 40
@@ -42,3 +44,5 @@ soldiers:
     femaleFrequency: 25
     soldierNames:
       - SoldierName/
+    deathMale: [41, 42, 43]
+    deathFemale: [44, 45, 46]

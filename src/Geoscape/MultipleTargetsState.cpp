@@ -18,7 +18,7 @@
  */
 #include "MultipleTargetsState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -64,7 +64,7 @@ MultipleTargetsState::MultipleTargetsState(std::vector<Target*> targets, Craft *
 		add(_window, "window", "UFOInfo");
 
 		// Set up objects
-		_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
+		_window->setBackground(_game->getMod()->getSurface("BACK15.SCR"));
 
 		int y = btnY;
 		for (size_t i = 0; i < _targets.size(); ++i)

@@ -19,7 +19,7 @@
 
 #include "Ufopaedia.h"
 #include "UfopaediaSelectState.h"
-#include "../Ruleset/ArticleDefinition.h"
+#include "../Mod/ArticleDefinition.h"
 #include "../Engine/Game.h"
 #include "../Engine/Options.h"
 #include "../Engine/LocalizedText.h"
@@ -27,7 +27,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 
 namespace OpenXcom
 {
@@ -55,7 +55,7 @@ namespace OpenXcom
 
 		centerAllSurfaces();
 
-		_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+		_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 		_txtTitle->setBig();
 		_txtTitle->setAlign(ALIGN_CENTER);
@@ -109,7 +109,7 @@ namespace OpenXcom
 		ArticleDefinitionList::iterator it;
 
 		_article_list.clear();
-		Ufopaedia::list(_game->getSavedGame(), _game->getRuleset(), _section, _article_list);
+		Ufopaedia::list(_game->getSavedGame(), _game->getMod(), _section, _article_list);
 		for (it = _article_list.begin(); it!=_article_list.end(); ++it)
 		{
 			_lstSelection->addRow(1, tr((*it)->title).c_str());

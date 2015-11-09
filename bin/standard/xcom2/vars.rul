@@ -10,7 +10,6 @@ startingTime: #done
   month: 1
   year: 2040
 
-costSoldier: 20000
 costEngineer: 25000
 costScientist: 30000
 timePersonnel: 72
@@ -32,8 +31,6 @@ constants: #done
   - itemReload: 45
   - walkOffset: 0
   - flyingSound: 66
-  - maleScream: [48, 48, 48]
-  - femaleScream: [48, 48, 48]
   - buttonPress: 0
   - windowPopup: [1, 1, 1]
   - ufoFire: 5

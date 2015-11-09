@@ -19,7 +19,7 @@
 #include "CommendationState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -60,7 +60,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
@@ -81,7 +81,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 
 	int row = 0;
 	int titleRow = 0;
-	std::map<std::string, RuleCommendations *> commendationsList = _game->getRuleset()->getCommendation();
+	std::map<std::string, RuleCommendations *> commendationsList = _game->getMod()->getCommendation();
 	bool modularCommendation;
 	std::string noun;
 	bool titleChosen = true;

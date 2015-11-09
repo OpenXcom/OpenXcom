@@ -29,6 +29,7 @@
 #include "../Engine/Screen.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/FileMap.h"
+#include "../Mod/Mod.h"
 
 namespace OpenXcom
 {
@@ -51,10 +52,10 @@ void CutsceneState::init()
 	// pop self off stack and replace with actual player state
 	_game->popState();
 
-	const std::map<std::string, RuleVideo*> *videoRulesets = _game->getRuleset()->getVideos();
-	std::map<std::string, RuleVideo*>::const_iterator videoRuleIt = videoRulesets->find(_cutsceneId);
+	const std::map<std::string, RuleVideo*> *videoMods = _game->getMod()->getVideos();
+	std::map<std::string, RuleVideo*>::const_iterator videoRuleIt = videoMods->find(_cutsceneId);
 
-	if (videoRuleIt == videoRulesets->end())
+	if (videoRuleIt == videoMods->end())
 	{
 		Log(LOG_WARNING) << "cutscene definition not found: " << _cutsceneId;
 		return;
@@ -67,7 +68,7 @@ void CutsceneState::init()
 		{
 			std::string filename = CrossPlatform::sanitizeFilename(
 				Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
-			CrossPlatform::deleteFile(Options::getUserFolder() + filename);
+			CrossPlatform::deleteFile(Options::getMasterUserFolder() + filename);
 		}
 		_game->setSavedGame(0);
 		_game->setState(new GoToMainMenuState);

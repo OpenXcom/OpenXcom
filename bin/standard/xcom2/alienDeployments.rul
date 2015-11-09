@@ -945,6 +945,7 @@ alienDeployments: #done
       palette: 4
       music: GMISPOSH
     alert: STR_ALIENS_LAUNCH_PORT_TERROR
+    alertBackground: BACK03.SCR
     markerName: STR_TERROR_SITE
     duration: [4, 10]
     despawnPenalty: 1000
@@ -1085,6 +1086,7 @@ alienDeployments: #done
       palette: 4
       music: GMISPOSH
     alert: STR_ALIENS_LAUNCH_ISLAND_TERROR
+    alertBackground: BACK03.SCR
     markerName: STR_TERROR_SITE
     duration: [4, 10]
     despawnPenalty: 1000
@@ -1228,6 +1230,7 @@ alienDeployments: #done
       palette: 4
       music: GMISPOSH
     alert: STR_ALIENS_ATTACK_SHIPPING_ROUTE
+    alertBackground: BACK03.SCR
     markerName: STR_TERROR_SITE
     duration: [4, 10]
     despawnPenalty: 1000
@@ -1364,6 +1367,7 @@ alienDeployments: #done
     script: SHIP_P2
     terrains:
       - CARGO
+    shade: 0
     briefing:
       title: STR_SHIP_RESCUE_MISSION
       desc: STR_SHIP_RESCUE_P2_BRIEFING
@@ -1511,6 +1515,7 @@ alienDeployments: #done
       palette: 4
       music: GMISPOSH
     alert: STR_ALIENS_ATTACK_SHIPPING_ROUTE
+    alertBackground: BACK03.SCR
     markerName: STR_TERROR_SITE
     duration: [4, 10]
     despawnPenalty: 1000
@@ -1647,6 +1652,7 @@ alienDeployments: #done
     script: SHIP_P2
     terrains:
       - LINERB
+    shade: 0
     briefing:
       title: STR_SHIP_RESCUE_MISSION
       desc: STR_SHIP_RESCUE_P2_BRIEFING
@@ -1799,6 +1805,7 @@ alienDeployments: #done
       palette: 4
       music: GMATTBAS
     alert: STR_ALIEN_ACTIVITY_DETECTED
+    alertBackground: BACK03.SCR
     markerName: STR_ARTIFACT_SITE
     duration: [4, 10]
     despawnPenalty: 2000
@@ -1942,6 +1949,8 @@ alienDeployments: #done
     height: 4
     terrains:
       - GRUNGE
+    shade: 15
+    depth: [3, 3]
     script: ARTIFACT_P2
     briefing:
       title: STR_ALIEN_CONTACT_SITE_MISSION
@@ -2279,7 +2288,7 @@ alienDeployments: #done
     width: 60
     length: 60
     height: 4
-    shade: 15
+    shade: 0
     depth: [3, 3]
     terrains:
       - A_BASE
@@ -2459,7 +2468,7 @@ alienDeployments: #done
     height: 4
     terrains:
       - XBASES
-    shade: 5
+    shade: 8
     script: BASE_DRILL
     briefing:
       palette: 4
@@ -2553,6 +2562,7 @@ alienDeployments: #done
     terrains: 
       - ALSHIP
     shade: 15
+    depth: [3, 3]
     race: STR_AQUATOID
     nextStage: STR_TLETH_P2
     finalDestination: true
@@ -2692,6 +2702,7 @@ alienDeployments: #done
     terrains: 
       - LEVEL
     shade: 15
+    depth: [3, 3]
     race: STR_MIXED_CREW_2
     nextStage: STR_TLETH_P3
     script: TLETH_P2_P3
@@ -2828,7 +2839,8 @@ alienDeployments: #done
     height: 2
     terrains:
       - CRYPT
-    shade: 5
+    shade: 15
+    depth: [3, 3]
     race: STR_MIXED_CREW_2
     script: TLETH_P2_P3
     winCutscene: winGame

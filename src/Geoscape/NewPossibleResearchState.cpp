@@ -20,12 +20,12 @@
 #include "NewPossibleResearchState.h"
 #include "../Engine/Game.h"
 #include "../Engine/LocalizedText.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
-#include "../Ruleset/RuleResearch.h"
+#include "../Mod/RuleResearch.h"
 #include "../Basescape/ResearchState.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
@@ -61,7 +61,7 @@ NewPossibleResearchState::NewPossibleResearchState(Base * base, const std::vecto
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK05.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewPossibleResearchState::btnOkClick);
@@ -79,7 +79,7 @@ NewPossibleResearchState::NewPossibleResearchState(Base * base, const std::vecto
 	size_t tally(0);
 	for (std::vector<RuleResearch *>::const_iterator iter = possibilities.begin(); iter != possibilities.end(); ++iter)
 	{
-		bool liveAlien = _game->getRuleset()->getUnit((*iter)->getName()) != 0;
+		bool liveAlien = (*iter)->needItem() && _game->getMod()->getUnit((*iter)->getName()) != 0;
 		if (!_game->getSavedGame()->wasResearchPopped(*iter) && (*iter)->getRequirements().empty() && !liveAlien)
 		{
 			_game->getSavedGame()->addPoppedResearch((*iter));

@@ -1,0 +1,9 @@
+#
+# metadata.yaml for Swap Small USOs
+
+name: "StrategyCore Swap Small USOs"
+version: 1.0
+description: "Swaps the maps and interception images for the two small USOs to better suit what they represent."
+author: Zombie
+
+master: xcom2

@@ -21,7 +21,7 @@
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/Bar.h"
@@ -35,11 +35,13 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDiary.h"
 #include "../Engine/SurfaceSet.h"
-#include "../Ruleset/Armor.h"
+#include "../Mod/Armor.h"
 #include "../Menu/ErrorMessageState.h"
 #include "SellState.h"
 #include "SoldierArmorState.h"
 #include "SackSoldierState.h"
+#include "../Mod/RuleInterface.h"
+#include "../Mod/RuleSoldier.h"
 
 namespace OpenXcom
 {
@@ -209,7 +211,7 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	centerAllSurfaces();
 
 	// Set up objects
-	_game->getResourcePack()->getSurface("BACK06.SCR")->blit(_bg);
+	_game->getMod()->getSurface("BACK06.SCR")->blit(_bg);
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldierInfoState::btnOkClick);
@@ -332,7 +334,7 @@ void SoldierInfoState::init()
 	UnitStats withArmor(*current);
 	withArmor += *(_soldier->getArmor()->getStats());
 
-	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+	SurfaceSet *texture = _game->getMod()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(_soldier->getRankSprite())->setX(0);
 	texture->getFrame(_soldier->getRankSprite())->setY(0);
 	texture->getFrame(_soldier->getRankSprite())->blit(_rank);
@@ -402,7 +404,7 @@ void SoldierInfoState::init()
 
 	std::wstring wsArmor;
 	std::string armorType = _soldier->getArmor()->getType();
-	if (armorType == "STR_NONE_UC")
+	if (armorType == _soldier->getRules()->getArmor())
 	{
 		wsArmor= tr("STR_ARMOR_").arg(tr(armorType));
 	}
@@ -443,7 +445,7 @@ void SoldierInfoState::init()
 
 	_txtPsionic->setVisible(_soldier->isInPsiTraining());
 
-	if (current->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+	if (current->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getMod()->getPsiRequirements())))
 	{
 		std::wstringstream ss14;
 		ss14 << withArmor.psiStrength;
@@ -500,7 +502,7 @@ void SoldierInfoState::init()
  * Disables the soldier input.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::edtSoldierPress(Action *action)
+void SoldierInfoState::edtSoldierPress(Action *)
 {
 	if (_base == 0)
 	{
@@ -520,7 +522,7 @@ void SoldierInfoState::setSoldierId(size_t soldier)
  * Changes the soldier's name.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::edtSoldierChange(Action *action)
+void SoldierInfoState::edtSoldierChange(Action *)
 {
 	_soldier->setName(_edtSoldier->getText());
 }
@@ -536,7 +538,7 @@ void SoldierInfoState::btnOkClick(Action *)
 	if (_game->getSavedGame()->getMonthsPassed() > -1 && Options::storageLimitsEnforced && _base != 0 && _base->storesOverfull())
 	{
 		_game->pushState(new SellState(_base));
-		_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, _game->getRuleset()->getInterface("soldierInfo")->getElement("errorMessage")->color, "BACK01.SCR", _game->getRuleset()->getInterface("soldierInfo")->getElement("errorPalette")->color));
+		_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, _game->getMod()->getInterface("soldierInfo")->getElement("errorMessage")->color, "BACK01.SCR", _game->getMod()->getInterface("soldierInfo")->getElement("errorPalette")->color));
 	}
 }
 

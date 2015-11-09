@@ -20,7 +20,7 @@
 #define OPENXCOM_SLIDESHOWSTATE_H
 
 #include "../Engine/State.h"
-#include "../Ruleset/RuleVideo.h"
+#include "../Mod/RuleVideo.h"
 
 namespace OpenXcom
 {

@@ -20,7 +20,7 @@
 #include "../fmath.h"
 #include <algorithm>
 #include "../Engine/Action.h"
-#include "../Interface/TextList.h"
+#include "TextList.h"
 #include "../Engine/Palette.h"
 
 namespace OpenXcom

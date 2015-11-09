@@ -38,9 +38,7 @@ public:
 	/// Create an empty set.
 	WeightedOptions() : _totalWeight(0) { /* Empty by design. */ }
 	/// Select from among the items.
-	const std::string choose() const;
-	/// Select the top item.
-	const std::string top() const;
+	std::string choose() const;
 	/// Set an option's weight.
 	void set(const std::string &id, size_t weight);
 	/// Is this empty?

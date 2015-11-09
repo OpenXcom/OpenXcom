@@ -26,10 +26,10 @@
 #include "AlienMission.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Language.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleUfo.h"
-#include "../Ruleset/UfoTrajectory.h"
-#include "../Ruleset/RuleAlienMission.h"
+#include "../Mod/Mod.h"
+#include "../Mod/RuleUfo.h"
+#include "../Mod/UfoTrajectory.h"
+#include "../Mod/RuleAlienMission.h"
 #include "SavedGame.h"
 #include "Waypoint.h"
 
@@ -100,10 +100,10 @@ private:
 /**
  * Loads the UFO from a YAML file.
  * @param node YAML node.
- * @param ruleset The game rules. Use to access the trajectory rules.
+ * @param mod The game mod. Use to access the trajectory rules.
  * @param game The game data. Used to find the UFO's mission.
  */
-void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
+void Ufo::load(const YAML::Node &node, const Mod &mod, SavedGame &game)
 {
 	MovingTarget::load(node);
 	_id = node["id"].as<int>(_id);
@@ -161,7 +161,7 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 		_mission = *found;
 
 		std::string tid = node["trajectory"].as<std::string>();
-		_trajectory = ruleset.getUfoTrajectory(tid);
+		_trajectory = mod.getUfoTrajectory(tid);
 		_trajectoryPoint = node["trajectoryPoint"].as<size_t>(_trajectoryPoint);
 	}
 	_fireCountdown = node["fireCountdown"].as<int>(_fireCountdown);
@@ -273,13 +273,10 @@ std::wstring Ufo::getName(Language *lang) const
 	case FLYING:
 	case DESTROYED: // Destroyed also means leaving Earth.
 		return lang->getString("STR_UFO_").arg(_id);
-		break;
 	case LANDED:
 		return lang->getString("STR_LANDING_SITE_").arg(_landId);
-		break;
 	case CRASHED:
 		return lang->getString("STR_CRASH_SITE_").arg(_crashId);
-		break;
 	default:
 		return L"";
 	}

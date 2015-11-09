@@ -56,8 +56,6 @@ public:
 	UnitWalkBState(BattlescapeGame *parent, BattleAction _action);
 	/// Cleans up the UnitWalkBState.
 	~UnitWalkBState();
-	/// Sets the target to walk to.
-	void setTarget(Position target);
 	/// Initializes the state.
 	void init();
 	/// Handles a cancels request.

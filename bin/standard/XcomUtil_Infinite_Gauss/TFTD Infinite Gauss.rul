@@ -1,0 +1,47 @@
+# Based on XcomUtil by Scott Jones and BladeFireLight
+items:
+  - type: STR_GAUSS_PISTOL
+    hitSound: 31
+    hitAnimation: 46
+    power: 45
+    damageType: 4
+    clipSize: -1
+    vaporColor: 2
+    vaporDensity: 5
+    compatibleAmmo: []
+  - delete: STR_GAUSS_PISTOL_CLIP
+  - type: STR_GAUSS_RIFLE
+    hitSound: 31
+    hitAnimation: 46
+    power: 60
+    damageType: 4
+    clipSize: -1
+    vaporColor: 2
+    vaporDensity: 10
+    compatibleAmmo: []
+  - delete: STR_GAUSS_RIFLE_CLIP
+  - type: STR_HEAVY_GAUSS
+    hitSound: 31
+    hitAnimation: 46
+    power: 80
+    damageType: 4
+    clipSize: -1
+    vaporColor: 2
+    vaporDensity: 15
+    compatibleAmmo: []
+  - delete: STR_HEAVY_GAUSS_CLIP
+research:
+  - delete: STR_GAUSS_PISTOL_CLIP
+  - delete: STR_GAUSS_RIFLE_CLIP
+  - delete: STR_HEAVY_GAUSS_CLIP
+  - name: STR_GAUSS_CANNON
+    dependencies:
+      - STR_HEAVY_GAUSS
+ufopaedia:
+  - delete: STR_GAUSS_PISTOL_CLIP
+  - delete: STR_GAUSS_RIFLE_CLIP
+  - delete: STR_HEAVY_GAUSS_CLIP
+manufacture:
+  - delete: STR_GAUSS_PISTOL_CLIP
+  - delete: STR_GAUSS_RIFLE_CLIP
+  - delete: STR_HEAVY_GAUSS_CLIP

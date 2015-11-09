@@ -34,10 +34,10 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Engine/RNG.h"
 #include "BattlescapeState.h"
-#include "../Ruleset/MapDataSet.h"
-#include "../Ruleset/MapData.h"
-#include "../Ruleset/Unit.h"
-#include "../Ruleset/Armor.h"
+#include "../Mod/MapDataSet.h"
+#include "../Mod/MapData.h"
+#include "../Mod/Unit.h"
+#include "../Mod/Armor.h"
 #include "Pathfinding.h"
 #include "../Engine/Options.h"
 #include "ProjectileFlyBState.h"
@@ -1288,7 +1288,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 									if (resistance > 0.0)
 									{
 										bu->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
-										int burnTime = RNG::generate(0, int(5 * resistance));
+										int burnTime = RNG::generate(0, int(5.0f * resistance));
 										if (bu->getFire() < burnTime)
 										{
 											bu->setFire(burnTime); // catch fire and burn

@@ -28,7 +28,7 @@
 #include "Exception.h"
 #include "Options.h"
 #include "LanguagePlurality.h"
-#include "../Ruleset/ExtraStrings.h"
+#include "../Mod/ExtraStrings.h"
 #include "../Interface/TextList.h"
 #ifdef _WIN32
 #ifndef NOMINMAX
@@ -433,11 +433,11 @@ void Language::load(ExtraStrings *extras)
 }
 
 /**
-* Replaces all special string markers with the appropriate characters
-* and converts the string encoding.
-* @param string Original UTF-8 string.
-* @return New widechar string.
-*/
+ * Replaces all special string markers with the appropriate characters
+ * and converts the string encoding.
+ * @param string Original UTF-8 string.
+ * @return New widechar string.
+ */
 std::wstring Language::loadString(const std::string &string) const
 {
 	std::string s = string;
@@ -654,4 +654,4 @@ STR_ENEMIES:
   other: "There are {N} enemies left."
 </pre>
 
-*/
+ */

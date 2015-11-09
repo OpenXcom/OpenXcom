@@ -19,7 +19,7 @@
 #include "CommendationLateState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -49,9 +49,9 @@ CommendationLateState::CommendationLateState(std::vector<Soldier*> soldiersMedal
 	_lstSoldiers = new TextList(288, 128, 8, 32);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("soldierMemorial")->getElement("palette")->color);
+	setInterface("soldierMemorial");
 
-	_game->getResourcePack()->playMusic("GMLOSE");
+	_game->getMod()->playMusic("GMLOSE");
 
 	add(_window, "window", "soldierMemorial");
 	add(_btnOk, "button", "soldierMemorial");
@@ -61,7 +61,7 @@ CommendationLateState::CommendationLateState(std::vector<Soldier*> soldiersMedal
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK02.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CommendationLateState::btnOkClick);
@@ -91,7 +91,7 @@ CommendationLateState::CommendationLateState(std::vector<Soldier*> soldiersMedal
     
     ***/
 
-	std::map<std::string, RuleCommendations *> commendationsList = _game->getRuleset()->getCommendation();
+	std::map<std::string, RuleCommendations *> commendationsList = _game->getMod()->getCommendation();
 	bool modularCommendation;
 	std::string noun;
 

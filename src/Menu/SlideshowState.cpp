@@ -25,7 +25,7 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Timer.h"
 #include "../Interface/Text.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Options.h"
 #include "../Interface/Cursor.h"
 
@@ -72,7 +72,7 @@ SlideshowState::SlideshowState(const SlideshowHeader &slideshowHeader,
 	_transitionTimer = new Timer(transitionSeconds * 1000);
 	_transitionTimer->onTimer((StateHandler)&SlideshowState::screenTimer);
 
-	_game->getResourcePack()->playMusic(_slideshowHeader.musicId);
+	_game->getMod()->playMusic(_slideshowHeader.musicId);
 	_game->getCursor()->setVisible(false);
 	screenClick(0);
 }
@@ -112,7 +112,7 @@ void SlideshowState::screenClick(Action *action)
 	++_curScreen;
 
 	// next screen
-	if (_curScreen < _slideshowSlides->size())
+	if (_curScreen < (int)_slideshowSlides->size())
 	{
 		int transitionSeconds = _slideshowHeader.transitionSeconds;
 		if (_slideshowSlides->at(_curScreen).transitionSeconds > 0)

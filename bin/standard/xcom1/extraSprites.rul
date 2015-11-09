@@ -50,6 +50,11 @@ extraSprites:
     subY: 48
     files:
       -4: Resources/Weapons/Terror.png
+  - type: BIGOBS.PCK
+    width: 32
+    height: 48
+    files:
+      -5: Resources/Weapons/Zombie.png
   - type: GlobeMarkers
     width: 27
     height: 3

@@ -22,7 +22,6 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <yaml-cpp/yaml.h>
 #include "LocalizedText.h"
 #include "../Savegame/Soldier.h"
 

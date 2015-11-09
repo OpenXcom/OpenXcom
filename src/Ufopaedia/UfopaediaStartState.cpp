@@ -27,7 +27,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 
 namespace OpenXcom
 {
@@ -47,7 +47,7 @@ namespace OpenXcom
 		// Modify the Ufopaedia in case the commendations mod is enabled or not.
 		bool commendations = false;
 		_commendationsYAdjustment = 0;
-		if (!_game->getRuleset()->getCommendation().empty())
+		if (!_game->getMod()->getCommendation().empty())
 		{
 			commendations = true;
 			_commendationsYAdjustment = 7;
@@ -88,7 +88,7 @@ namespace OpenXcom
 
 		centerAllSurfaces();
 
-		_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+		_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 		_txtTitle->setBig();
 		_txtTitle->setAlign(ALIGN_CENTER);

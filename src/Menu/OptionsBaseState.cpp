@@ -22,7 +22,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Screen.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Interface/Window.h"
@@ -91,7 +91,7 @@ OptionsBaseState::OptionsBaseState(OptionsOrigin origin) : _origin(origin)
 	add(_txtTooltip, "tooltip", "optionsMenu");
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnVideo->setText(tr("STR_VIDEO"));
 	_btnVideo->onMousePress((ActionHandler)&OptionsBaseState::btnGroupPress, SDL_BUTTON_LEFT);
@@ -249,7 +249,7 @@ void OptionsBaseState::btnCancelClick(Action *)
  * Restores the Options to default settings.
  * @param action Pointer to an action.
  */
-void OptionsBaseState::btnDefaultClick(Action *action)
+void OptionsBaseState::btnDefaultClick(Action *)
 {
 	_game->pushState(new OptionsDefaultsState(_origin, this));
 }
@@ -299,9 +299,9 @@ void OptionsBaseState::btnGroupPress(Action *action)
 }
 
 /**
-* Shows a tooltip for the appropriate button.
-* @param action Pointer to an action.
-*/
+ * Shows a tooltip for the appropriate button.
+ * @param action Pointer to an action.
+ */
 void OptionsBaseState::txtTooltipIn(Action *action)
 {
 	_currentTooltip = action->getSender()->getTooltip();
@@ -309,9 +309,9 @@ void OptionsBaseState::txtTooltipIn(Action *action)
 }
 
 /**
-* Clears the tooltip text.
-* @param action Pointer to an action.
-*/
+ * Clears the tooltip text.
+ * @param action Pointer to an action.
+ */
 void OptionsBaseState::txtTooltipOut(Action *action)
 {
 	if (_currentTooltip == action->getSender()->getTooltip())

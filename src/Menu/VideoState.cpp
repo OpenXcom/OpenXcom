@@ -28,9 +28,8 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Music.h"
 #include "../Engine/Sound.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleVideo.h"
+#include "../Mod/Mod.h"
+#include "../Mod/RuleVideo.h"
 #include "CutsceneState.h"
 #include "../Interface/Cursor.h"
 
@@ -317,13 +316,13 @@ static introSoundEffect introSoundTrack[] =
 
 static struct AudioSequence
 {
-	ResourcePack *rp;
+	Mod *mod;
 	Music *m;
 	Sound *s;
 	int trackPosition;
 	FlcPlayer *_flcPlayer;
 
-	AudioSequence(ResourcePack *resources, FlcPlayer *flcPlayer) : rp(resources), m(0), s(0), trackPosition(0), _flcPlayer(flcPlayer)
+	AudioSequence(Mod *mod, FlcPlayer *flcPlayer) : mod(mod), m(0), s(0), trackPosition(0), _flcPlayer(flcPlayer)
 	{ }
 
 	void operator()()
@@ -339,17 +338,17 @@ static struct AudioSequence
 				{
 				case 0x200:
 					Log(LOG_DEBUG) << "Playing gmintro1";
-					m = rp->getMusic("GMINTRO1");
+					m = mod->getMusic("GMINTRO1");
 					m->play(1);
 					break;
 				case 0x201:
 					Log(LOG_DEBUG) << "Playing gmintro2";
-					m = rp->getMusic("GMINTRO2");
+					m = mod->getMusic("GMINTRO2");
 					m->play(1);
 					break;
 				case 0x202:
 					Log(LOG_DEBUG) << "Playing gmintro3";
-					m = rp->getMusic("GMINTRO3");
+					m = mod->getMusic("GMINTRO3");
 					m->play(1);
 					//Mix_HookMusicFinished(_FlcPlayer::stop);
 					break;
@@ -370,7 +369,7 @@ static struct AudioSequence
 					int channel = trackPosition % 4; // use at most four channels to play sound effects
 					double ratio = (double)Options::soundVolume / MIX_MAX_VOLUME;
 					Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command; 
-					s = rp->getSound(sf->catFile, sf->sound);
+					s = mod->getSound(sf->catFile, sf->sound);
 					if (s)
 					{
 						s->play(channel);
@@ -442,7 +441,7 @@ void VideoState::init()
 
 		if (_useUfoAudioSequence)
 		{
-			audioSequence = new AudioSequence(_game->getResourcePack(), flcPlayer);
+			audioSequence = new AudioSequence(_game->getMod(), flcPlayer);
 		}
 
 		flcPlayer->init(videoFileName.c_str(),

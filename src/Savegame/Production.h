@@ -26,7 +26,7 @@ namespace OpenXcom
 class RuleManufacture;
 class Base;
 class SavedGame;
-class Ruleset;
+class Mod;
 enum productionProgress_e { PROGRESS_NOT_COMPLETE, PROGRESS_COMPLETE, PROGRESS_NOT_ENOUGH_MONEY, PROGRESS_NOT_ENOUGH_MATERIALS, PROGRESS_MAX, PROGRESS_CONSTRUCTION };
 class Production
 {
@@ -43,7 +43,7 @@ public:
 	void setAssignedEngineers (int);
 	bool getSellItems() const;
 	void setSellItems (bool);
-	productionProgress_e step(Base * b, SavedGame * g, const Ruleset *r);
+	productionProgress_e step(Base * b, SavedGame * g, const Mod *m);
 	const RuleManufacture * getRules() const;
 	void startItem(Base * b, SavedGame * g);
 	YAML::Node save() const;

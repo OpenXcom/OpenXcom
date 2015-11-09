@@ -174,18 +174,18 @@ void ListSaveState::saveGame()
 		oldFilename = _saves[_selectedRow - 1].fileName;
 		if (oldFilename != newFilename + ".sav")
 		{
-			while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
+			while (CrossPlatform::fileExists(Options::getMasterUserFolder() + newFilename + ".sav"))
 			{
 				newFilename += "_";
 			}
-			std::string oldPath = Options::getUserFolder() + oldFilename;
-			std::string newPath = Options::getUserFolder() + newFilename + ".sav";
+			std::string oldPath = Options::getMasterUserFolder() + oldFilename;
+			std::string newPath = Options::getMasterUserFolder() + newFilename + ".sav";
 			CrossPlatform::moveFile(oldPath, newPath);
 		}
 	}
 	else
 	{
-		while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
+		while (CrossPlatform::fileExists(Options::getMasterUserFolder() + newFilename + ".sav"))
 		{
 			newFilename += "_";
 		}

@@ -24,8 +24,8 @@
 #include "../Engine/Game.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleManufacture.h"
+#include "../Mod/Mod.h"
+#include "../Mod/RuleManufacture.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
 #include "ManufactureInfoState.h"
@@ -80,7 +80,7 @@ ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item
 
 	centerAllSurfaces();
 
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK17.SCR"));
 
 	_txtTitle->setText(tr(_item->getName()));
 	_txtTitle->setBig();
@@ -116,7 +116,7 @@ ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item
 	_lstRequiredItems->setColumns(3, 140, 75, 55);
 	_lstRequiredItems->setBackground(_window);
 
-	ItemContainer * itemContainer (base->getItems());
+	ItemContainer * itemContainer (base->getStorageItems());
 	int row = 0;
 	for (std::map<std::string, int>::const_iterator iter = requiredItems.begin();
 		iter != requiredItems.end();

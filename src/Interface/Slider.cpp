@@ -20,9 +20,9 @@
 #include "../fmath.h"
 #include <algorithm>
 #include "../Engine/Action.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Text.h"
-#include "../Interface/Frame.h"
+#include "TextButton.h"
+#include "Text.h"
+#include "Frame.h"
 
 namespace OpenXcom
 {

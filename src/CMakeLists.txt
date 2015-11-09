@@ -460,98 +460,91 @@ set ( menu_src
   Menu/VideoState.h
 )
 
-set ( resource_src
-  Resource/ResourcePack.h
-  Resource/ResourcePack.cpp
-  Resource/XcomResourcePack.cpp
-  Resource/XcomResourcePack.h
-)
-
-set ( ruleset_src
-  Ruleset/RuleCraft.cpp
-  Ruleset/RuleCraft.h
-  Ruleset/Armor.cpp
-  Ruleset/Armor.h
-  Ruleset/MapDataSet.h
-  Ruleset/MapDataSet.cpp
-  Ruleset/RuleSoldier.h
-  Ruleset/RuleSoldier.cpp
-  Ruleset/RuleRegion.cpp
-  Ruleset/RuleRegion.h
-  Ruleset/RuleItem.h
-  Ruleset/RuleItem.cpp
-  Ruleset/RuleCraftWeapon.cpp
-  Ruleset/RuleCraftWeapon.h
-  Ruleset/RuleCommendations.cpp
-  Ruleset/RuleCommendations.h
-  Ruleset/RuleInterface.h
-  Ruleset/RuleInterface.cpp
-  Ruleset/RuleInventory.h
-  Ruleset/RuleInventory.cpp
-  Ruleset/MapBlock.h
-  Ruleset/MapBlock.cpp
-  Ruleset/MapScript.h
-  Ruleset/MapScript.cpp
-  Ruleset/MCDPatch.h
-  Ruleset/MCDPatch.cpp
-  Ruleset/RuleBaseFacility.cpp
-  Ruleset/RuleBaseFacility.h
-  Ruleset/SoldierNamePool.h
-  Ruleset/SoldierNamePool.cpp
-  Ruleset/Ruleset.h
-  Ruleset/Ruleset.cpp
-  Ruleset/RuleCountry.cpp
-  Ruleset/RuleCountry.h
-  Ruleset/RuleUfo.h
-  Ruleset/RuleUfo.cpp
-  Ruleset/ArticleDefinition.cpp
-  Ruleset/ArticleDefinition.h
-  Ruleset/City.cpp
-  Ruleset/City.h
-  Ruleset/ExtraSprites.cpp
-  Ruleset/ExtraSprites.h
-  Ruleset/ExtraSounds.cpp
-  Ruleset/ExtraSounds.h
-  Ruleset/ExtraStrings.cpp
-  Ruleset/ExtraStrings.h
-  Ruleset/RuleTerrain.cpp
-  Ruleset/RuleTerrain.h
-  Ruleset/MapData.cpp
-  Ruleset/MapData.h
-  Ruleset/RuleResearch.h
-  Ruleset/RuleResearch.cpp
-  Ruleset/RuleManufacture.h
-  Ruleset/RuleManufacture.cpp
-  Ruleset/RuleMissionScript.h
-  Ruleset/RuleMissionScript.cpp
-  Ruleset/AlienDeployment.h
-  Ruleset/AlienDeployment.cpp
-  Ruleset/AlienRace.h
-  Ruleset/AlienRace.cpp
-  Ruleset/Unit.h
-  Ruleset/Unit.cpp
-  Ruleset/UfoTrajectory.cpp
-  Ruleset/UfoTrajectory.h
-  Ruleset/RuleAlienMission.cpp
-  Ruleset/RuleAlienMission.h
-  Ruleset/StatString.h
-  Ruleset/StatString.cpp
-  Ruleset/StatStringCondition.h
-  Ruleset/StatStringCondition.cpp
-  Ruleset/SoundDefinition.h
-  Ruleset/SoundDefinition.cpp
-  Ruleset/Polygon.h
-  Ruleset/Polygon.cpp
-  Ruleset/Polyline.h
-  Ruleset/Polyline.cpp
-  Ruleset/RuleGlobe.h
-  Ruleset/RuleGlobe.cpp
-  Ruleset/RuleVideo.h
-  Ruleset/RuleVideo.cpp
-  Ruleset/RuleMusic.h
-  Ruleset/RuleMusic.cpp
-  Ruleset/Texture.h
-  Ruleset/Texture.cpp
+set ( mod_src
+  Mod/RuleCraft.cpp
+  Mod/RuleCraft.h
+  Mod/Armor.cpp
+  Mod/Armor.h
+  Mod/MapDataSet.h
+  Mod/MapDataSet.cpp
+  Mod/RuleSoldier.h
+  Mod/RuleSoldier.cpp
+  Mod/RuleRegion.cpp
+  Mod/RuleRegion.h
+  Mod/RuleItem.h
+  Mod/RuleItem.cpp
+  Mod/RuleCommendations.cpp
+  Mod/RuleCommendations.h
+  Mod/RuleCraftWeapon.cpp
+  Mod/RuleCraftWeapon.h
+  Mod/RuleInterface.h
+  Mod/RuleInterface.cpp
+  Mod/RuleInventory.h
+  Mod/RuleInventory.cpp
+  Mod/MapBlock.h
+  Mod/MapBlock.cpp
+  Mod/MapScript.h
+  Mod/MapScript.cpp
+  Mod/MCDPatch.h
+  Mod/MCDPatch.cpp
+  Mod/RuleBaseFacility.cpp
+  Mod/RuleBaseFacility.h
+  Mod/SoldierNamePool.h
+  Mod/SoldierNamePool.cpp
+  Mod/Mod.h
+  Mod/Mod.cpp
+  Mod/RuleCountry.cpp
+  Mod/RuleCountry.h
+  Mod/RuleUfo.h
+  Mod/RuleUfo.cpp
+  Mod/ArticleDefinition.cpp
+  Mod/ArticleDefinition.h
+  Mod/City.cpp
+  Mod/City.h
+  Mod/ExtraSprites.cpp
+  Mod/ExtraSprites.h
+  Mod/ExtraSounds.cpp
+  Mod/ExtraSounds.h
+  Mod/ExtraStrings.cpp
+  Mod/ExtraStrings.h
+  Mod/RuleTerrain.cpp
+  Mod/RuleTerrain.h
+  Mod/MapData.cpp
+  Mod/MapData.h
+  Mod/RuleResearch.h
+  Mod/RuleResearch.cpp
+  Mod/RuleManufacture.h
+  Mod/RuleManufacture.cpp
+  Mod/RuleMissionScript.h
+  Mod/RuleMissionScript.cpp
+  Mod/AlienDeployment.h
+  Mod/AlienDeployment.cpp
+  Mod/AlienRace.h
+  Mod/AlienRace.cpp
+  Mod/Unit.h
+  Mod/Unit.cpp
+  Mod/UfoTrajectory.cpp
+  Mod/UfoTrajectory.h
+  Mod/RuleAlienMission.cpp
+  Mod/RuleAlienMission.h
+  Mod/StatString.h
+  Mod/StatString.cpp
+  Mod/StatStringCondition.h
+  Mod/StatStringCondition.cpp
+  Mod/SoundDefinition.h
+  Mod/SoundDefinition.cpp
+  Mod/Polygon.h
+  Mod/Polygon.cpp
+  Mod/Polyline.h
+  Mod/Polyline.cpp
+  Mod/RuleGlobe.h
+  Mod/RuleGlobe.cpp
+  Mod/RuleVideo.h
+  Mod/RuleVideo.cpp
+  Mod/RuleMusic.h
+  Mod/RuleMusic.cpp
+  Mod/Texture.h
+  Mod/Texture.cpp
 )
 
 set ( savegame_src
@@ -687,11 +680,10 @@ if ( ( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" ) AND (
       -Wtype-limits
       -Wempty-body
       -Wuninitialized
-      -Wno-unused-function
+      -Wignored-qualifiers
 # These warning options actually generate way too many warnings. Should be enabled later.
-#      -Wignored-qualifiers
+      -Wno-unused-function
 #      -Weffc++
-      -Wno-sign-compare
 #      -Winline
 #      -Wshadow
       )
@@ -732,18 +724,14 @@ if ( WIN32 )
   set ( application_type WIN32 )
 endif ()
 
-set ( openxcom_src ${root_src} ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${resource_src} ${ruleset_src} ${savegame_src} ${ufopedia_src} )
+set ( openxcom_src ${root_src} ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${mod_src} ${savegame_src} ${ufopedia_src} )
 
 set ( install_dest RUNTIME )
 set ( set_exec_path ON )
 set ( install_dest_dir bin )
 if ( UNIX AND NOT APPLE )
-  if ( "${DATADIR}" STREQUAL "" )
-    set ( data_install_dir "share/openxcom" )
-  else ()
-    set ( data_install_dir ${DATADIR} )
-    add_definitions( -DDATADIR="${data_install_dir}/" )
-  endif ()
+  set ( data_install_dir "${CMAKE_INSTALL_FULL_DATADIR}/openxcom" )
+  add_definitions( -DDATADIR="${data_install_dir}/" )
 endif ()
 if ( APPLE )
   set ( openxcom_src ${openxcom_src} ${MACOS_SDLMAIN_M_PATH} )
@@ -755,12 +743,8 @@ if ( APPLE )
     set ( install_dest_dir "" )
     set ( data_install_dir bin )
   else ()
-    if ( "${DATADIR}" STREQUAL "" )
-      set ( data_install_dir "share/openxcom" )
-    else ()
-      set ( data_install_dir ${DATADIR} )
-      add_definitions( -DDATADIR="${data_install_dir}/" )
-    endif ()
+    set ( data_install_dir "${CMAKE_INSTALL_FULL_DATADIR}/openxcom" )
+    add_definitions( -DDATADIR="${data_install_dir}/" )
   endif ()
 endif ()
 if ( set_exec_path )
@@ -772,7 +756,7 @@ if ( FORCE_INSTALL_DATA_TO_BIN )
 endif ()
 
 add_executable ( openxcom  ${application_type} ${openxcom_src} )
-install ( TARGETS openxcom ${install_dest} DESTINATION bin )
+install ( TARGETS openxcom ${install_dest} DESTINATION ${CMAKE_INSTALL_BINDIR} )
 # Extra link flags for Windows. They need to be set before the SDL/YAML link flags, otherwise you will get strange link errors ('Undefined reference to WinMain@16')
 if ( WIN32 )
   set ( basic_windows_libs advapi32.lib shell32.lib shlwapi.lib )

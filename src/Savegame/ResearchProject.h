@@ -24,12 +24,12 @@
 namespace OpenXcom
 {
 class RuleResearch;
-class Ruleset;
+class Mod;
 
 /**
    Represent a ResearchProject
    Contain information about assigned scientist, time already spent and cost of the project.
-*/
+ */
 class ResearchProject
 {
 	RuleResearch * _project;
@@ -52,7 +52,7 @@ public:
 	int getCost() const;
 	/// set time cost of this ResearchProject
 	void setCost(int f);
-	/// get the ResearchProject Ruleset
+	/// get the ResearchProject Mod
 	const RuleResearch * getRules() const;
 	/// load the ResearchProject from YAML
 	void load(const YAML::Node& node);

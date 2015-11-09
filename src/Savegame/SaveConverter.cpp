@@ -30,8 +30,8 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Language.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/Mod.h"
+#include "../Mod/RuleItem.h"
 #include "SavedGame.h"
 #include "GameTime.h"
 #include "Country.h"
@@ -49,13 +49,14 @@
 #include "Vehicle.h"
 #include "AlienStrategy.h"
 #include "AlienMission.h"
-#include "../Ruleset/RuleResearch.h"
-#include "../Ruleset/ArticleDefinition.h"
+#include "../Mod/RuleResearch.h"
+#include "../Mod/ArticleDefinition.h"
 #include "ResearchProject.h"
-#include "../Ruleset/RuleManufacture.h"
+#include "../Mod/RuleManufacture.h"
 #include "Production.h"
-#include "../Ruleset/Armor.h"
-#include "../Ruleset/UfoTrajectory.h"
+#include "../Mod/Armor.h"
+#include "../Mod/UfoTrajectory.h"
+#include "../Mod/RuleSoldier.h"
 
 namespace OpenXcom
 {
@@ -92,13 +93,13 @@ char *SaveConverter::binaryBuffer(const std::string &filename, std::vector<char>
 /**
  * Creates a new converter for the given save folder.
  * @param save Number of the save folder GAME_#
- * @param rule Ruleset to associate with this save.
+ * @param mod Mod to associate with this save.
  */
-SaveConverter::SaveConverter(int save, Ruleset *rule) : _rule(rule)
+SaveConverter::SaveConverter(int save, Mod *mod) : _mod(mod)
 {
 	std::stringstream ssFolder, ssPath;
 	ssFolder << "GAME_" << save;
-	ssPath << Options::getUserFolder() << "/" << ssFolder.str();
+	ssPath << Options::getMasterUserFolder() << "/" << ssFolder.str();
 	_saveName = ssFolder.str();
 	_savePath = ssPath.str();
 	ssPath << "/SAVEINFO.DAT";
@@ -107,24 +108,24 @@ SaveConverter::SaveConverter(int save, Ruleset *rule) : _rule(rule)
 		throw Exception(_saveName + " is not a valid save folder");
 	}
 
-	_idCountries = _rule->getCountriesList();
-	_idRegions = _rule->getRegionsList();
-	_idFacilities = _rule->getBaseFacilitiesList();
+	_idCountries = _mod->getCountriesList();
+	_idRegions = _mod->getRegionsList();
+	_idFacilities = _mod->getBaseFacilitiesList();
 	//_idItems = _rule->getItemsList();
 	_idItems = std::vector<std::string>(ARR_BEGIN(xcom1Items), ARR_END(xcom1Items));
-	_idCrews = _rule->getAlienRacesList();
-	_idCrafts = _rule->getCraftsList();
-	_idUfos = _rule->getUfosList();
-	_idCraftWeapons = _rule->getCraftWeaponsList();
-	_idMissions = _rule->getAlienMissionList();
-	_idResearch = _rule->getResearchList();
+	_idCrews = _mod->getAlienRacesList();
+	_idCrafts = _mod->getCraftsList();
+	_idUfos = _mod->getUfosList();
+	_idCraftWeapons = _mod->getCraftWeaponsList();
+	_idMissions = _mod->getAlienMissionList();
+	_idResearch = _mod->getResearchList();
 	_idResearch.resize(95); // TODO
-	_idManufacture = _rule->getManufactureList();
-	_idUfopaedia = _rule->getUfopaediaList();
+	_idManufacture = _mod->getManufactureList();
+	_idUfopaedia = _mod->getUfopaediaList();
 
-	for (std::vector<std::string>::const_iterator i = _rule->getArmorsList().begin(); i != _rule->getArmorsList().end(); ++i)
+	for (std::vector<std::string>::const_iterator i = _mod->getArmorsList().begin(); i != _mod->getArmorsList().end(); ++i)
 	{
-		Armor *armor = _rule->getArmor(*i);
+		Armor *armor = _mod->getArmor(*i);
 		if (!armor->getSpriteInventory().empty())
 		{
 			_idArmor.push_back(*i);
@@ -133,9 +134,9 @@ SaveConverter::SaveConverter(int save, Ruleset *rule) : _rule(rule)
 
 	_idAlienRaces.push_back("");
 	_idAlienRanks.push_back("");
-	for (std::vector<std::string>::const_iterator i = _rule->getItemsList().begin(); i != _rule->getItemsList().end(); ++i)
+	for (std::vector<std::string>::const_iterator i = _mod->getItemsList().begin(); i != _mod->getItemsList().end(); ++i)
 	{
-		RuleItem *item = _rule->getItem(*i);
+		RuleItem *item = _mod->getItem(*i);
 		if (item->isAlien())
 		{
 			size_t n = i->find_last_of('_');
@@ -186,7 +187,7 @@ void SaveConverter::getList(Language *lang, SaveOriginal info[NUM_SAVES])
 
 		int id = i + 1;
 		std::stringstream ss;
-		ss << Options::getUserFolder() << "/GAME_" << id << "/SAVEINFO.DAT";
+		ss << Options::getMasterUserFolder() << "/GAME_" << id << "/SAVEINFO.DAT";
 		std::ifstream datFile(ss.str().c_str(), std::ios::in | std::ios::binary);
 		if (datFile)
 		{
@@ -231,7 +232,7 @@ SavedGame *SaveConverter::loadOriginal()
 	_save->getIncomes().clear();
 	for (size_t i = 0; i < _idCountries.size(); ++i)
 	{
-		Country *country = new Country(_rule->getCountry(_idCountries[i]));
+		Country *country = new Country(_mod->getCountry(_idCountries[i]));
 		country->getActivityAlien().clear();
 		country->getActivityXcom().clear();
 		country->getFunding().clear();
@@ -239,7 +240,7 @@ SavedGame *SaveConverter::loadOriginal()
 	}
 	for (size_t i = 0; i < _idRegions.size(); ++i)
 	{
-		Region *region = new Region(_rule->getRegion(_idRegions[i]));
+		Region *region = new Region(_mod->getRegion(_idRegions[i]));
 		region->getActivityAlien().clear();
 		region->getActivityXcom().clear();
 		_save->getRegions()->push_back(region);
@@ -294,7 +295,7 @@ void SaveConverter::graphVector(std::vector<T> &vector, int month, bool year)
 	{
 		std::vector<T> newVector;
 		int i = month;
-		do 
+		do
 		{
 			newVector.push_back(vector[i]);
 			i = (i + 1) % vector.size();
@@ -334,28 +335,28 @@ void SaveConverter::loadDatIGlob()
 	_save->setDifficulty((GameDifficulty)difficulty);
 
 	// Fix up the months
-	int monthsPassed = month + (_year - _rule->getStartingTime().getYear()) * 12;
+	int monthsPassed = month + (_year - _mod->getStartingTime().getYear()) * 12;
 	for (int i = 0; i < monthsPassed; ++i)
 	{
 		_save->addMonth();
 	}
-	graphVector(_save->getIncomes(), month, _year != _rule->getStartingTime().getYear());
-	graphVector(_save->getExpenditures(), month, _year != _rule->getStartingTime().getYear());
-	graphVector(_save->getMaintenances(), month, _year != _rule->getStartingTime().getYear());
-	graphVector(_save->getFundsList(), month, _year != _rule->getStartingTime().getYear());
-	graphVector(_save->getResearchScores(), month, _year != _rule->getStartingTime().getYear());
+	graphVector(_save->getIncomes(), month, _year != _mod->getStartingTime().getYear());
+	graphVector(_save->getExpenditures(), month, _year != _mod->getStartingTime().getYear());
+	graphVector(_save->getMaintenances(), month, _year != _mod->getStartingTime().getYear());
+	graphVector(_save->getFundsList(), month, _year != _mod->getStartingTime().getYear());
+	graphVector(_save->getResearchScores(), month, _year != _mod->getStartingTime().getYear());
 	for (size_t i = 0; i < _idCountries.size(); ++i)
 	{
 		Country *country = _save->getCountries()->at(i);
-		graphVector(country->getActivityAlien(), month, _year != _rule->getStartingTime().getYear());
-		graphVector(country->getActivityXcom(), month, _year != _rule->getStartingTime().getYear());
-		graphVector(country->getFunding(), month, _year != _rule->getStartingTime().getYear());
+		graphVector(country->getActivityAlien(), month, _year != _mod->getStartingTime().getYear());
+		graphVector(country->getActivityXcom(), month, _year != _mod->getStartingTime().getYear());
+		graphVector(country->getFunding(), month, _year != _mod->getStartingTime().getYear());
 	}
 	for (size_t i = 0; i < _idRegions.size(); ++i)
 	{
 		Region *region = _save->getRegions()->at(i);
-		graphVector(region->getActivityAlien(), month, _year != _rule->getStartingTime().getYear());
-		graphVector(region->getActivityXcom(), month, _year != _rule->getStartingTime().getYear());
+		graphVector(region->getActivityAlien(), month, _year != _mod->getStartingTime().getYear());
+		graphVector(region->getActivityXcom(), month, _year != _mod->getStartingTime().getYear());
 	}
 	_save->getFundsList().back() = _funds;
 }
@@ -533,7 +534,7 @@ void SaveConverter::loadDatDiplom()
 		}
 		bool pact = satisfaction == 0;
 		bool newPact = load<Sint16>(cdata + 0x1E) != 0;
-		
+
 		if (pact)
 			country->setPact();
 		if (newPact)
@@ -559,7 +560,7 @@ void SaveConverter::loadDatZonal()
 	}
 	YAML::Node node;
 	node["regions"] = chances;
-	_save->getAlienStrategy().load(_rule, node);
+	_save->getAlienStrategy().load(node);
 }
 
 /**
@@ -590,7 +591,7 @@ void SaveConverter::loadDatActs()
 		subnode["missions"] = i->second;
 		node["possibleMissions"].push_back(subnode);
 	}
-	_save->getAlienStrategy().load(_rule, node);
+	_save->getAlienStrategy().load(node);
 }
 
 /**
@@ -616,7 +617,7 @@ void SaveConverter::loadDatMissions()
 			int region = i / nMissions;
 
 			YAML::Node node;
-			AlienMission *m = new AlienMission(*_rule->getAlienMission(_idMissions[mission]));
+			AlienMission *m = new AlienMission(*_mod->getAlienMission(_idMissions[mission]));
 			node["region"] = _idRegions[region];
 			node["race"] = _idCrews[race];
 			node["nextWave"] = wave * 30;
@@ -668,7 +669,7 @@ void SaveConverter::loadDatLoc()
 		case TARGET_UFO:
 		case TARGET_CRASH:
 		case TARGET_LANDED:
-			ufo = new Ufo(_rule->getUfo(_idUfos[0]));
+			ufo = new Ufo(_mod->getUfo(_idUfos[0]));
 			ufo->setId(id);
 			ufo->setCrashId(id);
 			ufo->setLandId(id);
@@ -677,11 +678,11 @@ void SaveConverter::loadDatLoc()
 			target = ufo;
 			break;
 		case TARGET_CRAFT:
-			craft = new Craft(_rule->getCraft(_idCrafts[0]), 0, id);
+			craft = new Craft(_mod->getCraft(_idCrafts[0]), 0, id);
 			target = craft;
 			break;
 		case TARGET_XBASE:
-			xbase = new Base(_rule);
+			xbase = new Base(_mod);
 			target = xbase;
 			break;
 		case TARGET_ABASE:
@@ -699,19 +700,19 @@ void SaveConverter::loadDatLoc()
 			target = waypoint;
 			break;
 		case TARGET_TERROR:
-			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_TERROR_MISSION"));
+			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR"), _mod->getDeployment("STR_TERROR_MISSION"));
 			break;
 		case TARGET_PORT:
-			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_PORT_ATTACK"));
+			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR"), _mod->getDeployment("STR_PORT_ATTACK"));
 			break;
 		case TARGET_ISLAND:
-			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_ISLAND_ATTACK"));
+			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR"), _mod->getDeployment("STR_ISLAND_ATTACK"));
 			break;
 		case TARGET_SHIP:
-			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_SHIP_RESCUE_MISSION"));
+			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR"), _mod->getDeployment("STR_SHIP_RESCUE_MISSION"));
 			break;
 		case TARGET_ARTEFACT:
-			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_ALIEN_CONTACT_SITE_MISSION"));
+			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR"), _mod->getDeployment("STR_ALIEN_CONTACT_SITE_MISSION"));
 			break;
 		}
 		if (mission != 0)
@@ -756,7 +757,7 @@ void SaveConverter::loadDatBase()
 				size_t facilityType = *(bdata + 0x16 + j);
 				if (facilityType < _idFacilities.size())
 				{
-					BaseFacility *facility = new BaseFacility(_rule->getBaseFacility(_idFacilities[facilityType]), base);
+					BaseFacility *facility = new BaseFacility(_mod->getBaseFacility(_idFacilities[facilityType]), base);
 					int x = j % 6;
 					int y = j / 6;
 					int days = load<Uint8>(bdata + 0x3A + j);
@@ -774,7 +775,7 @@ void SaveConverter::loadDatBase()
 				int qty = load<Uint16>(bdata + 0x60 + j * 2);
 				if (qty != 0 && !_idItems[j].empty())
 				{
-					base->getItems()->addItem(_idItems[j], qty);
+					base->getStorageItems()->addItem(_idItems[j], qty);
 				}
 			}
 			base->setEngineers(engineers);
@@ -817,7 +818,7 @@ void SaveConverter::loadDatAStore()
 			if (base != 0xFF)
 			{
 				Base *b = dynamic_cast<Base*>(_targets[base]);
-				b->getItems()->addItem(liveAlien);
+				b->getStorageItems()->addItem(liveAlien);
 			}
 		}
 		_aliens.push_back(liveAlien);
@@ -895,13 +896,13 @@ void SaveConverter::loadDatCraft()
 			Craft *craft = dynamic_cast<Craft*>(_targets[i]);
 			if (craft != 0)
 			{
-				craft->changeRules(_rule->getCraft(_idCrafts[type]));
+				craft->changeRules(_mod->getCraft(_idCrafts[type]));
 
 				int lweapon = load<Uint8>(cdata + 0x01);
 				int lammo = load<Uint16>(cdata + 0x02);
 				if (lweapon != 0xFF)
 				{
-					CraftWeapon *cw = new CraftWeapon(_rule->getCraftWeapon(_idCraftWeapons[lweapon]), lammo);
+					CraftWeapon *cw = new CraftWeapon(_mod->getCraftWeapon(_idCraftWeapons[lweapon]), lammo);
 					craft->getWeapons()->at(0) = cw;
 				}
 				int flight = load<Uint8>(cdata + 0x04);
@@ -909,7 +910,7 @@ void SaveConverter::loadDatCraft()
 				int rammo = load<Uint8>(cdata + 0x06);
 				if (rweapon != 0xFF)
 				{
-					CraftWeapon *cw = new CraftWeapon(_rule->getCraftWeapon(_idCraftWeapons[rweapon]), rammo);
+					CraftWeapon *cw = new CraftWeapon(_mod->getCraftWeapon(_idCraftWeapons[rweapon]), rammo);
 					craft->getWeapons()->at(1) = cw;
 				}
 
@@ -926,7 +927,7 @@ void SaveConverter::loadDatCraft()
 					int qty = load<Uint8>(cdata + 0x2C + j);
 					for (int v = 0; v < qty; ++v)
 					{
-						RuleItem *rule = _rule->getItem(_idItems[j + 10]);
+						RuleItem *rule = _mod->getItem(_idItems[j + 10]);
 						craft->getVehicles()->push_back(new Vehicle(rule, rule->getClipSize(), 4));
 					}
 				}
@@ -943,7 +944,7 @@ void SaveConverter::loadDatCraft()
 				std::bitset<7> status(load<int>(cdata + 0x64));
 				node["lowFuel"] = status.test(1);
 
-				craft->load(node, _rule, _save);
+				craft->load(node, _mod, _save);
 
 				if (flight != 0 && dest != 0xFF)
 				{
@@ -960,7 +961,7 @@ void SaveConverter::loadDatCraft()
 			Ufo *ufo = dynamic_cast<Ufo*>(_targets[i]);
 			if (ufo != 0)
 			{
-				ufo->changeRules(_rule->getUfo(_idUfos[type - 5]));
+				ufo->changeRules(_mod->getUfo(_idUfos[type - 5]));
 				node["damage"] = (int)load<Uint16>(cdata + 0x0A);
 				node["altitude"] = xcomAltitudes[load<Uint16>(cdata + 0x0C)];
 				node["speed"] = (int)load<Uint16>(cdata + 0x0E);
@@ -974,7 +975,7 @@ void SaveConverter::loadDatCraft()
 				if (m == 0)
 				{
 					YAML::Node subnode;
-					m = new AlienMission(*_rule->getAlienMission(_idMissions[mission]));
+					m = new AlienMission(*_mod->getAlienMission(_idMissions[mission]));
 					subnode["region"] = _idRegions[region];
 					subnode["race"] = _idCrews[load<Uint16>(cdata + 0x24)];
 					subnode["nextWave"] = 1;
@@ -1000,7 +1001,7 @@ void SaveConverter::loadDatCraft()
 				std::bitset<7> status(load<int>(cdata + 0x64));
 				node["hyperDetected"] = status.test(6);
 
-				ufo->load(node, *_rule, *_save);
+				ufo->load(node, *_mod, *_save);
 				ufo->setSpeed(ufo->getSpeed());
 				if (ufo->getStatus() == Ufo::CRASHED)
 				{
@@ -1083,8 +1084,8 @@ void SaveConverter::loadDatSoldier()
 			node["look"] = (int)load<Uint8>(sdata + 0x43);
 			node["id"] = _save->getId("STR_SOLDIER");
 
-			Soldier *soldier = new Soldier(_rule->getSoldier("XCOM"), _rule->getArmor("STR_NONE_UC"));
-			soldier->load(node, _rule, _save);
+			Soldier *soldier = new Soldier(_mod->getSoldier(_mod->getSoldiersList().front()), 0);
+			soldier->load(node, _mod, _save);
 			if (base != 0xFFFF)
 			{
 				Base *b = dynamic_cast<Base*>(_targets[base]);
@@ -1119,14 +1120,14 @@ void SaveConverter::loadDatResearch()
 		char *rdata = (data + i * 22);
 		if (!_idResearch[i].empty())
 		{
-			RuleResearch *research = _rule->getResearch(_idResearch[i]);
+			RuleResearch *research = _mod->getResearch(_idResearch[i]);
 			if (research != 0 && research->getCost() != 0)
 			{
 				bool discovered = load<Uint8>(rdata + 0x0A) != 0;
 				bool popped = load<Uint8>(rdata + 0x12) != 0;
 				if (discovered)
 				{
-					_save->addFinishedResearch(research, _rule, false);
+					_save->addFinishedResearch(research, _mod, false);
 				}
 				else if (popped)
 				{
@@ -1150,7 +1151,7 @@ void SaveConverter::loadDatUp()
 	for (size_t i = 0; i < _idUfopaedia.size(); ++i)
 	{
 		char *rdata = (data + i * 12);
-		ArticleDefinition *article = _rule->getUfopaediaArticle(_idUfopaedia[i]);
+		ArticleDefinition *article = _mod->getUfopaediaArticle(_idUfopaedia[i]);
 		if (article != 0)
 		{
 			bool discovered = load<Uint8>(rdata + 0x08) == 2;
@@ -1159,10 +1160,10 @@ void SaveConverter::loadDatUp()
 				std::vector<std::string> requires = article->requires;
 				for (std::vector<std::string>::const_iterator r = requires.begin(); r != requires.end(); ++r)
 				{
-					RuleResearch *research = _rule->getResearch(*r);
+					RuleResearch *research = _mod->getResearch(*r);
 					if (research->getCost() == 0)
 					{
-						_save->addFinishedResearch(research, _rule);
+						_save->addFinishedResearch(research, _mod);
 					}
 				}
 			}
@@ -1189,7 +1190,7 @@ void SaveConverter::loadDatProject()
 			int scientists = load<Uint8>(pdata + 0xC0 + j);
 			if (remaining != 0 && !_idResearch[j].empty())
 			{
-				RuleResearch *research = _rule->getResearch(_idResearch[j]);
+				RuleResearch *research = _mod->getResearch(_idResearch[j]);
 				if (research != 0 && research->getCost() != 0)
 				{
 					ResearchProject *project = new ResearchProject(research, research->getCost());
@@ -1224,7 +1225,7 @@ void SaveConverter::loadDatBProd()
 			int produced = load<Uint16>(pdata + 0x118 + j * 2);
 			if (remaining != 0 && !_idManufacture[j].empty())
 			{
-				RuleManufacture *manufacture = _rule->getManufacture(_idManufacture[j]);
+				RuleManufacture *manufacture = _mod->getManufacture(_idManufacture[j]);
 				if (manufacture != 0)
 				{
 					Production *project = new Production(manufacture, total);
@@ -1261,7 +1262,7 @@ void SaveConverter::loadDatXBases()
 			}
 		}
 	}
-	
+
 }
 
 }

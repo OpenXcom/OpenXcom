@@ -21,14 +21,13 @@
 #include <algorithm>
 #include "Ufopaedia.h"
 #include "ArticleStateItem.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/ArticleDefinition.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/Mod.h"
+#include "../Mod/ArticleDefinition.h"
+#include "../Mod/RuleItem.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/LocalizedText.h"
-#include "../Resource/ResourcePack.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -38,7 +37,7 @@ namespace OpenXcom
 
 	ArticleStateItem::ArticleStateItem(ArticleDefinitionItem *defs) : ArticleState(defs->id)
 	{
-		RuleItem *item = _game->getRuleset()->getItem(defs->id);
+		RuleItem *item = _game->getMod()->getItem(defs->id);
 
 		// add screen elements
 		_txtTitle = new Text(148, 32, 5, 24);
@@ -52,7 +51,7 @@ namespace OpenXcom
 		add(_txtTitle);
 
 		// Set up objects
-		_game->getResourcePack()->getSurface("BACK08.SCR")->blit(_bg);
+		_game->getMod()->getSurface("BACK08.SCR")->blit(_bg);
 		_btnOk->setColor(Palette::blockOffset(9));
 		_btnPrev->setColor(Palette::blockOffset(9));
 		_btnNext->setColor(Palette::blockOffset(9));
@@ -66,7 +65,7 @@ namespace OpenXcom
 		_image = new Surface(32, 48, 157, 5);
 		add(_image);
 
-		item->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _image);
+		item->drawHandSprite(_game->getMod()->getSurfaceSet("BIGOBS.PCK"), _image);
 
 		std::vector<std::string> *ammo_data = item->getCompatibleAmmo();
 
@@ -213,10 +212,10 @@ namespace OpenXcom
 				{
 					for (size_t i = 0; i < std::min(ammo_data->size(), (size_t)3); ++i)
 					{
-						ArticleDefinition *ammo_article = _game->getRuleset()->getUfopaediaArticle((*ammo_data)[i]);
+						ArticleDefinition *ammo_article = _game->getMod()->getUfopaediaArticle((*ammo_data)[i]);
 						if (Ufopaedia::isArticleAvailable(_game->getSavedGame(), ammo_article))
 						{
-							RuleItem *ammo_rule = _game->getRuleset()->getItem((*ammo_data)[i]);
+							RuleItem *ammo_rule = _game->getMod()->getItem((*ammo_data)[i]);
 							_txtAmmoType[i]->setText(tr(getDamageTypeText(ammo_rule->getDamageType())));
 
 							ss.str(L"");ss.clear();
@@ -227,7 +226,7 @@ namespace OpenXcom
 							}
 							_txtAmmoDamage[i]->setText(ss.str());
 
-							ammo_rule->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _imageAmmo[i]);
+							ammo_rule->drawHandSprite(_game->getMod()->getSurfaceSet("BIGOBS.PCK"), _imageAmmo[i]);
 						}
 					}
 				}

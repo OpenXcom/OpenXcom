@@ -18,7 +18,7 @@
  */
 #include "ErrorMessageState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
@@ -86,7 +86,7 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 	// Set palette
 	setPalette(palette);
 	if (bgColor != -1)
-		setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(bgColor)), Palette::backPos, 16);
+		setPalette(_game->getMod()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(bgColor)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);
@@ -96,7 +96,7 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 
 	// Set up objects
 	_window->setColor(color);
-	_window->setBackground(_game->getResourcePack()->getSurface(bg));
+	_window->setBackground(_game->getMod()->getSurface(bg));
 
 	_btnOk->setColor(color);
 	_btnOk->setText(tr("STR_OK"));

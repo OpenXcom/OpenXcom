@@ -1,0 +1,9 @@
+#
+# metadata.yaml for XcomUtil Improved Gauss
+
+name: "XcomUtil: Improved Gauss"
+version: 1.0
+description: "Increases Gauss Rifle and Heavy Gauss clip size, increases Heavy Gauss damage to 80"
+author: the OpenXcom team
+
+master: xcom2

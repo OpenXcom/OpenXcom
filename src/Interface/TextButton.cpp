@@ -87,9 +87,9 @@ Uint8 TextButton::getColor() const
 }
 
 /**
-* Changes the color for the text only.
-* @param color Color value.
-*/
+ * Changes the color for the text only.
+ * @param color Color value.
+ */
 void TextButton::setTextColor(Uint8 color)
 {
 	_text->setColor(color);
@@ -97,8 +97,8 @@ void TextButton::setTextColor(Uint8 color)
 }
 
 /**
-* Changes the text to use the big-size font.
-*/
+ * Changes the text to use the big-size font.
+ */
 void TextButton::setBig()
 {
 	_text->setBig();
@@ -106,8 +106,8 @@ void TextButton::setBig()
 }
 
 /**
-* Changes the text to use the small-size font.
-*/
+ * Changes the text to use the small-size font.
+ */
 void TextButton::setSmall()
 {
 	_text->setSmall();
@@ -115,9 +115,9 @@ void TextButton::setSmall()
 }
 
 /**
-* Returns the font currently used by the text.
-* @return Pointer to font.
-*/
+ * Returns the font currently used by the text.
+ * @return Pointer to font.
+ */
 Font *TextButton::getFont() const
 {
 	return _text->getFont();

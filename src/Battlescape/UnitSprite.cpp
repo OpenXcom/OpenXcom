@@ -20,12 +20,12 @@
 #include <cmath>
 #include "UnitSprite.h"
 #include "../Engine/SurfaceSet.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Armor.h"
+#include "../Mod/RuleItem.h"
+#include "../Mod/Armor.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Soldier.h"
-#include "../Ruleset/RuleInventory.h"
+#include "../Mod/RuleInventory.h"
 #include "../Engine/ShaderDraw.h"
 #include "../Engine/ShaderMove.h"
 #include "../Engine/Options.h"
@@ -1297,8 +1297,8 @@ void UnitSprite::drawRoutine9()
 }
 
 /**
-* Drawing routine for tftd tanks.
-*/
+ * Drawing routine for tftd tanks.
+ */
 void UnitSprite::drawRoutine11()
 {
 	if (_unit->isOut())
@@ -1339,8 +1339,8 @@ void UnitSprite::drawRoutine11()
 }
 
 /**
-* Drawing routine for hallucinoids (routine 12) and biodrones (routine 16).
-*/
+ * Drawing routine for hallucinoids (routine 12) and biodrones (routine 16).
+ */
 void UnitSprite::drawRoutine12()
 {
 	const int die = 8;

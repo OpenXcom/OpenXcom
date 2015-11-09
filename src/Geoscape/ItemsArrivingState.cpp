@@ -20,7 +20,7 @@
 #include <sstream>
 #include <algorithm>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -33,8 +33,8 @@
 #include "../Savegame/Craft.h"
 #include "../Savegame/CraftWeapon.h"
 #include "../Savegame/Vehicle.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleCraftWeapon.h"
+#include "../Mod/RuleItem.h"
+#include "../Mod/RuleCraftWeapon.h"
 #include "GeoscapeState.h"
 #include "../Engine/Options.h"
 #include "../Basescape/BasescapeState.h"
@@ -76,7 +76,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState *state) : _state(state), _b
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK13.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ItemsArrivingState::btnOkClick);
@@ -112,7 +112,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState *state) : _state(state), _b
 				// Check if we have an automated use for an item
 				if ((*j)->getType() == TRANSFER_ITEM)
 				{
-					RuleItem *item = _game->getRuleset()->getItem((*j)->getItems());
+					RuleItem *item = _game->getMod()->getItem((*j)->getItems());
 					for (std::vector<Craft*>::iterator c = (*i)->getCrafts()->begin(); c != (*i)->getCrafts()->end(); ++c)
 					{
 						// Check if it's ammo to reload a craft
@@ -136,7 +136,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState *state) : _state(state), _b
 								int used = std::min((*j)->getQuantity(), item->getClipSize() - (*v)->getAmmo());
 								(*v)->setAmmo((*v)->getAmmo() + used);
 								// Note that the items have already been delivered, so we remove them from the base, not the transfer
-								_base->getItems()->removeItem(item->getType(), used);
+								_base->getStorageItems()->removeItem(item->getType(), used);
 							}
 						}
 					}

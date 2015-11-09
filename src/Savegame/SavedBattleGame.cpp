@@ -23,18 +23,17 @@
 #include "SavedGame.h"
 #include "Tile.h"
 #include "Node.h"
-#include "../Ruleset/MapDataSet.h"
-#include "../Ruleset/MCDPatch.h"
+#include "../Mod/MapDataSet.h"
+#include "../Mod/MCDPatch.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/TileEngine.h"
 #include "../Battlescape/BattlescapeState.h"
 #include "../Battlescape/BattlescapeGame.h"
 #include "../Battlescape/Position.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/Armor.h"
+#include "../Mod/Mod.h"
+#include "../Mod/Armor.h"
 #include "../Engine/Game.h"
-#include "../Ruleset/RuleInventory.h"
+#include "../Mod/RuleInventory.h"
 #include "../Battlescape/CivilianBAIState.h"
 #include "../Battlescape/AlienBAIState.h"
 #include "../Engine/RNG.h"
@@ -109,10 +108,10 @@ SavedBattleGame::~SavedBattleGame()
 /**
  * Loads the saved battle game from a YAML file.
  * @param node YAML node.
- * @param rule for the saved game.
+ * @param mod for the saved game.
  * @param savedGame Pointer to saved game.
  */
-void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* savedGame)
+void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGame)
 {
 	_mapsize_x = node["width"].as<int>(_mapsize_x);
 	_mapsize_y = node["length"].as<int>(_mapsize_y);
@@ -126,7 +125,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	for (YAML::const_iterator i = node["mapdatasets"].begin(); i != node["mapdatasets"].end(); ++i)
 	{
 		std::string name = i->as<std::string>();
-		MapDataSet *mds = rule->getMapDataSet(name);
+		MapDataSet *mds = mod->getMapDataSet(name);
 		_mapDataSets.push_back(mds);
 	}
 
@@ -206,11 +205,11 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			std::string type = (*i)["genUnitType"].as<std::string>();
 			std::string armor = (*i)["genUnitArmor"].as<std::string>();
 			// create a new Unit.
-			if(!rule->getUnit(type) || !rule->getArmor(armor)) continue;
-			unit = new BattleUnit(rule->getUnit(type), originalFaction, id, rule->getArmor(armor), savedGame->getDifficultyCoefficient(), _depth);
+			if(!mod->getUnit(type) || !mod->getArmor(armor)) continue;
+			unit = new BattleUnit(mod->getUnit(type), originalFaction, id, mod->getArmor(armor), savedGame->getDifficultyCoefficient(), _depth);
 		}
 		unit->load(*i);
-		unit->setSpecialWeapon(this, rule);
+		unit->setSpecialWeapon(this, mod);
 		_units.push_back(unit);
 		if (faction == FACTION_PLAYER)
 		{
@@ -250,13 +249,13 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		{
 			std::string type = (*i)["type"].as<std::string>();
 			_itemId = (*i)["id"].as<int>(_itemId);
-			if (rule->getItem(type))
+			if (mod->getItem(type))
 			{
-				BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
+				BattleItem *item = new BattleItem(mod->getItem(type), &_itemId);
 				item->load(*i);
 				type = (*i)["inventoryslot"].as<std::string>();
 				if (type != "NULL")
-					item->setSlot(rule->getInventory(type));
+					item->setSlot(mod->getInventory(type));
 				int owner = (*i)["owner"].as<int>();
 				int prevOwner = (*i)["previousOwner"].as<int>(-1);
 				int unit = (*i)["unit"].as<int>();
@@ -286,7 +285,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 				{
 					Position pos = (*i)["position"].as<Position>();
 					if (pos.x != -1)
-						getTile(pos)->addItem(item, rule->getInventory("STR_GROUND"));
+						getTile(pos)->addItem(item, mod->getInventory("STR_GROUND"));
 				}
 				toContainer[pass]->push_back(item);
 			}
@@ -297,7 +296,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	std::vector<BattleItem*>::iterator weaponi = _items.begin();
 	for (YAML::const_iterator i = node["items"].begin(); i != node["items"].end(); ++i)
 	{
-		if (rule->getItem((*i)["type"].as<std::string>()))
+		if (mod->getItem((*i)["type"].as<std::string>()))
 		{
 			int ammo = (*i)["ammoItem"].as<int>();
 			if (ammo != -1)
@@ -326,17 +325,16 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 
 /**
  * Loads the resources required by the map in the battle save.
- * @param game Pointer to the game.
+ * @param mod Pointer to the mod.
  */
-void SavedBattleGame::loadMapResources(Game *game)
+void SavedBattleGame::loadMapResources(Mod *mod)
 {
-	ResourcePack *res = game->getResourcePack();
 	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
 		(*i)->loadData();
-		if (game->getRuleset()->getMCDPatch((*i)->getName()))
+		if (mod->getMCDPatch((*i)->getName()))
 		{
-			game->getRuleset()->getMCDPatch((*i)->getName())->modifyData(*i);
+			mod->getMCDPatch((*i)->getName())->modifyData(*i);
 		}
 	}
 
@@ -354,7 +352,7 @@ void SavedBattleGame::loadMapResources(Game *game)
 		}
 	}
 
-	initUtilities(res);
+	initUtilities(mod);
 	getTileEngine()->calculateSunShading();
 	getTileEngine()->calculateTerrainLighting();
 	getTileEngine()->calculateUnitLighting();
@@ -443,6 +441,7 @@ YAML::Node SavedBattleGame::save() const
     node["kneelReserved"] = _kneelReserved;
     node["depth"] = _depth;
 	node["ambience"] = _ambience;
+	node["ambientVolume"] = _ambientVolume;
 	for (std::vector<BattleItem*>::const_iterator i = _recoverGuaranteed.begin(); i != _recoverGuaranteed.end(); ++i)
 	{
 		node["recoverGuaranteed"].push_back((*i)->save());
@@ -505,14 +504,14 @@ void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
 
 /**
  * Initializes the map utilities.
- * @param res Pointer to resource pack.
+ * @param mod Pointer to mod.
  */
-void SavedBattleGame::initUtilities(ResourcePack *res)
+void SavedBattleGame::initUtilities(Mod *mod)
 {
 	delete _pathfinding;
 	delete _tileEngine;
 	_pathfinding = new Pathfinding(this);
-	_tileEngine = new TileEngine(this, res->getVoxelData());
+	_tileEngine = new TileEngine(this, mod->getVoxelData());
 }
 
 /**
@@ -620,13 +619,13 @@ void SavedBattleGame::setSelectedUnit(BattleUnit *unit)
 }
 
 /**
-* Selects the previous player unit.
-* @param checkReselect Whether to check if we should reselect a unit.
-* @param setReselect Don't reselect a unit.
-* @param checkInventory Whether to check if the unit has an inventory.
-* @return Pointer to new selected BattleUnit, NULL if none can be selected.
-* @sa selectPlayerUnit
-*/
+ * Selects the previous player unit.
+ * @param checkReselect Whether to check if we should reselect a unit.
+ * @param setReselect Don't reselect a unit.
+ * @param checkInventory Whether to check if the unit has an inventory.
+ * @return Pointer to new selected BattleUnit, NULL if none can be selected.
+ * @sa selectPlayerUnit
+ */
 BattleUnit *SavedBattleGame::selectPreviousPlayerUnit(bool checkReselect, bool setReselect, bool checkInventory)
 {
 	return selectPlayerUnit(-1, checkReselect, setReselect, checkInventory);
@@ -777,9 +776,9 @@ TileEngine *SavedBattleGame::getTileEngine() const
 }
 
 /**
-* Gets the array of mapblocks.
-* @return Pointer to the array of mapblocks.
-*/
+ * Gets the array of mapblocks.
+ * @return Pointer to the array of mapblocks.
+ */
 std::vector<MapDataSet*> *SavedBattleGame::getMapDataSets()
 {
 	return &_mapDataSets;
@@ -1473,14 +1472,14 @@ void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit *bu)
 bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly)
 {
 	int size = bu->getArmor()->getSize() - 1;
-
+	Position zOffset (0,0,0);
 	// first check if the tiles are occupied
 	for (int x = size; x >= 0; x--)
 	{
 		for (int y = size; y >= 0; y--)
 		{
-			Tile *t = getTile(position + Position(x,y,0));
-			Tile *tb = getTile(position + Position(x,y,-1));
+			Tile *t = getTile(position + Position(x,y,0) + zOffset);
+			Tile *tb = getTile(position + Position(x,y,-1) + zOffset);
 			if (t == 0 ||
 				(t->getUnit() != 0 && t->getUnit() != bu) ||
 				t->getTUCost(O_OBJECT, bu->getMovementType()) == 255 ||
@@ -1488,6 +1487,13 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 				(t->getMapData(O_OBJECT) && t->getMapData(O_OBJECT)->getBigWall() && t->getMapData(O_OBJECT)->getBigWall() <= 3))
 			{
 				return false;
+			}
+			// move the unit up to the next level (desert and seabed terrains)
+			if (t && t->getTerrainLevel() == -24)
+			{
+				zOffset.z += 1;
+				x = size;
+				y = size + 1;
 			}
 		}
 	}
@@ -1497,7 +1503,7 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 		getPathfinding()->setUnit(bu);
 		for (int dir = 2; dir <= 4; ++dir)
 		{
-			if (getPathfinding()->isBlocked(getTile(position), 0, dir, 0))
+			if (getPathfinding()->isBlocked(getTile(position + zOffset), 0, dir, 0))
 				return false;
 		}
 	}
@@ -1510,9 +1516,9 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 		{
 			if (x==0 && y==0)
 			{
-				bu->setPosition(position);
+				bu->setPosition(position + zOffset);
 			}
-			getTile(position + Position(x,y,0))->setUnit(bu, getTile(position + Position(x,y,-1)));
+			getTile(position + Position(x,y,0) + zOffset)->setUnit(bu, getTile(position + Position(x,y,-1) + zOffset));
 		}
 	}
 

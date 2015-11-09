@@ -31,7 +31,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
 #include "../Engine/Sound.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 
 namespace OpenXcom
 {
@@ -93,7 +93,7 @@ void PsiAttackBState::init()
 	}
 	else if (_item->getRules()->getHitSound() != -1)
 	{
-		_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _item->getRules()->getHitSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
+		_parent->getMod()->getSoundByDepth(_parent->getDepth(), _item->getRules()->getHitSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
 	}
 
 	// make a cosmetic explosion
@@ -260,7 +260,7 @@ void PsiAttackBState::psiAttack()
 			_target->convertToFaction(_unit->getFaction());
 			_parent->getTileEngine()->calculateFOV(_target->getPosition());
 			_parent->getTileEngine()->calculateUnitLighting();
-			_target->setTimeUnits(_target->getBaseStats()->tu);
+			_target->recoverTimeUnits();
 			_target->allowReselect();
 			_target->abortTurn(); // resets unit status to STANDING
 			// if all units from either faction are mind controlled - auto-end the mission.

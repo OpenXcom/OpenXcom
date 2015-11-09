@@ -18,15 +18,15 @@
  */
 #include "Tile.h"
 #include <algorithm>
-#include "../Ruleset/MapData.h"
-#include "../Ruleset/MapDataSet.h"
+#include "../Mod/MapData.h"
+#include "../Mod/MapDataSet.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
 #include "../Engine/RNG.h"
 #include "BattleUnit.h"
 #include "BattleItem.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Armor.h"
+#include "../Mod/RuleItem.h"
+#include "../Mod/Armor.h"
 #include "SerializationHelper.h"
 #include "../Battlescape/Particle.h"
 
@@ -45,9 +45,9 @@ Tile::SerializationKey Tile::serializationKey =
 };
 
 /**
-* constructor
-* @param pos Position.
-*/
+ * constructor
+ * @param pos Position.
+ */
 Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _explosiveType(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(-1), _overlaps(0), _danger(false)
 {
 	for (int i = 0; i < 4; ++i)
@@ -832,7 +832,7 @@ void Tile::prepareNewTurn()
 					// try to set the unit on fire.
 					if (RNG::percent(40 * _unit->getArmor()->getDamageModifier(DT_IN)))
 					{
-						int burnTime = RNG::generate(0, int(5 * _unit->getArmor()->getDamageModifier(DT_IN)));
+						int burnTime = RNG::generate(0, int(5.0f * _unit->getArmor()->getDamageModifier(DT_IN)));
 						if (_unit->getFire() < burnTime)
 						{
 							_unit->setFire(burnTime);

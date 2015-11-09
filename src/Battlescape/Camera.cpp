@@ -600,7 +600,7 @@ __________
 || ____ ||
 ||_|XX|_||
 |________|
-*/
+ */
 		if (boundary) //to make sprite updates even being slightly outside of screen
 		{
 			sizex += _spriteWidth;

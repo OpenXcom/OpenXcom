@@ -34,6 +34,7 @@ class DogfightState;
 class Ufo;
 class MissionSite;
 class Base;
+class RuleMissionScript;
 
 /**
  * Geoscape screen which shows an overview of

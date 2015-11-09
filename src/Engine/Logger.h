@@ -23,11 +23,11 @@
 #include <string>
 #include <stdio.h>
 #ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-// the following macros interfere with std::max and std::min as used throughout...
-#undef min 
-#undef max 
 #ifndef LOCALE_INVARIANT
 #define LOCALE_INVARIANT 0x007f
 #endif
@@ -90,7 +90,7 @@ inline std::ostringstream& Logger::get(SeverityLevel level)
 inline Logger::~Logger()
 {
     os << std::endl;
-	if (reportingLevel() == LOG_DEBUG)
+	if (reportingLevel() == LOG_DEBUG || reportingLevel() == LOG_VERBOSE)
 	{
 		fprintf(stderr, "%s", os.str().c_str());
 		fflush(stderr);
@@ -117,7 +117,7 @@ inline std::string& Logger::logFile()
 
 inline std::string Logger::toString(SeverityLevel level)
 {
-	static const char* const buffer[] = {"FATAL", "ERROR", "WARN", "INFO", "DEBUG"};
+    static const char* const buffer[] = {"FATAL", "ERROR", "WARN", "INFO", "DEBUG", "VERBOSE"};
     return buffer[level];
 }
 

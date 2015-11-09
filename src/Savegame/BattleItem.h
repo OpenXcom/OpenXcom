@@ -19,7 +19,6 @@
 #ifndef OPENXCOM_BATTLEITEM_H
 #define OPENXCOM_BATTLEITEM_H
 
-#include "../Battlescape/Position.h"
 #include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
@@ -49,7 +48,7 @@ private:
 	BattleItem *_ammoItem;
 	int _fuseTimer, _ammoQuantity;
 	int _painKiller, _heal, _stimulant;
-	bool _XCOMProperty, _droppedOnAlienTurn;
+	bool _XCOMProperty, _droppedOnAlienTurn, _isAmmo;
 public:
 	/// Creates a item of the specified type.
 	BattleItem(RuleItem *rules, int *id);
@@ -133,7 +132,10 @@ public:
 	void setTurnFlag(bool flag);
 	/// Sets the item's ruleset.
 	void convertToCorpse(RuleItem *rules);
-
+	/// Sets a flag on the item indicating if this is a clip in a weapon or not.
+	void setIsAmmo(bool ammo);
+	/// Checks a flag on the item to see if it's a clip in a weapon or not.
+	bool isAmmo();
 };
 
 }

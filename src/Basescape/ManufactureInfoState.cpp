@@ -26,12 +26,13 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleManufacture.h"
+#include "../Mod/Mod.h"
+#include "../Mod/RuleManufacture.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Production.h"
 #include "../Engine/Timer.h"
 #include "../Menu/ErrorMessageState.h"
+#include "../Mod/RuleInterface.h"
 #include <limits>
 
 namespace OpenXcom
@@ -74,7 +75,7 @@ void ManufactureInfoState::buildUi()
 	_txtAvailableEngineer = new Text(200, 9, 16, 55);
 	_txtAvailableSpace = new Text(200, 9, 16, 65);
 	_txtAllocatedEngineer = new Text(112, 32, 16, 75);
-	_txtUnitToProduce = new Text(104, 32, 168, 75);
+	_txtUnitToProduce = new Text(112, 48, 168, 59);
 	_txtEngineerUp = new Text(90, 9, 40, 113);
 	_txtEngineerDown = new Text(90, 9, 40, 133);
 	_txtUnitUp = new Text(90, 9, 192, 113);
@@ -84,7 +85,7 @@ void ManufactureInfoState::buildUi()
 	_btnUnitUp = new ArrowButton(ARROW_BIG_UP, 13, 14, 284, 109);
 	_btnUnitDown = new ArrowButton(ARROW_BIG_DOWN, 13, 14, 284, 131);
 	_txtAllocated = new Text(40, 16, 128, 83);
-	_txtTodo = new Text(40, 16, 272, 83);
+	_txtTodo = new Text(40, 16, 280, 83);
 
 	_surfaceEngineers = new InteractiveSurface(160, 150, 0, 25);
 	_surfaceEngineers->onMouseClick((ActionHandler)&ManufactureInfoState::handleWheelEngineer, 0);
@@ -119,7 +120,7 @@ void ManufactureInfoState::buildUi()
 
 	centerAllSurfaces();
 
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK17.SCR"));
 
 	_txtTitle->setText(tr(_item ? _item->getName() : _production->getRules()->getName()));
 	_txtTitle->setBig();
@@ -128,7 +129,7 @@ void ManufactureInfoState::buildUi()
 	_txtAllocatedEngineer->setText(tr("STR_ENGINEERS__ALLOCATED"));
 	_txtAllocatedEngineer->setBig();
 	_txtAllocatedEngineer->setWordWrap(true);
-	_txtAllocatedEngineer->setVerticalAlign(ALIGN_MIDDLE);
+	_txtAllocatedEngineer->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtAllocated->setBig();
 
@@ -137,7 +138,7 @@ void ManufactureInfoState::buildUi()
 	_txtUnitToProduce->setText(tr("STR_UNITS_TO_PRODUCE"));
 	_txtUnitToProduce->setBig();
 	_txtUnitToProduce->setWordWrap(true);
-	_txtUnitToProduce->setVerticalAlign(ALIGN_MIDDLE);
+	_txtUnitToProduce->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtEngineerUp->setText(tr("STR_INCREASE_UC"));
 
@@ -188,6 +189,17 @@ void ManufactureInfoState::buildUi()
 	_timerLessEngineer->onTimer((StateHandler)&ManufactureInfoState::onLessEngineer);
 	_timerMoreUnit->onTimer((StateHandler)&ManufactureInfoState::onMoreUnit);
 	_timerLessUnit->onTimer((StateHandler)&ManufactureInfoState::onLessUnit);
+}
+
+/**
+ * Frees up memory that's not automatically cleaned on exit
+ */
+ManufactureInfoState::~ManufactureInfoState()
+{
+	delete _timerMoreEngineer;
+	delete _timerLessEngineer;
+	delete _timerMoreUnit;
+	delete _timerLessUnit;
 }
 
 /**
@@ -352,7 +364,7 @@ void ManufactureInfoState::moreUnit(int change)
 	if (_production->getRules()->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() <= 0)
 	{
 		_timerMoreUnit->stop();
-		_game->pushState(new ErrorMessageState(tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"), _palette, _game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color, "BACK17.SCR", _game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
+		_game->pushState(new ErrorMessageState(tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"), _palette, _game->getMod()->getInterface("basescape")->getElement("errorMessage")->color, "BACK17.SCR", _game->getMod()->getInterface("basescape")->getElement("errorPalette")->color));
 	}
 	else
 	{

@@ -126,6 +126,7 @@ units:
     value: 30
     intelligence: 4
     energyRecovery: 20
+    deathSound: [41, 42, 43]
   - type: FEMALE_CIVILIAN
     race: STR_CIVILIAN
     stats:
@@ -146,7 +147,7 @@ units:
     value: 30
     intelligence: 4
     energyRecovery: 20
-    female: true
+    deathSound: [44, 45, 46]
   - type: STR_SECTOID_SOLDIER
     race: STR_SECTOID
     rank: STR_LIVE_SOLDIER
@@ -852,4 +853,4 @@ units:
     energyRecovery: 20
     spawnUnit: STR_CHRYSSALID_TERRORIST
     livingWeapon: true
-    deathSound: -2
+    # Zombies are silent on death, no deathSound

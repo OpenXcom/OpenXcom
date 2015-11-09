@@ -373,6 +373,10 @@ MCDPatches: #will never be done
         bigWall: 3
       - MCDIndex: 77
         bigWall: 3
+  - type: ORGANIC2
+    data:
+      - MCDIndex: 6
+        deathTile: 7
   - type: PIPES
     data:
       - MCDIndex: 32
@@ -418,6 +422,11 @@ MCDPatches: #will never be done
       - MCDIndex: 19
         TUWalk: 4
         TUFly: 4
+        objectType: 0
+      - MCDIndex: 50
+        LOFTS: [88,0,88,0,88,0,88,0,88,0,88,0]
+      - MCDIndex: 51
+        LOFTS: [87,0,87,0,87,0,87,0,87,0,87,0]
       - MCDIndex: 62
         LOFTS: [44,38,43,42,38,14,0,0,0,0,0,0]
       - MCDIndex: 64

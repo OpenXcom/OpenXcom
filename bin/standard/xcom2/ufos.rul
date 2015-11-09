@@ -135,7 +135,7 @@ ufos: #done
               - [10, 3, 1]
   - type: STR_BATTLESHIP
     size: STR_LARGE
-    sprite: 5
+    sprite: 7
     damageMax: 1400
     speedMax: 4200
     accel: 6
@@ -195,7 +195,7 @@ ufos: #done
               - [26, 12, 0]
   - type: STR_FLEET_SUPPLY_CRUISER
     size: STR_LARGE
-    sprite: 7
+    sprite: 5
     damageMax: 2000
     speedMax: 3400
     accel: 6

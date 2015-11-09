@@ -279,21 +279,21 @@ ufopaedia: #done
     image_id: UP043.BDY
   - id: STR_VIBRO_BLADE
     type_id: 14
-    section: STR_WEAPONS_AND_EQUIPMENT
+    section: STR_ALIEN_ARTIFACTS
     text: STR_VIBRO_BLADE_UFOPEDIA
     image_id: UP107.BDY
     requires:
       - STR_VIBRO_BLADE
   - id: STR_THERMIC_LANCE
     type_id: 14
-    section: STR_WEAPONS_AND_EQUIPMENT
+    section: STR_ALIEN_ARTIFACTS
     text: STR_THERMIC_LANCE_UFOPEDIA
     image_id: UP108.BDY
     requires:
       - STR_THERMIC_LANCE
   - id: STR_HEAVY_THERMIC_LANCE
     type_id: 14
-    section: STR_WEAPONS_AND_EQUIPMENT
+    section: STR_ALIEN_ARTIFACTS
     text: STR_HEAVY_THERMIC_LANCE_UFOPEDIA
     image_id: UP109.BDY
     requires:

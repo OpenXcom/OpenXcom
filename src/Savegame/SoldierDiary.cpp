@@ -18,8 +18,8 @@
  */
 #include "SoldierDiary.h"
 #include "GameTime.h"
-#include "../Ruleset/RuleCommendations.h"
-#include "../Ruleset/Ruleset.h"
+#include "../Mod/RuleCommendations.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Game.h"
 namespace OpenXcom
 {
@@ -195,7 +195,7 @@ YAML::Node SoldierDiary::save() const
  * @param unitStatistics BattleUnitStatistics to get stats from.
  * @param missionStatistics MissionStatistics to get stats from.
  */
-void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics, Ruleset *rules)
+void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics, Mod *rules)
 {
 	std::vector<BattleUnitKills*> unitKills = unitStatistics->kills;
 	for (std::vector<BattleUnitKills*>::const_iterator kill = unitKills.begin() ; kill != unitKills.end() ; ++kill)
@@ -329,7 +329,7 @@ std::vector<SoldierCommendations*> *SoldierDiary::getSoldierCommendations()
  * Award new ones, if deserved.
  * @return bool Has a commendation been awarded?
  */
-bool SoldierDiary::manageCommendations(Ruleset *rules)
+bool SoldierDiary::manageCommendations(Mod *rules)
 {
 	std::map<std::string, RuleCommendations *> commendationsList = rules->getCommendation();
 	bool awardedCommendation = false;                   // This value is returned if at least one commendation was given.

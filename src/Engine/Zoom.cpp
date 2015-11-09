@@ -96,13 +96,13 @@ static int zoomSurface2X_64bit(SDL_Surface *src, SDL_Surface *dst)
 			dataSrc = *((Uint64*) pixelSrc);
 			// boo
 			(void)SDL_SwapLE64(dataSrc);
-*/
+ */
 /* expanded form of data shift: 
 			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
 				((dataSrc & 0xFF00 ) << 8) | ((dataSrc & 0xFF00)) << 16)  | 
 				((dataSrc & 0xFF0000) << 16) | ((dataSrc & 0xFF0000) << 24) |
 				((dataSrc & 0xFF000000) << 24) | ((dataSrc & 0xFF000000) << 32);
-*/
+ */
 			// compact form, combining terms with equal multipliers (shifts)
 /*
 			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
@@ -130,7 +130,7 @@ static int zoomSurface2X_64bit(SDL_Surface *src, SDL_Surface *dst)
 	
 	return 0;
 }
-*/
+ */
 
 
 #if defined(__WORDSIZE) && (__WORDSIZE == 64) || defined(SIZE_MAX) && (SIZE_MAX > 0xFFFFFFFF)
@@ -197,7 +197,7 @@ static int zoomSurface2X_32bit(SDL_Surface *src, SDL_Surface *dst)
 	
 	return 0;
 }
-*/
+ */
 #endif
 
 /**
@@ -234,7 +234,7 @@ static int zoomSurface4X_64bit(SDL_Surface *src, SDL_Surface *dst)
 			dataSrc = *((Uint64*) pixelSrc);
 			// boo
 			(void)SDL_SwapLE64(dataSrc);
-*/
+ */
 			/* expanded form of data shift:
 			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
 				((dataSrc & 0xFF) << 16 | ((datasrc & 0xFF) << 24) |
@@ -262,7 +262,7 @@ static int zoomSurface4X_64bit(SDL_Surface *src, SDL_Surface *dst)
 	
 	return 0;
 }
-*/
+ */
 
 
 #if defined(__WORDSIZE) && (__WORDSIZE == 64) || defined(SIZE_MAX) && (SIZE_MAX > 0xFFFFFFFF)
@@ -325,7 +325,7 @@ static int zoomSurface4X_32bit(SDL_Surface *src, SDL_Surface *dst)
 	
 	return 0;
 }
-*/
+ */
 #endif
 
 /**
@@ -413,7 +413,7 @@ static int zoomSurface2X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 	
 	return 0;
 }
-*/
+ */
 
 
 /**
@@ -501,7 +501,7 @@ static int zoomSurface4X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 	
 	return 0;
 }
-*/
+ */
 
 #ifdef __SSE2__
 /**
@@ -543,7 +543,7 @@ static int zoomSurface4X_SSE2(SDL_Surface *src, SDL_Surface *dst)
 
 			__m128i halfDone = _mm_unpacklo_epi8(dataSrc, dataSrc); 
 			dataDst = _mm_unpacklo_epi8(halfDone, halfDone);
-*/
+ */
 /* #define WRITE_DST if ((char*)pixelDst4 + 128 > (char*)dst->pixels+(dst->w*dst->pitch)) { Log(LOG_ERROR) << "HELL"; exit(0); } \ */
 #define WRITE_DST			*(pixelDst++) = dataDst; \
 			*(pixelDst2++) = dataDst; \
@@ -570,7 +570,7 @@ static int zoomSurface4X_SSE2(SDL_Surface *src, SDL_Surface *dst)
 
 	return 0;
 }
-*/
+ */
 
 /**
  * Optimized 8-bit zoomer for resizing by a factor of 2. Doesn't flip.
@@ -624,7 +624,7 @@ static int zoomSurface2X_SSE2(SDL_Surface *src, SDL_Surface *dst)
 	
 	return 0;
 }
-*/
+ */
 
 /**
  * Checks the SSE2 feature bit returned by the CPUID instruction

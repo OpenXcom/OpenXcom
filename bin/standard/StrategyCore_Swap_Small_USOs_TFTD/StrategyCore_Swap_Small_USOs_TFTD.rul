@@ -1,0 +1,40 @@
+# Swaps the maps and interception images for the survey ship and escort.
+ufos:
+  - type: STR_SURVEY_SHIP
+    sprite: 1
+    battlescapeTerrainData:
+      name: UFO02
+      mapDataSets:
+        - BLANKS
+        - UEXT2
+        - UEXT3
+        - UINT1
+        - UINT2
+        - UINT3
+      mapBlocks:
+        - name: UFO02
+          width: 10
+          length: 10
+          items:
+            STR_ZRBITE:
+              - [2, 2, 0]
+  - type: STR_ESCORT
+    sprite: 0
+    battlescapeTerrainData:
+      name: UFO01
+      mapDataSets:
+        - BLANKS
+        - UEXT2
+        - UEXT3
+        - UINT1
+        - UINT2
+        - UINT3
+      mapBlocks:
+        - name: UFO01
+          width: 10
+          length: 10
+ufopaedia:
+  - id: STR_SURVEY_SHIP
+    image_id: UP094.BDY
+  - id: STR_ESCORT
+    image_id: UP093.BDY

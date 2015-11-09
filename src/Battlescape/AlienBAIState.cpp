@@ -26,17 +26,17 @@
 #include "../Savegame/Node.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
-#include "../Battlescape/TileEngine.h"
-#include "../Battlescape/Map.h"
-#include "../Battlescape/BattlescapeState.h"
+#include "TileEngine.h"
+#include "Map.h"
+#include "BattlescapeState.h"
 #include "../Savegame/Tile.h"
-#include "../Battlescape/Pathfinding.h"
+#include "Pathfinding.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
-#include "../Ruleset/Armor.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/Armor.h"
+#include "../Mod/Mod.h"
+#include "../Mod/RuleItem.h"
 
 namespace OpenXcom
 {
@@ -1495,9 +1495,9 @@ bool AlienBAIState::findFirePoint()
 bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff, bool grenade) const
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
-	Ruleset *ruleset = _save->getBattleState()->getGame()->getRuleset();
-	if ((!grenade && _save->getTurn() < ruleset->getTurnAIUseBlaster()) ||
-		 (grenade && _save->getTurn() < ruleset->getTurnAIUseGrenade()))
+	Mod *mod = _save->getBattleState()->getGame()->getMod();
+	if ((!grenade && _save->getTurn() < mod->getTurnAIUseBlaster()) ||
+		 (grenade && _save->getTurn() < mod->getTurnAIUseGrenade()))
 	{
 		return false;
 	}
@@ -2057,7 +2057,7 @@ void AlienBAIState::selectMeleeOrRanged()
 bool AlienBAIState::getNodeOfBestEfficacy(BattleAction *action)
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
-	if (_save->getTurn() < _save->getBattleState()->getGame()->getRuleset()->getTurnAIUseGrenade())
+	if (_save->getTurn() < _save->getBattleState()->getGame()->getMod()->getTurnAIUseGrenade())
 		return false;
 
 	int bestScore = 2;

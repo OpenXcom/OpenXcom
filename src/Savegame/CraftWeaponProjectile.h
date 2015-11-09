@@ -19,8 +19,6 @@
 #ifndef OPENXCOM_WEAPONPROJECTILE_H
 #define OPENXCOM_WEAPONPROJECTILE_H
 
-#include <string>
-
 namespace OpenXcom {
 
 class Surface;

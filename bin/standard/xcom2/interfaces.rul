@@ -408,7 +408,7 @@ interfaces: #done
       - id: button
         color: 1   # bright green
   - type: psiTraining
-    palette: PAL_BASESCAPE
+    palette: PAL_GEOSCAPE
     elements:
       - id: palette
         color: 4     # violet
@@ -421,7 +421,7 @@ interfaces: #done
       - id: button2
         color: 1   # light blue
   - type: allocatePsi
-    palette: PAL_BASESCAPE
+    palette: PAL_GEOSCAPE
     elements:
       - id: palette
         color: 4     # violet
@@ -455,7 +455,7 @@ interfaces: #done
     palette: PAL_GRAPHS
     elements:
       - id: text
-        color: 135   # red
+        color: 1     # white
       - id: scale
         color: 103   # minty green
       - id: graph
@@ -569,7 +569,7 @@ interfaces: #done
       - id: errorPalette
         color: 6     # brown
       - id: errorMessage
-        color: 241   # pink
+        color: 1   # even lighter blue
   - type: gameOver
     elements:
       - id: defeatText
@@ -631,7 +631,7 @@ interfaces: #done
       - id: button
         color: 1   # blue
       - id: errorPalette
-        color: 0     # oxide
+        color: 6     # oxide
       - id: errorMessage
         color: 1   # pink
   - type: transferBaseSelect
@@ -982,7 +982,7 @@ interfaces: #done
       - id: button
         color: 1   # white
   - type: soldierMemorial
-    music: GMLOSE
+    music: GMDEBPOR
     palette: PAL_BASESCAPE
     elements:
       - id: palette
@@ -1094,9 +1094,9 @@ interfaces: #done
       - id: button
         color: 1
       - id: errorPalette
-        color: 0     # brown
+        color: 6     # oxide
       - id: errorMessage
-        color: 241   # pink
+        color: 1
   - type: basescape
     palette: PAL_BASESCAPE
     elements:

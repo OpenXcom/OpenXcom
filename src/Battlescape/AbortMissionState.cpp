@@ -19,7 +19,7 @@
 #include "AbortMissionState.h"
 #include <vector>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -28,9 +28,8 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "BattlescapeState.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/AlienDeployment.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/MapScript.h"
+#include "../Mod/AlienDeployment.h"
+#include "../Mod/MapScript.h"
 #include "../Savegame/Tile.h"
 
 namespace OpenXcom
@@ -67,11 +66,11 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 
 	// Check available areas (maybe should be cached somewhere)
 	bool exit = false, craft = true;
-	AlienDeployment *deployment = _game->getRuleset()->getDeployment(_battleGame->getMissionType());
+	AlienDeployment *deployment = _game->getMod()->getDeployment(_battleGame->getMissionType());
 	if (deployment != 0)
 	{
 		exit = !deployment->getNextStage().empty();
-		const std::vector<MapScript*> *scripts = _game->getRuleset()->getMapScript(deployment->getScript());
+		const std::vector<MapScript*> *scripts = _game->getMod()->getMapScript(deployment->getScript());
 		if (scripts != 0)
 		{
 			craft = false;
@@ -121,7 +120,7 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 
 	// Set up objects
 	_window->setHighContrast(true);
-	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("TAC00.SCR"));
 
 	_txtInEntrance->setBig();
 	_txtInEntrance->setHighContrast(true);

@@ -19,14 +19,13 @@
 
 #include <sstream>
 #include "ArticleStateCraftWeapon.h"
-#include "../Ruleset/ArticleDefinition.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleCraftWeapon.h"
+#include "../Mod/ArticleDefinition.h"
+#include "../Mod/Mod.h"
+#include "../Mod/RuleCraftWeapon.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/LocalizedText.h"
-#include "../Resource/ResourcePack.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -36,7 +35,7 @@ namespace OpenXcom
 
 	ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon *defs) : ArticleState(defs->id)
 	{
-		RuleCraftWeapon *weapon = _game->getRuleset()->getCraftWeapon(defs->id);
+		RuleCraftWeapon *weapon = _game->getMod()->getCraftWeapon(defs->id);
 
 		// add screen elements
 		_txtTitle = new Text(200, 32, 5, 24);
@@ -50,7 +49,7 @@ namespace OpenXcom
 		add(_txtTitle);
 
 		// Set up objects
-		_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
+		_game->getMod()->getSurface(defs->image_id)->blit(_bg);
 		_btnOk->setColor(Palette::blockOffset(1));
 		_btnPrev->setColor(Palette::blockOffset(1));
 		_btnNext->setColor(Palette::blockOffset(1));
@@ -87,6 +86,9 @@ namespace OpenXcom
 
 		_lstInfo->addRow(2, tr("STR_RE_LOAD_TIME").c_str(), tr("STR_SECONDS").arg(weapon->getStandardReload()).c_str());
 		_lstInfo->setCellColor(3, 1, Palette::blockOffset(15)+4);
+
+		_lstInfo->addRow(2, tr("STR_ROUNDS").c_str(), Text::formatNumber(weapon->getAmmoMax()).c_str());
+		_lstInfo->setCellColor(4, 1, Palette::blockOffset(15)+4);
 
 		centerAllSurfaces();
 	}

@@ -20,16 +20,16 @@
 #define OPENXCOM_BATTLESCAPEGENERATOR_H
 
 #include <vector>
-#include "../Ruleset/RuleTerrain.h"
-#include "../Ruleset/MapScript.h"
+#include "../Mod/RuleTerrain.h"
+#include "../Mod/MapScript.h"
 
 namespace OpenXcom
 {
 class SavedBattleGame;
+class Mod;
 class Craft;
 class Ufo;
 class RuleTerrain;
-class ResourcePack;
 class BattleItem;
 class MapBlock;
 class Vehicle;
@@ -54,7 +54,7 @@ class BattlescapeGenerator
 private:
 	Game *_game;
 	SavedBattleGame *_save;
-	ResourcePack *_res;
+	Mod *_mod;
 	Craft *_craft;
 	Ufo *_ufo;
 	Base *_base;
@@ -70,7 +70,8 @@ private:
 	int _alienItemLevel;
 	bool _allowAutoLoadout, _baseInventory, _generateFuel, _craftDeployed;
 	int _craftZ;
-	SDL_Rect _craftPos, _ufoPos;
+	SDL_Rect _craftPos;
+	std::vector<SDL_Rect> _ufoPos;
 	int _blocksToDo;
 	std::vector< std::vector<MapBlock*> > _blocks;
 	std::vector< std::vector<bool> > _landingzone;

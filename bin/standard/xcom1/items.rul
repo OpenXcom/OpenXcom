@@ -1325,7 +1325,7 @@ items:
     recover: false
   - type: ZOMBIE_WEAPON
     weight: 3
-    bigSprite: 26
+    bigSprite: -5
     meleeSound: 48
     strengthApplied: true
     damageType: 7
@@ -1333,7 +1333,7 @@ items:
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
-    invWidth: 1
+    invWidth: 2
     invHeight: 3
     clipSize: -1
     recover: false

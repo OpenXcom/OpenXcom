@@ -19,15 +19,14 @@
 
 #include <sstream>
 #include "ArticleStateBaseFacility.h"
-#include "../Ruleset/ArticleDefinition.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleBaseFacility.h"
+#include "../Mod/ArticleDefinition.h"
+#include "../Mod/Mod.h"
+#include "../Mod/RuleBaseFacility.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/LocalizedText.h"
-#include "../Resource/ResourcePack.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -37,7 +36,7 @@ namespace OpenXcom
 
 	ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility *defs) : ArticleState(defs->id)
 	{
-		RuleBaseFacility *facility = _game->getRuleset()->getBaseFacility(defs->id);
+		RuleBaseFacility *facility = _game->getMod()->getBaseFacility(defs->id);
 
 		// add screen elements
 		_txtTitle = new Text(200, 17, 10, 24);
@@ -51,7 +50,7 @@ namespace OpenXcom
 		add(_txtTitle);
 
 		// Set up objects
-		_game->getResourcePack()->getSurface("BACK09.SCR")->blit(_bg);
+		_game->getMod()->getSurface("BACK09.SCR")->blit(_bg);
 		_btnOk->setColor(Palette::blockOffset(4));
 		_btnPrev->setColor(Palette::blockOffset(4));
 		_btnNext->setColor(Palette::blockOffset(4));
@@ -65,7 +64,7 @@ namespace OpenXcom
 		_image = new Surface(tile_size*2, tile_size*2, 232, 16);
 		add(_image);
 
-		SurfaceSet *graphic = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+		SurfaceSet *graphic = _game->getMod()->getSurfaceSet("BASEBITS.PCK");
 		Surface *frame;
 		int x_offset, y_offset;
 		int x_pos, y_pos;

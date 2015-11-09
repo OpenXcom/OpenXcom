@@ -19,7 +19,7 @@
 #include "AliensCrashState.h"
 #include "DebriefingState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -51,7 +51,7 @@ AliensCrashState::AliensCrashState()
 
 	// Set up objects
 	_window->setHighContrast(true);
-	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("TAC00.SCR"));
 
 	_btnOk->setHighContrast(true);
 	_btnOk->setText(tr("STR_OK"));

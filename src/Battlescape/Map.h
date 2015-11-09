@@ -22,13 +22,11 @@
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Options.h"
 #include "Position.h"
-#include <set>
 #include <vector>
 
 namespace OpenXcom
 {
 
-class ResourcePack;
 class SavedBattleGame;
 class Surface;
 class SurfaceSet;
@@ -52,7 +50,6 @@ private:
 	Timer *_scrollMouseTimer, *_scrollKeyTimer;
 	Game *_game;
 	SavedBattleGame *_save;
-	ResourcePack *_res;
 	Surface *_arrow;
 	int _spriteWidth, _spriteHeight;
 	int _selectorX, _selectorY;
@@ -141,13 +138,13 @@ public:
 	/// Special handling for updating map width.
 	void setWidth(int width);
 	/// Get the vertical position of the hidden movement screen.
-	const int getMessageY();
+	int getMessageY();
 	/// Get the icon height.
-	const int getIconHeight();
+	int getIconHeight();
 	/// Get the icon width.
-	const int getIconWidth();
+	int getIconWidth();
 	/// Convert a map position to a sound angle.
-	const int getSoundAngle(Position pos);
+	int getSoundAngle(Position pos);
 	/// Reset the camera smoothing bool.
 	void resetCameraSmoothing();
 	/// Set whether the screen should "flash" or not.

@@ -18,7 +18,7 @@
  */
 #include "PauseState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -77,7 +77,7 @@ PauseState::PauseState(OptionsOrigin origin) : _origin(origin)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnLoad->setText(tr("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&PauseState::btnLoadClick);
@@ -147,9 +147,9 @@ void PauseState::btnSaveClick(Action *)
 }
 
 /**
-* Opens the Game Options screen.
-* @param action Pointer to an action.
-*/
+ * Opens the Game Options screen.
+ * @param action Pointer to an action.
+ */
 void PauseState::btnOptionsClick(Action *)
 {
 	Options::backupDisplay();

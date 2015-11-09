@@ -19,7 +19,7 @@
 #include <sstream>
 #include "SackSoldierState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
@@ -28,7 +28,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/Soldier.h"
-#include "../Ruleset/Armor.h"
+#include "../Mod/Armor.h"
 
 namespace OpenXcom
 {
@@ -62,7 +62,7 @@ SackSoldierState::SackSoldierState(Base *base, size_t soldierId) : _base(base), 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK13.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SackSoldierState::btnOkClick);
@@ -98,9 +98,9 @@ SackSoldierState::~SackSoldierState()
 void SackSoldierState::btnOkClick(Action *)
 {
 	Soldier *soldier = _base->getSoldiers()->at(_soldierId);
-	if (soldier->getArmor()->getStoreItem() != "STR_NONE")
+	if (soldier->getArmor()->getStoreItem() != Armor::NONE)
 	{
-		_base->getItems()->addItem(soldier->getArmor()->getStoreItem());
+		_base->getStorageItems()->addItem(soldier->getArmor()->getStoreItem());
 	}
 	_base->getSoldiers()->erase(_base->getSoldiers()->begin() + _soldierId);
 	delete soldier;

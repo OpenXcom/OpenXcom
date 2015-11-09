@@ -21,7 +21,7 @@
 #include <fstream>
 #include <SDL.h>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
@@ -51,7 +51,7 @@ TestState::TestState()
 	_button = new TextButton(100, 20, 110, 150);
 	_list = new TextList(300, 180, 10, 10);
 	_number = new NumberText(50, 5, 200, 25);
-	_set = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+	_set = _game->getMod()->getSurfaceSet("BASEBITS.PCK");
 	_set->getFrame(1);
 	_slider = new Slider(100, 15, 50, 50);
 	_comboBox = new ComboBox(this, 80, 16, 98, 100);
@@ -70,7 +70,7 @@ TestState::TestState()
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+1);
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK04.SCR"));
 
 	_button->setColor(Palette::blockOffset(15)+1);
 	_button->setText(L"LOLOLOL");
@@ -108,13 +108,13 @@ TestState::TestState()
 
 	_i = 0;
 
-	//_game->getResourcePack()->getPalette("PAL_GEOSCAPE")->savePal("../../../Geoscape.pal");
-	//_game->getResourcePack()->getPalette("PAL_BASESCAPE")->savePal("../../../Basescape.pal");
-	//_game->getResourcePack()->getPalette("PAL_UFOPAEDIA")->savePal("../../../Ufopaedia.pal");
-	//_game->getResourcePack()->getPalette("PAL_BATTLESCAPE")->savePal("../../../Battlescape.pal");
+	//_game->getMod()->getPalette("PAL_GEOSCAPE")->savePal("../../../Geoscape.pal");
+	//_game->getMod()->getPalette("PAL_BASESCAPE")->savePal("../../../Basescape.pal");
+	//_game->getMod()->getPalette("PAL_UFOPAEDIA")->savePal("../../../Ufopaedia.pal");
+	//_game->getMod()->getPalette("PAL_BATTLESCAPE")->savePal("../../../Battlescape.pal");
 
-	//_game->getResourcePack()->getFont("FONT_BIG")->fix("../../../Big.bmp", 256);
-	//_game->getResourcePack()->getFont("FONT_SMALL")->fix("../../../Small.bmp", 128);
+	//_game->getMod()->getFont("FONT_BIG")->fix("../../../Big.bmp", 256);
+	//_game->getMod()->getFont("FONT_SMALL")->fix("../../../Small.bmp", 128);
 }
 
 TestState::~TestState()

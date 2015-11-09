@@ -57,9 +57,9 @@ const std::set<std::string> &getVFolderContents(const std::string &relativePath)
 	std::string canonicalRelativePath = _canonicalize(relativePath);
 	
 	// trim of trailing '/' characters
-	while (!canonicalRelativePath.empty() && "/" == canonicalRelativePath.substr(canonicalRelativePath.length() - 1, 1))
+	while (!canonicalRelativePath.empty() && '/' == canonicalRelativePath.at(canonicalRelativePath.length() - 1))
 	{
-		canonicalRelativePath.resize(canonicalRelativePath.length() -1);
+		canonicalRelativePath.resize(canonicalRelativePath.length() - 1);
 	}
 	
 	if (_vdirs.find(canonicalRelativePath) == _vdirs.end())
@@ -108,13 +108,13 @@ static std::string _combinePath(const std::string &prefixPath, const std::string
 }
 
 static void _mapFiles(const std::string &modId, const std::string &basePath,
-		      const std::string &relPath, bool ignoreRulesets)
+		      const std::string &relPath, bool ignoreMods)
 {
 	std::string fullDir = basePath + (relPath.length() ? "/" + relPath : "");
 	std::vector<std::string> files = CrossPlatform::getFolderContents(fullDir);
 	std::set<std::string> rulesetFiles = _filterFiles(files, "rul");
 
-	if (!ignoreRulesets && rulesetFiles.size())
+	if (!ignoreMods && rulesetFiles.size())
 	{
 		_rulesets.insert(_rulesets.begin(), std::pair<std::string, std::vector<std::string> >(modId, std::vector<std::string>()));
 		for (std::set<std::string>::iterator i = rulesetFiles.begin(); i != rulesetFiles.end(); ++i)
@@ -140,11 +140,11 @@ static void _mapFiles(const std::string &modId, const std::string &basePath,
 		{
 			Log(LOG_VERBOSE) << "  recursing into: " << fullpath;
 			// allow old mod directory format -- if the top-level subdir
-			// is named "Ruleset" and no top-level ruleset files were found,
+			// is named "Mod" and no top-level ruleset files were found,
 			// record ruleset files in that subdirectory, otherwise ignore them
-			bool ignoreRulesetsRecurse = ignoreRulesets ||
+			bool ignoreModsRecurse = ignoreMods ||
 				!rulesetFiles.empty() || !relPath.empty() || _canonicalize(*i) != "ruleset";
-			_mapFiles(modId, basePath, _combinePath(relPath, *i), ignoreRulesetsRecurse);
+			_mapFiles(modId, basePath, _combinePath(relPath, *i), ignoreModsRecurse);
 			continue;
 		}
 
@@ -180,10 +180,10 @@ void clear()
 	_vdirs.clear();
 }
 
-void load(const std::string &modId, const std::string &path, bool ignoreRulesets)
+void load(const std::string &modId, const std::string &path, bool ignoreMods)
 {
 	Log(LOG_VERBOSE) << "  mapping resources in: " << path;
-	_mapFiles(modId, path, "", ignoreRulesets);
+	_mapFiles(modId, path, "", ignoreMods);
 }
 
 }

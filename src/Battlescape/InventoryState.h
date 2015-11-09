@@ -21,7 +21,6 @@
 
 #include "../Engine/State.h"
 #include "../Interface/TextButton.h"
-#include "../Savegame/BattleItem.h"
 #include "../Savegame/EquipmentLayoutItem.h"
 
 

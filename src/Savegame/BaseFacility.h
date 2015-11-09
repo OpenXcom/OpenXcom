@@ -26,7 +26,7 @@ namespace OpenXcom
 
 class RuleBaseFacility;
 class Base;
-class Ruleset;
+class Mod;
 class Craft;
 
 /**

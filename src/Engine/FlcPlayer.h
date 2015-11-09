@@ -1,31 +1,30 @@
 /*
-* Copyright 2010-2015 OpenXcom Developers.
-*
-* This file is part of OpenXcom.
-*
-* OpenXcom is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OpenXcom is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright 2010-2015 OpenXcom Developers.
+ *
+ * This file is part of OpenXcom.
+ *
+ * OpenXcom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenXcom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /*
-* Based on http://www.libsdl.org/projects/flxplay/
-*/
+ * Based on http://www.libsdl.org/projects/flxplay/
+ */
 
 #ifndef OPENXCOM_FLCPLAYER_H
 #define OPENXCOM_FLCPLAYER_H
 
 #include <SDL.h>
-#include <deque>
 
 namespace OpenXcom
 {
@@ -93,12 +92,6 @@ private:
 
 	AudioData _audioData;
 
-	Uint16 sampleRate;
-
-	SDL_AudioSpec _requestedAudioSpec;
-	SDL_AudioSpec _returnedAudioSpec;
-	SDL_sem *audioVideoSync;
-
 	Game *_game;
 
 	void readU16(Uint16 &dst, const Uint8 *const src);
@@ -130,8 +123,6 @@ private:
 	bool isEndOfFile(Uint8 *pos);
 
 	static void audioCallback(void *userData, Uint8 *stream, int len);
-	static void wakeAudioWaiter(SDL_sem *audioWaiter);
-	static void waitForNextAudioFrame(SDL_sem *audioWaiter);
 
 public:
 

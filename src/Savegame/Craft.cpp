@@ -20,11 +20,11 @@
 #include "Craft.h"
 #include <cmath>
 #include "../Engine/Language.h"
-#include "../Ruleset/RuleCraft.h"
+#include "../Mod/RuleCraft.h"
 #include "CraftWeapon.h"
-#include "../Ruleset/RuleCraftWeapon.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Savegame/SavedGame.h"
+#include "../Mod/RuleCraftWeapon.h"
+#include "../Mod/Mod.h"
+#include "SavedGame.h"
 #include "ItemContainer.h"
 #include "Soldier.h"
 #include "Base.h"
@@ -33,8 +33,8 @@
 #include "MissionSite.h"
 #include "AlienBase.h"
 #include "Vehicle.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/AlienDeployment.h"
+#include "../Mod/RuleItem.h"
+#include "../Mod/AlienDeployment.h"
 
 namespace OpenXcom
 {
@@ -82,10 +82,10 @@ Craft::~Craft()
 /**
  * Loads the craft from a YAML file.
  * @param node YAML node.
- * @param rule Ruleset for the saved game.
+ * @param mod Mod for the saved game.
  * @param save Pointer to the saved game.
  */
-void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
+void Craft::load(const YAML::Node &node, const Mod *mod, SavedGame *save)
 {
 	MovingTarget::load(node);
 	_id = node["id"].as<int>(_id);
@@ -98,9 +98,9 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 		if (_rules->getWeapons() > j)
 		{
 			std::string type = (*i)["type"].as<std::string>();
-			if (type != "0" && rule->getCraftWeapon(type))
+			if (type != "0" && mod->getCraftWeapon(type))
 			{
-				CraftWeapon *w = new CraftWeapon(rule->getCraftWeapon(type), 0);
+				CraftWeapon *w = new CraftWeapon(mod->getCraftWeapon(type), 0);
 				w->load(*i);
 				_weapons[j] = w;
 			}
@@ -115,7 +115,7 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 	_items->load(node["items"]);
 	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end();)
 	{
-		if (std::find(rule->getItemsList().begin(), rule->getItemsList().end(), i->first) == rule->getItemsList().end())
+		if (std::find(mod->getItemsList().begin(), mod->getItemsList().end(), i->first) == mod->getItemsList().end())
 		{
 			_items->getContents()->erase(i++);
 		}
@@ -127,9 +127,9 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 	for (YAML::const_iterator i = node["vehicles"].begin(); i != node["vehicles"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		if (rule->getItem(type))
+		if (mod->getItem(type))
 		{
-			Vehicle *v = new Vehicle(rule->getItem(type), 0, 4);
+			Vehicle *v = new Vehicle(mod->getItem(type), 0, 4);
 			v->load(*i);
 			_vehicles.push_back(v);
 		}
@@ -796,10 +796,10 @@ void Craft::refuel()
 /**
  * Rearms the craft's weapons by adding ammo every hour
  * while it's docked in the base.
- * @param rules Pointer to ruleset.
+ * @param mod Pointer to mod.
  * @return The ammo ID missing for rearming, or "" if none.
  */
-std::string Craft::rearm(Ruleset *rules)
+std::string Craft::rearm(Mod *mod)
 {
 	std::string ammo;
 	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); ; ++i)
@@ -812,14 +812,14 @@ std::string Craft::rearm(Ruleset *rules)
 		if (*i != 0 && (*i)->isRearming())
 		{
 			std::string clip = (*i)->getRules()->getClipItem();
-			int available = _base->getItems()->getItem(clip);
+			int available = _base->getStorageItems()->getItem(clip);
 			if (clip.empty())
 			{
 				(*i)->rearm(0, 0);
 			}
 			else if (available > 0)
 			{
-				int used = (*i)->rearm(available, rules->getItem(clip)->getClipSize());
+				int used = (*i)->rearm(available, mod->getItem(clip)->getClipSize());
 
 				if (used == available && (*i)->isRearming())
 				{
@@ -827,7 +827,7 @@ std::string Craft::rearm(Ruleset *rules)
 					(*i)->setRearming(false);
 				}
 
-				_base->getItems()->removeItem(clip, used);
+				_base->getStorageItems()->removeItem(clip, used);
 			}
 			else
 			{

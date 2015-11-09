@@ -182,7 +182,7 @@ void Transpose(int reg, int val, int*val2, int *reg3, int*val3)
 	}*/
 	iFMReg[iRegister] = iValue;
 
-	if ((iChannel >= 0)) {// && (i == 1)) {
+	if ((iChannel >= 0 && iChannel < 12)) {// && (i == 1)) {
 		UINT8  iBlock = (iFMReg[0xB0 + iChannel] >> 2) & 0x07;
 		UINT16 iFNum = ((iFMReg[0xB0 + iChannel] & 0x03) << 8) | iFMReg[0xA0 + iChannel];
 		//double dbOriginalFreq = 50000.0 * (double)iFNum * pow(2, iBlock - 20);

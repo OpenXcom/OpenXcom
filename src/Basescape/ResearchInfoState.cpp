@@ -19,14 +19,14 @@
 #include "ResearchInfoState.h"
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Savegame/Base.h"
-#include "../Ruleset/RuleResearch.h"
+#include "../Mod/RuleResearch.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/ResearchProject.h"
 #include "../Interface/ArrowButton.h"
@@ -102,7 +102,7 @@ void ResearchInfoState::buildUi()
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK05.SCR"));
 
 	_txtTitle->setBig();
 
@@ -120,10 +120,10 @@ void ResearchInfoState::buildUi()
 	{
 		_base->addResearch(_project);
 		if (_rule->needItem() &&
-				(_game->getRuleset()->getUnit(_rule->getName()) ||
+				(_game->getMod()->getUnit(_rule->getName()) ||
 				 Options::spendResearchedItems))
 		{
-			_base->getItems()->removeItem(_rule->getName(), 1);
+			_base->getStorageItems()->removeItem(_rule->getName(), 1);
 		}
 	}
 	setAssignedScientist();
@@ -157,6 +157,15 @@ void ResearchInfoState::buildUi()
 }
 
 /**
+ * Frees up memory that's not automatically cleaned on exit
+ */
+ResearchInfoState::~ResearchInfoState()
+{
+	delete _timerLess;
+	delete _timerMore;
+}
+
+/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
@@ -174,10 +183,10 @@ void ResearchInfoState::btnCancelClick(Action *)
 {
 	const RuleResearch *ruleResearch = _rule ? _rule : _project->getRules();
 	if (ruleResearch->needItem() &&
-			(_game->getRuleset()->getUnit(ruleResearch->getName()) ||
+			(_game->getMod()->getUnit(ruleResearch->getName()) ||
 			 Options::spendResearchedItems))
 	{
-		_base->getItems()->addItem(ruleResearch->getName(), 1);
+		_base->getStorageItems()->addItem(ruleResearch->getName(), 1);
 	}
 	_base->removeResearch(_project);
 	_game->popState();

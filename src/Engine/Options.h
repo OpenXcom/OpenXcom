@@ -87,10 +87,14 @@ namespace Options
 	std::string getUserFolder();
 	/// Gets the game's config folder.
 	std::string getConfigFolder();
+	/// Gets the game's master mod user folder.
+	std::string getMasterUserFolder();
 	/// Gets the game's options.
 	const std::vector<OptionInfo> &getOptionInfo();
 	/// Sets the game's data, user and config folders.
 	void setFolders();
+	/// Sets the game's user master folders.
+	void userSplitMasters();
 	/// Update game options from config file and command line.
 	void updateOptions();
 	/// Backup display options.

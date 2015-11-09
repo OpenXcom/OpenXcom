@@ -76,12 +76,12 @@ void create()
 	_info.push_back(OptionInfo("traceAI", &traceAI, false));
 	_info.push_back(OptionInfo("verboseLogging", &verboseLogging, false));
 	_info.push_back(OptionInfo("StereoSound", &StereoSound, true));
-	_info.push_back(OptionInfo("baseXResolution", &baseXResolution, Screen::ORIGINAL_WIDTH));
-	_info.push_back(OptionInfo("baseYResolution", &baseYResolution, Screen::ORIGINAL_HEIGHT));
-	_info.push_back(OptionInfo("baseXGeoscape", &baseXGeoscape, Screen::ORIGINAL_WIDTH));
-	_info.push_back(OptionInfo("baseYGeoscape", &baseYGeoscape, Screen::ORIGINAL_HEIGHT));
-	_info.push_back(OptionInfo("baseXBattlescape", &baseXBattlescape, Screen::ORIGINAL_WIDTH));
-	_info.push_back(OptionInfo("baseYBattlescape", &baseYBattlescape, Screen::ORIGINAL_HEIGHT));
+	//_info.push_back(OptionInfo("baseXResolution", &baseXResolution, Screen::ORIGINAL_WIDTH));
+	//_info.push_back(OptionInfo("baseYResolution", &baseYResolution, Screen::ORIGINAL_HEIGHT));
+	//_info.push_back(OptionInfo("baseXGeoscape", &baseXGeoscape, Screen::ORIGINAL_WIDTH));
+	//_info.push_back(OptionInfo("baseYGeoscape", &baseYGeoscape, Screen::ORIGINAL_HEIGHT));
+	//_info.push_back(OptionInfo("baseXBattlescape", &baseXBattlescape, Screen::ORIGINAL_WIDTH));
+	//_info.push_back(OptionInfo("baseYBattlescape", &baseYBattlescape, Screen::ORIGINAL_HEIGHT));
 	_info.push_back(OptionInfo("geoscapeScale", &geoscapeScale, 0));
 	_info.push_back(OptionInfo("battlescapeScale", &battlescapeScale, 0));
 	_info.push_back(OptionInfo("useScaleFilter", &useScaleFilter, false));
@@ -135,6 +135,7 @@ void create()
 	_info.push_back(OptionInfo("geoDragScrollButton", &geoDragScrollButton, SDL_BUTTON_MIDDLE));
 	_info.push_back(OptionInfo("preferredMusic", (int*)&preferredMusic, MUSIC_AUTO));
 	_info.push_back(OptionInfo("preferredSound", (int*)&preferredSound, SOUND_AUTO));
+	_info.push_back(OptionInfo("preferredVideo", (int*)&preferredVideo, VIDEO_FMV));
 	_info.push_back(OptionInfo("musicAlwaysLoop", &musicAlwaysLoop, false));
 
 	// advanced options
@@ -315,18 +316,12 @@ static void _setDefaultMods()
 	bool haveUfo = _ufoIsInstalled();
 	if (haveUfo)
 	{
-		Log(LOG_DEBUG) << "detected UFO";
 		mods.push_back(std::pair<std::string, bool>("xcom1", true));
 	}
 
 	if (_tftdIsInstalled())
 	{
-		Log(LOG_DEBUG) << "detected TFTD";
 		mods.push_back(std::pair<std::string, bool>("xcom2", !haveUfo));
-	}
-	else if (!haveUfo)
-	{
-		Log(LOG_ERROR) << "neither UFO or TFTD data was detected";
 	}
 }
 
@@ -346,8 +341,6 @@ void resetDefault()
 	{
 		_setDefaultMods();
 	}
-
-	purchaseExclusions.clear();
 }
 
 /**
@@ -637,6 +630,7 @@ bool init(int argc, char *argv[])
 	}
 
 	mapResources();
+	userSplitMasters();
 
 	return true;
 }
@@ -773,24 +767,72 @@ void setFolders()
 	}
 	if (!_userFolder.empty())
 	{
-		// create mods subfolder if it doesn't already exist
-		std::string modsFolder = _userFolder + "mods";
-		if (!CrossPlatform::folderExists(modsFolder))
-		{
-			if (CrossPlatform::createFolder(modsFolder))
-			{
-				Log(LOG_INFO) << "created mods folder: '" << modsFolder << "'";
-			}
-			else
-			{
-				Log(LOG_WARNING) << "failed to create mods folder: '" << modsFolder << "'";
-			}
-		}
+		// create mod folder if it doesn't already exist
+		CrossPlatform::createFolder(_userFolder + "mods");
 	}
 
 	if (_configFolder.empty())
 	{
 		_configFolder = _userFolder;
+	}
+}
+
+/**
+ * Splits the game's User folder by master mod,
+ * creating a subfolder for each one and moving
+ * the apppropriate user data among them.
+ */
+void userSplitMasters()
+{
+	// get list of master mods
+	const std::map<std::string, ModInfo> &modInfos(Options::getModInfos());
+	if (modInfos.empty())
+	{
+		return;
+	}
+	std::vector<std::string> masters;
+	for (std::vector< std::pair<std::string, bool> >::const_iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
+	{
+		std::string modId = i->first;
+		ModInfo modInfo = modInfos.find(modId)->second;
+		if (modInfo.isMaster())
+		{
+			masters.push_back(modId);
+		}
+	}
+
+	// create master subfolders if they don't already exist
+	std::vector<std::string> saves;
+	for (std::vector<std::string>::const_iterator i = masters.begin(); i != masters.end(); ++i)
+	{
+		std::string masterFolder = _userFolder + (*i);
+		if (!CrossPlatform::folderExists(masterFolder))
+		{
+			CrossPlatform::createFolder(masterFolder);
+			// move any old saves to the appropriate folders
+			if (saves.empty())
+			{
+				saves = CrossPlatform::getFolderContents(_userFolder, "sav");
+				std::vector<std::string> autosaves = CrossPlatform::getFolderContents(_userFolder, "asav");
+				saves.insert(saves.end(), autosaves.begin(), autosaves.end());				
+			}
+			for (std::vector<std::string>::iterator j = saves.begin(); j != saves.end();)
+			{
+				std::string srcFile = _userFolder + (*j);
+				YAML::Node doc = YAML::LoadFile(srcFile);
+				std::vector<std::string> mods = doc["mods"].as<std::vector< std::string> >(std::vector<std::string>());
+				if (std::find(mods.begin(), mods.end(), (*i)) != mods.end())
+				{
+					std::string dstFile = masterFolder + "/" + (*j);
+					CrossPlatform::moveFile(srcFile, dstFile);
+					j = saves.erase(j);
+				}
+				else
+				{
+					++j;
+				}
+			}
+		}
 	}
 }
 
@@ -846,7 +888,6 @@ void load(const std::string &filename)
 		{
 			i->load(doc["options"]);
 		}
-		purchaseExclusions = doc["purchaseexclusions"].as< std::vector<std::string> >(purchaseExclusions);
 
 		mods.clear();
 		for (YAML::const_iterator i = doc["mods"].begin(); i != doc["mods"].end(); ++i)
@@ -889,7 +930,6 @@ void save(const std::string &filename)
 			i->save(node);
 		}
 		doc["options"] = node;
-		doc["purchaseexclusions"] = purchaseExclusions;
 
 		for (std::vector< std::pair<std::string, bool> >::iterator i = mods.begin(); i != mods.end(); ++i)
 		{
@@ -958,6 +998,16 @@ std::string getUserFolder()
 std::string getConfigFolder()
 {
 	return _configFolder;
+}
+
+/**
+ * Returns the game's User folder for the
+ * currently loaded master mod.
+ * @return Full path to User folder.
+ */
+std::string getMasterUserFolder()
+{
+	return _userFolder + getActiveMaster() + "/";
 }
 
 /**

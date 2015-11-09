@@ -23,9 +23,9 @@
 #include <string>
 #include "../Battlescape/Position.h"
 #include "../Battlescape/BattlescapeGame.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Unit.h"
-#include "../Ruleset/MapData.h"
+#include "../Mod/RuleItem.h"
+#include "../Mod/Unit.h"
+#include "../Mod/MapData.h"
 #include "Soldier.h"
 #include "BattleItem.h"
 
@@ -340,7 +340,8 @@ private:
 	std::wstring _name;
 	UnitStats _stats;
 	int _standHeight, _kneelHeight, _floatHeight;
-	int _value, _deathSound, _aggroSound, _moveSound;
+	std::vector<int> _deathSound;
+	int _value, _aggroSound, _moveSound;
 	int _intelligence, _aggression;
 	SpecialAbility _specab;
 	Armor *_armor;
@@ -583,8 +584,8 @@ public:
 	int getLoftemps(int entry = 0) const;
 	/// Get the unit's value.
 	int getValue() const;
-	/// Get the unit's death sound.
-	int getDeathSound() const;
+	/// Get the unit's death sounds.
+	const std::vector<int> &getDeathSounds() const;
 	/// Get the unit's move sound.
 	int getMoveSound() const;
 	/// Get whether the unit is affected by fatal wounds.
@@ -690,9 +691,11 @@ public:
 	/// Puts the unit in the corner to think about what he's done.
 	void goToTimeOut();
 	/// Create special weapon for unit.
-	void setSpecialWeapon(SavedBattleGame *save, const Ruleset *rule);
+	void setSpecialWeapon(SavedBattleGame *save, const Mod *mod);
 	/// Get special weapon.
 	BattleItem *getSpecialWeapon(BattleType type) const;
+	/// Recovers the unit's time units and energy.
+	void recoverTimeUnits();
     /// Get the unit's mission statistics.
     BattleUnitStatistics* getStatistics();
 	/// Set the unit murderer's id.

@@ -20,9 +20,9 @@
 #include <sstream>
 #include "Ufopaedia.h"
 #include "ArticleStateTFTDItem.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/ArticleDefinition.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/Mod.h"
+#include "../Mod/ArticleDefinition.h"
+#include "../Mod/RuleItem.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/LocalizedText.h"
@@ -33,36 +33,36 @@ namespace OpenXcom
 
 	ArticleStateTFTDItem::ArticleStateTFTDItem(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs)
 	{
-		RuleItem *item = _game->getRuleset()->getItem(defs->id);
+		RuleItem *item = _game->getMod()->getItem(defs->id);
 
 		std::vector<std::string> *ammo_data = item->getCompatibleAmmo();
 
 		// SHOT STATS TABLE (for firearms only)
 		if (item->getBattleType() == BT_FIREARM)
 		{
-			_txtShotType = new Text(100, 17, 28, 157);
+			_txtShotType = new Text(53, 17, 8, 157);
 			add(_txtShotType);
 			_txtShotType->setColor(Palette::blockOffset(0)+2);
 			_txtShotType->setWordWrap(true);
 			_txtShotType->setText(tr("STR_SHOT_TYPE"));
 
-			_txtAccuracy = new Text(50, 17, 76, 157);
+			_txtAccuracy = new Text(57, 17, 61, 157);
 			add(_txtAccuracy);
 			_txtAccuracy->setColor(Palette::blockOffset(0)+2);
 			_txtAccuracy->setWordWrap(true);
 			_txtAccuracy->setText(tr("STR_ACCURACY_UC"));
 
-			_txtTuCost = new Text(60, 17, 124, 157);
+			_txtTuCost = new Text(56, 17, 118, 157);
 			add(_txtTuCost);
 			_txtTuCost->setColor(Palette::blockOffset(0)+2);
 			_txtTuCost->setWordWrap(true);
 			_txtTuCost->setText(tr("STR_TIME_UNIT_COST"));
 
-			_lstInfo = new TextList(204, 55, 28, 170);
+			_lstInfo = new TextList(140, 55, 8, 170);
 			add(_lstInfo);
 
 			_lstInfo->setColor(Palette::blockOffset(15)+4); // color for %-data!
-			_lstInfo->setColumns(3, 48, 48, 48);
+			_lstInfo->setColumns(3, 70, 40, 30);
 
 			int current_row = 0;
 			if (item->getTUAuto()>0)
@@ -116,12 +116,12 @@ namespace OpenXcom
 
 		for (int i = 0; i<3; ++i)
 		{
-			_txtAmmoType[i] = new Text(82, 16, 168, 144 + i*10);
+			_txtAmmoType[i] = new Text(120, 9, 168, 144 + i*10);
 			add(_txtAmmoType[i]);
 			_txtAmmoType[i]->setColor(Palette::blockOffset(0)+2);
 			_txtAmmoType[i]->setWordWrap(true);
 			
-			_txtAmmoDamage[i] = new Text(82, 16, 300, 144 + i*10);
+			_txtAmmoDamage[i] = new Text(20, 9, 300, 144 + i*10);
 			add(_txtAmmoDamage[i]);
 			_txtAmmoDamage[i]->setColor(Palette::blockOffset(3)+6);
 		}
@@ -145,10 +145,10 @@ namespace OpenXcom
 				{
 					for (size_t i = 0; i < std::min(ammo_data->size(), (size_t)3); ++i)
 					{
-						ArticleDefinition *ammo_article = _game->getRuleset()->getUfopaediaArticle((*ammo_data)[i]);
+						ArticleDefinition *ammo_article = _game->getMod()->getUfopaediaArticle((*ammo_data)[i]);
 						if (Ufopaedia::isArticleAvailable(_game->getSavedGame(), ammo_article))
 						{
-							RuleItem *ammo_rule = _game->getRuleset()->getItem((*ammo_data)[i]);
+							RuleItem *ammo_rule = _game->getMod()->getItem((*ammo_data)[i]);
 							_txtAmmoType[i]->setText(tr(getDamageTypeText(ammo_rule->getDamageType())));
 
 							ss.str(L"");ss.clear();

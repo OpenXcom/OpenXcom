@@ -581,7 +581,7 @@ units: #done
     standHeight: 18
     kneelHeight: 18
     value: 18
-    deathSound: 55 # check this
+    # Zombies are silent on death, no deathSound
     intelligence: 3
     aggression: 2
     spawnUnit: STR_TENTACULAT_TERRORIST
@@ -606,6 +606,7 @@ units: #done
     kneelHeight: 14
     value: 30
     intelligence: 1
+    deathSound: 48
   - type: SAILOR_CIVILIAN
     race: STR_CIVILIAN
     stats:
@@ -625,6 +626,7 @@ units: #done
     kneelHeight: 14
     value: 30
     intelligence: 1
+    deathSound: 48
   - type: DOCKER_CIVILIAN
     race: STR_CIVILIAN
     stats:
@@ -644,6 +646,7 @@ units: #done
     kneelHeight: 14
     value: 30
     intelligence: 1
+    deathSound: 48
   - type: FEMALE_CIVILIAN
     race: STR_CIVILIAN
     stats:
@@ -663,6 +666,7 @@ units: #done
     kneelHeight: 14
     value: 30
     intelligence: 1
+    deathSound: 48
   - type: STR_COELACANTH_GAS_CANNON
     race: STR_COELACANTH_GAS_CANNON
     stats:

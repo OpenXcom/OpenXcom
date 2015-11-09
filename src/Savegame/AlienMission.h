@@ -30,7 +30,7 @@ class Ufo;
 class Globe;
 class Game;
 class SavedGame;
-class Ruleset;
+class Mod;
 class RuleRegion;
 struct MissionWave;
 class UfoTrajectory;
@@ -72,7 +72,7 @@ public:
 	/// Gets the mission's region.
 	const std::string &getRegion() const { return _region; }
 	/// Sets the mission's region.
-	void setRegion(const std::string &region, const Ruleset &rules);
+	void setRegion(const std::string &region, const Mod &rules);
 	/// Gets the mission's race.
 	const std::string &getRace() const { return _race; }
 	/// Sets the mission's race.
@@ -105,7 +105,7 @@ public:
 	/// Handle UFO reaching a waypoint.
 	void ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe);
 	/// Handle UFO lifting from the ground.
-	void ufoLifting(Ufo &ufo, SavedGame &game, const Globe &globe);
+	void ufoLifting(Ufo &ufo, SavedGame &game);
 	/// Handle UFO shot down.
 	void ufoShotDown(Ufo &ufo);
 	/// Handle Points for mission successes.
@@ -114,7 +114,7 @@ public:
 	void setMissionSiteZone(int zone);
 private:
 	/// Spawns a UFO, based on mission rules.
-	Ufo *spawnUfo(const SavedGame &game, const Ruleset &ruleset, const Globe &globe, const MissionWave &wave, const UfoTrajectory &trajectory);
+	Ufo *spawnUfo(const SavedGame &game, const Mod &mod, const Globe &globe, const MissionWave &wave, const UfoTrajectory &trajectory);
 	/// Spawn an alien base
 	void spawnAlienBase(const Globe &globe, Game &engine, int zone);
 	/// Select a destination (lon/lat) based on the criteria of our trajectory and desired waypoint.

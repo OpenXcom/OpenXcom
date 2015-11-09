@@ -20,15 +20,15 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
-#include "../Savegame/Craft.h"
-#include "../Savegame/EquipmentLayoutItem.h"
-#include "../Savegame/SoldierDeath.h"
-#include "../Savegame/SoldierDiary.h"
-#include "../Ruleset/SoldierNamePool.h"
-#include "../Ruleset/RuleSoldier.h"
-#include "../Ruleset/Armor.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/StatString.h"
+#include "Craft.h"
+#include "EquipmentLayoutItem.h"
+#include "SoldierDeath.h"
+#include "SoldierDiary.h"
+#include "../Mod/SoldierNamePool.h"
+#include "../Mod/RuleSoldier.h"
+#include "../Mod/Armor.h"
+#include "../Mod/Mod.h"
+#include "../Mod/StatString.h"
 #include "SavedGame.h"
 
 namespace OpenXcom
@@ -38,14 +38,13 @@ namespace OpenXcom
  * Initializes a new soldier, either blank or randomly generated.
  * @param rules Soldier ruleset.
  * @param armor Soldier armor.
- * @param names List of name pools for soldier generation.
- * @param id Pointer to unique soldier id for soldier generation.
+ * @param id Unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _id(id), _improvement(0), _psiStrImprovement(0), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _death(0), _diary()
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, int id) : _id(id), _improvement(0), _psiStrImprovement(0), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _death(0), _diary()
 {
 	_diary = new SoldierDiary();
-
-	if (names != 0)
+	
+	if (id != 0)
 	{
 		UnitStats minStats = rules->getMinStats();
 		UnitStats maxStats = rules->getMaxStats();
@@ -64,11 +63,12 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierName
 
 		_currentStats = _initialStats;	
 
-		if (!names->empty())
+		const std::vector<SoldierNamePool*> &names = rules->getNames();
+		if (!names.empty())
 		{
-			size_t nationality = RNG::generate(0, names->size()-1);
-			_name = names->at(nationality)->genName(&_gender, rules->getFemaleFrequency());
-			_look = (SoldierLook)names->at(nationality)->genLook(4); // Once we add the ability to mod in extra looks, this will need to reference the ruleset for the maximum amount of looks.
+			size_t nationality = RNG::generate(0, names.size() - 1);
+			_name = names.at(nationality)->genName(&_gender, rules->getFemaleFrequency());
+			_look = (SoldierLook)names.at(nationality)->genLook(4); // Once we add the ability to mod in extra looks, this will need to reference the ruleset for the maximum amount of looks.
 		}
 		else
 		{
@@ -95,10 +95,10 @@ Soldier::~Soldier()
 /**
  * Loads the soldier from a YAML file.
  * @param node YAML node.
- * @param rule Game ruleset.
+ * @param mod Game mod.
  * @param save Pointer to savegame.
  */
-void Soldier::load(const YAML::Node& node, const Ruleset *rule, SavedGame *save)
+void Soldier::load(const YAML::Node& node, const Mod *mod, SavedGame *save)
 {
 	_id = node["id"].as<int>(_id);
 	_name = Language::utf8ToWstr(node["name"].as<std::string>());
@@ -110,10 +110,10 @@ void Soldier::load(const YAML::Node& node, const Ruleset *rule, SavedGame *save)
 	_missions = node["missions"].as<int>(_missions);
 	_kills = node["kills"].as<int>(_kills);
 	_recovery = node["recovery"].as<int>(_recovery);
-	Armor *armor = rule->getArmor(node["armor"].as<std::string>());
+	Armor *armor = mod->getArmor(node["armor"].as<std::string>());
 	if (armor == 0)
 	{
-		armor = rule->getArmor("STR_NONE_UC");
+		armor = mod->getArmor(mod->getSoldier(mod->getSoldiersList().front())->getArmor());
 	}
 	_armor = armor;
 	_psiTraining = node["psiTraining"].as<bool>(_psiTraining);
@@ -124,7 +124,7 @@ void Soldier::load(const YAML::Node& node, const Ruleset *rule, SavedGame *save)
 		for (YAML::const_iterator i = layout.begin(); i != layout.end(); ++i)
 		{
 			EquipmentLayoutItem *layoutItem = new EquipmentLayoutItem(*i);
-			if (rule->getInventory(layoutItem->getSlot()))
+			if (mod->getInventory(layoutItem->getSlot()))
 			{
 				_equipmentLayout.push_back(layoutItem);
 			}
@@ -143,8 +143,8 @@ void Soldier::load(const YAML::Node& node, const Ruleset *rule, SavedGame *save)
 	{
 		_diary = new SoldierDiary();
 		_diary->load(node["diary"]);
-	}
-	calcStatString(rule->getStatStrings(), (Options::psiStrengthEval && save->isResearched(rule->getPsiRequirements())));
+	}	
+	calcStatString(mod->getStatStrings(), (Options::psiStrengthEval && save->isResearched(mod->getPsiRequirements())));
 }
 
 /**
@@ -154,6 +154,7 @@ void Soldier::load(const YAML::Node& node, const Ruleset *rule, SavedGame *save)
 YAML::Node Soldier::save() const
 {
 	YAML::Node node;
+	node["type"] = _rules->getType();
 	node["id"] = _id;
 	node["name"] = Language::wstrToUtf8(_name);
 	node["initialStats"] = _initialStats;

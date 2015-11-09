@@ -21,9 +21,9 @@
 #include "../fmath.h"
 #include "ArticleStateTFTD.h"
 #include "ArticleStateTFTDArmor.h"
-#include "../Ruleset/ArticleDefinition.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/Armor.h"
+#include "../Mod/ArticleDefinition.h"
+#include "../Mod/Mod.h"
+#include "../Mod/Armor.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/LocalizedText.h"
@@ -34,7 +34,7 @@ namespace OpenXcom
 
 	ArticleStateTFTDArmor::ArticleStateTFTDArmor(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs), _row(0)
 	{
-		Armor *armor = _game->getRuleset()->getArmor(defs->id);
+		Armor *armor = _game->getMod()->getArmor(defs->id);
 		
 		_lstInfo = new TextList(150, 64, 168, 110);
 		add(_lstInfo);
