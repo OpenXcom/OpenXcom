@@ -695,6 +695,26 @@ void Mod::loadMod(const std::vector<std::string> &rulesetFiles, size_t modIdx)
 		}
 	}
 
+	// instead of passing a pointer to the region load function and moving the alienMission loading before region loading
+	// and sanitizing there, i'll sanitize here, i'm sure this sanitation will grow, and will need to be refactored into
+	// its own function at some point, but for now, i'll put it here next to the missionScript sanitation, because it seems
+	// the logical place for it, given that this sanitation is required as a result of moving all terror mission handling
+	// into missionScripting behaviour. apologies to all the modders that will be getting errors and need to adjust their
+	// rulesets, but this will save you weird errors down the line.
+	for (std::map<std::string, RuleRegion*>::iterator i = _regions.begin(); i != _regions.end(); ++i)
+	{
+		// bleh, make copies, const correctness kinda screwed me here.
+		WeightedOptions weights = (*i).second->getAvailableMissions();
+		std::vector<std::string> names = weights.getNames();
+		for (std::vector<std::string>::iterator j = names.begin(); j != names.end(); ++j)
+		{
+			if (getAlienMission(*j)->getObjective() == OBJECTIVE_SITE)
+			{
+				throw Exception("Error with MissionWeights: Region: " + (*i).first + " has " + *j + " listed. Terror mission can only be invoked via missionScript, so sayeth the Spider Queen."); 
+			}
+		}
+	}
+
 	if (modIdx == 0)
 	{
 		loadVanillaResources();
