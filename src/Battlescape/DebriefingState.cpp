@@ -582,6 +582,7 @@ void DebriefingState::prepareDebriefing()
 			item->name = *i;
 			item->value = _game->getMod()->getItem(*i)->getRecoveryPoints();
 			_recoveryStats[_game->getMod()->getItem(*i)->getSpecialType()] = item;
+			_missionStatistics->lootValue = item->value;
 		}
 	}
 

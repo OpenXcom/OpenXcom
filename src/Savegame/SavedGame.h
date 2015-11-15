@@ -72,6 +72,7 @@ struct MissionStatistics
 	int daylight;
 	std::map<int, int> injuryList;
 	bool valiantCrux;
+	int lootValue;
     
     /// Functions
 	std::string getMissionTypeLowerCase()
@@ -99,6 +100,7 @@ struct MissionStatistics
         daylight = node["daylight"].as<int>(daylight);
         injuryList = node["injuryList"].as<std::map<int, int> >(injuryList);
         valiantCrux = node["valiantCrux"].as<bool>(valiantCrux);
+        lootValue = node["lootValue"].as<int>(lootValue);
     }
     // Save
     YAML::Node save() const
@@ -117,10 +119,11 @@ struct MissionStatistics
         node["daylight"] = daylight;
         node["injuryList"] = injuryList;
         if (valiantCrux) node["valiantCrux"] = valiantCrux;
+        if (lootValue) node["lootValue"] = lootValue;
         return node;
     }
     MissionStatistics(const YAML::Node& node) : time(0,0,0,0,0,0,0) { load(node); }
-    MissionStatistics() : id (0), time(0,0,0,0,0,0,0), region("STR_REGION_UNKNOWN"), country("STR_UNKNOWN"), type(), ufo("NO_UFO"), success(false), score(0), rating(), alienRace("STR_UNKNOWN"), daylight(0), injuryList(), valiantCrux(false) { }
+    MissionStatistics() : id (0), time(0,0,0,0,0,0,0), region("STR_REGION_UNKNOWN"), country("STR_UNKNOWN"), type(), ufo("NO_UFO"), success(false), score(0), rating(), alienRace("STR_UNKNOWN"), daylight(0), injuryList(), valiantCrux(false), lootValue(0) { }
     ~MissionStatistics() { }
 };
  /**
