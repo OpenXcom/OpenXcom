@@ -612,11 +612,11 @@ void ProjectileFlyBState::think()
 									_unit->setTurnsSinceSpotted(0);
 								}
 							}
-							// If our victim was hit by DT_IN, assume that _unit is his murderer until someone else kills victim.
-							if (_action.weapon->getRules()->getDamageType() == DT_IN)
-							{
-								victim->setMurdererId(_unit->getId());
-							}
+							// Record the last unit to hit our victim. If a victim dies without warning*, this unit gets the credit.
+							// *Because the unit died in a fire or bled out.
+							victim->setMurdererId(_unit->getId());
+							victim->setMurdererWeapon(_unit->getMainHandWeapon()->getRules()->getName());
+							victim->setMurdererWeapon(_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getName());
 						}
 					}
 				}

@@ -332,6 +332,7 @@ private:
 	int _murdererId;	// used to credit the murderer with the kills that this unit got by blowing up on death
     UnitSide _fatalShotSide;
     UnitBodyPart _fatalShotBodyPart;
+    std::string _murdererWeapon, _murdererWeaponAmmo;
 
 	// static data
 	std::string _type;
@@ -708,6 +709,14 @@ public:
     UnitSide getFatalShotSide() const;
     /// Get information on the unit's fatal shot's body part.
     UnitBodyPart getFatalShotBodyPart() const;
+    /// Get the unit murderer's weapon.
+    std::string getMurdererWeapon() const;
+    /// Set the unit murderer's weapon.
+    void setMurdererWeapon(std::string weapon);
+       /// Get the unit murderer's weapon's ammo.
+    std::string getMurdererWeaponAmmo() const;
+    /// Set the unit murderer's weapon's ammo.
+    void setMurdererWeaponAmmo(std::string weaponAmmo);   
 };
 
 }

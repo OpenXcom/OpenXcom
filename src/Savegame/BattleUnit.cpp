@@ -3134,4 +3134,40 @@ UnitBodyPart BattleUnit::getFatalShotBodyPart() const
     return _fatalShotBodyPart;
 }
 
+/**
+ * Gets the unit murderer's weapon.
+ * @return int murderer weapon.
+ */
+std::string BattleUnit::getMurdererWeapon() const
+{
+	return _murdererWeapon;
+}
+
+/**
+ * Set the murderer's weapon.
+ * @param string murderer's weapon.
+ */
+void BattleUnit::setMurdererWeapon(std::string weapon)
+{
+    _murdererWeapon = weapon;
+}
+
+/**
+ * Gets the unit murderer's weapon's ammo.
+ * @return int murderer weapon ammo.
+ */
+std::string BattleUnit::getMurdererWeaponAmmo() const
+{
+	return _murdererWeaponAmmo;
+}
+
+/**
+ * Set the murderer's weapon's ammo.
+ * @param string murderer weapon ammo.
+ */
+void BattleUnit::setMurdererWeaponAmmo(std::string weaponAmmo)
+{
+    _murdererWeaponAmmo = weaponAmmo;
+}
+
 }

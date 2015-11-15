@@ -654,7 +654,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		{
 			// Assume that, in absence of a murderer and an explosion, the laster unit to hit the victim is the murderer.
             // Possible causes of death: bleed out, fire.
-			// Assume that the fire that killed victim was started by the unit who hit victim with DT_IN.
+			/// Assumption : The last person to hit the victim is the murderer.
 			if (!murderer && !terrainExplosion)
 			{
 				for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
@@ -662,35 +662,9 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					if ((*i)->getId() == victim->getMurdererId())
 					{
 						murderer = (*i);
-						// Now find a plausible weapon. First a gun loaded with IN ammo, then a gun that can use IN ammo found in the inventory,
-						// then simlpy the IN thing.
-						for (std::vector<BattleItem*>::iterator it = murderer->getInventory()->begin(); it != murderer->getInventory()->end(); ++it)
-						{
-							if ((*it)->getRules()->getBattleType() == BT_FIREARM && (*it)->getAmmoItem()->getRules()->getDamageType() == DT_IN)
-							{
-								killStatWeaponAmmo = (*it)->getAmmoItem()->getRules()->getName();
-								killStatWeapon = (*it)->getRules()->getName();
-								break;
-							}
-							else if ((*it)->getRules()->getDamageType() == DT_IN)
-							{
-								killStatWeaponAmmo = (*it)->getRules()->getName();
-								if ((*it)->getRules()->getBattleType() == BT_AMMO)
-								{
-									for (std::vector<std::string>::iterator c = (*it)->getRules()->getCompatibleAmmo()->begin(); c != (*it)->getRules()->getCompatibleAmmo()->end(); ++c)
-									{
-										if ((*c) == killStatWeaponAmmo)
-										{
-											killStatWeapon = (*it)->getRules()->getName();
-										}
-									}
-								}
-								else if ((*it)->getRules()->getBattleType() == BT_GRENADE || (*it)->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
-								{
-									killStatWeapon = (*it)->getRules()->getName();
-								}
-							}
-						}
+						killStatWeapon = victim->getMurdererWeapon();
+						killStatWeaponAmmo = victim->getMurdererWeaponAmmo();
+						break;
 					}
 				}
 			}
@@ -803,6 +777,24 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
 		{
+			
+			// Assume that, in absence of a murderer and an explosion, the laster unit to hit the victim is the murderer.
+			// Possible causes of unconciousness: wounds, smoke.
+			/// Assumption : The last unit to hit the victim is respondible for their unconciousness.
+			if (!murderer && !terrainExplosion)
+			{
+				for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+				{
+					if ((*i)->getId() == victim->getMurdererId())
+					{
+						murderer = (*i);
+						killStatWeapon = victim->getMurdererWeapon();
+						killStatWeaponAmmo = victim->getMurdererWeaponAmmo();
+						break;
+					}
+				}
+			}
+			
 			if (murderer && murderer->getFaction() == FACTION_PLAYER && murderer->getOriginalFaction() != FACTION_PLAYER)
 			{
 				// This must be a mind controlled unit. Find out who mind controlled him and award the stun to that unit.
