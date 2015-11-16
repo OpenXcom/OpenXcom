@@ -927,7 +927,7 @@ void DebriefingState::prepareDebriefing()
 	// recover all our goodies
 	if (playersSurvived > 0)
 	{
-		int aadivider = (target == "STR_ALIEN_BASE") ? 150 : 10;
+		int aadivider = (target == "STR_UFO") ? 10 : 150;
 		for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 		{
 			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
