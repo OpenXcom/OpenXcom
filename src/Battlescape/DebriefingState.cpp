@@ -1076,10 +1076,16 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 		else
 		{ // so this tank requires ammo
 			RuleItem *ammo = _game->getMod()->getItem(tankRule->getCompatibleAmmo()->front());
-			int ammoPerVehicle = ammo->getClipSize();
-			if (ammoPerVehicle > 0 && tankRule->getClipSize() > 0)
+			int ammoPerVehicle, clipSize;
+			if (ammo->getClipSize() > 0 && item->getClipSize() > 0)
 			{
-				ammoPerVehicle = tankRule->getClipSize() / ammo->getClipSize();
+				clipSize = item->getClipSize();
+				ammoPerVehicle = clipSize / ammo->getClipSize();
+			}
+			else
+			{
+				clipSize = ammo->getClipSize();
+				ammoPerVehicle = clipSize;
 			}
 			int baqty = base->getStorageItems()->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
 			if (baqty < i->second * ammoPerVehicle)
@@ -1093,7 +1099,7 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 			{
 				for (int j = 0; j < canBeAdded; ++j)
 				{
-					craft->getVehicles()->push_back(new Vehicle(tankRule, ammoPerVehicle, size));
+					craft->getVehicles()->push_back(new Vehicle(tankRule, clipSize, size));
 					base->getStorageItems()->removeItem(ammo->getType(), ammoPerVehicle);
 				}
 				base->getStorageItems()->removeItem(i->first, canBeAdded);
