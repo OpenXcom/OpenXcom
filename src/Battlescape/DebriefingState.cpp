@@ -1077,9 +1077,9 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 		{ // so this tank requires ammo
 			RuleItem *ammo = _game->getMod()->getItem(tankRule->getCompatibleAmmo()->front());
 			int ammoPerVehicle, clipSize;
-			if (ammo->getClipSize() > 0 && item->getClipSize() > 0)
+			if (ammo->getClipSize() > 0 && tankRule->getClipSize() > 0)
 			{
-				clipSize = item->getClipSize();
+				clipSize = tankRule->getClipSize();
 				ammoPerVehicle = clipSize / ammo->getClipSize();
 			}
 			else
