@@ -38,7 +38,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _selRow(0), _color(0), _dot(false), _selectable(false), _condensed(false), _contrast(false), _wrap(false),
+TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _selRow(0), _color(0), _dot(false), _selectable(false), _condensed(false), _contrast(false), _wrap(false), _flooding(false),
 																								   _bg(0), _selector(0), _margin(0), _scrolling(true), _arrowPos(-1), _scrollPos(4), _arrowType(ARROW_VERTICAL),
 																								   _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0), _arrowsLeftEdge(0), _arrowsRightEdge(0), _comboBox(0)
 {
@@ -274,8 +274,17 @@ void TextList::addRow(int cols, ...)
 
 	for (int i = 0; i < cols; ++i)
 	{
+		int width;
 		// Place text
-		Text* txt = new Text(_columns[i], _font->getHeight(), _margin + rowX, getY());
+        if (_flooding)
+        {
+            width = 340;
+        }
+        else
+        {
+            width = _columns[i];
+        }
+		Text* txt = new Text(width, _font->getHeight(), _margin + rowX, getY());
 		txt->setPalette(this->getPalette());
 		txt->initText(_big, _small, _lang);
 		txt->setColor(_color);
@@ -1230,5 +1239,10 @@ void TextList::setBorderColor(Uint8 color)
 int TextList::getScrollbarColor()
 {
 	return _scrollbar->getColor();
+}
+
+void TextList::setFlooding(bool flooding)
+{
+    _flooding = flooding;
 }
 }

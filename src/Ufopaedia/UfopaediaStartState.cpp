@@ -39,17 +39,27 @@ namespace OpenXcom
 														 UFOPAEDIA_ALIEN_LIFE_FORMS,
 														 UFOPAEDIA_ALIEN_RESEARCH,
 														 UFOPAEDIA_UFO_COMPONENTS,
-														 UFOPAEDIA_UFOS};
+														 UFOPAEDIA_UFOS,
+                                                         UFOPAEDIA_COMMENDATIONS};
 	
 	UfopaediaStartState::UfopaediaStartState()
 	{
+		// Modify the Ufopaedia in case the commendations mod is enabled or not.
+		bool commendations = false;
+		_commendationsYAdjustment = 0;
+		if (!_game->getMod()->getCommendation().empty())
+		{
+			commendations = true;
+			_commendationsYAdjustment = 7;
+		}
+
 		_screen = false;
 
 		// set background window
-		_window = new Window(this, 256, 180, 32, 10, POPUP_BOTH);
+		_window = new Window(this, 256, 180 + 2*_commendationsYAdjustment, 32, 10 - _commendationsYAdjustment, POPUP_BOTH);
 
 		// set title
-		_txtTitle = new Text(224, 17, 48, 33);
+		_txtTitle = new Text(224, 17, 48, 33 - _commendationsYAdjustment);
 
 		// Set palette
 		setInterface("ufopaedia");
@@ -58,9 +68,13 @@ namespace OpenXcom
 		add(_window, "window", "ufopaedia");
 		add(_txtTitle, "text", "ufopaedia");
 		// set buttons
-		int y = 50;
+		int y = 50 - _commendationsYAdjustment;
 		for (int i = 0; i < NUM_SECTIONS; ++i)
 		{
+			if (!commendations && SECTIONS[i] == UFOPAEDIA_COMMENDATIONS)
+			{
+				continue;
+			}
 			_btnSection[i] = new TextButton(224, 12, 48, y);
 			y += 13;
 
@@ -108,7 +122,7 @@ namespace OpenXcom
 		{
 			if (action->getSender() == _btnSection[i])
 			{
-				_game->pushState(new UfopaediaSelectState(SECTIONS[i]));
+				_game->pushState(new UfopaediaSelectState(SECTIONS[i], _commendationsYAdjustment));
 				break;
 			}
 		}

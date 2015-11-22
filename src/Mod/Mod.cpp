@@ -58,6 +58,7 @@
 #include "RuleTerrain.h"
 #include "MapScript.h"
 #include "RuleSoldier.h"
+#include "RuleCommendations.h"
 #include "Unit.h"
 #include "AlienRace.h"
 #include "AlienDeployment.h"
@@ -80,6 +81,7 @@
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../Savegame/AlienStrategy.h"
 #include "../Savegame/GameTime.h"
+#include "../Savegame/SoldierDiary.h"
 #include "UfoTrajectory.h"
 #include "RuleAlienMission.h"
 #include "MCDPatch.h"
@@ -350,6 +352,10 @@ Mod::~Mod()
 	for (std::vector<StatString*>::const_iterator i = _statStrings.begin(); i != _statStrings.end(); ++i)
 	{
 		delete (*i);
+	}
+	for (std::map<std::string, RuleCommendations *>::const_iterator i = _commendations.begin(); i != _commendations.end(); ++i)
+	{
+		delete i->second;
 	}
 }
 
@@ -1161,6 +1167,13 @@ void Mod::loadFile(const std::string &filename)
 			rule->load(*i);
 		}
 	}
+	for (YAML::const_iterator i = doc["commendations"].begin(); i != doc["commendations"].end(); ++i)
+	{
+		std::string type = (*i)["type"].as<std::string>();
+		std::auto_ptr<RuleCommendations> commendations(new RuleCommendations());
+		commendations->load(*i);
+        _commendations[type] = commendations.release();
+	}
 }
 
 /**
@@ -1266,6 +1279,12 @@ SavedGame *Mod::newSave() const
 		Soldier *soldier = genSoldier(save);
 		soldier->setCraft(base->getCrafts()->front());
 		base->getSoldiers()->push_back(soldier);
+		// Award soldier a special 'original eigth' commendation
+		soldier->getDiary()->awardOriginalEightCommendation();
+		for (std::vector<SoldierCommendations*>::iterator comm = soldier->getDiary()->getSoldierCommendations()->begin(); comm != soldier->getDiary()->getSoldierCommendations()->end(); ++comm)
+		{
+			(*comm)->makeOld();
+		}
 	}
 
 	save->getBases()->push_back(base);
@@ -1485,6 +1504,15 @@ RuleSoldier *Mod::getSoldier(const std::string &name) const
 const std::vector<std::string> &Mod::getSoldiersList() const
 {
 	return _soldiersIndex;
+}
+
+/**
+ * Gets the list of commendations
+ * @return The list of commendations.
+ */
+std::map<std::string, RuleCommendations *> Mod::getCommendation() const
+{
+	return _commendations;
 }
 
 /**

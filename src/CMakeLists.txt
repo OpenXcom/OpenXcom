@@ -62,6 +62,12 @@ set ( basescape_src
   Basescape/TransferConfirmState.h
   Basescape/SoldierArmorState.h
   Basescape/SoldierArmorState.cpp
+  Basescape/SoldierDiaryMissionState.h
+  Basescape/SoldierDiaryMissionState.cpp
+  Basescape/SoldierDiaryOverviewState.h
+  Basescape/SoldierDiaryOverviewState.cpp
+  Basescape/SoldierDiaryPerformanceState.h
+  Basescape/SoldierDiaryPerformanceState.cpp
   Basescape/SoldiersState.cpp
   Basescape/SoldiersState.h
   Basescape/NewResearchListState.h
@@ -115,6 +121,10 @@ set ( battlescape_src
   Battlescape/BattlescapeGenerator.cpp
   Battlescape/Camera.h
   Battlescape/Camera.cpp
+  Battlescape/CommendationLateState.h
+  Battlescape/CommendationLateState.cpp
+  Battlescape/CommendationState.h
+  Battlescape/CommendationState.cpp
   Battlescape/Projectile.cpp
   Battlescape/Projectile.h
   Battlescape/Particle.cpp
@@ -463,6 +473,8 @@ set ( mod_src
   Mod/RuleRegion.h
   Mod/RuleItem.h
   Mod/RuleItem.cpp
+  Mod/RuleCommendations.cpp
+  Mod/RuleCommendations.h
   Mod/RuleCraftWeapon.cpp
   Mod/RuleCraftWeapon.h
   Mod/RuleInterface.h
@@ -578,6 +590,8 @@ set ( savegame_src
   Savegame/SavedGame.cpp
   Savegame/Soldier.h
   Savegame/Soldier.cpp
+  Savegame/SoldierDiary.h
+  Savegame/SoldierDiary.cpp
   Savegame/Waypoint.h
   Savegame/Waypoint.cpp
   Savegame/Target.h

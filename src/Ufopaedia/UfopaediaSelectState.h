@@ -40,7 +40,7 @@ namespace OpenXcom
 	class UfopaediaSelectState : public State
 	{
 	public:
-		UfopaediaSelectState(const std::string &section);
+		UfopaediaSelectState(const std::string &section, int commendationsYAdjustment);
 		virtual ~UfopaediaSelectState();
 		void init();
 	protected:
@@ -50,6 +50,8 @@ namespace OpenXcom
 		TextButton *_btnOk;
 		TextList *_lstSelection;
 		ArticleDefinitionList _article_list;
+		bool _commendations;
+		int _commendationsYAdjustment;
 
 		/// Handler for clicking the OK button
 		void btnOkClick(Action *action);

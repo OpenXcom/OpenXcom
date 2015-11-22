@@ -26,11 +26,14 @@
 #include "../Interface/Window.h"
 #include "NoContainmentState.h"
 #include "PromotionsState.h"
+#include "CommendationState.h"
+#include "CommendationLateState.h"
 #include "../Mod/Mod.h"
 #include "../Mod/RuleCountry.h"
 #include "../Mod/RuleCraft.h"
 #include "../Mod/RuleItem.h"
 #include "../Mod/RuleRegion.h"
+#include "../Mod/RuleUfo.h"
 #include "../Mod/Armor.h"
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/AlienMission.h"
@@ -44,6 +47,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDeath.h"
+#include "../Savegame/SoldierDiary.h"
 #include "../Savegame/MissionSite.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/Ufo.h"
@@ -70,7 +74,9 @@ namespace OpenXcom
  */
 DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(true), _noContainment(false), _manageContainment(false), _destroyBase(false)
 {
-	Options::baseXResolution = Options::baseXGeoscape;
+    _missionStatistics = new MissionStatistics();
+
+    Options::baseXResolution = Options::baseXGeoscape;
 	Options::baseYResolution = Options::baseYGeoscape;
 	_game->getScreen()->resetDisplay(false);
 
@@ -137,6 +143,8 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 	prepareDebriefing();
 
 	int total = 0, statsY = 0, recoveryY = 0;
+	int civiliansSaved = 0, civiliansDead = 0;
+    int aliensKilled = 0, aliensStunned = 0;
 	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 	{
 		if ((*i)->qty == 0)
@@ -156,7 +164,28 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 			_lstStats->addRow(3, tr((*i)->item).c_str(), ss.str().c_str(), ss2.str().c_str());
 			statsY += 8;
 		}
+		if ((*i)->item == "STR_CIVILIANS_SAVED")
+		{
+			civiliansSaved = (*i)->qty;
+		}
+		if ((*i)->item == "STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES" || (*i)->item == "STR_CIVILIANS_KILLED_BY_ALIENS")
+		{
+			civiliansDead += (*i)->qty;
+		}
+        if ((*i)->item == "STR_ALIENS_KILLED")
+        {
+            aliensKilled += (*i)->qty;
+        }
+        if ((*i)->item == "STR_LIVE_ALIENS_RECOVERED")
+        {
+            aliensStunned += (*i)->qty;
+        }
 	}
+	if (civiliansSaved && !civiliansDead && _missionStatistics->success == true)
+	{
+		_missionStatistics->valiantCrux = true;
+	}
+
 	std::wostringstream ss3;
 	ss3 << total;
 	_lstTotal->addRow(2, tr("STR_TOTAL_UC").c_str(), ss3.str().c_str());
@@ -188,24 +217,204 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 	if (total <= -200)
 	{
 		rating = tr("STR_RATING_TERRIBLE");
+		_missionStatistics->rating = "STR_RATING_TERRIBLE";
 	}
 	else if (total <= 0)
 	{
 		rating = tr("STR_RATING_POOR");
+		_missionStatistics->rating = "STR_RATING_POOR";
 	}
 	else if (total <= 200)
 	{
 		rating = tr("STR_RATING_OK");
+		_missionStatistics->rating = "STR_RATING_OK";
 	}
 	else if (total <= 500)
 	{
 		rating = tr("STR_RATING_GOOD");
+		_missionStatistics->rating = "STR_RATING_GOOD";
 	}
 	else
 	{
 		rating = tr("STR_RATING_EXCELLENT");
+		_missionStatistics->rating = "STR_RATING_EXCELLENT";
 	}
+	_missionStatistics->score = total;
 	_txtRating->setText(tr("STR_RATING").arg(rating));
+
+	SavedGame *save = _game->getSavedGame();
+	SavedBattleGame *battle = save->getSavedBattle();
+    
+    _missionStatistics->daylight = save->getSavedBattle()->getGlobalShade();
+    _missionStatistics->id = _game->getSavedGame()->getMissionStatistics()->size();
+
+	// Award Best-of commendations.
+	int bestScoreID[7] = {0, 0, 0, 0, 0, 0, 0};
+	int bestScore[7] = {0, 0, 0, 0, 0, 0, 0};
+	int bestOverallScorersID = 0;
+	int bestOverallScore = 0;
+
+	// Check to see if any of the dead soldiers were exceptional.
+	for (std::vector<BattleUnit*>::iterator deadUnit = battle->getUnits()->begin(); deadUnit != battle->getUnits()->end(); ++deadUnit)
+	{
+		if (!(*deadUnit)->getGeoscapeSoldier() || (*deadUnit)->getStatus() != STATUS_DEAD) 
+		{
+			continue;
+		}
+
+		/// Post-mortem kill award
+		int killTurn = -1;
+		for (std::vector<BattleUnit*>::iterator killerUnit = battle->getUnits()->begin(); killerUnit != battle->getUnits()->end(); ++killerUnit)
+		{
+			for(std::vector<BattleUnitKills*>::iterator kill = (*killerUnit)->getStatistics()->kills.begin(); kill != (*killerUnit)->getStatistics()->kills.end(); ++kill)
+			{
+				if ((*kill)->id == (*deadUnit)->getId())
+				{
+					killTurn = (*kill)->turn;
+					break;
+				}
+			}
+			if (killTurn != -1)
+			{
+				break;
+			}
+		}
+		int postMortemKills = 0;
+		if (killTurn != -1)
+		{
+			for(std::vector<BattleUnitKills*>::iterator deadUnitKill = (*deadUnit)->getStatistics()->kills.begin(); deadUnitKill != (*deadUnit)->getStatistics()->kills.end(); ++deadUnitKill)
+			{
+				if ((*deadUnitKill)->turn > killTurn && (*deadUnitKill)->faction == FACTION_HOSTILE)
+				{
+					postMortemKills++;
+				}
+			}
+		}
+		(*deadUnit)->getGeoscapeSoldier()->getDiary()->awardPostMortemKill(postMortemKills);
+
+		SoldierRank rank = (*deadUnit)->getGeoscapeSoldier()->getRank();
+		// Rookies don't get this next award. No one likes them.
+		if (rank == 0) 
+		{
+			continue;
+		}
+
+        /// Best-of awards
+		// Find the best soldier per rank by comparing score.
+		for (std::vector<Soldier*>::iterator j = _game->getSavedGame()->getDeadSoldiers()->begin(); j != _game->getSavedGame()->getDeadSoldiers()->end(); ++j)
+		{
+			int score = (*j)->getDiary()->getScoreTotal();
+
+			// Don't forget this mission's score!
+			if ((*j)->getId() == (*deadUnit)->getId())
+			{
+				score += _missionStatistics->score;
+			}
+
+			if (score > bestScore[rank])
+			{
+				bestScoreID[rank] = (*deadUnit)->getId();
+				bestScore[rank] = score;
+				if (score > bestOverallScore)
+				{
+					bestOverallScorersID = (*deadUnit)->getId();
+					bestOverallScore = score;
+				}
+			}
+		}					
+	}
+	// Now award those soldiers commendations!
+	for (std::vector<BattleUnit*>::iterator deadUnit = battle->getUnits()->begin(); deadUnit != battle->getUnits()->end(); ++deadUnit)
+	{
+		if (!(*deadUnit)->getGeoscapeSoldier() || (*deadUnit)->getStatus() != STATUS_DEAD) 
+		{
+			continue;
+		}
+		if ((*deadUnit)->getId() == bestScoreID[(*deadUnit)->getGeoscapeSoldier()->getRank()])
+		{
+			(*deadUnit)->getGeoscapeSoldier()->getDiary()->awardBestOfRank((*deadUnit)->getGeoscapeSoldier()->getRank());
+		}		
+		if ((*deadUnit)->getId() == bestOverallScorersID)
+		{
+			(*deadUnit)->getGeoscapeSoldier()->getDiary()->awardBestOverall();
+		}
+	}
+
+	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
+	{
+		if ((*j)->getGeoscapeSoldier())
+		{
+			int soldierAlienKills = 0;
+			int soldierAlienStuns = 0;
+			for (std::vector<BattleUnitKills*>::const_iterator k = (*j)->getStatistics()->kills.begin(); k != (*j)->getStatistics()->kills.end(); ++k)
+			{
+				if ((*k)->faction == FACTION_HOSTILE && (*k)->getUnitStatusString() == "STATUS_DEAD")
+				{
+					soldierAlienKills++;
+				}
+				if ((*k)->faction == FACTION_HOSTILE && (*k)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
+				{
+					soldierAlienStuns++;
+				}
+			}
+			if (aliensKilled && aliensKilled == soldierAlienKills && _missionStatistics->success == true)
+			{
+				(*j)->getStatistics()->nikeCross = true;
+			}
+			if (aliensStunned && aliensStunned == soldierAlienStuns && _missionStatistics->success == true)
+			{
+				(*j)->getStatistics()->mercyCross = true;
+			}
+			(*j)->getStatistics()->daysWounded = (*j)->getGeoscapeSoldier()->getWoundRecovery();
+			_missionStatistics->injuryList[(*j)->getGeoscapeSoldier()->getId()] = (*j)->getGeoscapeSoldier()->getWoundRecovery();
+
+			// Award Martyr Medal
+			if ((*j)->getMurdererId() == (*j)->getId() && (*j)->getStatistics()->kills.size() != 0)
+			{
+				int martyrKills = 0; // How many aliens were killed on the same turn?
+				int martyrTurn = -1;
+				for (std::vector<BattleUnitKills*>::iterator unitKill = (*j)->getStatistics()->kills.begin(); unitKill != (*j)->getStatistics()->kills.end(); ++unitKill)
+				{
+					if ( (*unitKill)->id == (*j)->getId() )
+					{
+						martyrTurn = (*unitKill)->turn;
+						break;
+					}
+				}
+				for (std::vector<BattleUnitKills*>::iterator unitKill = (*j)->getStatistics()->kills.begin(); unitKill != (*j)->getStatistics()->kills.end(); ++unitKill)
+				{
+					if ((*unitKill)->turn == martyrTurn && (*unitKill)->faction == FACTION_HOSTILE)
+					{
+						martyrKills++;
+					}
+				}
+				if (martyrKills > 0) 
+				{
+					if (martyrKills > 10) 
+					{
+						martyrKills = 10;
+					}
+					(*j)->getStatistics()->martyr = martyrKills;
+				}
+			}
+
+			// Set the UnitStats delta
+			(*j)->getStatistics()->delta = *(*j)->getGeoscapeSoldier()->getCurrentStats() - *(*j)->getGeoscapeSoldier()->getInitStats();
+
+            (*j)->getGeoscapeSoldier()->getDiary()->updateDiary((*j)->getStatistics(), _missionStatistics, _game->getMod());
+			if (!(*j)->getStatistics()->MIA && !(*j)->getStatistics()->KIA && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getMod()))
+			{
+				_soldiersCommended.push_back((*j)->getGeoscapeSoldier());
+			}
+            else if ((*j)->getStatistics()->MIA || (*j)->getStatistics()->KIA)
+            {
+                (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getMod());
+                _deadSoldiersCommended.push_back((*j)->getGeoscapeSoldier());
+            }
+		}
+	}
+    _game->getSavedGame()->getMissionStatistics()->push_back(_missionStatistics);
+
 	_positiveScore = (total > 0);
 }
 
@@ -267,6 +476,14 @@ void DebriefingState::btnOkClick(Action *)
 	{
 		if (!_destroyBase)
 		{
+			if (!_deadSoldiersCommended.empty())
+			{
+				_game->pushState(new CommendationLateState(_deadSoldiersCommended));
+			}
+            if (!_soldiersCommended.empty())
+            {
+                _game->pushState(new CommendationState(_soldiersCommended));
+            }
 			if (_game->getSavedGame()->handlePromotions(participants))
 			{
 				_game->pushState(new PromotionsState);
@@ -365,6 +582,7 @@ void DebriefingState::prepareDebriefing()
 			item->name = *i;
 			item->value = _game->getMod()->getItem(*i)->getRecoveryPoints();
 			_recoveryStats[_game->getMod()->getItem(*i)->getSpecialType()] = item;
+			_missionStatistics->lootValue = item->value;
 		}
 	}
 
@@ -417,6 +635,8 @@ void DebriefingState::prepareDebriefing()
 		_stats.push_back(new DebriefingStat((*i).second->name, true));
 	}
 
+	_missionStatistics->time = *save->getTime();
+	_missionStatistics->type = battle->getMissionType();	
 	_stats.push_back(new DebriefingStat(_game->getMod()->getAlienFuelName(), true));
 
 	for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
@@ -431,6 +651,7 @@ void DebriefingState::prepareDebriefing()
 					if ((*k)->getRules()->insideRegion((*j)->getLongitude(), (*j)->getLatitude()))
 					{
 						_region = (*k);
+						_missionStatistics->region = _region->getRules()->getType();
 						break;
 					}
 				}
@@ -439,6 +660,7 @@ void DebriefingState::prepareDebriefing()
 					if ((*k)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
 					{
 						_country = (*k);
+						_missionStatistics->country= _country->getRules()->getType();
 						break;
 					}
 				}
@@ -487,6 +709,7 @@ void DebriefingState::prepareDebriefing()
 				if ((*k)->getRules()->insideRegion(base->getLongitude(), base->getLatitude()))
 				{
 					_region = (*k);
+                    _missionStatistics->region = _region->getRules()->getType();
 					break;
 				}
 			}
@@ -495,6 +718,7 @@ void DebriefingState::prepareDebriefing()
 				if ((*k)->getRules()->insideCountry(base->getLongitude(), base->getLatitude()))
 				{
 					_country = (*k);
+                    _missionStatistics->country= _country->getRules()->getType();
 					break;
 				}
 			}
@@ -526,6 +750,11 @@ void DebriefingState::prepareDebriefing()
 	{
 		if ((*i)->isInBattlescape())
 		{
+			_missionStatistics->ufo = (*i)->getRules()->getType();
+			if (save->getMonthsPassed() != -1)
+			{
+				_missionStatistics->alienRace = (*i)->getAlienRace();
+			}
 			_txtRecovery->setText(tr("STR_UFO_RECOVERY"));
 			(*i)->setInBattlescape(false);
 			if ((*i)->getStatus() == Ufo::LANDED && aborted)
@@ -546,6 +775,7 @@ void DebriefingState::prepareDebriefing()
 	{
 		if ((*i)->isInBattlescape())
 		{
+			_missionStatistics->alienRace = (*i)->getAlienRace();
 			delete *i;
 			save->getMissionSites()->erase(i);
 			break;
@@ -555,6 +785,8 @@ void DebriefingState::prepareDebriefing()
 	// lets see what happens with units
 
 	// first, we evaluate how many surviving XCom units there are, and how many are conscious
+	// and how many have died (to use for commendations)
+	int deadSoldiers = 0;
 	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
 	{
 		if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getStatus() != STATUS_DEAD)
@@ -565,6 +797,8 @@ void DebriefingState::prepareDebriefing()
 			}
 			playersSurvived++;
 		}
+		else if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getStatus() == STATUS_DEAD)
+			deadSoldiers++;
 	}
 	// if all our men are unconscious, the aliens get to have their way with them.
 	if (playersUnconscious == playersSurvived)
@@ -578,7 +812,23 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
-
+	if (playersSurvived == 1)
+	{
+		for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
+		{
+			// if only one soldier survived, give him a medal! (unless he killed all the others...)
+			if ((*j)->getStatus() != STATUS_DEAD && (*j)->getOriginalFaction() == FACTION_PLAYER && !(*j)->getStatistics()->hasFriendlyFired() && deadSoldiers != 0)
+			{
+				(*j)->getStatistics()->loneSurvivor = true;
+				break;
+			}
+			// if only one soldier survived AND none have died, means only one soldier went on the mission...
+			if ((*j)->getStatus() != STATUS_DEAD && (*j)->getOriginalFaction() == FACTION_PLAYER && deadSoldiers == 0)
+			{
+				(*j)->getStatistics()->ironMan = true;
+			}
+		}
+	}
 	// alien base disappears (if you didn't abort)
 	for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
 	{
@@ -591,6 +841,12 @@ void DebriefingState::prepareDebriefing()
 			{
 				if (!battle->allObjectivesDestroyed())
 					destroyAlienBase = false;
+			}
+			
+			if (deployment && !deployment->getNextStage().empty())
+			{
+				_missionStatistics->alienRace = (*i)->getAlienRace();
+				destroyAlienBase = false;
 			}
 
 			success = destroyAlienBase;
@@ -672,6 +928,7 @@ void DebriefingState::prepareDebriefing()
 						if ((*i) == soldier)
 						{
 							(*j)->updateGeoscapeStats(*i);
+							(*j)->getStatistics()->KIA = true;
 							SoldierDeath *death = new SoldierDeath();
 							death->setTime(*save->getTime());
 							(*i)->die(death);
@@ -755,6 +1012,7 @@ void DebriefingState::prepareDebriefing()
 							if ((*i) == soldier)
 							{
 								(*j)->updateGeoscapeStats(*i);
+								(*j)->getStatistics()->MIA = true;
 								SoldierDeath *death = new SoldierDeath();
 								death->setTime(*save->getTime());
 								(*i)->die(death);
@@ -1011,6 +1269,7 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
+    _missionStatistics->success = success;
 }
 
 /**

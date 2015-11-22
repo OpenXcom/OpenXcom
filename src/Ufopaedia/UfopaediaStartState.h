@@ -41,9 +41,10 @@ namespace OpenXcom
 	public:
 		UfopaediaStartState();
 		virtual ~UfopaediaStartState();
+		int _commendationsYAdjustment;
 
 	protected:
-		static const int NUM_SECTIONS = 9;
+		static const int NUM_SECTIONS = 10;
 		static const std::string SECTIONS[NUM_SECTIONS];
 		
 		Window *_window;
