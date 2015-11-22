@@ -26,7 +26,7 @@
 namespace OpenXcom
 {
 class GameTime;
-class Ruleset;
+class Mod;
 /**
  * Each entry will be its own commendation.
  */

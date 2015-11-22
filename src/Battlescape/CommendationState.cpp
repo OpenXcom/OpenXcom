@@ -31,7 +31,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDiary.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/RuleCommendations.h"
+#include "../Mod/RuleCommendations.h"
 
 namespace OpenXcom
 {
