@@ -915,6 +915,11 @@ void Mod::loadFile(const std::string &filename)
 			}
 			_ufopaediaListOrder += 100;
 			rule->load(*i, _ufopaediaListOrder);
+			if (rule->section != UFOPAEDIA_NOT_AVAILABLE &&
+				std::find(_ufopaediaCatIndex.begin(), _ufopaediaCatIndex.end(), rule->section) == _ufopaediaCatIndex.end())
+			{
+				_ufopaediaCatIndex.push_back(rule->section);
+			}
 		}
 		else if ((*i)["delete"])
 		{
@@ -1641,6 +1646,16 @@ const std::vector<std::string> &Mod::getUfopaediaList() const
 }
 
 /**
+* Returns the list of all article categories
+* provided by the mod.
+* @return List of categories.
+*/
+const std::vector<std::string> &Mod::getUfopaediaCategoryList() const
+{
+	return _ufopaediaCatIndex;
+}
+
+/**
  * Returns the list of inventories.
  * @return Pointer to inventory list.
  */
@@ -1947,16 +1962,13 @@ struct compareRule<ArticleDefinition> : public std::binary_function<const std::s
 
 	compareRule(Mod *mod) : _mod(mod)
 	{
-		_sections[UFOPAEDIA_XCOM_CRAFT_ARMAMENT] = 0;
-		_sections[UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS] = 1;
-		_sections[UFOPAEDIA_WEAPONS_AND_EQUIPMENT] = 2;
-		_sections[UFOPAEDIA_ALIEN_ARTIFACTS] = 3;
-		_sections[UFOPAEDIA_BASE_FACILITIES] = 4;
-		_sections[UFOPAEDIA_ALIEN_LIFE_FORMS] = 5;
-		_sections[UFOPAEDIA_ALIEN_RESEARCH] = 6;
-		_sections[UFOPAEDIA_UFO_COMPONENTS] = 7;
-		_sections[UFOPAEDIA_UFOS] = 8;
-		_sections[UFOPAEDIA_NOT_AVAILABLE] = 9;
+		const std::vector<std::string> &list = mod->getUfopaediaCategoryList();
+		int order = 0;
+		for (std::vector<std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+		{
+			_sections[*i] = order++;
+		}
+		_sections[UFOPAEDIA_NOT_AVAILABLE] = order++;
 	}
 
 	bool operator()(const std::string &r1, const std::string &r2) const

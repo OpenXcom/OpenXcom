@@ -31,18 +31,18 @@
 
 namespace OpenXcom
 {
-	UfopaediaSelectState::UfopaediaSelectState(const std::string &section, int commendationsYAdjustment) : _section(section), _commendationsYAdjustment(commendationsYAdjustment)
+	UfopaediaSelectState::UfopaediaSelectState(const std::string &section) : _section(section)
 	{
 		_screen = false;
 
 		// set background window
-		_window = new Window(this, 256, 180 + 2*_commendationsYAdjustment, 32, 10 - _commendationsYAdjustment, POPUP_NONE);
+		_window = new Window(this, 256, 180, 32, 10, POPUP_NONE);
 
 		// set title
-		_txtTitle = new Text(224, 17, 48, 26 - _commendationsYAdjustment);
+		_txtTitle = new Text(224, 17, 48, 26);
 
 		// set buttons
-		_btnOk = new TextButton(224, 16, 48, 166 + _commendationsYAdjustment);
+		_btnOk = new TextButton(224, 16, 48, 166);
 		_lstSelection = new TextList(224, 104, 40, 50);
 
 		// Set palette

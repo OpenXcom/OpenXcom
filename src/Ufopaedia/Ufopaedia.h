@@ -33,26 +33,14 @@ namespace OpenXcom
 	/// definition of an article list
 	typedef std::vector<ArticleDefinition *> ArticleDefinitionList;
 
-	/// define Ufopaedia sections, which must be consistent
-	static const std::string UFOPAEDIA_XCOM_CRAFT_ARMAMENT = "STR_XCOM_CRAFT_ARMAMENT";
-	static const std::string UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS = "STR_HEAVY_WEAPONS_PLATFORMS";
-	static const std::string UFOPAEDIA_WEAPONS_AND_EQUIPMENT = "STR_WEAPONS_AND_EQUIPMENT";
-	static const std::string UFOPAEDIA_ALIEN_ARTIFACTS = "STR_ALIEN_ARTIFACTS";
-	static const std::string UFOPAEDIA_BASE_FACILITIES = "STR_BASE_FACILITIES";
-	static const std::string UFOPAEDIA_ALIEN_LIFE_FORMS = "STR_ALIEN_LIFE_FORMS";
-	static const std::string UFOPAEDIA_ALIEN_RESEARCH = "STR_ALIEN_RESEARCH_UC";
-	static const std::string UFOPAEDIA_UFO_COMPONENTS = "STR_UFO_COMPONENTS";
-	static const std::string UFOPAEDIA_UFOS = "STR_UFOS";
-    static const std::string UFOPAEDIA_COMMENDATIONS = "STR_COMMENDATIONS_UC";
-	static const std::string UFOPAEDIA_NOT_AVAILABLE = "STR_NOT_AVAILABLE";
-	// This last section is meant for articles, that have to be activated,
+	// This section is meant for articles, that have to be activated,
 	// but have no own entry in a list. E.g. Ammunition items.
 	// Maybe others as well, that should just not be selectable.
+	static const std::string UFOPAEDIA_NOT_AVAILABLE = "STR_NOT_AVAILABLE";
 
 	/**
 	 * This static class encapsulates all functions related to Ufopaedia
-	 * for the game. It manages the relationship between the UfopaediaSaved
-	 * instance in SavedGame and the UfopaediaFactory in Mod.
+	 * for the game.
 	 * Main purpose is to open Ufopaedia from Geoscape, navigate between articles
 	 * and release new articles after successful research.
 	 */
