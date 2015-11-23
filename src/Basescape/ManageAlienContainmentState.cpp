@@ -240,9 +240,9 @@ void ManageAlienContainmentState::btnOkClick(Action *)
 	{
 		_game->pushState(new SellState(_base, _origin));
 		if (_origin == OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, _game->getMod()->getInterface("manageContainment")->getElement("errorMessage")->color, "BACK01.SCR", _game->getMod()->getInterface("manageContainment")->getElement("errorPalette")->color));
+			_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()), _palette, _game->getMod()->getInterface("manageContainment")->getElement("errorMessage")->color, "BACK01.SCR", _game->getMod()->getInterface("manageContainment")->getElement("errorPalette")->color));
 		else
-			_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(), _palette, _game->getMod()->getInterface("manageContainment")->getElement("errorMessage")->color, "BACK13.SCR", _game->getMod()->getInterface("manageContainment")->getElement("errorPalette")->color));
+			_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()), _palette, _game->getMod()->getInterface("manageContainment")->getElement("errorMessage")->color, "BACK13.SCR", _game->getMod()->getInterface("manageContainment")->getElement("errorPalette")->color));
  	}
 }
 

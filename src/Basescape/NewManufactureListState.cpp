@@ -95,7 +95,7 @@ NewManufactureListState::NewManufactureListState(Base *base) : _base(base)
 		bool addCategory = true;
 		for (size_t x = 0; x < _catStrings.size(); ++x)
 		{
-			if ((*it)->getCategory().c_str() == _catStrings[x])
+			if ((*it)->getCategory() == _catStrings[x])
 			{
 				addCategory = false;
 				break;
@@ -103,7 +103,7 @@ NewManufactureListState::NewManufactureListState(Base *base) : _base(base)
 		}
 		if (addCategory)
 		{
-			_catStrings.push_back((*it)->getCategory().c_str());
+			_catStrings.push_back((*it)->getCategory());
 		}
 	}
 
@@ -139,7 +139,7 @@ void NewManufactureListState::lstProdClick(Action *)
 	RuleManufacture *rule = 0;
 	for (std::vector<RuleManufacture *>::iterator it = _possibleProductions.begin(); it != _possibleProductions.end(); ++it)
 	{
-		if ((*it)->getName().c_str() == _displayedStrings[_lstManufacture->getSelectedRow()])
+		if ((*it)->getName() == _displayedStrings[_lstManufacture->getSelectedRow()])
 		{
 			rule = (*it);
 			break;
@@ -180,10 +180,10 @@ void NewManufactureListState::fillProductionList()
 
 	for (std::vector<RuleManufacture *>::iterator it = _possibleProductions.begin(); it != _possibleProductions.end(); ++it)
 	{
-		if (((*it)->getCategory().c_str() == _catStrings[_cbxCategory->getSelected()]) || (_catStrings[_cbxCategory->getSelected()] == "STR_ALL_ITEMS"))
+		if (((*it)->getCategory() == _catStrings[_cbxCategory->getSelected()]) || (_catStrings[_cbxCategory->getSelected()] == "STR_ALL_ITEMS"))
 		{
 			_lstManufacture->addRow(2, tr((*it)->getName()).c_str(), tr((*it)->getCategory()).c_str());
-			_displayedStrings.push_back((*it)->getName().c_str());
+			_displayedStrings.push_back((*it)->getName());
 		}
 	}
 }

@@ -230,13 +230,13 @@ void SoldierDiaryOverviewState::init()
 			wssSuccess << tr("STR_MISSION_LOSS");
 		}
 		
-		wssRating << tr((*j)->rating.c_str());
+		wssRating << tr((*j)->rating);
 		wssScore << (*j)->score;
 
-		wssRegion << tr((*j)->region.c_str());
-		wssCountry << tr((*j)->country.c_str());
+		wssRegion << tr((*j)->region);
+		wssCountry << tr((*j)->country);
 
-		wssMonth << tr((*j)->time.getMonthString().c_str());
+		wssMonth << tr((*j)->time.getMonthString());
 		wssDay << (*j)->time.getDayString(_game->getLanguage());
 		wssYear << (*j)->time.getYear();
 
@@ -244,13 +244,13 @@ void SoldierDiaryOverviewState::init()
 
 		if ((*j)->country == "STR_UNKNOWN")
 		{
-			wssLocation << wssRegion.str().c_str();
+			wssLocation << wssRegion.str();
 		}
 		else
 		{
-			wssLocation << wssCountry.str().c_str();
+			wssLocation << wssCountry.str();
 		}
-		wssStatus << wssSuccess.str().c_str() << " - " << wssRating.str().c_str();
+		wssStatus << wssSuccess.str() << " - " << wssRating.str();
 		
 		_lstDiary->addRow(5, wssLocation.str().c_str(), wssStatus.str().c_str(), wssDay.str().c_str(), wssMonth.str().c_str(), wssYear.str().c_str());
 		row++;

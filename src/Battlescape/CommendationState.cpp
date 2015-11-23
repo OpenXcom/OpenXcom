@@ -116,7 +116,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 					// Soldier name
 					std::wstringstream wss;
 					wss << "   ";
-					wss << (*s)->getName().c_str();
+					wss << (*s)->getName();
 					// Decoration level name
 					int skipCounter = 0;
 					int lastInt = -2;
@@ -152,11 +152,11 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 			// Medal name
 			if (modularCommendation)
 			{
-				_lstSoldiers->setCellText(titleRow, 0, tr((*commList).first).arg(tr(noun).c_str()).c_str());
+				_lstSoldiers->setCellText(titleRow, 0, tr((*commList).first).arg(tr(noun)));
 			}
 			else
 			{
-				_lstSoldiers->setCellText(titleRow, 0, tr((*commList).first).c_str());
+				_lstSoldiers->setCellText(titleRow, 0, tr((*commList).first));
 			}
 			_lstSoldiers->setRowColor(titleRow, Palette::blockOffset(15)-1);
 			titleChosen = true;

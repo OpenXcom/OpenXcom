@@ -101,9 +101,9 @@ CommendationLateState::CommendationLateState(std::vector<Soldier*> soldiersMedal
 	for (std::vector<Soldier*>::iterator s = soldiersMedalled.begin() ; s != soldiersMedalled.end(); ++s)
 	{
 		// Establish some base information
-		_lstSoldiers->addRow(5, (*s)->getName().c_str(),
+		_lstSoldiers->addRow(5, (*s)->getName(),
 								L"",
-								tr((*s)->getRankString()).c_str(),
+								tr((*s)->getRankString()),
 								tr("STR_SCORE_VALUE").arg((*s)->getDiary()->getScoreTotal()),
 								tr("STR_KILLS").arg((*s)->getDiary()->getKillTotal()));
 
@@ -150,17 +150,17 @@ CommendationLateState::CommendationLateState(std::vector<Soldier*> soldiersMedal
 						}
 						vectorIterator++;					
 					}
-					commendationDecoration << tr((*soldierComm)->getDecorationLevelName(skipCounter)).c_str();
+					commendationDecoration << tr((*soldierComm)->getDecorationLevelName(skipCounter));
 					// Establish comms name
 					// Medal name
 					commendationName << "   ";
 					if (modularCommendation)
 					{
-					commendationName << tr((*commList).first).arg(tr(noun).c_str()).c_str();
+					commendationName << tr((*commList).first).arg(tr(noun));
 					}
 					else
 					{
-					commendationName << tr((*commList).first).c_str();
+					commendationName << tr((*commList).first);
 					}
 					_lstSoldiers->addRow(5, commendationName.str().c_str(), L"", L"", L"", commendationDecoration.str().c_str());
 					break;

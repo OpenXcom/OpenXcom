@@ -400,7 +400,7 @@ void SoldierDiaryPerformanceState::init()
 			if ((*j).first == "NO_UFO") continue;
 			std::wstringstream ss1, ss2;
 
-			ss1 << tr((*j).first.c_str());
+			ss1 << tr((*j).first);
 			ss2 << (*j).second;
 			lstArray[i]->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 		}
@@ -417,19 +417,19 @@ void SoldierDiaryPerformanceState::init()
 
 		if ((*i)->getNoun() != "noNoun")
 		{
-			ss1 << tr((*i)->getType().c_str()).arg(tr((*i)->getNoun()).c_str());
-			ss3 << tr(commendation->getDescription().c_str()).arg(tr((*i)->getNoun()).c_str());
+			ss1 << tr((*i)->getType()).arg(tr((*i)->getNoun()));
+			ss3 << tr(commendation->getDescription()).arg(tr((*i)->getNoun()));
 		}
 		else
 		{
-			ss1 << tr((*i)->getType().c_str());
-			ss3 << tr(commendation->getDescription().c_str());
+			ss1 << tr((*i)->getType());
+			ss3 << tr(commendation->getDescription());
 		}
-		ss2 << tr((*i)->getDecorationDescription().c_str());
+		ss2 << tr((*i)->getDecorationDescription());
 		_lstCommendations->addRow(2, ss1.str().c_str(), ss2.str().c_str());
 		
 
-		_commendationsListEntry.push_back(ss3.str().c_str());
+		_commendationsListEntry.push_back(ss3.str());
 
 		drawSprites();
 	}

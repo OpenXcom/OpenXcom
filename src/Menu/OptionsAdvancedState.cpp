@@ -254,7 +254,7 @@ void OptionsAdvancedState::lstOptionsClick(Action *action)
 		ss << *i;
 		settingText = ss.str();
 	}
-	_lstOptions->setCellText(sel, 1, settingText.c_str());
+	_lstOptions->setCellText(sel, 1, settingText);
 }
 
 void OptionsAdvancedState::lstOptionsMouseOver(Action *)
@@ -266,7 +266,7 @@ void OptionsAdvancedState::lstOptionsMouseOver(Action *)
 	{
 		desc = tr(setting->description() + "_DESC");
 	}
-	_txtTooltip->setText(desc.c_str());
+	_txtTooltip->setText(desc);
 }
 
 void OptionsAdvancedState::lstOptionsMouseOut(Action *)

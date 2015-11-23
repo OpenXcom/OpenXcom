@@ -77,7 +77,7 @@ TargetInfoState::TargetInfoState(Target *target, Globe *globe) : _target(target)
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTitle->setWordWrap(true);
 	ss << L'\x01' << _target->getName(_game->getLanguage());
-	_txtTitle->setText(ss.str().c_str());
+	_txtTitle->setText(ss.str());
 
 	_txtTargetted->setAlign(ALIGN_CENTER);
 	_txtTargetted->setText(tr("STR_TARGETTED_BY"));

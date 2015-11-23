@@ -169,32 +169,32 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Base *base, size_t soldierId,
 		if ((*j)->mission != missionId) continue;
 		std::wstringstream wssRank, wssRace, wssWeapon, wssAmmo;
 
-		wssRace << tr((*j)->race.c_str());
-		wssRank << tr((*j)->rank.c_str());
-		wssWeapon << tr((*j)->weapon.c_str());
+		wssRace << tr((*j)->race);
+		wssRank << tr((*j)->rank);
+		wssWeapon << tr((*j)->weapon);
 
 		std::wstringstream wssUnit, wssStatus;
-		wssUnit << wssRace.str().c_str() << " " << wssRank.str().c_str();
+		wssUnit << wssRace.str() << " " << wssRank.str();
 
 		if ((*j)->getUnitStatusString() == "STATUS_DEAD")
 		{
-			wssStatus << tr("STR_KILLED").c_str();
+			wssStatus << tr("STR_KILLED");
             count++;
             stunOrKill = true;
 		}
 		else if ((*j)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
 		{
-			wssStatus << tr("STR_STUNNED").c_str();
+			wssStatus << tr("STR_STUNNED");
             stunOrKill = true;
 		}
         else if ((*j)->getUnitStatusString() == "STATUS_PANICKED")
 		{
-            wssStatus << tr("STR_PANICKED").c_str();
+            wssStatus << tr("STR_PANICKED");
             stunOrKill = true;
         }
         else if ((*j)->getUnitStatusString() == "STATUS_TURNING")
         {
-            wssStatus << tr("STR_MINDCONTROLLED").c_str();
+            wssStatus << tr("STR_MINDCONTROLLED");
             stunOrKill = true;
         }
 

@@ -1064,7 +1064,7 @@ void Map::drawTerrain(Surface *surface)
 								}
 								ss << accuracy;
 								ss << "%";
-								_txtAccuracy->setText(Language::utf8ToWstr(ss.str().c_str()).c_str());
+								_txtAccuracy->setText(Language::utf8ToWstr(ss.str()));
 								_txtAccuracy->draw();
 								_txtAccuracy->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 							}

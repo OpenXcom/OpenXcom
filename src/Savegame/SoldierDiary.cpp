@@ -235,10 +235,10 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
             }
         }
     }
-    _regionTotal[missionStatistics->region.c_str()]++;
-    _countryTotal[missionStatistics->country.c_str()]++;
-    _typeTotal[missionStatistics->getMissionTypeLowerCase().c_str()]++;
-    _UFOTotal[missionStatistics->ufo.c_str()]++;
+    _regionTotal[missionStatistics->region]++;
+    _countryTotal[missionStatistics->country]++;
+    _typeTotal[missionStatistics->getMissionTypeLowerCase()]++;
+    _UFOTotal[missionStatistics->ufo]++;
     _scoreTotal += missionStatistics->score;
     _lootValueTotal += missionStatistics->lootValue;
     if (missionStatistics->success)
@@ -677,7 +677,7 @@ std::map<std::string, int> SoldierDiary::getAlienRankTotal()
 	std::map<std::string, int> list;
 	for(std::vector<BattleUnitKills*>::const_iterator kill = _killList.begin(); kill != _killList.end(); ++kill)
 	{
-		list[(*kill)->rank.c_str()]++;
+		list[(*kill)->rank]++;
 	}
 	return list;
 }
@@ -689,7 +689,7 @@ std::map<std::string, int> SoldierDiary::getAlienRaceTotal()
 	std::map<std::string, int> list;
 	for(std::vector<BattleUnitKills*>::const_iterator kill = _killList.begin(); kill != _killList.end(); ++kill)
 	{
-		list[(*kill)->race.c_str()]++;
+		list[(*kill)->race]++;
 	}
 	return list;
 }
@@ -701,7 +701,7 @@ std::map<std::string, int> SoldierDiary::getWeaponTotal()
 	std::map<std::string, int> list;
 	for(std::vector<BattleUnitKills*>::const_iterator kill = _killList.begin(); kill != _killList.end(); ++kill)
 	{
-		list[(*kill)->weapon.c_str()]++;
+		list[(*kill)->weapon]++;
 	}
 	return list;
 }
@@ -713,7 +713,7 @@ std::map<std::string, int> SoldierDiary::getWeaponAmmoTotal()
 	std::map<std::string, int> list;
 	for(std::vector<BattleUnitKills*>::const_iterator kill = _killList.begin(); kill != _killList.end(); ++kill)
 	{
-		list[(*kill)->weaponAmmo.c_str()]++;
+		list[(*kill)->weaponAmmo]++;
 	}
 	return list;
 }

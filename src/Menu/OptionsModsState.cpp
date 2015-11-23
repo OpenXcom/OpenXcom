@@ -205,7 +205,7 @@ void OptionsModsState::lstModsClick(Action *action)
 
 		mod.second = ! mod.second;
 		Options::mods[i].second = mod.second;
-		_lstMods->setCellText(_lstMods->getSelectedRow(), 2, (mod.second ? tr("STR_YES").c_str() : tr("STR_NO").c_str()));
+		_lstMods->setCellText(_lstMods->getSelectedRow(), 2, (mod.second ? tr("STR_YES") : tr("STR_NO")));
 
 		break;
 	}
