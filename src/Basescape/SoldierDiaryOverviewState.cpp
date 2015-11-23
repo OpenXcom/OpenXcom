@@ -285,8 +285,7 @@ void SoldierDiaryOverviewState::btnOkClick(Action *)
  */
 void SoldierDiaryOverviewState::btnKillsClick(Action *)
 {
-	int _display = 0;
-	_game->pushState(new SoldierDiaryPerformanceState(_base, _soldierId, this, _display));
+	_game->pushState(new SoldierDiaryPerformanceState(_base, _soldierId, this, DIARY_KILLS));
 }
 
 /**
@@ -296,7 +295,7 @@ void SoldierDiaryOverviewState::btnKillsClick(Action *)
 void SoldierDiaryOverviewState::btnMissionsClick(Action *)
 {
 	int _display = 1;
-	_game->pushState(new SoldierDiaryPerformanceState(_base, _soldierId, this, _display));
+	_game->pushState(new SoldierDiaryPerformanceState(_base, _soldierId, this, DIARY_MISSIONS));
 }
 
 /**
@@ -305,8 +304,7 @@ void SoldierDiaryOverviewState::btnMissionsClick(Action *)
  */
 void SoldierDiaryOverviewState::btnCommendationsClick(Action *)
 {
-	int _display = 2;
-	_game->pushState(new SoldierDiaryPerformanceState(_base, _soldierId, this, _display));
+	_game->pushState(new SoldierDiaryPerformanceState(_base, _soldierId, this, DIARY_COMMENDATIONS));
 }
 
 

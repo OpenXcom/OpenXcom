@@ -45,7 +45,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t soldierId, SoldierDiaryOverviewState *soldierDiaryOverviewState, int display) : _base(base), _soldierId(soldierId), _soldierDiaryOverviewState(soldierDiaryOverviewState), _display(display), _lastScrollPos(0)
+SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t soldierId, SoldierDiaryOverviewState *soldierDiaryOverviewState, SoldierDiaryDisplay display) : _base(base), _soldierId(soldierId), _soldierDiaryOverviewState(soldierDiaryOverviewState), _display(display), _lastScrollPos(0)
 {
 	if (_base == 0)
 	{
@@ -56,24 +56,6 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 		_list = _base->getSoldiers();
 	}
 
-	if (_display == 0)
-    {
-        _displayKills = true;
-        _displayMissions = false;
-		_displayCommendations = false;
-    }
-	else if (_display == 1)
-    {
-        _displayKills = false;
-        _displayMissions = true;
-		_displayCommendations = false;
-    }
-    else
-    {
-        _displayKills = false;
-        _displayMissions = false;
-		_displayCommendations = true;
-    }
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnPrev = new TextButton(28, 14, 8, 8);
@@ -294,6 +276,22 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 	_lstCommendations->onMouseOut((ActionHandler)&SoldierDiaryPerformanceState::lstInfoMouseOut);
 	_lstCommendations->onMousePress((ActionHandler)&SoldierDiaryPerformanceState::handle);
 
+	if (_display == DIARY_KILLS)
+	{
+		_group = _btnKills;
+	}
+	else if (_display == DIARY_MISSIONS)
+	{
+		_group = _btnMissions;
+	}
+	else if (_display == DIARY_COMMENDATIONS)
+	{
+		_group = _btnCommendations;
+	}
+	_btnKills->setGroup(&_group);
+	_btnMissions->setGroup(&_group);
+	_btnCommendations->setGroup(&_group);
+
 	init(); // Populate the list
 }
 
@@ -329,41 +327,27 @@ void SoldierDiaryPerformanceState::init()
 	_lstCommendations->scrollTo(0);
 	_lastScrollPos = 0;
 	// Set visibility for kills
-	_txtRace->setVisible(_displayKills);
-	_txtRank->setVisible(_displayKills);
-	_txtWeapon->setVisible(_displayKills);
-	_lstRace->setVisible(_displayKills);
-	_lstRank->setVisible(_displayKills);
-	_lstWeapon->setVisible(_displayKills);
-	_lstKillTotals->setVisible(_displayKills);
+	_txtRace->setVisible(_display == DIARY_KILLS);
+	_txtRank->setVisible(_display == DIARY_KILLS);
+	_txtWeapon->setVisible(_display == DIARY_KILLS);
+	_lstRace->setVisible(_display == DIARY_KILLS);
+	_lstRank->setVisible(_display == DIARY_KILLS);
+	_lstWeapon->setVisible(_display == DIARY_KILLS);
+	_lstKillTotals->setVisible(_display == DIARY_KILLS);
 	// Set visibility for missions
-	_txtLocation->setVisible(_displayMissions);
-	_txtType->setVisible(_displayMissions);
-	_txtUFO->setVisible(_displayMissions);
-	_lstLocation->setVisible(_displayMissions);
-	_lstType->setVisible(_displayMissions);
-	_lstUFO->setVisible(_displayMissions);
-	_lstMissionTotals->setVisible(_displayMissions);
+	_txtLocation->setVisible(_display == DIARY_MISSIONS);
+	_txtType->setVisible(_display == DIARY_MISSIONS);
+	_txtUFO->setVisible(_display == DIARY_MISSIONS);
+	_lstLocation->setVisible(_display == DIARY_MISSIONS);
+	_lstType->setVisible(_display == DIARY_MISSIONS);
+	_lstUFO->setVisible(_display == DIARY_MISSIONS);
+	_lstMissionTotals->setVisible(_display == DIARY_MISSIONS);
 	// Set visibility for commendations
-	if (_game->getMod()->getCommendation().empty())
-	{
-		_displayCommendations = false;
-	}
-    _txtMedalName->setVisible(_displayCommendations);
-    _txtMedalLevel->setVisible(_displayCommendations);
-	_txtMedalInfo->setVisible(_displayCommendations);
-    _lstCommendations->setVisible(_displayCommendations);
-	// Set visibility for buttons
-	_btnKills->setVisible(!_displayKills);
-	_btnMissions->setVisible(!_displayMissions);
-	if (_game->getMod()->getCommendation().empty())
-	{
-		_btnCommendations->setVisible(false);
-	}
-	else
-	{
-		_btnCommendations->setVisible(!_displayCommendations);
-	}
+    _txtMedalName->setVisible(_display == DIARY_COMMENDATIONS);
+    _txtMedalLevel->setVisible(_display == DIARY_COMMENDATIONS);
+	_txtMedalInfo->setVisible(_display == DIARY_COMMENDATIONS);
+    _lstCommendations->setVisible(_display == DIARY_COMMENDATIONS);
+	_btnCommendations->setVisible(!_game->getMod()->getCommendation().empty());
 
 	if (_list->empty())
 	{
@@ -457,7 +441,7 @@ void SoldierDiaryPerformanceState::init()
  */
 void SoldierDiaryPerformanceState::drawSprites()
 {
-	if (!_displayCommendations) return;
+	if (_display != DIARY_COMMENDATIONS) return;
 
 	// Clear sprites
 	for (int i = 0; i != 10; ++i)
@@ -539,9 +523,7 @@ void SoldierDiaryPerformanceState::btnNextClick(Action *)
  */
 void SoldierDiaryPerformanceState::btnKillsToggle(Action *)
 {
-	_displayKills = true;
-	_displayMissions = false;
-    _displayCommendations = false;
+	_display = DIARY_KILLS;
 	init();
 }
 
@@ -550,9 +532,7 @@ void SoldierDiaryPerformanceState::btnKillsToggle(Action *)
  */
 void SoldierDiaryPerformanceState::btnMissionsToggle(Action *)
 {
-	_displayKills = false;
-	_displayMissions = true;
-    _displayCommendations = false;
+	_display = DIARY_MISSIONS;
 	init();
 }
 
@@ -561,9 +541,7 @@ void SoldierDiaryPerformanceState::btnMissionsToggle(Action *)
  */
 void SoldierDiaryPerformanceState::btnCommendationsToggle(Action *)
 {
-	_displayKills = false;
-	_displayMissions = false;
-    _displayCommendations = true;
+	_display = DIARY_COMMENDATIONS;
 	init();
 }
 

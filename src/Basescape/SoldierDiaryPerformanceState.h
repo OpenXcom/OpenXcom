@@ -34,6 +34,8 @@ class Surface;
 class SurfaceSet;
 class Soldier;
 
+enum SoldierDiaryDisplay { DIARY_KILLS, DIARY_MISSIONS, DIARY_COMMENDATIONS };
+
 /**
  * Diary screen that lists totals.
  */
@@ -58,12 +60,13 @@ private:
 	std::vector<Surface*> _commendations, _commendationDecorations;
 	SurfaceSet *_commendationSprite, *_commendationDecoration;
 
-	int _display, _lastScrollPos; // 0 displays kills, 1 displays missions, 2 displays commendations
-	bool _displayKills, _displayMissions, _displayCommendations;
+	int _lastScrollPos;
+	SoldierDiaryDisplay _display;
+	TextButton *_group;
 
 public:
 	/// Creates the Soldiers state.
-	SoldierDiaryPerformanceState(Base *base, size_t soldierId, SoldierDiaryOverviewState *soldierDiaryState, int display);
+	SoldierDiaryPerformanceState(Base *base, size_t soldierId, SoldierDiaryOverviewState *soldierDiaryState, SoldierDiaryDisplay display);
 	/// Cleans up the Soldiers state.
 	~SoldierDiaryPerformanceState();
 	/// Updates the soldier info.
