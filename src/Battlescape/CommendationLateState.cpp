@@ -101,18 +101,11 @@ CommendationLateState::CommendationLateState(std::vector<Soldier*> soldiersMedal
 	for (std::vector<Soldier*>::iterator s = soldiersMedalled.begin() ; s != soldiersMedalled.end(); ++s)
 	{
 		// Establish some base information
-		std::wstringstream soldierName, soldierRank, soldierScore, SoldierStat;
-		soldierName << (*s)->getName().c_str();
-		soldierRank << tr((*s)->getRankString()).c_str();
-		soldierScore << "Score: " << (*s)->getDiary()->getScoreTotal(); // TODO: Translatable
-		SoldierStat << "Kills: " << (*s)->getDiary()->getKillTotal(); // TODO: Translatable
-
-		// Soldier name and rank
-		_lstSoldiers->addRow(5, soldierName.str().c_str(),
+		_lstSoldiers->addRow(5, (*s)->getName().c_str(),
 								L"",
-								soldierRank.str().c_str(),
-								soldierScore.str().c_str(),
-								SoldierStat.str().c_str());
+								tr((*s)->getRankString()).c_str(),
+								tr("STR_SCORE_VALUE").arg((*s)->getDiary()->getScoreTotal()),
+								tr("STR_KILLS").arg((*s)->getDiary()->getKillTotal()));
 
 		// Loop over all commendations
 		for (std::map<std::string, RuleCommendations *>::const_iterator commList = commendationsList.begin(); commList != commendationsList.end();)
