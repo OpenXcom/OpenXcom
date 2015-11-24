@@ -66,56 +66,43 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(Base *base, size_t soldierI
 	_txtLocation = new Text(114, 9, 16, 36);
 	_txtStatus = new Text(102, 9, 120, 36);
 	_txtDate = new Text(90, 9, 218, 36);
-	_lstDiary= new TextList(288, 120, 8, 44);
+	_lstDiary = new TextList(288, 120, 8, 44);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE");
+	setInterface("soldierDiary");
 
-	add(_window);
-	add(_btnOk);
-	add(_btnKills);
-	add(_btnMissions);
-	add(_btnCommendations);
-	add(_btnPrev);
-	add(_btnNext); 
-	add(_txtTitle);
-	add(_txtLocation);
-	add(_txtStatus);
-	add(_txtDate);
-	add(_lstDiary);
+	add(_window, "window", "soldierDiary");
+	add(_btnOk, "button", "soldierDiary");
+	add(_btnKills, "button", "soldierDiary");
+	add(_btnMissions, "button", "soldierDiary");
+	add(_btnCommendations, "button", "soldierDiary");
+	add(_btnPrev, "button", "soldierDiary");
+	add(_btnNext, "button", "soldierDiary");
+	add(_txtTitle, "text1", "soldierDiary");
+	add(_txtLocation, "text2", "soldierDiary");
+	add(_txtStatus, "text2", "soldierDiary");
+	add(_txtDate, "text2", "soldierDiary");
+	add(_lstDiary, "list", "soldierDiary");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getMod()->getSurface("BACK02.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SoldierDiaryOverviewState::btnOkClick, Options::keyCancel);
 
-	_btnKills->setColor(Palette::blockOffset(13)+10);
 	_btnKills->setText(tr("STR_KILLS_UC"));
 	_btnKills->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnKillsClick);
 	
-	_btnMissions->setColor(Palette::blockOffset(13)+10);
 	_btnMissions->setText(tr("STR_MISSIONS_UC"));
 	_btnMissions->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnMissionsClick);
 
-	_btnCommendations->setColor(Palette::blockOffset(13)+10);
 	_btnCommendations->setText(tr("STR_AWARDS_UC"));
-	if (!_game->getMod()->getCommendation().empty())
-	{
-		_btnCommendations->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnCommendationsClick);
-		_btnCommendations->setVisible(true);
-	}
-	else
-	{
-		_btnCommendations->setVisible(false);
-	}
+	_btnCommendations->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnCommendationsClick);
+	_btnCommendations->setVisible(!_game->getMod()->getCommendation().empty());
 
-	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<<");
 	if (_base == 0)
 	{
@@ -128,7 +115,6 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(Base *base, size_t soldierI
 		_btnPrev->onKeyboardPress((ActionHandler)&SoldierDiaryOverviewState::btnPrevClick, Options::keyBattlePrevUnit);
 	}
 
-	_btnNext->setColor(Palette::blockOffset(15)+6);
 	_btnNext->setText(L">>");
 	if (_base == 0)
 	{
@@ -141,28 +127,21 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(Base *base, size_t soldierI
 		_btnNext->onKeyboardPress((ActionHandler)&SoldierDiaryOverviewState::btnNextClick, Options::keyBattleNextUnit);
 	}
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	// Text is decided in init()
 
-	_txtLocation->setColor(Palette::blockOffset(15)+1);
 	_txtLocation->setText(tr("STR_LOCATION"));
 
-	_txtStatus->setColor(Palette::blockOffset(15)+1);
 	_txtStatus->setText(tr("STR_STATUS"));
 
-	_txtDate->setColor(Palette::blockOffset(15)+1);
 	_txtDate->setText(tr("STR_DATE_UC"));
 
-	_lstDiary->setColor(Palette::blockOffset(13)+10);
-	_lstDiary->setArrowColor(Palette::blockOffset(15)+1);
 	_lstDiary->setColumns(5, 104, 98, 30, 25, 35);
 	_lstDiary->setSelectable(true);
 	_lstDiary->setBackground(_window);
 	_lstDiary->setMargin(8);
 	_lstDiary->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::lstDiaryInfoClick);
-
 
 	init(); // Populate the list
 }

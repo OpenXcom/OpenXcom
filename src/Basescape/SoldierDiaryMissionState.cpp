@@ -69,19 +69,19 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Base *base, size_t soldierId,
 	_lstKills = new TextList(240, 32, 29, 102);
 
 	// Set palette
-	setPalette("PAL_BASESCAPE");
+	setInterface("soldierMission");
 
-	add(_window);
-	add(_btnOk);
-	add(_txtTitle);
-	add(_txtScore);
-	add(_txtKills);
-	add(_txtMissionType);
-	add(_txtUFO);
-	add(_txtRace);
-	add(_txtDaylight);
-	add(_txtDaysWounded);
-	add(_lstKills);
+	add(_window, "window", "soldierMission");
+	add(_btnOk, "button", "soldierMission");
+	add(_txtTitle, "text", "soldierMission");
+	add(_txtScore, "text", "soldierMission");
+	add(_txtKills, "text", "soldierMission");
+	add(_txtMissionType, "text", "soldierMission");
+	add(_txtUFO, "text", "soldierMission");
+	add(_txtRace, "text", "soldierMission");
+	add(_txtDaylight, "text", "soldierMission");
+	add(_txtDaysWounded, "text", "soldierMission");
+	add(_lstKills, "list", "soldierMission");
 
 	centerAllSurfaces();
 
@@ -104,41 +104,25 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Base *base, size_t soldierId,
 	}
 	int daysWounded = missionStatistics->at(missionId)->injuryList[_soldier->getId()];
     
-	_window->setColor(Palette::blockOffset(13)+10);
-	_window->setBackground(_game->getMod()->getSurface("BACK14.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK16.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldierDiaryMissionState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SoldierDiaryMissionState::btnOkClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_MISSION_DETAILS"));
 
-	_txtScore->setColor(Palette::blockOffset(13)+5);
-	_txtScore->setSecondaryColor(Palette::blockOffset(13));
-	_txtScore->setAlign(ALIGN_LEFT);
 	_txtScore->setText(tr("STR_SCORE_VALUE").arg(missionStatistics->at(missionId)->score));
 
-	_txtMissionType->setColor(Palette::blockOffset(13)+5);
-	_txtMissionType->setSecondaryColor(Palette::blockOffset(13));
 	_txtMissionType->setText(tr("STR_MISSION_TYPE").arg(tr(missionStatistics->at(missionId)->getMissionTypeLowerCase())));
 
-	_txtUFO->setColor(Palette::blockOffset(13)+5);
-	_txtUFO->setSecondaryColor(Palette::blockOffset(13));
 	_txtUFO->setText(tr("STR_UFO_TYPE").arg(tr(missionStatistics->at(missionId)->ufo)));
-	_txtUFO->setVisible(true);
-	if (missionStatistics->at(missionId)->ufo == "NO_UFO") _txtUFO->setVisible(false);
+	_txtUFO->setVisible(missionStatistics->at(missionId)->ufo != "NO_UFO");
 
-	_txtRace->setColor(Palette::blockOffset(13)+5);
-	_txtRace->setSecondaryColor(Palette::blockOffset(13));
 	_txtRace->setText(tr("STR_RACE_TYPE").arg(tr(missionStatistics->at(missionId)->alienRace)));
-	_txtRace->setVisible(true);
-	if (missionStatistics->at(missionId)->alienRace == "STR_UNKNOWN") _txtUFO->setVisible(false);
+	_txtRace->setVisible(missionStatistics->at(missionId)->alienRace != "STR_UNKNOWN");
 
-	_txtDaylight->setColor(Palette::blockOffset(13)+5);
-	_txtDaylight->setSecondaryColor(Palette::blockOffset(13));
 	if (missionStatistics->at(missionId)->daylight <= 5)
 	{
 		_txtDaylight->setText(tr("STR_DAYLIGHT_TYPE").arg(tr("STR_DAY")));
@@ -151,10 +135,8 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Base *base, size_t soldierId,
 	_txtDaysWounded->setColor(Palette::blockOffset(13)+5);
 	_txtDaysWounded->setSecondaryColor(Palette::blockOffset(13));
 	_txtDaysWounded->setText(tr("STR_DAYS_WOUNDED").arg(daysWounded));
-	if (daysWounded == 0) _txtDaysWounded->setVisible(false);
+	_txtDaysWounded->setVisible(daysWounded != 0);
 
-	_lstKills->setColor(Palette::blockOffset(13));
-	_lstKills->setArrowColor(Palette::blockOffset(13)+5);
 	_lstKills->setColumns(3, 60, 90, 90);
 	_lstKills->setSelectable(false);
 	_lstKills->setBackground(_window);
@@ -206,9 +188,6 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Base *base, size_t soldierId,
 		_lstKills->addRow(1, wssKills.str().c_str());
 	}
 
-	_txtKills->setColor(Palette::blockOffset(13)+5);
-	_txtKills->setSecondaryColor(Palette::blockOffset(13));
-	_txtKills->setAlign(ALIGN_LEFT);
 	_txtKills->setText(tr("STR_KILLS").arg(count));
 }
 

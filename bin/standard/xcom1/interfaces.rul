@@ -514,7 +514,21 @@ interfaces:
       - id: errorPalette
         color: 0     # brown
       - id: errorMessage
+        color: 133   # minty green  
+  - type: commendations
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 239   # bright green
+      - id: heading
         color: 133   # minty green
+      - id: list
+        color: 239   # bright green
+        color2: 138  # yellow
+      - id: button
+        color: 239   # bright green
+    elements: 
   - type: geoscape
     elements:
       - id: palette
@@ -962,9 +976,42 @@ interfaces:
         color2: 208  # white
       - id: list
         color: 246   # purple
+        color2: 218  # blue
         border: 218  # blue
       - id: button
         color: 218   # blue
+  - type: soldierDiary
+    palette: PAL_BASESCAPE
+    elements:
+      - id: palette
+        color: 7     # violet
+      - id: window
+        color: 241   # pink
+      - id: text1
+        color: 218   # blue
+      - id: text2
+        color: 241   # pink
+        color2: 218  # blue
+      - id: list
+        color: 218   # blue
+        border: 241  # pink
+      - id: button
+        color: 246   # purple
+  - type: soldierMission
+    palette: PAL_BASESCAPE
+    elements:
+      - id: palette
+        color: 1     # burgundy
+      - id: window
+        color: 218   # blue
+      - id: text
+        color: 213   # gold
+        color2: 208  # white
+      - id: list
+        color: 208   # white
+        border: 213  # gold
+      - id: button
+        color: 213   # gold
   - type: craftEquipment
     palette: PAL_BASESCAPE
     elements:

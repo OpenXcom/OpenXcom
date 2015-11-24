@@ -49,31 +49,27 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 	_lstSoldiers = new TextList(288, 128, 8, 32);
 
 	// Set palette
-	setPalette("PAL_GEOSCAPE", 0);
+	setInterface("commendations");
 
-	add(_window);
-	add(_btnOk);
-	add(_txtTitle);
-	add(_lstSoldiers);
+	add(_window, "window", "commendations");
+	add(_btnOk, "button", "commendations");
+	add(_txtTitle, "heading", "commendations");
+	add(_lstSoldiers, "text1", "commendations");
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CommendationState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CommendationState::btnOkClick, Options::keyOk);
 	_btnOk->onKeyboardPress((ActionHandler)&CommendationState::btnOkClick, Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setText(tr("STR_MEDALS"));
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 
-	_lstSoldiers->setColor(Palette::blockOffset(8)+10);
 	_lstSoldiers->setColumns(2, 204, 84);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
@@ -142,7 +138,6 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 						vectorIterator++;
 					}
 					_lstSoldiers->addRow(2, wss.str().c_str(), tr((*soldierComm)->getDecorationLevelName(skipCounter)).c_str());
-					// _lstSoldiers->setRowColor(row, Palette::blockOffset(8)+10);
 					break;
 				}
 			}
@@ -158,7 +153,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 			{
 				_lstSoldiers->setCellText(titleRow, 0, tr((*commList).first));
 			}
-			_lstSoldiers->setRowColor(titleRow, Palette::blockOffset(15)-1);
+			_lstSoldiers->setRowColor(titleRow, _lstSoldiers->getSecondaryColor());
 			titleChosen = true;
 		}
 		if (noun == "noNoun")

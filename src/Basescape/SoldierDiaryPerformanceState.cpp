@@ -96,34 +96,34 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 	}
 
 	// Set palette
-	setPalette("PAL_BASESCAPE");
+	setInterface("soldierDiary");
 
-	add(_window);
-	add(_btnOk);
-	add(_btnKills);
-	add(_btnMissions);
-    add(_btnCommendations);
-	add(_btnPrev);
-	add(_btnNext); 
-	add(_txtTitle);
-	add(_txtRace);
-	add(_txtRank);
-	add(_txtWeapon);
-	add(_lstRace);
-	add(_lstRank);
-	add(_lstWeapon);
-	add(_lstKillTotals);
-	add(_txtLocation);
-	add(_txtType);
-	add(_txtUFO);
-	add(_lstLocation);
-	add(_lstType);
-	add(_lstUFO);
-	add(_lstMissionTotals);
-    add(_txtMedalName);
-    add(_txtMedalLevel);
-	add(_txtMedalInfo);
-    add(_lstCommendations);
+	add(_window, "window", "soldierDiary");
+	add(_btnOk, "button", "soldierDiary");
+	add(_btnKills, "button", "soldierDiary");
+	add(_btnMissions, "button", "soldierDiary");
+    add(_btnCommendations, "button", "soldierDiary");
+	add(_btnPrev, "button", "soldierDiary");
+	add(_btnNext, "button", "soldierDiary");
+	add(_txtTitle, "text1", "soldierDiary");
+	add(_txtRace, "text2", "soldierDiary");
+	add(_txtRank, "text2", "soldierDiary");
+	add(_txtWeapon, "text2", "soldierDiary");
+	add(_lstRace, "list", "soldierDiary");
+	add(_lstRank, "list", "soldierDiary");
+	add(_lstWeapon, "list", "soldierDiary");
+	add(_lstKillTotals, "text2", "soldierDiary");
+	add(_txtLocation, "text2", "soldierDiary");
+	add(_txtType, "text2", "soldierDiary");
+	add(_txtUFO, "text2", "soldierDiary");
+	add(_lstLocation, "list", "soldierDiary");
+	add(_lstType, "list", "soldierDiary");
+	add(_lstUFO, "list", "soldierDiary");
+	add(_lstMissionTotals, "text2", "soldierDiary");
+    add(_txtMedalName, "text2", "soldierDiary");
+    add(_txtMedalLevel, "text2", "soldierDiary");
+	add(_txtMedalInfo, "text2", "soldierDiary");
+    add(_lstCommendations, "list", "soldierDiary");
 	for (int i = 0; i != 10; ++i)
 	{
 		add(_commendations[i]);
@@ -133,27 +133,21 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getMod()->getSurface("BACK02.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldierDiaryPerformanceState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SoldierDiaryPerformanceState::btnOkClick, Options::keyCancel);
 
-	_btnKills->setColor(Palette::blockOffset(13)+10);
 	_btnKills->setText(tr("STR_KILLS_UC"));
 	_btnKills->onMouseClick((ActionHandler)&SoldierDiaryPerformanceState::btnKillsToggle);
 	
-	_btnMissions->setColor(Palette::blockOffset(13)+10);
 	_btnMissions->setText(tr("STR_MISSIONS_UC"));
 	_btnMissions->onMouseClick((ActionHandler)&SoldierDiaryPerformanceState::btnMissionsToggle);
 
-    _btnCommendations->setColor(Palette::blockOffset(13)+10);
 	_btnCommendations->setText(tr("STR_AWARDS_UC"));
 	_btnCommendations->onMouseClick((ActionHandler)&SoldierDiaryPerformanceState::btnCommendationsToggle);
 
-	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<<");
 	if (_base == 0)
 	{
@@ -166,7 +160,6 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 		_btnPrev->onKeyboardPress((ActionHandler)&SoldierDiaryPerformanceState::btnPrevClick, Options::keyBattlePrevUnit);
 	}
 
-	_btnNext->setColor(Palette::blockOffset(15)+6);
 	_btnNext->setText(L">>");
 	if (_base == 0)
 	{
@@ -179,96 +172,68 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 		_btnNext->onKeyboardPress((ActionHandler)&SoldierDiaryPerformanceState::btnNextClick, Options::keyBattleNextUnit);
 	}
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	// Text is decided in init()
 
-	_txtRace->setColor(Palette::blockOffset(15)+1);
 	_txtRace->setText(tr("STR_KILLS_BY_RACE"));
 	_txtRace->setWordWrap(true);
 
-	_txtRank->setColor(Palette::blockOffset(15)+1);
 	_txtRank->setText(tr("STR_KILLS_BY_RANK"));
 	_txtRank->setWordWrap(true);
 
-	_txtWeapon->setColor(Palette::blockOffset(15)+1);
 	_txtWeapon->setText(tr("STR_KILLS_BY_WEAPON"));
 	_txtWeapon->setWordWrap(true);
 
-	_lstRace->setColor(Palette::blockOffset(13)+10);
-	_lstRace->setArrowColor(Palette::blockOffset(15)+1);
 	_lstRace->setColumns(2, 80, 10);
 	_lstRace->setBackground(_window);
 	_lstRace->setDot(true);
 
-	_lstRank->setColor(Palette::blockOffset(13)+10);
-	_lstRank->setArrowColor(Palette::blockOffset(15)+1);
 	_lstRank->setColumns(2, 80, 10);
 	_lstRank->setBackground(_window);
 	_lstRank->setDot(true);
 
-	_lstWeapon->setColor(Palette::blockOffset(13)+10);
-	_lstWeapon->setArrowColor(Palette::blockOffset(15)+1);
 	_lstWeapon->setColumns(2, 80, 10);
 	_lstWeapon->setBackground(_window);
 	_lstWeapon->setDot(true);
 
-	_lstKillTotals->setColor(Palette::blockOffset(15)+1);
-	_lstKillTotals->setSecondaryColor(Palette::blockOffset(13)+10);
 	_lstKillTotals->setColumns(4, 68, 68, 68, 84);
 	_lstKillTotals->setMargin(8);
 	_lstKillTotals->setBackground(_window);
 	
-	_txtLocation->setColor(Palette::blockOffset(15)+1);
 	_txtLocation->setText(tr("STR_MISSIONS_BY_LOCATION"));
 	_txtLocation->setWordWrap(true);
 	
-	_txtType->setColor(Palette::blockOffset(15)+1);
 	_txtType->setText(tr("STR_MISSIONS_BY_TYPE"));
 	_txtType->setWordWrap(true);
 	
-	_txtUFO->setColor(Palette::blockOffset(15)+1);
 	_txtUFO->setText(tr("STR_MISSIONS_BY_UFO"));
 	_txtUFO->setWordWrap(true);
 	
-	_lstLocation->setColor(Palette::blockOffset(13)+10);
-	_lstLocation->setArrowColor(Palette::blockOffset(15)+1);
 	_lstLocation->setColumns(2, 80, 10);
 	_lstLocation->setBackground(_window);
 	_lstLocation->setDot(true);
 	
-	_lstType->setColor(Palette::blockOffset(13)+10);
-	_lstType->setArrowColor(Palette::blockOffset(15)+1);
 	_lstType->setColumns(2, 100, 10);
 	_lstType->setBackground(_window);
 	_lstType->setDot(true);
 	
-	_lstUFO->setColor(Palette::blockOffset(13)+10);
-	_lstUFO->setArrowColor(Palette::blockOffset(15)+1);
 	_lstUFO->setColumns(2, 80, 10);
 	_lstUFO->setBackground(_window);
 	_lstUFO->setDot(true);
 
-	_lstMissionTotals->setColor(Palette::blockOffset(15)+1);
-	_lstMissionTotals->setSecondaryColor(Palette::blockOffset(13)+10);
 	_lstMissionTotals->setColumns(4, 68, 68, 68, 84);
 	_lstMissionTotals->setMargin(8);
 	_lstMissionTotals->setBackground(_window);
 	
-	_txtMedalName->setColor(Palette::blockOffset(15)+1);
 	_txtMedalName->setText(tr("STR_MEDAL_NAME"));
 	_txtMedalName->setWordWrap(true);
 
-	_txtMedalLevel->setColor(Palette::blockOffset(15)+1);
 	_txtMedalLevel->setText(tr("STR_MEDAL_DECOR_LEVEL"));
 	_txtMedalLevel->setWordWrap(true);
 
-	_txtMedalInfo->setColor(Palette::blockOffset(13)+10);
 	_txtMedalInfo->setWordWrap(true);
 
-	_lstCommendations->setColor(Palette::blockOffset(13)+10);
-	_lstCommendations->setArrowColor(Palette::blockOffset(15)+1);
 	_lstCommendations->setColumns(2, 158, 80);
 	_lstCommendations->setSelectable(true);
 	_lstCommendations->setBackground(_window);

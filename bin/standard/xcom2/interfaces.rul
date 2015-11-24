@@ -543,6 +543,19 @@ interfaces: #done
         color: 1     # brown
       - id: errorMessage
         color: 1     # white
+  - type: commendations
+    elements:
+      - id: palette
+        color: 4     # green
+      - id: window
+        color: 1   # bright green
+      - id: heading
+        color: 1   # minty green
+      - id: list
+        color: 1   # bright green
+        color2: 239   # yellow
+      - id: button
+        color: 1   # bright green
   - type: geoscape
     elements:
       - id: palette
@@ -994,9 +1007,40 @@ interfaces: #done
         color2: 244  # white
       - id: list
         color: 244   # purple
+        color2: 1    # blue
         border: 1  # blue
       - id: button
         color: 1   # blue
+  - type: soldierDiary
+    elements:
+      - id: palette
+        color: 6
+      - id: window
+        color: 1
+      - id: text1
+        color: 1
+      - id: text2
+        color: 1
+        color2: 244
+      - id: list
+        color: 244
+        border: 1
+      - id: button
+        color: 1
+  - type: soldierMission
+    elements:
+      - id: palette
+        color: 4     # burgundy
+      - id: window
+        color: 1   # blue
+      - id: text
+        color: 1   # gold
+        color2: 239  # white
+      - id: list
+        color: 239   # white
+        border: 1  # gold
+      - id: button
+        color: 1   # gold
   - type: craftEquipment
     elements:
       - id: palette

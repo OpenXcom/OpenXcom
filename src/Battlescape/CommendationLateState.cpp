@@ -51,8 +51,6 @@ CommendationLateState::CommendationLateState(std::vector<Soldier*> soldiersMedal
 	// Set palette
 	setInterface("soldierMemorial");
 
-	_game->getMod()->playMusic("GMLOSE");
-
 	add(_window, "window", "soldierMemorial");
 	add(_btnOk, "button", "soldierMemorial");
 	add(_txtTitle, "text", "soldierMemorial");
@@ -101,11 +99,11 @@ CommendationLateState::CommendationLateState(std::vector<Soldier*> soldiersMedal
 	for (std::vector<Soldier*>::iterator s = soldiersMedalled.begin() ; s != soldiersMedalled.end(); ++s)
 	{
 		// Establish some base information
-		_lstSoldiers->addRow(5, (*s)->getName(),
+		_lstSoldiers->addRow(5, (*s)->getName().c_str(),
 								L"",
-								tr((*s)->getRankString()),
-								tr("STR_SCORE_VALUE").arg((*s)->getDiary()->getScoreTotal()),
-								tr("STR_KILLS").arg((*s)->getDiary()->getKillTotal()));
+								tr((*s)->getRankString()).c_str(),
+								tr("STR_SCORE_VALUE").arg((*s)->getDiary()->getScoreTotal()).c_str(),
+								tr("STR_KILLS").arg((*s)->getDiary()->getKillTotal()).c_str());
 
 		// Loop over all commendations
 		for (std::map<std::string, RuleCommendations *>::const_iterator commList = commendationsList.begin(); commList != commendationsList.end();)
