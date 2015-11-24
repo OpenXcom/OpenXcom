@@ -74,16 +74,6 @@ struct MissionStatistics
 	bool valiantCrux;
 	int lootValue;
     
-    /// Functions
-	std::string getMissionTypeLowerCase()
-	{
-	if		(type == "STR_UFO_CRASH_RECOVERY")	return "STR_UFO_CRASH_RECOVERY_LC";
-	else if (type == "STR_UFO_GROUND_ASSAULT")	return "STR_UFO_GROUND_ASSAULT_LC";
-	else if (type == "STR_BASE_DEFENSE")		return "STR_BASE_DEFENSE_LC";
-	else if (type == "STR_ALIEN_BASE_ASSAULT")	return "STR_ALIEN_BASE_ASSAULT_LC";
-	else if (type == "STR_TERROR_MISSION")		return "STR_TERROR_MISSION_LC";
-	else										return "type error";
-	}
     // Load
     void load(const YAML::Node &node)
     {

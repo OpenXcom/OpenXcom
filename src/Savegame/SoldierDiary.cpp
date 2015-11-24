@@ -237,7 +237,7 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
     }
     _regionTotal[missionStatistics->region]++;
     _countryTotal[missionStatistics->country]++;
-    _typeTotal[missionStatistics->getMissionTypeLowerCase()]++;
+    _typeTotal[missionStatistics->type]++;
     _UFOTotal[missionStatistics->ufo]++;
     _scoreTotal += missionStatistics->score;
     _lootValueTotal += missionStatistics->lootValue;

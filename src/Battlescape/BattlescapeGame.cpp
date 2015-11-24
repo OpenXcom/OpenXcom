@@ -565,47 +565,47 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		// Soldiers
 		if (victim->getGeoscapeSoldier() && victim->getOriginalFaction() == FACTION_PLAYER)
 		{
-			if (victim->getUnitRules() != NULL && victim->getUnitRules()->getRank() != "")
+			if (victim->getUnitRules() != 0 && victim->getUnitRules()->getRank() != "")
 			{
 				killStatRank = victim->getGeoscapeSoldier()->getRankString();
 			}
 			else
 			{
-				killStatRank = "STR_LIVE_SOLDIER";
+				killStatRank = "STR_SOLDIER";
 			}
-			if (victim->getUnitRules() != NULL && victim->getUnitRules()->getRace() != "")
+			if (victim->getUnitRules() != 0 && victim->getUnitRules()->getRace() != "")
 			{
 				killStatRace = victim->getUnitRules()->getRace();
 			}
 			else
 			{
-				killStatRace = "STR_HUMAN";								
+				killStatRace = "STR_XCOM";
 			}
 		}
 		// HWPs
 		else if (victim->getOriginalFaction() == FACTION_PLAYER)
 		{
-			if (victim->getUnitRules() != NULL && victim->getUnitRules()->getRank() != "")
+			if (victim->getUnitRules() != 0 && victim->getUnitRules()->getRank() != "")
 			{
 				killStatRank = victim->getUnitRules()->getRank();
 			}
 			else
 			{
-				killStatRank = "STR_HEAVY_WEAPONS_PLATFORM_LC";
+				killStatRank = "STR_HEAVY_WEAPONS_PLATFORM";
 			}
-			if (victim->getUnitRules() != NULL && victim->getUnitRules()->getRace() != "")
+			if (victim->getUnitRules() != 0 && victim->getUnitRules()->getRace() != "")
 			{
 				killStatRace = victim->getUnitRules()->getRace();
 			}
 			else
 			{
-				killStatRace = "STR_TANK";								
+				killStatRace = "STR_XCOM";
 			}
 		}
 		// Aliens
 		else if (victim->getOriginalFaction() == FACTION_HOSTILE)
 		{
-			if (victim->getUnitRules() != NULL && victim->getUnitRules()->getRank() != "")
+			if (victim->getUnitRules() != 0 && victim->getUnitRules()->getRank() != "")
 			{
 				killStatRank = victim->getUnitRules()->getRank();
 			}
@@ -613,19 +613,19 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			{
 				killStatRank = "STR_UNKNOWN";
 			}
-			if (victim->getUnitRules() != NULL && victim->getUnitRules()->getRace() != "")
+			if (victim->getUnitRules() != 0 && victim->getUnitRules()->getRace() != "")
 			{
 				killStatRace = victim->getUnitRules()->getRace();
 			}
 			else
 			{
-				killStatRace = "STR_LIVE_SOLDIER";								
+				killStatRace = "STR_LIVE_SOLDIER";
 			}
 		}
 		// Civilians
 		else if (victim->getOriginalFaction() == FACTION_NEUTRAL)
 		{
-			if (victim->getUnitRules() != NULL && victim->getUnitRules()->getRank() != "")
+			if (victim->getUnitRules() != 0 && victim->getUnitRules()->getRank() != "")
 			{
 				killStatRank = victim->getUnitRules()->getRank();
 			}
@@ -633,7 +633,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			{
 				killStatRank = "STR_CIVILIAN";
 			}
-			if (victim->getUnitRules() != NULL && (victim->getUnitRules()->getRace() != "" || victim->getUnitRules()->getRace() != "STR_CIVILIAN"))
+			if (victim->getUnitRules() != 0 && (victim->getUnitRules()->getRace() != "" || victim->getUnitRules()->getRace() != "STR_CIVILIAN"))
 			{
 				killStatRace = victim->getUnitRules()->getRace();
 			}
