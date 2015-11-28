@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,6 +20,7 @@
 #define OPENXCOM_SOLDIERDIARYPERFORMANCESTATE_H
 
 #include "../Engine/State.h"
+#include <vector>
 
 namespace OpenXcom
 {
@@ -37,7 +38,7 @@ class Soldier;
 enum SoldierDiaryDisplay { DIARY_KILLS, DIARY_MISSIONS, DIARY_COMMENDATIONS };
 
 /**
- * Diary screen that lists totals.
+ * Diary screen that lists soldier totals.
  */
 class SoldierDiaryPerformanceState : public State
 {
@@ -65,9 +66,9 @@ private:
 	TextButton *_group;
 
 public:
-	/// Creates the Soldiers state.
+	/// Creates the Soldier Diary Totals state.
 	SoldierDiaryPerformanceState(Base *base, size_t soldierId, SoldierDiaryOverviewState *soldierDiaryState, SoldierDiaryDisplay display);
-	/// Cleans up the Soldiers state.
+	/// Cleans up the Soldier Diary Totals state.
 	~SoldierDiaryPerformanceState();
 	/// Updates the soldier info.
 	void init();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,16 +31,17 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/SoldierDiary.h"
+#include "../Savegame/MissionStatistics.h"
+#include "../Savegame/BattleUnitStatistics.h"
 
 namespace OpenXcom
 {
 
 /**
  * Initializes all the elements in the Soldier Diary Mission window.
- * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  * @param soldier ID of the selected soldier.
- * @param row number to get mission info from.
+ * @param rowEntry number to get mission info from.
  */
 SoldierDiaryMissionState::SoldierDiaryMissionState(Base *base, size_t soldierId, int rowEntry) : _base(base), _soldierId(soldierId), _rowEntry(rowEntry)
 {

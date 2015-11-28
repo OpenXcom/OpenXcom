@@ -33,6 +33,7 @@
 #include "../Engine/Options.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/BattleUnitStatistics.h"
 
 namespace OpenXcom
 {

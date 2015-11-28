@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,15 +18,18 @@
  */
 #ifndef OPENXCOM_SOLDIERDIARY_H
 #define OPENXCOM_SOLDIERDIARY_H
+
 #include <yaml-cpp/yaml.h>
-#include "GameTime.h"
 #include "BattleUnit.h"
 #include "SavedGame.h"
 #include "../Mod/Mod.h"
+
 namespace OpenXcom
 {
-class GameTime;
+
 class Mod;
+struct BattleUnitKills;
+
 /**
  * Each entry will be its own commendation.
  */
@@ -82,7 +85,7 @@ private:
 	void manageModularCommendations(std::map<std::string, int> &nextCommendationLevel, std::map<std::string, int> &modularCommendations, std::pair<std::string, int> statTotal, int criteria);
 	void awardCommendation(std::string type, std::string noun = "noNoun");
 public:
-	/// Creates a new soldier-equipment layout item and loads its contents from YAML.
+	/// Creates a new soldier diary and loads its contents from YAML.
 	SoldierDiary(const YAML::Node& node);
 	/// Construct a diary.
 	SoldierDiary();

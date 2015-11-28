@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,12 +18,10 @@
  */
 #include "SoldierDiaryPerformanceState.h"
 #include "SoldierDiaryOverviewState.h"
-#include "SoldierInfoState.h"
 #include <string>
 #include "../Engine/Game.h"
 #include "../Mod/Mod.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Options.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Interface/TextButton.h"
@@ -36,20 +34,21 @@
 #include "../Mod/RuleCommendations.h"
 #include "../Engine/Action.h"
 
-
 namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Soldiers screen.
- * @param game Pointer to the core game.
+ * Initializes all the elements in the Soldier Diary Totals screen.
  * @param base Pointer to the base to get info from.
+ * @param soldier ID of the selected soldier.
+ * @param soldierInfoState Pointer to the Soldier Diary screen.
+ * @param display Type of totals to display.
  */
 SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t soldierId, SoldierDiaryOverviewState *soldierDiaryOverviewState, SoldierDiaryDisplay display) : _base(base), _soldierId(soldierId), _soldierDiaryOverviewState(soldierDiaryOverviewState), _display(display), _lastScrollPos(0)
 {
 	if (_base == 0)
 	{
-		_list = _game->getSavedGame()->getDeadSoldiers();\
+		_list = _game->getSavedGame()->getDeadSoldiers();
 	}
 	else
 	{

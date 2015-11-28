@@ -52,6 +52,7 @@
 #include "AlienMission.h"
 #include "../Mod/RuleRegion.h"
 #include "../Mod/RuleSoldier.h"
+#include "MissionStatistics.h"
 
 namespace OpenXcom
 {

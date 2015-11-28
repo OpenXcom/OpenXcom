@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -32,7 +32,7 @@ class TextList;
 class Soldier;
 
 /**
- * Medals screen that displays new soldier medals.
+ * Medals screen that displays dead soldier medals.
  */
 class CommendationLateState : public State
 {

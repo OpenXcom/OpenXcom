@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,8 +19,8 @@
 #ifndef OPENXCOM_SOLDIERDIARYMISSIONSTATE_H
 #define OPENXCOM_SOLDIERDIARYMISSIONSTATE_H
 
-#include <vector>
 #include "../Engine/State.h"
+#include <vector>
 
 namespace OpenXcom
 {
@@ -33,7 +33,7 @@ class TextList;
 class Soldier;
 
 /**
- * Select Mission window that shows 
+ * Diary window that shows 
  * mission details for a soldier.
  */
 class SoldierDiaryMissionState : public State

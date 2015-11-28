@@ -38,6 +38,7 @@
 #include "Tile.h"
 #include "SavedGame.h"
 #include "SavedBattleGame.h"
+#include "BattleUnitStatistics.h"
 
 namespace OpenXcom
 {

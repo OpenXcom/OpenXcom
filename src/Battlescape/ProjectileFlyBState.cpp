@@ -36,6 +36,7 @@
 #include "Camera.h"
 #include "Explosion.h"
 #include "BattlescapeState.h"
+#include "../Savegame/BattleUnitStatistics.h"
 
 namespace OpenXcom
 {

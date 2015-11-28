@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,13 +21,10 @@
 #include "../Engine/Game.h"
 #include "../Mod/Mod.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDiary.h"
 #include "../Engine/Options.h"
@@ -38,7 +35,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Medals screen.
- * @param game Pointer to the core game.
+ * @param soldiersMedalled List of soldiers with medals.
  */
 CommendationLateState::CommendationLateState(std::vector<Soldier*> soldiersMedalled)
 {

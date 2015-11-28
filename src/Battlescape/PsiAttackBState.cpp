@@ -32,6 +32,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Sound.h"
 #include "../Mod/Mod.h"
+#include "../Savegame/BattleUnitStatistics.h"
 
 namespace OpenXcom
 {

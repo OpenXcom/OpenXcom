@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -24,7 +24,6 @@
 #include "../Mod/Mod.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -34,14 +33,16 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDiary.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/MissionStatistics.h"
 
 namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Soldiers screen.
- * @param game Pointer to the core game.
+ * Initializes all the elements in the Soldier Diary screen.
  * @param base Pointer to the base to get info from.
+ * @param soldier ID of the selected soldier.
+ * @param soldierInfoState Pointer to the Soldier Info screen.
  */
 SoldierDiaryOverviewState::SoldierDiaryOverviewState(Base *base, size_t soldierId, SoldierInfoState *soldierInfoState) : _base(base), _soldierId(soldierId), _soldierInfoState(soldierInfoState)
 {
