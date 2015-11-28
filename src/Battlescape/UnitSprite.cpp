@@ -170,6 +170,7 @@ void UnitSprite::setAnimationFrame(int frame)
 {
 	_animationFrame = frame;
 }
+
 /**
  * Draws a unit, using the drawing rules of the unit.
  * This function is called by Map, for each unit on the screen.

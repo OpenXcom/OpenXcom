@@ -777,6 +777,7 @@ bool Pathfinding::canFallDown(Tile *here, int size)
 	}
 	return true;
 }
+
 /**
  * Determines whether the unit is going up a stairs.
  * @param startPosition The position to start from.

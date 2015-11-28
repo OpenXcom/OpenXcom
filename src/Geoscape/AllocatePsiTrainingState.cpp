@@ -133,6 +133,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base *base) : _sel(0)
 		row++;
 	}
 }
+
 /**
  *
  */

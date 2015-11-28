@@ -68,6 +68,7 @@ public:
 	// Sets _isNew to true.
 	void addDecoration();
 };
+
 class SoldierDiary
 {
 private:

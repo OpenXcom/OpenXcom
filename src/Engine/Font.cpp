@@ -187,6 +187,7 @@ Surface *Font::getChar(wchar_t c)
 	_surface->getCrop()->h = _chars[c].h;
 	return _surface;
 }
+
 /**
  * Returns the maximum width for any character in the font.
  * @return Width in pixels.

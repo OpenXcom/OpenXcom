@@ -422,6 +422,7 @@ void GeoscapeState::blit()
 		(*it)->blit();
 	}
 }
+
 /**
  * Handle key shortcuts.
  * @param action Pointer to an action.
@@ -2576,6 +2577,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 	return true;
 
 }
+
 /**
  * Handler for clicking on a timer button.
  * @param action pointer to the mouse action.

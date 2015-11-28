@@ -49,6 +49,7 @@ void Frame::setColor(Uint8 color)
 	_color = color;
 	_redraw = true;
 }
+
 /**
  * Changes the color used to draw the shaded border.
  * only really to be used in conjunction with the State add()

@@ -453,6 +453,7 @@ void DebriefingState::init()
 		_game->getMod()->playMusic(Mod::DEBRIEF_MUSIC_BAD);
 	}
 }
+
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.

@@ -211,6 +211,7 @@ void State::add(Surface *surface, const std::string &id, const std::string &cate
 
 	_surfaces.push_back(surface);
 }
+
 /**
  * Returns whether this is a full-screen state.
  * This is used to optimize the state machine since full-screen

@@ -356,6 +356,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		target->z = (int)(origin.z + maxRange * sin_fi);
 	}
 }
+
 /**
  * Moves further in the trajectory.
  * @return false if the trajectory is finished - no new position exists in the trajectory.

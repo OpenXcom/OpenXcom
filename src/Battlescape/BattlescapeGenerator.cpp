@@ -102,6 +102,7 @@ void BattlescapeGenerator::init()
 	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
 	_save->initUtilities(_mod);
 }
+
 /**
  * Sets the XCom craft involved in the battle.
  * @param craft Pointer to XCom craft.

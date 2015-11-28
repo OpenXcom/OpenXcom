@@ -96,6 +96,7 @@ BaseDefenseState::BaseDefenseState(Base *base, Ufo *ufo, GeoscapeState *state) :
 
 	_explosionCount = 0;
 }
+
 /**
  *
  */
@@ -212,6 +213,7 @@ void BaseDefenseState::nextStep()
 		}
 	}
 }
+
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.

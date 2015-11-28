@@ -1302,6 +1302,7 @@ bool isCompleted::operator()(const BaseFacility *facility) const
 {
 	return (facility->getBuildTime() == 0);
 }
+
 /**
  * Calculate the detection chance of this base.
  * Big bases without mindshields are easier to detect.

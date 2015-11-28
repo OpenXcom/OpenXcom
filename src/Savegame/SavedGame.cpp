@@ -634,6 +634,7 @@ int SavedGame::getDifficultyCoefficient() const
 
 	return Mod::DIFFICULTY_COEFFICIENT[_difficulty];
 }
+
 /**
  * Changes the game's difficulty to a new level.
  * @param difficulty New difficulty.
@@ -1475,6 +1476,7 @@ void SavedGame::processSoldier(Soldier *soldier, PromotionInfo &soldierData)
 		break;
 	}
 }
+
 /**
  * Checks how many soldiers of a rank exist and which one has the highest score.
  * @param soldiers full list of live soldiers.
@@ -1619,6 +1621,7 @@ std::vector<int64_t> &SavedGame::getExpenditures()
 {
 	return _expenditures;
 }
+
 /**
  * return if the player has been
  * warned about poor performance.

@@ -369,6 +369,7 @@ double Game::volumeExponent(int volume)
 {
 	return (exp(log(Game::VOLUME_GRADIENT + 1.0) * volume / (double)SDL_MIX_MAXVOLUME) -1.0 ) / Game::VOLUME_GRADIENT;
 }
+
 /**
  * Returns the display screen used by the game.
  * @return Pointer to the screen.

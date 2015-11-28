@@ -1005,6 +1005,7 @@ void SavedBattleGame::randomizeItemLocations(Tile *t)
 		}
 	}
 }
+
 /**
  * Removes an item from the game. Eg. when ammo item is depleted.
  * @param item The Item to remove.
@@ -1796,6 +1797,7 @@ std::vector< std::vector<std::pair<int, int> > > &SavedBattleGame::getModuleMap(
 {
 	return _baseModules;
 }
+
 /**
  * calculate the number of map modules remaining by counting the map objects
  * on the top floor who have the baseModule flag set. we store this data in the grid

@@ -227,12 +227,14 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 
 	_txtDesc->setText(ss5.str());
 }
+
 /**
  *
  */
 MonthlyReportState::~MonthlyReportState()
 {
 }
+
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
@@ -299,6 +301,7 @@ void MonthlyReportState::btnOkClick(Action *)
 		}
 	}
 }
+
 /**
  * Update all our activity counters, gather all our scores,
  * get our countries to make sign pacts, adjust their fundings,
@@ -371,6 +374,7 @@ void MonthlyReportState::calculateChanges()
 	//calculate total.
 	_ratingTotal = xcomTotal - alienTotal;
 }
+
 /**
  * Builds a sentence from a list of countries, adding the appropriate
  * separators and pluralization.

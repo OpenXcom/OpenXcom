@@ -32,6 +32,7 @@ SoldierDiary::SoldierDiary(const YAML::Node &node)
 {
 	load(node);
 }
+
 /**
  * Initializes a new blank diary.
  */
@@ -45,6 +46,7 @@ SoldierDiary::SoldierDiary() : _commendations(), _killList(), _missionIdList(), 
     _MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _slaveKillsTotal(0), _panickTotal(0), _controlTotal(0), _lootValueTotal(0), _bestSoldier(false), _globeTrotter(false)
 {
 }
+
 /**
  *
  */
@@ -59,6 +61,7 @@ SoldierDiary::~SoldierDiary()
 		delete *i;
 	}
 }
+
 /**
  * Loads the diary from a YAML file.
  * @param node YAML node.
@@ -128,6 +131,7 @@ void SoldierDiary::load(const YAML::Node& node)
     _controlTotal = node["controlTotal"].as<int>(_controlTotal);
     _lootValueTotal = node["lootValueTotal"].as<int>(_lootValueTotal);
 }
+
 /**
  * Saves the diary to a YAML file.
  * @return YAML node.
@@ -193,6 +197,7 @@ YAML::Node SoldierDiary::save() const
     if (_lootValueTotal) node["lootValueTotal"] = _lootValueTotal;
 	return node;
 }
+
 /**
  * Update soldier diary statistics.
  * @param unitStatistics BattleUnitStatistics to get stats from.
@@ -320,6 +325,7 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 		_globeTrotter = true;
 	}
 }
+
 /**
  * Get soldier commendations.
  * @return SoldierCommendations list of soldier's commendations.
@@ -328,6 +334,7 @@ std::vector<SoldierCommendations*> *SoldierDiary::getSoldierCommendations()
 {
 	return &_commendations;
 }
+
 /**
  * Manage the soldier's commendations.
  * Award new ones, if deserved.
@@ -616,6 +623,7 @@ bool SoldierDiary::manageCommendations(Mod *rules)
 	}
 	return awardedCommendation;
 }
+
 /**
  * Manage modular commendations (private)
  * @param nextCommendationLevel map<string, int> 
@@ -631,6 +639,7 @@ void SoldierDiary::manageModularCommendations(std::map<std::string, int> &nextCo
 		modularCommendations[statTotal.first]++;
 	}
 }
+
 /**
  * Award commendations to the soldier.
  * @param type string
@@ -653,6 +662,7 @@ void SoldierDiary::awardCommendation(std::string type, std::string noun)
 		_commendations.push_back(new SoldierCommendations(type, noun));
 	}
 }
+
 /**
  * Get vector of mission ids.
  * @return Vector of mission ids.
@@ -661,6 +671,7 @@ std::vector<int> &SoldierDiary::getMissionIdList()
 { 
     return _missionIdList;
 }
+
 /**
  * Get vector of kills.
  * @return vector of BattleUnitKills
@@ -669,6 +680,7 @@ std::vector<BattleUnitKills*> &SoldierDiary::getKills()
 {
     return _killList;
 }
+
 /**
  * Get list of kills sorted by rank
  * @return 
@@ -682,6 +694,7 @@ std::map<std::string, int> SoldierDiary::getAlienRankTotal()
 	}
 	return list;
 }
+
 /**
  *
  */
@@ -694,6 +707,7 @@ std::map<std::string, int> SoldierDiary::getAlienRaceTotal()
 	}
 	return list;
 }
+
 /**
  *
  */
@@ -706,6 +720,7 @@ std::map<std::string, int> SoldierDiary::getWeaponTotal()
 	}
 	return list;
 }
+
 /**
  *
  */
@@ -718,6 +733,7 @@ std::map<std::string, int> SoldierDiary::getWeaponAmmoTotal()
 	}
 	return list;
 }
+
 /**
  *
  */
@@ -725,6 +741,7 @@ std::map<std::string, int> &SoldierDiary::getRegionTotal()
 {
 	return _regionTotal;
 }
+
 /**
  *
  */
@@ -732,6 +749,7 @@ std::map<std::string, int> &SoldierDiary::getCountryTotal()
 {
 	return _countryTotal;
 }
+
 /**
  *
  */
@@ -739,6 +757,7 @@ std::map<std::string, int> &SoldierDiary::getTypeTotal()
 {
 	return _typeTotal;
 }
+
 /**
  *
  */
@@ -746,6 +765,7 @@ std::map<std::string, int> &SoldierDiary::getUFOTotal()
 {
 	return _UFOTotal;
 }
+
 /**
  *
  */
@@ -753,6 +773,7 @@ int SoldierDiary::getScoreTotal() const
 {
 	return _scoreTotal;
 }
+
 /**
  *
  */
@@ -760,6 +781,7 @@ int SoldierDiary::getKillTotal() const
 {
 	return _killTotal;
 }
+
 /**
  *
  */
@@ -767,6 +789,7 @@ int SoldierDiary::getMissionTotal() const
 {
 	return _missionIdList.size();
 }
+
 /**
  *
  */
@@ -774,6 +797,7 @@ int SoldierDiary::getWinTotal() const
 {
 	return _winTotal;
 }
+
 /**
  *
  */
@@ -781,6 +805,7 @@ int SoldierDiary::getStunTotal() const
 {
 	return _stunTotal;
 }
+
 /**
  * 
  */
@@ -788,6 +813,7 @@ int SoldierDiary::getPanickTotal() const
 {
     return _panickTotal;
 }
+
 /**
  *
  */
@@ -795,6 +821,7 @@ int SoldierDiary::getControlTotal() const
 {
     return _controlTotal;
 }
+
 /**
  *
  */
@@ -802,6 +829,7 @@ int SoldierDiary::getDaysWoundedTotal() const
 {
 	return _daysWoundedTotal;
 }
+
 /**
  * Increment soldier's service time one month
  */
@@ -809,6 +837,7 @@ void SoldierDiary::addMonthlyService()
 {
 	_monthsService++;
 }
+
 /**
  *  Award special commendation to the original 8 soldiers.
  */
@@ -816,6 +845,7 @@ void SoldierDiary::awardOriginalEightCommendation()
 {
     _commendations.push_back(new SoldierCommendations("STR_MEDAL_ORIGINAL8_NAME", "NoNoun"));
 }
+
 /**
  *  Award post-humous best-of commendation.
  */
@@ -823,6 +853,7 @@ void SoldierDiary::awardBestOfRank(SoldierRank rank)
 {
     _bestOfRank = (int)rank + 1;
 }
+
 /**
  *  Award post-humous best-of commendation.
  */
@@ -847,18 +878,21 @@ SoldierCommendations::SoldierCommendations(const YAML::Node &node)
 {
 	load(node);
 }
+
 /**
  * Initializes a soldier commendation.
  */
 SoldierCommendations::SoldierCommendations(std::string commendationName, std::string noun) : _type(commendationName), _noun(noun), _decorationLevel(0), _isNew(true)
 {
 }
+
 /**
  *
  */
 SoldierCommendations::~SoldierCommendations()
 {
 }
+
 /**
  * Loads the commendation from a YAML file.
  * @param node YAML node.
@@ -870,6 +904,7 @@ void SoldierCommendations::load(const YAML::Node &node)
 	_decorationLevel = node["decorationLevel"].as<int>(_decorationLevel);
 	_isNew = node["isNew"].as<bool>(false);
 }
+
 /**
  * Saves the commendation to a YAML file.
  * @return YAML node.
@@ -882,6 +917,7 @@ YAML::Node SoldierCommendations::save() const
 	node["decorationLevel"] = _decorationLevel;
 	return node;
 }
+
 /**
  * Get the soldier's commendation's name.
  * @return string Commendation name.
@@ -890,6 +926,7 @@ std::string SoldierCommendations::getType() const
 {
 	return _type;
 }
+
 /**
  * Get the soldier's commendation's noun.
  * @return string Commendation noun
@@ -898,6 +935,7 @@ std::string SoldierCommendations::getNoun() const
 {
 	return _noun;
 }
+
 /**
  * Get the soldier commendation level's name.
  * @return string Commendation level.
@@ -908,6 +946,7 @@ std::string SoldierCommendations::getDecorationLevelName(int skipCounter)
 	ss << "STR_AWARD_" << _decorationLevel - skipCounter;
 	return ss.str();
 }
+
 /**
  * Get the soldier commendation level's description.
  * @return string Commendation level description.
@@ -918,6 +957,7 @@ std::string SoldierCommendations::getDecorationDescription()
 	ss << "STR_AWARD_DECOR_" << _decorationLevel;
 	return ss.str();
 }
+
 /**
  * Get the soldier commendation level's int.
  * @return int Commendation level.
@@ -926,6 +966,7 @@ int SoldierCommendations::getDecorationLevelInt()
 {
 	return _decorationLevel;
 }
+
 /**
  * Get newness of commendation.
  * @return bool Is the commendation new?
@@ -934,6 +975,7 @@ bool SoldierCommendations::isNew()
 {
 	return _isNew;
 }
+
 /**
  * Set the newness of the commendation to old.
  */
@@ -941,6 +983,7 @@ void SoldierCommendations::makeOld()
 {
 	_isNew = false;
 }
+
 /**
  * Add a level of decoration to the commendation.
  * Sets isNew to true.

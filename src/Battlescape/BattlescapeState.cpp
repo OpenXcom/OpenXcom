@@ -990,6 +990,7 @@ void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect, bool setRese
 		_battleGame->setupCursor();
 	}
 }
+
 /**
  * Shows/hides all map layers.
  * @param action Pointer to an action.
@@ -1022,6 +1023,7 @@ void BattlescapeState::btnEndTurnClick(Action *)
 		_battleGame->requestEndTurn();
 	}
 }
+
 /**
  * Aborts the game.
  * @param action Pointer to an action.

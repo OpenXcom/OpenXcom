@@ -231,6 +231,7 @@ bool AlienStrategy::validMissionLocation(const std::string &varName, const std::
 	}
 	return true;
 }
+
 /**
  * Checks that a given region appears in our strategy table.
  * @param region the region we want to check for validity.

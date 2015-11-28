@@ -1710,6 +1710,7 @@ void Map::setHeight(int height)
 	_message->setHeight((_visibleMapHeight < 200)? _visibleMapHeight : 200);
 	_message->setY((_visibleMapHeight - _message->getHeight()) / 2);
 }
+
 /**
  * Special handling for setting the width of the map viewport.
  * @param width the new base screen width.

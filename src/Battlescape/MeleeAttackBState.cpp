@@ -126,6 +126,7 @@ void MeleeAttackBState::init()
 
 	performMeleeAttack();
 }
+
 /**
  * Performs all the overall functions of the state, this code runs AFTER the explosion state pops.
  */

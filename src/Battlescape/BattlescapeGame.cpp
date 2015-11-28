@@ -857,6 +857,7 @@ void BattlescapeGame::missionComplete()
 		}
 	}
 }
+
 /**
  * Handles the result of non target actions, like priming a grenade.
  */
@@ -1177,6 +1178,7 @@ bool BattlescapeGame::noActionsPending(BattleUnit *bu)
 
 	return true;
 }
+
 /**
  * Sets the timer interval for think() calls of the state.
  * @param interval An interval in ms.
@@ -1418,6 +1420,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 
 	return false;
 }
+
 /**
  * Gets a pointer to access action members directly.
  * @return Pointer to action.
@@ -1792,6 +1795,7 @@ Map *BattlescapeGame::getMap()
 {
 	return _parentState->getMap();
 }
+
 /**
  * Gets the save.
  * @return save.
@@ -1800,6 +1804,7 @@ SavedBattleGame *BattlescapeGame::getSave()
 {
 	return _save;
 }
+
 /**
  * Gets the tilengine.
  * @return tilengine.
@@ -1808,6 +1813,7 @@ TileEngine *BattlescapeGame::getTileEngine()
 {
 	return _save->getTileEngine();
 }
+
 /**
  * Gets the pathfinding.
  * @return pathfinding.
@@ -1816,6 +1822,7 @@ Pathfinding *BattlescapeGame::getPathfinding()
 {
 	return _save->getPathfinding();
 }
+
 /**
  * Gets the mod.
  * @return mod.
@@ -2196,6 +2203,7 @@ bool BattlescapeGame::convertInfected()
 	}
 	return retVal;
 }
+
 /**
  * Sets the kneel reservation setting.
  * @param reserved Should we reserve an extra 4 TUs to kneel?

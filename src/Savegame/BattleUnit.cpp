@@ -2320,6 +2320,7 @@ Armor *BattleUnit::getArmor() const
 {
 	return _armor;
 }
+
 /**
  * Get unit's name.
  * An aliens name is the translation of it's race and rank.
@@ -2350,6 +2351,7 @@ std::wstring BattleUnit::getName(Language *lang, bool debugAppendId) const
 
 	return _name;
 }
+
 /**
   * Gets pointer to the unit's stats.
   * @return stats Pointer to the unit's stats.
@@ -2441,6 +2443,7 @@ bool BattleUnit::isWoundable() const
 {
 	return (_type=="SOLDIER" || (Options::alienBleeding && _faction != FACTION_PLAYER && _armor->getSize() == 1));
 }
+
 /**
  * Get whether the unit is affected by morale loss.
  * Normally only small units are affected by morale loss.
@@ -2557,6 +2560,7 @@ void BattleUnit::setActiveHand(const std::string &hand)
 	if (_activeHand != hand) _cacheInvalid = true;
 	_activeHand = hand;
 }
+
 /**
  * Get unit's active hand.
  * @return active hand.

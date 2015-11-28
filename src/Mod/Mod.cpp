@@ -1861,6 +1861,7 @@ std::vector<std::pair<std::string, ExtraSounds *> > Mod::getExtraSounds() const
 {
 	return _extraSounds;
 }
+
 /**
  * Gets the list of external strings.
  * @return The list of external strings.
