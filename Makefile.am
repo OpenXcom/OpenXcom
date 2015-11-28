@@ -577,7 +577,6 @@ openxcom_SOURCES = \
 	src/Savegame/Country.h \
 	src/Savegame/Craft.cpp \
 	src/Savegame/Craft.h \
-	src/Savegame/CraftId.h \
 	src/Savegame/CraftWeapon.cpp \
 	src/Savegame/CraftWeapon.h \
 	src/Savegame/CraftWeaponProjectile.cpp \

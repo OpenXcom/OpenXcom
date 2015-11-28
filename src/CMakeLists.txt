@@ -308,6 +308,7 @@ set ( geoscape_src
   Geoscape/ConfirmLandingState.h
   Geoscape/ConfirmNewBaseState.cpp
   Geoscape/ConfirmNewBaseState.h
+  Geoscape/Cord.h
   Geoscape/CraftErrorState.cpp
   Geoscape/CraftErrorState.h
   Geoscape/CraftPatrolState.cpp
