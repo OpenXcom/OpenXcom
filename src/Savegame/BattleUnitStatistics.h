@@ -166,6 +166,7 @@ struct BattleUnitKills
 		}
 	}
 
+	// Get human-readable victim name.
 	std::wstring getUnitName(Language *lang) const
 	{
 		if (!name.empty())
@@ -181,6 +182,109 @@ struct BattleUnitKills
 			std::wostringstream ss;
 			ss << lang->getString(race) << L" " << lang->getString(rank);
 			return ss.str();
+		}
+	}
+
+	// Decide victim name, race and rank.
+	void setUnitStats(BattleUnit *unit)
+	{
+		if (unit->getGeoscapeSoldier())
+		{
+			name = unit->getGeoscapeSoldier()->getName();
+		}
+		else
+		{
+			type = unit->getType();
+		}
+
+		if (unit->getOriginalFaction() == FACTION_PLAYER)
+		{
+			// Soldiers
+			if (unit->getGeoscapeSoldier())
+			{
+				if (!unit->getGeoscapeSoldier()->getRankString().empty())
+				{
+					rank = unit->getGeoscapeSoldier()->getRankString();
+				}
+				else
+				{
+					rank = "STR_SOLDIER";
+				}
+				if (unit->getUnitRules() != 0 && !unit->getUnitRules()->getRace().empty())
+				{
+					race = unit->getUnitRules()->getRace();
+				}
+				else
+				{
+					race = "STR_FRIENDLY";
+				}
+			}
+			// HWPs
+			else
+			{
+				if (unit->getUnitRules() != 0 && !unit->getUnitRules()->getRank().empty())
+				{
+					rank = unit->getUnitRules()->getRank();
+				}
+				else
+				{
+					rank = "STR_HWPS";
+				}
+				if (unit->getUnitRules() != 0 && !unit->getUnitRules()->getRace().empty())
+				{
+					race = unit->getUnitRules()->getRace();
+				}
+				else
+				{
+					race = "STR_FRIENDLY";
+				}
+			}
+		}
+		// Aliens
+		else if (unit->getOriginalFaction() == FACTION_HOSTILE)
+		{
+			if (unit->getUnitRules() != 0 && !unit->getUnitRules()->getRank().empty())
+			{
+				rank = unit->getUnitRules()->getRank();
+			}
+			else
+			{
+				rank = "STR_LIVE_SOLDIER";
+			}
+			if (unit->getUnitRules() != 0 && !unit->getUnitRules()->getRace().empty())
+			{
+				race = unit->getUnitRules()->getRace();
+			}
+			else
+			{
+				race = "STR_HOSTILE";
+			}
+		}
+		// Civilians
+		else if (unit->getOriginalFaction() == FACTION_NEUTRAL)
+		{
+			if (unit->getUnitRules() != 0 && !unit->getUnitRules()->getRank().empty())
+			{
+				rank = unit->getUnitRules()->getRank();
+			}
+			else
+			{
+				rank = "STR_CIVILIAN";
+			}
+			if (unit->getUnitRules() != 0 && !unit->getUnitRules()->getRace().empty())
+			{
+				race = unit->getUnitRules()->getRace();
+			}
+			else
+			{
+				race = "STR_NEUTRAL";
+			}
+		}
+		// Error
+		else
+		{
+			rank = "STR_UNKNOWN";
+			race = "STR_UNKNOWN";
 		}
 	}
 

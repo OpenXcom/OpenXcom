@@ -18,7 +18,7 @@
  */
 #include "SoldierDiaryPerformanceState.h"
 #include "SoldierDiaryOverviewState.h"
-#include <string>
+#include <sstream>
 #include "../Engine/Game.h"
 #include "../Mod/Mod.h"
 #include "../Engine/Language.h"
@@ -138,13 +138,13 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 	_btnOk->onMouseClick((ActionHandler)&SoldierDiaryPerformanceState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SoldierDiaryPerformanceState::btnOkClick, Options::keyCancel);
 
-	_btnKills->setText(tr("STR_KILLS_UC"));
+	_btnKills->setText(tr("STR_TAKEDOWNS"));
 	_btnKills->onMouseClick((ActionHandler)&SoldierDiaryPerformanceState::btnKillsToggle);
 	
 	_btnMissions->setText(tr("STR_MISSIONS_UC"));
 	_btnMissions->onMouseClick((ActionHandler)&SoldierDiaryPerformanceState::btnMissionsToggle);
 
-	_btnCommendations->setText(tr("STR_AWARDS_UC"));
+	_btnCommendations->setText(tr("STR_AWARDS"));
 	_btnCommendations->onMouseClick((ActionHandler)&SoldierDiaryPerformanceState::btnCommendationsToggle);
 
 	_btnPrev->setText(L"<<");
@@ -175,13 +175,13 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 	_txtTitle->setAlign(ALIGN_CENTER);
 	// Text is decided in init()
 
-	_txtRace->setText(tr("STR_KILLS_BY_RACE"));
+	_txtRace->setText(tr("STR_TAKEDOWNS_BY_RACE"));
 	_txtRace->setWordWrap(true);
 
-	_txtRank->setText(tr("STR_KILLS_BY_RANK"));
+	_txtRank->setText(tr("STR_TAKEDOWNS_BY_RANK"));
 	_txtRank->setWordWrap(true);
 
-	_txtWeapon->setText(tr("STR_KILLS_BY_WEAPON"));
+	_txtWeapon->setText(tr("STR_TAKEDOWNS_BY_WEAPON"));
 	_txtWeapon->setWordWrap(true);
 
 	_lstRace->setColumns(2, 80, 10);
@@ -331,7 +331,7 @@ void SoldierDiaryPerformanceState::init()
 		_lstKillTotals->addRow(4, tr("STR_KILLS").arg(_soldier->getDiary()->getKillTotal()).c_str(),
 								  tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str(),
 								  tr("STR_PANICKS").arg(_soldier->getDiary()->getPanickTotal()).c_str(),
-								  tr("STR_MIND_CONTROLS").arg(_soldier->getDiary()->getControlTotal()).c_str());
+								  tr("STR_MINDCONTROLS").arg(_soldier->getDiary()->getControlTotal()).c_str());
 	}
 	else
 	{
@@ -362,11 +362,9 @@ void SoldierDiaryPerformanceState::init()
 		for (std::map<std::string, int>::const_iterator j = mapArray[i].begin() ; j != mapArray[i].end() ; ++j)
 		{
 			if ((*j).first == "NO_UFO") continue;
-			std::wstringstream ss1, ss2;
-
-			ss1 << tr((*j).first);
-			ss2 << (*j).second;
-			lstArray[i]->addRow(2, ss1.str().c_str(), ss2.str().c_str());
+			std::wostringstream ss;
+			ss << (*j).second;
+			lstArray[i]->addRow(2, tr((*j).first).c_str(), ss.str().c_str());
 		}
 	}
     
@@ -376,24 +374,18 @@ void SoldierDiaryPerformanceState::init()
 		{
 			break;
 		}
-		RuleCommendations* commendation = _game->getMod()->getCommendation()[(*i)->getType()];
-		std::wstringstream ss1, ss2, ss3;
 
+		RuleCommendations* commendation = _game->getMod()->getCommendation()[(*i)->getType()];
 		if ((*i)->getNoun() != "noNoun")
 		{
-			ss1 << tr((*i)->getType()).arg(tr((*i)->getNoun()));
-			ss3 << tr(commendation->getDescription()).arg(tr((*i)->getNoun()));
+			_lstCommendations->addRow(2, tr((*i)->getType()).arg(tr((*i)->getNoun())).c_str(), tr((*i)->getDecorationDescription()).c_str());
+			_commendationsListEntry.push_back(tr(commendation->getDescription()).arg(tr((*i)->getNoun())));
 		}
 		else
 		{
-			ss1 << tr((*i)->getType());
-			ss3 << tr(commendation->getDescription());
+			_lstCommendations->addRow(2, tr((*i)->getType()).c_str(), tr((*i)->getDecorationDescription()).c_str());
+			_commendationsListEntry.push_back(tr(commendation->getDescription()));
 		}
-		ss2 << tr((*i)->getDecorationDescription());
-		_lstCommendations->addRow(2, ss1.str().c_str(), ss2.str().c_str());
-		
-
-		_commendationsListEntry.push_back(ss3.str());
 
 		drawSprites();
 	}

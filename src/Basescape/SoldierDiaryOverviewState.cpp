@@ -20,7 +20,7 @@
 #include "SoldierDiaryPerformanceState.h"
 #include "SoldierDiaryMissionState.h"
 #include "SoldierInfoState.h"
-#include <string>
+#include <sstream>
 #include "../Mod/Mod.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -94,13 +94,13 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(Base *base, size_t soldierI
 	_btnOk->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SoldierDiaryOverviewState::btnOkClick, Options::keyCancel);
 
-	_btnKills->setText(tr("STR_KILLS_UC"));
+	_btnKills->setText(tr("STR_TAKEDOWNS"));
 	_btnKills->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnKillsClick);
 	
 	_btnMissions->setText(tr("STR_MISSIONS_UC"));
 	_btnMissions->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnMissionsClick);
 
-	_btnCommendations->setText(tr("STR_AWARDS_UC"));
+	_btnCommendations->setText(tr("STR_AWARDS"));
 	_btnCommendations->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnCommendationsClick);
 	_btnCommendations->setVisible(!_game->getMod()->getCommendation().empty());
 
@@ -197,42 +197,32 @@ void SoldierDiaryOverviewState::init()
 		}
 
 		// See if this mission is part of the soldier's vector of missions
-		std::wstringstream wssSuccess, wssRating, wssScore;
-		std::wstringstream wssRegion, wssCountry;
-		std::wstringstream wssHour, wssMinute, wssDay, wssMonth, wssYear;
-
+		std::wostringstream wssStatus, wssLocation, wssYear;
 		if ((*j)->success)
 		{
-			wssSuccess << tr("STR_MISSION_WIN");
+			wssStatus << tr("STR_MISSION_WIN") << " - " << tr((*j)->rating);
 		}
 		else
 		{
-			wssSuccess << tr("STR_MISSION_LOSS");
+			wssStatus << tr("STR_MISSION_LOSS") << " - " << tr((*j)->rating);
 		}
-		
-		wssRating << tr((*j)->rating);
-		wssScore << (*j)->score;
-
-		wssRegion << tr((*j)->region);
-		wssCountry << tr((*j)->country);
-
-		wssMonth << tr((*j)->time.getMonthString());
-		wssDay << (*j)->time.getDayString(_game->getLanguage());
-		wssYear << (*j)->time.getYear();
-
-		std::wstringstream wssStatus, wssLocation;
 
 		if ((*j)->country == "STR_UNKNOWN")
 		{
-			wssLocation << wssRegion.str();
+			wssLocation << tr((*j)->region);
 		}
 		else
 		{
-			wssLocation << wssCountry.str();
+			wssLocation << tr((*j)->country);
 		}
-		wssStatus << wssSuccess.str() << " - " << wssRating.str();
+
+		wssYear << (*j)->time.getYear();
 		
-		_lstDiary->addRow(5, wssLocation.str().c_str(), wssStatus.str().c_str(), wssDay.str().c_str(), wssMonth.str().c_str(), wssYear.str().c_str());
+		_lstDiary->addRow(5, wssLocation.str().c_str(),
+							 wssStatus.str().c_str(),
+							 (*j)->time.getDayString(_game->getLanguage()).c_str(),
+							 tr((*j)->time.getMonthString()).c_str(),
+							 wssYear.str().c_str());
 		row++;
 	}
 	if (row > 0 && _lstDiary->getScroll() >= row)

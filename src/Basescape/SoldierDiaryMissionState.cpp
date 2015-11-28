@@ -161,11 +161,13 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Base *base, size_t soldierId,
 			break;
 		}
 
-		_lstKills->addRow(3, tr((*j)->getKillStatusString()).c_str(), (*j)->getUnitName(_game->getLanguage()).c_str(), tr((*j)->weapon).c_str());
+		_lstKills->addRow(3, tr((*j)->getKillStatusString()).c_str(),
+							 (*j)->getUnitName(_game->getLanguage()).c_str(),
+							 tr((*j)->weapon).c_str());
 	}
 	if (!stunOrKill)
 	{
-		_lstKills->addRow(1, tr("STR_NO_KILLS").c_str());
+		_lstKills->addRow(1, tr("STR_NO_RECORD").c_str());
 	}
 
 	_txtKills->setText(tr("STR_KILLS").arg(count));

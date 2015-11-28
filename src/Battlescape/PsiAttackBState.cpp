@@ -164,74 +164,9 @@ void PsiAttackBState::psiAttack()
 		Game *game = _parent->getSave()->getBattleState()->getGame();
 		_action.actor->addPsiSkillExp();
 		_action.actor->addPsiSkillExp();
-		/// Decide target race and rank.
+
 		BattleUnitKills *killStat = new BattleUnitKills();
-		// Soldiers
-		if (_target->getGeoscapeSoldier() && _target->getOriginalFaction() == FACTION_PLAYER)
-		{
-			if (_target->getUnitRules() != 0 && _target->getUnitRules()->getRank() != "")
-			{
-				killStat->rank = _target->getGeoscapeSoldier()->getRankString();
-			}
-			else
-			{
-				killStat->rank = "STR_LIVE_SOLDIER";
-			}
-			if (_target->getUnitRules() != 0 && _target->getUnitRules()->getRace() != "")
-			{
-				killStat->race = _target->getUnitRules()->getRace();
-			}
-			else
-			{
-				killStat->race = "STR_HUMAN";								
-			}
-		}
-		// Aliens
-		else if (_target->getOriginalFaction() == FACTION_HOSTILE)
-		{
-			if (_target->getUnitRules() != 0 && _target->getUnitRules()->getRank() != "")
-			{
-				killStat->rank = _target->getUnitRules()->getRank();
-			}
-			else
-			{
-				killStat->rank = "STR_UNKNOWN";
-			}
-			if (_target->getUnitRules() != 0 && _target->getUnitRules()->getRace() != "")
-			{
-				killStat->race = _target->getUnitRules()->getRace();
-			}
-			else
-			{
-				killStat->race = "STR_LIVE_SOLDIER";								
-			}
-		}
-		// Civilians
-		else if (_target->getOriginalFaction() == FACTION_NEUTRAL)
-		{
-			if (_target->getUnitRules() != 0 && _target->getUnitRules()->getRank() != "")
-			{
-				killStat->rank = _target->getUnitRules()->getRank();
-			}
-			else
-			{
-				killStat->rank = "STR_CIVILIAN";
-			}
-			if (_target->getUnitRules() != 0 && (_target->getUnitRules()->getRace() != "" || _target->getUnitRules()->getRace() != "STR_CIVILIAN"))
-			{
-				killStat->race = _target->getUnitRules()->getRace();
-			}
-			else
-			{
-				killStat->race = "STR_HUMAN";
-			}
-		}
-		// Error
-		else
-		{
-			killStat->rank = "STR_UNKNOWN";
-			killStat->race = "STR_UNKNOWN";
-		}
+		killStat->setUnitStats(_target);
 		killStat->weapon = _action.weapon->getRules()->getName();
 		killStat->weaponAmmo = _action.weapon->getRules()->getName();
 		killStat->faction = _target->getFaction();
