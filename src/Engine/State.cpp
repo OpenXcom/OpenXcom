@@ -104,10 +104,6 @@ void State::setInterface(const std::string& category, bool alterPal, SavedBattle
 				backPal = color;
 			}
 		}
-		if (!_ruleInterface->getMusic().empty())
-		{
-			_game->getMod()->playMusic(_ruleInterface->getMusic());
-		}
 	}
 	if (battleGame)
 	{
@@ -255,6 +251,10 @@ void State::init()
 	if (_game->getMod() != 0)
 	{
 		_game->getMod()->setPalette(_palette);
+	}
+	if (!_ruleInterface->getMusic().empty())
+	{
+		_game->getMod()->playMusic(_ruleInterface->getMusic());
 	}
 }
 

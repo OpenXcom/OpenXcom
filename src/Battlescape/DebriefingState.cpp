@@ -215,34 +215,30 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 	}
 
 	// Calculate rating
-	std::wstring rating;
+	std::string rating;
 	if (total <= -200)
 	{
-		rating = tr("STR_RATING_TERRIBLE");
-		_missionStatistics->rating = "STR_RATING_TERRIBLE";
+		rating = "STR_RATING_TERRIBLE";
 	}
 	else if (total <= 0)
 	{
-		rating = tr("STR_RATING_POOR");
-		_missionStatistics->rating = "STR_RATING_POOR";
+		rating = "STR_RATING_POOR";
 	}
 	else if (total <= 200)
 	{
-		rating = tr("STR_RATING_OK");
-		_missionStatistics->rating = "STR_RATING_OK";
+		rating = "STR_RATING_OK";
 	}
 	else if (total <= 500)
 	{
-		rating = tr("STR_RATING_GOOD");
-		_missionStatistics->rating = "STR_RATING_GOOD";
+		rating = "STR_RATING_GOOD";
 	}
 	else
 	{
-		rating = tr("STR_RATING_EXCELLENT");
-		_missionStatistics->rating = "STR_RATING_EXCELLENT";
+		rating = "STR_RATING_EXCELLENT";
 	}
+	_missionStatistics->rating = rating;
 	_missionStatistics->score = total;
-	_txtRating->setText(tr("STR_RATING").arg(rating));
+	_txtRating->setText(tr("STR_RATING").arg(tr(rating)));
 
 	SavedGame *save = _game->getSavedGame();
 	SavedBattleGame *battle = save->getSavedBattle();
@@ -663,7 +659,7 @@ void DebriefingState::prepareDebriefing()
 					if ((*k)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
 					{
 						_country = (*k);
-						_missionStatistics->country= _country->getRules()->getType();
+						_missionStatistics->country = _country->getRules()->getType();
 						break;
 					}
 				}
@@ -685,6 +681,10 @@ void DebriefingState::prepareDebriefing()
 				craft->returnToBase();
 				craft->setMissionComplete(true);
 				craft->setInBattlescape(false);
+				// Cheap way to get marker data
+				YAML::Node node = craft->getDestination()->saveId();
+				_missionStatistics->markerName = node["type"].as<std::string>();
+				_missionStatistics->markerId = node["id"].as<int>();
 			}
 			else if ((*j)->getDestination() != 0)
 			{

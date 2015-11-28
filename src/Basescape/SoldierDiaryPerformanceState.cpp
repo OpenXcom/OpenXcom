@@ -138,10 +138,10 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 	_btnOk->onMouseClick((ActionHandler)&SoldierDiaryPerformanceState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SoldierDiaryPerformanceState::btnOkClick, Options::keyCancel);
 
-	_btnKills->setText(tr("STR_TAKEDOWNS"));
+	_btnKills->setText(tr("STR_EFFICACY"));
 	_btnKills->onMouseClick((ActionHandler)&SoldierDiaryPerformanceState::btnKillsToggle);
 	
-	_btnMissions->setText(tr("STR_MISSIONS_UC"));
+	_btnMissions->setText(tr("STR_PERFORMANCE"));
 	_btnMissions->onMouseClick((ActionHandler)&SoldierDiaryPerformanceState::btnMissionsToggle);
 
 	_btnCommendations->setText(tr("STR_AWARDS"));
@@ -173,15 +173,15 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	// Text is decided in init()
 
-	_txtRace->setText(tr("STR_TAKEDOWNS_BY_RACE"));
+	// Text is decided in init()
+	_txtRace->setText(tr("STR_NEUTRALIZATIONS_BY_RACE"));
 	_txtRace->setWordWrap(true);
 
-	_txtRank->setText(tr("STR_TAKEDOWNS_BY_RANK"));
+	_txtRank->setText(tr("STR_NEUTRALIZATIONS_BY_RANK"));
 	_txtRank->setWordWrap(true);
 
-	_txtWeapon->setText(tr("STR_TAKEDOWNS_BY_WEAPON"));
+	_txtWeapon->setText(tr("STR_NEUTRALIZATIONS_BY_WEAPON"));
 	_txtWeapon->setWordWrap(true);
 
 	_lstRace->setColumns(2, 80, 10);

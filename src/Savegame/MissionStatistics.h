@@ -22,7 +22,9 @@
 #include <yaml-cpp/yaml.h>
 #include <map>
 #include <string>
+#include <sstream>
 #include "GameTime.h"
+#include "../Engine/Language.h"
 
 namespace OpenXcom
 {
@@ -34,6 +36,8 @@ struct MissionStatistics
 {
 	/// Variables
 	int id;
+	std::string markerName;
+	int markerId;
 	GameTime time;
 	std::string region, country, type, ufo;
 	bool success;
@@ -49,6 +53,8 @@ struct MissionStatistics
 	void load(const YAML::Node &node)
 	{
 		id = node["id"].as<int>(id);
+		markerName = node["markerName"].as<std::string>(markerName);
+		markerId = node["markerId"].as<int>(markerId);
 		time.load(node["time"]);
 		region = node["region"].as<std::string>(region);
 		country = node["country"].as<std::string>(country);
@@ -59,7 +65,7 @@ struct MissionStatistics
 		rating = node["rating"].as<std::string>(rating);
 		alienRace = node["alienRace"].as<std::string>(alienRace);
 		daylight = node["daylight"].as<int>(daylight);
-		injuryList = node["injuryList"].as<std::map<int, int> >(injuryList);
+		injuryList = node["injuryList"].as< std::map<int, int> >(injuryList);
 		valiantCrux = node["valiantCrux"].as<bool>(valiantCrux);
 		lootValue = node["lootValue"].as<int>(lootValue);
 	}
@@ -69,6 +75,11 @@ struct MissionStatistics
 	{
 		YAML::Node node;
 		node["id"] = id;
+		if (!markerName.empty())
+		{
+			node["markerName"] = markerName;
+			node["markerId"] = markerId;
+		}
 		node["time"] = time.save();
 		node["region"] = region;
 		node["country"] = country;
@@ -85,8 +96,59 @@ struct MissionStatistics
 		return node;
 	}
 
+	std::wstring getMissionName(Language *lang) const
+	{
+		if (!markerName.empty())
+		{
+			return lang->getString(markerName).arg(markerId);
+		}
+		else
+		{
+			return lang->getString(type);
+		}
+	}
+
+	std::wstring getRatingString(Language *lang) const
+	{
+		std::wostringstream ss;
+		if (success)
+		{
+			ss << lang->getString("STR_MISSION_WIN");
+		}
+		else
+		{
+			ss << lang->getString("STR_MISSION_LOSS");
+		}
+		ss << L" - " << lang->getString(rating);
+		return ss.str();
+	}
+
+	std::string getLocationString() const
+	{
+		if (country == "STR_UNKNOWN")
+		{
+			return region;
+		}
+		else
+		{
+			return country;
+		}
+	}
+
+	std::string getDaylightString() const
+	{
+		if (daylight <= 5)
+		{
+			return "STR_DAY";
+		}
+		else
+		{
+			return "STR_NIGHT";
+		}
+	}
+
 	MissionStatistics(const YAML::Node& node) : time(0, 0, 0, 0, 0, 0, 0) { load(node); }
-	MissionStatistics() : id(0), time(0, 0, 0, 0, 0, 0, 0), region("STR_REGION_UNKNOWN"), country("STR_UNKNOWN"), type(), ufo("NO_UFO"), success(false), score(0), rating(), alienRace("STR_UNKNOWN"), daylight(0), injuryList(), valiantCrux(false), lootValue(0) { }
+	MissionStatistics() : id(0), markerId(0), time(0, 0, 0, 0, 0, 0, 0), region("STR_REGION_UNKNOWN"), country("STR_UNKNOWN"), ufo("NO_UFO"), success(false), score(0), alienRace("STR_UNKNOWN"), daylight(0), valiantCrux(false), lootValue(0) { }
 	~MissionStatistics() { }
 };
 

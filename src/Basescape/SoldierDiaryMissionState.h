@@ -39,20 +39,17 @@ class Soldier;
 class SoldierDiaryMissionState : public State
 {
 private:
-	Base *_base;
-	size_t _soldierId;
 	Soldier *_soldier;
-	std::vector<Soldier*> *_list;
 
 	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtScore, *_txtKills, *_txtMissionType, *_txtUFO, *_txtRace, *_txtDaylight, *_txtDaysWounded;
+	Text *_txtTitle, *_txtUFO, *_txtScore, *_txtKills, *_txtLocation, *_txtRace, *_txtDaylight, *_txtDaysWounded;
 	TextList *_lstKills;
 
 	int _rowEntry;
 public:
 	/// Creates the Soldier Diary Mission state.
-	SoldierDiaryMissionState(Base *base, size_t soldierId, int rowEntry);
+	SoldierDiaryMissionState(Soldier *soldier, int rowEntry);
 	/// Cleans up the Soldier Diary Mission state.
 	~SoldierDiaryMissionState();
 	/// Handler for clicking the Cancel button.

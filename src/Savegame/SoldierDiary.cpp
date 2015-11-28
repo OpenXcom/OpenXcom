@@ -249,10 +249,14 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
     _lootValueTotal += missionStatistics->lootValue;
     if (missionStatistics->success)
     {
+		bool ufo = missionStatistics->ufo != "NO_UFO";
+		bool baseDefense = missionStatistics->type == "STR_BASE_DEFENSE";
+		bool alienBase = missionStatistics->type.find("STR_ALIEN_BASE") != std::string::npos ||
+						 missionStatistics->type.find("STR_ALIEN_COLONY") != std::string::npos;
         _winTotal++;
         if (missionStatistics->type != "STR_UFO_CRASH_RECOVERY")
             _importantMissionTotal++;
-		if (missionStatistics->type == "STR_ALIEN_BASE_ASSAULT")
+		if (alienBase)
 			_alienBaseAssaultTotal++;
         if (unitStatistics->loneSurvivor)
             _loneSurvivorTotal++;
@@ -262,11 +266,11 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
             _allAliensKilledTotal++;
         if (unitStatistics->mercyCross)
             _allAliensStunnedTotal++;
-        if (missionStatistics->daylight > 5 && missionStatistics->type != "STR_ALIEN_BASE_ASSAULT" && missionStatistics->type != "STR_BASE_DEFENSE")
+        if (missionStatistics->daylight > 5 && !alienBase && !baseDefense)
             _nightMissionTotal++;
-        if (missionStatistics->type == "STR_BASE_DEFENSE")
+        if (baseDefense)
             _baseDefenseMissionTotal++;
-        else if (missionStatistics->type == "STR_TERROR_MISSION")
+        else if (!alienBase && !ufo)
         {
             _terrorMissionTotal++;
             if (missionStatistics->daylight > 5)
