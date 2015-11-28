@@ -99,7 +99,20 @@ struct BattleUnitKills
 		return node;
 	}
 
-	// Convert victim State to string.
+	// Convert kill Status to string.
+	std::string getKillStatusString() const
+	{
+		switch (status)
+		{
+		case STATUS_DEAD:           return "STR_KILLED";
+		case STATUS_UNCONSCIOUS:    return "STR_STUNNED";
+		case STATUS_PANICKING:		return "STR_PANICKED";
+		case STATUS_TURNING:		return "STR_MINDCONTROLLED";
+		default:                    return "status error";
+		}
+	}
+
+	// Convert victim Status to string.
 	std::string getUnitStatusString() const
 	{
 		switch (status)

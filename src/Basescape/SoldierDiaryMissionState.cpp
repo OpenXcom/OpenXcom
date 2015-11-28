@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SoldierDiaryMissionState.h"
-#include <sstream>
 #include "../Mod/Mod.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -145,48 +144,28 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Base *base, size_t soldierId,
 
 	int count = 0;
     bool stunOrKill = false;
-	std::wstringstream wssKills;
 
 	for (std::vector<BattleUnitKills*>::iterator j = _soldier->getDiary()->getKills().begin() ; j != _soldier->getDiary()->getKills().end() ; ++j)
 	{
 		if ((*j)->mission != missionId) continue;
-		std::wstringstream wssRank, wssRace, wssWeapon, wssAmmo;
 
-		wssRace << tr((*j)->race);
-		wssRank << tr((*j)->rank);
-		wssWeapon << tr((*j)->weapon);
-
-		std::wstringstream wssUnit, wssStatus;
-		wssUnit << (*j)->getUnitName(_game->getLanguage());
-
-		if ((*j)->getUnitStatusString() == "STATUS_DEAD")
+		switch ((*j)->status)
 		{
-			wssStatus << tr("STR_KILLED");
-            count++;
-            stunOrKill = true;
+		case STATUS_DEAD:
+			count++;
+		case STATUS_UNCONSCIOUS:
+		case STATUS_PANICKING:
+		case STATUS_TURNING:
+			stunOrKill = true;
+		default:
+			break;
 		}
-		else if ((*j)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
-		{
-			wssStatus << tr("STR_STUNNED");
-            stunOrKill = true;
-		}
-        else if ((*j)->getUnitStatusString() == "STATUS_PANICKED")
-		{
-            wssStatus << tr("STR_PANICKED");
-            stunOrKill = true;
-        }
-        else if ((*j)->getUnitStatusString() == "STATUS_TURNING")
-        {
-            wssStatus << tr("STR_MINDCONTROLLED");
-            stunOrKill = true;
-        }
 
-		_lstKills->addRow(3, wssStatus.str().c_str(), wssUnit.str().c_str(), wssWeapon.str().c_str());
+		_lstKills->addRow(3, tr((*j)->getKillStatusString()).c_str(), (*j)->getUnitName(_game->getLanguage()).c_str(), tr((*j)->weapon).c_str());
 	}
 	if (!stunOrKill)
 	{
-		wssKills << tr("STR_NO_KILLS");
-		_lstKills->addRow(1, wssKills.str().c_str());
+		_lstKills->addRow(1, tr("STR_NO_KILLS").c_str());
 	}
 
 	_txtKills->setText(tr("STR_KILLS").arg(count));

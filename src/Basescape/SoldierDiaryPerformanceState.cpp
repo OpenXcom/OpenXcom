@@ -331,7 +331,7 @@ void SoldierDiaryPerformanceState::init()
 		_lstKillTotals->addRow(4, tr("STR_KILLS").arg(_soldier->getDiary()->getKillTotal()).c_str(),
 								  tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str(),
 								  tr("STR_PANICKS").arg(_soldier->getDiary()->getPanickTotal()).c_str(),
-								  tr("STR_CONTROLS").arg(_soldier->getDiary()->getControlTotal()).c_str());
+								  tr("STR_MIND_CONTROLS").arg(_soldier->getDiary()->getControlTotal()).c_str());
 	}
 	else
 	{

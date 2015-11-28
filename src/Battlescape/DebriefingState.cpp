@@ -350,11 +350,11 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 			int soldierAlienStuns = 0;
 			for (std::vector<BattleUnitKills*>::const_iterator k = (*j)->getStatistics()->kills.begin(); k != (*j)->getStatistics()->kills.end(); ++k)
 			{
-				if ((*k)->faction == FACTION_HOSTILE && (*k)->getUnitStatusString() == "STATUS_DEAD")
+				if ((*k)->faction == FACTION_HOSTILE && (*k)->status == STATUS_DEAD)
 				{
 					soldierAlienKills++;
 				}
-				if ((*k)->faction == FACTION_HOSTILE && (*k)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
+				if ((*k)->faction == FACTION_HOSTILE && (*k)->status == STATUS_UNCONSCIOUS)
 				{
 					soldierAlienStuns++;
 				}

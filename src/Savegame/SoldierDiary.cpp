@@ -210,21 +210,21 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
     {
 		(*kill)->makeTurnUnique();
         _killList.push_back(*kill);
-        if ((*kill)->getUnitFactionString() == "FACTION_HOSTILE")
+        if ((*kill)->faction == FACTION_HOSTILE)
         {
-            if ((*kill)->getUnitStatusString() == "STATUS_DEAD")
+            if ((*kill)->status == STATUS_DEAD)
             {
                 _killTotal++;
             }
-            else if ((*kill)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
+            else if ((*kill)->status == STATUS_UNCONSCIOUS)
             {
                 _stunTotal++;
             }
-            else if ((*kill)->getUnitStatusString() == "STATUS_PANICKING")
+            else if ((*kill)->status == STATUS_PANICKING)
             {
                 _panickTotal++;
             }
-            else if ((*kill)->getUnitStatusString() == "STATUS_TURNING")
+            else if ((*kill)->status == STATUS_TURNING)
             {
                 _controlTotal++;
             }
@@ -340,9 +340,9 @@ std::vector<SoldierCommendations*> *SoldierDiary::getSoldierCommendations()
  * Award new ones, if deserved.
  * @return bool Has a commendation been awarded?
  */
-bool SoldierDiary::manageCommendations(Mod *rules)
+bool SoldierDiary::manageCommendations(Mod *mod)
 {
-	std::map<std::string, RuleCommendations *> commendationsList = rules->getCommendation();
+	std::map<std::string, RuleCommendations *> commendationsList = mod->getCommendation();
 	bool awardedCommendation = false;                   // This value is returned if at least one commendation was given.
     std::map<std::string, int> nextCommendationLevel;   // Noun, threshold.
     std::vector<std::string> modularCommendations;      // Commendation name.
@@ -552,8 +552,8 @@ bool SoldierDiary::manageCommendations(Mod *rules)
 									((*singleKill)->rank != (*detail) && (*singleKill)->race != (*detail) &&
 									 (*singleKill)->weapon != (*detail) && (*singleKill)->weaponAmmo != (*detail) &&
 									 (*singleKill)->getUnitStatusString() != (*detail) && (*singleKill)->getUnitFactionString() != (*detail)  &&
-									 rules->getItem((*singleKill)->weaponAmmo)->getDamageType() != damageType && 
-									 rules->getItem((*singleKill)->weapon)->getBattleType() != battleType &&
+									 mod->getItem((*singleKill)->weaponAmmo)->getDamageType() != damageType && 
+									 mod->getItem((*singleKill)->weapon)->getBattleType() != battleType &&
                                      (*singleKill)->getUnitSideString() != (*detail) && (*singleKill)->getUnitBodyPartString() != (*detail)) )
                                 {
                                     foundMatch = false;
