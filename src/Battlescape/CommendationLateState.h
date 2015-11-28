@@ -20,7 +20,6 @@
 #define OPENXCOM_COMMENDATIONLATESTATE_H
 
 #include "../Engine/State.h"
-#include <string>
 
 namespace OpenXcom
 {

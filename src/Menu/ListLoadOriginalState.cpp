@@ -109,7 +109,7 @@ ListLoadOriginalState::ListLoadOriginalState()
 	SaveConverter::getList(_game->getLanguage(), _saves);
 	for (int i = 0; i < SaveConverter::NUM_SAVES; ++i)
 	{
-		std::wstringstream ss;
+		std::wostringstream ss;
 		ss << (i + 1);
 		_btnSlot[i]->setText(ss.str());
 		_btnSlot[i]->onMouseClick((ActionHandler)&ListLoadOriginalState::btnSlotClick);

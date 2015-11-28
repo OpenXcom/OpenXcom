@@ -107,9 +107,9 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 					}
 
 					// Soldier name
-					std::wstringstream wss;
-					wss << "   ";
-					wss << (*s)->getName();
+					std::wostringstream wssName;
+					wssName << "   ";
+					wssName << (*s)->getName();
 					// Decoration level name
 					int skipCounter = 0;
 					int lastInt = -2;
@@ -134,7 +134,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 						}
 						vectorIterator++;
 					}
-					_lstSoldiers->addRow(2, wss.str().c_str(), tr((*soldierComm)->getDecorationLevelName(skipCounter)).c_str());
+					_lstSoldiers->addRow(2, wssName.str().c_str(), tr((*soldierComm)->getDecorationLevelName(skipCounter)).c_str());
 					break;
 				}
 			}

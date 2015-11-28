@@ -2229,7 +2229,7 @@ void GeoscapeState::determineAlienMissions()
 		}
 		if (command->getLabel() > 0 && conditions.find(command->getLabel()) != conditions.end())
 		{
-			std::stringstream ss;
+			std::ostringstream ss;
 			ss << "Mission generator encountered an error: multiple commands: " << command->getType() << " and ";
 			for (std::vector<RuleMissionScript*>::const_iterator j = availableMissions.begin(); j != availableMissions.end(); ++j)
 			{

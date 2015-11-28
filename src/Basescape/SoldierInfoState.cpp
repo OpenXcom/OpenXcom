@@ -447,7 +447,7 @@ void SoldierInfoState::init()
 
 	if (current->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getMod()->getPsiRequirements())))
 	{
-		std::wstringstream ss14;
+		std::wostringstream ss14;
 		ss14 << withArmor.psiStrength;
 		_numPsiStrength->setText(ss14.str());
 		_barPsiStrength->setMax(current->psiStrength);
@@ -467,7 +467,7 @@ void SoldierInfoState::init()
 
 	if (current->psiSkill > 0)
 	{
-		std::wstringstream ss15;
+		std::wostringstream ss15;
 		ss15 << withArmor.psiSkill;
 		_numPsiSkill->setText(ss15.str());
 		_barPsiSkill->setMax(current->psiSkill);

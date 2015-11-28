@@ -525,11 +525,10 @@ bool SoldierDiary::manageCommendations(Mod *mod)
                             {
 								std::string battleTypeArray[] = { "BT_NONE", "BT_FIREARM", "BT_AMMO", "BT_MELEE", "BT_GRENADE",
 									"BT_PROXIMITYGRENADE", "BT_MEDIKIT", "BT_SCANNER", "BT_MINDPROBE", "BT_PSIAMP", "BT_FLARE", "BT_CORPSE", "BT_END" };
-								std::vector<std::string> battleTypeVector(battleTypeArray, battleTypeArray + 13);
 								int battleType = 0;
-								for (; battleType != battleTypeVector.size(); ++battleType)
+								for (; battleType != 13; ++battleType)
 								{
-									if ((*detail) == battleTypeVector[battleType])
+									if ((*detail) == battleTypeArray[battleType])
 									{
 										break;
 									}
@@ -537,11 +536,10 @@ bool SoldierDiary::manageCommendations(Mod *mod)
 
 								std::string damageTypeArray[] = { "DT_NONE", "DT_AP", "DT_IN", "DT_HE", "DT_LASER", "DT_PLASMA", 
 									"DT_STUN", "DT_MELEE", "DT_ACID", "DT_SMOKE", "DT_END"};
-								std::vector<std::string> damageTypeVector(damageTypeArray, damageTypeArray + 11);
 								int damageType = 0;
-								for (; damageType != damageTypeVector.size(); ++damageType)
+								for (; damageType != 11; ++damageType)
 								{
-									if ((*detail) == damageTypeVector[damageType])
+									if ((*detail) == damageTypeArray[damageType])
 									{
 										break;
 									}
@@ -942,7 +940,7 @@ std::string SoldierCommendations::getNoun() const
  */
 std::string SoldierCommendations::getDecorationLevelName(int skipCounter)
 {
-	std::stringstream ss;
+	std::ostringstream ss;
 	ss << "STR_AWARD_" << _decorationLevel - skipCounter;
 	return ss.str();
 }
@@ -953,7 +951,7 @@ std::string SoldierCommendations::getDecorationLevelName(int skipCounter)
  */
 std::string SoldierCommendations::getDecorationDescription()
 {
-	std::stringstream ss;
+	std::ostringstream ss;
 	ss << "STR_AWARD_DECOR_" << _decorationLevel;
 	return ss.str();
 }

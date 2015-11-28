@@ -99,7 +99,7 @@ char *SaveConverter::binaryBuffer(const std::string &filename, std::vector<char>
  */
 SaveConverter::SaveConverter(int save, Mod *mod) : _mod(mod)
 {
-	std::stringstream ssFolder, ssPath;
+	std::ostringstream ssFolder, ssPath;
 	ssFolder << "GAME_" << save;
 	ssPath << Options::getMasterUserFolder() << "/" << ssFolder.str();
 	_saveName = ssFolder.str();
@@ -188,7 +188,7 @@ void SaveConverter::getList(Language *lang, SaveOriginal info[NUM_SAVES])
 		save.id = 0;
 
 		int id = i + 1;
-		std::stringstream ss;
+		std::ostringstream ss;
 		ss << Options::getMasterUserFolder() << "/GAME_" << id << "/SAVEINFO.DAT";
 		std::ifstream datFile(ss.str().c_str(), std::ios::in | std::ios::binary);
 		if (datFile)
@@ -206,7 +206,7 @@ void SaveConverter::getList(Language *lang, SaveOriginal info[NUM_SAVES])
 
 			GameTime time = GameTime(0, day, month + 1, year, hour, minute, 0);
 
-			std::wstringstream ssDate, ssTime;
+			std::wostringstream ssDate, ssTime;
 			ssDate << time.getDayString(lang) << L"  " << lang->getString(time.getMonthString()) << L"  " << time.getYear();
 			ssTime << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
 

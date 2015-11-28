@@ -1450,17 +1450,17 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 
 	mapblock->setSizeZ(sizez);
 
-	std::stringstream ss;
+	std::ostringstream ss;
 	if (sizez > _save->getMapSizeZ())
 	{
-		ss <<"Height of map " + filename.str() + " too big for this mission, block is " << sizez << ", expected: " << _save->getMapSizeZ();
+		ss << "Height of map " + filename.str() + " too big for this mission, block is " << sizez << ", expected: " << _save->getMapSizeZ();
 		throw Exception(ss.str());
 	}
 
 	if (sizex != mapblock->getSizeX() ||
 		sizey != mapblock->getSizeY())
 	{
-		ss <<"Map block is not of the size specified " + filename.str() + " is " << sizex << "x" << sizey << " , expected: " << mapblock->getSizeX() << "x" << mapblock->getSizeY();
+		ss << "Map block is not of the size specified " + filename.str() + " is " << sizex << "x" << sizey << " , expected: " << mapblock->getSizeX() << "x" << mapblock->getSizeY();
 		throw Exception(ss.str());
 	}
 

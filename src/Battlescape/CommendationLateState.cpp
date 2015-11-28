@@ -105,7 +105,7 @@ CommendationLateState::CommendationLateState(std::vector<Soldier*> soldiersMedal
 		// Loop over all commendations
 		for (std::map<std::string, RuleCommendations *>::const_iterator commList = commendationsList.begin(); commList != commendationsList.end();)
 		{
-			std::wstringstream commendationName, commendationDecoration;
+			std::wostringstream wssCommendation;
 			modularCommendation = false;
 			noun = "noNoun";
 
@@ -145,19 +145,18 @@ CommendationLateState::CommendationLateState(std::vector<Soldier*> soldiersMedal
 						}
 						vectorIterator++;					
 					}
-					commendationDecoration << tr((*soldierComm)->getDecorationLevelName(skipCounter));
 					// Establish comms name
 					// Medal name
-					commendationName << "   ";
+					wssCommendation << "   ";
 					if (modularCommendation)
 					{
-					commendationName << tr((*commList).first).arg(tr(noun));
+						wssCommendation << tr((*commList).first).arg(tr(noun));
 					}
 					else
 					{
-					commendationName << tr((*commList).first);
+						wssCommendation << tr((*commList).first);
 					}
-					_lstSoldiers->addRow(5, commendationName.str().c_str(), L"", L"", L"", commendationDecoration.str().c_str());
+					_lstSoldiers->addRow(5, wssCommendation.str().c_str(), L"", L"", L"", tr((*soldierComm)->getDecorationLevelName(skipCounter)).c_str());
 					break;
 				}
 			} // END SOLDIER COMMS LOOP			

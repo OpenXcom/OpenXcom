@@ -1863,7 +1863,7 @@ void SavedBattleGame::setPaletteByDepth(State *state)
 	}
 	else
 	{
-		std::stringstream ss;
+		std::ostringstream ss;
 		ss << "PAL_BATTLESCAPE_" << _depth;
 		state->setPalette(ss.str());
 	}
