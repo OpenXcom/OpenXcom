@@ -20,8 +20,10 @@
 #define OPENXCOM_BATTLEUNITSTATISTICS_H
 
 #include <string>
+#include <sstream>
 #include <yaml-cpp/yaml.h>
 #include "BattleUnit.h"
+#include "../Engine/Language.h"
 
 namespace OpenXcom
 {
@@ -32,7 +34,8 @@ namespace OpenXcom
 struct BattleUnitKills
 {
 	/// Variables
-	std::string rank, race, weapon, weaponAmmo;
+	std::wstring name;
+	std::string type, rank, race, weapon, weaponAmmo;
 	UnitFaction faction;
 	UnitStatus status;
 	int mission, turn, id;
@@ -45,15 +48,22 @@ struct BattleUnitKills
 	{
 		return turn += mission * 300; // Maintains divisibility by 3 as well
 	}
+
 	// Check to see if turn was on HOSTILE side
 	bool hostileTurn() const
 	{
 		if ((turn - 1) % 3 == 0) return true;
 		return false;
 	}
+
 	// Load
 	void load(const YAML::Node &node)
 	{
+		if (const YAML::Node n = node["name"])
+		{
+			name = Language::utf8ToWstr(n.as<std::string>());
+		}
+		type = node["type"].as<std::string>(type);
 		rank = node["rank"].as<std::string>(rank);
 		race = node["race"].as<std::string>(race);
 		weapon = node["weapon"].as<std::string>(weapon);
@@ -66,10 +76,15 @@ struct BattleUnitKills
 		bodypart = (UnitBodyPart)node["bodypart"].as<int>();
 		id = node["id"].as<int>(id);
 	}
+
 	// Save
 	YAML::Node save() const
 	{
 		YAML::Node node;
+		if (!name.empty())
+			node["name"] = Language::wstrToUtf8(name);
+		if (!type.empty())
+			node["type"] = type;
 		node["rank"] = rank;
 		node["race"] = race;
 		node["weapon"] = weapon;
@@ -83,6 +98,7 @@ struct BattleUnitKills
 		node["id"] = id;
 		return node;
 	}
+
 	// Convert victim State to string.
 	std::string getUnitStatusString() const
 	{
@@ -95,6 +111,7 @@ struct BattleUnitKills
 		default:                    return "status error";
 		}
 	}
+
 	// Convert victim Faction to string.
 	std::string getUnitFactionString() const
 	{
@@ -106,6 +123,7 @@ struct BattleUnitKills
 		default:                return "faction error";
 		}
 	}
+
 	// Convert victim Side to string.
 	std::string getUnitSideString() const
 	{
@@ -119,6 +137,7 @@ struct BattleUnitKills
 		default:            return "side error";
 		}
 	}
+
 	// Convert victim Body part to string.
 	std::string getUnitBodyPartString() const
 	{
@@ -133,9 +152,27 @@ struct BattleUnitKills
 		default:                return "body part error";
 		}
 	}
+
+	std::wstring getUnitName(Language *lang) const
+	{
+		if (!name.empty())
+		{
+			return name;
+		}
+		else if (!type.empty())
+		{
+			return lang->getString(type);
+		}
+		else
+		{
+			std::wostringstream ss;
+			ss << lang->getString(race) << L" " << lang->getString(rank);
+			return ss.str();
+		}
+	}
+
 	BattleUnitKills(const YAML::Node& node) { load(node); }
-	BattleUnitKills(std::string Rank, std::string Race, std::string Weapon, std::string WeaponAmmo, UnitFaction Faction, UnitStatus Status, int Mission, int Turn, UnitSide Side, UnitBodyPart BodyPart, int Id) :
-		rank(Rank), race(Race), weapon(Weapon), weaponAmmo(WeaponAmmo), faction(Faction), status(Status), mission(Mission), turn(Turn), side(Side), bodypart(BodyPart), id(Id) { }
+	BattleUnitKills(): faction(FACTION_HOSTILE), status(STATUS_IGNORE_ME), mission(0), turn(0), id(0), side(SIDE_FRONT), bodypart(BODYPART_HEAD) { }
 	~BattleUnitKills() { }
 };
 
@@ -183,6 +220,7 @@ struct BattleUnitStatistics
 		}
 		return false;
 	}
+
 	// Friendly fire check
 	bool hasFriendlyFired() const
 	{
@@ -193,6 +231,7 @@ struct BattleUnitStatistics
 		}
 		return false;
 	}
+
 	// Load function
 	void load(const YAML::Node& node)
 	{
@@ -221,6 +260,7 @@ struct BattleUnitStatistics
 		martyr = node["martyr"].as<int>(martyr);
 		slaveKills = node["slaveKills"].as<int>(slaveKills);
 	}
+
 	// Save function
 	YAML::Node save() const
 	{
@@ -251,6 +291,7 @@ struct BattleUnitStatistics
 		if (slaveKills) node["slaveKills"] = slaveKills;
 		return node;
 	}
+
 	BattleUnitStatistics(const YAML::Node& node) { load(node); }
 	BattleUnitStatistics() : wasUnconcious(false), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0), kills(), daysWounded(0), KIA(false), nikeCross(false), mercyCross(false), woundsHealed(0), appliedStimulant(0), appliedPainKill(0), revivedSoldier(0), MIA(false), martyr(0), slaveKills(0) { }
 	~BattleUnitStatistics() { }

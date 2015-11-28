@@ -165,74 +165,79 @@ void PsiAttackBState::psiAttack()
 		_action.actor->addPsiSkillExp();
 		_action.actor->addPsiSkillExp();
 		/// Decide target race and rank.
-		std::string killStatRank, killStatRace;
+		BattleUnitKills *killStat = new BattleUnitKills();
 		// Soldiers
 		if (_target->getGeoscapeSoldier() && _target->getOriginalFaction() == FACTION_PLAYER)
 		{
-			if (_target->getUnitRules() != NULL && _target->getUnitRules()->getRank() != "")
+			if (_target->getUnitRules() != 0 && _target->getUnitRules()->getRank() != "")
 			{
-				killStatRank = _target->getGeoscapeSoldier()->getRankString();
+				killStat->rank = _target->getGeoscapeSoldier()->getRankString();
 			}
 			else
 			{
-				killStatRank = "STR_LIVE_SOLDIER";
+				killStat->rank = "STR_LIVE_SOLDIER";
 			}
-			if (_target->getUnitRules() != NULL && _target->getUnitRules()->getRace() != "")
+			if (_target->getUnitRules() != 0 && _target->getUnitRules()->getRace() != "")
 			{
-				killStatRace = _target->getUnitRules()->getRace();
+				killStat->race = _target->getUnitRules()->getRace();
 			}
 			else
 			{
-				killStatRace = "STR_HUMAN";								
+				killStat->race = "STR_HUMAN";								
 			}
 		}
 		// Aliens
 		else if (_target->getOriginalFaction() == FACTION_HOSTILE)
 		{
-			if (_target->getUnitRules() != NULL && _target->getUnitRules()->getRank() != "")
+			if (_target->getUnitRules() != 0 && _target->getUnitRules()->getRank() != "")
 			{
-				killStatRank = _target->getUnitRules()->getRank();
+				killStat->rank = _target->getUnitRules()->getRank();
 			}
 			else
 			{
-				killStatRank = "STR_UNKNOWN";
+				killStat->rank = "STR_UNKNOWN";
 			}
-			if (_target->getUnitRules() != NULL && _target->getUnitRules()->getRace() != "")
+			if (_target->getUnitRules() != 0 && _target->getUnitRules()->getRace() != "")
 			{
-				killStatRace = _target->getUnitRules()->getRace();
+				killStat->race = _target->getUnitRules()->getRace();
 			}
 			else
 			{
-				killStatRace = "STR_LIVE_SOLDIER";								
+				killStat->race = "STR_LIVE_SOLDIER";								
 			}
 		}
 		// Civilians
 		else if (_target->getOriginalFaction() == FACTION_NEUTRAL)
 		{
-			if (_target->getUnitRules() != NULL && _target->getUnitRules()->getRank() != "")
+			if (_target->getUnitRules() != 0 && _target->getUnitRules()->getRank() != "")
 			{
-				killStatRank = _target->getUnitRules()->getRank();
+				killStat->rank = _target->getUnitRules()->getRank();
 			}
 			else
 			{
-				killStatRank = "STR_CIVILIAN";
+				killStat->rank = "STR_CIVILIAN";
 			}
-			if (_target->getUnitRules() != NULL && (_target->getUnitRules()->getRace() != "" || _target->getUnitRules()->getRace() != "STR_CIVILIAN"))
+			if (_target->getUnitRules() != 0 && (_target->getUnitRules()->getRace() != "" || _target->getUnitRules()->getRace() != "STR_CIVILIAN"))
 			{
-				killStatRace = _target->getUnitRules()->getRace();
+				killStat->race = _target->getUnitRules()->getRace();
 			}
 			else
 			{
-				killStatRace = "STR_HUMAN";
+				killStat->race = "STR_HUMAN";
 			}
 		}
 		// Error
 		else
 		{
-			killStatRank = "STR_UNKNOWN";
-			killStatRace = "STR_UNKNOWN";
+			killStat->rank = "STR_UNKNOWN";
+			killStat->race = "STR_UNKNOWN";
 		}
-
+		killStat->weapon = _action.weapon->getRules()->getName();
+		killStat->weaponAmmo = _action.weapon->getRules()->getName();
+		killStat->faction = _target->getFaction();
+		killStat->mission = _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size();
+		killStat->turn = turn;
+		killStat->id = _target->getId();
 
 		if (_action.type == BA_PANIC)
 		{
@@ -242,7 +247,8 @@ void PsiAttackBState::psiAttack()
 			// Award Panic battle unit kill
 			if (!_unit->getStatistics()->duplicateEntry(STATUS_PANICKING, _target->getId()))
 			{
-				_unit->getStatistics()->kills.push_back(new BattleUnitKills(killStatRank, killStatRace, _action.weapon->getRules()->getName(), _action.weapon->getRules()->getName(), _target->getFaction(), STATUS_PANICKING, _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size(), turn, SIDE_FRONT, BODYPART_HEAD, _target->getId()));
+				killStat->status = STATUS_PANICKING;
+				_unit->getStatistics()->kills.push_back(killStat);
 				_target->setMurdererId(_unit->getId());
 			}
 			if (_parent->getSave()->getSide() == FACTION_PLAYER)
@@ -255,7 +261,8 @@ void PsiAttackBState::psiAttack()
 			// Award MC battle unit kill
 			if (!_unit->getStatistics()->duplicateEntry(STATUS_TURNING, _target->getId()))
 			{
-				_unit->getStatistics()->kills.push_back(new BattleUnitKills(killStatRank, killStatRace, _action.weapon->getRules()->getName(), _action.weapon->getRules()->getName(), _target->getFaction(), STATUS_TURNING, _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size(), turn, SIDE_FRONT, BODYPART_HEAD, _target->getId()));
+				killStat->status = STATUS_TURNING;
+				_unit->getStatistics()->kills.push_back(killStat);
 				_target->setMurdererId(_unit->getId());
 			}
 			_target->convertToFaction(_unit->getFaction());
@@ -287,6 +294,12 @@ void PsiAttackBState::psiAttack()
 				// show a little infobox with the name of the unit and "... is under alien control"
 				game->pushState(new InfoboxState(game->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL", _target->getGender()).arg(_target->getName(game->getLanguage()))));
 			}
+		}
+
+		// Cleanup unused stats
+		if (killStat->status == STATUS_IGNORE_ME)
+		{
+			delete killStat;
 		}
 	}
 	else

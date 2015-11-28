@@ -63,6 +63,7 @@ struct MissionStatistics
 		valiantCrux = node["valiantCrux"].as<bool>(valiantCrux);
 		lootValue = node["lootValue"].as<int>(lootValue);
 	}
+
 	// Save
 	YAML::Node save() const
 	{
@@ -83,6 +84,7 @@ struct MissionStatistics
 		if (lootValue) node["lootValue"] = lootValue;
 		return node;
 	}
+
 	MissionStatistics(const YAML::Node& node) : time(0, 0, 0, 0, 0, 0, 0) { load(node); }
 	MissionStatistics() : id(0), time(0, 0, 0, 0, 0, 0, 0), region("STR_REGION_UNKNOWN"), country("STR_UNKNOWN"), type(), ufo("NO_UFO"), success(false), score(0), rating(), alienRace("STR_UNKNOWN"), daylight(0), injuryList(), valiantCrux(false), lootValue(0) { }
 	~MissionStatistics() { }

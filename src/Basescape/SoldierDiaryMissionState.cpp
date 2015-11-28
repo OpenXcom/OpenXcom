@@ -157,7 +157,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Base *base, size_t soldierId,
 		wssWeapon << tr((*j)->weapon);
 
 		std::wstringstream wssUnit, wssStatus;
-		wssUnit << wssRace.str() << " " << wssRank.str();
+		wssUnit << (*j)->getUnitName(_game->getLanguage());
 
 		if ((*j)->getUnitStatusString() == "STATUS_DEAD")
 		{

@@ -22,7 +22,7 @@
 #include "MovingTarget.h"
 #include <string>
 #include <yaml-cpp/yaml.h>
-#include "CraftId.h"
+#include "Craft.h"
 
 namespace OpenXcom
 {

@@ -365,10 +365,6 @@ YAML::Node BattleUnit::save() const
 
 	node["id"] = _id;
 	node["faction"] = (int)_faction;
-	node["soldierId"] = _id;
-	node["genUnitType"] = _type;
-	node["genUnitArmor"] = _armor->getType();
-	node["name"] = Language::wstrToUtf8(getName(0));
 	node["status"] = (int)_status;
 	node["position"] = _pos;
 	node["direction"] = _direction;

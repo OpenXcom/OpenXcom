@@ -494,8 +494,7 @@ void BattlescapeGame::endTurn()
  */
 void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion, bool terrainExplosion)
 {
-	std::string killStatRank, killStatRace, killStatWeapon, killStatWeaponAmmo;
-	int killStatMission, killStatTurn;
+	BattleUnitKills *killStat = new BattleUnitKills();
 
 	// If the victim was killed by the murderer's death explosion, fetch who killed the murderer and make HIM the murderer!
 	if (murderer && !murderer->getGeoscapeSoldier() && murderer->getUnitRules()->getSpecialAbility() == SPECAB_EXPLODEONDEATH && murderer->getStatus() == STATUS_DEAD && murderer->getMurdererId() != 0)
@@ -509,20 +508,20 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		}
 	}
 
-	killStatWeapon = "STR_WEAPON_UNKNOWN";
-	killStatWeaponAmmo = "STR_WEAPON_UNKNOWN";
-	killStatMission = _save->getGeoscapeSave()->getMissionStatistics()->size();
+	killStat->weapon = "STR_WEAPON_UNKNOWN";
+	killStat->weaponAmmo = "STR_WEAPON_UNKNOWN";
+	killStat->mission = _save->getGeoscapeSave()->getMissionStatistics()->size();
 	if (_save->getSide() == FACTION_PLAYER)
 	{
-		killStatTurn = _save->getTurn()*3 + 0;
+		killStat->turn = _save->getTurn()*3 + 0;
 	}
 	else if (_save->getSide() == FACTION_HOSTILE)
 	{
-		killStatTurn = _save->getTurn()*3 + 1;
+		killStat->turn = _save->getTurn()*3 + 1;
 	}
 	else if (_save->getSide() == FACTION_NEUTRAL)
 	{
-		killStatTurn = _save->getTurn()*3 + 2;
+		killStat->turn = _save->getTurn()*3 + 2;
 	}
 
 	// Fetch the murder weapon
@@ -530,8 +529,8 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	{
 		if (murderweapon)
 		{
-			killStatWeaponAmmo = murderweapon->getRules()->getName();
-			killStatWeapon = killStatWeaponAmmo;
+			killStat->weaponAmmo = murderweapon->getRules()->getName();
+			killStat->weapon = killStat->weaponAmmo;
 		}
 
 		BattleItem *weapon = murderer->getItem("STR_RIGHT_HAND");
@@ -539,9 +538,9 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		{
 			for (std::vector<std::string>::iterator c = weapon->getRules()->getCompatibleAmmo()->begin(); c != weapon->getRules()->getCompatibleAmmo()->end(); ++c)
 			{
-				if ((*c) == killStatWeaponAmmo)
+				if ((*c) == killStat->weaponAmmo)
 				{
-					killStatWeapon = weapon->getRules()->getName();
+					killStat->weapon = weapon->getRules()->getName();
 				}
 			}
 		}
@@ -550,9 +549,9 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		{
 			for (std::vector<std::string>::iterator c = weapon->getRules()->getCompatibleAmmo()->begin(); c != weapon->getRules()->getCompatibleAmmo()->end(); ++c)
 			{
-				if ((*c) == killStatWeaponAmmo)
+				if ((*c) == killStat->weaponAmmo)
 				{
-					killStatWeapon = weapon->getRules()->getName();
+					killStat->weapon = weapon->getRules()->getName();
 				}
 			}
 		}
@@ -560,7 +559,18 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
+		if ((*j)->getStatus() == STATUS_IGNORE_ME) continue;
 		BattleUnit *victim = (*j);
+
+		/// Decide victim name
+		if (victim->getGeoscapeSoldier())
+		{
+			killStat->name = victim->getGeoscapeSoldier()->getName();
+		}
+		else
+		{
+			killStat->type = victim->getType();
+		}
 		
 		/// Decide victim race and rank
 		// Soldiers
@@ -568,19 +578,19 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		{
 			if (victim->getUnitRules() != 0 && victim->getUnitRules()->getRank() != "")
 			{
-				killStatRank = victim->getGeoscapeSoldier()->getRankString();
+				killStat->rank = victim->getGeoscapeSoldier()->getRankString();
 			}
 			else
 			{
-				killStatRank = "STR_SOLDIER";
+				killStat->rank = "STR_SOLDIER";
 			}
 			if (victim->getUnitRules() != 0 && victim->getUnitRules()->getRace() != "")
 			{
-				killStatRace = victim->getUnitRules()->getRace();
+				killStat->race = victim->getUnitRules()->getRace();
 			}
 			else
 			{
-				killStatRace = "STR_XCOM";
+				killStat->race = "STR_XCOM";
 			}
 		}
 		// HWPs
@@ -588,19 +598,19 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		{
 			if (victim->getUnitRules() != 0 && victim->getUnitRules()->getRank() != "")
 			{
-				killStatRank = victim->getUnitRules()->getRank();
+				killStat->rank = victim->getUnitRules()->getRank();
 			}
 			else
 			{
-				killStatRank = "STR_HEAVY_WEAPONS_PLATFORM";
+				killStat->rank = "STR_HEAVY_WEAPONS_PLATFORM";
 			}
 			if (victim->getUnitRules() != 0 && victim->getUnitRules()->getRace() != "")
 			{
-				killStatRace = victim->getUnitRules()->getRace();
+				killStat->race = victim->getUnitRules()->getRace();
 			}
 			else
 			{
-				killStatRace = "STR_XCOM";
+				killStat->race = "STR_XCOM";
 			}
 		}
 		// Aliens
@@ -608,19 +618,19 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		{
 			if (victim->getUnitRules() != 0 && victim->getUnitRules()->getRank() != "")
 			{
-				killStatRank = victim->getUnitRules()->getRank();
+				killStat->rank = victim->getUnitRules()->getRank();
 			}
 			else
 			{
-				killStatRank = "STR_UNKNOWN";
+				killStat->rank = "STR_UNKNOWN";
 			}
 			if (victim->getUnitRules() != 0 && victim->getUnitRules()->getRace() != "")
 			{
-				killStatRace = victim->getUnitRules()->getRace();
+				killStat->race = victim->getUnitRules()->getRace();
 			}
 			else
 			{
-				killStatRace = "STR_LIVE_SOLDIER";
+				killStat->race = "STR_LIVE_SOLDIER";
 			}
 		}
 		// Civilians
@@ -628,29 +638,32 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		{
 			if (victim->getUnitRules() != 0 && victim->getUnitRules()->getRank() != "")
 			{
-				killStatRank = victim->getUnitRules()->getRank();
+				killStat->rank = victim->getUnitRules()->getRank();
 			}
 			else
 			{
-				killStatRank = "STR_CIVILIAN";
+				killStat->rank = "STR_CIVILIAN";
 			}
 			if (victim->getUnitRules() != 0 && (victim->getUnitRules()->getRace() != "" || victim->getUnitRules()->getRace() != "STR_CIVILIAN"))
 			{
-				killStatRace = victim->getUnitRules()->getRace();
+				killStat->race = victim->getUnitRules()->getRace();
 			}
 			else
 			{
-				killStatRace = "STR_HUMAN";
+				killStat->race = "STR_HUMAN";
 			}
 		}
 		// Error
 		else
 		{
-			killStatRank = "STR_UNKNOWN";
-			killStatRace = "STR_UNKNOWN";
+			killStat->rank = "STR_UNKNOWN";
+			killStat->race = "STR_UNKNOWN";
 		}
-		
-		if ((*j)->getStatus() == STATUS_IGNORE_ME) continue;
+
+		killStat->faction = victim->getFaction();
+		killStat->side = victim->getFatalShotSide();
+		killStat->bodypart = victim->getFatalShotBodyPart();
+		killStat->id = victim->getId();
 		if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_COLLAPSING)
 		{
 			// Assume that, in absence of a murderer and an explosion, the laster unit to hit the victim is the murderer.
@@ -663,8 +676,8 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					if ((*i)->getId() == victim->getMurdererId())
 					{
 						murderer = (*i);
-						killStatWeapon = victim->getMurdererWeapon();
-						killStatWeaponAmmo = victim->getMurdererWeaponAmmo();
+						killStat->weapon = victim->getMurdererWeapon();
+						killStat->weaponAmmo = victim->getMurdererWeaponAmmo();
 						break;
 					}
 				}
@@ -679,7 +692,8 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					{
 						if ((*j)->getId() == murderer->getMurdererId() && (*j)->getGeoscapeSoldier())
 						{
-							(*j)->getStatistics()->kills.push_back(new BattleUnitKills(killStatRank, killStatRace, killStatWeapon, killStatWeaponAmmo, victim->getFaction(), STATUS_DEAD, killStatMission, killStatTurn, victim->getFatalShotSide(), victim->getFatalShotBodyPart(), victim->getId() ));
+							killStat->status = STATUS_DEAD;
+							(*j)->getStatistics()->kills.push_back(killStat);
 							if (victim->getFaction() == FACTION_HOSTILE)
 							{
 								(*j)->getStatistics()->slaveKills++;
@@ -691,7 +705,8 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				}
 				else if (!murderer->getStatistics()->duplicateEntry(STATUS_DEAD, victim->getId()))
 				{
-					murderer->getStatistics()->kills.push_back(new BattleUnitKills(killStatRank, killStatRace, killStatWeapon, killStatWeaponAmmo, victim->getFaction(), STATUS_DEAD, killStatMission, killStatTurn, victim->getFatalShotSide(), victim->getFatalShotBodyPart(), victim->getId() ));
+					killStat->status = STATUS_DEAD;
+					murderer->getStatistics()->kills.push_back(killStat);
 					victim->setMurdererId(murderer->getId());
 				}
 				murderer->addKillCount();
@@ -789,8 +804,8 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					if ((*i)->getId() == victim->getMurdererId())
 					{
 						murderer = (*i);
-						killStatWeapon = victim->getMurdererWeapon();
-						killStatWeaponAmmo = victim->getMurdererWeaponAmmo();
+						killStat->weapon = victim->getMurdererWeapon();
+						killStat->weaponAmmo = victim->getMurdererWeaponAmmo();
 						break;
 					}
 				}
@@ -803,7 +818,8 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				{
 					if ((*j)->getId() == murderer->getMurdererId() && (*j)->getGeoscapeSoldier())
 					{
-						(*j)->getStatistics()->kills.push_back(new BattleUnitKills(killStatRank, killStatRace, killStatWeapon, killStatWeaponAmmo, victim->getFaction(), STATUS_UNCONSCIOUS, killStatMission, killStatTurn, victim->getFatalShotSide(), victim->getFatalShotBodyPart(), victim->getId() ));
+						killStat->status = STATUS_UNCONSCIOUS;
+						(*j)->getStatistics()->kills.push_back(killStat);
 						(*j)->getStatistics()->slaveKills++;
 						victim->setMurdererId((*j)->getId());
 						break;
@@ -812,7 +828,8 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			}
 			else if (murderer && !murderer->getStatistics()->duplicateEntry(STATUS_UNCONSCIOUS, victim->getId())) 
 			{
-                    murderer->getStatistics()->kills.push_back(new BattleUnitKills(killStatRank, killStatRace, killStatWeapon, killStatWeaponAmmo, victim->getFaction(), STATUS_UNCONSCIOUS, killStatMission, killStatTurn, victim->getFatalShotSide(), victim->getFatalShotBodyPart(), victim->getId() ));
+				killStat->status = STATUS_UNCONSCIOUS;
+				murderer->getStatistics()->kills.push_back(killStat);
 			}
 			if (victim->getGeoscapeSoldier())
 			{
@@ -820,6 +837,12 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			}
 			statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));
 		}
+	}
+
+	// Cleanup unused stats
+	if (killStat->status == STATUS_IGNORE_ME)
+	{
+		delete killStat;
 	}
 
 	BattleUnit *bu = _save->getSelectedUnit();
