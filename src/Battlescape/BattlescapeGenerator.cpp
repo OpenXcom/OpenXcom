@@ -1929,7 +1929,14 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 					break;
 				case MSC_ADDUFO:
 					// as above, note that the craft and the ufo will never be allowed to overlap.
-					// TODO: make _ufopos a vector ;)
+					// significant difference here is that we accept a UFOName string here to choose the UFO map
+					// and we store the UFO positions in a vector, which we iterate later when actually loading the
+					// map and route data. this makes it possible to add multiple UFOs to a single map
+					// IMPORTANTLY: all the UFOs must use _exactly_ the same MCD set.
+					// this is fine for most UFOs but it does mean small scouts can't be combined with larger ones
+					// unless some major alterations are done to the MCD sets and maps themselves beforehand
+					// this is because serializing all the MCDs is an implementational nightmare from my perspective,
+					// and modders can take care of all that manually on their end.
 					if (_game->getMod()->getUfo(command->getUFOName()))
 					{
 						ufoTerrain = _game->getMod()->getUfo(command->getUFOName())->getBattlescapeTerrainData();
@@ -2067,8 +2074,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 			_save->getMapDataSets()->push_back(*i);
 			craftDataSetIDOffset++;
 		}
-		// TODO: put ufo positions in a vector rather than a single rect, and iterate here?
-		// will probably need to make ufomap a vector too i suppose.
+		
 		for (size_t i = 0; i < ufoMaps.size(); ++i)
 		{
 			loadMAP(ufoMaps[i], _ufoPos[i].x * 10, _ufoPos[i].y * 10, ufoTerrain, mapDataSetIDOffset);
