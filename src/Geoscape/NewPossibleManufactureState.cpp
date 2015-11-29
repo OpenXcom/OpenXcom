@@ -45,7 +45,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(Base * base, const std:
 	_btnOk = new TextButton(160, 14, 80, 149);
 	_btnManufacture = new TextButton(160, 14, 80, 165);
 	_txtTitle = new Text(288, 40, 16, 20);
-	_lstPossibilities = new TextList(260, 80, 21, 56);
+	_lstPossibilities = new TextList(250, 80, 35, 56);
 
 	// Set palette
 	setInterface("geoManufacture");

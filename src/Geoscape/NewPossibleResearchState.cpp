@@ -47,7 +47,7 @@ NewPossibleResearchState::NewPossibleResearchState(Base * base, const std::vecto
 	_btnOk = new TextButton(160, 14, 80, 149);
 	_btnResearch = new TextButton(160, 14, 80, 165);
 	_txtTitle = new Text(288, 40, 16, 20);
-	_lstPossibilities = new TextList(288, 80, 16, 56);
+	_lstPossibilities = new TextList(250, 80, 35, 56);
 
 	// Set palette
 	setInterface("geoResearch");
