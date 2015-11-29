@@ -25,7 +25,7 @@
 namespace OpenXcom
 {
 
-class GameTime;
+class BattleUnitKills;
 
 /**
  * Stores info about a soldier's death.
@@ -34,6 +34,7 @@ class SoldierDeath
 {
 private:
 	GameTime _time;
+	BattleUnitKills *_cause;
 public:
 	/// Creates a death.
 	SoldierDeath();
@@ -47,6 +48,10 @@ public:
 	const GameTime *getTime() const;
 	/// Sets the death time.
 	void setTime(GameTime time);
+	/// Gets the death cause.
+	const BattleUnitKills *getCause() const;
+	/// Sets the death cause.
+	void setCause(BattleUnitKills *cause);
 };
 
 }

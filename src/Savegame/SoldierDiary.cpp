@@ -36,8 +36,7 @@ SoldierDiary::SoldierDiary(const YAML::Node &node)
 /**
  * Initializes a new blank diary.
  */
-SoldierDiary::SoldierDiary() : _commendations(), _killList(), _missionIdList(), _regionTotal(), _countryTotal(), _typeTotal(), _UFOTotal(), _scoreTotal(0),
-	_killTotal(0), _winTotal(0), _stunTotal(0), _daysWoundedTotal(0), _baseDefenseMissionTotal(0), _totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0),
+SoldierDiary::SoldierDiary() : _scoreTotal(0), _killTotal(0), _winTotal(0), _stunTotal(0), _daysWoundedTotal(0), _baseDefenseMissionTotal(0), _totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0),
 	_loneSurvivorTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0), _nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0),
 	_shotAtCounterTotal(0), _hitCounterTotal(0), _ironManTotal(0), _importantMissionTotal(0), _longDistanceHitCounterTotal(0),
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),

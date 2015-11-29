@@ -934,10 +934,7 @@ void DebriefingState::prepareDebriefing()
 						{
 							(*j)->updateGeoscapeStats(*i);
 							(*j)->getStatistics()->KIA = true;
-							SoldierDeath *death = new SoldierDeath();
-							death->setTime(*save->getTime());
-							(*i)->die(death);
-							save->getDeadSoldiers()->push_back(*i);
+							// We already handled the soldier death on battlescape
 							base->getSoldiers()->erase(i);
 							break;
 						}

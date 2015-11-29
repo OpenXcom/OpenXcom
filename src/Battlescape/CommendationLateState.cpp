@@ -99,7 +99,7 @@ CommendationLateState::CommendationLateState(std::vector<Soldier*> soldiersMedal
 		_lstSoldiers->addRow(5, (*s)->getName().c_str(),
 								L"",
 								tr((*s)->getRankString()).c_str(),
-								tr("STR_SCORE_VALUE").arg((*s)->getDiary()->getScoreTotal()).c_str(),
+								L"",
 								tr("STR_KILLS").arg((*s)->getDiary()->getKillTotal()).c_str());
 
 		// Loop over all commendations

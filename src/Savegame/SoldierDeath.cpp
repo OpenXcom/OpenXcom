@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SoldierDeath.h"
+#include "BattleUnitStatistics.h"
 
 namespace OpenXcom
 {
@@ -24,12 +25,13 @@ namespace OpenXcom
 /**
  * Initializes a death event.
  */
-SoldierDeath::SoldierDeath() : _time(0,0,0,0,0,0,0)
+SoldierDeath::SoldierDeath() : _time(0,0,0,0,0,0,0), _cause(0)
 {
 }
 
 SoldierDeath::~SoldierDeath()
 {
+	delete _cause;
 }
 
 /**
@@ -39,6 +41,11 @@ SoldierDeath::~SoldierDeath()
 void SoldierDeath::load(const YAML::Node &node)
 {
 	_time.load(node["time"]);
+	if (node["cause"])
+	{
+		_cause = new BattleUnitKills();
+		_cause->load(node["cause"]);
+	}
 }
 
 /**
@@ -49,6 +56,10 @@ YAML::Node SoldierDeath::save() const
 {
 	YAML::Node node;
 	node["time"] = _time.save();
+	if (_cause != 0)
+	{
+		node["cause"] = _cause->save();
+	}
 	return node;
 }
 
@@ -68,6 +79,24 @@ const GameTime *SoldierDeath::getTime() const
 void SoldierDeath::setTime(GameTime time)
 {
 	_time = time;
+}
+
+/**
+* Returns the time of death of this soldier.
+* @return Pointer to the time.
+*/
+const BattleUnitKills *SoldierDeath::getCause() const
+{
+	return _cause;
+}
+
+/**
+* Changes the time of death of this soldier.
+* @param time The time of death.
+*/
+void SoldierDeath::setCause(BattleUnitKills *cause)
+{
+	_cause = cause;
 }
 
 }

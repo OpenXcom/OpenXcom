@@ -60,6 +60,7 @@
 #include "UnitFallBState.h"
 #include "../Engine/Logger.h"
 #include "../Savegame/BattleUnitStatistics.h"
+#include "../Savegame/SoldierDeath.h"
 
 namespace OpenXcom
 {
@@ -494,8 +495,6 @@ void BattlescapeGame::endTurn()
  */
 void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion, bool terrainExplosion)
 {
-	BattleUnitKills *killStat = new BattleUnitKills();
-
 	// If the victim was killed by the murderer's death explosion, fetch who killed the murderer and make HIM the murderer!
 	if (murderer && !murderer->getGeoscapeSoldier() && murderer->getUnitRules()->getSpecialAbility() == SPECAB_EXPLODEONDEATH && murderer->getStatus() == STATUS_DEAD && murderer->getMurdererId() != 0)
 	{
@@ -506,20 +505,16 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				murderer = (*i);
 			}
 		}
-	}
-
-	killStat->weapon = "STR_WEAPON_UNKNOWN";
-	killStat->weaponAmmo = "STR_WEAPON_UNKNOWN";
-	killStat->mission = _save->getGeoscapeSave()->getMissionStatistics()->size();
-	killStat->setTurn(_save->getTurn(), _save->getSide());
+	}	
 
 	// Fetch the murder weapon
+	std::string tempWeapon = "STR_WEAPON_UNKNOWN", tempAmmo = "STR_WEAPON_UNKNOWN";
 	if (murderer)
 	{
 		if (murderweapon)
 		{
-			killStat->weaponAmmo = murderweapon->getRules()->getName();
-			killStat->weapon = killStat->weaponAmmo;
+			tempAmmo = murderweapon->getRules()->getName();
+			tempWeapon = tempAmmo;
 		}
 
 		BattleItem *weapon = murderer->getItem("STR_RIGHT_HAND");
@@ -527,9 +522,9 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		{
 			for (std::vector<std::string>::iterator c = weapon->getRules()->getCompatibleAmmo()->begin(); c != weapon->getRules()->getCompatibleAmmo()->end(); ++c)
 			{
-				if ((*c) == killStat->weaponAmmo)
+				if ((*c) == tempAmmo)
 				{
-					killStat->weapon = weapon->getRules()->getName();
+					tempWeapon = weapon->getRules()->getName();
 				}
 			}
 		}
@@ -538,9 +533,9 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		{
 			for (std::vector<std::string>::iterator c = weapon->getRules()->getCompatibleAmmo()->begin(); c != weapon->getRules()->getCompatibleAmmo()->end(); ++c)
 			{
-				if ((*c) == killStat->weaponAmmo)
+				if ((*c) == tempAmmo)
 				{
-					killStat->weapon = weapon->getRules()->getName();
+					tempWeapon = weapon->getRules()->getName();
 				}
 			}
 		}
@@ -549,13 +544,19 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
 		if ((*j)->getStatus() == STATUS_IGNORE_ME) continue;
-
 		BattleUnit *victim = (*j);
+
+		BattleUnitKills *killStat = new BattleUnitKills();
+		killStat->mission = _save->getGeoscapeSave()->getMissionStatistics()->size();
+		killStat->setTurn(_save->getTurn(), _save->getSide());
 		killStat->setUnitStats(victim);
 		killStat->faction = victim->getFaction();
 		killStat->side = victim->getFatalShotSide();
 		killStat->bodypart = victim->getFatalShotBodyPart();
 		killStat->id = victim->getId();
+		killStat->weapon = tempWeapon;
+		killStat->weaponAmmo = tempAmmo;
+
 		if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_COLLAPSING)
 		{
 			// Assume that, in absence of a murderer and an explosion, the laster unit to hit the victim is the murderer.
@@ -682,6 +683,16 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					}
 				}
 			}
+			if (victim->getGeoscapeSoldier())
+			{
+				Soldier *soldier = victim->getGeoscapeSoldier();
+				SoldierDeath *death = new SoldierDeath();
+				death->setTime(*_save->getGeoscapeSave()->getTime());
+				killStat->status = STATUS_DEAD;
+				death->setCause(killStat);
+				soldier->die(death);
+				_save->getGeoscapeSave()->getDeadSoldiers()->push_back(soldier);
+			}
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
 		{
@@ -729,12 +740,12 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			}
 			statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));
 		}
-	}
 
-	// Cleanup unused stats
-	if (killStat->status == STATUS_IGNORE_ME)
-	{
-		delete killStat;
+		// Cleanup unused stats
+		if (killStat->status == STATUS_IGNORE_ME)
+		{
+			delete killStat;
+		}
 	}
 
 	BattleUnit *bu = _save->getSelectedUnit();
