@@ -177,7 +177,7 @@ void SoldierDiaryOverviewState::init()
 	
 	std::vector<MissionStatistics*> *missionStatistics = _game->getSavedGame()->getMissionStatistics();
 
-	int row = 0;
+	unsigned int row = 0;
 	for (std::vector<MissionStatistics*>::iterator j = missionStatistics->begin() ; j != missionStatistics->end() ; ++j)
 	{
 		int missionId = (*j)->id;
@@ -246,7 +246,6 @@ void SoldierDiaryOverviewState::btnKillsClick(Action *)
  */
 void SoldierDiaryOverviewState::btnMissionsClick(Action *)
 {
-	int _display = 1;
 	_game->pushState(new SoldierDiaryPerformanceState(_base, _soldierId, this, DIARY_MISSIONS));
 }
 

@@ -381,15 +381,15 @@ bool SoldierDiary::manageCommendations(Mod *mod)
 		for (std::map<std::string, std::vector<int> >::const_iterator j = (*i).second->getCriteria()->begin(); j != (*i).second->getCriteria()->end(); ++j)
 		{
 			// Skip this medal if we have reached its max award level.
-			if (nextCommendationLevel["noNoun"] >= (*j).second.size())
+			if ((unsigned int)nextCommendationLevel["noNoun"] >= (*j).second.size())
 			{
 				awardCommendationBool = false;
 				break;
 			}
             // These criteria have no nouns, so only the nextCommendationLevel["noNoun"] will ever be used.
 			else if( nextCommendationLevel.count("noNoun") == 1 &&
-					((*j).first == "totalKills" && _killList.size() < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalMissions" && _missionIdList.size() < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+				      ( ((*j).first == "totalKills" && _killList.size() < (unsigned int)(*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalMissions" && _missionIdList.size() < (unsigned int)(*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalWins" && _winTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalScore" && _scoreTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalStuns" && _stunTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
@@ -430,7 +430,7 @@ bool SoldierDiary::manageCommendations(Mod *mod)
 					((*j).first == "totalMartyrKills" && _martyrKillsTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalPostMortemKills" && _postMortemKills < (*j).second.at(nextCommendationLevel["noNoun"])) ||
                     ((*j).first == "globeTrotter" && (int)_globeTrotter < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalSlaveKills" && _slaveKillsTotal < (*j).second.at(nextCommendationLevel["noNoun"])) )
+					((*j).first == "totalSlaveKills" && _slaveKillsTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ) )
 					
 			{
 				awardCommendationBool = false;
@@ -454,12 +454,12 @@ bool SoldierDiary::manageCommendations(Mod *mod)
 				for(std::map<std::string, int>::const_iterator k = tempTotal.begin(); k != tempTotal.end(); ++k)
 				{
 					int criteria = -1;
-                    std::string noun = (*k).first;
+	                                std::string noun = (*k).first;
 					// If there is no matching noun, get the first award criteria.
-                    if (nextCommendationLevel.count(noun) == 0)
+	                                if (nextCommendationLevel.count(noun) == 0)
 						criteria = (*j).second.front(); 
 					// Otherwise, get the criteria that reflects the soldier's commendation level.
-                    else if (nextCommendationLevel[noun] != (*j).second.size())
+	                                else if ((unsigned int)nextCommendationLevel[noun] != (*j).second.size())
 						criteria = (*j).second.at(nextCommendationLevel[noun]); 
 
                     // If a criteria was set AND the stat's count exceeds the criteria.
@@ -595,7 +595,6 @@ bool SoldierDiary::manageCommendations(Mod *mod)
                 }
             }
         }
-		bool awardedModularCommendation = false;
 		if (awardCommendationBool)
 		{
             // If we do not have modular medals, but are awarded a different medal,
@@ -604,10 +603,6 @@ bool SoldierDiary::manageCommendations(Mod *mod)
             {
                 modularCommendations.push_back("noNoun");
             }
-			else
-			{
-				awardedModularCommendation = true;
-			}
             for (std::vector<std::string>::const_iterator j = modularCommendations.begin(); j != modularCommendations.end(); ++j)
             {
 				bool newCommendation = true;

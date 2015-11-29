@@ -76,7 +76,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Soldier *soldier, int rowEntr
 
 	// Set up objects
 	std::vector<MissionStatistics*> *missionStatistics = _game->getSavedGame()->getMissionStatistics();
-    int missionId = _soldier->getDiary()->getMissionIdList().at(_rowEntry);
+	unsigned int missionId = _soldier->getDiary()->getMissionIdList().at(_rowEntry);
 	if (missionId > missionStatistics->size())
 	{
 		missionId = 0;
@@ -117,7 +117,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Soldier *soldier, int rowEntr
 
 	for (std::vector<BattleUnitKills*>::iterator i = _soldier->getDiary()->getKills().begin() ; i != _soldier->getDiary()->getKills().end() ; ++i)
 	{
-		if ((*i)->mission != missionId) continue;
+		if ((unsigned int)(*i)->mission != missionId) continue;
 
 		switch ((*i)->status)
 		{

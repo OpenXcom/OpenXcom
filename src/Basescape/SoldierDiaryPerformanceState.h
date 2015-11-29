@@ -62,8 +62,8 @@ private:
 	std::vector<Surface*> _commendations, _commendationDecorations;
 	SurfaceSet *_commendationSprite, *_commendationDecoration;
 
-	int _lastScrollPos;
 	SoldierDiaryDisplay _display;
+	int _lastScrollPos;
 	TextButton *_group;
 
 public:
