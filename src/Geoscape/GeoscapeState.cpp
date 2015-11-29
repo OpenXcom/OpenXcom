@@ -901,7 +901,8 @@ void GeoscapeState::time5Seconds()
 							if (underwater && !_globe->insideLand((*j)->getLongitude(), (*j)->getLatitude()))
 							{
 								popup(new DogfightErrorState((*j), tr("STR_UNABLE_TO_ENGAGE_AIRBORNE")));
-								_dogfightsToBeStarted.back()->btnMinimizeClick(0);
+								_dogfightsToBeStarted.back()->setMinimized(true);
+								_dogfightsToBeStarted.back()->setWaitForPoly(true);
 							}
 							if (!_dogfightStartTimer->isRunning())
 							{
@@ -1825,11 +1826,15 @@ void GeoscapeState::globeClick(Action *action)
 	if (_game->getSavedGame()->getDebugMode())
 	{
 		double lon, lat;
+		int texture, shade;
 		_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
 		double lonDeg = lon / M_PI * 180, latDeg = lat / M_PI * 180;
+		_globe->getPolygonTextureAndShade(lon, lat, &texture, &shade);
 		std::wostringstream ss;
-		ss << "rad: " << lon << " , " << lat << std::endl;
-		ss << "deg: " << lonDeg << " , " << latDeg << std::endl;
+		ss << "rad: " << lon << ", " << lat << std::endl;
+		ss << "deg: " << lonDeg << ", " << latDeg << std::endl;
+		ss << "texture: " << texture << ", shade: " << shade << std::endl;
+
 		_txtDebug->setText(ss.str());
 	}
 }
@@ -2047,7 +2052,15 @@ void GeoscapeState::handleDogfights()
 	{
 		if ((*d)->isMinimized())
 		{
-			_minimizedDogfights++;
+			if ((*d)->getWaitForPoly() && _globe->insideLand((*d)->getUfo()->getLongitude(), (*d)->getUfo()->getLatitude()))
+			{
+				(*d)->setMinimized(false);
+				(*d)->setWaitForPoly(false);
+			}
+			else
+			{
+				_minimizedDogfights++;
+			}
 		}
 		else
 		{

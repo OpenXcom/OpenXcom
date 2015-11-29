@@ -397,43 +397,48 @@ double Globe::lastVisibleLat(double lon) const
 	return atan(-cos(_cenLat) * cos(lon - _cenLon)/sin(_cenLat));
 }
 
-/**
- * Checks if a polar point is inside a certain polygon.
- * @param lon Longitude of the point.
- * @param lat Latitude of the point.
- * @param poly Pointer to the polygon.
- * @return True if it's inside, False if it's outside.
- */
-bool Globe::insidePolygon(double lon, double lat, Polygon *poly) const
+
+Polygon* Globe::getPolygonFromLonLat(double lon, double lat) const
 {
-	bool backFace = true;
-	for (int i = 0; i < poly->getPoints(); ++i)
+	const double zDiscard=0.75f;
+    double coslat = cos(lat);
+    double sinlat = sin(lat);
+
+	for (std::list<Polygon*>::iterator i = _rules->getPolygons()->begin(); i != _rules->getPolygons()->end(); ++i)
 	{
-		backFace = backFace && pointBack(poly->getLongitude(i), poly->getLatitude(i));
-	}
-	if (backFace != pointBack(lon, lat))
-		return false;
-
-	bool odd = false;
-	for (int i = 0; i < poly->getPoints(); ++i)
-	{
-		int j = (i + 1) % poly->getPoints();
-
-		/*double x = lon, y = lat,
-			   x_i = poly->getLongitude(i), y_i = poly->getLatitude(i),
-			   x_j = poly->getLongitude(j), y_j = poly->getLatitude(j);*/
-
-		double x, y, x_i, x_j, y_i, y_j;
-		polarToCart(poly->getLongitude(i), poly->getLatitude(i), &x_i, &y_i);
-		polarToCart(poly->getLongitude(j), poly->getLatitude(j), &x_j, &y_j);
-		polarToCart(lon, lat, &x, &y);
-
-		if (((y_i < y && y_j >= y) || (y_j < y && y_i >= y)) && (x_i <= x || x_j <= x))
+		double x, y, z, x2, y2;
+		double clat, clon;
+		for (int j = 0; j < (*i)->getPoints(); ++j)
 		{
-			odd ^= (x_i + (y - y_i) / (y_j - y_i) * (x_j - x_i) < x);
+			z = coslat * cos((*i)->getLatitude(j)) * cos((*i)->getLongitude(j) - lon) + sinlat * sin((*i)->getLatitude(j));
+			if (z<zDiscard) break; //discarded
 		}
+		if (z<zDiscard) continue; //discarded
+
+		bool odd = false;
+
+		clat = (*i)->getLatitude(0); //initial point
+		clon = (*i)->getLongitude(0);
+		x = cos(clat) * sin(clon - lon);
+		y = coslat * sin(clat) - sinlat * cos(clat) * cos(clon - lon);
+
+		for (int j = 0; j < (*i)->getPoints(); ++j)
+		{
+			int k = (j + 1) % (*i)->getPoints(); //index of next point in poly
+			clat = (*i)->getLatitude(k);
+			clon = (*i)->getLongitude(k);
+
+			x2 = cos(clat) * sin(clon - lon);
+			y2 = coslat * sin(clat) - sinlat * cos(clat) * cos(clon - lon);
+			if ( ((y>0)!=(y2>0)) && (0 < (x2-x)*(0-y)/(y2-y)+x) )
+				odd = !odd;
+			x = x2;
+			y = y2;
+
+		}
+		if (odd) return *i;
 	}
-	return odd;
+	return NULL;
 }
 
 /**
@@ -650,19 +655,7 @@ void Globe::center(double lon, double lat)
  */
 bool Globe::insideLand(double lon, double lat) const
 {
-	bool inside = false;
-	// We're only temporarily changing cenLon/cenLat so the "const" is actually preserved
-	Globe* const globe = const_cast<Globe* const>(this); // WARNING: BAD CODING PRACTICE
-	double oldLon = _cenLon, oldLat = _cenLat;
-	globe->_cenLon = lon;
-	globe->_cenLat = lat;
-	for (std::list<Polygon*>::iterator i = _rules->getPolygons()->begin(); i != _rules->getPolygons()->end() && !inside; ++i)
-	{
-		inside = insidePolygon(lon, lat, *i);
-	}
-	globe->_cenLon = oldLon;
-	globe->_cenLat = oldLat;
-	return inside;
+	return (getPolygonFromLonLat(lon,lat))!=NULL;
 }
 
 /**
@@ -1112,8 +1105,6 @@ void Globe::drawRadars()
 		if (( !(AreSame(lon, 0.0) && AreSame(lat, 0.0)) )/* &&
 			!pointBack((*i)->getLongitude(), (*i)->getLatitude())*/)
 		{
-			polarToCart(lon, lat, &x, &y);
-
 			if (_hover && Options::globeAllRadarsOnBaseBuild)
 			{
 				for (size_t j=0; j<ranges.size(); j++) drawGlobeCircle(lat,lon,ranges[j],48);
@@ -1138,11 +1129,10 @@ void Globe::drawRadars()
 
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
-			lat=(*j)->getLatitude();
-			lon=(*j)->getLongitude();
 			if ((*j)->getStatus()!= "STR_OUT")
 				continue;
-			polarToCart(lon, lat, &x, &y);
+			lat=(*j)->getLatitude();
+			lon=(*j)->getLongitude();
 			range = (*j)->getRules()->getRadarRange();
 			range = range * (1 / 60.0) * (M_PI / 180);
 
@@ -1812,24 +1802,9 @@ void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int 
 							 7, 7, 8, 8, 9, 9,10,11,
 							11,12,12,13,13,14,15,15};
 
-	*texture = -1;
 	*shade = worldshades[ CreateShadow::getShadowValue(0, Cord(0.,0.,1.), getSunDirection(lon, lat), 0) ];
-
-	// We're only temporarily changing cenLon/cenLat so the "const" is actually preserved
-	Globe* const globe = const_cast<Globe* const>(this); // WARNING: BAD CODING PRACTICE
-	double oldLon = _cenLon, oldLat = _cenLat;
-	globe->_cenLon = lon;
-	globe->_cenLat = lat;
-	for (std::list<Polygon*>::iterator i = _rules->getPolygons()->begin(); i != _rules->getPolygons()->end(); ++i)
-	{
-		if (insidePolygon(lon, lat, *i))
-		{
-			*texture = (*i)->getTexture();
-			break;
-		}
-	}
-	globe->_cenLon = oldLon;
-	globe->_cenLat = oldLat;
+	Polygon *t = getPolygonFromLonLat(lon,lat);
+	*texture = (t==NULL)? -1 : t->getTexture();
 }
 
 /**
