@@ -51,7 +51,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 	add(_window, "window", "commendations");
 	add(_btnOk, "button", "commendations");
 	add(_txtTitle, "heading", "commendations");
-	add(_lstSoldiers, "text1", "commendations");
+	add(_lstSoldiers, "list", "commendations");
 
 	centerAllSurfaces();
 
