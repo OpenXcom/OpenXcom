@@ -252,7 +252,7 @@ void State::init()
 	{
 		_game->getMod()->setPalette(_palette);
 	}
-	if (!_ruleInterface->getMusic().empty())
+	if (_ruleInterface != 0 && !_ruleInterface->getMusic().empty())
 	{
 		_game->getMod()->playMusic(_ruleInterface->getMusic());
 	}

@@ -137,26 +137,11 @@ void PsiAttackBState::psiAttack()
 	attackStrength -= dist;
 	attackStrength += RNG::generate(0,55);
 
-	// Determine turn of the attack
-	int turn = 0;
-	if (_parent->getSave()->getSide() == FACTION_PLAYER)
-	{
-		turn = _parent->getSave()->getSide()*3 + 0;
-	}
-	else if (_parent->getSave()->getSide() == FACTION_HOSTILE)
-	{
-		turn = _parent->getSave()->getSide()*3 + 1;
-	}
-	else if (_parent->getSave()->getSide() == FACTION_NEUTRAL)
-	{
-		turn = _parent->getSave()->getSide()*3 + 2;
-	}
-
 	if (_action.type == BA_MINDCONTROL)
 	{
 		defenseStrength += 20;
 	}
-
+	
 	_unit->addPsiSkillExp();
 	if (Options::allowPsiStrengthImprovement) _target->addPsiStrengthExp();
 	if (attackStrength > defenseStrength)
@@ -167,11 +152,11 @@ void PsiAttackBState::psiAttack()
 
 		BattleUnitKills *killStat = new BattleUnitKills();
 		killStat->setUnitStats(_target);
+		killStat->setTurn(_parent->getSave()->getTurn(), _parent->getSave()->getSide());
 		killStat->weapon = _action.weapon->getRules()->getName();
 		killStat->weaponAmmo = _action.weapon->getRules()->getName();
 		killStat->faction = _target->getFaction();
 		killStat->mission = _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size();
-		killStat->turn = turn;
 		killStat->id = _target->getId();
 
 		if (_action.type == BA_PANIC)

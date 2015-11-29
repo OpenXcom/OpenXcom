@@ -511,18 +511,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	killStat->weapon = "STR_WEAPON_UNKNOWN";
 	killStat->weaponAmmo = "STR_WEAPON_UNKNOWN";
 	killStat->mission = _save->getGeoscapeSave()->getMissionStatistics()->size();
-	if (_save->getSide() == FACTION_PLAYER)
-	{
-		killStat->turn = _save->getTurn()*3 + 0;
-	}
-	else if (_save->getSide() == FACTION_HOSTILE)
-	{
-		killStat->turn = _save->getTurn()*3 + 1;
-	}
-	else if (_save->getSide() == FACTION_NEUTRAL)
-	{
-		killStat->turn = _save->getTurn()*3 + 2;
-	}
+	killStat->setTurn(_save->getTurn(), _save->getSide());
 
 	// Fetch the murder weapon
 	if (murderer)

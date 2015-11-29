@@ -56,6 +56,12 @@ struct BattleUnitKills
 		return false;
 	}
 
+	// Make turn unique across mission
+	void setTurn(int unitTurn, UnitFaction unitFaction)
+	{
+		turn = unitTurn * 3 + (int)unitFaction;
+	}
+
 	// Load
 	void load(const YAML::Node &node)
 	{

@@ -666,6 +666,10 @@ void DebriefingState::prepareDebriefing()
 				craft = (*j);
 				base = (*i);
 				craftIterator = j;
+				// Cheap way to get marker data
+				YAML::Node node = craft->getDestination()->saveId();
+				_missionStatistics->markerName = node["type"].as<std::string>();
+				_missionStatistics->markerId = node["id"].as<int>();
 				if (dynamic_cast<Ufo*>(craft->getDestination()))
 				{
 					target = "STR_UFO";
@@ -681,10 +685,6 @@ void DebriefingState::prepareDebriefing()
 				craft->returnToBase();
 				craft->setMissionComplete(true);
 				craft->setInBattlescape(false);
-				// Cheap way to get marker data
-				YAML::Node node = craft->getDestination()->saveId();
-				_missionStatistics->markerName = node["type"].as<std::string>();
-				_missionStatistics->markerId = node["id"].as<int>();
 			}
 			else if ((*j)->getDestination() != 0)
 			{
