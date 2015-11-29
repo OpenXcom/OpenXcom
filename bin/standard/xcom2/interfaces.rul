@@ -487,7 +487,7 @@ interfaces: #done
   - type: noContainment
     elements:
       - id: palette
-        color: 4     # brown
+        color: 4     # green
       - id: window
         color: 1   # bright green
       - id: text
@@ -511,7 +511,7 @@ interfaces: #done
   - type: cannotReequip
     elements:
       - id: palette
-        color: 1     # brown
+        color: 4     # green
       - id: window
         color: 1   # bright green
       - id: heading
@@ -519,9 +519,9 @@ interfaces: #done
       - id: text
         color: 1   # bright green
       - id: list
-        color: 1   # yellow
+        color: 239   # yellow
       - id: button
-        color: 1   # minty green
+        color: 1   # bright green
   - type: debriefing
     elements:
       - id: palette
