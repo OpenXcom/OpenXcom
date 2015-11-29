@@ -408,6 +408,7 @@ Polygon* Globe::getPolygonFromLonLat(double lon, double lat) const
 	{
 		double x, y, z, x2, y2;
 		double clat, clon;
+		z = 0;
 		for (int j = 0; j < (*i)->getPoints(); ++j)
 		{
 			z = coslat * cos((*i)->getLatitude(j)) * cos((*i)->getLongitude(j) - lon) + sinlat * sin((*i)->getLatitude(j));
@@ -1077,7 +1078,6 @@ void Globe::drawRadars()
 	if (!Options::globeRadarLines)
 		return;
 
-	double x, y;
 	double tr, range;
 	double lat, lon;
 	std::vector<double> ranges;

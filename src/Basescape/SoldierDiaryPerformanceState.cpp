@@ -413,7 +413,7 @@ void SoldierDiaryPerformanceState::drawSprites()
 	{
 		RuleCommendations* commendation = _game->getMod()->getCommendation()[(*i)->getType()];
 		// Skip commendations that are not visible in the textlist
-		if ( vectorIterator < scrollDepth || vectorIterator - scrollDepth >= _commendations.size())
+		if ( vectorIterator < scrollDepth || vectorIterator - scrollDepth >= (int)_commendations.size())
 		{
 			vectorIterator++;
 			continue;
@@ -535,7 +535,7 @@ void SoldierDiaryPerformanceState::think()
 {
 	State::think();
 
-	if (_lastScrollPos != _lstCommendations->getScroll())
+	if ((unsigned int)_lastScrollPos != _lstCommendations->getScroll())
 	{
 		drawSprites();
 		_lastScrollPos = _lstCommendations->getScroll();

@@ -100,11 +100,11 @@ private:
 	int _turnsSinceSpotted;
 	std::string _spawnUnit;
 	std::string _activeHand;
-    BattleUnitStatistics* _statistics;
+	BattleUnitStatistics* _statistics;
 	int _murdererId;	// used to credit the murderer with the kills that this unit got by blowing up on death
-    UnitSide _fatalShotSide;
-    UnitBodyPart _fatalShotBodyPart;
-    std::string _murdererWeapon, _murdererWeaponAmmo;
+	UnitSide _fatalShotSide;
+	UnitBodyPart _fatalShotBodyPart;
+	std::string _murdererWeapon, _murdererWeaponAmmo;
 
 	// static data
 	std::string _type;

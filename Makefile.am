@@ -146,10 +146,10 @@ openxcom_SOURCES = \
 	src/Battlescape/CannotReequipState.h \
 	src/Battlescape/CivilianBAIState.cpp \
 	src/Battlescape/CivilianBAIState.h \
-	src/Battlescape/CommendationsLateState.cpp \
-	src/Battlescape/CommendationsLateState.h \
-	src/Battlescape/CommendationsState.cpp \
-	src/Battlescape/CommendationsState.h \
+	src/Battlescape/CommendationLateState.cpp \
+	src/Battlescape/CommendationLateState.h \
+	src/Battlescape/CommendationState.cpp \
+	src/Battlescape/CommendationState.h \
 	src/Battlescape/DebriefingState.cpp \
 	src/Battlescape/DebriefingState.h \
 	src/Battlescape/Explosion.cpp \

@@ -25,7 +25,7 @@ namespace OpenXcom
 /**
  * Creates a blank set of commendation data.
  */
-RuleCommendations::RuleCommendations() : _description(""), _criteria(), _sprite(), _killCriteria()
+RuleCommendations::RuleCommendations() : _criteria(), _killCriteria(), _description(""), _sprite()
 {
 }
 
