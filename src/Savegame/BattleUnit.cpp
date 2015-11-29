@@ -364,6 +364,8 @@ YAML::Node BattleUnit::save() const
 	YAML::Node node;
 
 	node["id"] = _id;
+	node["genUnitType"] = _type;
+	node["genUnitArmor"] = _armor->getType();
 	node["faction"] = (int)_faction;
 	node["status"] = (int)_status;
 	node["position"] = _pos;

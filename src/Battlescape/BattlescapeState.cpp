@@ -1530,8 +1530,7 @@ inline void BattlescapeState::handle(Action *action)
 					}
 				}
 				// quick save and quick load
-				// not works in debug mode to prevent conflict in hotkeys by default
-				else if (!_game->getSavedGame()->isIronman())
+				if (!_game->getSavedGame()->isIronman())
 				{
 					if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
 					{

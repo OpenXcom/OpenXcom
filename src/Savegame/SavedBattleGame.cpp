@@ -193,7 +193,7 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 	{
 		UnitFaction faction = (UnitFaction)(*i)["faction"].as<int>();
 		UnitFaction originalFaction = (UnitFaction)(*i)["originalFaction"].as<int>(faction);
-		int id = (*i)["soldierId"].as<int>();
+		int id = (*i)["id"].as<int>();
 		BattleUnit *unit;
 		if (id < BattleUnit::MAX_SOLDIER_ID) // Unit is linked to a geoscape soldier
 		{
