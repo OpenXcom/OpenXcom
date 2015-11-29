@@ -666,21 +666,23 @@ void DebriefingState::prepareDebriefing()
 				craft = (*j);
 				base = (*i);
 				craftIterator = j;
-				// Cheap way to get marker data
-				YAML::Node node = craft->getDestination()->saveId();
-				_missionStatistics->markerName = node["type"].as<std::string>();
-				_missionStatistics->markerId = node["id"].as<int>();
-				if (dynamic_cast<Ufo*>(craft->getDestination()))
+				if (Ufo *u = dynamic_cast<Ufo*>(craft->getDestination()))
 				{
 					target = "STR_UFO";
+					_missionStatistics->markerName = "STR_UFO_";
+					_missionStatistics->markerId = u->getId();
 				}
-				else if (dynamic_cast<AlienBase*>(craft->getDestination()))
+				else if (AlienBase *b = dynamic_cast<AlienBase*>(craft->getDestination()))
 				{
 					target = "STR_ALIEN_BASE";
+					_missionStatistics->markerName = "STR_ALIEN_BASE_";
+					_missionStatistics->markerId = b->getId();
 				}
-				else if (dynamic_cast<MissionSite*>(craft->getDestination()))
+				else if (MissionSite *ms = dynamic_cast<MissionSite*>(craft->getDestination()))
 				{
 					target = "STR_MISSION_SITE";
+					_missionStatistics->markerName = deployment->getMarkerName();
+					_missionStatistics->markerId = ms->getId();
 				}
 				craft->returnToBase();
 				craft->setMissionComplete(true);
