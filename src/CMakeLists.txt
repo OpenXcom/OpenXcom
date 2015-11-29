@@ -580,7 +580,7 @@ set ( savegame_src
   Savegame/ItemContainer.h
   Savegame/MissionSite.cpp
   Savegame/MissionSite.h
-  Savegame/MissionStatistics.cpp
+  Savegame/MissionStatistics.h
   Savegame/MovingTarget.cpp
   Savegame/MovingTarget.h
   Savegame/Node.cpp
