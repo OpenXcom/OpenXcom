@@ -79,7 +79,7 @@ void MapBlock::load(const YAML::Node &node)
 			_revealedFloors.push_back(map.as<int>(0));
 		}
 	}
-	_items = node["items"].as<std::map<std::string, std::vector<Position> > >(_items);
+	_items = node["items"].as< std::map<std::string, std::vector<Position> > >(_items);
 }
 
 /**

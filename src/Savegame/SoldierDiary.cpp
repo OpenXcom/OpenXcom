@@ -79,10 +79,19 @@ void SoldierDiary::load(const YAML::Node& node)
 			_killList.push_back(new BattleUnitKills(*i));
 	}
     _missionIdList = node["missionIdList"].as<std::vector<int> >(_missionIdList);
-	_regionTotal = node["regionTotal"].as<std::map<std::string, int> >(_regionTotal);
-	_countryTotal = node["countryTotal"].as<std::map<std::string, int> >(_countryTotal);
-	_typeTotal = node["typeTotal"].as<std::map<std::string, int> >(_typeTotal);
-	_UFOTotal = node["UFOTotal"].as<std::map<std::string, int> >(_UFOTotal);
+	_regionTotal = node["regionTotal"].as< std::map<std::string, int> >(_regionTotal);
+	_countryTotal = node["countryTotal"].as< std::map<std::string, int> >(_countryTotal);
+	_typeTotal = node["typeTotal"].as< std::map<std::string, int> >(_typeTotal);
+	// Backwards compatibility
+	std::map<std::string, int> newTypeTotal;
+	for (std::map<std::string, int>::const_iterator i = _typeTotal.begin(); i != _typeTotal.end(); ++i)
+	{
+		std::string key = i->first;
+		Language::replace(key, "_LC", "");
+		newTypeTotal[key] = i->second;
+	}
+	_typeTotal = newTypeTotal;
+	_UFOTotal = node["UFOTotal"].as< std::map<std::string, int> >(_UFOTotal);
 	_scoreTotal = node["scoreTotal"].as<int>(_scoreTotal);
 	_killTotal = node["killTotal"].as<int>(_killTotal);
 	_winTotal = node["winTotal"].as<int>(_winTotal);

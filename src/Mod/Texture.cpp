@@ -45,7 +45,7 @@ Texture::~Texture()
 void Texture::load(const YAML::Node &node)
 {
 	_id = node["id"].as<int>(_id);
-	_deployments = node["deployments"].as<std::map<std::string, int> >(_deployments);
+	_deployments = node["deployments"].as< std::map<std::string, int> >(_deployments);
 	_terrain = node["terrain"].as< std::vector<TerrainCriteria> >(_terrain);
 }
 
