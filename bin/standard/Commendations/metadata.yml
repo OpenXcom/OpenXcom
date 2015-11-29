@@ -1,8 +1,0 @@
-#
-# metadata.yaml for Commendations Mod
-
-name: "Commendations"
-version: 1.0
-author: "Shoes01"
-description: "Adds a series of rewards that may be earned by soldiers for achivements in the field."
-master: "xcom1"
