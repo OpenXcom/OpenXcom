@@ -46,7 +46,6 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/SoldierDeath.h"
 #include "../Savegame/SoldierDiary.h"
 #include "../Savegame/MissionSite.h"
 #include "../Savegame/Tile.h"
@@ -928,14 +927,15 @@ void DebriefingState::prepareDebriefing()
 				if (soldier != 0)
 				{
 					addStat("STR_XCOM_OPERATIVES_KILLED", 1, -value);
-					for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end(); ++i)
+					// We already handled the soldier death on battlescape
+					for (std::vector<Soldier*>::reverse_iterator i = _game->getSavedGame()->getDeadSoldiers()->rbegin();
+																i != _game->getSavedGame()->getDeadSoldiers()->rend();
+																++i)
 					{
 						if ((*i) == soldier)
 						{
 							(*j)->updateGeoscapeStats(*i);
 							(*j)->getStatistics()->KIA = true;
-							// We already handled the soldier death on battlescape
-							base->getSoldiers()->erase(i);
 							break;
 						}
 					}
@@ -1015,11 +1015,7 @@ void DebriefingState::prepareDebriefing()
 							{
 								(*j)->updateGeoscapeStats(*i);
 								(*j)->getStatistics()->MIA = true;
-								SoldierDeath *death = new SoldierDeath();
-								death->setTime(*save->getTime());
-								(*i)->die(death);
-								save->getDeadSoldiers()->push_back(*i);
-								base->getSoldiers()->erase(i);
+								save->killSoldier(*i);
 								break;
 							}
 						}

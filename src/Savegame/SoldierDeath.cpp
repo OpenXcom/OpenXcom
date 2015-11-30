@@ -25,10 +25,13 @@ namespace OpenXcom
 /**
  * Initializes a death event.
  */
-SoldierDeath::SoldierDeath() : _time(0,0,0,0,0,0,0), _cause(0)
+SoldierDeath::SoldierDeath(GameTime time, BattleUnitKills *cause) : _time(time), _cause(cause)
 {
 }
 
+/**
+ * Cleans up a death event.
+ */
 SoldierDeath::~SoldierDeath()
 {
 	delete _cause;
@@ -73,30 +76,12 @@ const GameTime *SoldierDeath::getTime() const
 }
 
 /**
- * Changes the time of death of this soldier.
- * @param time The time of death.
- */
-void SoldierDeath::setTime(GameTime time)
-{
-	_time = time;
-}
-
-/**
 * Returns the time of death of this soldier.
 * @return Pointer to the time.
 */
 const BattleUnitKills *SoldierDeath::getCause() const
 {
 	return _cause;
-}
-
-/**
-* Changes the time of death of this soldier.
-* @param time The time of death.
-*/
-void SoldierDeath::setCause(BattleUnitKills *cause)
-{
-	_cause = cause;
 }
 
 }

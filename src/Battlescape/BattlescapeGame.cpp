@@ -49,7 +49,6 @@
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
-#include "../Savegame/SoldierDiary.h"
 #include "../Mod/RuleItem.h"
 #include "../Mod/RuleInventory.h"
 #include "../Mod/Armor.h"
@@ -60,7 +59,6 @@
 #include "UnitFallBState.h"
 #include "../Engine/Logger.h"
 #include "../Savegame/BattleUnitStatistics.h"
-#include "../Savegame/SoldierDeath.h"
 
 namespace OpenXcom
 {
@@ -683,15 +681,16 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					}
 				}
 			}
+			// one of our own died, record the murderer instead of the victim
 			if (victim->getGeoscapeSoldier())
 			{
-				Soldier *soldier = victim->getGeoscapeSoldier();
-				SoldierDeath *death = new SoldierDeath();
-				death->setTime(*_save->getGeoscapeSave()->getTime());
 				killStat->status = STATUS_DEAD;
-				death->setCause(killStat);
-				soldier->die(death);
-				_save->getGeoscapeSave()->getDeadSoldiers()->push_back(soldier);
+				killStat->setUnitStats(murderer);
+				killStat->faction = murderer->getFaction();
+				killStat->side = murderer->getFatalShotSide();
+				killStat->bodypart = murderer->getFatalShotBodyPart();
+				killStat->id = murderer->getId();
+				_save->getGeoscapeSave()->killSoldier(victim->getGeoscapeSoldier(), killStat);
 			}
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)

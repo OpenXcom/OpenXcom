@@ -48,7 +48,6 @@
 #include "../Savegame/Waypoint.h"
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/SoldierDeath.h"
 #include "../Savegame/SoldierDiary.h"
 #include "../Menu/PauseState.h"
 #include "InterceptState.h"
@@ -796,15 +795,11 @@ void GeoscapeState::time5Seconds()
 				// if a transport craft has been shot down, kill all the soldiers on board.
 				if ((*j)->getRules()->getSoldiers() > 0)
 				{
-					for (std::vector<Soldier*>::iterator k = (*i)->getSoldiers()->begin(); k != (*i)->getSoldiers()->end();)
+					for (std::vector<Soldier*>::const_iterator k = (*i)->getSoldiers()->begin(); k != (*i)->getSoldiers()->end();)
 					{
 						if ((*k)->getCraft() == (*j))
 						{
-							SoldierDeath *death = new SoldierDeath();
-							death->setTime(*_game->getSavedGame()->getTime());
-							(*k)->die(death);
-							_game->getSavedGame()->getDeadSoldiers()->push_back((*k));
-							k = (*i)->getSoldiers()->erase(k);
+							k = _game->getSavedGame()->killSoldier(*k);
 						}
 						else
 						{

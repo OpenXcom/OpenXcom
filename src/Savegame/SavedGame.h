@@ -53,6 +53,7 @@ class Target;
 class Soldier;
 class Craft;
 struct MissionStatistics;
+struct BattleUnitKills;
 
 /**
  *Enumerator containing all the possible game difficulties.
@@ -296,11 +297,13 @@ public:
 	/// Sets the last selected armour
 	void setLastSelectedArmor(const std::string &value);
 	/// Gets the last selected armour
-	std::string getLastSelectedArmor();
+	std::string getLastSelectedArmor() const;
 	/// Returns the craft corresponding to the specified unique id.
 	Craft *findCraftByUniqueId(const CraftId& craftId) const;
     /// Gets the list of missions statistics
 	std::vector<MissionStatistics*> *getMissionStatistics();
+	/// Handles a soldier's death.
+	std::vector<Soldier*>::const_iterator killSoldier(Soldier *soldier, BattleUnitKills *cause = 0);
 };
 }
 #endif

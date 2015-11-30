@@ -29,7 +29,6 @@
 #include "../Mod/Armor.h"
 #include "../Mod/Mod.h"
 #include "../Mod/StatString.h"
-#include "SavedGame.h"
 
 namespace OpenXcom
 {
@@ -40,10 +39,8 @@ namespace OpenXcom
  * @param armor Soldier armor.
  * @param id Unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, int id) : _id(id), _improvement(0), _psiStrImprovement(0), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _death(0), _diary()
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, int id) : _id(id), _improvement(0), _psiStrImprovement(0), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _death(0), _diary(new SoldierDiary())
 {
-	_diary = new SoldierDiary();
-	
 	if (id != 0)
 	{
 		UnitStats minStats = rules->getMinStats();
@@ -186,7 +183,7 @@ YAML::Node Soldier::save() const
 	}
 	if (!_diary->getMissionIdList().empty() || !_diary->getSoldierCommendations()->empty())
 	{
-	node["diary"] = _diary->save();
+		node["diary"] = _diary->save();
 	}
 
 	return node;

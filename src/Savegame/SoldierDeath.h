@@ -36,8 +36,9 @@ private:
 	GameTime _time;
 	BattleUnitKills *_cause;
 public:
+	SoldierDeath() : _time(0, 0, 0, 0, 0, 0, 0), _cause(0) {}
 	/// Creates a death.
-	SoldierDeath();
+	SoldierDeath(GameTime time, BattleUnitKills *cause);
 	/// Cleans up the death.
 	~SoldierDeath();
 	/// Loads the death from YAML.
@@ -46,12 +47,8 @@ public:
 	YAML::Node save() const;
 	/// Gets the death time.
 	const GameTime *getTime() const;
-	/// Sets the death time.
-	void setTime(GameTime time);
 	/// Gets the death cause.
 	const BattleUnitKills *getCause() const;
-	/// Sets the death cause.
-	void setCause(BattleUnitKills *cause);
 };
 
 }

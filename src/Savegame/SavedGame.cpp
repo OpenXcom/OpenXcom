@@ -53,6 +53,7 @@
 #include "../Mod/RuleRegion.h"
 #include "../Mod/RuleSoldier.h"
 #include "MissionStatistics.h"
+#include "SoldierDeath.h"
 
 namespace OpenXcom
 {
@@ -1343,6 +1344,13 @@ Soldier *SavedGame::getSoldier(int id) const
 			}
 		}
 	}
+	for (std::vector<Soldier*>::const_iterator j = _deadSoldiers.begin(); j != _deadSoldiers.end(); ++j)
+	{
+		if ((*j)->getId() == id)
+		{
+			return (*j);
+		}
+	}
 	return 0;
 }
 
@@ -1804,7 +1812,7 @@ void SavedGame::setLastSelectedArmor(const std::string &value)
  * Gets the last selected armour
  * @return last used armor type string
  */
-std::string SavedGame::getLastSelectedArmor()
+std::string SavedGame::getLastSelectedArmor() const
 {
 	return _lastselectedArmor;
 }
@@ -1829,12 +1837,35 @@ Craft *SavedGame::findCraftByUniqueId(const CraftId& craftId) const
 }
 
 /**
- * Returns the list of dead soldiers.
- * @return Pointer to soldier list.
+ * Returns the list of mission statistics.
+ * @return Pointer to statistics list.
  */
 std::vector<MissionStatistics*> *SavedGame::getMissionStatistics()
 {
 	return &_missionStatistics;
+}
+
+/**
+ * Registers a soldier's death in the memorial.
+ * @param soldier Pointer to dead soldier.
+ * @param cause Pointer to cause of death, NULL if missing in action.
+ */
+std::vector<Soldier*>::const_iterator SavedGame::killSoldier(Soldier *soldier, BattleUnitKills *cause)
+{
+	soldier->die(new SoldierDeath(*_time, cause));
+	_deadSoldiers.push_back(soldier);
+	std::vector<Soldier*>::const_iterator j;
+	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); ++i)
+	{
+		for (j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
+		{
+			if ((*j) == soldier)
+			{
+				return (*i)->getSoldiers()->erase(j);
+			}
+		}
+	}
+	return j;
 }
 
 }
