@@ -59,7 +59,6 @@
 #include "MapScript.h"
 #include "RuleSoldier.h"
 #include "RuleCommendations.h"
-#include "Unit.h"
 #include "AlienRace.h"
 #include "AlienDeployment.h"
 #include "Armor.h"
@@ -120,7 +119,7 @@ int Mod::UFOPAEDIA_CURSOR;
 int Mod::GRAPHS_CURSOR;
 int Mod::DAMAGE_RANGE;
 int Mod::EXPLOSIVE_DAMAGE_RANGE;
-int Mod::FIRE_DAMAGE_RANGE;
+int Mod::FIRE_DAMAGE_RANGE[2];
 std::string Mod::DEBRIEF_MUSIC_GOOD;
 std::string Mod::DEBRIEF_MUSIC_BAD;
 int Mod::DIFFICULTY_COEFFICIENT[5];
@@ -157,7 +156,8 @@ void Mod::resetGlobalStatics()
 	Mod::GRAPHS_CURSOR = 252;
 	Mod::DAMAGE_RANGE = 100;
 	Mod::EXPLOSIVE_DAMAGE_RANGE = 50;
-	Mod::FIRE_DAMAGE_RANGE = 5;
+	Mod::FIRE_DAMAGE_RANGE[0] = 5;
+	Mod::FIRE_DAMAGE_RANGE[1] = 10;
 	Mod::DEBRIEF_MUSIC_GOOD = "GMMARS";
 	Mod::DEBRIEF_MUSIC_BAD = "GMMARS";
 
@@ -192,6 +192,13 @@ Mod::Mod() : _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFun
 	_muteMusic = new Music();
 	_muteSound = new Sound();
 	_globe = new RuleGlobe();
+	_statAdjustment[0].aimAndArmorMultiplier = 0.5;
+	_statAdjustment[0].growthMultiplier = 0;
+	for (int i = 1; i != 5; ++i)
+	{
+		_statAdjustment[i].aimAndArmorMultiplier = 1.0;
+		_statAdjustment[i].growthMultiplier = i;
+	}
 }
 
 /**
@@ -963,6 +970,7 @@ void Mod::loadFile(const std::string &filename)
 		for (YAML::const_iterator i = doc["difficultyCoefficient"].begin(); i != doc["difficultyCoefficient"].end() && num < 5; ++i)
 		{
 			DIFFICULTY_COEFFICIENT[num] = (*i).as<int>(DIFFICULTY_COEFFICIENT[num]);
+			_statAdjustment[num].growthMultiplier = DIFFICULTY_COEFFICIENT[num];
 			++num;
 		}
 	}
@@ -1098,7 +1106,12 @@ void Mod::loadFile(const std::string &filename)
 		Mod::GRAPHS_CURSOR = (*i)["graphsCursor"].as<int>(Mod::GRAPHS_CURSOR);
 		Mod::DAMAGE_RANGE = (*i)["damageRange"].as<int>(Mod::DAMAGE_RANGE);
 		Mod::EXPLOSIVE_DAMAGE_RANGE = (*i)["explosiveDamageRange"].as<int>(Mod::EXPLOSIVE_DAMAGE_RANGE);
-		Mod::FIRE_DAMAGE_RANGE = (*i)["fireDamageRange"].as<int>(Mod::FIRE_DAMAGE_RANGE);
+		size_t num = 0;
+		for (YAML::const_iterator j = (*i)["fireDamageRange"].begin(); j != (*i)["fireDamageRange"].end() && num < 2; ++j)
+		{
+			FIRE_DAMAGE_RANGE[num] = (*j).as<int>(FIRE_DAMAGE_RANGE[num]);
+			++num;
+		}
 		Mod::DEBRIEF_MUSIC_GOOD = (*i)["goodDebriefingMusic"].as<std::string>(Mod::DEBRIEF_MUSIC_GOOD);
 		Mod::DEBRIEF_MUSIC_BAD = (*i)["badDebriefingMusic"].as<std::string>(Mod::DEBRIEF_MUSIC_BAD);
 	}
@@ -1178,6 +1191,20 @@ void Mod::loadFile(const std::string &filename)
 		std::auto_ptr<RuleCommendations> commendations(new RuleCommendations());
 		commendations->load(*i);
         _commendations[type] = commendations.release();
+	}
+	size_t count = 0;
+	for (YAML::const_iterator i = doc["aimAndArmorMultipliers"].begin(); i != doc["aimAndArmorMultipliers"].end() && count < 5; ++i)
+	{
+		_statAdjustment[count].aimAndArmorMultiplier = (*i).as<double>(_statAdjustment[count].aimAndArmorMultiplier);
+		++count;
+	}
+	if (doc["statGrowthMultipliers"])
+	{
+		_statAdjustment[0].statGrowth = doc["statGrowthMultipliers"].as<UnitStats>(_statAdjustment[0].statGrowth);
+		for (size_t i = 1; i != 5; ++i)
+		{
+			_statAdjustment[i].statGrowth = _statAdjustment[0].statGrowth;
+		}
 	}
 }
 
@@ -3308,6 +3335,15 @@ void Mod::createTransparencyLUT(Palette *pal)
 		}
 	}
 	_transparencyLUTs.push_back(lookUpTable);
+}
+
+StatAdjustment *Mod::getStatAdjustment(int difficulty)
+{
+	if (difficulty >= 4)
+	{
+		return &_statAdjustment[4];
+	}
+	return &_statAdjustment[difficulty];
 }
 
 }

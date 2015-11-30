@@ -48,6 +48,7 @@ class Language;
 class AlienBAIState;
 class CivilianBAIState;
 struct BattleUnitStatistics;
+struct StatAdjustment;
 
 enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_COLLAPSING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK, STATUS_IGNORE_ME};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
@@ -79,7 +80,7 @@ private:
 	std::vector<Tile *> _visibleTiles;
 	int _tu, _energy, _health, _morale, _stunlevel;
 	bool _kneeled, _floating, _dontReselect;
-	int _currentArmor[5];
+	int _currentArmor[5], _maxArmor[5];
 	int _fatalWounds[6];
 	int _fire;
 	std::vector<BattleItem*> _inventory;
@@ -137,7 +138,7 @@ public:
 	/// Creates a BattleUnit from solder.
 	BattleUnit(Soldier *soldier, int depth);
 	/// Creates a BattleUnit from unit.
-	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff, int depth);
+	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, StatAdjustment *adjustment, int depth);
 	/// Cleans up the BattleUnit.
 	~BattleUnit();
 	/// Loads the unit from YAML.
@@ -261,6 +262,8 @@ public:
 	void setArmor(int armor, UnitSide side);
 	/// Get armor value.
 	int getArmor(UnitSide side) const;
+	/// Get max armor value.
+	int getMaxArmor(UnitSide side) const;
 	/// Get total number of fatal wounds.
 	int getFatalWounds() const;
 	/// Get the current reaction score.
@@ -399,8 +402,6 @@ public:
 	int getAggroSound() const;
 	/// Sets the unit's energy level.
 	void setEnergy(int energy);
-	/// Halve the unit's armor values.
-	void halveArmor();
 	/// Get the faction that killed this unit.
 	UnitFaction killedBy() const;
 	/// Set the faction that killed this unit.
@@ -434,7 +435,7 @@ public:
 	/// this function checks if a tile is visible, using maths.
 	bool checkViewSector(Position pos) const;
 	/// adjust this unit's stats according to difficulty.
-	void adjustStats(const int diff);
+	void adjustStats(const StatAdjustment &adjustment);
 	/// did this unit already take fire damage this turn? (used to avoid damaging large units multiple times.)
 	bool tookFireDamage() const;
 	/// switch the state of the fire damage tracker.

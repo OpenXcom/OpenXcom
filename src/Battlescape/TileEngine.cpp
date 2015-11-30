@@ -1288,7 +1288,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 									float resistance = bu->getArmor()->getDamageModifier(DT_IN);
 									if (resistance > 0.0)
 									{
-										bu->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(Mod::FIRE_DAMAGE_RANGE, Mod::FIRE_DAMAGE_RANGE * 2), DT_IN, true);
+										bu->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(Mod::FIRE_DAMAGE_RANGE[0], Mod::FIRE_DAMAGE_RANGE[1]), DT_IN, true);
 										int burnTime = RNG::generate(0, int(5.0f * resistance));
 										if (bu->getFire() < burnTime)
 										{

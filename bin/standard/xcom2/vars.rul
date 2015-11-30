@@ -15,10 +15,7 @@ costScientist: 30000
 timePersonnel: 72
 initialFunding: 6000
 alienFuel: [STR_ZRBITE, 50]
-turnAIUseGrenade: 2
-turnAIUseBlaster: 2
 fontName: Font.dat
-difficultyCoefficient: [0, 1, 2, 4, 6]
 
 constants: #done
   - doorSound: 47
@@ -46,7 +43,6 @@ constants: #done
   - graphsCursor: 144
   - goodDebriefingMusic: GMDEBGOO
   - badDebriefingMusic: GMDEBPOR
-  - damageRange: 50
 
 soundDefs: #done: double check explosions.
   - type: GEO.CAT

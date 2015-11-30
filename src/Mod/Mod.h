@@ -26,6 +26,7 @@
 #include <yaml-cpp/yaml.h>
 #include "../Engine/Options.h"
 #include "../Savegame/GameTime.h"
+#include "Unit.h"
 #include "RuleAlienMission.h"
 
 namespace OpenXcom
@@ -78,6 +79,7 @@ class MapScript;
 class RuleVideo;
 class RuleMusic;
 class RuleMissionScript;
+struct StatAdjustment;
 
 /**
  * Contains all the game-specific static data that never changes
@@ -137,6 +139,7 @@ private:
 	std::string _fontName, _finalResearch;
 	YAML::Node _startingBase;
 	GameTime _startingTime;
+	StatAdjustment _statAdjustment[5];
 
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _invsIndex, _ufosIndex;
 	std::vector<std::string> _soldiersIndex, _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _ufopaediaCatIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
@@ -203,7 +206,7 @@ public:
 	static int GRAPHS_CURSOR;
 	static int DAMAGE_RANGE;
 	static int EXPLOSIVE_DAMAGE_RANGE;
-	static int FIRE_DAMAGE_RANGE;
+	static int FIRE_DAMAGE_RANGE[2];
 	static std::string DEBRIEF_MUSIC_GOOD;
 	static std::string DEBRIEF_MUSIC_BAD;
 	static int DIFFICULTY_COEFFICIENT[5];
@@ -384,6 +387,7 @@ public:
 	const std::vector<std::string> *getMissionScriptList() const;
 	RuleMissionScript *getMissionScript(const std::string &name) const;
 	std::string getFinalResearch() const;
+	StatAdjustment *getStatAdjustment(int difficulty);
 };
 
 }

@@ -570,31 +570,31 @@ void UnitInfoState::init()
 	ss.str(L"");
 	ss << _unit->getArmor(SIDE_FRONT);
 	_numFrontArmor->setText(ss.str());
-	_barFrontArmor->setMax(_unit->getArmor()->getFrontArmor());
+	_barFrontArmor->setMax(_unit->getMaxArmor(SIDE_FRONT));
 	_barFrontArmor->setValue(_unit->getArmor(SIDE_FRONT));
 
 	ss.str(L"");
 	ss << _unit->getArmor(SIDE_LEFT);
 	_numLeftArmor->setText(ss.str());
-	_barLeftArmor->setMax(_unit->getArmor()->getSideArmor());
+	_barLeftArmor->setMax(_unit->getMaxArmor(SIDE_LEFT));
 	_barLeftArmor->setValue(_unit->getArmor(SIDE_LEFT));
 
 	ss.str(L"");
 	ss << _unit->getArmor(SIDE_RIGHT);
 	_numRightArmor->setText(ss.str());
-	_barRightArmor->setMax(_unit->getArmor()->getSideArmor());
+	_barRightArmor->setMax(_unit->getMaxArmor(SIDE_RIGHT));
 	_barRightArmor->setValue(_unit->getArmor(SIDE_RIGHT));
 
 	ss.str(L"");
 	ss << _unit->getArmor(SIDE_REAR);
 	_numRearArmor->setText(ss.str());
-	_barRearArmor->setMax(_unit->getArmor()->getRearArmor());
+	_barRearArmor->setMax(_unit->getMaxArmor(SIDE_REAR));
 	_barRearArmor->setValue(_unit->getArmor(SIDE_REAR));
 
 	ss.str(L"");
 	ss << _unit->getArmor(SIDE_UNDER);
 	_numUnderArmor->setText(ss.str());
-	_barUnderArmor->setMax(_unit->getArmor()->getUnderArmor());
+	_barUnderArmor->setMax(_unit->getMaxArmor(SIDE_UNDER));
 	_barUnderArmor->setValue(_unit->getArmor(SIDE_UNDER));
 }
 

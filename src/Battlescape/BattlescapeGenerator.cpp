@@ -1071,8 +1071,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment *deployment)
  */
 BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outside)
 {
-	int difficulty =_game->getSavedGame()->getDifficultyCoefficient();
-	BattleUnit *unit = new BattleUnit(rules, FACTION_HOSTILE, _unitSequence++, _game->getMod()->getArmor(rules->getArmor()), difficulty, _save->getDepth());
+	BattleUnit *unit = new BattleUnit(rules, FACTION_HOSTILE, _unitSequence++, _game->getMod()->getArmor(rules->getArmor()), _game->getMod()->getStatAdjustment(_game->getSavedGame()->getDifficulty()), _save->getDepth());
 	Node *node = 0;
 
 	// safety to avoid index out of bounds errors
@@ -1081,7 +1080,6 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 	/* following data is the order in which certain alien ranks spawn on certain node ranks */
 	/* note that they all can fall back to rank 0 nodes - which is scout (outside ufo) */
 
-
 	for (int i = 0; i < 7 && node == 0; ++i)
 	{
 		if (outside)
@@ -1089,6 +1087,8 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 		else
 			node = _save->getSpawnNode(Node::nodeRank[alienRank][i], unit);
 	}
+
+	int difficulty = _game->getSavedGame()->getDifficultyCoefficient();
 
 	if (node && _save->setUnitPosition(unit, node->getPosition()))
 	{
@@ -1103,11 +1103,6 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 			unit->setDirection(dir);
 		else
 			unit->setDirection(RNG::generate(0,7));
-
-		if (!difficulty)
-		{
-			unit->halveArmor();
-		}
 
 		// we only add a unit if it has a node to spawn on.
 		// (stops them spawning at 0,0,0)

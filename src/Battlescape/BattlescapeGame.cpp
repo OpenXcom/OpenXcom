@@ -1682,14 +1682,13 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit)
 	std::string terroristWeapon = getMod()->getUnit(newType)->getRace().substr(4);
 	terroristWeapon += "_WEAPON";
 	RuleItem *newItem = getMod()->getItem(terroristWeapon);
-	int difficulty = _parentState->getGame()->getSavedGame()->getDifficultyCoefficient();
 
-	BattleUnit *newUnit = new BattleUnit(getMod()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getMod()->getArmor(newArmor.str()), difficulty, getDepth());
-
-	if (!difficulty)
-	{
-		newUnit->halveArmor();
-	}
+	BattleUnit *newUnit = new BattleUnit(getMod()->getUnit(newType),
+		FACTION_HOSTILE,
+		_save->getUnits()->back()->getId() + 1,
+		getMod()->getArmor(newArmor.str()),
+		getMod()->getStatAdjustment(_parentState->getGame()->getSavedGame()->getDifficulty()),
+		getDepth());
 
 	getSave()->getTile(unit->getPosition())->setUnit(newUnit, _save->getTile(unit->getPosition() + Position(0,0,-1)));
 	newUnit->setPosition(unit->getPosition());
