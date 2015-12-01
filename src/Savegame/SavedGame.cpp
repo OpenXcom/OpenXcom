@@ -1850,11 +1850,11 @@ std::vector<MissionStatistics*> *SavedGame::getMissionStatistics()
  * @param soldier Pointer to dead soldier.
  * @param cause Pointer to cause of death, NULL if missing in action.
  */
-std::vector<Soldier*>::const_iterator SavedGame::killSoldier(Soldier *soldier, BattleUnitKills *cause)
+std::vector<Soldier*>::iterator SavedGame::killSoldier(Soldier *soldier, BattleUnitKills *cause)
 {
 	soldier->die(new SoldierDeath(*_time, cause));
 	_deadSoldiers.push_back(soldier);
-	std::vector<Soldier*>::const_iterator j;
+	std::vector<Soldier*>::iterator j;
 	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{
 		for (j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)

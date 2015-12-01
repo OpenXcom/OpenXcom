@@ -684,13 +684,18 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			// one of our own died, record the murderer instead of the victim
 			if (victim->getGeoscapeSoldier())
 			{
-				killStat->status = STATUS_DEAD;
-				killStat->setUnitStats(murderer);
-				killStat->faction = murderer->getFaction();
-				killStat->side = murderer->getFatalShotSide();
-				killStat->bodypart = murderer->getFatalShotBodyPart();
-				killStat->id = murderer->getId();
-				_save->getGeoscapeSave()->killSoldier(victim->getGeoscapeSoldier(), killStat);
+				BattleUnitKills *deathStat = new BattleUnitKills();
+				deathStat->mission = _save->getGeoscapeSave()->getMissionStatistics()->size();
+				deathStat->setTurn(_save->getTurn(), _save->getSide());
+				deathStat->setUnitStats(murderer);
+				deathStat->faction = murderer->getFaction();
+				deathStat->side = victim->getFatalShotSide();
+				deathStat->bodypart = victim->getFatalShotBodyPart();
+				deathStat->id = victim->getId();
+				deathStat->weapon = killStat->weapon;
+				deathStat->weaponAmmo = killStat->weaponAmmo;
+				deathStat->status = STATUS_DEAD;
+				_save->getGeoscapeSave()->killSoldier(victim->getGeoscapeSoldier(), deathStat);
 			}
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
