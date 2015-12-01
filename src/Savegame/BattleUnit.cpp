@@ -354,7 +354,10 @@ void BattleUnit::load(const YAML::Node &node)
 	_motionPoints = node["motionPoints"].as<int>(0);
 	_respawn = node["respawn"].as<bool>(_respawn);
 	_activeHand = node["activeHand"].as<std::string>(_activeHand);
-	_statistics->load(node["tempUnitStatistics"]);
+	if (node["tempUnitStatistics"])
+	{
+		_statistics->load(node["tempUnitStatistics"]);
+	}
 
 	if (const YAML::Node& p = node["recolor"])
 	{
