@@ -927,18 +927,9 @@ void DebriefingState::prepareDebriefing()
 				if (soldier != 0)
 				{
 					addStat("STR_XCOM_OPERATIVES_KILLED", 1, -value);
-					// We already handled the soldier death on battlescape
-					for (std::vector<Soldier*>::reverse_iterator i = _game->getSavedGame()->getDeadSoldiers()->rbegin();
-																i != _game->getSavedGame()->getDeadSoldiers()->rend();
-																++i)
-					{
-						if ((*i) == soldier)
-						{
-							(*j)->updateGeoscapeStats(*i);
-							(*j)->getStatistics()->KIA = true;
-							break;
-						}
-					}
+					(*j)->updateGeoscapeStats(soldier);
+					(*j)->getStatistics()->KIA = true;
+					save->killSoldier(soldier); // in case we missed the soldier death on battlescape
 				}
 				else
 				{ // non soldier player = tank
@@ -1009,16 +1000,9 @@ void DebriefingState::prepareDebriefing()
 					addStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", 1, -value);
 					if (soldier != 0)
 					{
-						for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end(); ++i)
-						{
-							if ((*i) == soldier)
-							{
-								(*j)->updateGeoscapeStats(*i);
-								(*j)->getStatistics()->MIA = true;
-								save->killSoldier(*i);
-								break;
-							}
-						}
+						(*j)->updateGeoscapeStats(soldier);
+						(*j)->getStatistics()->MIA = true;
+						save->killSoldier(soldier);
 					}
 				}
 			}

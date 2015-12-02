@@ -1852,8 +1852,6 @@ std::vector<MissionStatistics*> *SavedGame::getMissionStatistics()
  */
 std::vector<Soldier*>::iterator SavedGame::killSoldier(Soldier *soldier, BattleUnitKills *cause)
 {
-	soldier->die(new SoldierDeath(*_time, cause));
-	_deadSoldiers.push_back(soldier);
 	std::vector<Soldier*>::iterator j;
 	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{
@@ -1861,6 +1859,8 @@ std::vector<Soldier*>::iterator SavedGame::killSoldier(Soldier *soldier, BattleU
 		{
 			if ((*j) == soldier)
 			{
+				soldier->die(new SoldierDeath(*_time, cause));
+				_deadSoldiers.push_back(soldier);
 				return (*i)->getSoldiers()->erase(j);
 			}
 		}
