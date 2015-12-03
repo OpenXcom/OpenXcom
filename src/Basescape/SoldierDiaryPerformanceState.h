@@ -52,12 +52,8 @@ private:
 
 	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnKills, *_btnMissions, *_btnCommendations;
 	Window *_window;
-	Text *_txtTitle, *_txtRank, *_txtRace, *_txtWeapon;
-	Text *_txtLocation, *_txtType, *_txtUFO;
-	Text *_txtMedalName, *_txtMedalLevel, *_txtMedalInfo;
-	TextList *_lstRank, *_lstRace, *_lstWeapon, *_lstKillTotals;
-	TextList *_lstLocation, *_lstType, *_lstUFO, *_lstMissionTotals;
-	TextList *_lstCommendations;
+	Text *_txtTitle, *_txtMedalName, *_txtMedalLevel, *_txtMedalInfo;
+	TextList *_lstPerformance, *_lstKillTotals, *_lstMissionTotals, *_lstCommendations;
 	std::vector<std::wstring> _commendationsListEntry;
 	std::vector<Surface*> _commendations, _commendationDecorations;
 	SurfaceSet *_commendationSprite, *_commendationDecoration;

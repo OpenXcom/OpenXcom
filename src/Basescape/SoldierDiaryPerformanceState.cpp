@@ -64,25 +64,12 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
     _btnCommendations = new TextButton(70, 16, 164, 176);
     _btnOk = new TextButton(70, 16, 242, 176);
 	_txtTitle = new Text(310, 16, 5, 8);
-	// Kill stats
-	_txtRace = new Text(90, 18, 16, 36);
-	_txtRank = new Text(90, 18, 114, 36);
-	_txtWeapon = new Text(90, 18, 212, 36);
-	_lstRace = new TextList(90, 140, 16, 52);
-	_lstRank = new TextList(90, 140, 114, 52);
-	_lstWeapon = new TextList(90, 140, 212, 52);
-	_lstKillTotals = new TextList(288, 9, 8, 167);
-	// Mission stats
-	_txtLocation = new Text(90, 18, 16, 36);
-	_txtType = new Text(110, 18, 108, 36);
-	_txtUFO = new Text(90, 18, 222, 36);
-	_lstLocation = new TextList(90, 140, 16, 52);
-	_lstType = new TextList(110, 140, 108, 52);
-	_lstUFO = new TextList(90, 140, 222, 52);
-	_lstMissionTotals = new TextList(296, 9, 8, 167);
+	_lstPerformance = new TextList(288, 128, 8, 28);
+	_lstKillTotals = new TextList(302, 9, 8, 164);
+	_lstMissionTotals = new TextList(302, 9, 8, 164);
     // Commendation stats
-    _txtMedalName = new Text(90, 18, 16, 36);
-    _txtMedalLevel = new Text(90, 18, 206, 36);
+    _txtMedalName = new Text(120, 18, 16, 36);
+    _txtMedalLevel = new Text(120, 18, 186, 36);
 	_txtMedalInfo = new Text(280, 32, 20, 135);
     _lstCommendations = new TextList(240, 80, 48, 52);
 	// Commendation sprites
@@ -105,19 +92,8 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 	add(_btnPrev, "button", "soldierDiary");
 	add(_btnNext, "button", "soldierDiary");
 	add(_txtTitle, "text1", "soldierDiary");
-	add(_txtRace, "text2", "soldierDiary");
-	add(_txtRank, "text2", "soldierDiary");
-	add(_txtWeapon, "text2", "soldierDiary");
-	add(_lstRace, "list", "soldierDiary");
-	add(_lstRank, "list", "soldierDiary");
-	add(_lstWeapon, "list", "soldierDiary");
+	add(_lstPerformance, "list", "soldierDiary");
 	add(_lstKillTotals, "text2", "soldierDiary");
-	add(_txtLocation, "text2", "soldierDiary");
-	add(_txtType, "text2", "soldierDiary");
-	add(_txtUFO, "text2", "soldierDiary");
-	add(_lstLocation, "list", "soldierDiary");
-	add(_lstType, "list", "soldierDiary");
-	add(_lstUFO, "list", "soldierDiary");
 	add(_lstMissionTotals, "text2", "soldierDiary");
     add(_txtMedalName, "text2", "soldierDiary");
     add(_txtMedalLevel, "text2", "soldierDiary");
@@ -175,65 +151,20 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 	_txtTitle->setAlign(ALIGN_CENTER);
 
 	// Text is decided in init()
-	_txtRace->setText(tr("STR_NEUTRALIZATIONS_BY_RACE"));
-	_txtRace->setWordWrap(true);
+	_lstPerformance->setColumns(2, 273, 15);
+	_lstPerformance->setDot(true);
 
-	_txtRank->setText(tr("STR_NEUTRALIZATIONS_BY_RANK"));
-	_txtRank->setWordWrap(true);
+	_lstKillTotals->setColumns(4, 74, 74, 74, 80);
 
-	_txtWeapon->setText(tr("STR_NEUTRALIZATIONS_BY_WEAPON"));
-	_txtWeapon->setWordWrap(true);
-
-	_lstRace->setColumns(2, 80, 10);
-	_lstRace->setBackground(_window);
-	_lstRace->setDot(true);
-
-	_lstRank->setColumns(2, 80, 10);
-	_lstRank->setBackground(_window);
-	_lstRank->setDot(true);
-
-	_lstWeapon->setColumns(2, 80, 10);
-	_lstWeapon->setBackground(_window);
-	_lstWeapon->setDot(true);
-
-	_lstKillTotals->setColumns(4, 68, 68, 68, 84);
-	_lstKillTotals->setMargin(8);
-	_lstKillTotals->setBackground(_window);
-	
-	_txtLocation->setText(tr("STR_MISSIONS_BY_LOCATION"));
-	_txtLocation->setWordWrap(true);
-	
-	_txtType->setText(tr("STR_MISSIONS_BY_TYPE"));
-	_txtType->setWordWrap(true);
-	
-	_txtUFO->setText(tr("STR_MISSIONS_BY_UFO"));
-	_txtUFO->setWordWrap(true);
-	
-	_lstLocation->setColumns(2, 80, 10);
-	_lstLocation->setBackground(_window);
-	_lstLocation->setDot(true);
-	
-	_lstType->setColumns(2, 100, 10);
-	_lstType->setBackground(_window);
-	_lstType->setDot(true);
-	
-	_lstUFO->setColumns(2, 80, 10);
-	_lstUFO->setBackground(_window);
-	_lstUFO->setDot(true);
-
-	_lstMissionTotals->setColumns(4, 68, 68, 68, 84);
-	_lstMissionTotals->setMargin(8);
-	_lstMissionTotals->setBackground(_window);
+	_lstMissionTotals->setColumns(4, 74, 74, 74, 80);
 	
 	_txtMedalName->setText(tr("STR_MEDAL_NAME"));
-	_txtMedalName->setWordWrap(true);
 
 	_txtMedalLevel->setText(tr("STR_MEDAL_DECOR_LEVEL"));
-	_txtMedalLevel->setWordWrap(true);
 
 	_txtMedalInfo->setWordWrap(true);
 
-	_lstCommendations->setColumns(2, 158, 80);
+	_lstCommendations->setColumns(2, 138, 100);
 	_lstCommendations->setSelectable(true);
 	_lstCommendations->setBackground(_window);
 	_lstCommendations->onMouseOver((ActionHandler)&SoldierDiaryPerformanceState::lstInfoMouseOver);
@@ -280,31 +211,15 @@ void SoldierDiaryPerformanceState::init()
 		_commendationDecorations[i]->clear();
 	}
 	// Reset scroll depth for lists
-	_lstRank->scrollTo(0);
-	_lstRace->scrollTo(0);
-	_lstWeapon->scrollTo(0);
+	_lstPerformance->scrollTo(0);
 	_lstKillTotals->scrollTo(0);
-	_lstLocation->scrollTo(0);
-	_lstType->scrollTo(0);
-	_lstUFO->scrollTo(0);
 	_lstMissionTotals->scrollTo(0);
 	_lstCommendations->scrollTo(0);
 	_lastScrollPos = 0;
+	_lstPerformance->setVisible(_display != DIARY_COMMENDATIONS);
 	// Set visibility for kills
-	_txtRace->setVisible(_display == DIARY_KILLS);
-	_txtRank->setVisible(_display == DIARY_KILLS);
-	_txtWeapon->setVisible(_display == DIARY_KILLS);
-	_lstRace->setVisible(_display == DIARY_KILLS);
-	_lstRank->setVisible(_display == DIARY_KILLS);
-	_lstWeapon->setVisible(_display == DIARY_KILLS);
 	_lstKillTotals->setVisible(_display == DIARY_KILLS);
 	// Set visibility for missions
-	_txtLocation->setVisible(_display == DIARY_MISSIONS);
-	_txtType->setVisible(_display == DIARY_MISSIONS);
-	_txtUFO->setVisible(_display == DIARY_MISSIONS);
-	_lstLocation->setVisible(_display == DIARY_MISSIONS);
-	_lstType->setVisible(_display == DIARY_MISSIONS);
-	_lstUFO->setVisible(_display == DIARY_MISSIONS);
 	_lstMissionTotals->setVisible(_display == DIARY_MISSIONS);
 	// Set visibility for commendations
     _txtMedalName->setVisible(_display == DIARY_COMMENDATIONS);
@@ -326,68 +241,88 @@ void SoldierDiaryPerformanceState::init()
 	_lstKillTotals->clearList();
 	_lstMissionTotals->clearList();
 	_commendationsListEntry.clear();
-	if (_soldier->getCurrentStats()->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getMod()->getPsiRequirements())))
-	{
-		_lstKillTotals->addRow(4, tr("STR_KILLS").arg(_soldier->getDiary()->getKillTotal()).c_str(),
-								  tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str(),
-								  tr("STR_PANICKS").arg(_soldier->getDiary()->getPanickTotal()).c_str(),
-								  tr("STR_MINDCONTROLS").arg(_soldier->getDiary()->getControlTotal()).c_str());
-	}
-	else
-	{
-		_lstKillTotals->addRow(2, tr("STR_KILLS").arg(_soldier->getDiary()->getKillTotal()).c_str(),
-								  tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str());
-	}
-	_lstMissionTotals->addRow(4, tr("STR_MISSIONS").arg(_soldier->getDiary()->getMissionTotal()).c_str(),
-								 tr("STR_WINS").arg(_soldier->getDiary()->getWinTotal()).c_str(),
-								 tr("STR_SCORE_VALUE").arg(_soldier->getDiary()->getScoreTotal()).c_str(),
-								 tr("STR_DAYS_WOUNDED").arg(_soldier->getDiary()->getDaysWoundedTotal()).c_str());
-
 	_txtTitle->setText(_soldier->getName());
-	_lstRace->clearList();
-	_lstRank->clearList();
-	_lstWeapon->clearList();
-	_lstLocation->clearList();
-	_lstType->clearList();
-	_lstUFO->clearList();
+	_lstPerformance->clearList();
     _lstCommendations->clearList();
-
-	std::map<std::string, int> mapArray[6] = {_soldier->getDiary()->getAlienRaceTotal(), _soldier->getDiary()->getAlienRankTotal(), _soldier->getDiary()->getWeaponTotal(), 
-												_soldier->getDiary()->getRegionTotal(), _soldier->getDiary()->getTypeTotal(), _soldier->getDiary()->getUFOTotal()};
-	TextList *lstArray[6] = {_lstRace, _lstRank, _lstWeapon, 
-								_lstLocation, _lstType, _lstUFO};
-
-	for (int i = 0; i != 6; ++i)
+	if (_display == DIARY_KILLS)
 	{
-		for (std::map<std::string, int>::const_iterator j = mapArray[i].begin() ; j != mapArray[i].end() ; ++j)
+		std::map<std::string, int> mapArray[] = { _soldier->getDiary()->getAlienRaceTotal(), _soldier->getDiary()->getAlienRankTotal(), _soldier->getDiary()->getWeaponTotal() };
+		std::string titleArray[] = { "STR_NEUTRALIZATIONS_BY_RACE", "STR_NEUTRALIZATIONS_BY_RANK", "STR_NEUTRALIZATIONS_BY_WEAPON" };
+
+		for (int i = 0; i != 3; ++i)
 		{
-			if ((*j).first == "NO_UFO") continue;
-			std::wostringstream ss;
-			ss << (*j).second;
-			lstArray[i]->addRow(2, tr((*j).first).c_str(), ss.str().c_str());
-		}
-	}
-    
-    for (std::vector<SoldierCommendations*>::const_iterator i = _soldier->getDiary()->getSoldierCommendations()->begin() ; i != _soldier->getDiary()->getSoldierCommendations()->end() ; ++i)
-	{
-		if (_game->getMod()->getCommendation().empty())
-		{
-			break;
+			_lstPerformance->addRow(1, tr(titleArray[i]).c_str());
+			_lstPerformance->setRowColor(_lstPerformance->getRows() - 1, _lstPerformance->getSecondaryColor());
+			for (std::map<std::string, int>::const_iterator j = mapArray[i].begin(); j != mapArray[i].end(); ++j)
+			{
+				std::wostringstream ss;
+				ss << (*j).second;
+				_lstPerformance->addRow(2, tr((*j).first).c_str(), ss.str().c_str());
+			}
+			if (i != 2)
+			{
+				_lstPerformance->addRow(1, L"");
+			}
 		}
 
-		RuleCommendations* commendation = _game->getMod()->getCommendation()[(*i)->getType()];
-		if ((*i)->getNoun() != "noNoun")
+		if (_soldier->getCurrentStats()->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getMod()->getPsiRequirements())))
 		{
-			_lstCommendations->addRow(2, tr((*i)->getType()).arg(tr((*i)->getNoun())).c_str(), tr((*i)->getDecorationDescription()).c_str());
-			_commendationsListEntry.push_back(tr(commendation->getDescription()).arg(tr((*i)->getNoun())));
+			_lstKillTotals->addRow(4, tr("STR_KILLS").arg(_soldier->getDiary()->getKillTotal()).c_str(),
+				tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str(),
+				tr("STR_PANICKS").arg(_soldier->getDiary()->getPanickTotal()).c_str(),
+				tr("STR_MINDCONTROLS").arg(_soldier->getDiary()->getControlTotal()).c_str());
 		}
 		else
 		{
-			_lstCommendations->addRow(2, tr((*i)->getType()).c_str(), tr((*i)->getDecorationDescription()).c_str());
-			_commendationsListEntry.push_back(tr(commendation->getDescription()));
+			_lstKillTotals->addRow(2, tr("STR_KILLS").arg(_soldier->getDiary()->getKillTotal()).c_str(),
+				tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str());
+		}
+	}
+	else if (_display == DIARY_MISSIONS)
+	{
+		std::map<std::string, int> mapArray[] = { _soldier->getDiary()->getRegionTotal(), _soldier->getDiary()->getTypeTotal(), _soldier->getDiary()->getUFOTotal() };
+		std::string titleArray[] = { "STR_MISSIONS_BY_LOCATION", "STR_MISSIONS_BY_TYPE", "STR_MISSIONS_BY_UFO" };
+
+		for (int i = 0; i != 3; ++i)
+		{
+			_lstPerformance->addRow(1, tr(titleArray[i]).c_str());
+			_lstPerformance->setRowColor(_lstPerformance->getRows() - 1, _lstPerformance->getSecondaryColor());
+			for (std::map<std::string, int>::const_iterator j = mapArray[i].begin(); j != mapArray[i].end(); ++j)
+			{
+				if ((*j).first == "NO_UFO") continue;
+				std::wostringstream ss;
+				ss << (*j).second;
+				_lstPerformance->addRow(2, tr((*j).first).c_str(), ss.str().c_str());
+			}
+			if (i != 2)
+			{
+				_lstPerformance->addRow(1, L"");
+			}
 		}
 
-		drawSprites();
+		_lstMissionTotals->addRow(4, tr("STR_MISSIONS").arg(_soldier->getDiary()->getMissionTotal()).c_str(),
+			tr("STR_WINS").arg(_soldier->getDiary()->getWinTotal()).c_str(),
+			tr("STR_SCORE_VALUE").arg(_soldier->getDiary()->getScoreTotal()).c_str(),
+			tr("STR_DAYS_WOUNDED").arg(_soldier->getDiary()->getDaysWoundedTotal()).c_str());
+	}
+	else if (_display == DIARY_COMMENDATIONS && !_game->getMod()->getCommendation().empty())
+	{
+		for (std::vector<SoldierCommendations*>::const_iterator i = _soldier->getDiary()->getSoldierCommendations()->begin(); i != _soldier->getDiary()->getSoldierCommendations()->end(); ++i)
+		{
+			RuleCommendations* commendation = _game->getMod()->getCommendation()[(*i)->getType()];
+			if ((*i)->getNoun() != "noNoun")
+			{
+				_lstCommendations->addRow(2, tr((*i)->getType()).arg(tr((*i)->getNoun())).c_str(), tr((*i)->getDecorationDescription()).c_str());
+				_commendationsListEntry.push_back(tr(commendation->getDescription()).arg(tr((*i)->getNoun())));
+			}
+			else
+			{
+				_lstCommendations->addRow(2, tr((*i)->getType()).c_str(), tr((*i)->getDecorationDescription()).c_str());
+				_commendationsListEntry.push_back(tr(commendation->getDescription()));
+			}
+
+			drawSprites();
+		}
 	}
 }
 

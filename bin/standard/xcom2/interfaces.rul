@@ -1024,6 +1024,7 @@ interfaces: #done
         color2: 244
       - id: list
         color: 244
+        color2: 1
         border: 1
       - id: button
         color: 1

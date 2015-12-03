@@ -994,6 +994,7 @@ interfaces:
         color2: 218  # blue
       - id: list
         color: 218   # blue
+        color2: 241   # pink
         border: 241  # pink
       - id: button
         color: 246   # purple
