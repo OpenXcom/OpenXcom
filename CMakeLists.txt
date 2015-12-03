@@ -112,8 +112,11 @@ if ( GIT_FOUND )
   set ( git_nb_commit ${CMAKE_MATCH_2} )
   set ( git_commit ${CMAKE_MATCH_3} )
   set ( git_dirty ${CMAKE_MATCH_4} )
-  add_definitions( -DOPENXCOM_VERSION_GIT="${git_commit}" )
+  set ( OPENXCOM_GIT_SHA1 ${git_commit} )
 endif()
+# Create version file
+configure_file("${CMAKE_MODULE_PATH}/version.cpp.in" "${CMAKE_BINARY_DIR}/version.cpp" )
+set(version_file "${CMAKE_BINARY_DIR}/version.cpp")
 
 if ( DEV_BUILD )
   # Append the commit to version number
