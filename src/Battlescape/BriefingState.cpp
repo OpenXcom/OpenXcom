@@ -195,7 +195,7 @@ void BriefingState::btnOkClick(Action *)
 	{
 		Options::baseXResolution = Options::baseXGeoscape;
 		Options::baseYResolution = Options::baseYGeoscape;
-		_game->getScreen()->resetDisplay(false);;
+		_game->getScreen()->resetDisplay(false);
 		delete bs;
 		_game->pushState(new AliensCrashState);
 	}

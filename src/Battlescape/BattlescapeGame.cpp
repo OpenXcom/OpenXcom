@@ -544,16 +544,16 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		if ((*j)->getStatus() == STATUS_IGNORE_ME) continue;
 		BattleUnit *victim = (*j);
 
-		BattleUnitKills *killStat = new BattleUnitKills();
-		killStat->mission = _save->getGeoscapeSave()->getMissionStatistics()->size();
-		killStat->setTurn(_save->getTurn(), _save->getSide());
-		killStat->setUnitStats(victim);
-		killStat->faction = victim->getFaction();
-		killStat->side = victim->getFatalShotSide();
-		killStat->bodypart = victim->getFatalShotBodyPart();
-		killStat->id = victim->getId();
-		killStat->weapon = tempWeapon;
-		killStat->weaponAmmo = tempAmmo;
+		BattleUnitKills killStat;
+		killStat.mission = _parentState->getGame()->getSavedGame()->getMissionStatistics()->size();
+		killStat.setTurn(_save->getTurn(), _save->getSide());
+		killStat.setUnitStats(victim);
+		killStat.faction = victim->getFaction();
+		killStat.side = victim->getFatalShotSide();
+		killStat.bodypart = victim->getFatalShotBodyPart();
+		killStat.id = victim->getId();
+		killStat.weapon = tempWeapon;
+		killStat.weaponAmmo = tempAmmo;
 
 		if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_COLLAPSING)
 		{
@@ -567,8 +567,8 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					if ((*i)->getId() == victim->getMurdererId())
 					{
 						murderer = (*i);
-						killStat->weapon = victim->getMurdererWeapon();
-						killStat->weaponAmmo = victim->getMurdererWeaponAmmo();
+						killStat.weapon = victim->getMurdererWeapon();
+						killStat.weaponAmmo = victim->getMurdererWeaponAmmo();
 						break;
 					}
 				}
@@ -583,8 +583,8 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					{
 						if ((*j)->getId() == murderer->getMurdererId() && (*j)->getGeoscapeSoldier())
 						{
-							killStat->status = STATUS_DEAD;
-							(*j)->getStatistics()->kills.push_back(killStat);
+							killStat.status = STATUS_DEAD;
+							(*j)->getStatistics()->kills.push_back(new BattleUnitKills(killStat));
 							if (victim->getFaction() == FACTION_HOSTILE)
 							{
 								(*j)->getStatistics()->slaveKills++;
@@ -596,8 +596,8 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				}
 				else if (!murderer->getStatistics()->duplicateEntry(STATUS_DEAD, victim->getId()))
 				{
-					killStat->status = STATUS_DEAD;
-					murderer->getStatistics()->kills.push_back(killStat);
+					killStat.status = STATUS_DEAD;
+					murderer->getStatistics()->kills.push_back(new BattleUnitKills(killStat));
 					victim->setMurdererId(murderer->getId());
 				}
 				murderer->addKillCount();
@@ -685,17 +685,17 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			if (victim->getGeoscapeSoldier())
 			{
 				BattleUnitKills *deathStat = new BattleUnitKills();
-				deathStat->mission = _save->getGeoscapeSave()->getMissionStatistics()->size();
+				deathStat->mission = _parentState->getGame()->getSavedGame()->getMissionStatistics()->size();
 				deathStat->setTurn(_save->getTurn(), _save->getSide());
 				deathStat->setUnitStats(murderer);
 				deathStat->faction = murderer->getFaction();
 				deathStat->side = victim->getFatalShotSide();
 				deathStat->bodypart = victim->getFatalShotBodyPart();
 				deathStat->id = victim->getId();
-				deathStat->weapon = killStat->weapon;
-				deathStat->weaponAmmo = killStat->weaponAmmo;
+				deathStat->weapon = killStat.weapon;
+				deathStat->weaponAmmo = killStat.weaponAmmo;
 				deathStat->status = STATUS_DEAD;
-				_save->getGeoscapeSave()->killSoldier(victim->getGeoscapeSoldier(), deathStat);
+				_parentState->getGame()->getSavedGame()->killSoldier(victim->getGeoscapeSoldier(), deathStat);
 			}
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
@@ -711,8 +711,8 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					if ((*i)->getId() == victim->getMurdererId())
 					{
 						murderer = (*i);
-						killStat->weapon = victim->getMurdererWeapon();
-						killStat->weaponAmmo = victim->getMurdererWeaponAmmo();
+						killStat.weapon = victim->getMurdererWeapon();
+						killStat.weaponAmmo = victim->getMurdererWeaponAmmo();
 						break;
 					}
 				}
@@ -725,8 +725,8 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				{
 					if ((*j)->getId() == murderer->getMurdererId() && (*j)->getGeoscapeSoldier())
 					{
-						killStat->status = STATUS_UNCONSCIOUS;
-						(*j)->getStatistics()->kills.push_back(killStat);
+						killStat.status = STATUS_UNCONSCIOUS;
+						(*j)->getStatistics()->kills.push_back(new BattleUnitKills(killStat));
 						(*j)->getStatistics()->slaveKills++;
 						victim->setMurdererId((*j)->getId());
 						break;
@@ -735,20 +735,14 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			}
 			else if (murderer && !murderer->getStatistics()->duplicateEntry(STATUS_UNCONSCIOUS, victim->getId())) 
 			{
-				killStat->status = STATUS_UNCONSCIOUS;
-				murderer->getStatistics()->kills.push_back(killStat);
+				killStat.status = STATUS_UNCONSCIOUS;
+				murderer->getStatistics()->kills.push_back(new BattleUnitKills(killStat));
 			}
 			if (victim->getGeoscapeSoldier())
 			{
 				victim->getStatistics()->wasUnconcious = true;
 			}
 			statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));
-		}
-
-		// Cleanup unused stats
-		if (killStat->status == STATUS_IGNORE_ME)
-		{
-			delete killStat;
 		}
 	}
 

@@ -150,14 +150,14 @@ void PsiAttackBState::psiAttack()
 		_action.actor->addPsiSkillExp();
 		_action.actor->addPsiSkillExp();
 
-		BattleUnitKills *killStat = new BattleUnitKills();
-		killStat->setUnitStats(_target);
-		killStat->setTurn(_parent->getSave()->getTurn(), _parent->getSave()->getSide());
-		killStat->weapon = _action.weapon->getRules()->getName();
-		killStat->weaponAmmo = _action.weapon->getRules()->getName();
-		killStat->faction = _target->getFaction();
-		killStat->mission = _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size();
-		killStat->id = _target->getId();
+		BattleUnitKills killStat;
+		killStat.setUnitStats(_target);
+		killStat.setTurn(_parent->getSave()->getTurn(), _parent->getSave()->getSide());
+		killStat.weapon = _action.weapon->getRules()->getName();
+		killStat.weaponAmmo = _action.weapon->getRules()->getName();
+		killStat.faction = _target->getFaction();
+		killStat.mission = _parent->getSave()->getGeoscapeSave()->getMissionStatistics()->size();
+		killStat.id = _target->getId();
 
 		if (_action.type == BA_PANIC)
 		{
@@ -167,8 +167,8 @@ void PsiAttackBState::psiAttack()
 			// Award Panic battle unit kill
 			if (!_unit->getStatistics()->duplicateEntry(STATUS_PANICKING, _target->getId()))
 			{
-				killStat->status = STATUS_PANICKING;
-				_unit->getStatistics()->kills.push_back(killStat);
+				killStat.status = STATUS_PANICKING;
+				_unit->getStatistics()->kills.push_back(new BattleUnitKills(killStat));
 				_target->setMurdererId(_unit->getId());
 			}
 			if (_parent->getSave()->getSide() == FACTION_PLAYER)
@@ -181,8 +181,8 @@ void PsiAttackBState::psiAttack()
 			// Award MC battle unit kill
 			if (!_unit->getStatistics()->duplicateEntry(STATUS_TURNING, _target->getId()))
 			{
-				killStat->status = STATUS_TURNING;
-				_unit->getStatistics()->kills.push_back(killStat);
+				killStat.status = STATUS_TURNING;
+				_unit->getStatistics()->kills.push_back(new BattleUnitKills(killStat));
 				_target->setMurdererId(_unit->getId());
 			}
 			_target->convertToFaction(_unit->getFaction());
@@ -214,12 +214,6 @@ void PsiAttackBState::psiAttack()
 				// show a little infobox with the name of the unit and "... is under alien control"
 				game->pushState(new InfoboxState(game->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL", _target->getGender()).arg(_target->getName(game->getLanguage()))));
 			}
-		}
-
-		// Cleanup unused stats
-		if (killStat->status == STATUS_IGNORE_ME)
-		{
-			delete killStat;
 		}
 	}
 	else

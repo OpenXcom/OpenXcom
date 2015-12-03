@@ -268,9 +268,9 @@ void SoldierDiaryPerformanceState::init()
 		if (_soldier->getCurrentStats()->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getMod()->getPsiRequirements())))
 		{
 			_lstKillTotals->addRow(4, tr("STR_KILLS").arg(_soldier->getDiary()->getKillTotal()).c_str(),
-				tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str(),
-				tr("STR_PANICKS").arg(_soldier->getDiary()->getPanickTotal()).c_str(),
-				tr("STR_MINDCONTROLS").arg(_soldier->getDiary()->getControlTotal()).c_str());
+										tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str(),
+										tr("STR_PANICKS").arg(_soldier->getDiary()->getPanickTotal()).c_str(),
+										tr("STR_MINDCONTROLS").arg(_soldier->getDiary()->getControlTotal()).c_str());
 		}
 		else
 		{
@@ -301,9 +301,9 @@ void SoldierDiaryPerformanceState::init()
 		}
 
 		_lstMissionTotals->addRow(4, tr("STR_MISSIONS").arg(_soldier->getDiary()->getMissionTotal()).c_str(),
-			tr("STR_WINS").arg(_soldier->getDiary()->getWinTotal()).c_str(),
-			tr("STR_SCORE_VALUE").arg(_soldier->getDiary()->getScoreTotal()).c_str(),
-			tr("STR_DAYS_WOUNDED").arg(_soldier->getDiary()->getDaysWoundedTotal()).c_str());
+									tr("STR_WINS").arg(_soldier->getDiary()->getWinTotal()).c_str(),
+									tr("STR_SCORE_VALUE").arg(_soldier->getDiary()->getScoreTotal()).c_str(),
+									tr("STR_DAYS_WOUNDED").arg(_soldier->getDiary()->getDaysWoundedTotal()).c_str());
 	}
 	else if (_display == DIARY_COMMENDATIONS && !_game->getMod()->getCommendation().empty())
 	{
@@ -320,9 +320,8 @@ void SoldierDiaryPerformanceState::init()
 				_lstCommendations->addRow(2, tr((*i)->getType()).c_str(), tr((*i)->getDecorationDescription()).c_str());
 				_commendationsListEntry.push_back(tr(commendation->getDescription()));
 			}
-
-			drawSprites();
 		}
+		drawSprites();
 	}
 }
 
