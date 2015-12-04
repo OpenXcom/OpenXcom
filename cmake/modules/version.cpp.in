@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-# include "../src/version.h"
+# include "@CMAKE_SOURCE_DIR@/src/version.h"
 
 const std::string OPENXCOM_VERSION_GIT = "@OPENXCOM_GIT_SHA1@";
 
