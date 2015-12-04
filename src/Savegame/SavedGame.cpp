@@ -215,12 +215,12 @@ std::vector<SaveInfo> SavedGame::getList(Language *lang, bool autoquick)
 		}
 		catch (Exception &e)
 		{
-			Log(LOG_ERROR) << e.what();
+			Log(LOG_ERROR) << (*i) << ": " << e.what();
 			continue;
 		}
 		catch (YAML::Exception &e)
 		{
-			Log(LOG_ERROR) << e.what();
+			Log(LOG_ERROR) << (*i) << ": " << e.what();
 			continue;
 		}
 	}

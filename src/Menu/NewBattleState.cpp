@@ -332,7 +332,7 @@ void NewBattleState::load(const std::string &filename)
 				initSave();
 			}
 		}
-		catch (YAML::Exception e)
+		catch (YAML::Exception &e)
 		{
 			Log(LOG_WARNING) << e.what();
 			initSave();

@@ -280,6 +280,7 @@ int StartState::load(void *game_ptr)
 	try
 	{
 		Log(LOG_INFO) << "Loading data...";
+		Options::updateMods();
 		game->loadMods();
 		Log(LOG_INFO) << "Data loaded successfully.";
 		Log(LOG_INFO) << "Loading language...";

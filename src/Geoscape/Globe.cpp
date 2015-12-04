@@ -296,14 +296,12 @@ Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y
  */
 Globe::~Globe()
 {
-	delete _texture;
-
 	delete _blinkTimer;
 	delete _rotTimer;
 	delete _countries;
 	delete _markers;
-	//delete _texture;
-	//delete _markerSet;
+	delete _texture;
+	delete _markerSet;
 	delete _radars;
 	delete _clipper;
 

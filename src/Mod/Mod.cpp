@@ -675,7 +675,7 @@ void Mod::loadMod(const std::vector<std::string> &rulesetFiles, size_t modIdx)
 		}
 		catch (YAML::Exception &e)
 		{
-			throw Exception((*i) + " (" + std::string(e.what()) + ")");
+			throw Exception((*i) + ": " + std::string(e.what()));
 		}
 	}
 

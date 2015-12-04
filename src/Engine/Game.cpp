@@ -454,8 +454,15 @@ void Game::loadLanguage(const std::string &filename)
 {
 	std::ostringstream ss;
 	ss << "/Language/" << filename << ".yml";
-
-	_lang->load(CrossPlatform::searchDataFile("common" + ss.str()));
+	std::string path = CrossPlatform::searchDataFile("common" + ss.str());
+	try
+	{
+		_lang->load(path);
+	}
+	catch (YAML::Exception &e)
+	{
+		throw Exception(path + ": " + std::string(e.what()));
+	}
 
 	for (std::vector< std::pair<std::string, bool> >::const_iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
 	{
