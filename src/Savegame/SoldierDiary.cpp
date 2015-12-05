@@ -238,7 +238,8 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
             }
             if ((*kill)->hostileTurn())
             {
-                if (rules->getItem((*kill)->weapon)->getBattleType() == BT_GRENADE || rules->getItem((*kill)->weapon)->getBattleType() == BT_PROXIMITYGRENADE)
+				RuleItem *item = rules->getItem((*kill)->weapon);
+                if (item == 0 || item->getBattleType() == BT_GRENADE || item->getBattleType() == BT_PROXIMITYGRENADE)
                 {
                     _trapKillTotal++;
                 }
