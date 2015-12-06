@@ -946,6 +946,9 @@
     <ClCompile Include="Basescape\SoldierDiaryPerformanceState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
+    <ClCompile Include="Mod\RuleConverter.cpp">
+      <Filter>Mod</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1755,9 +1758,6 @@
     <ClInclude Include="Menu\ListLoadOriginalState.h">
       <Filter>Menu</Filter>
     </ClInclude>
-    <ClInclude Include="Savegame\SaveConverterXcom1.h">
-      <Filter>Savegame</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\FlcPlayer.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -1928,6 +1928,9 @@
     </ClInclude>
     <ClInclude Include="Basescape\SoldierDiaryPerformanceState.h">
       <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Mod\RuleConverter.h">
+      <Filter>Mod</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

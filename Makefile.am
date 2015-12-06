@@ -512,6 +512,8 @@ openxcom_SOURCES = \
 	src/Mod/RuleBaseFacility.h \
 	src/Mod/RuleCommendations.cpp \
 	src/Mod/RuleCommendations.h \
+	src/Mod/RuleConverter.cpp \
+	src/Mod/RuleConverter.h \
 	src/Mod/RuleCountry.cpp \
 	src/Mod/RuleCountry.h \
 	src/Mod/RuleCraft.cpp \
@@ -602,7 +604,6 @@ openxcom_SOURCES = \
 	src/Savegame/ResearchProject.h \
 	src/Savegame/SaveConverter.cpp \
 	src/Savegame/SaveConverter.h \
-	src/Savegame/SaveConverterXcom1.h \
 	src/Savegame/SavedBattleGame.cpp \
 	src/Savegame/SavedBattleGame.h \
 	src/Savegame/SavedGame.cpp \

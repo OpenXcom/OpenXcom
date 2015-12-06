@@ -87,6 +87,7 @@
 #include "StatString.h"
 #include "RuleGlobe.h"
 #include "RuleVideo.h"
+#include "RuleConverter.h"
 
 namespace OpenXcom
 {
@@ -192,6 +193,7 @@ Mod::Mod() : _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFun
 	_muteMusic = new Music();
 	_muteSound = new Sound();
 	_globe = new RuleGlobe();
+	_converter = new RuleConverter();
 	_statAdjustment[0].aimAndArmorMultiplier = 0.5;
 	_statAdjustment[0].growthMultiplier = 0;
 	for (int i = 1; i != 5; ++i)
@@ -209,6 +211,7 @@ Mod::~Mod()
 	delete _muteMusic;
 	delete _muteSound;
 	delete _globe;
+	delete _converter;
 	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); ++i)
 	{
 		delete i->second;
@@ -1068,6 +1071,10 @@ void Mod::loadFile(const std::string &filename)
 	if (doc["globe"])
 	{
 		_globe->load(doc["globe"]);
+	}
+	if (doc["converter"])
+	{
+		_converter->load(doc["converter"]);
 	}
 	for (YAML::const_iterator i = doc["constants"].begin(); i != doc["constants"].end(); ++i)
 	{
@@ -2156,6 +2163,15 @@ RuleInterface *Mod::getInterface(const std::string &id) const
 RuleGlobe *Mod::getGlobe() const
 {
 	return _globe;
+}
+
+/**
+* Gets the rules for the Save Converter.
+* @return Pointer to converter rules.
+*/
+RuleConverter *Mod::getConverter() const
+{
+	return _converter;
 }
 
 const std::map<std::string, SoundDefinition *> *Mod::getSoundDefinitions() const

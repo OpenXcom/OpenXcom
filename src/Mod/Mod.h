@@ -74,6 +74,7 @@ class RuleCommendations;
 class StatString;
 class RuleInterface;
 class RuleGlobe;
+class RuleConverter;
 class SoundDefinition;
 class MapScript;
 class RuleVideo;
@@ -134,6 +135,7 @@ private:
 	std::vector<StatString*> _statStrings;
 	std::map<std::string, RuleMusic *> _musicDefs;
 	RuleGlobe *_globe;
+	RuleConverter *_converter;
 	int _costEngineer, _costScientist, _timePersonnel, _initialFunding, _turnAIUseGrenade, _turnAIUseBlaster;
 	std::pair<std::string, int> _alienFuel;
 	std::string _fontName, _finalResearch;
@@ -374,8 +376,10 @@ public:
 	int getMinRadarRange() const;
 	/// Gets information on an interface element.
 	RuleInterface *getInterface(const std::string &id) const;
-	/// Gets the ruleset for the globe
+	/// Gets the ruleset for the globe.
 	RuleGlobe *getGlobe() const;
+	/// Gets the ruleset for the converter.
+	RuleConverter *getConverter() const;
 	/// Gets the list of selective files for insertion into our cat files.
 	const std::map<std::string, SoundDefinition *> *getSoundDefinitions() const;
 	/// Gets the list of transparency colors, 
