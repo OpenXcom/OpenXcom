@@ -53,11 +53,6 @@ research: #done: double check scores and times.
     points: 15
     dependencies:
       - STR_HEAVY_GAUSS_CLIP
-  - name: STR_GAUSS_CANNON_AMMO
-    cost: 0
-    points: 0
-    dependencies:
-      - STR_GAUSS_CANNON
   - name: STR_GAUSS_DEFENSES
     cost: 510
     points: 15

@@ -556,13 +556,13 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		killStat.weaponAmmo = tempAmmo;
 
 		// Determine murder type
-		if ((*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_COLLAPSING)
+		if ((*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
 		{
 			if ((*j)->getHealth() == 0)
 			{
 				killStat.status = STATUS_DEAD;
 			}
-			else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_TURNING)
+			else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_UNCONSCIOUS)
 			{
 				killStat.status = STATUS_UNCONSCIOUS;
 			}
@@ -612,7 +612,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			}
 		}
 
-		if ((*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_COLLAPSING)
+		if ((*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
 		{
 			if ((*j)->getHealth() == 0)
 			{
@@ -709,7 +709,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					_parentState->getGame()->getSavedGame()->killSoldier(victim->getGeoscapeSoldier(), deathStat);
 				}
 			}
-			else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_TURNING)
+			else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_UNCONSCIOUS)
 			{
 				if (victim->getGeoscapeSoldier())
 				{

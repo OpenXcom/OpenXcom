@@ -25,7 +25,7 @@
 namespace OpenXcom
 {
 
-class BattleUnitKills;
+struct BattleUnitKills;
 
 /**
  * Stores info about a soldier's death.
