@@ -115,7 +115,7 @@ if ( GIT_FOUND )
   set ( OPENXCOM_GIT_SHA1 ${git_commit} )
 endif()
 # Temporarily replace source version file by generated one (dirty, but works).
-file(RENAME "${CMAKE_SOURCE_DIR}/src/version.h" "${CMAKE_SOURCE_DIR}/src/version.h.backup")
+file(RENAME "${CMAKE_SOURCE_DIR}/src/version.h" "${CMAKE_BINARY_DIR}/src/version.h.backup")
 configure_file("${CMAKE_SOURCE_DIR}/src/version.h.in" "${CMAKE_SOURCE_DIR}/src/version.h" )
 
 if ( DEV_BUILD )
