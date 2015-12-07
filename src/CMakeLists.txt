@@ -264,7 +264,7 @@ set ( engine_src
   Engine/Scalers/scalebit.cpp
   Engine/Scalers/scalebit.h
   Engine/Scalers/xbrz.cpp
-  Engine/Scalers/xbrz.h  
+  Engine/Scalers/xbrz.h
   Engine/Screen.cpp
   Engine/Screen.h
   Engine/ShaderDraw.h
@@ -759,6 +759,9 @@ if ( FORCE_INSTALL_DATA_TO_BIN )
 endif ()
 
 add_executable ( openxcom  ${application_type} ${openxcom_src} )
+# Undo: Temporarily replace source version file by generated one (../CMakeLists.txt).
+add_custom_command ( TARGET openxcom POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E rename "${CMAKE_SOURCE_DIR}/src/version.h.backup" "${CMAKE_SOURCE_DIR}/src/version.h" )
 install ( TARGETS openxcom ${install_dest} DESTINATION ${CMAKE_INSTALL_BINDIR} )
 # Extra link flags for Windows. They need to be set before the SDL/YAML link flags, otherwise you will get strange link errors ('Undefined reference to WinMain@16')
 if ( WIN32 )
