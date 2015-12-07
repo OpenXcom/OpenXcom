@@ -18,5 +18,9 @@
  */
 # include "../src/version.h"
 
+#ifndef OPENXCOM_GIT_SHA1
+#define OPENXCOM_GIT_SHA1 = ""
+#endif
+
 const std::string OPENXCOM_VERSION_GIT = "@OPENXCOM_GIT_SHA1@";
 
