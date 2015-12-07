@@ -264,7 +264,7 @@ set ( engine_src
   Engine/Scalers/scalebit.cpp
   Engine/Scalers/scalebit.h
   Engine/Scalers/xbrz.cpp
-  Engine/Scalers/xbrz.h
+  Engine/Scalers/xbrz.h  
   Engine/Screen.cpp
   Engine/Screen.h
   Engine/ShaderDraw.h
@@ -727,7 +727,7 @@ if ( WIN32 )
   set ( application_type WIN32 )
 endif ()
 
-set ( openxcom_src ${version_file} ${root_src} ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${mod_src} ${savegame_src} ${ufopedia_src} )
+set ( openxcom_src ${root_src} ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${mod_src} ${savegame_src} ${ufopedia_src} )
 
 set ( install_dest RUNTIME )
 set ( set_exec_path ON )

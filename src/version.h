@@ -16,8 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <string>
-
 #ifndef OPENXCOM_VERSION_H
 #define OPENXCOM_VERSION_H
 
@@ -25,6 +23,8 @@
 #define OPENXCOM_VERSION_LONG "1.0.0.0"
 #define OPENXCOM_VERSION_NUMBER 1,0,0,0
 
-extern const std::string OPENXCOM_VERSION_GIT;
+#ifndef OPENXCOM_VERSION_GIT
+#define OPENXCOM_VERSION_GIT ""
+#endif
 
 #endif
