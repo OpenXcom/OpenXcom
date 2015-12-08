@@ -57,6 +57,7 @@
 #include "../Mod/UfoTrajectory.h"
 #include "../Engine/RNG.h"
 #include "../Mod/RuleConverter.h"
+#include "../Ufopaedia/Ufopaedia.h"
 
 namespace OpenXcom
 {
@@ -1038,7 +1039,7 @@ void SaveConverter::loadDatSoldier()
 			current += initial;
 			node["currentStats"] = current;
 
-			int armor = load<Uint8>(sdata + 0x3E);
+			int armor = load<Uint8>(sdata + _rules->getOffset("SOLDIER.DAT_ARMOR"));
 			node["armor"] = _rules->getArmor()[armor];
 			node["improvement"] = (int)load<Uint8>(sdata + _rules->getOffset("SOLDIER.DAT_PSI"));
 			node["psiTraining"] = (int)load<char>(sdata + _rules->getOffset("SOLDIER.DAT_PSILAB")) != 0;
@@ -1076,7 +1077,7 @@ void SaveConverter::loadDatResearch()
 	std::vector<char> buffer;
 	char *data = binaryBuffer("RESEARCH.DAT", buffer);
 
-	const size_t ENTRY_SIZE = 22;
+	const size_t ENTRY_SIZE = buffer.size() / _rules->getResearch().size();
 	for (size_t i = 0; i < _rules->getResearch().size(); ++i)
 	{
 		char *rdata = (data + i * ENTRY_SIZE);
@@ -1109,12 +1110,12 @@ void SaveConverter::loadDatUp()
 	std::vector<char> buffer;
 	char *data = binaryBuffer("UP.DAT", buffer);
 
-	const size_t ENTRY_SIZE = 12;
+	const size_t ENTRY_SIZE = buffer.size() / _rules->getUfopaedia().size();
 	for (size_t i = 0; i < _rules->getUfopaedia().size(); ++i)
 	{
 		char *rdata = (data + i * ENTRY_SIZE);
 		ArticleDefinition *article = _mod->getUfopaediaArticle(_rules->getUfopaedia()[i]);
-		if (article != 0)
+		if (article != 0 && article->section != UFOPAEDIA_NOT_AVAILABLE)
 		{
 			bool discovered = load<Uint8>(rdata + 0x08) == 2;
 			if (discovered)
@@ -1142,15 +1143,19 @@ void SaveConverter::loadDatProject()
 	std::vector<char> buffer;
 	char *data = binaryBuffer("PROJECT.DAT", buffer);
 
-	const size_t ENTRY_SIZE = buffer.size() / _rules->getResearch().size();
+	const size_t ENTRIES = _rules->getResearch().size();
+	// days (Uint16) | scientists (Uint8)
+	const size_t ENTRY_SIZE = ENTRIES * (sizeof(Uint16) + sizeof(Uint8));
 	for (size_t i = 0; i < _save->getBases()->size(); ++i)
 	{
 		Base *base = _save->getBases()->at(i);
+		char *pdata = (data + i * ENTRY_SIZE);
+		Uint16 *arrRemaining = (Uint16*)pdata;
+		Uint8 *arrScientists = (Uint8*)(&arrRemaining[ENTRIES]);
 		for (size_t j = 0; j < _rules->getResearch().size(); ++j)
 		{
-			char *pdata = (data + i * ENTRY_SIZE);
-			int remaining = load<Uint16>(pdata + j * sizeof(Uint16));
-			int scientists = load<Uint8>(pdata + 0xC0 + j);
+			int remaining = load<Uint16>((char*)&arrRemaining[j]);
+			int scientists = load<Uint8>((char*)&arrScientists[j]);
 			if (remaining != 0 && !_rules->getResearch()[j].empty())
 			{
 				RuleResearch *research = _mod->getResearch(_rules->getResearch()[j]);
@@ -1176,17 +1181,23 @@ void SaveConverter::loadDatBProd()
 	std::vector<char> buffer;
 	char *data = binaryBuffer("BPROD.DAT", buffer);
 
-	const size_t ENTRY_SIZE = buffer.size() / _rules->getManufacture().size();
+	const size_t ENTRIES = _rules->getManufacture().size();
+	// hours (int) | engineers (Uint16) | quantity (Uint16)| produced (Uint16)
+	const size_t ENTRY_SIZE = ENTRIES * (sizeof(int) + 3 * sizeof(Uint16));
 	for (size_t i = 0; i < _save->getBases()->size(); ++i)
 	{
 		Base *base = _save->getBases()->at(i);
+		char *pdata = (data + i * ENTRY_SIZE);
+		int *arrRemaining = (int*)pdata;
+		Uint16 *arrEngineers = (Uint16*)(&arrRemaining[ENTRIES]);
+		Uint16 *arrTotal = (Uint16*)(&arrEngineers[ENTRIES]);
+		Uint16 *arrProduced = (Uint16*)(&arrTotal[ENTRIES]);
 		for (size_t j = 0; j < _rules->getManufacture().size(); ++j)
 		{
-			char *pdata = (data + i * ENTRY_SIZE);
-			int remaining = load<int>(pdata + j * sizeof(int));
-			int engineers = load<Uint16>(pdata + 0x8C + j * sizeof(Uint16));
-			int total = load<Uint16>(pdata + 0xD2 + j * sizeof(Uint16));
-			int produced = load<Uint16>(pdata + 0x118 + j * sizeof(Uint16));
+			int remaining = load<int>((char*)&arrRemaining[j]);
+			int engineers = load<Uint16>((char*)&arrEngineers[j]);
+			int total = load<Uint16>((char*)&arrTotal[j]);
+			int produced = load<Uint16>((char*)&arrProduced[j]);
 			if (remaining != 0 && !_rules->getManufacture()[j].empty())
 			{
 				RuleManufacture *manufacture = _mod->getManufacture(_rules->getManufacture()[j]);
