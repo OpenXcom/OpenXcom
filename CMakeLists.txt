@@ -112,8 +112,11 @@ if ( GIT_FOUND )
   set ( git_nb_commit ${CMAKE_MATCH_2} )
   set ( git_commit ${CMAKE_MATCH_3} )
   set ( git_dirty ${CMAKE_MATCH_4} )
-  add_definitions( -DOPENXCOM_VERSION_GIT="${git_commit}" )
+  set ( OPENXCOM_GIT_SHA1 ${git_commit} )
 endif()
+# Temporarily replace source version file by generated one (dirty, but works).
+file(RENAME "${CMAKE_SOURCE_DIR}/src/version.h" "${CMAKE_BINARY_DIR}/src/version.h.backup")
+configure_file("${CMAKE_SOURCE_DIR}/src/version.h.in" "${CMAKE_SOURCE_DIR}/src/version.h" )
 
 if ( DEV_BUILD )
   # Append the commit to version number
