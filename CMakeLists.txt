@@ -100,7 +100,6 @@ string ( REGEX MATCH "[.]*OPENXCOM_VERSION_SHORT \"([0-9]).([0-9])" version_line
 set ( CPACK_PACKAGE_VERSION_MAJOR ${CMAKE_MATCH_1} )
 set ( CPACK_PACKAGE_VERSION_MINOR ${CMAKE_MATCH_2} )
 set ( CPACK_PACKAGE_VERSION_PATCH "" )
-find_package ( Git )
 
 if ( "${OPENXCOM_VERSION_STRING}" STREQUAL "" )
   find_package ( Git )
@@ -123,8 +122,8 @@ endif()
 
 add_definitions( -DGIT_BUILD=1 )
 
-configure_file("${CMAKE_SOURCE_DIR}/src/git_version.h.in" "${CMAKE_CURRENT_BINARY_DIR}/src/git_version.h" )
-include_directories ( "${CMAKE_CURRENT_BINARY_DIR}/src" )
+configure_file("${CMAKE_SOURCE_DIR}/src/git_version.h.in" "${CMAKE_CURRENT_BINARY_DIR}/git_version.h" )
+include_directories ( "${CMAKE_CURRENT_BINARY_DIR}" )
 
 
 if ( DEV_BUILD )
