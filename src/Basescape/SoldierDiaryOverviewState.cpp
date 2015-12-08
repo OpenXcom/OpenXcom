@@ -94,7 +94,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(Base *base, size_t soldierI
 	_btnOk->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SoldierDiaryOverviewState::btnOkClick, Options::keyCancel);
 
-	_btnKills->setText(tr("STR_EFFICACY"));
+	_btnKills->setText(tr("STR_COMBAT"));
 	_btnKills->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnKillsClick);
 	
 	_btnMissions->setText(tr("STR_PERFORMANCE"));
