@@ -12,6 +12,8 @@ option ( ENABLE_CLANG_ANALYSIS "When building with clang, enable the static anal
 set ( MSVC_WARNING_LEVEL 3 CACHE STRING "Visual Studio warning levels" )
 option ( FORCE_INSTALL_DATA_TO_BIN "Force installation of data to binary directory" OFF )
 set ( DATADIR "" CACHE STRING "Where to place datafiles" )
+set ( OPENXCOM_VERSION_STRING "" CACHE STRING "Version string (after x.x)" )
+
 
 if ( WIN32 )
   set ( default_deps_dir "${CMAKE_SOURCE_DIR}/deps" )
@@ -99,21 +101,31 @@ set ( CPACK_PACKAGE_VERSION_MAJOR ${CMAKE_MATCH_1} )
 set ( CPACK_PACKAGE_VERSION_MINOR ${CMAKE_MATCH_2} )
 set ( CPACK_PACKAGE_VERSION_PATCH "" )
 find_package ( Git )
-if ( GIT_FOUND )
-  message("git found: ${GIT_EXECUTABLE}")
-  execute_process ( COMMAND ${GIT_EXECUTABLE} describe --dirty
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_VARIABLE git_describe_out
-    ERROR_VARIABLE git_describe_error
-    RESULT_VARIABLE git_describe_result
-    )
-  string ( REGEX MATCH "([a-z|0-9|.]*)-([0-9]*)-([a-z|0-9]*)([-|a-z]*)" git_commit "${git_describe_out}" )
-  set ( git_tag ${CMAKE_MATCH_1} )
-  set ( git_nb_commit ${CMAKE_MATCH_2} )
-  set ( git_commit ${CMAKE_MATCH_3} )
-  set ( git_dirty ${CMAKE_MATCH_4} )
-  add_definitions( -DOPENXCOM_VERSION_GIT="${git_commit}" )
+
+if ( "${OPENXCOM_VERSION_STRING}" STREQUAL "" )
+  find_package ( Git )
+  if ( GIT_FOUND )
+    message("git found: ${GIT_EXECUTABLE}")
+    execute_process ( COMMAND ${GIT_EXECUTABLE} describe --dirty
+      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+      OUTPUT_VARIABLE git_describe_out
+      ERROR_VARIABLE git_describe_error
+      RESULT_VARIABLE git_describe_result
+      )
+    string ( REGEX MATCH "([a-z|0-9|.]*)-([0-9]*)-([a-z|0-9]*)([-|a-z]*)" git_commit "${git_describe_out}" )
+    set ( git_tag ${CMAKE_MATCH_1} )
+    set ( git_nb_commit ${CMAKE_MATCH_2} )
+    set ( git_commit ${CMAKE_MATCH_3} )
+    set ( git_dirty ${CMAKE_MATCH_4} )
+    set ( OPENXCOM_VERSION_STRING ".${git_commit}" )
+  endif()
 endif()
+
+add_definitions( -DGIT_BUILD=1 )
+
+configure_file("${CMAKE_SOURCE_DIR}/src/git_version.h.in" "${CMAKE_CURRENT_BINARY_DIR}/src/git_version.h" )
+include_directories ( "${CMAKE_CURRENT_BINARY_DIR}/src" )
+
 
 if ( DEV_BUILD )
   # Append the commit to version number
