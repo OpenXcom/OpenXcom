@@ -370,7 +370,7 @@ void SaveConverter::loadDatLease()
 	_save->setGlobeLatitude(lat);
 	
 	int zoom = load<Sint16>(data + 0x0C);
-	const size_t DISTANCE[] = { 90, 120, 180, 360, 450, 720 };
+	const int DISTANCE[] = { 90, 120, 180, 360, 450, 720 };
 	for (size_t i = 0; i < 6; ++i)
 	{
 		if (zoom == DISTANCE[i])
@@ -709,7 +709,7 @@ void SaveConverter::loadDatBase()
 			char *bdata = (data + j * ENTRY_SIZE);
 			std::wstring name = load<std::wstring>(bdata);
 			// facilities
-			for (int k = 0; k < FACILITIES; ++k)
+			for (size_t k = 0; k < FACILITIES; ++k)
 			{
 				size_t facilityType = load<Uint8>(bdata + _rules->getOffset("BASE.DAT_FACILITIES") + k);
 				if (facilityType < _rules->getFacilities().size())
@@ -761,8 +761,8 @@ void SaveConverter::loadDatAStore()
 	char *data = binaryBuffer("ASTORE.DAT", buffer);
 
 	const size_t ENTRY_SIZE = 12;
-	int entries = buffer.size() / ENTRY_SIZE;
-	for (size_t i = 0; i < entries; ++i)
+	const size_t ENTRIES = buffer.size() / ENTRY_SIZE;
+	for (size_t i = 0; i < ENTRIES; ++i)
 	{
 		char *adata = (data + i * ENTRY_SIZE);
 		int race = load<Uint8>(adata + 0x00);

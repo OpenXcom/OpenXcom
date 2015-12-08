@@ -48,7 +48,6 @@ private:
 	int _ratingTotal, _fundingDiff, _lastMonthsRating;
 	std::vector<std::string> _happyList, _sadList, _pactList;
 	Globe *_globe;
-	Base *_base;
 	std::vector<Soldier*> _soldiersMedalled;
 	/// Builds a country list string.
 	std::wstring countryList(const std::vector<std::string> &countries, const std::string &singular, const std::string &plural);

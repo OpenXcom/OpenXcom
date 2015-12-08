@@ -278,7 +278,7 @@ bool ProjectileFlyBState::createNewProjectile()
 {
 	++_action.autoShotCounter;
 
-	if (_action.type != BA_THROW || _action.type != BA_LAUNCH)
+	if (_action.type != BA_THROW && _action.type != BA_LAUNCH)
 		_unit->getStatistics()->shotsFiredCounter++;
 
 	// create a new projectile

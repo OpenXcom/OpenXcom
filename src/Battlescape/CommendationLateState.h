@@ -38,7 +38,7 @@ class CommendationLateState : public State
 private:
 	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtName;
+	Text *_txtTitle;
 	TextList *_lstSoldiers;
 public:
 	/// Creates the Medals state.

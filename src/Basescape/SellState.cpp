@@ -210,7 +210,7 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		int qty = _base->getStorageItems()->getItem(*i);
-		if (Options::storageLimitsEnforced && origin == OPT_BATTLESCAPE)
+		if (Options::storageLimitsEnforced && _origin == OPT_BATTLESCAPE)
 		{
 			for (std::vector<Transfer*>::iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end(); ++j)
 			{
