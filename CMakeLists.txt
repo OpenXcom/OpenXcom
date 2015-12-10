@@ -116,7 +116,7 @@ if ( "${OPENXCOM_VERSION_STRING}" STREQUAL "" )
     set ( git_nb_commit ${CMAKE_MATCH_2} )
     set ( git_commit ${CMAKE_MATCH_3} )
     set ( git_dirty ${CMAKE_MATCH_4} )
-    set ( OPENXCOM_VERSION_STRING ".${git_commit}" )
+    set ( OPENXCOM_VERSION_STRING ".${git_commit}${git_dirty}" )
   endif()
 endif()
 
