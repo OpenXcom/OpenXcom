@@ -3,17 +3,11 @@
 #export DH_VERBOSE=1
 
 %:
-	dh $@ --sourcedirectory=src
+	dh $@ --buildsystem=cmake --parallel
 
-override_dh_install:
-	mkdir -p debian/openxcom/usr/bin
-	cp bin/openxcom debian/openxcom/usr/bin/
-	mkdir -p debian/openxcom/usr/share/openxcom
-	cp -r bin/{TFTD,UFO,common,standard}/ debian/openxcom/usr/share/openxcom/
-	mkdir -p debian/openxcom/usr/share/applications
-	cp res/linux/openxcom.desktop debian/openxcom/usr/share/applications/
-	mkdir -p debian/openxcom/usr/share/icons/hicolor/48x48/apps
-	cp res/linux/icons/openxcom_48x48.png debian/openxcom/usr/share/icons/hicolor/48x48/apps/openxcom.png
-	mkdir -p debian/openxcom/usr/share/icons/hicolor/128x128/apps
-	cp res/linux/icons/openxcom_128x128.png debian/openxcom/usr/share/icons/hicolor/128x128/apps/openxcom.png
-	dh_install
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		-DCMAKE_BUILD_TYPE:STRING=Release \
+		-DCMAKE_INSTALL_BINDIR="/usr/games" \
+		-DCMAKE_INSTALL_DATADIR="/usr/share/games" \
+		-DBUILD_PACKAGE=OFF
