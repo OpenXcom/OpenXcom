@@ -129,14 +129,17 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 	for (std::vector<std::string>::const_iterator i = soldiers.begin(); i != soldiers.end(); ++i)
 	{
 		RuleSoldier *soldier = _game->getMod()->getSoldier(*i);
-		std::wostringstream ss4;
-		ss4 << _base->getSoldierCount(*i);
-		std::string name = (*i);
-		if (soldiers.size() == 1)
+		if (soldier->getBuyCost() != 0 && _game->getSavedGame()->isResearched(soldier->getRequirements()))
 		{
-			name = "STR_SOLDIERS";
+			std::wostringstream ss4;
+			ss4 << _base->getSoldierCount(*i);
+			std::string name = (*i);
+			if (soldiers.size() == 1)
+			{
+				name = "STR_SOLDIERS";
+			}
+			_lstSalaries->addRow(4, tr(name).c_str(), Text::formatFunding(soldier->getSalaryCost()).c_str(), ss4.str().c_str(), Text::formatFunding(_base->getSoldierCount(*i) * soldier->getSalaryCost()).c_str());
 		}
-		_lstSalaries->addRow(4, tr(name).c_str(), Text::formatFunding(soldier->getSalaryCost()).c_str(), ss4.str().c_str(), Text::formatFunding(_base->getSoldierCount(*i) * soldier->getSalaryCost()).c_str());
 	}	
 	std::wostringstream ss5;
 	ss5 << _base->getTotalEngineers();
