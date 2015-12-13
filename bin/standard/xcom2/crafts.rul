@@ -49,7 +49,7 @@ crafts: #done
     refuelRate: 50
     transferTime: 96
     score: 250
-    maxDepth: 3
+    maxDepth: 2
   - type: STR_MANTA
     sprite: 4
     fuelMax: 30
@@ -60,6 +60,7 @@ crafts: #done
     refuelItem: STR_ZRBITE
     refuelRate: 5
     score: 250
+    maxDepth: 3
   - type: STR_HAMMERHEAD
     sprite: 1
     fuelMax: 60
@@ -71,7 +72,7 @@ crafts: #done
     refuelItem: STR_ZRBITE
     refuelRate: 5
     score: 300
-    maxDepth: 2
+    maxDepth: 3
     battlescapeTerrainData:
       name: HAMMER
       mapDataSets:

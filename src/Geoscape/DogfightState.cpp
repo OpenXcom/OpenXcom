@@ -1647,15 +1647,7 @@ void DogfightState::btnMinimizedIconClick(Action *)
 	}
 	else
 	{
-		bool underwater = !_craft->getWeapons()->empty();
-		for (std::vector<CraftWeapon*>::iterator w = _craft->getWeapons()->begin(); w != _craft->getWeapons()->end(); ++w)
-		{
-			if ((*w) && !(*w)->getRules()->isWaterOnly())
-			{
-				underwater = false;
-				break;
-			}
-		}
+		bool underwater = _craft->getRules()->getMaxDepth() > 0;
 		if (underwater && !_state->getGlobe()->insideLand(_craft->getLongitude(), _craft->getLatitude()))
 		{
 			_state->popup(new DogfightErrorState(_craft, tr("STR_UNABLE_TO_ENGAGE_AIRBORNE")));

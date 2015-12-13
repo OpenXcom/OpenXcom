@@ -880,15 +880,7 @@ void GeoscapeState::time5Seconds()
 						}
 						else
 						{
-							underwater = !(*j)->getWeapons()->empty();
-							for (std::vector<CraftWeapon*>::iterator w = (*j)->getWeapons()->begin(); w != (*j)->getWeapons()->end(); ++w)
-							{
-								if ( (*w) && !(*w)->getRules()->isWaterOnly())
-								{
-									underwater = false;
-									break;
-								}
-							}
+							underwater = (*j)->getRules()->getMaxDepth() > 0;
 						}
 						if (!(*j)->isInDogfight() && !(*j)->getDistance(u))
 						{
