@@ -45,7 +45,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(Base * base, const std:
 	_btnOk = new TextButton(160, 14, 80, 149);
 	_btnManufacture = new TextButton(160, 14, 80, 165);
 	_txtTitle = new Text(288, 40, 16, 20);
-	_lstPossibilities = new TextList(250, 80, 35, 56);
+	_lstPossibilities = new TextList(250, 80, 35, 50);
 
 	// Set palette
 	setInterface("geoManufacture");
@@ -71,9 +71,10 @@ NewPossibleManufactureState::NewPossibleManufactureState(Base * base, const std:
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_WE_CAN_NOW_PRODUCE"));
 
-	_lstPossibilities->setColumns(1, 288);
+	_lstPossibilities->setColumns(1, 250);
 	_lstPossibilities->setBig();
 	_lstPossibilities->setAlign(ALIGN_CENTER);
+	_lstPossibilities->setScrolling(true, 0);
 	for (std::vector<RuleManufacture *>::const_iterator iter = possibilities.begin(); iter != possibilities.end(); ++iter)
 	{
 		_lstPossibilities->addRow (1, tr((*iter)->getName()).c_str());

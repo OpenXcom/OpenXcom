@@ -53,7 +53,7 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 	_txtIncome = new Text(150, 9, 10, 146);
 	_txtMaintenance = new Text(150, 9, 10, 154);
 	_lstCrafts = new TextList(288, 32, 10, 48);
-	_lstSalaries = new TextList(300, 40, 10, 88);
+	_lstSalaries = new TextList(288, 40, 10, 88);
 	_lstMaintenance = new TextList(300, 9, 10, 128);
 	_lstTotal = new TextList(100, 9, 205, 150);
 
@@ -107,7 +107,7 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 	ss2 << tr("STR_MAINTENANCE") << L"=" << Text::formatFunding(_game->getSavedGame()->getBaseMaintenance());
 	_txtMaintenance->setText(ss2.str());
 
-	_lstCrafts->setColumns(4, 125, 70, 44, 60);
+	_lstCrafts->setColumns(4, 125, 70, 44, 50);
 	_lstCrafts->setDot(true);
 
 	const std::vector<std::string> &crafts = _game->getMod()->getCraftsList();
@@ -122,7 +122,7 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 		}
 	}
 
-	_lstSalaries->setColumns(4, 125, 70, 44, 60);
+	_lstSalaries->setColumns(4, 125, 70, 44, 50);
 	_lstSalaries->setDot(true);
 
 	const std::vector<std::string> &soldiers = _game->getMod()->getSoldiersList();

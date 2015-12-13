@@ -47,7 +47,7 @@ NewPossibleResearchState::NewPossibleResearchState(Base * base, const std::vecto
 	_btnOk = new TextButton(160, 14, 80, 149);
 	_btnResearch = new TextButton(160, 14, 80, 165);
 	_txtTitle = new Text(288, 40, 16, 20);
-	_lstPossibilities = new TextList(288, 80, 16, 56);
+	_lstPossibilities = new TextList(250, 96, 35, 50);
 
 	// Set palette
 	setInterface("geoResearch");
@@ -72,9 +72,10 @@ NewPossibleResearchState::NewPossibleResearchState(Base * base, const std::vecto
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
-	_lstPossibilities->setColumns(1, 288);
+	_lstPossibilities->setColumns(1, 250);
 	_lstPossibilities->setBig();
 	_lstPossibilities->setAlign(ALIGN_CENTER);
+	_lstPossibilities->setScrolling(true, 0);
 	
 	size_t tally(0);
 	for (std::vector<RuleResearch *>::const_iterator iter = possibilities.begin(); iter != possibilities.end(); ++iter)
