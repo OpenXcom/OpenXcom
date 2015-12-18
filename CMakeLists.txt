@@ -111,7 +111,7 @@ if ( "${OPENXCOM_VERSION_STRING}" STREQUAL "" )
       ERROR_VARIABLE git_describe_error
       RESULT_VARIABLE git_describe_result
       )
-    string ( REGEX MATCH "([a-z|0-9|.]*)-([0-9]*)-([a-z|0-9]*)([-|a-z]*)" git_commit "${git_describe_out}" )
+    string ( REGEX MATCH "([a-z|0-9|.]*)-([0-9]*)-g([a-z|0-9]*)([-|a-z]*)" git_commit "${git_describe_out}" )
     set ( git_tag ${CMAKE_MATCH_1} )
     set ( git_nb_commit ${CMAKE_MATCH_2} )
     set ( git_commit ${CMAKE_MATCH_3} )
