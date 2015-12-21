@@ -501,7 +501,12 @@ void SavedGame::save(const std::string &filename) const
 	YAML::Node brief;
 	brief["name"] = Language::wstrToUtf8(_name);
 	brief["version"] = OPENXCOM_VERSION_SHORT;
-	brief["build"] = OPENXCOM_VERSION_GIT;
+	std::string git_sha = OPENXCOM_VERSION_GIT;
+	if (git_sha[0] ==  '.')
+	{
+		git_sha.erase(0,1);
+	}
+	brief["build"] = git_sha;
 	brief["time"] = _time->save();
 	if (_battleGame != 0)
 	{
