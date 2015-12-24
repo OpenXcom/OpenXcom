@@ -64,7 +64,8 @@ int main(int argc, char *argv[])
 	//_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 
 	SetUnhandledExceptionFilter(crashLogger);
-	AddVectoredContinueHandler(1, crashLogger);
+	// Uncomment to debug crash handler
+	// AddVectoredContinueHandler(1, crashLogger);
 #endif
 
 #ifdef _DEBUG
