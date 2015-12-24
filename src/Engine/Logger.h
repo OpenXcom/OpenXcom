@@ -117,7 +117,7 @@ inline std::string& Logger::logFile()
 
 inline std::string Logger::toString(SeverityLevel level)
 {
-    static const char* const buffer[] = {"FATAL", "ERROR", "WARN", "INFO", "DEBUG", "VERBOSE"};
+    static const char* const buffer[] = {"FATAL", "ERROR", "WARN", "INFO", "DEBUG", "VERB"};
     return buffer[level];
 }
 

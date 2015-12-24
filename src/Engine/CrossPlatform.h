@@ -85,6 +85,10 @@ namespace CrossPlatform
 	std::string getDosPath();
 	/// Sets the window icon.
 	void setWindowIcon(int winResource, const std::string &unixPath);
+	/// Produces a stack trace.
+	void stackTrace();
+	/// Produces a crash dump.
+	std::string crashDump(void *info);
 }
 
 }

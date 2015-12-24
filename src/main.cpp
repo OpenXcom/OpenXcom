@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <exception>
 #include <sstream>
 #include "version.h"
 #include "Engine/Logger.h"
@@ -40,42 +39,51 @@
 
 using namespace OpenXcom;
 
+#ifdef _WIN32
+#include <windows.h>
+LONG WINAPI crashLogger(PEXCEPTION_POINTERS exception)
+{
+	std::string error = CrossPlatform::crashDump(exception);
+	std::ostringstream msg;
+	msg << "OpenXcom has crashed: " << error << std::endl;
+	msg << "Extra information has been saved to openxcom.log." << std::endl;
+	msg << "Please report this to the developers.";
+	CrossPlatform::showError(msg.str());
+	return EXCEPTION_CONTINUE_SEARCH;
+}
+#endif
+
 Game *game = 0;
 
 // If you can't tell what the main() is for you should have your
 // programming license revoked...
 int main(int argc, char *argv[])
 {
+#ifdef _WIN32
 	// Uncomment to check memory leaks in VS
 	//_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 
-#ifndef _DEBUG
-	try
-	{
-		Logger::reportingLevel() = LOG_INFO;
+	SetUnhandledExceptionFilter(crashLogger);
+	AddVectoredContinueHandler(1, crashLogger);
+#endif
+
+#ifdef _DEBUG
+	Logger::reportingLevel() = LOG_DEBUG;
 #else
-		Logger::reportingLevel() = LOG_DEBUG;
+	Logger::reportingLevel() = LOG_INFO;
 #endif
-		if (!Options::init(argc, argv))
-			return EXIT_SUCCESS;
-		std::ostringstream title;
-		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
-		if (Options::verboseLogging)
-			Logger::reportingLevel() = LOG_VERBOSE;
-		Options::baseXResolution = Options::displayWidth;
-		Options::baseYResolution = Options::displayHeight;
-		game = new Game(title.str());
-		State::setGamePtr(game);
-		game->setState(new StartState);
-		game->run();
-#ifndef _DEBUG
-	}
-	catch (std::exception &e)
-	{
-		CrossPlatform::showError(e.what());
-		exit(EXIT_FAILURE);
-	}
-#endif
+	if (!Options::init(argc, argv))
+		return EXIT_SUCCESS;
+	std::ostringstream title;
+	title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
+	if (Options::verboseLogging)
+		Logger::reportingLevel() = LOG_VERBOSE;
+	Options::baseXResolution = Options::displayWidth;
+	Options::baseYResolution = Options::displayHeight;
+	game = new Game(title.str());
+	State::setGamePtr(game);
+	game->setState(new StartState);
+	game->run();
 	Options::save();
 
 	// Comment this for faster exit.

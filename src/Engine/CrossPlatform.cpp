@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CrossPlatform.h"
+#include <exception>
 #include <algorithm>
 #include <sstream>
 #include <fstream>
@@ -37,13 +38,17 @@
 #include <shlobj.h>
 #include <shlwapi.h>
 #include <direct.h>
+#include <DbgHelp.h>
 #ifndef SHGFP_TYPE_CURRENT
 #define SHGFP_TYPE_CURRENT 0
 #endif
+#define MAX_STACK_FRAMES 100
+#define EXCEPTION_CODE_CXX 0xe06d7363
 #ifndef __GNUC__
 #pragma comment(lib, "advapi32.lib")
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "shlwapi.lib")
+#pragma comment(lib, "DbgHelp.lib")
 #endif
 #else
 #include "Language.h"
@@ -56,7 +61,16 @@
 #include <sys/param.h>
 #include <sys/types.h>
 #include <pwd.h>
+#ifdef BACKTRACE_LIBUNWIND
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
 #endif
+#include <dlfcn.h>
+#define UNW_LOCAL_ONLY
+#include <libunwind.h>
+#endif
+#endif
+#define MAX_SYMBOL_LENGTH 1024
 #include <SDL.h>
 #include <SDL_syswm.h>
 
@@ -810,6 +824,13 @@ std::string getDosPath()
 #endif
 }
 
+/**
+ * Sets the window titlebar icon.
+ * For Windows, use the embedded resource icon.
+ * For other systems, use a PNG icon.
+ * @param winResource ID for Windows icon.
+ * @param unixPath Path to PNG icon for Unix.
+ */
 void setWindowIcon(int winResource, const std::string &unixPath)
 {
 #ifdef _WIN32
@@ -834,6 +855,233 @@ void setWindowIcon(int winResource, const std::string &unixPath)
 		SDL_FreeSurface(icon);
 	}
 #endif
+}
+
+/**
+ * Logs the stack back trace leading up to this function call.
+ */
+void stackTrace()
+{
+#ifdef _WIN32
+	static bool initialised = false;
+	static HANDLE process;
+
+	unsigned int frames;
+	void *ip[MAX_STACK_FRAMES];
+	SYMBOL_INFO *sym;
+
+	if (!initialised)
+	{
+		process = GetCurrentProcess();
+		SymInitialize(process, NULL, true);
+		initialised = true;
+	}
+
+	if (!process)
+	{
+		Log(LOG_FATAL) << "Failed to get process for backtrace";
+		return;
+	}
+
+	sym = (SYMBOL_INFO *)calloc(sizeof(SYMBOL_INFO) + MAX_SYMBOL_LENGTH * (sizeof(char)), 1);
+	if (!sym)
+	{
+		Log(LOG_FATAL) << "Failed to allocate symbol info for backtrace";
+		return;
+	}
+	sym->MaxNameLen = MAX_SYMBOL_LENGTH;
+	sym->SizeOfStruct = sizeof(SYMBOL_INFO);
+
+	/* Skip 1 frame to skip this function */
+	frames = CaptureStackBackTrace(1, MAX_STACK_FRAMES, ip, NULL);
+
+	char buf[MAX_SYMBOL_LENGTH];
+	for (unsigned int frame = 0; frame < frames; ++frame)
+	{
+		SymFromAddr(process, (DWORD64)(ip[frame]), 0, sym);
+		sprintf(buf, "- 0x%p %s+0x%lx", ip[frame], sym->Name, (uintptr_t)ip[frame] - (uintptr_t)sym->Address);
+		Log(LOG_FATAL) << buf;
+	}
+
+	free(sym);
+#elif defined(BACKTRACE_LIBUNWIND)
+	unw_cursor_t cursor;
+	unw_context_t ctx;
+	unw_word_t ip;
+	unw_getcontext(&ctx);
+	unw_init_local(&cursor, &ctx);
+
+	Log(LOG_FATAL) << "  called by:";
+	char buf[MAX_SYMBOL_LENGTH];
+	while (unw_step(&cursor) > 0)
+	{
+		Dl_info info;
+		unw_get_reg(&cursor, UNW_REG_IP, &ip);
+		if (ip == 0)
+			break;
+		dladdr(reinterpret_cast<void *>(ip), &info);
+		if (info.dli_sname)
+		{
+			sprintf(buf, "- 0x%lx %s+0x%lx (%s)", static_cast<uintptr_t>(ip), info.dli_sname, static_cast<uintptr_t>(ip) - reinterpret_cast<uintptr_t>(info.dli_saddr), info.dli_fname);
+			Log(LOG_FATAL) << buf;
+			continue;
+		}
+		// If dladdr() failed, try libunwind
+		unw_word_t offsetInFn;
+		char fnName[MAX_SYMBOL_LENGTH];
+		if (!unw_get_proc_name(&cursor, fnName, MAX_SYMBOL_LENGTH, &offsetInFn))
+		{
+			sprintf(buf, "- 0x%lx %s+0x%lx (%s)", static_cast<uintptr_t>(ip), fnName, offsetInFn, info.dli_fname);
+			Log(LOG_FATAL) << buf;
+		}
+		else
+		{
+			sprintf(buf, "- 0x%lx", static_cast<uintptr_t>(ip));
+			Log(LOG_FATAL) << buf;
+		}
+	}
+#else
+	// TODO: Other platform backtrace?
+#endif
+}
+
+std::string timestamp()
+{
+	const int MAX_LEN = 25, MAX_RESULT = 80;
+#ifdef _WIN32
+	char date[MAX_LEN], time[MAX_LEN];
+	if (GetDateFormatA(LOCALE_INVARIANT, 0, 0,
+		"dd'-'MM'-'yyyy", date, MAX_LEN) == 0)
+		return "Error in Now()";
+	if (GetTimeFormatA(LOCALE_INVARIANT, TIME_FORCE24HOURFORMAT, 0,
+		"HH'-'mm'-'ss", time, MAX_LEN) == 0)
+		return "Error in Now()";
+
+	char result[MAX_RESULT] = { 0 };
+	sprintf(result, "%s_%s", date, time);
+#else
+	char buffer[MAX_LEN];
+	time_t rawtime;
+	struct tm *timeinfo;
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	strftime(buffer, MAX_LEN, "%d-%m-%Y_%H-%M-%S", timeinfo);
+	char result[MAX_RESULT] = { 0 };
+	sprintf(result, "%s", buffer);
+#endif
+	return result;
+}
+
+/**
+ * Logs the stack back trace and crash dump leading up to this fatal exception.
+ * @note Based on http://stackoverflow.com/questions/22487887/why-doesnt-stack-walking-work-properly-when-using-setunhandledexceptionfilter
+ * @return Error code.
+ */
+std::string crashDump(void *info)
+{
+	std::ostringstream error;
+#ifdef _WIN32
+	PEXCEPTION_POINTERS exception = (PEXCEPTION_POINTERS)info;
+	if (exception->ExceptionRecord->ExceptionCode == EXCEPTION_CODE_CXX)
+	{
+		std::exception *ex = (std::exception *)exception->ExceptionRecord->ExceptionInformation[1];
+		error << ex->what();
+	}
+	else
+	{
+		error << "0x" << std::hex << exception->ExceptionRecord->ExceptionCode;
+	}
+	CONTEXT context = *(exception->ContextRecord);
+	HANDLE thread = GetCurrentThread();
+	HANDLE process = GetCurrentProcess();
+	STACKFRAME64 frame;
+	memset(&frame, 0, sizeof(STACKFRAME64));
+	DWORD image;
+#ifdef _M_IX86
+	image = IMAGE_FILE_MACHINE_I386;
+	frame.AddrPC.Offset = context.Eip;
+	frame.AddrPC.Mode = AddrModeFlat;
+	frame.AddrFrame.Offset = context.Ebp;
+	frame.AddrFrame.Mode = AddrModeFlat;
+	frame.AddrStack.Offset = context.Esp;
+	frame.AddrStack.Mode = AddrModeFlat;
+#elif _M_X64
+	image = IMAGE_FILE_MACHINE_AMD64;
+	frame.AddrPC.Offset = context.Rip;
+	frame.AddrPC.Mode = AddrModeFlat;
+	frame.AddrFrame.Offset = context.Rbp;
+	frame.AddrFrame.Mode = AddrModeFlat;
+	frame.AddrStack.Offset = context.Rsp;
+	frame.AddrStack.Mode = AddrModeFlat;
+#elif _M_IA64
+	image = IMAGE_FILE_MACHINE_IA64;
+	frame.AddrPC.Offset = context.StIIP;
+	frame.AddrPC.Mode = AddrModeFlat;
+	frame.AddrFrame.Offset = context.IntSp;
+	frame.AddrFrame.Mode = AddrModeFlat;
+	frame.AddrBStore.Offset = context.RsBSP;
+	frame.AddrBStore.Mode = AddrModeFlat;
+	frame.AddrStack.Offset = context.IntSp;
+	frame.AddrStack.Mode = AddrModeFlat;
+#else
+#error This platform is not supported.
+#endif
+	SYMBOL_INFO *symbol = (SYMBOL_INFO *)malloc(sizeof(SYMBOL_INFO) + (MAX_SYMBOL_LENGTH - 1) * sizeof(TCHAR));
+	symbol->MaxNameLen = MAX_SYMBOL_LENGTH;
+	symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+	IMAGEHLP_LINE64 *line = (IMAGEHLP_LINE64 *)malloc(sizeof(IMAGEHLP_LINE64));
+	line->SizeOfStruct = sizeof(IMAGEHLP_LINE64);
+	DWORD displacement;
+	Log(LOG_FATAL) << "A fatal error has occurred: " << error.str();
+	SymInitialize(process, NULL, TRUE);
+	while (StackWalk64(image, process, thread, &frame, &context, NULL, NULL, NULL, NULL))
+	{
+		if (SymFromAddr(process, frame.AddrPC.Offset, NULL, symbol))
+		{
+			if (SymGetLineFromAddr64(process, frame.AddrPC.Offset, &displacement, line))
+			{
+				std::string filename = line->FileName;
+				size_t n = filename.find_last_of(PATH_SEPARATOR);
+				if (n != std::string::npos)
+				{
+					filename = filename.substr(n+1);
+				}
+				Log(LOG_FATAL) << "0x" << std::hex << symbol->Address << std::dec << " " << symbol->Name << " (" << filename << ":" << line->LineNumber << ")";
+			}
+			else
+			{
+				Log(LOG_FATAL) << "0x" << std::hex << symbol->Address << std::dec << " " << symbol->Name << " (SymGetLineFromAddr64 failed: " << GetLastError() << ")";
+			}
+		}
+		else
+		{
+			Log(LOG_FATAL) << "SymFromAddr failed: " << GetLastError();
+		}
+	}
+	DWORD err = GetLastError();
+	if (err)
+	{
+		Log(LOG_FATAL) << "StackWalk64 failed: " << err;
+	}
+	std::string dumpName = Options::getUserFolder();
+	dumpName += timestamp() + ".dmp";
+	HANDLE dumpFile = CreateFileA(dumpName.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	MINIDUMP_EXCEPTION_INFORMATION exceptionInformation;
+	exceptionInformation.ThreadId = GetCurrentThreadId();
+	exceptionInformation.ExceptionPointers = exception;
+	exceptionInformation.ClientPointers = FALSE;
+	if (MiniDumpWriteDump(process, GetProcessId(process), dumpFile, MiniDumpNormal, exception ? &exceptionInformation : NULL, NULL, NULL))
+	{
+		Log(LOG_FATAL) << "Crash dump generated at " << dumpName;
+	}
+	else
+	{
+		Log(LOG_FATAL) << "MiniDumpWriteDump failed: " << GetLastError();
+	}
+#else
+	// TODO: Other platform backtrace?
+#endif
+	return error.str();
 }
 
 }
