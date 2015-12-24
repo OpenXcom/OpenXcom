@@ -38,7 +38,7 @@
 #include <shlobj.h>
 #include <shlwapi.h>
 #include <direct.h>
-#include <DbgHelp.h>
+#include <dbghelp.h>
 #ifndef SHGFP_TYPE_CURRENT
 #define SHGFP_TYPE_CURRENT 0
 #endif
@@ -48,7 +48,7 @@
 #pragma comment(lib, "advapi32.lib")
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "shlwapi.lib")
-#pragma comment(lib, "DbgHelp.lib")
+#pragma comment(lib, "dbghelp.lib")
 #endif
 #else
 #include "Language.h"
