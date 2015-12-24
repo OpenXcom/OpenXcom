@@ -941,6 +941,7 @@ void stackTrace()
 		}
 	}
 #else
+#warning Backtrace not supported on this platform
 	// TODO: Other platform backtrace?
 #endif
 }
@@ -1024,7 +1025,7 @@ std::string crashDump(void *info)
 	frame.AddrStack.Offset = context.IntSp;
 	frame.AddrStack.Mode = AddrModeFlat;
 #else
-#error This platform is not supported.
+#warning Crash dump not supported on this platform
 #endif
 	SYMBOL_INFO *symbol = (SYMBOL_INFO *)malloc(sizeof(SYMBOL_INFO) + (MAX_SYMBOL_LENGTH - 1) * sizeof(TCHAR));
 	symbol->MaxNameLen = MAX_SYMBOL_LENGTH;
