@@ -857,6 +857,7 @@ void setWindowIcon(int winResource, const std::string &unixPath)
 #endif
 }
 
+#if 0
 /**
  * Logs the stack back trace leading up to this function call.
  */
@@ -945,6 +946,7 @@ void stackTrace()
 	// TODO: Other platform backtrace?
 #endif
 }
+#endif
 
 std::string timestamp()
 {
@@ -1071,7 +1073,7 @@ std::string crashDump(void *info)
 	exceptionInformation.ThreadId = GetCurrentThreadId();
 	exceptionInformation.ExceptionPointers = exception;
 	exceptionInformation.ClientPointers = FALSE;
-	if (MiniDumpWriteDump(process, GetProcessId(process), dumpFile, MiniDumpNormal, exception ? &exceptionInformation : NULL, NULL, NULL))
+	if (MiniDumpWriteDump(process, GetCurrentProcessId(), dumpFile, MiniDumpNormal, exception ? &exceptionInformation : NULL, NULL, NULL))
 	{
 		Log(LOG_FATAL) << "Crash dump generated at " << dumpName;
 	}
