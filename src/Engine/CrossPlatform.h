@@ -86,9 +86,9 @@ namespace CrossPlatform
 	/// Sets the window icon.
 	void setWindowIcon(int winResource, const std::string &unixPath);
 	/// Produces a stack trace.
-	void stackTrace();
+	void stackTrace(void *ctx);
 	/// Produces a crash dump.
-	std::string crashDump(void *info);
+	void crashDump(void *ex, const std::string &err);
 }
 
 }

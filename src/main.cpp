@@ -39,17 +39,38 @@
 
 using namespace OpenXcom;
 
+// Crash handling routines
 #ifdef _WIN32
 #include <windows.h>
 LONG WINAPI crashLogger(PEXCEPTION_POINTERS exception)
 {
-	std::string error = CrossPlatform::crashDump(exception);
-	std::ostringstream msg;
-	msg << "OpenXcom has crashed: " << error << std::endl;
-	msg << "Extra information has been saved to openxcom.log." << std::endl;
-	msg << "Please report this to the developers.";
-	CrossPlatform::showError(msg.str());
+	CrossPlatform::crashDump(exception, "");
 	return EXCEPTION_CONTINUE_SEARCH;
+}
+#else
+#include <signal.h>
+void signalLogger(int sig)
+{
+	CrossPlatform::crashDump(&sig, "");
+	exit(EXIT_FAILURE);
+}
+
+#include <exception>
+void exceptionLogger()
+{
+	static bool logged = false;
+	std::string error;
+	try {
+		if (!logged++) throw;
+	}
+	catch (const std::exception &e) {
+		error = e.what();
+	}
+	catch (...) {
+		error = "Unknown exception";
+	}
+	CrossPlatform::crashDump(0, error);
+	abort();
 }
 #endif
 
@@ -66,6 +87,9 @@ int main(int argc, char *argv[])
 	SetUnhandledExceptionFilter(crashLogger);
 	// Uncomment to debug crash handler
 	// AddVectoredContinueHandler(1, crashLogger);
+#else
+	signal(SIGSEGV, signalLogger);
+	std::set_terminate(exceptionLogger);
 #endif
 
 #ifdef _DEBUG

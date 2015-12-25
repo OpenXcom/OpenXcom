@@ -20,7 +20,6 @@
 #include <exception>
 #include <algorithm>
 #include <sstream>
-#include <fstream>
 #include <string>
 #include <locale>
 #include <stdint.h>
@@ -42,7 +41,6 @@
 #ifndef SHGFP_TYPE_CURRENT
 #define SHGFP_TYPE_CURRENT 0
 #endif
-#define MAX_STACK_FRAMES 100
 #define EXCEPTION_CODE_CXX 0xe06d7363
 #ifndef __GNUC__
 #pragma comment(lib, "advapi32.lib")
@@ -61,16 +59,8 @@
 #include <sys/param.h>
 #include <sys/types.h>
 #include <pwd.h>
-#ifdef BACKTRACE_LIBUNWIND
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE
+#include <execinfo.h>
 #endif
-#include <dlfcn.h>
-#define UNW_LOCAL_ONLY
-#include <libunwind.h>
-#endif
-#endif
-#define MAX_SYMBOL_LENGTH 1024
 #include <SDL.h>
 #include <SDL_syswm.h>
 
@@ -857,144 +847,25 @@ void setWindowIcon(int winResource, const std::string &unixPath)
 #endif
 }
 
-#if 0
 /**
  * Logs the stack back trace leading up to this function call.
+ * @param ex Pointer to stack context (PCONTEXT on Windows), NULL to use current context.
  */
-void stackTrace()
+void stackTrace(void *ctx)
 {
 #ifdef _WIN32
-	static bool initialised = false;
-	static HANDLE process;
-
-	unsigned int frames;
-	void *ip[MAX_STACK_FRAMES];
-	SYMBOL_INFO *sym;
-
-	if (!initialised)
+	const int MAX_SYMBOL_LENGTH = 1024;
+	CONTEXT context;
+	if (ctx != 0)
 	{
-		process = GetCurrentProcess();
-		SymInitialize(process, NULL, true);
-		initialised = true;
-	}
-
-	if (!process)
-	{
-		Log(LOG_FATAL) << "Failed to get process for backtrace";
-		return;
-	}
-
-	sym = (SYMBOL_INFO *)calloc(sizeof(SYMBOL_INFO) + MAX_SYMBOL_LENGTH * (sizeof(char)), 1);
-	if (!sym)
-	{
-		Log(LOG_FATAL) << "Failed to allocate symbol info for backtrace";
-		return;
-	}
-	sym->MaxNameLen = MAX_SYMBOL_LENGTH;
-	sym->SizeOfStruct = sizeof(SYMBOL_INFO);
-
-	/* Skip 1 frame to skip this function */
-	frames = CaptureStackBackTrace(1, MAX_STACK_FRAMES, ip, NULL);
-
-	char buf[MAX_SYMBOL_LENGTH];
-	for (unsigned int frame = 0; frame < frames; ++frame)
-	{
-		SymFromAddr(process, (DWORD64)(ip[frame]), 0, sym);
-		sprintf(buf, "- 0x%p %s+0x%lx", ip[frame], sym->Name, (uintptr_t)ip[frame] - (uintptr_t)sym->Address);
-		Log(LOG_FATAL) << buf;
-	}
-
-	free(sym);
-#elif defined(BACKTRACE_LIBUNWIND)
-	unw_cursor_t cursor;
-	unw_context_t ctx;
-	unw_word_t ip;
-	unw_getcontext(&ctx);
-	unw_init_local(&cursor, &ctx);
-
-	Log(LOG_FATAL) << "  called by:";
-	char buf[MAX_SYMBOL_LENGTH];
-	while (unw_step(&cursor) > 0)
-	{
-		Dl_info info;
-		unw_get_reg(&cursor, UNW_REG_IP, &ip);
-		if (ip == 0)
-			break;
-		dladdr(reinterpret_cast<void *>(ip), &info);
-		if (info.dli_sname)
-		{
-			sprintf(buf, "- 0x%lx %s+0x%lx (%s)", static_cast<uintptr_t>(ip), info.dli_sname, static_cast<uintptr_t>(ip) - reinterpret_cast<uintptr_t>(info.dli_saddr), info.dli_fname);
-			Log(LOG_FATAL) << buf;
-			continue;
-		}
-		// If dladdr() failed, try libunwind
-		unw_word_t offsetInFn;
-		char fnName[MAX_SYMBOL_LENGTH];
-		if (!unw_get_proc_name(&cursor, fnName, MAX_SYMBOL_LENGTH, &offsetInFn))
-		{
-			sprintf(buf, "- 0x%lx %s+0x%lx (%s)", static_cast<uintptr_t>(ip), fnName, offsetInFn, info.dli_fname);
-			Log(LOG_FATAL) << buf;
-		}
-		else
-		{
-			sprintf(buf, "- 0x%lx", static_cast<uintptr_t>(ip));
-			Log(LOG_FATAL) << buf;
-		}
-	}
-#else
-#warning Backtrace not supported on this platform
-	// TODO: Other platform backtrace?
-#endif
-}
-#endif
-
-std::string timestamp()
-{
-	const int MAX_LEN = 25, MAX_RESULT = 80;
-#ifdef _WIN32
-	char date[MAX_LEN], time[MAX_LEN];
-	if (GetDateFormatA(LOCALE_INVARIANT, 0, 0,
-		"dd'-'MM'-'yyyy", date, MAX_LEN) == 0)
-		return "Error in Now()";
-	if (GetTimeFormatA(LOCALE_INVARIANT, TIME_FORCE24HOURFORMAT, 0,
-		"HH'-'mm'-'ss", time, MAX_LEN) == 0)
-		return "Error in Now()";
-
-	char result[MAX_RESULT] = { 0 };
-	sprintf(result, "%s_%s", date, time);
-#else
-	char buffer[MAX_LEN];
-	time_t rawtime;
-	struct tm *timeinfo;
-	time(&rawtime);
-	timeinfo = localtime(&rawtime);
-	strftime(buffer, MAX_LEN, "%d-%m-%Y_%H-%M-%S", timeinfo);
-	char result[MAX_RESULT] = { 0 };
-	sprintf(result, "%s", buffer);
-#endif
-	return result;
-}
-
-/**
- * Logs the stack back trace and crash dump leading up to this fatal exception.
- * @note Based on http://stackoverflow.com/questions/22487887/why-doesnt-stack-walking-work-properly-when-using-setunhandledexceptionfilter
- * @return Error code.
- */
-std::string crashDump(void *info)
-{
-	std::ostringstream error;
-#ifdef _WIN32
-	PEXCEPTION_POINTERS exception = (PEXCEPTION_POINTERS)info;
-	if (exception->ExceptionRecord->ExceptionCode == EXCEPTION_CODE_CXX)
-	{
-		std::exception *ex = (std::exception *)exception->ExceptionRecord->ExceptionInformation[1];
-		error << ex->what();
+		context = *((PCONTEXT)ctx);
 	}
 	else
 	{
-		error << "0x" << std::hex << exception->ExceptionRecord->ExceptionCode;
+		memset(&context, 0, sizeof(CONTEXT));
+		context.ContextFlags = CONTEXT_FULL;
+		RtlCaptureContext(&context);
 	}
-	CONTEXT context = *(exception->ContextRecord);
 	HANDLE thread = GetCurrentThread();
 	HANDLE process = GetCurrentProcess();
 	STACKFRAME64 frame;
@@ -1027,7 +898,7 @@ std::string crashDump(void *info)
 	frame.AddrStack.Offset = context.IntSp;
 	frame.AddrStack.Mode = AddrModeFlat;
 #else
-#warning Crash dump not supported on this platform
+#warning Stack trace not supported on this architecture
 #endif
 	SYMBOL_INFO *symbol = (SYMBOL_INFO *)malloc(sizeof(SYMBOL_INFO) + (MAX_SYMBOL_LENGTH - 1) * sizeof(TCHAR));
 	symbol->MaxNameLen = MAX_SYMBOL_LENGTH;
@@ -1035,7 +906,6 @@ std::string crashDump(void *info)
 	IMAGEHLP_LINE64 *line = (IMAGEHLP_LINE64 *)malloc(sizeof(IMAGEHLP_LINE64));
 	line->SizeOfStruct = sizeof(IMAGEHLP_LINE64);
 	DWORD displacement;
-	Log(LOG_FATAL) << "A fatal error has occurred: " << error.str();
 	SymInitialize(process, NULL, TRUE);
 	while (StackWalk64(image, process, thread, &frame, &context, NULL, NULL, NULL, NULL))
 	{
@@ -1047,7 +917,7 @@ std::string crashDump(void *info)
 				size_t n = filename.find_last_of(PATH_SEPARATOR);
 				if (n != std::string::npos)
 				{
-					filename = filename.substr(n+1);
+					filename = filename.substr(n + 1);
 				}
 				Log(LOG_FATAL) << "0x" << std::hex << symbol->Address << std::dec << " " << symbol->Name << " (" << filename << ":" << line->LineNumber << ")";
 			}
@@ -1066,6 +936,74 @@ std::string crashDump(void *info)
 	{
 		Log(LOG_FATAL) << "StackWalk64 failed: " << err;
 	}
+	SymCleanup(process);
+#else
+	const int MAX_STACK_FRAMES = 16;
+	void *array[MAX_STACK_FRAMES];
+	size_t size = backtrace(array, MAX_STACK_FRAMES);
+	char **strings = backtrace_symbols(array, size);
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		Log(LOG_FATAL) << strings[i];
+	}
+
+	free(strings);
+#endif
+}
+
+/**
+ * Generates a quick timestamp.
+ * @return String in D-M-Y_H_M_S format.
+ */
+std::string timestamp()
+{
+	const int MAX_LEN = 25, MAX_RESULT = 80;
+#ifdef _WIN32
+	char date[MAX_LEN], time[MAX_LEN];
+	if (GetDateFormatA(LOCALE_INVARIANT, 0, 0,
+		"dd'-'MM'-'yyyy", date, MAX_LEN) == 0)
+		return "Error in Now()";
+	if (GetTimeFormatA(LOCALE_INVARIANT, TIME_FORCE24HOURFORMAT, 0,
+		"HH'-'mm'-'ss", time, MAX_LEN) == 0)
+		return "Error in Now()";
+
+	char result[MAX_RESULT] = { 0 };
+	sprintf(result, "%s_%s", date, time);
+#else
+	char buffer[MAX_LEN];
+	time_t rawtime;
+	struct tm *timeinfo;
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	strftime(buffer, MAX_LEN, "%d-%m-%Y_%H-%M-%S", timeinfo);
+	char result[MAX_RESULT] = { 0 };
+	sprintf(result, "%s", buffer);
+#endif
+	return result;
+}
+
+/**
+ * Logs the details of this crash and shows an error.
+ * @param ex Pointer to exception data (PEXCEPTION_POINTERS on Windows, signal int on Unix)
+ * @param err Exception message, if any.
+ */
+void crashDump(void *ex, const std::string &err)
+{
+	std::ostringstream error;
+#ifdef _WIN32
+	PEXCEPTION_POINTERS exception = (PEXCEPTION_POINTERS)ex;
+	if (exception->ExceptionRecord->ExceptionCode == EXCEPTION_CODE_CXX)
+	{
+		std::exception *cppException = (std::exception *)exception->ExceptionRecord->ExceptionInformation[1];
+		error << cppException->what();
+	}
+	else
+	{
+		error << "code 0x" << std::hex << exception->ExceptionRecord->ExceptionCode;
+	}
+	Log(LOG_FATAL) << "A fatal error has occurred: " << error.str();
+	stackTrace(exception->ContextRecord);
 	std::string dumpName = Options::getUserFolder();
 	dumpName += timestamp() + ".dmp";
 	HANDLE dumpFile = CreateFileA(dumpName.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -1073,7 +1011,7 @@ std::string crashDump(void *info)
 	exceptionInformation.ThreadId = GetCurrentThreadId();
 	exceptionInformation.ExceptionPointers = exception;
 	exceptionInformation.ClientPointers = FALSE;
-	if (MiniDumpWriteDump(process, GetCurrentProcessId(), dumpFile, MiniDumpNormal, exception ? &exceptionInformation : NULL, NULL, NULL))
+	if (MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), dumpFile, MiniDumpNormal, exception ? &exceptionInformation : NULL, NULL, NULL))
 	{
 		Log(LOG_FATAL) << "Crash dump generated at " << dumpName;
 	}
@@ -1082,9 +1020,23 @@ std::string crashDump(void *info)
 		Log(LOG_FATAL) << "MiniDumpWriteDump failed: " << GetLastError();
 	}
 #else
-	// TODO: Other platform backtrace?
+	if (ex == 0)
+	{
+		error << err;
+	}
+	else
+	{
+		int signal = *((int*)ex);
+		error << "signal " << signal;
+	}
+	Log(LOG_FATAL) << "A fatal error has occurred: " << error.str();
+	stackTrace(0);
 #endif
-	return error.str();
+	std::ostringstream msg;
+	msg << "OpenXcom has crashed: " << error.str() << std::endl;
+	msg << "Extra information has been saved to openxcom.log." << std::endl;
+	msg << "Please report this to the developers.";
+	showError(msg.str());
 }
 
 }

@@ -65,6 +65,7 @@
 #else
 #include <alloca.h>
 #include <dirent.h>
+#include <execinfo.h>
 #include <pwd.h>
 #include <sys/param.h>
 #include <unistd.h>
