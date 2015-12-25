@@ -51,6 +51,7 @@
 #else
 #include "Language.h"
 #include <iostream>
+#include <fstream>
 #include <SDL_image.h>
 #include <cstring>
 #include <cstdio>
@@ -862,9 +863,13 @@ void stackTrace(void *ctx)
 	}
 	else
 	{
+		// TODO: Doesn't work on MinGW
+#if 0
 		memset(&context, 0, sizeof(CONTEXT));
 		context.ContextFlags = CONTEXT_FULL;
 		RtlCaptureContext(&context);
+#endif
+		return;
 	}
 	HANDLE thread = GetCurrentThread();
 	HANDLE process = GetCurrentProcess();
@@ -898,7 +903,8 @@ void stackTrace(void *ctx)
 	frame.AddrStack.Offset = context.IntSp;
 	frame.AddrStack.Mode = AddrModeFlat;
 #else
-#warning Stack trace not supported on this architecture
+	#warning Stack trace not supported on this architecture
+	return;
 #endif
 	SYMBOL_INFO *symbol = (SYMBOL_INFO *)malloc(sizeof(SYMBOL_INFO) + (MAX_SYMBOL_LENGTH - 1) * sizeof(TCHAR));
 	symbol->MaxNameLen = MAX_SYMBOL_LENGTH;

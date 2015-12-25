@@ -68,6 +68,7 @@
 #include <execinfo.h>
 #include <pwd.h>
 #include <sys/param.h>
+#include <signal.h>
 #include <unistd.h>
 #endif
 
