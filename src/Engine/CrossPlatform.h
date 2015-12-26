@@ -33,6 +33,8 @@ namespace OpenXcom
  */
 namespace CrossPlatform
 {
+	/// Gets the available error dialog.
+	void getErrorDialog();
 	/// Displays an error message.
 	void showError(const std::string &error);
 	/// Finds the game's data folders in the system.

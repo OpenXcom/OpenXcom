@@ -69,12 +69,30 @@ namespace OpenXcom
 {
 namespace CrossPlatform
 {
-
+	std::string errorDlg;
 #ifdef _WIN32
 	const char PATH_SEPARATOR = '\\';
 #else
 	const char PATH_SEPARATOR = '/';
 #endif
+
+/**
+ * Determines the available Linux error dialogs.
+ */
+void getErrorDialog()
+{
+#ifndef _WIN32
+	if (system(NULL))
+	{
+		if (system("which kdialog") == 0)
+			errorDlg = "kdialog";
+		else if (system("which xdialog") == 0)
+			errorDlg = "xdialog";
+		else if (system("which gdialog") == 0)
+			errorDlg = "gdialog";
+	}
+#endif
+}
 
 /**
  * Displays a message box with an error message.
@@ -85,7 +103,17 @@ void showError(const std::string &error)
 #ifdef _WIN32
 	MessageBoxA(NULL, error.c_str(), "OpenXcom Error", MB_ICONERROR | MB_OK);
 #else
-	std::cerr << error << std::endl;
+	if (errorDlg.empty())
+	{
+		std::cerr << error << std::endl;
+	}
+	else
+	{
+		std::string cmd = errorDlg;
+		cmd += " --title \"OpenXcom Error\" --error \"" + error + "\"";
+		if (system(cmd.c_str()) != 0)
+			std::cerr << error << std::endl;
+	}
 #endif
 	Log(LOG_FATAL) << error;
 }

@@ -92,6 +92,8 @@ int main(int argc, char *argv[])
 	std::set_terminate(exceptionLogger);
 #endif
 
+	CrossPlatform::getErrorDialog();
+
 #ifdef _DEBUG
 	Logger::reportingLevel() = LOG_DEBUG;
 #else
@@ -105,12 +107,13 @@ int main(int argc, char *argv[])
 		Logger::reportingLevel() = LOG_VERBOSE;
 	Options::baseXResolution = Options::displayWidth;
 	Options::baseYResolution = Options::displayHeight;
+
 	game = new Game(title.str());
 	State::setGamePtr(game);
 	game->setState(new StartState);
 	game->run();
-	Options::save();
 
+	Options::save();
 	// Comment this for faster exit.
 	delete game;
 	return EXIT_SUCCESS;
