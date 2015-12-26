@@ -28,9 +28,6 @@
 #include "Logger.h"
 #include "Exception.h"
 #include "Options.h"
-#ifdef __APPLE__
-#import <Cocoa/Cocoa.h>
-#endif
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -105,14 +102,6 @@ void showError(const std::string &error)
 {
 #ifdef _WIN32
 	MessageBoxA(NULL, error.c_str(), "OpenXcom Error", MB_ICONERROR | MB_OK);
-#elif __APPLE__
-	NSString* msg = [NSString stringWithUTF8String:error.c_str()];
-	NSAlert *alert = [[NSAlert alloc] init];
-	[alert addButtonWithTitle : @"OK"];
-	[alert setMessageText : @"OpenXcom Error"];
-	[alert setInformativeText : msg];
-	[alert setAlertStyle : NSCriticalAlertStyle];
-	[alert performSelectorOnMainThread : @selector(runModal) withObject:nil waitUntilDone : NO];
 #else
 	if (errorDlg.empty())
 	{
