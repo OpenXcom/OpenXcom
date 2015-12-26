@@ -1296,6 +1296,20 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allo
 			}
 		}
 	}
+	// fixed weapon should be always placed in hand slots
+	if (item->getRules()->isFixed())
+	{
+		if (!rightWeapon || !leftWeapon)
+		{
+			item->moveToOwner(unit);
+			item->setSlot(!rightWeapon ? rightHand : leftHand);
+			placed = true;
+			_save->getItems()->push_back(item);
+			item->setXCOMProperty(unit->getFaction() == FACTION_PLAYER);
+		}
+		return placed;
+	}
+
 	bool keep = true;
 	switch (item->getRules()->getBattleType())
 	{
@@ -1314,7 +1328,7 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allo
 				item->setSlot(rightHand);
 				placed = true;
 			}
-			if (!placed && !leftWeapon && (unit->getFaction() != FACTION_PLAYER || item->getRules()->isFixed()))
+			else if (!leftWeapon && unit->getFaction() != FACTION_PLAYER)
 			{
 				item->moveToOwner(unit);
 				item->setSlot(leftHand);
