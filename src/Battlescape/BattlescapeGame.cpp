@@ -704,8 +704,11 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				{
 					victim->getStatistics()->KIA = true;
 					BattleUnitKills *deathStat = new BattleUnitKills(killStat);
-					deathStat->setUnitStats(murderer);
-					deathStat->faction = murderer->getFaction();
+					if (murderer)
+					{
+						deathStat->setUnitStats(murderer);
+						deathStat->faction = murderer->getFaction();
+					}
 					_parentState->getGame()->getSavedGame()->killSoldier(victim->getGeoscapeSoldier(), deathStat);
 				}
 			}

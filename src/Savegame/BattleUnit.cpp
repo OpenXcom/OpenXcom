@@ -358,6 +358,11 @@ void BattleUnit::load(const YAML::Node &node)
 	{
 		_statistics->load(node["tempUnitStatistics"]);
 	}
+	_murdererId = node["murdererId"].as<int>(_murdererId);
+	_fatalShotSide = (UnitSide)node["fatalShotSide"].as<int>(_fatalShotSide);
+	_fatalShotBodyPart = (UnitBodyPart)node["fatalShotBodyPart"].as<int>(_fatalShotBodyPart);
+	_murdererWeapon = node["murdererWeapon"].as<std::string>(_murdererWeapon);
+	_murdererWeaponAmmo = node["murdererWeaponAmmo"].as<std::string>(_murdererWeaponAmmo);
 
 	if (const YAML::Node& p = node["recolor"])
 	{
@@ -424,6 +429,11 @@ YAML::Node BattleUnit::save() const
 	node["respawn"] = _respawn;
 	node["activeHand"] = _activeHand;
 	node["tempUnitStatistics"] = _statistics->save();
+	node["murdererId"] = _murdererId;
+	node["fatalShotSide"] = (int)_fatalShotSide;
+	node["fatalShotBodyPart"] = (int)_fatalShotBodyPart;
+	node["murdererWeapon"] = _murdererWeapon;
+	node["murdererWeaponAmmo"] = _murdererWeaponAmmo;
 
 	for (size_t i = 0; i < _recolor.size(); ++i)
 	{
