@@ -1239,7 +1239,7 @@ void Map::drawTerrain(Surface *surface)
 					if ((*i)->getCurrentFrame() >= 0)
 					{
 						tmpSurface = _game->getMod()->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
-						tmpSurface->blitNShade(surface, bulletPositionScreen.x - 64, bulletPositionScreen.y - 64, 0);
+						tmpSurface->blitNShade(surface, bulletPositionScreen.x - (tmpSurface->getWidth() / 2), bulletPositionScreen.y - (tmpSurface->getHeight() / 2), 0);
 					}
 				}
 				else if ((*i)->isHit())
