@@ -733,6 +733,7 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
 
 	if (minZ > maxZ) minZ = maxZ;
 	int rangeZ = maxZ - minZ;
+	if (rangeZ>10) rangeZ = 10; //as above, clamping height range to prevent buffer overflow
 	int centerZ = (maxZ + minZ)/2;
 
 	for (int j = 0; j <= rangeZ; ++j)
