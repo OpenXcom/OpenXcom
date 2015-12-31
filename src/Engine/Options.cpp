@@ -457,7 +457,7 @@ static void _scanMods(const std::string &modsDir)
 		std::string metadataPath = modPath + "/metadata.yml";
 		if (!CrossPlatform::fileExists(metadataPath))
 		{
-			Log(LOG_WARNING) << metadataPath << " not found; using default values for mod: " << *i;
+			Log(LOG_VERBOSE) << metadataPath << " not found; using default values for mod: " << *i;
 		}
 		else
 		{

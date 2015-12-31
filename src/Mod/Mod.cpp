@@ -370,14 +370,42 @@ Mod::~Mod()
 }
 
 /**
+ * Gets a specific rule element by ID.
+ * @param id String ID of the rule element.
+ * @param name Human-readable name of the rule type.
+ * @param map Map associated to the rule type.
+ * @return Pointer to the rule element, or NULL if not found.
+ */
+template <typename T>
+T *Mod::getRule(const std::string &id, const std::string &name, const std::map<std::string, T*> &map) const
+{
+	if (id.empty())
+	{
+		return 0;
+	}
+	typename std::map<std::string, T*>::const_iterator i = map.find(id);
+	if (map.end() != i)
+	{
+		return i->second;
+	}
+	else
+	{
+		if (id != Armor::NONE)
+		{
+			Log(LOG_ERROR) << name << " " << id << " not found";
+		}
+		return 0;
+	}
+}
+
+/**
  * Returns a specific font from the mod.
  * @param name Name of the font.
  * @return Pointer to the font.
  */
 Font *Mod::getFont(const std::string &name) const
 {
-	std::map<std::string, Font*>::const_iterator i = _fonts.find(name);
-	if (_fonts.end() != i) return i->second; else return 0;
+	return getRule(name, "Font", _fonts);
 }
 
 /**
@@ -387,8 +415,7 @@ Font *Mod::getFont(const std::string &name) const
  */
 Surface *Mod::getSurface(const std::string &name) const
 {
-	std::map<std::string, Surface*>::const_iterator i = _surfaces.find(name);
-	if (_surfaces.end() != i) return i->second; else return 0;
+	return getRule(name, "Surface", _surfaces);
 }
 
 /**
@@ -398,8 +425,7 @@ Surface *Mod::getSurface(const std::string &name) const
  */
 SurfaceSet *Mod::getSurfaceSet(const std::string &name) const
 {
-	std::map<std::string, SurfaceSet*>::const_iterator i = _sets.find(name);
-	if (_sets.end() != i) return i->second; else return 0;
+	return getRule(name, "Surface Set", _sets);
 }
 
 /**
@@ -415,8 +441,7 @@ Music *Mod::getMusic(const std::string &name) const
 	}
 	else
 	{
-		std::map<std::string, Music*>::const_iterator i = _musics.find(name);
-		if (_musics.end() != i) return i->second; else return _muteMusic;
+		return getRule(name, "Music", _musics);
 	}
 }
 
@@ -442,9 +467,13 @@ Music *Mod::getRandomMusic(const std::string &name) const
 			}
 		}
 		if (music.empty())
+		{
 			return _muteMusic;
+		}
 		else
+		{
 			return music[RNG::seedless(0, music.size() - 1)];
+		}
 	}
 }
 
@@ -459,9 +488,10 @@ void Mod::playMusic(const std::string &name, int id)
 	{
 		int loop = -1;
 		// hacks
-		if (!Options::musicAlwaysLoop &&
-			(name == "GMSTORY" || name == "GMWIN" || name == "GMLOSE"))
+		if (!Options::musicAlwaysLoop && (name == "GMSTORY" || name == "GMWIN" || name == "GMLOSE"))
+		{
 			loop = 0;
+		}
 
 		Music *music = 0;
 		if (id == 0)
@@ -489,8 +519,7 @@ void Mod::playMusic(const std::string &name, int id)
  */
 SoundSet *Mod::getSoundSet(const std::string &name) const
 {
-	std::map<std::string, SoundSet*>::const_iterator i = _sounds.find(name);
-	if (_sounds.end() != i) return i->second; else return 0;
+	return getRule(name, "Sound Set", _sounds);
 }
 
 /**
@@ -508,7 +537,19 @@ Sound *Mod::getSound(const std::string &set, unsigned int sound) const
 	else
 	{
 		SoundSet *ss = getSoundSet(set);
-		if (ss != 0) return ss->getSound(sound); else return 0;
+		if (ss != 0)
+		{
+			Sound *s = ss->getSound(sound);
+			if (s == 0)
+			{
+				Log(LOG_ERROR) << "Sound " << sound << " in " << set << " not found";				
+			}
+			return s;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 }
 
@@ -519,8 +560,7 @@ Sound *Mod::getSound(const std::string &set, unsigned int sound) const
  */
 Palette *Mod::getPalette(const std::string &name) const
 {
-	std::map<std::string, Palette*>::const_iterator i = _palettes.find(name);
-	if (_palettes.end() != i) return i->second; else return 0;
+	return getRule(name, "Palette", _palettes);
 }
 
 /**
@@ -595,8 +635,8 @@ int Mod::getModOffset() const
  */
 int Mod::getSpriteOffset(int sprite, const std::string& set) const
 {
-	SurfaceSet *ss = getSurfaceSet(set);
-	if (ss != 0 && sprite >= (int)ss->getTotalFrames())
+	std::map<std::string, SurfaceSet*>::const_iterator i = _sets.find(set);
+	if (i != _sets.end() && sprite >= (int)i->second->getTotalFrames())
 		return sprite + _modOffset;
 	else
 		return sprite;
@@ -610,8 +650,8 @@ int Mod::getSpriteOffset(int sprite, const std::string& set) const
  */
 int Mod::getSoundOffset(int sound, const std::string& set) const
 {
-	SoundSet *ss = getSoundSet(set);
-	if (ss != 0 && sound >= (int)ss->getTotalSounds())
+	std::map<std::string, SoundSet*>::const_iterator i = _sounds.find(set);
+	if (i != _sounds.end() && sound >= (int)i->second->getTotalSounds())
 		return sound + _modOffset;
 	else
 		return sound;
@@ -1224,13 +1264,13 @@ void Mod::loadFile(const std::string &filename)
  * @return Pointer to new rule if one was created, or NULL if one was removed.
  */
 template <typename T>
-T *Mod::loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index, const std::string &key)
+T *Mod::loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index, const std::string &key) const
 {
 	T *rule = 0;
 	if (node[key])
 	{
 		std::string type = node[key].as<std::string>();
-		typename std::map<std::string, T*>::iterator i = map->find(type);
+		typename std::map<std::string, T*>::const_iterator i = map->find(type);
 		if (i != map->end())
 		{
 			rule = i->second;
@@ -1341,8 +1381,7 @@ SavedGame *Mod::newSave() const
  */
 RuleCountry *Mod::getCountry(const std::string &id) const
 {
-	std::map<std::string, RuleCountry*>::const_iterator i = _countries.find(id);
-	if (_countries.end() != i) return i->second; else return 0;
+	return getRule(id, "Country", _countries);
 }
 
 /**
@@ -1362,8 +1401,7 @@ const std::vector<std::string> &Mod::getCountriesList() const
  */
 RuleRegion *Mod::getRegion(const std::string &id) const
 {
-	std::map<std::string, RuleRegion*>::const_iterator i = _regions.find(id);
-	if (_regions.end() != i) return i->second; else return 0;
+	return getRule(id, "Region", _regions);
 }
 
 /**
@@ -1383,8 +1421,7 @@ const std::vector<std::string> &Mod::getRegionsList() const
  */
 RuleBaseFacility *Mod::getBaseFacility(const std::string &id) const
 {
-	std::map<std::string, RuleBaseFacility*>::const_iterator i = _facilities.find(id);
-	if (_facilities.end() != i) return i->second; else return 0;
+	return getRule(id, "Facility", _facilities);
 }
 
 /**
@@ -1404,8 +1441,7 @@ const std::vector<std::string> &Mod::getBaseFacilitiesList() const
  */
 RuleCraft *Mod::getCraft(const std::string &id) const
 {
-	std::map<std::string, RuleCraft*>::const_iterator i = _crafts.find(id);
-	if (_crafts.end() != i) return i->second; else return 0;
+	return getRule(id, "Craft", _crafts);
 }
 
 /**
@@ -1425,8 +1461,7 @@ const std::vector<std::string> &Mod::getCraftsList() const
  */
 RuleCraftWeapon *Mod::getCraftWeapon(const std::string &id) const
 {
-	std::map<std::string, RuleCraftWeapon*>::const_iterator i = _craftWeapons.find(id);
-	if (_craftWeapons.end() != i) return i->second; else return 0;
+	return getRule(id, "Craft Weapon", _craftWeapons);
 }
 
 /**
@@ -1446,10 +1481,7 @@ const std::vector<std::string> &Mod::getCraftWeaponsList() const
  */
 RuleItem *Mod::getItem(const std::string &id) const
 {
-	if (_items.find(id) != _items.end())
-		return _items.find(id)->second;
-	else
-		return 0;
+	return getRule(id, "Item", _items);
 }
 
 /**
@@ -1469,8 +1501,7 @@ const std::vector<std::string> &Mod::getItemsList() const
  */
 RuleUfo *Mod::getUfo(const std::string &id) const
 {
-	std::map<std::string, RuleUfo*>::const_iterator i = _ufos.find(id);
-	if (_ufos.end() != i) return i->second; else return 0;
+	return getRule(id, "UFO", _ufos);
 }
 
 /**
@@ -1490,8 +1521,7 @@ const std::vector<std::string> &Mod::getUfosList() const
  */
 RuleTerrain *Mod::getTerrain(const std::string &name) const
 {
-	std::map<std::string, RuleTerrain*>::const_iterator i = _terrains.find(name);
-	if (_terrains.end() != i) return i->second; else return 0;
+	return getRule(name, "Terrain", _terrains);
 }
 
 /**
@@ -1531,8 +1561,7 @@ MapDataSet *Mod::getMapDataSet(const std::string &name)
  */
 RuleSoldier *Mod::getSoldier(const std::string &name) const
 {
-	std::map<std::string, RuleSoldier*>::const_iterator i = _soldiers.find(name);
-	if (_soldiers.end() != i) return i->second; else return 0;
+	return getRule(name, "Soldier", _soldiers);
 }
 
 /**
@@ -1561,8 +1590,7 @@ std::map<std::string, RuleCommendations *> Mod::getCommendation() const
  */
 Unit *Mod::getUnit(const std::string &name) const
 {
-	std::map<std::string, Unit*>::const_iterator i = _units.find(name);
-	if (_units.end() != i) return i->second; else return 0;
+	return getRule(name, "Unit", _units);
 }
 
 /**
@@ -1572,8 +1600,7 @@ Unit *Mod::getUnit(const std::string &name) const
  */
 AlienRace *Mod::getAlienRace(const std::string &name) const
 {
-	std::map<std::string, AlienRace*>::const_iterator i = _alienRaces.find(name);
-	if (_alienRaces.end() != i) return i->second; else return 0;
+	return getRule(name, "Alien Race", _alienRaces);
 }
 
 /**
@@ -1593,8 +1620,7 @@ const std::vector<std::string> &Mod::getAlienRacesList() const
  */
 AlienDeployment *Mod::getDeployment(const std::string &name) const
 {
-	std::map<std::string, AlienDeployment*>::const_iterator i = _alienDeployments.find(name);
-	if (_alienDeployments.end() != i) return i->second; else return 0;
+	return getRule(name, "Alien Deployment", _alienDeployments);
 }
 
 /**
@@ -1614,8 +1640,7 @@ const std::vector<std::string> &Mod::getDeploymentsList() const
  */
 Armor *Mod::getArmor(const std::string &name) const
 {
-	std::map<std::string, Armor*>::const_iterator i = _armors.find(name);
-	if (_armors.end() != i) return i->second; else return 0;
+	return getRule(name, "Armor", _armors);
 }
 
 /**
@@ -1665,8 +1690,7 @@ int Mod::getPersonnelTime() const
  */
 ArticleDefinition *Mod::getUfopaediaArticle(const std::string &name) const
 {
-	std::map<std::string, ArticleDefinition*>::const_iterator i = _ufopaediaArticles.find(name);
-	if (_ufopaediaArticles.end() != i) return i->second; else return 0;
+	return getRule(name, "Article", _ufopaediaArticles);
 }
 
 /**
@@ -1705,8 +1729,7 @@ std::map<std::string, RuleInventory*> *Mod::getInventories()
  */
 RuleInventory *Mod::getInventory(const std::string &id) const
 {
-	std::map<std::string, RuleInventory*>::const_iterator i = _invs.find(id);
-	if (_invs.end() != i) return i->second; else return 0;
+	return getRule(id, "Inventory", _invs);
 }
 
 /**
@@ -1725,8 +1748,7 @@ const std::vector<std::string> &Mod::getInvsList() const
  */
 RuleResearch *Mod::getResearch (const std::string &id) const
 {
-	std::map<std::string, RuleResearch *>::const_iterator i = _research.find(id);
-	if (_research.end() != i) return i->second; else return 0;
+	return getRule(id, "Research", _research);
 }
 
 /**
@@ -1745,8 +1767,7 @@ const std::vector<std::string> &Mod::getResearchList() const
  */
 RuleManufacture *Mod::getManufacture (const std::string &id) const
 {
-	std::map<std::string, RuleManufacture *>::const_iterator i = _manufacture.find(id);
-	if (_manufacture.end() != i) return i->second; else return 0;
+	return getRule(id, "Manufacture", _manufacture);
 }
 
 /**
@@ -1788,8 +1809,7 @@ std::vector<OpenXcom::RuleBaseFacility*> Mod::getCustomBaseFacilities() const
  */
 const UfoTrajectory *Mod::getUfoTrajectory(const std::string &id) const
 {
-	std::map<std::string, UfoTrajectory *>::const_iterator i = _ufoTrajectories.find(id);
-	if (_ufoTrajectories.end() != i) return i->second; else return 0;
+	return getRule(id, "Trajectory", _ufoTrajectories);
 }
 
 /**
@@ -1799,8 +1819,7 @@ const UfoTrajectory *Mod::getUfoTrajectory(const std::string &id) const
  */
 const RuleAlienMission *Mod::getAlienMission(const std::string &id) const
 {
-	std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.find(id);
-	if (_alienMissions.end() != i) return i->second; else return 0;
+	return getRule(id, "Alien Mission", _alienMissions);
 }
 
 /**
@@ -2152,8 +2171,7 @@ std::string Mod::getFontName() const
  */
 RuleInterface *Mod::getInterface(const std::string &id) const
 {
-	std::map<std::string, RuleInterface*>::const_iterator i = _interfaces.find(id);
-	if (_interfaces.end() != i) return i->second; else return 0;
+	return getRule(id, "Interface", _interfaces);
 }
 
 /**
@@ -2187,7 +2205,15 @@ const std::vector<SDL_Color> *Mod::getTransparencies() const
 const std::vector<MapScript*> *Mod::getMapScript(std::string id) const
 {
 	std::map<std::string, std::vector<MapScript*> >::const_iterator i = _mapScripts.find(id);
-	if (_mapScripts.end() != i) return &i->second; else return 0;
+	if (_mapScripts.end() != i)
+	{
+		return &i->second;
+	}
+	else
+	{
+		Log(LOG_ERROR) << "Map Script " << id << "not found";
+		return 0;
+	}
 }
 
 const std::map<std::string, RuleVideo *> *Mod::getVideos() const
@@ -2207,8 +2233,7 @@ const std::vector<std::string> *Mod::getMissionScriptList() const
 
 RuleMissionScript *Mod::getMissionScript(const std::string &name) const
 {
-	std::map<std::string, RuleMissionScript*>::const_iterator i = _missionScripts.find(name);
-	if (_missionScripts.end() != i) return i->second; else return 0;
+	return getRule(name, "Mission Script", _missionScripts);
 }
 std::string Mod::getFinalResearch() const
 {

@@ -156,7 +156,10 @@ private:
 	void loadFile(const std::string &filename);
 	/// Loads a ruleset element.
 	template <typename T>
-	T *loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index = 0, const std::string &key = "type");
+	T *loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index = 0, const std::string &key = "type") const;
+	/// Gets a ruleset element.
+	template <typename T>
+	T *getRule(const std::string &id, const std::string &name, const std::map<std::string, T*> &map) const;
 	/// Gets a random music. This is private to prevent access, use playMusic(name, true) instead.
 	Music *getRandomMusic(const std::string &name) const;
 	/// Gets a particular sound set. This is private to prevent access, use getSound(name, id) instead.
