@@ -71,7 +71,7 @@ private:
 	SpecialAbility _specab;
 	std::string _spawnUnit;
 	bool _livingWeapon;
-	std::string _meleeWeapon;
+	std::string _meleeWeapon, _psiWeapon;
 	std::vector<std::string> _builtInWeapons;
 public:
 	/// Creates a blank unit ruleset.
@@ -118,6 +118,8 @@ public:
 	bool isLivingWeapon() const;
 	/// Gets the name of any melee weapon that may be built in to this unit.
 	std::string getMeleeWeapon() const;
+	/// Gets the name of any psi weapon that may be built in to this unit.
+	std::string getPsiWeapon() const;
 	/// Gets a vector of integrated items this unit has available.
 	const std::vector<std::string> &getBuiltInWeapons() const;
 };

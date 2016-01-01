@@ -3053,7 +3053,7 @@ void BattleUnit::setSpecialWeapon(SavedBattleGame *save, const Mod *mod)
 	}
 	if (getBaseStats()->psiSkill > 0 && getOriginalFaction() == FACTION_HOSTILE)
 	{
-		item = mod->getItem("ALIEN_PSI_WEAPON");
+		item = mod->getItem(getUnitRules()->getPsiWeapon());
 		if (item)
 		{
 			_specWeapon[i++] = createItem(save, this, item);
