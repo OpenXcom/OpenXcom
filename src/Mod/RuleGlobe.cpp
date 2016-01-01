@@ -122,7 +122,7 @@ void RuleGlobe::load(const YAML::Node &node)
 		else if ((*i)["delete"])
 		{
 			int id = (*i)["delete"].as<int>();
-			std::map<int, Texture*>::const_iterator j = _textures.find(id);
+			std::map<int, Texture*>::iterator j = _textures.find(id);
 			if (j != _textures.end())
 			{
 				_textures.erase(j);
