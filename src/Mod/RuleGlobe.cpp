@@ -101,19 +101,32 @@ void RuleGlobe::load(const YAML::Node &node)
 			_polylines.push_back(polyline);
 		}
 	}
-	if (node["textures"])
+	for (YAML::const_iterator i = node["textures"].begin(); i != node["textures"].end(); ++i)
 	{
-		for (std::map<int, Texture*>::iterator i = _textures.begin(); i != _textures.end(); ++i)
-		{
-			delete i->second;
-		}
-		_textures.clear();
-		for (YAML::const_iterator i = node["textures"].begin(); i != node["textures"].end(); ++i)
+		if ((*i)["id"])
 		{
 			int id = (*i)["id"].as<int>();
-			Texture *texture = new Texture(id);
+			std::map<int, Texture*>::const_iterator j = _textures.find(id);
+			Texture *texture;
+			if (j != _textures.end())
+			{
+				texture = j->second;
+			}
+			else
+			{
+				texture = new Texture(id);
+				_textures[id] = texture;
+			}
 			texture->load(*i);
-			_textures[id] = texture;
+		}
+		else if ((*i)["delete"])
+		{
+			int id = (*i)["delete"].as<int>();
+			std::map<int, Texture*>::const_iterator j = _textures.find(id);
+			if (j != _textures.end())
+			{
+				_textures.erase(j);
+			}
 		}
 	}
 	Globe::COUNTRY_LABEL_COLOR = node["countryColor"].as<int>(Globe::COUNTRY_LABEL_COLOR);

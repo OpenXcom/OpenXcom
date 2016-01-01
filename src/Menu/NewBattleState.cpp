@@ -655,8 +655,7 @@ void NewBattleState::cbxTerrainChange(Action *)
 	AlienDeployment *ruleDeploy = _game->getMod()->getDeployment(_missionTypes[_cbxMission->getSelected()]);
 	int minDepth = 0;
 	int maxDepth = 0;
-	if (_game->getMod()->getDeployment(_missionTypes[_cbxMission->getSelected()])->getMaxDepth() > 0 ||
-		_game->getMod()->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMaxDepth() > 0 ||
+	if (ruleDeploy->getMaxDepth() > 0 || _game->getMod()->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMaxDepth() > 0 ||
 		(!ruleDeploy->getTerrains().empty() && _game->getMod()->getTerrain(ruleDeploy->getTerrains().front())->getMaxDepth() > 0))
 	{
 		minDepth = 1;
