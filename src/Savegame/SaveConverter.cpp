@@ -800,8 +800,9 @@ void SaveConverter::loadDatTransfer()
 		int qty = load<Uint8>(tdata + 0x06);
 		if (qty != 0)
 		{
-			int base = load<Uint8>(tdata + 0x01);
-			Base *b = dynamic_cast<Base*>(_targets[base]);
+			int baseSrc = load<Uint8>(tdata + 0x00);
+			int baseDest = load<Uint8>(tdata + 0x01);
+			Base *b = dynamic_cast<Base*>(_targets[baseDest]);
 			int hours = load<Uint8>(tdata + 0x02);
 			TransferType type = (TransferType)load<Uint8>(tdata + 0x03);
 			int dat = load<Uint8>(tdata + 0x04);
@@ -810,7 +811,15 @@ void SaveConverter::loadDatTransfer()
 			switch (type)
 			{
 			case TRANSFER_CRAFT:
-				transfer->setCraft(dynamic_cast<Craft*>(_targets[dat]));
+				if (baseSrc == 255)
+				{
+					std::string newCraft = _rules->getCrafts()[dat];
+					transfer->setCraft(new Craft(_mod->getCraft(newCraft), b, _save->getId(newCraft)));
+				}
+				else
+				{
+					transfer->setCraft(dynamic_cast<Craft*>(_targets[dat]));
+				}
 				break;
 			case TRANSFER_SOLDIER:
 				transfer->setSoldier(_soldiers[dat]);
