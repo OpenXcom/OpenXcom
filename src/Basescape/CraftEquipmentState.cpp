@@ -510,7 +510,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 	if (item->isFixed())
 	{
 		int size = 4;
-		if (_game->getMod()->getUnit(item->getType()))
+		if (_game->getMod()->hasUnit(item->getType()))
 		{
 			size = _game->getMod()->getArmor(_game->getMod()->getUnit(item->getType())->getArmor())->getSize();
 			size *= size;

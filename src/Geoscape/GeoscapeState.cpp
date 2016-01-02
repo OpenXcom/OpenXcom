@@ -1544,7 +1544,7 @@ void GeoscapeState::time1Day()
 			RuleResearch * bonus = 0;
 			const RuleResearch * research = (*iter)->getRules();
 			// If "researched" the live alien, his body sent to the stores.
-			if (Options::spendResearchedItems && research->needItem() && _game->getMod()->getUnit(research->getName()))
+			if (Options::spendResearchedItems && research->needItem() && _game->getMod()->hasUnit(research->getName()))
 			{
 				(*i)->getStorageItems()->addItem(
 					_game->getMod()->getArmor(
