@@ -64,6 +64,8 @@
 namespace OpenXcom
 {
 
+static bool _addItem(BattleItem *item, BattleUnit *unit, Mod *mod, SavedBattleGame *addToSave, bool allowAutoLoadout, bool allowSecondClip);
+
 /**
  * Sets up a BattlescapeGenerator.
  * @param game pointer to Game object.
@@ -706,14 +708,19 @@ void BattlescapeGenerator::deployXCOM()
 			continue;
 		placeItemByLayout(*i);
 	}
+	
+	// auto-equip soldiers (only soldiers without layout) and clean up moved items
+	autoEquip(*_save->getUnits(), _game->getMod(), _save, _craftInventoryTile->getInventory(), ground, _worldShade, _allowAutoLoadout, false);
+}
 
-
-	// auto-equip soldiers (only soldiers without layout)
-	for (int pass = 0; pass != 4; ++pass)
+void BattlescapeGenerator::autoEquip(std::vector<BattleUnit*> units, Mod *mod, SavedBattleGame *addToSave, std::vector<BattleItem*> *craftInv,
+		RuleInventory *groundRuleInv, int worldShade, bool allowAutoLoadout, bool overrideEquipmentLayout)
+{
+	for (int pass = 0; pass < 4; ++pass)
 	{
-		for (std::vector<BattleItem*>::iterator j = _craftInventoryTile->getInventory()->begin(); j != _craftInventoryTile->getInventory()->end();)
+		for (std::vector<BattleItem*>::iterator j = craftInv->begin(); j != craftInv->end();)
 		{
-			if ((*j)->getSlot() == ground)
+			if ((*j)->getSlot() == groundRuleInv)
 			{
 				bool add = false;
 
@@ -735,7 +742,7 @@ void BattlescapeGenerator::deployXCOM()
 				case 3:
 					add = !(*j)->getRules()->isPistol() &&
 							!(*j)->getRules()->isRifle() &&
-							((*j)->getRules()->getBattleType() != BT_FLARE || _worldShade >= 9);
+							((*j)->getRules()->getBattleType() != BT_FLARE || worldShade >= 9);
 					break;
 				default:
 					break;
@@ -743,19 +750,18 @@ void BattlescapeGenerator::deployXCOM()
 
 				if (add)
 				{
-					for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+					for (std::vector<BattleUnit*>::iterator i = units.begin(); i != units.end(); ++i)
 					{
-						if (!(*i)->hasInventory() || !(*i)->getGeoscapeSoldier() || !(*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())
+						if (!(*i)->hasInventory() || !(*i)->getGeoscapeSoldier() || (!overrideEquipmentLayout && !(*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty()))
 						{
 							continue;
 						}
 						// let's not be greedy, we'll only take a second extra clip
 						// if everyone else has had a chance to take a first.
 						bool allowSecondClip = (pass == 3);
-
-						if (addItem(*j, *i, allowSecondClip))
+						if (_addItem(*j, *i, mod, addToSave, allowAutoLoadout, allowSecondClip))
 						{
-							j = _craftInventoryTile->getInventory()->erase(j);
+							j = craftInv->erase(j);
 							add = false;
 							break;
 						}
@@ -769,16 +775,20 @@ void BattlescapeGenerator::deployXCOM()
 			++j;
 		}
 	}
+
 	// clean up moved items
-	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end();)
+	for (std::vector<BattleItem*>::iterator i = craftInv->begin(); i != craftInv->end();)
 	{
-		if ((*i)->getSlot() != ground)
+		if ((*i)->getSlot() != groundRuleInv)
 		{
-			i = _craftInventoryTile->getInventory()->erase(i);
+			i = craftInv->erase(i);
 		}
 		else
 		{
-			_save->getItems()->push_back(*i);
+			if (addToSave)
+			{
+				addToSave->getItems()->push_back(*i);
+			}
 			++i;
 		}
 	}
@@ -1248,13 +1258,16 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem *item)
  * Adds an item to an XCom soldier (auto-equip).
  * @param item Pointer to the Item.
  * @param unit Pointer to the Unit.
+ * @param mod Pointer to the mod in use by the game.
+ * @param addToSave if non-NULL and the item was successfully placed, will add the item to the specified SavedBattleGame
+ * @param allowAutoLoadout allow auto-equip to function
  * @param allowSecondClip allow the unit to take a second clip or not. (only applies to xcom soldiers, aliens are allowed regardless of this flag)
- * @return if the item was placed or not.
+ * @return if the item was placed.
  */
-bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allowSecondClip)
+static bool _addItem(BattleItem *item, BattleUnit *unit, Mod *mod, SavedBattleGame *addToSave, bool allowAutoLoadout, bool allowSecondClip)
 {
-	RuleInventory *rightHand = _game->getMod()->getInventory("STR_RIGHT_HAND");
-	RuleInventory *leftHand = _game->getMod()->getInventory("STR_LEFT_HAND");
+	RuleInventory *rightHand = mod->getInventory("STR_RIGHT_HAND");
+	RuleInventory *leftHand = mod->getInventory("STR_LEFT_HAND");
 	bool placed = false;
 	bool loaded = false;
 	BattleItem *rightWeapon = unit->getItem("STR_RIGHT_HAND");
@@ -1320,7 +1333,7 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allo
 			loaded = true;
 		}
 
-		if (loaded && (unit->getGeoscapeSoldier() == 0 || _allowAutoLoadout))
+		if (loaded && (unit->getGeoscapeSoldier() == 0 || allowAutoLoadout))
 		{
 			if (!rightWeapon && unit->getBaseStats()->strength * 0.66 >= weight) // weight is always considered 0 for aliens
 			{
@@ -1386,13 +1399,13 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allo
 			break;
 		}
 	default:
-		if ((unit->getGeoscapeSoldier() == 0 || _allowAutoLoadout))
+		if ((unit->getGeoscapeSoldier() == 0 || allowAutoLoadout))
 		{
 			if (unit->getBaseStats()->strength >= weight) // weight is always considered 0 for aliens
 			{
-				for (std::vector<std::string>::const_iterator i = _game->getMod()->getInvsList().begin(); i != _game->getMod()->getInvsList().end() && !placed; ++i)
+				for (std::vector<std::string>::const_iterator i = mod->getInvsList().begin(); i != mod->getInvsList().end() && !placed; ++i)
 				{
-					RuleInventory *slot = _game->getMod()->getInventory(*i);
+					RuleInventory *slot = mod->getInventory(*i);
 					if (slot->getType() == INV_SLOT)
 					{
 						for (std::vector<RuleSlot>::iterator j = slot->getSlots()->begin(); j != slot->getSlots()->end() && !placed; ++j)
@@ -1414,13 +1427,25 @@ bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allo
 	break;
 	}
 
-	if (placed)
+	if (placed && addToSave)
 	{
-		_save->getItems()->push_back(item);
+		addToSave->getItems()->push_back(item);
 	}
 	item->setXCOMProperty(unit->getFaction() == FACTION_PLAYER);
 
 	return placed;
+}
+
+/**
+ * Adds an item to an XCom soldier (auto-equip).
+ * @param item Pointer to the Item.
+ * @param unit Pointer to the Unit.
+ * @param allowSecondClip allow the unit to take a second clip or not. (only applies to xcom soldiers, aliens are allowed regardless of this flag)
+ * @return if the item was placed or not.
+ */
+bool BattlescapeGenerator::addItem(BattleItem *item, BattleUnit *unit, bool allowSecondClip)
+{
+	return _addItem(item, unit, _game->getMod(), _save, _allowAutoLoadout, allowSecondClip);
 }
 
 /**
