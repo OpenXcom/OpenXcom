@@ -392,7 +392,7 @@ T *Mod::getRule(const std::string &id, const std::string &name, const std::map<s
 	{
 		if (id != Armor::NONE)
 		{
-			Log(LOG_ERROR) << name << " " << id << " not found";
+			Log(LOG_WARNING) << name << " " << id << " not found";
 		}
 		return 0;
 	}

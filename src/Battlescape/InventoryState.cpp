@@ -771,16 +771,12 @@ void InventoryState::onAutoequip(Action *action)
 		return;
 	}
 
-	BattleUnit               *unit       = _battleGame->getSelectedUnit();
-	Tile                     *groundTile = unit->getTile();
-	std::vector<BattleItem*> *groundInv  = groundTile->getInventory();
-	
-	Mod       *mod   = _game->getMod();
-	RuleInventory *groundRuleInv = mod->getInventory("STR_GROUND");
-
-	const std::string missionType = _game->getSavedGame()->getSavedBattle()->getMissionType();
-	AlienDeployment *ruleDeploy = mod->getDeployment(missionType);
-	int worldShade = ruleDeploy->getShade();
+	BattleUnit               *unit          = _battleGame->getSelectedUnit();
+	Tile                     *groundTile    = unit->getTile();
+	std::vector<BattleItem*> *groundInv     = groundTile->getInventory();	
+	Mod                      *mod           = _game->getMod();
+	RuleInventory            *groundRuleInv = mod->getInventory("STR_GROUND");
+	int                       worldShade    = _battleGame->getGlobalShade();
 
 	std::vector<BattleUnit*> units;
 	units.push_back(unit);
@@ -792,7 +788,7 @@ void InventoryState::onAutoequip(Action *action)
 	_refreshMouse();
 
 	// give audio feedback
-	_game->getMod()->getSound("BATTLE.CAT", 38)->play();
+	_game->getMod()->getSoundByDepth(_battleGame->getDepth(), Mod::ITEM_DROP)->play();
 }
 
 /**
