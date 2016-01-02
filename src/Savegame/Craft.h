@@ -139,6 +139,8 @@ public:
 	void returnToBase();
 	/// Checks if a target is detected by the craft's radar.
 	bool detect(Target *target) const;
+	/// Checks if a target is inside the craft's radar range.
+	bool insideRadarRange(Target *target) const;
 	/// Handles craft logic.
 	void think();
 	/// Does a craft full checkup.
