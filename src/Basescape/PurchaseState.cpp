@@ -547,7 +547,8 @@ void PurchaseState::increaseByValue(int change)
 	if (errorMessage.empty())
 	{
 		int maxByMoney = (_game->getSavedGame()->getFunds() - _total) / getRow().cost;
-		change = std::min(maxByMoney, change);
+		if (maxByMoney >= 0)
+			change = std::min(maxByMoney, change);
 		switch (getRow().type)
 		{
 		case TRANSFER_SOLDIER:

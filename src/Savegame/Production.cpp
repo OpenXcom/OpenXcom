@@ -193,7 +193,10 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Mod *m)
 
 int Production::getAmountProduced() const
 {
-	return _timeSpent / _rules->getManufactureTime();
+	if (_rules->getManufactureTime() > 0)
+		return _timeSpent / _rules->getManufactureTime();
+	else
+		return _amount;
 }
 
 const RuleManufacture * Production::getRules() const

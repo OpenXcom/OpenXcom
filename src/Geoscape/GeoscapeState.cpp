@@ -1428,7 +1428,7 @@ void GeoscapeState::time1Hour()
 		for (std::vector<Transfer*>::iterator j = (*i)->getTransfers()->begin(); j != (*i)->getTransfers()->end(); ++j)
 		{
 			(*j)->advance(*i);
-			if (!window && (*j)->getHours() == 0)
+			if (!window && (*j)->getHours() <= 0)
 			{
 				window = true;
 			}
