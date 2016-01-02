@@ -585,7 +585,7 @@ void UnitWalkBState::playMovementSound()
 				}
 			}
 		}
-		else
+		else if (_unit->getMovementType() == MT_FLY)
 		{
 			// play default flying sound
 			if (_unit->getWalkingPhase() == 1 && !_falling)
