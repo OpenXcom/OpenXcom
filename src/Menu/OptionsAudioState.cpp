@@ -55,9 +55,6 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	_txtUiVolume = new Text(114, 9, 94, 40);
 	_slrUiVolume = new Slider(104, 16, 94, 50);
 
-	_txtSampleRate = new Text(114, 9, 206, 40);
-	_cbxSampleRate = new ComboBox(this, 104, 16, 206, 50);
-
 	_txtMusicFormat = new Text(114, 9, 94, 72);
 	_cbxMusicFormat = new ComboBox(this, 104, 16, 94, 82);
 	_txtCurrentMusic = new Text(114, 9, 94, 100);
@@ -65,6 +62,9 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	_txtSoundFormat = new Text(114, 9, 206, 72);
 	_cbxSoundFormat = new ComboBox(this, 104, 16, 206, 82);
 	_txtCurrentSound = new Text(114, 9, 206, 100);
+
+	_txtVideoFormat = new Text(114, 9, 206, 40);
+	_cbxVideoFormat = new ComboBox(this, 104, 16, 206, 50);
 
 	add(_txtMusicVolume, "text", "audioMenu");
 	add(_slrMusicVolume, "button", "audioMenu");
@@ -75,8 +75,7 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	add(_txtUiVolume, "text", "audioMenu");
 	add(_slrUiVolume, "button", "audioMenu");
 
-	add(_txtSampleRate, "text", "audioMenu");
-
+	add(_txtVideoFormat, "text", "audioMenu");
 	add(_txtMusicFormat, "text", "audioMenu");
 	add(_txtCurrentMusic, "text", "audioMenu");
 	add(_txtSoundFormat, "text", "audioMenu");
@@ -84,8 +83,7 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 
 	add(_cbxMusicFormat, "button", "audioMenu");
 	add(_cbxSoundFormat, "button", "audioMenu");
-
-	add(_cbxSampleRate, "button", "audioMenu");
+	add(_cbxVideoFormat, "button", "audioMenu");
 
 	centerAllSurfaces();
 
@@ -119,31 +117,7 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	_slrUiVolume->onMouseIn((ActionHandler)&OptionsAudioState::txtTooltipIn);
 	_slrUiVolume->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
 
-	std::wostringstream ss;
-	std::vector<std::wstring> samplesText;
-
-	int samples[] = {8000, 11025, 16000, 22050, 32000, 44100, 48000};
-	for (unsigned int i = 0; i < sizeof(samples) / sizeof(samples[0]); ++i)
-	{
-		_sampleRates.push_back(samples[i]);
-		ss << samples[i] << L" Hz";
-		samplesText.push_back(ss.str());
-		ss.str(L"");
-		if (Options::audioSampleRate == samples[i])
-		{
-			_cbxSampleRate->setSelected(i);
-		}
-	}
-
-	_txtSampleRate->setText(tr("STR_AUDIO_SAMPLE_RATE"));
-
-	_cbxSampleRate->setOptions(samplesText);
-	_cbxSampleRate->setTooltip("STR_AUDIO_SAMPLE_RATE_DESC");
-	_cbxSampleRate->onChange((ActionHandler)&OptionsAudioState::cbxSampleRateChange);
-	_cbxSampleRate->onMouseIn((ActionHandler)&OptionsAudioState::txtTooltipIn);
-	_cbxSampleRate->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
-
-	std::vector<std::wstring> musicText, soundText;
+	std::vector<std::wstring> musicText, soundText, videoText;
 	/* MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI */
 	musicText.push_back(tr("STR_PREFERRED_FORMAT_AUTO"));
 	musicText.push_back(L"FLAC");
@@ -157,6 +131,9 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	soundText.push_back(tr("STR_PREFERRED_FORMAT_AUTO"));
 	soundText.push_back(L"1.4");
 	soundText.push_back(L"1.0");
+
+	videoText.push_back(tr("STR_PREFERRED_VIDEO_ANIMATION"));
+	videoText.push_back(tr("STR_PREFERRED_VIDEO_SLIDESHOW"));
 
 	_txtMusicFormat->setText(tr("STR_PREFERRED_MUSIC_FORMAT"));
 
@@ -182,9 +159,16 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	std::wstring curSound = sndFormats[Options::currentSound];
 	_txtCurrentSound->setText(tr("STR_CURRENT_FORMAT").arg(curSound));
 
+	_txtVideoFormat->setText(tr("STR_PREFERRED_VIDEO_FORMAT"));
+
+	_cbxVideoFormat->setOptions(videoText);
+	_cbxSoundFormat->setSelected(Options::preferredVideo);
+	_cbxVideoFormat->setTooltip("STR_PREFERRED_VIDEO_FORMAT_DESC");
+	_cbxVideoFormat->onChange((ActionHandler)&OptionsAudioState::cbxVideoFormatChange);
+	_cbxVideoFormat->onMouseIn((ActionHandler)&OptionsAudioState::txtTooltipIn);
+	_cbxVideoFormat->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
+
 	// These options require a restart, so don't enable them in-game
-	_txtSampleRate->setVisible(_origin == OPT_MENU);
-	_cbxSampleRate->setVisible(_origin == OPT_MENU);
 	_txtMusicFormat->setVisible(_origin == OPT_MENU);
 	_cbxMusicFormat->setVisible(_origin == OPT_MENU);
 	_txtCurrentMusic->setVisible(_origin == OPT_MENU);
@@ -252,13 +236,12 @@ void OptionsAudioState::slrUiVolumeRelease(Action *)
 }
 
 /**
- * Changes the Audio Sample Rate option.
+ * Changes the Video Format option.
  * @param action Pointer to an action.
  */
-void OptionsAudioState::cbxSampleRateChange(Action *)
+void OptionsAudioState::cbxVideoFormatChange(Action *)
 {
-	Options::audioSampleRate = _sampleRates[_cbxSampleRate->getSelected()];
-	Options::reload = true;
+	Options::preferredVideo = (VideoFormat)_cbxVideoFormat->getSelected();
 }
 
 /**
