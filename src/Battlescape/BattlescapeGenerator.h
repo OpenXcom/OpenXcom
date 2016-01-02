@@ -34,6 +34,7 @@ class BattleItem;
 class MapBlock;
 class Vehicle;
 class Tile;
+class RuleInventory;
 class RuleItem;
 class Unit;
 class AlienRace;
@@ -167,6 +168,9 @@ public:
 	void runInventory(Craft *craft);
 	/// Sets up the objectives for the map.
 	void setupObjectives(AlienDeployment *ruleDeploy);
+	// Autoequip a set of units
+	static void autoEquip(std::vector<BattleUnit*> units, Mod *mod, SavedBattleGame *addToSave, std::vector<BattleItem*> *craftInv,
+		RuleInventory *groundRuleInv, int worldShade, bool allowAutoLoadout, bool overrideEquipmentLayout);
 };
 
 }
