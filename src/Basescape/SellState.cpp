@@ -131,8 +131,11 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 
 	_txtValue->setText(tr("STR_VALUE"));
 
-	_lstItems->setArrowColumn(182, ARROW_VERTICAL);
-	_lstItems->setColumns(4, 156, 54, 24, 53);
+	_lstItems->setArrowColumn(185, ARROW_VERTICAL);
+	_lstItems->setColumns(4, 156, 24, 50, 53);
+	_lstItems->setAlign(ALIGN_RIGHT, 1);
+	_lstItems->setAlign(ALIGN_RIGHT, 2);
+	_lstItems->setAlign(ALIGN_RIGHT, 3);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
