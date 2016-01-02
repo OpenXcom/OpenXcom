@@ -20,6 +20,7 @@
 #include "Craft.h"
 #include <cmath>
 #include "../Engine/Language.h"
+#include "../Engine/RNG.h"
 #include "../Mod/RuleCraft.h"
 #include "CraftWeapon.h"
 #include "../Mod/RuleCraftWeapon.h"
@@ -744,8 +745,26 @@ void Craft::checkup()
  */
 bool Craft::detect(Target *target) const
 {
-	if (_rules->getRadarRange() == 0)
+	if (_rules->getRadarRange() == 0 || !insideRadarRange(target))
 		return false;
+
+	// backward compatibility with vanilla
+	if (_rules->getRadarChance() == 100)
+		return true;
+
+	Ufo *u = dynamic_cast<Ufo*>(target);
+	int chance = _rules->getRadarChance() * (100 + u->getVisibility()) / 100;
+	return RNG::percent(chance);
+}
+
+/**
+ * Returns if a certain target is inside the craft's
+ * radar range, taking in account the positions of both.
+ * @param target Pointer to target to compare.
+ * @return True if inside radar range.
+ */
+bool Craft::insideRadarRange(Target *target) const
+{
 	double range = _rules->getRadarRange() * (1 / 60.0) * (M_PI / 180);
 	return (getDistance(target) <= range);
 }
