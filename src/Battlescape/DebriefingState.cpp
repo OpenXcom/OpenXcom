@@ -1296,7 +1296,7 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 		int qty = base->getStorageItems()->getItem(i->first);
 		RuleItem *tankRule = _game->getMod()->getItem(i->first);
 		int size = 4;
-		if (_game->getMod()->getUnit(tankRule->getType()))
+		if (_game->getMod()->hasUnit(tankRule->getType()))
 		{
 			size = _game->getMod()->getArmor(_game->getMod()->getUnit(tankRule->getType())->getArmor())->getSize();
 			size *= size;

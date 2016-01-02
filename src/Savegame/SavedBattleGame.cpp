@@ -205,7 +205,7 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 			std::string type = (*i)["genUnitType"].as<std::string>();
 			std::string armor = (*i)["genUnitArmor"].as<std::string>();
 			// create a new Unit.
-			if(!mod->getUnit(type) || !mod->getArmor(armor)) continue;
+			if(!mod->hasUnit(type) || !mod->getArmor(armor)) continue;
 			unit = new BattleUnit(mod->getUnit(type), originalFaction, id, mod->getArmor(armor), mod->getStatAdjustment(savedGame->getDifficulty()), _depth);
 		}
 		unit->load(*i);

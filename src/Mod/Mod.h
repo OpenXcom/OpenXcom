@@ -157,6 +157,9 @@ private:
 	/// Loads a ruleset element.
 	template <typename T>
 	T *loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index = 0, const std::string &key = "type") const;
+	/// Checks if a ruleset element exists.
+	template <typename T>
+	bool hasRule(const std::string &id, const std::map<std::string, T*> &map) const;
 	/// Gets a ruleset element.
 	template <typename T>
 	T *getRule(const std::string &id, const std::string &name, const std::map<std::string, T*> &map) const;
@@ -295,6 +298,8 @@ public:
 	const std::vector<std::string> &getSoldiersList() const;
 	/// Gets commendation rules.
 	std::map<std::string, RuleCommendations *> getCommendation() const;
+	/// Checks if a unit exists.
+	bool hasUnit(const std::string &name) const;
 	/// Gets generated unit rules.
 	Unit *getUnit(const std::string &name) const;
 	/// Gets alien race rules.

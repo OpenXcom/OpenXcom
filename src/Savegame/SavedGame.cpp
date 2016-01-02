@@ -1062,8 +1062,6 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 		}
 		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin(), discovered.end(), research);
 
-		bool liveAlien = mod->getUnit(research->getName()) != 0;
-
 		if (itDiscovered != discovered.end())
 		{
 			bool cull = true;
@@ -1079,18 +1077,11 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 					}
 				}
 			}
-			if (!liveAlien && cull)
-			{
-				continue;
-			}
-			else
+
+			if (mod->hasUnit(research->getName()))
 			{
 				std::vector<std::string>::const_iterator leaderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_LEADER_PLUS");
-				std::vector<std::string>::const_iterator cmnderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_COMMANDER_PLUS");
-
 				bool leader ( leaderCheck != research->getUnlocked().end());
-				bool cmnder ( cmnderCheck != research->getUnlocked().end());
-
 				if (leader)
 				{
 					std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), mod->getResearch("STR_LEADER_PLUS"));
@@ -1098,15 +1089,19 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 						cull = false;
 				}
 
+				std::vector<std::string>::const_iterator cmnderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_COMMANDER_PLUS");
+				bool cmnder(cmnderCheck != research->getUnlocked().end());
 				if (cmnder)
 				{
 					std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), mod->getResearch("STR_COMMANDER_PLUS"));
 					if (found == discovered.end())
 						cull = false;
 				}
+			}
 
-				if (cull)
-					continue;
+			if (cull)
+			{
+				continue;
 			}
 		}
 
@@ -1179,12 +1174,11 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 	}
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
-	bool liveAlien = mod->getUnit(r->getName()) != 0;
 	if (_debug || std::find(unlocked.begin(), unlocked.end(), r) != unlocked.end())
 	{
 		return true;
 	}
-	else if (liveAlien)
+	else if (mod->hasUnit(r->getName()))
 	{
 		if (!r->getGetOneFree().empty())
 		{

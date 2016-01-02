@@ -1198,7 +1198,7 @@ int Base::getUsedContainment() const
 	for (std::vector<ResearchProject*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
 	{
 		const RuleResearch *projRules = (*i)->getRules();
-		if (projRules->needItem() && _mod->getUnit(projRules->getName()))
+		if (projRules->needItem() && _mod->hasUnit(projRules->getName()))
 		{
 			++total;
 		}
@@ -1372,7 +1372,7 @@ void Base::setupDefenses()
 		if (rule->isFixed())
 		{
 			int size = 4;
-			if (_mod->getUnit(itemId))
+			if (_mod->hasUnit(itemId))
 			{
 				size = _mod->getArmor(_mod->getUnit(itemId)->getArmor())->getSize();
 			}

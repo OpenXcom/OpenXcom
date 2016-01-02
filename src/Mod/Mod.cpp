@@ -370,6 +370,27 @@ Mod::~Mod()
 }
 
 /**
+ * Checks if a specific rule element exists
+ * @param id String ID of the rule element.
+ * @param name Human-readable name of the rule type.
+ * @param map Map associated to the rule type.
+ * @return Boolean
+ */
+template <typename T>
+bool Mod::hasRule(const std::string &id, const std::map<std::string, T*> &map) const
+{
+	if (id.empty())
+	{
+		return false;
+	}
+	else
+	{
+		typename std::map<std::string, T*>::const_iterator i = map.find(id);
+		return (map.end() != i);
+	}
+}
+
+/**
  * Gets a specific rule element by ID.
  * @param id String ID of the rule element.
  * @param name Human-readable name of the rule type.
@@ -1581,6 +1602,16 @@ const std::vector<std::string> &Mod::getSoldiersList() const
 std::map<std::string, RuleCommendations *> Mod::getCommendation() const
 {
 	return _commendations;
+}
+
+/**
+ * Checks if a specific unit exists.
+ * @param name Unit name.
+ * @return bool
+ */
+bool Mod::hasUnit(const std::string &name) const
+{
+	return hasRule(name, _units);
 }
 
 /**
