@@ -21,6 +21,7 @@
 #include <cmath>
 #include "../fmath.h"
 #include "SerializationHelper.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -127,6 +128,15 @@ int MovingTarget::getSpeed() const
 }
 
 /**
+ * Returns the radial speed of the moving target.
+ * @return Speed in 1 / 5 sec.
+ */
+double MovingTarget::getSpeedRadian() const
+{
+	return _speedRadian;
+}
+
+/**
  * Changes the speed of the moving target
  * and converts it from standard knots (nautical miles per hour)
  * into radians per 5 in-game seconds.
@@ -150,12 +160,17 @@ void MovingTarget::calculateSpeed()
 {
 	if (_dest != 0)
 	{
+		// Find the meet point
+		if (Options::meetingPoint) calculateMeetPoint();
+		else {_meetPointLat = _dest->getLatitude(); _meetPointLon = _dest->getLongitude();}
+
 		double dLon, dLat, length;
-		dLon = sin(_dest->getLongitude() - _lon) * cos(_dest->getLatitude());
-		dLat = cos(_lat) * sin(_dest->getLatitude()) - sin(_lat) * cos(_dest->getLatitude()) * cos(_dest->getLongitude() - _lon);
+		dLon = sin(_meetPointLon - _lon) * cos(_meetPointLat);
+		dLat = cos(_lat) * sin(_meetPointLat) - sin(_lat) * cos(_meetPointLat) * cos(_meetPointLon - _lon);
 		length = sqrt(dLon * dLon + dLat * dLat);
 		_speedLat = dLat / length * _speedRadian;
 		_speedLon = dLon / length * _speedRadian / cos(_lat + _speedLat);
+
 		// Check for invalid speeds when a division by zero occurs due to near-zero values
 		if (!(_speedLon == _speedLon) || !(_speedLat == _speedLat))
 		{
@@ -202,6 +217,71 @@ void MovingTarget::move()
 			setLatitude(_dest->getLatitude());
 		}
 	}
+}
+
+/**
+ * Calculate meeting point with the target.
+ */
+void MovingTarget::calculateMeetPoint()
+{
+	// Initialize
+	_meetPointLat = _dest->getLatitude();
+	_meetPointLon = _dest->getLongitude();
+
+	MovingTarget *u = dynamic_cast<MovingTarget*>(_dest);
+	if (!u) return;
+
+	// Speed ratio
+	const double	speedRatio = _speedRadian/ u->getSpeedRadian();
+	if (speedRatio <= 1) return;
+
+	// The direction pseudovector
+	double	nx = cos(u->getLatitude())*sin(u->getLongitude())*sin(u->getDestination()->getLatitude()) -
+				   sin(u->getLatitude())*cos(u->getDestination()->getLatitude())*sin(u->getDestination()->getLongitude()),
+			  ny = sin(u->getLatitude())*cos(u->getDestination()->getLatitude())*cos(u->getDestination()->getLongitude()) -
+				   cos(u->getLatitude())*cos(u->getLongitude())*sin(u->getDestination()->getLatitude()),
+			  nz = cos(u->getLatitude())*cos(u->getDestination()->getLatitude())*sin(u->getDestination()->getLongitude() - u->getLongitude());
+	// Normalize and multiplex with radian speed
+	double	nk = _speedRadian/sqrt(nx*nx+ny*ny+nz*nz);
+	nx *= nk;
+	ny *= nk;
+	nz *= nk;
+
+	// Initialize
+	double path=0, distance;
+
+	// Finding the meeting point
+	do
+	{
+		_meetPointLat += nx*sin(_meetPointLon) - ny*cos(_meetPointLon);
+		if (abs(_meetPointLat) < M_PI/2) _meetPointLon += nz - (nx*cos(_meetPointLon) + ny*sin(_meetPointLon))*tan(_meetPointLat); else _meetPointLon += M_PI;
+		path += _speedRadian;
+
+		distance = acos(cos(_lat) * cos(_meetPointLat) * cos(_meetPointLon - _lon) + sin(_lat) * sin(_meetPointLat));
+	} while (path < M_PI && distance - path*speedRatio > 0);
+
+	// Correction overflowing angles
+	while (abs(_meetPointLon) > M_PI) _meetPointLon -= copysign(2*M_PI, _meetPointLon);
+	while (abs(_meetPointLat) > M_PI) _meetPointLat -= copysign(2*M_PI, _meetPointLat);
+	if (abs(_meetPointLat) > M_PI/2) {_meetPointLat = copysign(2*M_PI - abs(_meetPointLat), _meetPointLat); _meetPointLon -= copysign(M_PI, _meetPointLon);}
+}
+
+/**
+ * Returns the latitude of the meeting point.
+ * @return Angle in rad.
+ */
+double MovingTarget::getMeetLatitude() const
+{
+	return _meetPointLat;
+}
+
+/**
+ * Returns the longitude of the meeting point.
+ * @return Angle in rad.
+ */
+double MovingTarget::getMeetLongitude() const
+{
+	return _meetPointLon;
 }
 
 }

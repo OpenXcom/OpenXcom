@@ -278,6 +278,8 @@ en-GB:
   STR_ALIENBLEEDING_DESC: "Allows fatal wounds to be inflicted on most aliens."
   STR_FIELDPROMOTIONS: "Field promotions"
   STR_FIELDPROMOTIONS_DESC: "Only soldiers that were present at the mission site are eligible for promotion."
+  STR_MEETINGPOINT: "Predict UFO trajectory"
+  STR_MEETINGPOINT_DESC: "Crafts fly towards a meeting point with the UFO based on its current trajectory."
   STR_IRONMAN: "IRONMAN"
   STR_IRONMAN_DESC: "No manual saving"
   STR_SAVE_AND_ABANDON_GAME: "SAVE AND ABANDON GAME"
