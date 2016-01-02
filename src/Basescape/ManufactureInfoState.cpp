@@ -69,26 +69,26 @@ void ManufactureInfoState::buildUi()
 {
 	_screen = false;
 
-	_window = new Window(this, 320, 150, 0, 25, POPUP_BOTH);
-	_txtTitle = new Text(320, 17, 0, 35);
-	_btnOk = new TextButton(136, 16, 168, 150);
-	_btnStop = new TextButton(136, 16, 16, 150);
-	_btnSell = new ToggleTextButton(60, 16, 244, 56);
-	_txtAvailableEngineer = new Text(200, 9, 16, 55);
-	_txtAvailableSpace = new Text(200, 9, 16, 65);
-	_txtMonthlyProfit = new Text(200, 9, 16, 68);
-	_txtAllocatedEngineer = new Text(112, 32, 16, 75);
-	_txtUnitToProduce = new Text(112, 48, 168, 59);
-	_txtEngineerUp = new Text(90, 9, 40, 113);
-	_txtEngineerDown = new Text(90, 9, 40, 133);
-	_txtUnitUp = new Text(90, 9, 192, 113);
-	_txtUnitDown = new Text(90, 9, 192, 133);
-	_btnEngineerUp = new ArrowButton(ARROW_BIG_UP, 13, 14, 132, 109);
-	_btnEngineerDown = new ArrowButton(ARROW_BIG_DOWN, 13, 14, 132, 131);
-	_btnUnitUp = new ArrowButton(ARROW_BIG_UP, 13, 14, 284, 109);
-	_btnUnitDown = new ArrowButton(ARROW_BIG_DOWN, 13, 14, 284, 131);
-	_txtAllocated = new Text(40, 16, 128, 83);
-	_txtTodo = new Text(40, 16, 280, 83);
+	_window = new Window(this, 320, 160, 0, 20, POPUP_BOTH);
+	_txtTitle = new Text(320, 17, 0, 30);
+	_btnOk = new TextButton(136, 16, 168, 155);
+	_btnStop = new TextButton(136, 16, 16, 155);
+	_btnSell = new ToggleTextButton(60, 16, 244, 61);
+	_txtAvailableEngineer = new Text(160, 9, 16, 50);
+	_txtAvailableSpace = new Text(160, 9, 16, 60);
+	_txtMonthlyProfit = new Text(160, 9, 168, 50);
+	_txtAllocatedEngineer = new Text(112, 32, 16, 80);
+	_txtUnitToProduce = new Text(112, 48, 168, 64);
+	_txtEngineerUp = new Text(90, 9, 40, 118);
+	_txtEngineerDown = new Text(90, 9, 40, 138);
+	_txtUnitUp = new Text(90, 9, 192, 118);
+	_txtUnitDown = new Text(90, 9, 192, 138);
+	_btnEngineerUp = new ArrowButton(ARROW_BIG_UP, 13, 14, 132, 114);
+	_btnEngineerDown = new ArrowButton(ARROW_BIG_DOWN, 13, 14, 132, 136);
+	_btnUnitUp = new ArrowButton(ARROW_BIG_UP, 13, 14, 284, 114);
+	_btnUnitDown = new ArrowButton(ARROW_BIG_DOWN, 13, 14, 284, 136);
+	_txtAllocated = new Text(40, 16, 128, 88);
+	_txtTodo = new Text(40, 16, 280, 88);
 
 	_surfaceEngineers = new InteractiveSurface(160, 150, 0, 25);
 	_surfaceEngineers->onMouseClick((ActionHandler)&ManufactureInfoState::handleWheelEngineer, 0);
@@ -199,7 +199,7 @@ void ManufactureInfoState::buildUi()
 
 void ManufactureInfoState::initProfitInfo ()
 {
-	Ruleset *ruleset = _game->getRuleset();
+	Mod *mod = _game->getMod();
 	const RuleManufacture *item = _production->getRules();
 
 	_producedItemsValue = 0;
@@ -208,11 +208,11 @@ void ManufactureInfoState::initProfitInfo ()
 		int sellValue = 0;
 		if (item->getCategory() == "STR_CRAFT")
 		{
-			sellValue = ruleset->getCraft(i->first)->getSellCost();
+			sellValue = mod->getCraft(i->first)->getSellCost();
 		}
 		else
 		{
-			sellValue = ruleset->getItem(i->first)->getSellCost();
+			sellValue = mod->getItem(i->first)->getSellCost();
 		}
 		_producedItemsValue += sellValue * i->second;
 	}
@@ -222,7 +222,7 @@ void ManufactureInfoState::initProfitInfo ()
 // in net worth.  after discussion in the forums, it was decided that focusing
 // only on visible changes in funds was clearer and more valuable to the player
 // than trying to take used materials and maintenance costs into account.
-int ManufactureInfoState::getMonthlyNetFunds ()
+int ManufactureInfoState::getMonthlyNetFunds () const
 {
 	// does not take into account leap years, but a game is unlikely to take long enough for that to matter
 	static const int AVG_HOURS_PER_MONTH = (365 * 24) / 12;

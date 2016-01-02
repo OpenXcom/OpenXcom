@@ -54,7 +54,7 @@ private:
 	/// Caches static data for monthly profit calculations
 	void initProfitInfo ();
 	/// Calculates the monthly change in funds due to the job
-	int getMonthlyNetFunds ();
+	int getMonthlyNetFunds () const;
 	/// Handler for the Sell button.
 	void btnSellClick (Action * action);
 	/// Handler for the Stop button.

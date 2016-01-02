@@ -1317,7 +1317,7 @@ static bool _addItem(BattleItem *item, BattleUnit *unit, Mod *mod, SavedBattleGa
 			item->moveToOwner(unit);
 			item->setSlot(!rightWeapon ? rightHand : leftHand);
 			placed = true;
-			_save->getItems()->push_back(item);
+			addToSave->getItems()->push_back(item);
 			item->setXCOMProperty(unit->getFaction() == FACTION_PLAYER);
 		}
 		return placed;

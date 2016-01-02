@@ -38,7 +38,6 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Tile.h"
 #include "../Mod/AlienDeployment.h"
-#include "../Mod/Ruleset.h"
 #include "../Mod/RuleItem.h"
 #include "../Mod/RuleInventory.h"
 #include "../Mod/Armor.h"
@@ -776,16 +775,16 @@ void InventoryState::onAutoequip(Action *action)
 	Tile                     *groundTile = unit->getTile();
 	std::vector<BattleItem*> *groundInv  = groundTile->getInventory();
 	
-	Ruleset       *gameRuleset   = _game->getRuleset();
-	RuleInventory *groundRuleInv = gameRuleset->getInventory("STR_GROUND");
+	Mod       *mod   = _game->getMod();
+	RuleInventory *groundRuleInv = mod->getInventory("STR_GROUND");
 
 	const std::string missionType = _game->getSavedGame()->getSavedBattle()->getMissionType();
-	AlienDeployment *ruleDeploy = gameRuleset->getDeployment(missionType);
+	AlienDeployment *ruleDeploy = mod->getDeployment(missionType);
 	int worldShade = ruleDeploy->getShade();
 
 	std::vector<BattleUnit*> units;
 	units.push_back(unit);
-	BattlescapeGenerator::autoEquip(units, _game->getRuleset(), NULL, groundInv, groundRuleInv, worldShade, true, true);
+	BattlescapeGenerator::autoEquip(units, mod, NULL, groundInv, groundRuleInv, worldShade, true, true);
 
 	// refresh ui
 	_inv->arrangeGround(false);
@@ -793,7 +792,7 @@ void InventoryState::onAutoequip(Action *action)
 	_refreshMouse();
 
 	// give audio feedback
-	_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+	_game->getMod()->getSound("BATTLE.CAT", 38)->play();
 }
 
 /**
