@@ -39,14 +39,3 @@ before_script:
   - cmake . -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" -DYAMLCPP_INCLUDE_DIR=$TRAVIS_BUILD_DIR/dependency-prefix/include -DCMAKE_CXX_FLAGS="${EXTRA_WARNING_FLAGS}" -DCMAKE_C_FLAGS="${EXTRA_WARNING_FLAGS}"
 
 script: make -j2
-
-notifications:
-  irc:
-    channels:
-      - "chat.freenode.net#openxcom"
-    template:
-      - "(%{commit_subject} : %{author}): %{message}"
-      - "Change view : %{compare_url}"
-      - "Build details : %{build_url}"
-    on_success: change
-    on_failure: change

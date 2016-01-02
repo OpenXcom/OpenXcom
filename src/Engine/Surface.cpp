@@ -23,6 +23,7 @@
 #include <SDL_gfxPrimitives.h>
 #include <SDL_image.h>
 #include <SDL_endian.h>
+#include "../lodepng.h"
 #include "Palette.h"
 #include "Exception.h"
 #include "Logger.h"
@@ -255,19 +256,55 @@ void Surface::loadImage(const std::string &filename)
 	_alignedBuffer = 0;
 	_surface = 0;
 
-	// SDL only takes UTF-8 filenames
-	// so here's an ugly hack to match this ugly reasoning
-	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
+	Log(LOG_VERBOSE) << "Loading image: " << filename;
 
-	// Load file
-	Log(LOG_VERBOSE) << "Loading image: " << utf8;
-	_surface = IMG_Load(utf8.c_str());
+	// Try loading with LodePNG first
+	std::vector<unsigned char> png;
+	unsigned error = lodepng::load_file(png, filename);
+	if (!error)
+	{
+		std::vector<unsigned char> image;
+		unsigned width, height;
+		lodepng::State state;
+		state.decoder.color_convert = 0;
+		error = lodepng::decode(image, width, height, state, png);
+		if (!error)
+		{
+			LodePNGColorMode *color = &state.info_png.color;
+			unsigned bpp = lodepng_get_bpp(color);
+			if (bpp == 8)
+			{
+				_alignedBuffer = NewAligned(bpp, width, height);
+				_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, GetPitch(bpp, width), 0, 0, 0, 0);
+				if (_surface)
+				{
+					int x = 0, y = 0;
+					for (std::vector<unsigned char>::const_iterator i = image.begin(); i != image.end(); ++i)
+					{
+						setPixelIterative(&x, &y, *i);
+					}
+					setPalette((SDL_Color*)color->palette, 0, color->palettesize);					
+				}
+			}
+		}
+	}
+
+	// Otherwise default to SDL_Image
+	if (!_surface)
+	{
+		// SDL only takes UTF-8 filenames
+		// so here's an ugly hack to match this ugly reasoning
+		std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
+		_surface = IMG_Load(utf8.c_str());
+	}
 
 	if (!_surface)
 	{
 		std::string err = filename + ":" + IMG_GetError();
 		throw Exception(err);
 	}
+
+	SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
 }
 
 /**
