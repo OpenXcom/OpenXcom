@@ -35,6 +35,7 @@ protected:
 
 	Target *_dest;
 	double _speedLon, _speedLat, _speedRadian;
+	double _meetPointLon, _meetPointLat;
 	int _speed;
 
 	/// Calculates a new speed vector to the destination.
@@ -54,12 +55,20 @@ public:
 	virtual void setDestination(Target *dest);
 	/// Gets the moving target's speed.
 	int getSpeed() const;
+	/// Gets the moving target's radial speed.
+	double getSpeedRadian() const;
 	/// Sets the moving target's speed.
 	void setSpeed(int speed);
 	/// Has the moving target reached its destination?
 	bool reachedDestination() const;
 	/// Move towards the destination.
 	void move();
+	/// Calculate meeting point with the target.
+	void calculateMeetPoint();
+	/// Returns the latitude of the meeting point
+	double getMeetLatitude() const;
+	/// Returns the longitude of the meeting point
+	double getMeetLongitude() const;
 };
 
 }
