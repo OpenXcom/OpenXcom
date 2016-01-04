@@ -490,13 +490,13 @@ void GraphsState::btnRegionListClick(Action * action)
 		{
 			if (button == _btnRegions[i])
 			{
-				number = i;
+				number = i + _butRegionsOffset;
 				break;
 			}
 		}
 	}
 
-	_regionToggles.at(number + _butRegionsOffset)->_pushed = button->getPressed();
+	_regionToggles.at(number)->_pushed = button->getPressed();
 
 	drawLines();
 }
@@ -520,13 +520,13 @@ void GraphsState::btnCountryListClick(Action * action)
 		{
 			if (button == _btnCountries[i])
 			{
-				number = i;
+				number = i + _butCountriesOffset;
 				break;
 			}
 		}
 	}
 
-	_countryToggles.at(number + _butCountriesOffset)->_pushed = button->getPressed();
+	_countryToggles.at(number)->_pushed = button->getPressed();
 
 	drawLines();
 }
