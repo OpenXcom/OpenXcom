@@ -22,7 +22,7 @@ BIN = openxcom
 endif
 
 # Compiler settings
-CXXFLAGS ?= -std=c++03 -Wall -Wextra -Wno-unused-function -O2 -rdynamic -g -D_DEBUG
+CXXFLAGS ?= -Wall -Wextra -Wno-unused-function -O2 -rdynamic -g -D_DEBUG
 CXXFLAGS += $(addprefix -D,$(TARGET))
 CXXFLAGS += $(shell $(PKG-CONFIG) --cflags sdl yaml-cpp)
 CXXFLAGS += -include pch.h
