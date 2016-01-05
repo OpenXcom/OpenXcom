@@ -44,8 +44,8 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Soldier *soldier, int rowEntr
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 272, 128, 24, 36, POPUP_BOTH);
-	_btnOk = new TextButton(220, 16, 50, 140);
+	_window = new Window(this, 300, 128, 10, 36, POPUP_HORIZONTAL);
+	_btnOk = new TextButton(240, 16, 40, 140);
 	_txtTitle = new Text(262, 9, 29, 44);
 	_txtUFO = new Text(262, 9, 29, 52);
 	_txtScore = new Text(180, 9, 29, 68);
@@ -55,7 +55,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Soldier *soldier, int rowEntr
 	_txtDaylight = new Text(120, 9, 169, 84);
 	_txtDaysWounded = new Text(180, 9, 29, 84);
 	_txtNoRecord = new Text(240, 9, 29, 100);
-	_lstKills = new TextList(240, 32, 29, 100);
+	_lstKills = new TextList(270, 32, 20, 100);
 
 	// Set palette
 	setInterface("soldierMission");
@@ -109,7 +109,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Soldier *soldier, int rowEntr
 	_txtDaysWounded->setText(tr("STR_DAYS_WOUNDED").arg(daysWounded));
 	_txtDaysWounded->setVisible(daysWounded != 0);
 
-	_lstKills->setColumns(3, 60, 95, 85);
+	_lstKills->setColumns(3, 60, 110, 100);
 
 	int kills = 0;
     bool stunOrKill = false;
