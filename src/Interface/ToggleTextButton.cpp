@@ -53,7 +53,6 @@ void ToggleTextButton::mousePress(Action *action, State *state)
 /// set the _isPressed state of the button and force it to redraw
 void ToggleTextButton::setPressed(bool pressed)
 {
-    if (_isPressed == pressed) return;
     _isPressed = pressed;
     _fakeGroup = _isPressed ? this : 0;
 	if (_isPressed && _invertedColor > -1) TextButton::setColor(_invertedColor);
