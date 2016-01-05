@@ -23,8 +23,8 @@ addons:
 env:
   - BUILD_TYPE=Debug EXTRA_WARNING_FLAGS=""
   - BUILD_TYPE=Release EXTRA_WARNING_FLAGS=""
-  - BUILD_TYPE=Debug EXTRA_WARNING_FLAGS="-Wall -Wextra"
-  - BUILD_TYPE=Release EXTRA_WARNING_FLAGS="-Wall -Wextra"
+  - BUILD_TYPE=Debug EXTRA_WARNING_FLAGS="-std=c++03 -Wall -Wextra"
+  - BUILD_TYPE=Release EXTRA_WARNING_FLAGS="-std=c++03 -Wall -Wextra"
 
 before_install:
   - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install yaml-cpp sdl sdl_gfx sdl_image sdl_mixer --with-flac --with-libmikmod --with-libvorbis --with-static-lib; fi
