@@ -261,9 +261,48 @@ void MovingTarget::calculateMeetPoint()
 	} while (path < M_PI && distance - path*speedRatio > 0);
 
 	// Correction overflowing angles
-	while (abs(_meetPointLon) > M_PI) _meetPointLon -= copysign(2*M_PI, _meetPointLon);
-	while (abs(_meetPointLat) > M_PI) _meetPointLat -= copysign(2*M_PI, _meetPointLat);
-	if (abs(_meetPointLat) > M_PI/2) {_meetPointLat = copysign(2*M_PI - abs(_meetPointLat), _meetPointLat); _meetPointLon -= copysign(M_PI, _meetPointLon);}
+	while (abs(_meetPointLon) > M_PI)
+	{
+		if (_meetPointLon > 0)
+		{
+			_meetPointLon -= 2*M_PI;
+		}
+		else
+		{
+			_meetPointLon += 2*M_PI;
+		}
+	}
+	while (abs(_meetPointLat) > M_PI)
+	{
+		if (_meetPointLat > 0)
+		{
+			_meetPointLat -= 2*M_PI;
+		}
+		else
+		{
+			_meetPointLat += 2*M_PI;
+		}
+	}
+	if (abs(_meetPointLat) > M_PI/2)
+	{
+		if (_meetPointLat > 0)
+		{
+			_meetPointLat = 2*M_PI - abs(_meetPointLat);
+		}
+		else
+		{
+			_meetPointLat = -(2*M_PI - abs(_meetPointLat));
+		}
+
+		if (_meetPointLon > 0)
+		{
+			_meetPointLon -= 2*M_PI - abs(_meetPointLon);
+		}
+		else
+		{
+			_meetPointLon += 2*M_PI - abs(_meetPointLon);
+		}
+	}
 }
 
 /**
