@@ -946,7 +946,7 @@ void GraphsState::drawRegionLines()
 	for (int iter = 0; iter != 12; ++iter)
 	{
 		int x = 312 - (iter*17);
-		int y = 175;
+		int y = 175 - (-lowerLimit / units);
 		if (totals[iter] > 0)
 		{
 			int reduction = totals[iter] / units;
