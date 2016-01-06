@@ -254,14 +254,15 @@ void MovingTarget::calculateMeetPoint()
 	do
 	{
 		_meetPointLat += nx*sin(_meetPointLon) - ny*cos(_meetPointLon);
-		if (abs(_meetPointLat) < M_PI/2) _meetPointLon += nz - (nx*cos(_meetPointLon) + ny*sin(_meetPointLon))*tan(_meetPointLat); else _meetPointLon += M_PI;
+		// using std::abs instead of abs since abs can't handle floating point
+		if (std::abs(_meetPointLat) < M_PI/2) _meetPointLon += nz - (nx*cos(_meetPointLon) + ny*sin(_meetPointLon))*tan(_meetPointLat); else _meetPointLon += M_PI;
 		path += _speedRadian;
 
 		distance = acos(cos(_lat) * cos(_meetPointLat) * cos(_meetPointLon - _lon) + sin(_lat) * sin(_meetPointLat));
 	} while (path < M_PI && distance - path*speedRatio > 0);
 
 	// Correction overflowing angles
-	while (abs(_meetPointLon) > M_PI)
+	while (std::abs(_meetPointLon) > M_PI)
 	{
 		if (_meetPointLon > 0)
 		{
@@ -272,7 +273,7 @@ void MovingTarget::calculateMeetPoint()
 			_meetPointLon += 2*M_PI;
 		}
 	}
-	while (abs(_meetPointLat) > M_PI)
+	while (std::abs(_meetPointLat) > M_PI)
 	{
 		if (_meetPointLat > 0)
 		{
@@ -283,24 +284,24 @@ void MovingTarget::calculateMeetPoint()
 			_meetPointLat += 2*M_PI;
 		}
 	}
-	if (abs(_meetPointLat) > M_PI/2)
+	if (std::abs(_meetPointLat) > M_PI/2)
 	{
 		if (_meetPointLat > 0)
 		{
-			_meetPointLat = 2*M_PI - abs(_meetPointLat);
+			_meetPointLat = 2*M_PI - std::abs(_meetPointLat);
 		}
 		else
 		{
-			_meetPointLat = -(2*M_PI - abs(_meetPointLat));
+			_meetPointLat = -(2*M_PI - std::abs(_meetPointLat));
 		}
 
 		if (_meetPointLon > 0)
 		{
-			_meetPointLon -= 2*M_PI - abs(_meetPointLon);
+			_meetPointLon -= 2*M_PI - std::abs(_meetPointLon);
 		}
 		else
 		{
-			_meetPointLon += 2*M_PI - abs(_meetPointLon);
+			_meetPointLon += 2*M_PI - std::abs(_meetPointLon);
 		}
 	}
 }
