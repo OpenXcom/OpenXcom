@@ -32,8 +32,6 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/SavedGame.h"
-#include "../Ruleset/RuleCraft.h"
-#include "../Engine/LocalizedText.h"
 #include "SoldierInfoState.h"
 #include "../Mod/RuleInterface.h"
 
@@ -70,7 +68,7 @@ int psiStrengthStat(Game *game, Soldier *s)
 	// don't reveal psi strength before it would otherwise be known
 	if (s->getCurrentStats()->psiSkill > 0
 	 || (Options::psiStrengthEval
-	     && game->getSavedGame()->isResearched(game->getRuleset()->getPsiRequirements())))
+	     && game->getSavedGame()->isResearched(game->getMod()->getPsiRequirements())))
 	{
 		return s->getCurrentStats()->psiStrength;
 	}
