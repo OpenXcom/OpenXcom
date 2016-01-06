@@ -42,7 +42,7 @@ namespace FileMap
 	/// filesystem paths via getFilePath()
 	const std::set<std::string> &getVFolderContents(const std::string &relativePath);
 
-	/// Returns the subset of the given files that matches the given extention
+	/// Returns the subset of the given files that matches the given extension
 	std::set<std::string> filterFiles(const std::vector<std::string> &files, const std::string &ext);
 	std::set<std::string> filterFiles(const std::set<std::string>    &files, const std::string &ext);
 
@@ -55,9 +55,9 @@ namespace FileMap
 
 	/// Scans a directory tree rooted at the specified filesystem path.  Any files it encounters that have already
 	/// been mapped will be ignored.  Therefore, load files from mods with the highest priority first.  If
-	/// ignoreRulesets is false, it will add any rulesets it finds to the front of the vector
-	/// returned by getRulesets().
-	void load(const std::string &modId, const std::string &path, bool ignoreRulesets);
+	/// ignoreMods is false, it will add any rulesets it finds to the front of the vector
+	/// returned by getMods().
+	void load(const std::string &modId, const std::string &path, bool ignoreMods);
 }
 
 }

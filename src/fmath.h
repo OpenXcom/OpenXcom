@@ -24,7 +24,7 @@
 
 template <class _Tx>
 inline bool AreSame(const _Tx& l, const _Tx& r) {
-  return std::fabs(l-r) <= std::numeric_limits<_Tx>::epsilon();
+	return std::fabs(l-r) <= std::numeric_limits<_Tx>::epsilon();
 }
 
 template <class _Tx>

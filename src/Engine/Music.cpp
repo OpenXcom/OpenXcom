@@ -91,10 +91,13 @@ void Music::play(int loop) const
 #ifndef __NO_MUSIC
 	if (!Options::mute)
 	{
-		stop();
-		if (_music != 0 && Mix_PlayMusic(_music, loop) == -1)
+		if (_music != 0)
 		{
-			Log(LOG_WARNING) << Mix_GetError();
+			stop();
+			if (Mix_PlayMusic(_music, loop) == -1)
+			{
+				Log(LOG_WARNING) << Mix_GetError();
+			}
 		}
 	}
 #endif
@@ -145,14 +148,18 @@ void Music::resume()
 #endif
 }
 
+/**
+ * Checks if any music is playing.
+ */
 bool Music::isPlaying()
 {
 #ifndef __NO_MUSIC
 	if (!Options::mute)
 	{
-		return Mix_Playing(-1);
+		return Mix_Playing(-1) != 0;
 	}
 #endif
 	return false;
 }
+
 }

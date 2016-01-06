@@ -1,0 +1,9 @@
+#
+# metadata.yaml for Limit Craft Item Capacities
+
+name: "Limit Craft Item Capacities"
+version: 1.0
+description: "Limits the number of items you can take on a craft to 80."
+author: the OpenXcom team
+
+master: xcom2

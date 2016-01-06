@@ -1,0 +1,46 @@
+# Based on XcomUtil by Scott Jones and BladeFireLight
+alienDeployments:
+  - type: STR_SURVEY_SHIP
+    shade: 0
+  - type: STR_ESCORT
+    shade: 0
+  - type: STR_CRUISER
+    shade: 0
+  - type: STR_HEAVY_CRUISER
+    shade: 0
+  - type: STR_HUNTER
+    shade: 0
+  - type: STR_BATTLESHIP
+    shade: 0
+  - type: STR_DREADNOUGHT
+    shade: 0
+  - type: STR_FLEET_SUPPLY_CRUISER
+    shade: 0
+  - type: STR_PORT_TERROR
+    shade: 0
+  - type: STR_ISLAND_TERROR
+    shade: 0
+  - type: STR_CARGO_SHIP_P1
+    shade: 0
+  - type: STR_CRUISE_SHIP_P1
+    shade: 0
+  - type: STR_CARGO_SHIP_P2
+    shade: 0
+  - type: STR_CRUISE_SHIP_P2
+    shade: 0
+  - type: STR_ARTIFACT_SITE_P1
+    shade: 0
+  - type: STR_ARTIFACT_SITE_P2
+    shade: 0
+  - type: STR_ALIEN_BASE_ASSAULT
+    shade: 0
+  - type: STR_ALIEN_COLONY_P2
+    shade: 0
+  - type: STR_BASE_DEFENSE
+    shade: 0
+  - type: STR_TLETH_P1
+    shade: 0
+  - type: STR_TLETH_P2
+    shade: 0
+  - type: STR_TLETH_P3
+    shade: 0

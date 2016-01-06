@@ -21,7 +21,6 @@
 #include "BattlescapeGame.h"
 #include "BattlescapeState.h"
 #include "TileEngine.h"
-#include "Pathfinding.h"
 #include "Map.h"
 #include "InfoboxState.h"
 #include "Camera.h"
@@ -34,9 +33,8 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Engine/Sound.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Armor.h"
+#include "../Mod/Mod.h"
+#include "../Mod/RuleItem.h"
 
 namespace OpenXcom
 {
@@ -44,7 +42,7 @@ namespace OpenXcom
 /**
  * Sets up a MeleeAttackBState.
  */
-MeleeAttackBState::MeleeAttackBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _target(0), _weapon(0), _ammo(0), _initialized(false), _deathMessage(false)
+MeleeAttackBState::MeleeAttackBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _target(0), _weapon(0), _ammo(0), _initialized(false)
 {
 }
 
@@ -111,7 +109,10 @@ void MeleeAttackBState::init()
 	
 	AlienBAIState *ai = dynamic_cast<AlienBAIState*>(_unit->getCurrentAIState());
 
-	if (ai && ai->getTarget())
+	if (_unit->getFaction() == _parent->getSave()->getSide() &&
+		_unit->getFaction() != FACTION_PLAYER &&
+		_parent->_debugPlay == false &&
+		ai && ai->getTarget())
 	{
 		_target = ai->getTarget();
 	}
@@ -125,18 +126,12 @@ void MeleeAttackBState::init()
 
 	performMeleeAttack();
 }
+
 /**
  * Performs all the overall functions of the state, this code runs AFTER the explosion state pops.
  */
 void MeleeAttackBState::think()
 {
-	if (_deathMessage)
-	{
-		Game *game = _parent->getSave()->getBattleState()->getGame();
-		game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _target->getGender()).arg(_target->getName(game->getLanguage()))));
-		_parent->popState();
-		return;
-	}
 	_parent->getSave()->getBattleState()->clearMouseScrollingState();
 
 	// if the unit burns floortiles, burn floortiles
@@ -151,6 +146,8 @@ void MeleeAttackBState::think()
 	resolveHit();
 		// aliens
 	if (_unit->getFaction() != FACTION_PLAYER &&
+		// not performing a reaction attack
+		_unit->getFaction() == _parent->getSave()->getSide() &&
 		// with enough TU for a second attack (*2 because they'll get charged for the initial attack when this state pops.)
 		_unit->getTimeUnits() >= _unit->getActionTUs(BA_HIT, _action.weapon) * 2 &&
 		// whose target is still alive or at least conscious
@@ -180,15 +177,8 @@ void MeleeAttackBState::think()
 		{
 			_parent->setupCursor();
 		}
-		if (_parent->convertInfected() && Options::battleNotifyDeath && _target && _target->getFaction() == FACTION_PLAYER)
-		{
-			_deathMessage = true;
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
-		}
-		else
-		{
-			_parent->popState();
-		}
+		_parent->convertInfected();
+		_parent->popState();
 	}
 }
 
@@ -204,11 +194,11 @@ void MeleeAttackBState::performMeleeAttack()
 	// make some noise
 	if (_ammo && _ammo->getRules()->getMeleeAttackSound() != -1)
 	{
-		_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _ammo->getRules()->getMeleeAttackSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
+		_parent->getMod()->getSoundByDepth(_parent->getDepth(), _ammo->getRules()->getMeleeAttackSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
 	}
 	else if (_weapon->getRules()->getMeleeAttackSound() != -1)
 	{
-		_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _weapon->getRules()->getMeleeAttackSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
+		_parent->getMod()->getSoundByDepth(_parent->getDepth(), _weapon->getRules()->getMeleeAttackSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
 	}
 	// use up ammo if applicable
 	if (!_parent->getSave()->getDebugMode() && _weapon->getRules()->getBattleType() == BT_MELEE && _ammo && _ammo->spendBullet() == false)
@@ -265,7 +255,7 @@ void MeleeAttackBState::resolveHit()
 		// make some noise to signal the hit.
 		if (_weapon->getRules()->getMeleeHitSound() != -1)
 		{
-			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _action.weapon->getRules()->getMeleeHitSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
+			_parent->getMod()->getSoundByDepth(_parent->getDepth(), _action.weapon->getRules()->getMeleeHitSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
 		}
 		
 		// offset the damage voxel ever so slightly so that the target knows which side the attack came from

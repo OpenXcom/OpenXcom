@@ -18,9 +18,8 @@
  */
 #include "PauseState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -32,7 +31,6 @@
 #include "OptionsGeoscapeState.h"
 #include "OptionsBattlescapeState.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {
@@ -66,7 +64,7 @@ PauseState::PauseState(OptionsOrigin origin) : _origin(origin)
 	_txtTitle = new Text(206, 17, x+5, 32);
 
 	// Set palette
-	setInterface("pauseMenu", false, _origin == OPT_BATTLESCAPE);
+	setInterface("pauseMenu", false, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : 0);
 
 	add(_window, "window", "pauseMenu");
 	add(_btnLoad, "button", "pauseMenu");
@@ -79,7 +77,7 @@ PauseState::PauseState(OptionsOrigin origin) : _origin(origin)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnLoad->setText(tr("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&PauseState::btnLoadClick);
@@ -149,9 +147,9 @@ void PauseState::btnSaveClick(Action *)
 }
 
 /**
-* Opens the Game Options screen.
-* @param action Pointer to an action.
-*/
+ * Opens the Game Options screen.
+ * @param action Pointer to an action.
+ */
 void PauseState::btnOptionsClick(Action *)
 {
 	Options::backupDisplay();

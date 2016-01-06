@@ -18,9 +18,8 @@
  */
 #include "TargetInfoState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -62,7 +61,7 @@ TargetInfoState::TargetInfoState(Target *target, Globe *globe) : _target(target)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)&TargetInfoState::btnInterceptClick);
@@ -78,7 +77,7 @@ TargetInfoState::TargetInfoState(Target *target, Globe *globe) : _target(target)
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTitle->setWordWrap(true);
 	ss << L'\x01' << _target->getName(_game->getLanguage());
-	_txtTitle->setText(ss.str().c_str());
+	_txtTitle->setText(ss.str());
 
 	_txtTargetted->setAlign(ALIGN_CENTER);
 	_txtTargetted->setText(tr("STR_TARGETTED_BY"));

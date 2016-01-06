@@ -318,6 +318,7 @@ research:
   - name: STR_CYDONIA_OR_BUST
     cost: 600
     points: 60
+    unlockFinalMission: true
     dependencies:
       - STR_COMMANDER_PLUS
   - name: STR_PERSONAL_ARMOR

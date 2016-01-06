@@ -33,6 +33,8 @@ namespace OpenXcom
  */
 namespace CrossPlatform
 {
+	/// Gets the available error dialog.
+	void getErrorDialog();
 	/// Displays an error message.
 	void showError(const std::string &error);
 	/// Finds the game's data folders in the system.
@@ -85,6 +87,10 @@ namespace CrossPlatform
 	std::string getDosPath();
 	/// Sets the window icon.
 	void setWindowIcon(int winResource, const std::string &unixPath);
+	/// Produces a stack trace.
+	void stackTrace(void *ctx);
+	/// Produces a crash dump.
+	void crashDump(void *ex, const std::string &err);
 }
 
 }

@@ -18,16 +18,11 @@
  */
 #include "SelectStartFacilityState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
 #include "../Interface/TextList.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleBaseFacility.h"
-#include "../Savegame/SavedGame.h"
+#include "../Mod/Mod.h"
+#include "../Mod/RuleBaseFacility.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
 #include "../Engine/Options.h"
@@ -46,7 +41,7 @@ namespace OpenXcom
  */
 SelectStartFacilityState::SelectStartFacilityState(Base *base, State *state, Globe *globe) : BuildFacilitiesState(base, state), _globe(globe)
 {
-	_facilities = _game->getRuleset()->getCustomBaseFacilities();
+	_facilities = _game->getMod()->getCustomBaseFacilities();
 
 	_btnOk->setText(tr("STR_RESET"));
 	_btnOk->onMouseClick((ActionHandler)&SelectStartFacilityState::btnOkClick);

@@ -26,14 +26,14 @@
 #include "../Engine/Logger.h"
 #include "../Engine/RNG.h"
 #include "../Geoscape/Globe.h"
-#include "../Ruleset/RuleAlienMission.h"
-#include "../Ruleset/RuleRegion.h"
-#include "../Ruleset/RuleCountry.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleUfo.h"
-#include "../Ruleset/UfoTrajectory.h"
-#include "../Ruleset/RuleGlobe.h"
-#include "../Ruleset/Texture.h"
+#include "../Mod/RuleAlienMission.h"
+#include "../Mod/RuleRegion.h"
+#include "../Mod/RuleCountry.h"
+#include "../Mod/Mod.h"
+#include "../Mod/RuleUfo.h"
+#include "../Mod/UfoTrajectory.h"
+#include "../Mod/RuleGlobe.h"
+#include "../Mod/Texture.h"
 #include "SavedGame.h"
 #include "MissionSite.h"
 #include "Ufo.h"
@@ -43,14 +43,13 @@
 #include "Waypoint.h"
 #include <assert.h>
 #include <algorithm>
-#include <functional>
 #include <math.h>
-#include "../Ruleset/AlienDeployment.h"
+#include "../Mod/AlienDeployment.h"
 
 namespace OpenXcom
 {
 
-AlienMission::AlienMission(const RuleAlienMission &rule) : _rule(rule), _nextWave(0), _nextUfoCounter(0), _spawnCountdown(0), _liveUfos(0), _uniqueID(0), _base(0)
+AlienMission::AlienMission(const RuleAlienMission &rule) : _rule(rule), _nextWave(0), _nextUfoCounter(0), _spawnCountdown(0), _liveUfos(0), _uniqueID(0), _missionSiteZone(-1), _base(0)
 {
 	// Empty by design.
 }
@@ -95,7 +94,7 @@ void AlienMission::load(const YAML::Node& node, SavedGame &game)
 		}
 		_base = *found;
 	}
-
+	_missionSiteZone = node["missionSiteZone"].as<int>(_missionSiteZone);
 }
 
 /**
@@ -117,6 +116,7 @@ YAML::Node AlienMission::save() const
 	{
 		node["alienBase"] = _base->getId();
 	}
+	node["missionSiteZone"] = _missionSiteZone;
 	return node;
 }
 
@@ -154,7 +154,7 @@ private:
 
 void AlienMission::think(Game &engine, const Globe &globe)
 {
-	const Ruleset &ruleset = *engine.getRuleset();
+	const Mod &mod = *engine.getMod();
 	SavedGame &game = *engine.getSavedGame();
 	if (_nextWave >= _rule.getWaveCount())
 		return;
@@ -164,13 +164,23 @@ void AlienMission::think(Game &engine, const Globe &globe)
 		return;
 	}
 	const MissionWave &wave = _rule.getWave(_nextWave);
-	const UfoTrajectory &trajectory = *ruleset.getUfoTrajectory(wave.trajectory);
-	Ufo *ufo = spawnUfo(game, ruleset, globe, wave, trajectory);
+	const UfoTrajectory &trajectory = *mod.getUfoTrajectory(wave.trajectory);
+	Ufo *ufo = spawnUfo(game, mod, globe, wave, trajectory);
 	if (ufo)
 	{
 		//Some missions may not spawn a UFO!
 		game.getUfos()->push_back(ufo);
 	}
+	else if ((mod.getDeployment(wave.ufoType) && !mod.getUfo(wave.ufoType) && mod.getDeployment(wave.ufoType)->getMarkerName() != "") // a mission site that we want to spawn directly
+			|| (_rule.getObjective() == OBJECTIVE_SITE && wave.objective))																		// or we want to spawn one at random according to our terrain
+	{
+		std::vector<MissionArea> areas = mod.getRegion(_region)->getMissionZones().at((_rule.getSpawnZone() == -1) ? trajectory.getZone(0) : _rule.getSpawnZone()).areas;
+		MissionArea area = areas.at((_missionSiteZone == -1) ? RNG::generate(0, areas.size()-1) : _missionSiteZone);
+		Texture *texture = mod.getGlobe()->getTexture(area.texture);
+		AlienDeployment *deployment = mod.getDeployment(wave.ufoType) ? mod.getDeployment(wave.ufoType) : mod.getDeployment(texture->getRandomDeployment());
+		spawnMissionSite(game, deployment, area);
+	}
+
 	++_nextUfoCounter;
 	if (_nextUfoCounter == wave.ufoCount)
 	{
@@ -181,15 +191,13 @@ void AlienMission::think(Game &engine, const Globe &globe)
 	{
 		for (std::vector<Country*>::iterator c = game.getCountries()->begin(); c != game.getCountries()->end(); ++c)
 		{
-			if (!(*c)->getPact() && !(*c)->getNewPact() && ruleset.getRegion(_region)->insideRegion((*c)->getRules()->getLabelLongitude(), (*c)->getRules()->getLabelLatitude()))
+			if (!(*c)->getPact() && !(*c)->getNewPact() && mod.getRegion(_region)->insideRegion((*c)->getRules()->getLabelLongitude(), (*c)->getRules()->getLabelLatitude()))
 			{
 				(*c)->setNewPact();
 				spawnAlienBase(globe, engine, _rule.getSpawnZone());
 				break;
 			}
 		}
-
-
 		// Infiltrations loop for ever.
 		_nextWave = 0;
 	}
@@ -197,6 +205,7 @@ void AlienMission::think(Game &engine, const Globe &globe)
 	{
 		spawnAlienBase(globe, engine, _rule.getSpawnZone());
 	}
+
 	if (_nextWave != _rule.getWaveCount())
 	{
 		size_t spawnTimer = _rule.getWave(_nextWave).spawnTimer / 30;
@@ -205,30 +214,30 @@ void AlienMission::think(Game &engine, const Globe &globe)
 }
 
 /**
- * This function will spawn a UFO according the the mission rules.
+ * This function will spawn a UFO according the mission rules.
  * Some code is duplicated between cases, that's ok for now. It's on different
  * code paths and the function is MUCH easier to read written this way.
  * @param game The saved game information.
- * @param ruleset The ruleset.
+ * @param mod The mod.
  * @param globe The globe, for land checks.
  * @param wave The wave for the desired UFO.
  * @param trajectory The rule for the desired trajectory.
  * @return Pointer to the spawned UFO. If the mission does not desire to spawn a UFO, 0 is returned.
  */
-Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const Globe &globe, const MissionWave &wave, const UfoTrajectory &trajectory)
+Ufo *AlienMission::spawnUfo(const SavedGame &game, const Mod &mod, const Globe &globe, const MissionWave &wave, const UfoTrajectory &trajectory)
 {
-	RuleUfo &ufoRule = *ruleset.getUfo(wave.ufoType);
+	RuleUfo *ufoRule = mod.getUfo(wave.ufoType);
 	if (_rule.getObjective() == OBJECTIVE_RETALIATION)
 	{
-		const RuleRegion &regionRules = *ruleset.getRegion(_region);
+		const RuleRegion &regionRules = *mod.getRegion(_region);
 		std::vector<Base *>::const_iterator found =
 		    std::find_if (game.getBases()->begin(), game.getBases()->end(),
 				 FindMarkedXCOMBase(regionRules));
 		if (found != game.getBases()->end())
 		{
 			// Spawn a battleship straight for the XCOM base.
-			const RuleUfo &battleshipRule = *ruleset.getUfo(_rule.getSpawnUfo());
-			const UfoTrajectory &assaultTrajectory = *ruleset.getUfoTrajectory("__RETALIATION_ASSAULT_RUN");
+			const RuleUfo &battleshipRule = *mod.getUfo(_rule.getSpawnUfo());
+			const UfoTrajectory &assaultTrajectory = *mod.getUfoTrajectory(UfoTrajectory::RETALIATION_ASSAULT_RUN);
 			Ufo *ufo = new Ufo(&battleshipRule);
 			ufo->setMissionInfo(this, &assaultTrajectory);
 			std::pair<double, double> pos;
@@ -253,15 +262,15 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 	}
 	else if (_rule.getObjective() == OBJECTIVE_SUPPLY)
 	{
-		if (wave.objective && !_base)
+		if (ufoRule == 0 || (wave.objective && !_base))
 		{
 			// No base to supply!
 			return 0;
 		}
 		// Our destination is always an alien base.
-		Ufo *ufo = new Ufo(&ufoRule);
+		Ufo *ufo = new Ufo(ufoRule);
 		ufo->setMissionInfo(this, &trajectory);
-		const RuleRegion &regionRules = *ruleset.getRegion(_region);
+		const RuleRegion &regionRules = *mod.getRegion(_region);
 		std::pair<double, double> pos;
 		if (trajectory.getAltitude(0) == "STR_GROUND")
 		{
@@ -272,7 +281,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 			pos = regionRules.getRandomPoint(trajectory.getZone(0));
 		}
 		ufo->setAltitude(trajectory.getAltitude(0));
-		ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
+		ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule->getMaxSpeed());
 		ufo->setLongitude(pos.first);
 		ufo->setLatitude(pos.second);
 		Waypoint *wp = new Waypoint();
@@ -299,17 +308,19 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 		ufo->setDestination(wp);
 		return ufo;
 	}
+	if (ufoRule == 0)
+		return 0;
 	// Spawn according to sequence.
-	Ufo *ufo = new Ufo(&ufoRule);
+	Ufo *ufo = new Ufo(ufoRule);
 	ufo->setMissionInfo(this, &trajectory);
-	const RuleRegion &regionRules = *ruleset.getRegion(_region);
+	const RuleRegion &regionRules = *mod.getRegion(_region);
 	std::pair<double, double> pos = getWaypoint(trajectory, 0, globe, regionRules);
 	ufo->setAltitude(trajectory.getAltitude(0));
 	if (trajectory.getAltitude(0) == "STR_GROUND")
 	{
 		ufo->setSecondsRemaining(trajectory.groundTimer()*5);
 	}
-	ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
+	ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule->getMaxSpeed());
 	ufo->setLongitude(pos.first);
 	ufo->setLatitude(pos.second);
 	Waypoint *wp = new Waypoint();
@@ -361,7 +372,7 @@ private:
  */
 void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe)
 {
-	const Ruleset &rules = *engine.getRuleset();
+	const Mod &rules = *engine.getMod();
 	SavedGame &game = *engine.getSavedGame();
 	const size_t curWaypoint = ufo.getTrajectoryPoint();
 	const size_t nextWaypoint = curWaypoint + 1;
@@ -406,11 +417,12 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			addScore(ufo.getLongitude(), ufo.getLatitude(), game);
 			ufo.setStatus(Ufo::DESTROYED);
 
-			MissionArea area = regionRules.getMissionPoint(trajectory.getZone(curWaypoint), &ufo);
-			MissionSite *missionSite = spawnMissionSite(game, rules, area);
+			MissionArea area = regionRules.getMissionZones().at(trajectory.getZone(curWaypoint)).areas.at(_missionSiteZone);
+			Texture *texture = rules.getGlobe()->getTexture(area.texture);
+			AlienDeployment *deployment = rules.getDeployment(texture->getRandomDeployment());
+			MissionSite *missionSite = spawnMissionSite(game, deployment, area);
 			if (missionSite)
 			{
-				game.getMissionSites()->push_back(missionSite);
 				for (std::vector<Target*>::iterator t = ufo.getFollowers()->begin(); t != ufo.getFollowers()->end();)
 				{
 					Craft* c = dynamic_cast<Craft*>(*t);
@@ -426,7 +438,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 				}
 			}
 		}
-		else if (trajectory.getID() == "__RETALIATION_ASSAULT_RUN")
+		else if (trajectory.getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN)
 		{
 			// Ignore what the trajectory might say, this is a base assault.
 			// Remove UFO, replace with Base defense.
@@ -492,9 +504,8 @@ void AlienMission::ufoShotDown(Ufo &ufo)
  * It must set the game data in a way that the rest of the code understands what to do.
  * @param ufo The UFO that reached it's waypoint.
  * @param game The saved game information.
- * @param globe The earth globe, required to get access to land checks.
  */
-void AlienMission::ufoLifting(Ufo &ufo, SavedGame &game, const Globe &globe)
+void AlienMission::ufoLifting(Ufo &ufo, SavedGame &game)
 {
 	switch (ufo.getStatus())
 	{
@@ -554,7 +565,7 @@ void AlienMission::setId(int id)
  */
 int AlienMission::getId() const
 {
-	assert(_uniqueID != 0 && "Uninitalized mission!");
+	assert(_uniqueID != 0 && "Uninitialized mission!");
 	return _uniqueID;
 }
 
@@ -612,7 +623,7 @@ void AlienMission::addScore(const double lon, const double lat, SavedGame &game)
 void AlienMission::spawnAlienBase(const Globe &globe, Game &engine, int zone)
 {
 	SavedGame &game = *engine.getSavedGame();
-	const Ruleset &ruleset = *engine.getRuleset();
+	const Mod &ruleset = *engine.getMod();
 	// Once the last UFO is spawned, the aliens build their base.
 	const RuleRegion &regionRules = *ruleset.getRegion(_region);
 	std::pair<double, double> pos = getLandPoint(globe, regionRules, zone);
@@ -632,13 +643,13 @@ void AlienMission::spawnAlienBase(const Globe &globe, Game &engine, int zone)
  * (this is a slight difference from the original, which just
  * defaulted them to zone[0], North America)
  * @param region the region we want to try to set the mission to.
- * @param rules the ruleset, in case we need to swap out the region.
+ * @param mod the mod, in case we need to swap out the region.
  */
-void AlienMission::setRegion(const std::string &region, const Ruleset &rules)
+void AlienMission::setRegion(const std::string &region, const Mod &mod)
 {
-	if (!rules.getRegion(region)->getMissionRegion().empty())
+	if (!mod.getRegion(region)->getMissionRegion().empty())
 	{
-		_region = rules.getRegion(region)->getMissionRegion();
+		_region = mod.getRegion(region)->getMissionRegion();
 	}
 	else
 	{
@@ -656,14 +667,24 @@ void AlienMission::setRegion(const std::string &region, const Ruleset &rules)
  */
 std::pair<double, double> AlienMission::getWaypoint(const UfoTrajectory &trajectory, const size_t nextWaypoint, const Globe &globe, const RuleRegion &region)
 {
-	/* LOOK MA! NO HANDS!
-	if (trajectory.getAltitude(nextWaypoint) == "STR_GROUND")
+	int waveNumber = _nextWave - 1;
+	if (waveNumber < 0)
+	{
+		waveNumber = _rule.getWaveCount() - 1;
+	}
+
+	if (_missionSiteZone != -1 && _rule.getWave(waveNumber).objective && trajectory.getZone(nextWaypoint) == (size_t)(_rule.getSpawnZone()))
+	{
+		const MissionArea *area = &region.getMissionZones().at(_rule.getObjective()).areas.at(_missionSiteZone);
+		return std::make_pair(area->lonMin, area->latMin);
+	}
+
+	if (trajectory.getWaypointCount() > nextWaypoint + 1 && trajectory.getAltitude(nextWaypoint + 1) == "STR_GROUND")
 	{
 		return getLandPoint(globe, region, trajectory.getZone(nextWaypoint));
 	}
-	else
-	*/
-		return region.getRandomPoint(trajectory.getZone(nextWaypoint));
+
+	return region.getRandomPoint(trajectory.getZone(nextWaypoint));
 }
 
 /**
@@ -684,7 +705,7 @@ std::pair<double, double> AlienMission::getLandPoint(const Globe &globe, const R
 		&& tries < 100);
 	if (tries == 100)
 	{
-		Log(LOG_DEBUG) << "Region: " << region.getType() << " Longitude: " << pos.first << " Lattitude: " << pos.second << " invalid zone: " << zone << " ufo forced to land on water!";
+		Log(LOG_DEBUG) << "Region: " << region.getType() << " Longitude: " << pos.first << " Latitude: " << pos.second << " invalid zone: " << zone << " ufo forced to land on water!";
 	}
 	return pos;
 
@@ -697,23 +718,31 @@ std::pair<double, double> AlienMission::getLandPoint(const Globe &globe, const R
  * @param area the point on the globe at which to spawn this site.
  * @return a pointer to the mission site.
  */
-MissionSite *AlienMission::spawnMissionSite(SavedGame &game, const Ruleset &rules, const MissionArea &area)
+MissionSite *AlienMission::spawnMissionSite(SavedGame &game, AlienDeployment *deployment, const MissionArea &area)
 {
-	Texture *texture = rules.getGlobe()->getTexture(area.texture);
-	AlienDeployment *deployment = rules.getDeployment(texture->getRandomDeployment());
 	if (deployment)
 	{
 		MissionSite *missionSite = new MissionSite(&_rule, deployment);
-		missionSite->setLongitude(area.lonMin);
-		missionSite->setLatitude(area.latMin);
+		missionSite->setLongitude(RNG::generate(area.lonMin, area.lonMax));
+		missionSite->setLatitude(RNG::generate(area.latMin, area.latMax));
 		missionSite->setId(game.getId(deployment->getMarkerName()));
 		missionSite->setSecondsRemaining(RNG::generate(deployment->getDurationMin(), deployment->getDurationMax()) * 3600);
 		missionSite->setAlienRace(_race);
 		missionSite->setTexture(area.texture);
 		missionSite->setCity(area.name);
 		missionSite->setSiteDepth(RNG::generate(deployment->getMinSiteDepth(), deployment->getMaxSiteDepth()));
+		game.getMissionSites()->push_back(missionSite);
 		return missionSite;
 	}
 	return 0;
+}
+
+/**
+ * Tell the mission which entry in the zone array we're targetting for our missionSite payload.
+ * @param zone the number of the zone to target, synonymous with a city.
+ */
+void AlienMission::setMissionSiteZone(int zone)
+{
+	_missionSiteZone = zone;
 }
 }

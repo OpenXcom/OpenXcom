@@ -1,0 +1,3 @@
+# increase the damage range to 0%-200%
+constants:
+  - damageRange: 100

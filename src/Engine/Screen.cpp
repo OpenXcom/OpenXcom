@@ -165,7 +165,7 @@ void Screen::handle(Action *action)
 		do
 		{
 			ss.str("");
-			ss << Options::getUserFolder() << "screen" << std::setfill('0') << std::setw(3) << i << ".png";
+			ss << Options::getMasterUserFolder() << "screen" << std::setfill('0') << std::setw(3) << i << ".png";
 			i++;
 		}
 		while (CrossPlatform::fileExists(ss.str()));
@@ -233,7 +233,7 @@ void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors, bool imm
 {
 	if (_numColors && (_numColors != ncolors) && (_firstColor != firstcolor))
 	{
-		// an initial palette setup has not been comitted to the screen yet
+		// an initial palette setup has not been committed to the screen yet
 		// just update it with whatever colors are being sent now
 		memmove(&(deferredPalette[firstcolor]), colors, sizeof(SDL_Color)*ncolors);
 		_numColors = 256; // all the use cases are just a full palette with 16-color follow-ups
@@ -583,13 +583,13 @@ int Screen::getDY()
 }
 
 /**
-* Changes a given scale, and if necessary, switch the current base resolution.
-* @param type reference to which scale option we are using, battlescape or geoscape.
-* @param selection the new scale level.
-* @param width reference to which x scale to adjust.
-* @param height reference to which y scale to adjust.
-* @param change should we change the current scale.
-*/
+ * Changes a given scale, and if necessary, switch the current base resolution.
+ * @param type reference to which scale option we are using, battlescape or geoscape.
+ * @param selection the new scale level.
+ * @param width reference to which x scale to adjust.
+ * @param height reference to which y scale to adjust.
+ * @param change should we change the current scale.
+ */
 void Screen::updateScale(int &type, int selection, int &width, int &height, bool change)
 {
 	double pixelRatioY = 1.0;

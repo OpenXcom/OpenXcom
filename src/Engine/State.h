@@ -23,9 +23,6 @@
 #include <vector>
 #include <string>
 #include <SDL.h>
-#include <climits>
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleInterface.h"
 
 namespace OpenXcom
 {
@@ -35,6 +32,8 @@ class Surface;
 class InteractiveSurface;
 class Action;
 class LocalizedText;
+class SavedBattleGame;
+class RuleInterface;
 
 /**
  * A game state that receives user input and reacts accordingly.
@@ -65,7 +64,7 @@ public:
 	/// Cleans up the state.
 	virtual ~State();
 	/// Set interface rules.
-	void setInterface(const std::string &s, bool alterPal = false, bool battlescape = false);
+	void setInterface(const std::string &s, bool alterPal = false, SavedBattleGame *battleGame = 0);
 	/// Adds a child element to the state.
 	void add(Surface *surface);
 	/// Adds a child element to the state.
@@ -109,7 +108,7 @@ public:
 	/// Changes the state's 8bpp palette with certain resources.
 	void setPalette(const std::string &palette, int backpals = -1);
 	/// Gets the state's 8bpp palette.
-	SDL_Color *const getPalette();
+	SDL_Color *getPalette();
 	/// Let the state know the window has been resized.
 	virtual void resize(int &dX, int &dY);
 	/// Re-orients all the surfaces in the state.

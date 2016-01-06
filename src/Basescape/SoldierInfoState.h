@@ -46,13 +46,14 @@ private:
 	std::vector<Soldier*> *_list;
 
 	Surface *_bg, *_rank;
-	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmor, *_btnSack;
+	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmor, *_btnSack, *_btnDiary;
 	Text *_txtRank, *_txtMissions, *_txtKills, *_txtCraft, *_txtRecovery, *_txtPsionic;
 	TextEdit *_edtSoldier;
 
 	Text *_txtTimeUnits, *_txtStamina, *_txtHealth, *_txtBravery, *_txtReactions, *_txtFiring, *_txtThrowing, *_txtMelee, *_txtStrength, *_txtPsiStrength, *_txtPsiSkill;
 	Text *_numTimeUnits, *_numStamina, *_numHealth, *_numBravery, *_numReactions, *_numFiring, *_numThrowing, *_numMelee, *_numStrength, *_numPsiStrength, *_numPsiSkill;
 	Bar *_barTimeUnits, *_barStamina, *_barHealth, *_barBravery, *_barReactions, *_barFiring, *_barThrowing, *_barMelee, *_barStrength, *_barPsiStrength, *_barPsiSkill;
+
 public:
 	/// Creates the Soldier Info state.
 	SoldierInfoState(Base *base, size_t soldierId);
@@ -60,6 +61,8 @@ public:
 	~SoldierInfoState();
 	/// Updates the soldier info.
 	void init();
+	/// Set the soldier Id.
+	void setSoldierId(size_t soldier);
 	/// Handler for pressing on the Name edit.
 	void edtSoldierPress(Action *action);
 	/// Handler for changing text on the Name edit.
@@ -74,6 +77,8 @@ public:
 	void btnArmorClick(Action *action);
 	/// Handler for clicking the Sack button.
 	void btnSackClick(Action *action);
+	/// Handler for clicking the Diary button.
+	void btnDiaryClick(Action *action);
 };
 
 }

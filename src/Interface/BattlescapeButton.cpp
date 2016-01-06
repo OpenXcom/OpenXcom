@@ -140,7 +140,7 @@ void BattlescapeButton::allowClickInversion()
 /**
  * Initializes the alternate surface for swapping out as needed.
  * performs a colour swap for TFTD style buttons, and a palette inversion for coloured buttons
- * we use two seperate surfaces because it's far easier to keep track of
+ * we use two separate surfaces because it's far easier to keep track of
  * whether or not this surface is inverted.
  */
 void BattlescapeButton::initSurfaces()

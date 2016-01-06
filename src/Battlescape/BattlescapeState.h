@@ -85,6 +85,8 @@ private:
 	void handleItemClick(BattleItem *item);
 	/// Shifts the red colors of the visible unit buttons backgrounds.
 	void blinkVisibleUnitButtons();
+	/// Shifts the colors of the health bar when unit has fatal wounds.
+	void blinkHealthBar();
 public:
 	/// Selects the next soldier.
 	void selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
@@ -95,7 +97,7 @@ public:
 	BattlescapeState();
 	/// Cleans up the Battlescape state.
 	~BattlescapeState();
-	/// Initilizes the battlescapestate.
+	/// Initializes the battlescapestate.
 	void init();
 	/// Runs the timers and handles popups.
 	void think();

@@ -56,6 +56,8 @@ public:
 	/// Creates the ResearchProject state.
 	ResearchInfoState(Base *base, RuleResearch * rule);
 	ResearchInfoState(Base *base, ResearchProject * project);
+	/// Cleans up the ResearchInfo state
+	~ResearchInfoState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.

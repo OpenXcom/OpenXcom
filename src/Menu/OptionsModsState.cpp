@@ -17,17 +17,15 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "OptionsModsState.h"
+#include <climits>
 #include <algorithm>
-#include <limits>
 #include "../Engine/Game.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/FileMap.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Palette.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Language.h"
 #include "../Interface/Window.h"
 #include "../Interface/TextList.h"
 #include "../Interface/Text.h"
+#include "../Interface/ComboBox.h"
 #include "../Engine/Options.h"
 #include "../Engine/Action.h"
 
@@ -56,7 +54,7 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 
 	// how much room do we need for YES/NO
 	Text text = Text(100, 9, 0, 0);
-	text.initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
+	text.initText(_game->getMod()->getFont("FONT_BIG"), _game->getMod()->getFont("FONT_SMALL"), _game->getLanguage());
 	text.setText(tr("STR_YES"));
 	int yes = text.getTextWidth();
 	text.setText(tr("STR_NO"));
@@ -207,7 +205,7 @@ void OptionsModsState::lstModsClick(Action *action)
 
 		mod.second = ! mod.second;
 		Options::mods[i].second = mod.second;
-		_lstMods->setCellText(_lstMods->getSelectedRow(), 2, (mod.second ? tr("STR_YES").c_str() : tr("STR_NO").c_str()));
+		_lstMods->setCellText(_lstMods->getSelectedRow(), 2, (mod.second ? tr("STR_YES") : tr("STR_NO")));
 
 		break;
 	}
@@ -356,7 +354,7 @@ void OptionsModsState::moveModDown(Action *action, unsigned int row, bool max)
 			}
 			targetScrollPos += _lstMods->getNumTextLines(i);
 		}
-		if (curScrollPos + _lstMods->getVisibleRows() > targetScrollPos)
+		if (curScrollPos + (int)_lstMods->getVisibleRows() > targetScrollPos)
 		{
 			int ydiff = _lstMods->getTextHeight(row + 1);
 			SDL_WarpMouse(action->getLeftBlackBand() + action->getXMouse(),

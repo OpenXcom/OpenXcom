@@ -19,13 +19,12 @@
 #include "ScannerView.h"
 #include "../Engine/Game.h"
 #include "../Engine/SurfaceSet.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Action.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Interface/Text.h"
 
 namespace OpenXcom
 {
@@ -49,7 +48,7 @@ ScannerView::ScannerView (int w, int h, int x, int y, Game * game, BattleUnit *u
  */
 void ScannerView::draw()
 {
-	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("DETBLOB.DAT");
+	SurfaceSet *set = _game->getMod()->getSurfaceSet("DETBLOB.DAT");
 	Surface *surface = 0;
 
 	clear();
@@ -96,7 +95,7 @@ void ScannerView::mouseClick (Action *, State *)
 
 /**
  * Updates the scanner animation.
-*/
+ */
 void ScannerView::animate()
 {
 	_frame++;

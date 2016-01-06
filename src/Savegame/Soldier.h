@@ -21,8 +21,8 @@
 
 #include <string>
 #include <yaml-cpp/yaml.h>
-#include "../Ruleset/Unit.h"
-#include "../Ruleset/StatString.h"
+#include "../Mod/Unit.h"
+#include "../Mod/StatString.h"
 	 
 namespace OpenXcom
 {
@@ -33,12 +33,13 @@ enum SoldierLook { LOOK_BLONDE, LOOK_BROWNHAIR, LOOK_ORIENTAL, LOOK_AFRICAN };
 
 class Craft;
 class SoldierNamePool;
-class Ruleset;
+class Mod;
 class RuleSoldier;
 class Armor;
 class Language;
 class EquipmentLayoutItem;
 class SoldierDeath;
+class SoldierDiary;
 class SavedGame;
 
 /**
@@ -62,14 +63,15 @@ private:
 	Armor *_armor;
 	std::vector<EquipmentLayoutItem*> _equipmentLayout;
 	SoldierDeath *_death;
+	SoldierDiary *_diary;
 	std::wstring _statString;
 public:
 	/// Creates a new soldier.
-	Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names = 0, int id = 0);
+	Soldier(RuleSoldier *rules, Armor *armor, int id = 0);
 	/// Cleans up the soldier.
 	~Soldier();
 	/// Loads the soldier from YAML.
-	void load(const YAML::Node& node, const Ruleset *rule, SavedGame *save);
+	void load(const YAML::Node& node, const Mod *mod, SavedGame *save);
 	/// Saves the soldier to YAML.
 	YAML::Node save() const;
 	/// Gets the soldier's name.
@@ -140,6 +142,8 @@ public:
 	SoldierDeath *getDeath() const;
 	/// Kills the soldier.
 	void die(SoldierDeath *death);
+	/// Gets the soldier's diary.
+	SoldierDiary *getDiary();
 	/// Calculate statString.
 	void calcStatString(const std::vector<StatString *> &statStrings, bool psiStrengthEval);
 };

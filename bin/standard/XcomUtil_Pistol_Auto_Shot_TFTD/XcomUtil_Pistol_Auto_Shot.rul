@@ -1,0 +1,5 @@
+# Based on XcomUtil by Scott Jones and BladeFireLight
+items:
+  - type: STR_DART_PISTOL
+    accuracyAuto: 60
+    tuAuto: 54

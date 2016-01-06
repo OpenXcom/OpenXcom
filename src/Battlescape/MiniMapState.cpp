@@ -17,13 +17,11 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "MiniMapState.h"
-#include <iostream>
-#include <sstream>
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
 #include "../Interface/BattlescapeButton.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Text.h"
 #include "MiniMapView.h"
@@ -31,7 +29,6 @@
 #include "../Engine/Timer.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
-#include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
@@ -62,7 +59,7 @@ MiniMapState::MiniMapState (Camera * camera, SavedBattleGame * battleGame)
 	battleGame->setPaletteByDepth(this);
 
 	add(_bg);
-	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_bg);
+	_game->getMod()->getSurface("SCANBORD.PCK")->blit(_bg);
 	add(_miniMapView);
 	add(_btnLvlUp, "buttonUp", "minimap", _bg);
 	add(_btnLvlDwn, "buttonDown", "minimap", _bg);
@@ -84,13 +81,7 @@ MiniMapState::MiniMapState (Camera * camera, SavedBattleGame * battleGame)
 	_btnOk->onKeyboardPress((ActionHandler)&MiniMapState::btnOkClick, Options::keyBattleMap);
 	_txtLevel->setBig();
 	_txtLevel->setHighContrast(true);
-	std::wostringstream s;
-	if (_txtLevel->isTFTDMode())
-	{
-		s << tr("STR_LEVEL_SHORT");
-	}
-	s << camera->getViewLevel();
-	_txtLevel->setText(s.str());
+	_txtLevel->setText(tr("STR_LEVEL_SHORT").arg(camera->getViewLevel()));
 	_timerAnimate = new Timer(125);
 	_timerAnimate->onTimer((StateHandler)&MiniMapState::animate);
 	_timerAnimate->start();
@@ -145,13 +136,7 @@ void MiniMapState::btnOkClick(Action *)
  */
 void MiniMapState::btnLevelUpClick(Action *)
 {
-	std::wostringstream s;
-	if (_miniMapView->isTFTDMode())
-	{
-		s << tr("STR_LEVEL_SHORT");
-	}
-	s << _miniMapView->up();
-	_txtLevel->setText(s.str());
+	_txtLevel->setText(tr("STR_LEVEL_SHORT").arg(_miniMapView->up()));
 }
 
 /**
@@ -160,18 +145,12 @@ void MiniMapState::btnLevelUpClick(Action *)
  */
 void MiniMapState::btnLevelDownClick(Action *)
 {
-	std::wostringstream s;
-	if (_miniMapView->isTFTDMode())
-	{
-		s << tr("STR_LEVEL_SHORT");
-	}
-	s << _miniMapView->down();
-	_txtLevel->setText(s.str());
+	_txtLevel->setText(tr("STR_LEVEL_SHORT").arg(_miniMapView->down()));
 }
 
 /**
  * Animation handler. Updates the minimap view animation.
-*/
+ */
 void MiniMapState::animate()
 {
 	_miniMapView->animate();
@@ -179,7 +158,7 @@ void MiniMapState::animate()
 
 /**
  * Handles timers.
-*/
+ */
 void MiniMapState::think()
 {
 	State::think();

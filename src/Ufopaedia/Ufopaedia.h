@@ -26,32 +26,21 @@ namespace OpenXcom
 {
 	class Game;
 	class SavedGame;
-	class Ruleset;
+	class Mod;
 	class ArticleDefinition;
 	class ArticleState;
 
 	/// definition of an article list
 	typedef std::vector<ArticleDefinition *> ArticleDefinitionList;
 
-	/// define Ufopaedia sections, which must be consistent
-	static const std::string UFOPAEDIA_XCOM_CRAFT_ARMAMENT = "STR_XCOM_CRAFT_ARMAMENT";
-	static const std::string UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS = "STR_HEAVY_WEAPONS_PLATFORMS";
-	static const std::string UFOPAEDIA_WEAPONS_AND_EQUIPMENT = "STR_WEAPONS_AND_EQUIPMENT";
-	static const std::string UFOPAEDIA_ALIEN_ARTIFACTS = "STR_ALIEN_ARTIFACTS";
-	static const std::string UFOPAEDIA_BASE_FACILITIES = "STR_BASE_FACILITIES";
-	static const std::string UFOPAEDIA_ALIEN_LIFE_FORMS = "STR_ALIEN_LIFE_FORMS";
-	static const std::string UFOPAEDIA_ALIEN_RESEARCH = "STR_ALIEN_RESEARCH_UC";
-	static const std::string UFOPAEDIA_UFO_COMPONENTS = "STR_UFO_COMPONENTS";
-	static const std::string UFOPAEDIA_UFOS = "STR_UFOS";
-	static const std::string UFOPAEDIA_NOT_AVAILABLE = "STR_NOT_AVAILABLE";
-	// This last section is meant for articles, that have to be activated,
+	// This section is meant for articles, that have to be activated,
 	// but have no own entry in a list. E.g. Ammunition items.
 	// Maybe others as well, that should just not be selectable.
+	static const std::string UFOPAEDIA_NOT_AVAILABLE = "STR_NOT_AVAILABLE";
 
 	/**
 	 * This static class encapsulates all functions related to Ufopaedia
-	 * for the game. It manages the relationship between the UfopaediaSaved
-	 * instance in SavedGame and the UfopaediaFactory in Ruleset.
+	 * for the game.
 	 * Main purpose is to open Ufopaedia from Geoscape, navigate between articles
 	 * and release new articles after successful research.
 	 */
@@ -78,7 +67,7 @@ namespace OpenXcom
 		static void prev(Game *game);
 
 		/// load a vector with article ids that are currently visible of a given section.
-		static void list(SavedGame *save, Ruleset *rule, const std::string &section, ArticleDefinitionList &data);
+		static void list(SavedGame *save, Mod *rule, const std::string &section, ArticleDefinitionList &data);
 
 	protected:
 
@@ -86,10 +75,10 @@ namespace OpenXcom
 		static size_t _current_index;
 
 		/// get index of the given article id in the visible list.
-		static size_t getArticleIndex(SavedGame *save, Ruleset *rule, std::string &article_id);
+		static size_t getArticleIndex(SavedGame *save, Mod *rule, std::string &article_id);
 
 		/// get list of researched articles
-		static ArticleDefinitionList getAvailableArticles(SavedGame *save, Ruleset *rule);
+		static ArticleDefinitionList getAvailableArticles(SavedGame *save, Mod *rule);
 
 		/// create a new state object from article definition.
 		static ArticleState *createArticleState(ArticleDefinition *article);

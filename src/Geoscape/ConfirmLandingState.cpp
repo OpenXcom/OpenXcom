@@ -18,12 +18,9 @@
  */
 #include "ConfirmLandingState.h"
 #include <sstream>
-#include "../Engine/RNG.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Surface.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -37,11 +34,9 @@
 #include "../Savegame/AlienBase.h"
 #include "../Battlescape/BriefingState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
-#include "../Geoscape/GeoscapeState.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/RuleAlienMission.h"
-#include "../Ruleset/AlienDeployment.h"
+#include "../Mod/AlienDeployment.h"
 
 namespace OpenXcom
 {
@@ -76,7 +71,7 @@ ConfirmLandingState::ConfirmLandingState(Craft *craft, Texture *texture, int sha
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK15.SCR"));
 
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&ConfirmLandingState::btnYesClick);
@@ -97,7 +92,7 @@ ConfirmLandingState::ConfirmLandingState(Craft *craft, Texture *texture, int sha
 	_txtBegin->setAlign(ALIGN_CENTER);
 	std::wostringstream ss;
 	ss << L'\x01' << tr("STR_BEGIN_MISSION");
-	_txtBegin->setText(ss.str().c_str());
+	_txtBegin->setText(ss.str());
 }
 
 /**

@@ -20,9 +20,7 @@
 #include <sstream>
 #include <cmath>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Action.h"
 #include "../Interface/Text.h"
 #include "../Interface/Frame.h"
@@ -30,6 +28,8 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Mod/Mod.h"
+#include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
 {
@@ -68,7 +68,7 @@ PrimeGrenadeState::PrimeGrenadeState(BattleAction *action, bool inInventoryView,
 		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 	}
 
-	Element *grenadeBackground = _game->getRuleset()->getInterface("battlescape")->getElement("grenadeBackground");
+	Element *grenadeBackground = _game->getMod()->getInterface("battlescape")->getElement("grenadeBackground");
 
 	// Set up objects
 	add(_bg);

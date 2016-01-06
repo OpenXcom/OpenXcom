@@ -18,13 +18,13 @@
  */
 #include "OptionsDefaultsState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Engine/Options.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
@@ -46,7 +46,7 @@ OptionsDefaultsState::OptionsDefaultsState(OptionsOrigin origin, OptionsBaseStat
 	_txtTitle = new Text(246, 32, 37, 70);
 
 	// Set palette
-	setInterface("mainMenu", false, _origin == OPT_BATTLESCAPE);
+	setInterface("mainMenu", false, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : 0);
 
 	add(_window, "confirmDefaults", "mainMenu");
 	add(_btnYes, "confirmDefaults", "mainMenu");
@@ -56,7 +56,7 @@ OptionsDefaultsState::OptionsDefaultsState(OptionsOrigin origin, OptionsBaseStat
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&OptionsDefaultsState::btnYesClick);

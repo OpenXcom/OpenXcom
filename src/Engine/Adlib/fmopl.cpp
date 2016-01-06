@@ -35,7 +35,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdarg.h>
 #include <math.h>
 //#include "driver.h"		/* use M.A.M.E. */
 #include "fmopl.h"
@@ -710,8 +709,8 @@ static void OPLCloseTable( void )
 	free(VIB_TABLE);
 }
 
-/* CSM Key Controll */
-INLINE void CSMKeyControll(OPL_CH *CH)
+/* CSM Key Control */
+INLINE void CSMKeyControl(OPL_CH *CH)
 {
 	OPL_SLOT *slot1 = &CH->SLOT[SLOT1];
 	OPL_SLOT *slot2 = &CH->SLOT[SLOT2];
@@ -1398,7 +1397,7 @@ int OPLTimerOver(FM_OPL *OPL,int c)
 			int ch;
 			if(OPL->UpdateHandler) OPL->UpdateHandler(OPL->UpdateParam,0);
 			for(ch=0;ch<9;ch++)
-				CSMKeyControll( &OPL->P_CH[ch] );
+				CSMKeyControl( &OPL->P_CH[ch] );
 		}
 	}
 	/* reload timer */

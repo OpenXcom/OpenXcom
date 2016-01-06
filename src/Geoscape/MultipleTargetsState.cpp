@@ -17,11 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "MultipleTargetsState.h"
-#include <sstream>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Savegame/Target.h"
@@ -66,7 +64,7 @@ MultipleTargetsState::MultipleTargetsState(std::vector<Target*> targets, Craft *
 		add(_window, "window", "UFOInfo");
 
 		// Set up objects
-		_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
+		_window->setBackground(_game->getMod()->getSurface("BACK15.SCR"));
 
 		int y = btnY;
 		for (size_t i = 0; i < _targets.size(); ++i)

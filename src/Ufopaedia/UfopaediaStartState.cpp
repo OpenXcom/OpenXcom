@@ -20,30 +20,18 @@
 #include "UfopaediaStartState.h"
 #include "UfopaediaSelectState.h"
 #include "Ufopaedia.h"
-#include "../Ruleset/ArticleDefinition.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Surface.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
+#include "../Mod/ArticleDefinition.h"
 
 namespace OpenXcom
-{
-	const std::string UfopaediaStartState::SECTIONS[] = {UFOPAEDIA_XCOM_CRAFT_ARMAMENT,
-														 UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS,
-														 UFOPAEDIA_WEAPONS_AND_EQUIPMENT,
-														 UFOPAEDIA_ALIEN_ARTIFACTS,
-														 UFOPAEDIA_BASE_FACILITIES,
-														 UFOPAEDIA_ALIEN_LIFE_FORMS,
-														 UFOPAEDIA_ALIEN_RESEARCH,
-														 UFOPAEDIA_UFO_COMPONENTS,
-														 UFOPAEDIA_UFOS};
-	
+{	
 	UfopaediaStartState::UfopaediaStartState()
 	{
 		_screen = false;
@@ -57,27 +45,33 @@ namespace OpenXcom
 		// Set palette
 		setInterface("ufopaedia");
 
-
 		add(_window, "window", "ufopaedia");
 		add(_txtTitle, "text", "ufopaedia");
+
+		_btnOk = new TextButton(224, 12, 48, 167);
+		add(_btnOk, "button1", "ufopaedia");
+
 		// set buttons
+		const std::vector<std::string> &list = _game->getMod()->getUfopaediaCategoryList();
 		int y = 50;
-		for (int i = 0; i < NUM_SECTIONS; ++i)
+		y -= 13 * (list.size() - 9);
+		for (std::vector<std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
 		{
-			_btnSection[i] = new TextButton(224, 12, 48, y);
+			TextButton *button = new TextButton(224, 12, 48, y);
 			y += 13;
 
-			add(_btnSection[i], "button1", "ufopaedia");
+			add(button, "button1", "ufopaedia");
 
-			_btnSection[i]->setText(tr(SECTIONS[i]));
-			_btnSection[i]->onMouseClick((ActionHandler)&UfopaediaStartState::btnSectionClick);
+			button->setText(tr(*i));
+			button->onMouseClick((ActionHandler)&UfopaediaStartState::btnSectionClick);
+
+			_btnSections.push_back(button);
 		}
-		_btnOk = new TextButton(224, 12, 48, y);
-		add(_btnOk, "button1", "ufopaedia");
+		_txtTitle->setY(_btnSections.front()->getY() - _txtTitle->getHeight());
 
 		centerAllSurfaces();
 
-		_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+		_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 		_txtTitle->setBig();
 		_txtTitle->setAlign(ALIGN_CENTER);
@@ -107,11 +101,12 @@ namespace OpenXcom
 	 */
 	void UfopaediaStartState::btnSectionClick(Action *action)
 	{
-		for (int i = 0; i < NUM_SECTIONS; ++i)
+		const std::vector<std::string> &list = _game->getMod()->getUfopaediaCategoryList();
+		for (size_t i = 0; i < list.size(); ++i)
 		{
-			if (action->getSender() == _btnSection[i])
+			if (action->getSender() == _btnSections[i])
 			{
-				_game->pushState(new UfopaediaSelectState(SECTIONS[i]));
+				_game->pushState(new UfopaediaSelectState(list[i]));
 				break;
 			}
 		}

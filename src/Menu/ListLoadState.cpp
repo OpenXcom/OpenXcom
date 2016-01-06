@@ -18,9 +18,8 @@
  */
 #include "ListLoadState.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Action.h"
-#include "../Engine/Palette.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -55,7 +54,7 @@ ListLoadState::ListLoadState(OptionsOrigin origin) : ListGamesState(origin, 0, t
 		_btnCancel->setX(180);
 	}
 
-	_btnOld->setText(L"Original X-Com");
+	_btnOld->setText(tr("STR_ORIGINAL_XCOM"));
 	_btnOld->onMouseClick((ActionHandler)&ListLoadState::btnOldClick);
 
 	centerAllSurfaces();

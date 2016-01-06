@@ -19,14 +19,11 @@
 
 #include "UnitTurnBState.h"
 #include "TileEngine.h"
-#include "BattlescapeState.h"
 #include "Map.h"
-#include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Sound.h"
-#include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 
 namespace OpenXcom
@@ -80,11 +77,11 @@ void UnitTurnBState::init()
 			int door = _parent->getTileEngine()->unitOpensDoor(_unit, true);
 			if (door == 0)
 			{
-				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::DOOR_OPEN)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition())); // normal door
+				_parent->getMod()->getSoundByDepth(_parent->getDepth(), Mod::DOOR_OPEN)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition())); // normal door
 			}
 			if (door == 1)
 			{
-				_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), ResourcePack::SLIDING_DOOR_OPEN)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition())); // ufo door
+				_parent->getMod()->getSoundByDepth(_parent->getDepth(), Mod::SLIDING_DOOR_OPEN)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition())); // ufo door
 			}
 			if (door == 4)
 			{

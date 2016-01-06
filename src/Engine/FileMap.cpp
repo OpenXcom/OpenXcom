@@ -57,9 +57,9 @@ const std::set<std::string> &getVFolderContents(const std::string &relativePath)
 	std::string canonicalRelativePath = _canonicalize(relativePath);
 	
 	// trim of trailing '/' characters
-	while (!canonicalRelativePath.empty() && "/" == canonicalRelativePath.substr(canonicalRelativePath.length() - 1, 1))
+	while (!canonicalRelativePath.empty() && '/' == canonicalRelativePath.at(canonicalRelativePath.length() - 1))
 	{
-		canonicalRelativePath.resize(canonicalRelativePath.length() -1);
+		canonicalRelativePath.resize(canonicalRelativePath.length() - 1);
 	}
 	
 	if (_vdirs.find(canonicalRelativePath) == _vdirs.end())
@@ -79,7 +79,7 @@ std::set<std::string> _filterFiles(const T &files, const std::string &ext)
 	for (typename T::const_iterator i = files.begin(); i != files.end(); ++i)
 	{
 		// less-than not less-than-or-equal since we should have at least
-		// one character in the filename that is not part of the extention
+		// one character in the filename that is not part of the extension
 		if (extLen < i->length() && 0 == _canonicalize(i->substr(i->length() - (extLen - 1))).compare(canonicalExt))
 		{
 			ret.insert(*i);
@@ -108,19 +108,19 @@ static std::string _combinePath(const std::string &prefixPath, const std::string
 }
 
 static void _mapFiles(const std::string &modId, const std::string &basePath,
-		      const std::string &relPath, bool ignoreRulesets)
+		      const std::string &relPath, bool ignoreMods)
 {
 	std::string fullDir = basePath + (relPath.length() ? "/" + relPath : "");
 	std::vector<std::string> files = CrossPlatform::getFolderContents(fullDir);
 	std::set<std::string> rulesetFiles = _filterFiles(files, "rul");
 
-	if (!ignoreRulesets && rulesetFiles.size())
+	if (!ignoreMods && rulesetFiles.size())
 	{
 		_rulesets.insert(_rulesets.begin(), std::pair<std::string, std::vector<std::string> >(modId, std::vector<std::string>()));
 		for (std::set<std::string>::iterator i = rulesetFiles.begin(); i != rulesetFiles.end(); ++i)
 		{
 			std::string fullpath = fullDir + "/" + *i;
-			Log(LOG_DEBUG) << "  recording ruleset: " << fullpath;
+			Log(LOG_VERBOSE) << "  recording ruleset: " << fullpath;
 			_rulesets.front().second.push_back(fullpath);
 		}
 	}
@@ -132,19 +132,19 @@ static void _mapFiles(const std::string &modId, const std::string &basePath,
 		if (_canonicalize(*i) == "metadata.yml" || rulesetFiles.find(*i) != rulesetFiles.end())
 		{
 			// no need to map mod metadata files or ruleset files
-			Log(LOG_DEBUG) << "  ignoring non-resource file: " << fullpath;
+			Log(LOG_VERBOSE) << "  ignoring non-resource file: " << fullpath;
 			continue;
 		}
 
 		if (CrossPlatform::folderExists(fullpath))
 		{
-			Log(LOG_DEBUG) << "  recursing into: " << fullpath;
+			Log(LOG_VERBOSE) << "  recursing into: " << fullpath;
 			// allow old mod directory format -- if the top-level subdir
-			// is named "Ruleset" and no top-level ruleset files were found,
+			// is named "Mod" and no top-level ruleset files were found,
 			// record ruleset files in that subdirectory, otherwise ignore them
-			bool ignoreRulesetsRecurse = ignoreRulesets ||
+			bool ignoreModsRecurse = ignoreMods ||
 				!rulesetFiles.empty() || !relPath.empty() || _canonicalize(*i) != "ruleset";
-			_mapFiles(modId, basePath, _combinePath(relPath, *i), ignoreRulesetsRecurse);
+			_mapFiles(modId, basePath, _combinePath(relPath, *i), ignoreModsRecurse);
 			continue;
 		}
 
@@ -152,11 +152,11 @@ static void _mapFiles(const std::string &modId, const std::string &basePath,
 		std::string canonicalRelativeFilePath = _canonicalize(_combinePath(relPath, *i));
 		if (_resources.insert(std::pair<std::string, std::string>(canonicalRelativeFilePath, fullpath)).second)
 		{
-			Log(LOG_DEBUG) << "  mapped resource: " << canonicalRelativeFilePath << " -> " << fullpath;
+			Log(LOG_VERBOSE) << "  mapped resource: " << canonicalRelativeFilePath << " -> " << fullpath;
 		}
 		else
 		{
-			Log(LOG_DEBUG) << "  resource already mapped by higher-priority mod; ignoring: " << fullpath;
+			Log(LOG_VERBOSE) << "  resource already mapped by higher-priority mod; ignoring: " << fullpath;
 		}
 
 		// populate vdir map
@@ -168,7 +168,7 @@ static void _mapFiles(const std::string &modId, const std::string &basePath,
 		}
 		if (_vdirs.at(canonicalRelativePath).insert(canonicalFile).second)
 		{
-			Log(LOG_DEBUG) << "  mapped file to virtual directory: " << canonicalRelativePath << " -> " << canonicalFile;
+			Log(LOG_VERBOSE) << "  mapped file to virtual directory: " << canonicalRelativePath << " -> " << canonicalFile;
 		}
 	}
 }
@@ -180,10 +180,10 @@ void clear()
 	_vdirs.clear();
 }
 
-void load(const std::string &modId, const std::string &path, bool ignoreRulesets)
+void load(const std::string &modId, const std::string &path, bool ignoreMods)
 {
-	Log(LOG_INFO) << "  mapping resources in: " << path;
-	_mapFiles(modId, path, "", ignoreRulesets);
+	Log(LOG_VERBOSE) << "  mapping resources in: " << path;
+	_mapFiles(modId, path, "", ignoreMods);
 }
 
 }

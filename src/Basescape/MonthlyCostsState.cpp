@@ -19,9 +19,8 @@
 #include "MonthlyCostsState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -29,7 +28,8 @@
 #include "../Interface/TextList.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
-#include "../Ruleset/RuleCraft.h"
+#include "../Mod/RuleCraft.h"
+#include "../Mod/RuleSoldier.h"
 
 namespace OpenXcom
 {
@@ -53,7 +53,7 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 	_txtIncome = new Text(150, 9, 10, 146);
 	_txtMaintenance = new Text(150, 9, 10, 154);
 	_lstCrafts = new TextList(288, 32, 10, 48);
-	_lstSalaries = new TextList(300, 40, 10, 88);
+	_lstSalaries = new TextList(288, 40, 10, 88);
 	_lstMaintenance = new TextList(300, 9, 10, 128);
 	_lstTotal = new TextList(100, 9, 205, 150);
 
@@ -78,7 +78,7 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK13.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&MonthlyCostsState::btnOkClick);
@@ -107,33 +107,46 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 	ss2 << tr("STR_MAINTENANCE") << L"=" << Text::formatFunding(_game->getSavedGame()->getBaseMaintenance());
 	_txtMaintenance->setText(ss2.str());
 
-	_lstCrafts->setColumns(4, 125, 70, 44, 60);
+	_lstCrafts->setColumns(4, 125, 70, 44, 50);
 	_lstCrafts->setDot(true);
 
-	const std::vector<std::string> &crafts = _game->getRuleset()->getCraftsList();
+	const std::vector<std::string> &crafts = _game->getMod()->getCraftsList();
 	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
-		RuleCraft *craft = _game->getRuleset()->getCraft(*i);
+		RuleCraft *craft = _game->getMod()->getCraft(*i);
 		if (craft->getRentCost() != 0 && _game->getSavedGame()->isResearched(craft->getRequirements()))
 		{
 			std::wostringstream ss3;
-			ss3 << _base->getCraftCount((*i));
+			ss3 << _base->getCraftCount(*i);
 			_lstCrafts->addRow(4, tr(*i).c_str(), Text::formatFunding(craft->getRentCost()).c_str(), ss3.str().c_str(), Text::formatFunding(_base->getCraftCount(*i) * craft->getRentCost()).c_str());
 		}
 	}
 
-	_lstSalaries->setColumns(4, 125, 70, 44, 60);
+	_lstSalaries->setColumns(4, 125, 70, 44, 50);
 	_lstSalaries->setDot(true);
 
-	std::wostringstream ss4;
-	ss4 << _base->getSoldiers()->size();
-	_lstSalaries->addRow(4, tr("STR_SOLDIERS").c_str(), Text::formatFunding(_game->getRuleset()->getSoldierCost()).c_str(), ss4.str().c_str(), Text::formatFunding(_base->getSoldiers()->size() * _game->getRuleset()->getSoldierCost()).c_str());
+	const std::vector<std::string> &soldiers = _game->getMod()->getSoldiersList();
+	for (std::vector<std::string>::const_iterator i = soldiers.begin(); i != soldiers.end(); ++i)
+	{
+		RuleSoldier *soldier = _game->getMod()->getSoldier(*i);
+		if (soldier->getBuyCost() != 0 && _game->getSavedGame()->isResearched(soldier->getRequirements()))
+		{
+			std::wostringstream ss4;
+			ss4 << _base->getSoldierCount(*i);
+			std::string name = (*i);
+			if (soldiers.size() == 1)
+			{
+				name = "STR_SOLDIERS";
+			}
+			_lstSalaries->addRow(4, tr(name).c_str(), Text::formatFunding(soldier->getSalaryCost()).c_str(), ss4.str().c_str(), Text::formatFunding(_base->getSoldierCount(*i) * soldier->getSalaryCost()).c_str());
+		}
+	}	
 	std::wostringstream ss5;
 	ss5 << _base->getTotalEngineers();
-	_lstSalaries->addRow(4, tr("STR_ENGINEERS").c_str(), Text::formatFunding(_game->getRuleset()->getEngineerCost()).c_str(), ss5.str().c_str(), Text::formatFunding(_base->getTotalEngineers() * _game->getRuleset()->getEngineerCost()).c_str());
+	_lstSalaries->addRow(4, tr("STR_ENGINEERS").c_str(), Text::formatFunding(_game->getMod()->getEngineerCost()).c_str(), ss5.str().c_str(), Text::formatFunding(_base->getTotalEngineers() * _game->getMod()->getEngineerCost()).c_str());
 	std::wostringstream ss6;
 	ss6 << _base->getTotalScientists();
-	_lstSalaries->addRow(4, tr("STR_SCIENTISTS").c_str(), Text::formatFunding(_game->getRuleset()->getScientistCost()).c_str(), ss6.str().c_str(), Text::formatFunding(_base->getTotalScientists() * _game->getRuleset()->getScientistCost()).c_str());
+	_lstSalaries->addRow(4, tr("STR_SCIENTISTS").c_str(), Text::formatFunding(_game->getMod()->getScientistCost()).c_str(), ss6.str().c_str(), Text::formatFunding(_base->getTotalScientists() * _game->getMod()->getScientistCost()).c_str());
 
 	_lstMaintenance->setColumns(2, 239, 60);
 	_lstMaintenance->setDot(true);

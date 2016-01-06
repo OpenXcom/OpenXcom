@@ -17,14 +17,14 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../Ruleset/ArticleDefinition.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleCraft.h"
+#include "../Mod/ArticleDefinition.h"
+#include "../Mod/Mod.h"
+#include "../Mod/RuleCraft.h"
 #include "ArticleStateTFTD.h"
 #include "ArticleStateTFTDCraft.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/Text.h"
 
 namespace OpenXcom
@@ -32,8 +32,8 @@ namespace OpenXcom
 
 	ArticleStateTFTDCraft::ArticleStateTFTDCraft(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs)
 	{
-		RuleCraft *craft = _game->getRuleset()->getCraft(defs->id);
-		_txtStats = new Text(126, 56, 192, 116);
+		RuleCraft *craft = _game->getMod()->getCraft(defs->id);
+		_txtStats = new Text(131, 56, 187, 116);
 		add(_txtStats);
 
 		_txtStats->setColor(Palette::blockOffset(0)+2);

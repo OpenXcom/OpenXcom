@@ -22,7 +22,7 @@
 #include <vector>
 #include "Position.h"
 #include "PathfindingNode.h"
-#include "../Ruleset/MapData.h"
+#include "../Mod/MapData.h"
 
 namespace OpenXcom
 {
@@ -86,7 +86,7 @@ public:
 	/// Dequeues a direction.
 	int dequeuePath();
 	/// Gets the TU cost to move from 1 tile to the other.
-	int getTUCost(const Position &startPosition, const int direction, Position *endPosition, BattleUnit *unit, BattleUnit *target, bool missile);
+	int getTUCost(const Position &startPosition, int direction, Position *endPosition, BattleUnit *unit, BattleUnit *target, bool missile);
 	/// Aborts the current path.
 	void abortPath();
 	/// Gets the strafe move setting.

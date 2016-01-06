@@ -23,19 +23,19 @@
 #include <stack>
 #include <algorithm>
 #include "BaseFacility.h"
-#include "../Ruleset/RuleBaseFacility.h"
+#include "../Mod/RuleBaseFacility.h"
 #include "Craft.h"
 #include "CraftWeapon.h"
-#include "../Ruleset/RuleCraft.h"
-#include "../Ruleset/RuleCraftWeapon.h"
-#include "../Ruleset/Ruleset.h"
+#include "../Mod/RuleCraft.h"
+#include "../Mod/RuleCraftWeapon.h"
+#include "../Mod/Mod.h"
 #include "ItemContainer.h"
 #include "Soldier.h"
 #include "../Engine/Language.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Armor.h"
-#include "../Ruleset/RuleManufacture.h"
-#include "../Ruleset/RuleResearch.h"
+#include "../Mod/RuleItem.h"
+#include "../Mod/Armor.h"
+#include "../Mod/RuleManufacture.h"
+#include "../Mod/RuleResearch.h"
 #include "Transfer.h"
 #include "ResearchProject.h"
 #include "Production.h"
@@ -44,15 +44,16 @@
 #include "Ufo.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
+#include "../Mod/RuleSoldier.h"
 
 namespace OpenXcom
 {
 
 /**
  * Initializes an empty base.
- * @param rule Pointer to ruleset.
+ * @param mod Pointer to mod.
  */
-Base::Base(const Ruleset *rule) : Target(), _rule(rule), _scientists(0), _engineers(0), _inBattlescape(false), _retaliationTarget(false)
+Base::Base(const Mod *mod) : Target(), _mod(mod), _scientists(0), _engineers(0), _inBattlescape(false), _retaliationTarget(false)
 {
 	_items = new ItemContainer();
 }
@@ -113,9 +114,9 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 		for (YAML::const_iterator i = node["facilities"].begin(); i != node["facilities"].end(); ++i)
 		{
 			std::string type = (*i)["type"].as<std::string>();
-			if (_rule->getBaseFacility(type))
+			if (_mod->getBaseFacility(type))
 			{
-				BaseFacility *f = new BaseFacility(_rule->getBaseFacility(type), this);
+				BaseFacility *f = new BaseFacility(_mod->getBaseFacility(type), this);
 				f->load(*i);
 				_facilities.push_back(f);
 			}
@@ -125,39 +126,43 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 	for (YAML::const_iterator i = node["crafts"].begin(); i != node["crafts"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		if (_rule->getCraft(type))
+		if (_mod->getCraft(type))
 		{
-			Craft *c = new Craft(_rule->getCraft(type), this);
-			c->load(*i, _rule, save);
+			Craft *c = new Craft(_mod->getCraft(type), this);
+			c->load(*i, _mod, save);
 			_crafts.push_back(c);
 		}
 	}
 
 	for (YAML::const_iterator i = node["soldiers"].begin(); i != node["soldiers"].end(); ++i)
 	{
-		Soldier *s = new Soldier(_rule->getSoldier("XCOM"), _rule->getArmor("STR_NONE_UC"));
-		s->load(*i, _rule, save);
-		s->setCraft(0);
-		if (const YAML::Node &craft = (*i)["craft"])
+		std::string type = (*i)["type"].as<std::string>(_mod->getSoldiersList().front());
+		if (_mod->getSoldier(type))
 		{
-			CraftId craftId = Craft::loadId(craft);
-			for (std::vector<Craft*>::iterator j = _crafts.begin(); j != _crafts.end(); ++j)
+			Soldier *s = new Soldier(_mod->getSoldier(type), 0);
+			s->load(*i, _mod, save);
+			s->setCraft(0);
+			if (const YAML::Node &craft = (*i)["craft"])
 			{
-				if ((*j)->getUniqueId() == craftId)
+				CraftId craftId = Craft::loadId(craft);
+				for (std::vector<Craft*>::iterator j = _crafts.begin(); j != _crafts.end(); ++j)
 				{
-					s->setCraft(*j);
-					break;
+					if ((*j)->getUniqueId() == craftId)
+					{
+						s->setCraft(*j);
+						break;
+					}
 				}
 			}
+			_soldiers.push_back(s);
 		}
-		_soldiers.push_back(s);
 	}
 
 	_items->load(node["items"]);
 	// Some old saves have bad items, better get rid of them to avoid further bugs
 	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end();)
 	{
-		if (std::find(_rule->getItemsList().begin(), _rule->getItemsList().end(), i->first) == _rule->getItemsList().end())
+		if (std::find(_mod->getItemsList().begin(), _mod->getItemsList().end(), i->first) == _mod->getItemsList().end())
 		{
 			_items->getContents()->erase(i++);
 		}
@@ -175,7 +180,7 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 	{
 		int hours = (*i)["hours"].as<int>();
 		Transfer *t = new Transfer(hours);
-		if (t->load(*i, this, _rule, save))
+		if (t->load(*i, this, _mod, save))
 		{
 			_transfers.push_back(t);
 		}
@@ -184,9 +189,9 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 	for (YAML::const_iterator i = node["research"].begin(); i != node["research"].end(); ++i)
 	{
 		std::string research = (*i)["project"].as<std::string>();
-		if (_rule->getResearch(research))
+		if (_mod->getResearch(research))
 		{
-			ResearchProject *r = new ResearchProject(_rule->getResearch(research));
+			ResearchProject *r = new ResearchProject(_mod->getResearch(research));
 			r->load(*i);
 			_research.push_back(r);
 		}
@@ -199,9 +204,9 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 	for (YAML::const_iterator i = node["productions"].begin(); i != node["productions"].end(); ++i)
 	{
 		std::string item = (*i)["item"].as<std::string>();
-		if (_rule->getManufacture(item))
+		if (_mod->getManufacture(item))
 		{
-			Production *p = new Production(_rule->getManufacture(item), 0);
+			Production *p = new Production(_mod->getManufacture(item), 0);
 			p->load(*i);
 			_productions.push_back(p);
 		}
@@ -335,10 +340,11 @@ std::vector<Transfer*> *Base::getTransfers()
 }
 
 /**
- * Returns the list of items in the base.
+ * Returns the list of items in the base storage rooms.
+ * Does NOT return items assigned to craft or in transfer.
  * @return Pointer to the item list.
  */
-ItemContainer *Base::getItems()
+ItemContainer *Base::getStorageItems()
 {
 	return _items;
 }
@@ -458,7 +464,7 @@ int Base::getAvailableSoldiers(bool checkCombatReadiness) const
 		{
 			total++;
 		}
-		else if (checkCombatReadiness && (((*i)->getCraft() != 0 && (*i)->getCraft()->getStatus() != "STR_OUT") || 
+		else if (checkCombatReadiness && (((*i)->getCraft() != 0 && (*i)->getCraft()->getStatus() != "STR_OUT") ||
 			((*i)->getCraft() == 0 && (*i)->getWoundRecovery() == 0)))
 		{
 			total++;
@@ -587,10 +593,10 @@ int Base::getAvailableQuarters() const
  */
 double Base::getUsedStores()
 {
-	double total = _items->getTotalSize(_rule);
+	double total = _items->getTotalSize(_mod);
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
-		total += (*i)->getItems()->getTotalSize(_rule);
+		total += (*i)->getItems()->getTotalSize(_mod);
 		for (std::vector<Vehicle*>::const_iterator j = (*i)->getVehicles()->begin(); j != (*i)->getVehicles()->end(); ++j)
 		{
 			total += (*j)->getRules()->getSize();
@@ -600,12 +606,12 @@ double Base::getUsedStores()
 	{
 		if ((*i)->getType() == TRANSFER_ITEM)
 		{
-			total += (*i)->getQuantity() * _rule->getItem((*i)->getItems())->getSize();
+			total += (*i)->getQuantity() * _mod->getItem((*i)->getItems())->getSize();
 		}
 		else if ((*i)->getType() == TRANSFER_CRAFT)
 		{
 			Craft *craft = (*i)->getCraft();
-			total += craft->getItems()->getTotalSize(_rule);
+			total += craft->getItems()->getTotalSize(_mod);
 		}
 	}
 	total -= getIgnoredStores();
@@ -623,9 +629,9 @@ double Base::getUsedStores()
  */
 bool Base::storesOverfull(double offset)
 {
-	double capacity = getAvailableStores();
-	double used = getUsedStores();
-	return used + offset > capacity;
+	int capacity = getAvailableStores() * 100;
+	double used = (getUsedStores() + offset) * 100;
+	return (int)used > capacity;
 }
 
 /**
@@ -662,16 +668,16 @@ double Base::getIgnoredStores()
 				if (*w != 0 && (*w)->isRearming())
 				{
 					std::string clip = (*w)->getRules()->getClipItem();
-					int available = getItems()->getItem(clip);
+					int available = getStorageItems()->getItem(clip);
 					if (!clip.empty() && available > 0)
 					{
-						int clipSize = _rule->getItem(clip)->getClipSize();
+						int clipSize = _mod->getItem(clip)->getClipSize();
 						int needed = 0;
 						if (clipSize > 0)
 						{
 							needed = ((*w)->getRules()->getAmmoMax() - (*w)->getAmmo()) / clipSize;
 						}
-						space += std::min(available, needed) * _rule->getItem(clip)->getSize();
+						space += std::min(available, needed) * _mod->getItem(clip)->getSize();
 					}
 				}
 			}
@@ -752,7 +758,7 @@ int Base::getAvailableWorkshops() const
 /**
  * Returns the amount of hangars used up
  * by crafts in the base.
- * @return Storage space.
+ * @return Number of hangars.
  */
 int Base::getUsedHangars() const
 {
@@ -796,7 +802,7 @@ int Base::getAvailableHangars() const
 /**
  * Return laboratories space not used by a ResearchProject
  * @return laboratories space not used by a ResearchProject
-*/
+ */
 int Base::getFreeLaboratories() const
 {
 	return getAvailableLaboratories() - getUsedLaboratories();
@@ -805,7 +811,7 @@ int Base::getFreeLaboratories() const
 /**
  * Return workshop space not used by a Production
  * @return workshop space not used by a Production
-*/
+ */
 int Base::getFreeWorkshops() const
 {
 	return getAvailableWorkshops() - getUsedWorkshops();
@@ -814,7 +820,7 @@ int Base::getFreeWorkshops() const
 /**
  * Return psilab space not in use
  * @return psilab space not in use
-*/
+ */
 int Base::getFreePsiLabs() const
 {
 	return getAvailablePsiLabs() - getUsedPsiLabs();
@@ -823,7 +829,7 @@ int Base::getFreePsiLabs() const
 /**
  * Return containment space not in use
  * @return containment space not in use
-*/
+ */
 int Base::getFreeContainment() const
 {
 	return getAvailableContainment() - getUsedContainment();
@@ -832,7 +838,7 @@ int Base::getFreeContainment() const
 /**
  * Returns the amount of scientists currently in use.
  * @return Amount of scientists.
-*/
+ */
 int Base::getAllocatedScientists() const
 {
 	int total = 0;
@@ -849,7 +855,7 @@ int Base::getAllocatedScientists() const
 /**
  * Returns the amount of engineers currently in use.
  * @return Amount of engineers.
-*/
+ */
 int Base::getAllocatedEngineers() const
 {
 	int total = 0;
@@ -886,7 +892,7 @@ int Base::getDefenseValue() const
 int Base::getShortRangeDetection() const
 {
 	int total = 0;
-	int minRadarRange = _rule->getMinRadarRange();
+	int minRadarRange = _mod->getMinRadarRange();
 
 	if (minRadarRange == 0) return 0;
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
@@ -907,7 +913,7 @@ int Base::getShortRangeDetection() const
 int Base::getLongRangeDetection() const
 {
 	int total = 0;
-	int minRadarRange = _rule->getMinRadarRange();
+	int minRadarRange = _mod->getMinRadarRange();
 
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
@@ -928,6 +934,13 @@ int Base::getLongRangeDetection() const
 int Base::getCraftCount(const std::string &craft) const
 {
 	int total = 0;
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
+	{
+		if ((*i)->getType() == TRANSFER_CRAFT && (*i)->getCraft()->getRules()->getType() == craft)
+		{
+			total++;
+		}
+	}
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
 		if ((*i)->getRules()->getType() == craft)
@@ -946,9 +959,42 @@ int Base::getCraftCount(const std::string &craft) const
 int Base::getCraftMaintenance() const
 {
 	int total = 0;
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
+	{
+		if ((*i)->getType() == TRANSFER_CRAFT)
+		{
+			total += (*i)->getCraft()->getRules()->getRentCost();
+		}
+	}
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
 		total += (*i)->getRules()->getRentCost();
+	}
+	return total;
+}
+
+/**
+ * Returns the total amount of soldiers of
+ * a certain type stored in the base.
+ * @param soldier Soldier type.
+ * @return Number of soldiert.
+ */
+int Base::getSoldierCount(const std::string &soldier) const
+{
+	int total = 0;
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
+	{
+		if ((*i)->getType() == TRANSFER_SOLDIER && (*i)->getSoldier()->getRules()->getType() == soldier)
+		{
+			total++;
+		}
+	}
+	for (std::vector<Soldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
+	{
+		if ((*i)->getRules()->getType() == soldier)
+		{
+			total++;
+		}
 	}
 	return total;
 }
@@ -960,10 +1006,20 @@ int Base::getCraftMaintenance() const
  */
 int Base::getPersonnelMaintenance() const
 {
-	size_t total = 0;
-	total += getTotalSoldiers() * _rule->getSoldierCost();
-	total += getTotalEngineers() * _rule->getEngineerCost();
-	total += getTotalScientists() * _rule->getScientistCost();
+	int total = 0;
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
+	{
+		if ((*i)->getType() == TRANSFER_SOLDIER)
+		{
+			total += (*i)->getSoldier()->getRules()->getSalaryCost();
+		}
+	}
+	for (std::vector<Soldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
+	{
+		total += (*i)->getRules()->getSalaryCost();
+	}
+	total += getTotalEngineers() * _mod->getEngineerCost();
+	total += getTotalScientists() * _mod->getScientistCost();
 	return total;
 }
 
@@ -998,7 +1054,7 @@ int Base::getMonthlyMaintenace() const
 /**
  * Returns the list of all base's ResearchProject
  * @return list of base's ResearchProject
-*/
+ */
 const std::vector<ResearchProject *> & Base::getResearch() const
 {
 	return _research;
@@ -1007,7 +1063,7 @@ const std::vector<ResearchProject *> & Base::getResearch() const
 /**
  * Add a new Production to the Base
  * @param p A pointer to a Production
-*/
+ */
 void Base::addProduction (Production * p)
 {
 	_productions.push_back(p);
@@ -1016,7 +1072,7 @@ void Base::addProduction (Production * p)
 /**
  * Add A new ResearchProject to Base
  * @param project The project to add
-*/
+ */
 void Base::addResearch(ResearchProject * project)
 {
 	_research.push_back(project);
@@ -1025,7 +1081,7 @@ void Base::addResearch(ResearchProject * project)
 /**
  * Remove a ResearchProject from base
  * @param project the project to remove
-*/
+ */
 void Base::removeResearch(ResearchProject * project)
 {
 	_scientists += project->getAssigned();
@@ -1039,7 +1095,7 @@ void Base::removeResearch(ResearchProject * project)
 /**
  * Remove a Production from the Base
  * @param p A pointer to a Production
-*/
+ */
 void Base::removeProduction (Production * p)
 {
 	_engineers += p->getAssignedEngineers();
@@ -1073,7 +1129,7 @@ bool Base::getHyperDetection() const
 		if ((*i)->getRules()->isHyperwave() && (*i)->getBuildTime() == 0)
 		{
 			return true;
-		}		
+		}
 	}
 	return false;
 }
@@ -1115,7 +1171,7 @@ int Base::getUsedPsiLabs() const
 }
 
 /**
- * Returns the total amount of used 
+ * Returns the total amount of used
  * Containment Space in the base.
  * @return Containment Lab space.
  */
@@ -1124,7 +1180,7 @@ int Base::getUsedContainment() const
 	int total = 0;
 	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end(); ++i)
 	{
-		if (_rule->getItem((i)->first)->isAlien())
+		if (_mod->getItem((i)->first)->isAlien())
 		{
 			total += (i)->second;
 		}
@@ -1133,7 +1189,7 @@ int Base::getUsedContainment() const
 	{
 		if ((*i)->getType() == TRANSFER_ITEM)
 		{
-			if (_rule->getItem((*i)->getItems())->isAlien())
+			if (_mod->getItem((*i)->getItems())->isAlien())
 			{
 				total += (*i)->getQuantity();
 			}
@@ -1142,7 +1198,7 @@ int Base::getUsedContainment() const
 	for (std::vector<ResearchProject*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
 	{
 		const RuleResearch *projRules = (*i)->getRules();
-		if (projRules->needItem() && _rule->getUnit(projRules->getName()))
+		if (projRules->needItem() && _mod->getUnit(projRules->getName()))
 		{
 			++total;
 		}
@@ -1246,6 +1302,7 @@ bool isCompleted::operator()(const BaseFacility *facility) const
 {
 	return (facility->getBuildTime() == 0);
 }
+
 /**
  * Calculate the detection chance of this base.
  * Big bases without mindshields are easier to detect.
@@ -1311,13 +1368,13 @@ void Base::setupDefenses()
 	{
 		std::string itemId = (i)->first;
 		int itemQty = (i)->second;
-		RuleItem *rule = _rule->getItem(itemId);
+		RuleItem *rule = _mod->getItem(itemId);
 		if (rule->isFixed())
 		{
 			int size = 4;
-			if (_rule->getUnit(itemId))
+			if (_mod->getUnit(itemId))
 			{
-				size = _rule->getArmor(_rule->getUnit(itemId)->getArmor())->getSize();
+				size = _mod->getArmor(_mod->getUnit(itemId)->getArmor())->getSize();
 			}
 			if (rule->getCompatibleAmmo()->empty()) // so this vehicle does not need ammo
 			{
@@ -1329,8 +1386,18 @@ void Base::setupDefenses()
 			}
 			else // so this vehicle needs ammo
 			{
-				RuleItem *ammo = _rule->getItem(rule->getCompatibleAmmo()->front());
-				int ammoPerVehicle = ammo->getClipSize();
+				RuleItem *ammo = _mod->getItem(rule->getCompatibleAmmo()->front());
+				int ammoPerVehicle, clipSize;
+				if (ammo->getClipSize() > 0 && rule->getClipSize() > 0)
+				{
+					clipSize = rule->getClipSize();
+					ammoPerVehicle = clipSize / ammo->getClipSize();
+				}
+				else
+				{
+					clipSize = ammo->getClipSize();
+					ammoPerVehicle = clipSize;
+				}
 				int baseQty = _items->getItem(ammo->getType()) / ammoPerVehicle;
 				if (!baseQty)
 				{
@@ -1340,7 +1407,7 @@ void Base::setupDefenses()
 				int canBeAdded = std::min(itemQty, baseQty);
 				for (int j=0; j<canBeAdded; ++j)
 				{
-					_vehicles.push_back(new Vehicle(rule, ammoPerVehicle, size));
+					_vehicles.push_back(new Vehicle(rule, clipSize, size));
 					_items->removeItem(ammo->getType(), ammoPerVehicle);
 				}
 				_items->removeItem(itemId, canBeAdded);
@@ -1666,8 +1733,16 @@ void Base::cleanupDefenses(bool reclaimItems)
 			_items->addItem(type);
 			if (!rule->getCompatibleAmmo()->empty())
 			{
-				RuleItem *ammo = _rule->getItem(rule->getCompatibleAmmo()->front());
-				int ammoPerVehicle = ammo->getClipSize();
+				RuleItem *ammo = _mod->getItem(rule->getCompatibleAmmo()->front());
+				int ammoPerVehicle;
+				if (ammo->getClipSize() > 0 && rule->getClipSize() > 0)
+				{
+					ammoPerVehicle = rule->getClipSize() / ammo->getClipSize();
+				}
+				else
+				{
+					ammoPerVehicle = ammo->getClipSize();
+				}
 				_items->addItem(ammo->getType(), ammoPerVehicle);
 			}
 		}

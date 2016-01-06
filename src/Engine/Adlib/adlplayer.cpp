@@ -21,7 +21,6 @@
  * X-COM Adlib Player by Volutar
  */
 
-#include <stdio.h>
 #include <stdint.h>
 #include <math.h>
 #include <memory.h>
@@ -60,6 +59,7 @@ const int8_t adl_gv_detune_table[] = { // 9 * 12 -- pitch bend scale values depe
 	3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5,
 	3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5};
 
+/*
 const uint8_t percus_samples[] = { // 16 * 11  //there was another 13 bytes of 0
 	0x0F,0x42,0x3F,0x3F,0xFA,0xFA,0x41,0x44,2,3,0x0F,
 	0x0F,0x02,0x3F,0x3F,0xFA,0xFA,0x51,0x44,2,3,0x0F,
@@ -88,6 +88,7 @@ const uint8_t percus_mapping[] = { // 32 * 3 -- percussion channel 9 map of buil
 	0x00,0x41,0x64, 0x0B,0x0C,0x4D, 0x00,0x3E,0x64, 0xFF,0xFF,0xFF,
 	0x01,0x3F,0x4D, 0x0D,0x43,0x55, 0x0D,0x3D,0x55, 0x0E,0x3E,0x64,
 	0x0F,0x31,0x64, 0x0F,0x2C,0x55, 0x10,0x36,0x4D, 0x10,0x31,0x4D};
+*/
 
 const int8_t adl_gv_instr_order[] = {0,1,2,3,4,5,6,7,8,10,11,12,13,14,15,9};
 
@@ -181,7 +182,7 @@ void Transpose(int reg, int val, int*val2, int *reg3, int*val3)
 	}*/
 	iFMReg[iRegister] = iValue;
 
-	if ((iChannel >= 0)) {// && (i == 1)) {
+	if ((iChannel >= 0 && iChannel < 12)) {// && (i == 1)) {
 		UINT8  iBlock = (iFMReg[0xB0 + iChannel] >> 2) & 0x07;
 		UINT16 iFNum = ((iFMReg[0xB0 + iChannel] & 0x03) << 8) | iFMReg[0xA0 + iChannel];
 		//double dbOriginalFreq = 50000.0 * (double)iFNum * pow(2, iBlock - 20);
@@ -697,7 +698,7 @@ int decode_op(int instrument, bool* another_loop)
 }
 
 // music initialization function, sets up subblock array,
-// tempo, instrument addreses and samples
+// tempo, instrument addresses and samples
 void init_music_data(unsigned char* music_ptr,int length)
 {
 	unsigned int i, to_add, j;

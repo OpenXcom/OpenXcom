@@ -19,7 +19,6 @@
 #ifndef OPENXCOM_BATTLESTATE_H
 #define OPENXCOM_BATTLESTATE_H
 
-#include <string>
 #include "BattlescapeGame.h"
 
 namespace OpenXcom

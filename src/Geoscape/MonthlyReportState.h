@@ -29,6 +29,8 @@ class TextButton;
 class Window;
 class Text;
 class Globe;
+class Base;
+class Soldier;
 
 /**
  * Report screen shown monthly to display
@@ -46,6 +48,7 @@ private:
 	int _ratingTotal, _fundingDiff, _lastMonthsRating;
 	std::vector<std::string> _happyList, _sadList, _pactList;
 	Globe *_globe;
+	std::vector<Soldier*> _soldiersMedalled;
 	/// Builds a country list string.
 	std::wstring countryList(const std::vector<std::string> &countries, const std::string &singular, const std::string &plural);
 public:

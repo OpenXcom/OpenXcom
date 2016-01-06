@@ -1,0 +1,304 @@
+mapScripts: #done
+  - type: DEFAULT #ATLAN_MU_GAL_VOLCANO
+    commands:
+    - type: addUFO
+    - type: addCraft
+    - type: addBlock
+      size: 2
+      executions: 2
+    - type: fillArea
+  - type: THREEBIG #SEABED_PIPES_MSUNK_CORAL
+    commands:
+    - type: addUFO
+    - type: addCraft
+    - type: addBlock
+      size: 2
+      executions: 3
+    - type: fillArea
+  - type: PLANE
+    commands:
+    - type: addUFO
+    - type: addCraft
+    - type: addBlock
+      blocks: [13, 14]
+      rects:
+        - [2, 0, 2, 2]
+    - type: addBlock
+      blocks: [17, 18]
+      rects:
+        - [3, 0, 1, 1]
+    - type: addBlock
+      blocks: [15, 16]
+      rects:
+        - [2, 3, 2, 2]
+    - type: addBlock
+      blocks: [19, 20]
+      rects:
+        - [3, 3, 1, 1]
+    - type: addBlock
+      blocks: 12
+      rects:
+        - [0, 0, 1, 5]
+    - type: addBlock
+      blocks: [8, 9, 10, 11]
+      rects:
+        - [1, 0, 1, 5]
+    - type: addBlock
+      blocks: [8, 9, 10, 11]
+      rects:
+        - [2, 0, 1, 5]
+    - type: addBlock
+      blocks: [6, 7]
+      rects:
+        - [3, 0, 1, 5]
+    - type: addBlock
+      blocks: [4, 5]
+      rects:
+        - [4, 0, 1, 5]
+    - type: fillArea
+      blocks: [1, 2, 3]
+  - type: SHIP_P1
+    commands:
+    - type: addCraft
+      rects:
+        - [1,0,1,1]
+      label: 1
+    - type: addCraft
+      rects:
+        - [1,0,1,2]
+      conditionals: [-1]
+    - type: addBlock
+      size: [3,7]
+    - type: addBlock
+      size: [3,2]
+      rects:
+        - [0,5,3,2]
+    - type: addBlock
+      size: [3,5]
+  - type: SHIP_P2
+    commands:
+    - type: addBlock
+      size: [3,2]
+      rects:
+        - [0,5,3,2]
+    - type: addBlock
+      size: [3,5]
+  - type: ARTIFACT_P1
+    commands:
+    - type: addBlock
+      groups: 6
+      size: 2
+    - type: addCraft
+    - type: addBlock
+      size: 2
+      executions: 2
+    - type: fillArea
+  - type: ARTIFACT_P2
+    commands:
+    - type: addBlock
+      groups: 7
+      size: 2
+    - type: addBlock
+      groups: 6
+      executions: 2
+    - type: addBlock
+      size: 2
+      executions: 2
+    - type: fillArea
+    - type: digTunnel
+      direction: both
+      tunnelData:
+        level: 0
+  - type: BASE_DRILL
+    commands:
+    - type: digTunnel
+      direction: both
+      tunnelData:
+        level: 1
+    - type: fillArea
+      groups: 1
+  - type: ALIEN_COLONY_P1
+    commands:
+    - type: addCraft
+      rects:
+       - [1,0,1,2]
+       - [4,0,1,2]
+       - [1,4,1,2]
+       - [4,4,1,2]
+    - type: addBlock
+      size: 2
+      groups: 2
+      rects:
+        - [0,0,2,2]
+    - type: addBlock
+      size: 2
+      groups: 3
+      rects:
+        - [2,0,2,2]
+    - type: addBlock
+      size: 2
+      groups: 4
+      rects:
+        - [4,0,2,2]
+    - type: addBlock
+      size: 2
+      groups: 5
+      rects:
+        - [0,2,2,2]
+    - type: addBlock
+      size: 2
+      groups: 6
+      rects:
+        - [2,2,2,2]
+    - type: addBlock
+      size: 2
+      groups: 7
+      rects:
+        - [4,2,2,2]
+    - type: addBlock
+      size: 2
+      groups: 8
+      rects:
+        - [0,4,2,2]
+    - type: addBlock
+      size: 2
+      groups: 9
+      rects:
+        - [2,4,2,2]
+    - type: addBlock
+      size: 2
+      groups: 10
+      rects:
+        - [4,4,2,2]
+  - type: ALIEN_COLONY_P2
+    commands:
+    - type: addBlock
+      size: 2
+      groups: 1
+    - type: addBlock
+      executions: 2
+      groups: 2
+    - type: addBlock
+      size: 2
+      executions: 4
+      groups: 3
+    - type: fillArea
+      groups: [3, 4]
+      freqs: [3, 2]
+    - type: digTunnel
+      direction: both
+      tunnelData:
+        level: 0
+    - type: digTunnel
+      direction: both
+      tunnelData:
+        level: 1
+    - type: digTunnel
+      direction: both
+      tunnelData:
+        level: 2
+  - type: PORT_TERROR
+    commands:
+    - type: addBlock
+      rects:
+        - [0,0,4,2]
+      blocks: 20
+    - type: addBlock
+      rects:
+        - [4,0,1,5]
+      executions: 5
+      blocks: [2, 3, 4, 5, 6, 7, 8, 9]
+      maxUses: [1, 1, 1, 1, 1, 1, 1, 1]
+    - type: addCraft
+    - type: addBlock
+      size: 2
+      executions: 2
+    - type: fillArea
+  - type: ISLAND_TERROR
+    commands:
+    - type: addBlock
+      size: 2
+      groups: 2
+      rects:
+        - [0,3,5,2]
+    - type: addBlock
+      size: 2
+      groups: 3
+      rects:
+        - [0,3,5,2]
+    - type: addBlock
+      groups: 4
+      rects:
+        - [0,4,5,1]
+    - type: addCraft
+    - type: addBlock
+      size: 2
+      executions: 4
+    - type: fillArea
+  - type: TLETH_P1
+    commands:
+    - type: fillArea
+      groups: 3
+      rects:
+        - [0,0,1,1]
+        - [5,0,1,1]
+        - [0,5,1,1]
+        - [5,5,1,1]
+    - type: addBlock
+      groups: 2
+      rects:
+        - [1,5,4,1]
+    - type: addBlock
+      blocks: 1
+      rects:
+        - [1,0,4,1]
+    - type: addBlock
+      blocks: 2
+      rects:
+        - [0,0,5,1]
+    - type: addBlock
+      size: 2
+      executions: 3
+    - type: fillArea
+    - type: digTunnel
+      direction: both
+      tunnelData:
+        level: 0
+  - type: TLETH_P2_P3
+    commands:
+    - type: addBlock
+      blocks: 0
+      rects:
+        - [0,0,2,2]
+    - type: addBlock
+      blocks: 1
+      rects:
+        - [2,0,2,2]
+    - type: addBlock
+      blocks: 2
+      rects:
+        - [4,0,2,2]
+    - type: addBlock
+      blocks: 3
+      rects:
+        - [0,2,2,2]
+    - type: addBlock
+      blocks: 4
+      rects:
+        - [2,2,2,2]
+    - type: addBlock
+      blocks: 5
+      rects:
+        - [4,2,2,2]
+    - type: addBlock
+      blocks: 6
+      rects:
+        - [0,4,2,2]
+    - type: addBlock
+      blocks: 7
+      rects:
+        - [2,4,2,2]
+    - type: addBlock
+      blocks: 8
+      rects:
+        - [4,4,2,2]

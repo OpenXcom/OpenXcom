@@ -94,9 +94,9 @@ ComboBox::~ComboBox()
 }
 
 /**
-* Changes the position of the surface in the X axis.
-* @param x X position in pixels.
-*/
+ * Changes the position of the surface in the X axis.
+ * @param x X position in pixels.
+ */
 void ComboBox::setX(int x)
 {
 	Surface::setX(x);
@@ -107,9 +107,9 @@ void ComboBox::setX(int x)
 }
 
 /**
-* Changes the position of the surface in the Y axis.
-* @param y Y position in pixels.
-*/
+ * Changes the position of the surface in the Y axis.
+ * @param y Y position in pixels.
+ */
 void ComboBox::setY(int y)
 {
 	Surface::setY(y);
@@ -260,7 +260,7 @@ size_t ComboBox::getHoveredListIdx() const
 	{
 		ret = _list->getSelectedRow();
 	}
-	if (-1 == ret)
+	if ((size_t)-1 == ret)
 	{
 		ret = _sel;
 	}

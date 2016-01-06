@@ -20,18 +20,17 @@
 #include <sstream>
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
-#include "../Engine/Action.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Interface/Text.h"
 #include "ErrorMessageState.h"
 #include "MainMenuState.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
+#include "../Mod/Mod.h"
+#include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
 {
@@ -160,8 +159,8 @@ void SaveGameState::think()
 		{
 			std::string backup = _filename + ".bak";
 			_game->getSavedGame()->save(backup);
-			std::string fullPath = Options::getUserFolder() + _filename;
-			std::string bakPath = Options::getUserFolder() + backup;
+			std::string fullPath = Options::getMasterUserFolder() + _filename;
+			std::string bakPath = Options::getMasterUserFolder() + backup;
 			if (!CrossPlatform::moveFile(bakPath, fullPath))
 			{
 				throw Exception("Save backed up in " + backup);
@@ -182,9 +181,9 @@ void SaveGameState::think()
 			std::wostringstream error;
 			error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 			if (_origin != OPT_BATTLESCAPE)
-				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
+				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getMod()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getMod()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 			else
-				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color, "TAC00.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
+				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getMod()->getInterface("errorMessages")->getElement("battlescapeColor")->color, "TAC00.SCR", _game->getMod()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
 		}
 		catch (YAML::Exception &e)
 		{
@@ -192,9 +191,9 @@ void SaveGameState::think()
 			std::wostringstream error;
 			error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 			if (_origin != OPT_BATTLESCAPE)
-				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
+				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getMod()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getMod()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 			else
-				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color, "TAC00.SCR", _game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
+				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getMod()->getInterface("errorMessages")->getElement("battlescapeColor")->color, "TAC00.SCR", _game->getMod()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
 		}
 	}
 }

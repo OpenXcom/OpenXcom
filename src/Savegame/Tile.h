@@ -19,10 +19,10 @@
 #ifndef OPENXCOM_TILE_H
 #define OPENXCOM_TILE_H
 
-#include <string>
+#include <list>
 #include <vector>
 #include "../Battlescape/Position.h"
-#include "../Ruleset/MapData.h"
+#include "../Mod/MapData.h"
 #include "BattleUnit.h"
 
 #include <SDL_types.h> // for Uint8
@@ -102,10 +102,6 @@ public:
 	 */
 	MapData *getMapData(int part) const
 	{
-		if (0 > part || 3 < part)
-		{
-			return NULL;
-		}
 		return _objects[part];
 	}
 
@@ -162,9 +158,9 @@ public:
 	/// Get the shade amount.
 	int getShade() const;
 	/// Destroy a tile part.
-	bool destroy(int part);
+	bool destroy(int part, SpecialTileType type);
 	/// Damage a tile part.
-	bool damage(int part, int power);
+	bool damage(int part, int power, SpecialTileType type);
 	/// Set a "virtual" explosive on this tile, to detonate later.
 	void setExplosive(int power, int damageType, bool force = false);
 	/// Get explosive power of this tile.

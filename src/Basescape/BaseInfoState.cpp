@@ -20,9 +20,8 @@
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/Bar.h"
 #include "../Interface/TextButton.h"
@@ -165,9 +164,9 @@ BaseInfoState::BaseInfoState(Base *base, BasescapeState *state) : _base(base), _
 		ss << "ALT";
 	}
 	ss << "BACK07.SCR";
-	_game->getResourcePack()->getSurface(ss.str())->blit(_bg);
+	_game->getMod()->getSurface(ss.str())->blit(_bg);
 
-	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
+	_mini->setTexture(_game->getMod()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
 	for (size_t i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
 	{
@@ -364,7 +363,7 @@ void BaseInfoState::init()
  * Changes the base name.
  * @param action Pointer to an action.
  */
-void BaseInfoState::edtBaseChange(Action *action)
+void BaseInfoState::edtBaseChange(Action *)
 {
 	_base->setName(_edtBase->getText());
 }

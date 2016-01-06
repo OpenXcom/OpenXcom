@@ -1,0 +1,1169 @@
+terrains: #done
+  - name: SEABED
+    music:
+      - GMTACWET
+    mapDataSets:
+      - BLANKS
+      - SAND
+      - ROCKS
+      - WEEDS
+      - DEBRIS
+      - UFOBITS
+    depth: [1, 2]
+    ambience: 67
+    script: THREEBIG
+    mapBlocks:
+      - name: SEABED00
+        width: 10
+        length: 10
+        groups: 1
+      - name: SEABED01
+        width: 10
+        length: 10
+        groups: 1
+      - name: SEABED02
+        width: 10
+        length: 10
+      - name: SEABED03
+        width: 10
+        length: 10
+      - name: SEABED04
+        width: 10
+        length: 10
+      - name: SEABED05
+        width: 10
+        length: 10
+      - name: SEABED06
+        width: 10
+        length: 10
+      - name: SEABED07
+        width: 10
+        length: 10
+      - name: SEABED08
+        width: 10
+        length: 10
+      - name: SEABED09
+        width: 10
+        length: 10
+      - name: SEABED10
+        width: 20
+        length: 20
+      - name: SEABED11
+        width: 20
+        length: 20
+      - name: SEABED12
+        width: 20
+        length: 20
+  - name: PIPES
+    music:
+      - GMTACWET
+    mapDataSets:
+      - BLANKS
+      - SAND
+      - PIPES
+      - UFOBITS
+    depth: [1, 2]
+    ambience: 67
+    script: THREEBIG
+    mapBlocks:
+      - name: PIPES00
+        width: 10
+        length: 10
+        groups: 1
+      - name: PIPES01
+        width: 10
+        length: 10
+      - name: PIPES02
+        width: 10
+        length: 10
+      - name: PIPES03
+        width: 10
+        length: 10
+      - name: PIPES04
+        width: 10
+        length: 10
+      - name: PIPES05
+        width: 10
+        length: 10
+      - name: PIPES06
+        width: 10
+        length: 10
+      - name: PIPES07
+        width: 10
+        length: 10
+      - name: PIPES08
+        width: 20
+        length: 20
+      - name: PIPES09
+        width: 20
+        length: 20
+      - name: PIPES10
+        width: 20
+        length: 20
+      - name: PIPES11
+        width: 20
+        length: 20
+  - name: PLANE
+    music:
+      - GMTACWET
+    mapDataSets:
+      - BLANKS
+      - SAND
+      - PLANE
+      - UFOBITS
+    depth: [1, 2]
+    ambience: 67
+    script: PLANE
+    mapBlocks:
+      - name: PLANE00
+        width: 10
+        length: 10
+        groups: 1
+      - name: PLANE01
+        width: 10
+        length: 10
+      - name: PLANE02
+        width: 10
+        length: 10
+      - name: PLANE03
+        width: 10
+        length: 10
+      - name: PLANE04
+        width: 10
+        length: 10
+      - name: PLANE05
+        width: 10
+        length: 10
+      - name: PLANE06
+        width: 10
+        length: 10
+      - name: PLANE07
+        width: 10
+        length: 10
+      - name: PLANE08
+        width: 10
+        length: 10
+      - name: PLANE09
+        width: 10
+        length: 10
+      - name: PLANE10
+        width: 10
+        length: 10
+      - name: PLANE11
+        width: 10
+        length: 10
+      - name: PLANE12
+        width: 10
+        length: 10
+      - name: PLANE13
+        width: 20
+        length: 20
+      - name: PLANE14
+        width: 20
+        length: 20
+      - name: PLANE15
+        width: 20
+        length: 20
+      - name: PLANE16
+        width: 20
+        length: 20
+      - name: PLANE17
+        width: 10
+        length: 10
+      - name: PLANE18
+        width: 10
+        length: 10
+      - name: PLANE19
+        width: 10
+        length: 10
+      - name: PLANE20
+        width: 10
+        length: 10
+  - name: ATLAN
+    music:
+      - GMTACWET
+    mapDataSets:
+      - BLANKS
+      - SAND
+      - ATLANTIS
+      - UFOBITS
+    depth: [1, 2]
+    ambience: 67
+    mapBlocks:
+      - name: ATLAN00
+        width: 10
+        length: 10
+        groups: 1
+      - name: ATLAN01
+        width: 10
+        length: 10
+      - name: ATLAN02
+        width: 10
+        length: 10
+      - name: ATLAN03
+        width: 10
+        length: 10
+      - name: ATLAN04
+        width: 10
+        length: 10
+      - name: ATLAN05
+        width: 10
+        length: 10
+      - name: ATLAN06
+        width: 10
+        length: 10
+      - name: ATLAN07
+        width: 10
+        length: 10
+      - name: ATLAN08
+        width: 10
+        length: 10
+      - name: ATLAN09
+        width: 10
+        length: 10
+      - name: ATLAN10
+        width: 20
+        length: 20
+      - name: ATLAN11
+        width: 20
+        length: 20
+  - name: MU
+    music:
+      - GMTACWET
+    mapDataSets:
+      - BLANKS
+      - SAND
+      - MU
+      - UFOBITS
+    depth: [1, 2]
+    ambience: 67
+    mapBlocks:
+      - name: MU00
+        width: 10
+        length: 10
+        groups: 1
+      - name: MU01
+        width: 10
+        length: 10
+      - name: MU02
+        width: 10
+        length: 10
+      - name: MU03
+        width: 10
+        length: 10
+      - name: MU04
+        width: 10
+        length: 10
+      - name: MU05
+        width: 10
+        length: 10
+      - name: MU06
+        width: 10
+        length: 10
+      - name: MU07
+        width: 10
+        length: 10
+      - name: MU08
+        width: 10
+        length: 10
+      - name: MU09
+        width: 20
+        length: 20
+      - name: MU10
+        width: 20
+        length: 20
+      - name: MU11
+        width: 20
+        length: 20
+  - name: GAL
+    music:
+      - GMTACWET
+    mapDataSets:
+      - BLANKS
+      - SAND
+      - ROCKS
+      - ASUNK
+      - UFOBITS
+    depth: [1, 2]
+    ambience: 67
+    mapBlocks:
+      - name: GAL01
+        width: 20
+        length: 20
+      - name: GAL02
+        width: 20
+        length: 20
+      - name: GAL03
+        width: 20
+        length: 20
+      - name: GAL04
+        width: 10
+        length: 10
+      - name: GAL05
+        width: 10
+        length: 10
+      - name: GAL06
+        width: 10
+        length: 10
+      - name: GAL07
+        width: 10
+        length: 10
+      - name: GAL08
+        width: 10
+        length: 10
+      - name: GAL09
+        width: 10
+        length: 10
+      - name: GAL10
+        width: 10
+        length: 10
+      - name: GAL11
+        width: 10
+        length: 10
+      - name: GAL12
+        width: 10
+        length: 10
+      - name: GAL13
+        width: 10
+        length: 10
+        groups: 1
+      - name: GAL14
+        width: 10
+        length: 10
+        groups: 1
+      - name: GAL15
+        width: 10
+        length: 10
+        groups: 1
+      - name: GAL16
+        width: 10
+        length: 10
+        groups: 1
+  - name: MSUNK
+    music:
+      - GMTACWET
+    mapDataSets:
+      - BLANKS
+      - SAND
+      - MSUNK1
+      - MSUNK2
+      - UFOBITS
+    depth: [1, 2]
+    ambience: 67
+    script: THREEBIG
+    mapBlocks:
+      - name: MSUNK00
+        width: 10
+        length: 10
+        groups: 1
+      - name: MSUNK01
+        width: 10
+        length: 10
+        groups: 1
+      - name: MSUNK02
+        width: 20
+        length: 20
+      - name: MSUNK03
+        width: 20
+        length: 20
+      - name: MSUNK04
+        width: 20
+        length: 20
+      - name: MSUNK05
+        width: 20
+        length: 20
+      - name: MSUNK06
+        width: 20
+        length: 20
+      - name: MSUNK07
+        width: 10
+        length: 10
+      - name: MSUNK08
+        width: 10
+        length: 10
+      - name: MSUNK09
+        width: 10
+        length: 10
+      - name: MSUNK10
+        width: 10
+        length: 10
+      - name: MSUNK11
+        width: 10
+        length: 10
+      - name: MSUNK12
+        width: 10
+        length: 10
+      - name: MSUNK13
+        width: 10
+        length: 10
+  - name: VOLC
+    music:
+      - GMTACWET
+    mapDataSets:
+      - BLANKS
+      - SAND
+      - VOLC
+      - UFOBITS
+    depth: [1, 2]
+    ambience: 67
+    mapBlocks:
+      - name: VOLC00
+        width: 10
+        length: 10
+        groups: 1
+      - name: VOLC01
+        width: 10
+        length: 10
+      - name: VOLC02
+        width: 10
+        length: 10
+      - name: VOLC03
+        width: 10
+        length: 10
+      - name: VOLC04
+        width: 10
+        length: 10
+      - name: VOLC05
+        width: 10
+        length: 10
+      - name: VOLC06
+        width: 10
+        length: 10
+      - name: VOLC07
+        width: 10
+        length: 10
+      - name: VOLC08
+        width: 10
+        length: 10
+      - name: VOLC09
+        width: 20
+        length: 20
+      - name: VOLC10
+        width: 20
+        length: 20
+      - name: VOLC11
+        width: 20
+        length: 20
+  - name: CORAL
+    music:
+      - GMTACWET
+    mapDataSets:
+      - BLANKS
+      - SAND
+      - WEEDS
+      - CORAL
+      - ROCKS
+    depth: [1, 2]
+    ambience: 67
+    script: THREEBIG
+    mapBlocks:
+      - name: CORAL00
+        width: 10
+        length: 10
+        groups: 1
+      - name: CORAL01
+        width: 10
+        length: 10
+      - name: CORAL02
+        width: 10
+        length: 10
+      - name: CORAL03
+        width: 10
+        length: 10
+      - name: CORAL04
+        width: 10
+        length: 10
+      - name: CORAL05
+        width: 10
+        length: 10
+      - name: CORAL06
+        width: 10
+        length: 10
+      - name: CORAL07
+        width: 10
+        length: 10
+      - name: CORAL08
+        width: 10
+        length: 10
+      - name: CORAL09
+        width: 20
+        length: 20
+      - name: CORAL10
+        width: 20
+        length: 20
+      - name: CORAL11
+        width: 20
+        length: 20
+  - name: ALART
+    music:
+      - GMTACWET
+    mapDataSets:
+      - BLANKS
+      - SAND
+      - ROCKS
+      - WEEDS
+      - PYRAMID
+      - UFOBITS
+    depth: [1, 2]
+    ambience: 67
+    mapBlocks:
+      - name: ALART00
+        width: 10
+        length: 10
+        groups: 1
+      - name: ALART01
+        width: 10
+        length: 10
+      - name: ALART02
+        width: 10
+        length: 10
+      - name: ALART03
+        width: 10
+        length: 10
+      - name: ALART04
+        width: 10
+        length: 10
+      - name: ALART05
+        width: 10
+        length: 10
+      - name: ALART06
+        width: 10
+        length: 10
+      - name: ALART07
+        width: 10
+        length: 10
+      - name: ALART08
+        width: 10
+        length: 10
+      - name: ALART09
+        width: 20
+        length: 20
+        groups: 6
+      - name: ALART10
+        width: 20
+        length: 20
+      - name: ALART11
+        width: 20
+        length: 20
+  - name: PORT
+    music:
+      - GMTACDRY
+    mapDataSets:
+      - BLANKS
+      - SEA
+      - PORT01
+      - PORT02
+    ambience: 67
+    ambientVolume: 0.25
+    civilianTypes:
+      - SAILOR_CIVILIAN
+      - DOCKER_CIVILIAN
+    mapBlocks:
+      - name: PORT00
+        width: 10
+        length: 10
+        groups: 1
+      - name: PORT01
+        width: 10
+        length: 10
+        groups: 1
+      - name: PORT02
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORT03
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORT04
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORT05
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORT06
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORT07
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORT08
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORT09
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORT10
+        width: 10
+        length: 10
+      - name: PORT11
+        width: 10
+        length: 10
+      - name: PORT12
+        width: 10
+        length: 10
+      - name: PORT13
+        width: 10
+        length: 10
+      - name: PORT14
+        width: 10
+        length: 10
+      - name: PORT15
+        width: 10
+        length: 10
+      - name: PORT16
+        width: 10
+        length: 10
+      - name: PORT17
+        width: 20
+        length: 20
+      - name: PORT18
+        width: 20
+        length: 20
+      - name: PORT19
+        width: 20
+        length: 20
+      - name: PORT20
+        width: 20
+        length: 20
+        groups: 5
+  - name: ISLAND
+    music:
+      - GMTACDRY
+    mapDataSets:
+      - BLANKS
+      - SEA
+      - ISLAND1
+      - ISLAND2
+      - ISLAND3
+    ambience: 67
+    ambientVolume: 0.25
+    mapBlocks:
+      - name: ISLAND00
+        width: 10
+        length: 10
+        groups: 1
+      - name: ISLAND01
+        width: 10
+        length: 10
+        groups: 1
+      - name: ISLAND02
+        width: 20
+        length: 20
+      - name: ISLAND03
+        width: 20
+        length: 20
+      - name: ISLAND04
+        width: 20
+        length: 20
+        groups: 2
+      - name: ISLAND05
+        width: 20
+        length: 20
+        groups: 3
+      - name: ISLAND06
+        width: 20
+        length: 20
+      - name: ISLAND07
+        width: 10
+        length: 10
+        groups: 4
+      - name: ISLAND08
+        width: 10
+        length: 10
+      - name: ISLAND09
+        width: 10
+        length: 10
+      - name: ISLAND10
+        width: 10
+        length: 10
+      - name: ISLAND11
+        width: 10
+        length: 10
+      - name: ISLAND12
+        width: 10
+        length: 10
+      - name: ISLAND13
+        width: 10
+        length: 10
+      - name: ISLAND14
+        width: 10
+        length: 10
+  - name: CARGO
+    music:
+      - GMTACDRY
+    ambience: 67
+    ambientVolume: 0.25
+    mapDataSets:
+      - BLANKS
+      - SEA
+      - CARGO1
+      - CARGO2
+      - XBITS
+      - CARGO3
+    civilianTypes:
+      - SAILOR_CIVILIAN
+      - DOCKER_CIVILIAN
+    mapBlocks:
+      - name: CARGO00
+        width: 30
+        length: 70
+      - name: CARGO01
+        width: 30
+        length: 50
+      - name: CARGO02
+        width: 30
+        length: 20
+  - name: XBASES
+    music:
+      - GMTACDRY
+    ambience: 67
+    ambientVolume: 0.25
+    mapDataSets:
+      - BLANKS
+      - XBASES01
+      - XBASES02
+      - XBASES03
+      - XBASES04
+      - XBASES05
+      - XBITS
+    mapBlocks:
+      - name: XBASES00
+        width: 10
+        length: 10
+      - name: XBASES01
+        width: 10
+        length: 10
+      - name: XBASES02
+        width: 10
+        length: 10
+      - name: XBASES03
+        width: 10
+        length: 10
+      - name: XBASES04
+        width: 10
+        length: 10
+      - name: XBASES05
+        width: 10
+        length: 10
+      - name: XBASES06
+        width: 10
+        length: 10
+      - name: XBASES07
+        width: 10
+        length: 10
+      - name: XBASES08
+        width: 10
+        length: 10
+      - name: XBASES09
+        width: 10
+        length: 10
+      - name: XBASES10
+        width: 10
+        length: 10
+      - name: XBASES11
+        width: 10
+        length: 10
+      - name: XBASES12
+        width: 10
+        length: 10
+      - name: XBASES13
+        width: 10
+        length: 10
+      - name: XBASES14
+        width: 10
+        length: 10
+      - name: XBASES15
+        width: 10
+        length: 10
+      - name: XBASES16
+        width: 10
+        length: 10
+      - name: XBASES17
+        width: 10
+        length: 10
+      - name: XBASES18
+        width: 10
+        length: 10
+      - name: XBASES19
+        width: 10
+        length: 10
+      - name: XBASES20
+        width: 10
+        length: 10
+        groups: 1
+  - name: ENTRY
+    music:
+      - GMTACWET
+    depth: [2, 3]
+    ambience: 67
+    mapDataSets:
+      - BLANKS
+      - SAND
+      - UEXT2
+      - UEXT3
+      - ORGANIC1
+      - ENTRY
+    mapBlocks:
+      - name: ENTRY00
+        width: 20
+        length: 20
+        groups: 2
+      - name: ENTRY01
+        width: 20
+        length: 20
+        groups: 3
+      - name: ENTRY02
+        width: 20
+        length: 20
+        groups: 4
+      - name: ENTRY03
+        width: 20
+        length: 20
+        groups: 5
+      - name: ENTRY04
+        width: 20
+        length: 20
+        groups: 6
+      - name: ENTRY05
+        width: 20
+        length: 20
+        groups: 7
+      - name: ENTRY06
+        width: 20
+        length: 20
+        groups: 8
+      - name: ENTRY07
+        width: 20
+        length: 20
+        groups: 9
+      - name: ENTRY08
+        width: 20
+        length: 20
+        groups: 10
+  - name: GRUNGE
+    music:
+      - GMTACDRY
+    ambience: 67
+    ambientVolume: 0.25
+    mapDataSets:
+      - BLANKS
+      - GRUNGE1
+      - GRUNGE2
+      - GRUNGE3
+      - GRUNGE4
+      - GRUNGE5
+      - UFOBITS
+    mapBlocks:
+      - name: GRUNGE00
+        width: 10
+        length: 10
+        groups: 1
+      - name: GRUNGE01
+        width: 10
+        length: 10
+        groups: 1
+      - name: GRUNGE02
+        width: 10
+        length: 10
+        groups: 1
+      - name: GRUNGE03
+        width: 10
+        length: 10
+        groups: 1
+      - name: GRUNGE04
+        width: 10
+        length: 10
+        groups: 6
+        revealedFloors: 3
+      - name: GRUNGE05
+        width: 10
+        length: 10
+      - name: GRUNGE06
+        width: 10
+        length: 10
+      - name: GRUNGE07
+        width: 10
+        length: 10
+      - name: GRUNGE08
+        width: 10
+        length: 10
+      - name: GRUNGE09
+        width: 10
+        length: 10
+      - name: GRUNGE10
+        width: 10
+        length: 10
+      - name: GRUNGE11
+        width: 20
+        length: 20
+      - name: GRUNGE12
+        width: 20
+        length: 20
+      - name: GRUNGE13
+        width: 20
+        length: 20
+      - name: GRUNGE14
+        width: 20
+        length: 20
+      - name: GRUNGE15
+        width: 20
+        length: 20
+        groups: 7
+    #  - name: GRUNGE16
+    #    width: 20
+    #    length: 20
+  - name: LINERT
+    music:
+      - GMTACDRY
+    ambience: 67
+    ambientVolume: 0.25
+    mapDataSets:
+      - BLANKS
+      - DECKC
+      - LINERA
+      - LINERB
+      - LINERC
+      - LINERD
+    mapBlocks:
+      - name: LINERT00
+        width: 30
+        length: 20
+      - name: LINERT01
+        width: 30
+        length: 50
+      - name: LINERT02
+        width: 30
+        length: 50
+        groups: 2 #this block is unused
+  - name: LINERB
+    music:
+      - GMTACDRY
+    ambience: 67
+    ambientVolume: 0.25
+    mapDataSets:
+      - BLANKS
+      - SEA
+      - LINERA
+      - LINERB
+      - LINERC
+      - LINERD
+      - DECKC
+    mapBlocks:
+      - name: LINERB02
+        width: 30
+        length: 50
+      - name: LINERB03
+        width: 30
+        length: 20
+  - name: A_BASE
+    music:
+      - GMTACWET
+    depth: [1, 1]
+    ambience: 67
+    mapDataSets:
+      - BLANKS
+      - ORGANIC1
+      - ORGANIC2
+      - ORGANIC3
+      - PSYNOM
+    mapBlocks:
+      - name: A_BASE00
+        width: 10
+        length: 10
+        groups: 2
+        revealedFloors: 2
+      - name: A_BASE07
+        width: 10
+        length: 10
+        groups: 4
+      - name: A_BASE08
+        width: 10
+        length: 10
+        groups: 3
+      - name: A_BASE09
+        width: 10
+        length: 10
+        groups: 3
+      - name: A_BASE11
+        width: 20
+        length: 20
+        groups: 3
+      - name: A_BASE12
+        width: 20
+        length: 20
+        groups: 3
+      - name: A_BASE13
+        width: 20
+        length: 20
+        groups: 3
+      - name: A_BASE14
+        width: 20
+        length: 20
+        groups: 3
+      - name: A_BASE15
+        width: 20
+        length: 20
+        groups: 1
+        items:
+          STR_ZRBITE:
+            - [14, 14, 2]
+            - [4, 10, 2]
+  - name: ALSHIP
+    music:
+      - GMTACWET
+    depth: [1, 3]
+    ambience: 67
+    mapDataSets:
+      - BLANKS
+      - GRUNGE1
+      - GRUNGE2
+      - GRUNGE3
+      - GRUNGE4
+      - UFOBITS
+    mapBlocks:
+      - name: ALSHIP00
+        width: 10
+        length: 10
+        groups: 3
+      - name: ALSHIP01
+        width: 10
+        length: 10
+        groups: 1
+        revealedFloors: 1
+      - name: ALSHIP02
+        width: 10
+        length: 10
+        groups: 1
+        revealedFloors: 1
+      - name: ALSHIP03
+        width: 10
+        length: 10
+        groups: 2
+      - name: ALSHIP04
+        width: 10
+        length: 10
+      - name: ALSHIP05
+        width: 10
+        length: 10
+      - name: ALSHIP06
+        width: 10
+        length: 10
+      - name: ALSHIP07
+        width: 10
+        length: 10
+      - name: ALSHIP08
+        width: 10
+        length: 10
+      - name: ALSHIP09
+        width: 10
+        length: 10
+      - name: ALSHIP10
+        width: 10
+        length: 10
+      - name: ALSHIP11
+        width: 20
+        length: 20
+      - name: ALSHIP12
+        width: 20
+        length: 20
+      - name: ALSHIP13
+        width: 20
+        length: 20
+      - name: ALSHIP14
+        width: 20
+        length: 20
+      - name: ALSHIP15
+        width: 20
+        length: 20
+      - name: ALSHIP16
+        width: 20
+        length: 20
+      - name: ALSHIP17
+        width: 20
+        length: 20
+  - name: LEVEL
+    music:
+      - GMTACWET
+    depth: [1, 3]
+    ambience: 67
+    mapDataSets:
+      - BLANKS
+      - ORGANIC1
+      - ORGANIC2
+      - ORGANIC3
+      - PSYNOM
+    mapBlocks:
+      - name: LEVEL01
+        width: 20
+        length: 20
+      - name: LEVEL02
+        width: 20
+        length: 20
+      - name: LEVEL03
+        width: 20
+        length: 20
+      - name: LEVEL04
+        width: 20
+        length: 20
+      - name: LEVEL05
+        width: 20
+        length: 20
+      - name: LEVEL06
+        width: 20
+        length: 20
+      - name: LEVEL07
+        width: 20
+        length: 20
+      - name: LEVEL08
+        width: 20
+        length: 20
+      - name: LEVEL09
+        width: 20
+        length: 20
+  - name: CRYPT
+    music:
+      - GMTACWET
+    depth: [3, 3]
+    ambience: 67
+    mapDataSets:
+      - BLANKS
+      - CRYPT1
+      - CRYPT2
+      - CRYPT3
+      - CRYPT4
+      - UFOBITS
+    mapBlocks:
+      - name: CRYPT01
+        width: 20
+        length: 20
+      - name: CRYPT02
+        width: 20
+        length: 20
+      - name: CRYPT03
+        width: 20
+        length: 20
+      - name: CRYPT04
+        width: 20
+        length: 20
+      - name: CRYPT05
+        width: 20
+        length: 20
+      - name: CRYPT06
+        width: 20
+        length: 20
+      - name: CRYPT07
+        width: 20
+        length: 20
+      - name: CRYPT08
+        width: 20
+        length: 20
+      - name: CRYPT09
+        width: 20
+        length: 20

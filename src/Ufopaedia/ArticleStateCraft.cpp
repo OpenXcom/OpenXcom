@@ -18,17 +18,14 @@
  */
 
 #include <sstream>
-
-#include "Ufopaedia.h"
 #include "ArticleStateCraft.h"
-#include "../Ruleset/ArticleDefinition.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleCraft.h"
+#include "../Mod/ArticleDefinition.h"
+#include "../Mod/Mod.h"
+#include "../Mod/RuleCraft.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
-#include "../Engine/Language.h"
-#include "../Resource/ResourcePack.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 
@@ -37,7 +34,7 @@ namespace OpenXcom
 
 	ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft *defs) : ArticleState(defs->id)
 	{
-		RuleCraft *craft = _game->getRuleset()->getCraft(defs->id);
+		RuleCraft *craft = _game->getMod()->getCraft(defs->id);
 
 		// add screen elements
 		_txtTitle = new Text(210, 32, 5, 24);
@@ -51,7 +48,7 @@ namespace OpenXcom
 		add(_txtTitle);
 
 		// Set up objects
-		_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
+		_game->getMod()->getSurface(defs->image_id)->blit(_bg);
 		_btnOk->setColor(Palette::blockOffset(15)-1);
 		_btnPrev->setColor(Palette::blockOffset(15)-1);
 		_btnNext->setColor(Palette::blockOffset(15)-1);

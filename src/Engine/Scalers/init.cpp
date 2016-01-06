@@ -24,7 +24,7 @@ uint32_t   YUV1, YUV2;
 
 HQX_API void HQX_CALLCONV hqxInit(void)
 {
-    /* Initalize RGB to YUV lookup table */
+    /* Initialize RGB to YUV lookup table */
     uint32_t c, r, g, b, y, u, v;
     for (c = 0; c < 16777215; c++) {
         r = (c & 0xFF0000) >> 16;

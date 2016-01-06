@@ -19,10 +19,8 @@
 #include "ManufactureState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Mod/Mod.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -30,11 +28,10 @@
 #include "../Interface/TextList.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
-#include "../Ruleset/RuleManufacture.h"
+#include "../Mod/RuleManufacture.h"
 #include "../Savegame/Production.h"
 #include "NewManufactureListState.h"
 #include "ManufactureInfoState.h"
-#include <limits>
 
 namespace OpenXcom
 {
@@ -83,7 +80,7 @@ ManufactureState::ManufactureState(Base *base) : _base(base)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK17.SCR"));
 
 	_btnNew->setText(tr("STR_NEW_PRODUCTION"));
 	_btnNew->onMouseClick((ActionHandler)&ManufactureState::btnNewProductionClick);
@@ -171,10 +168,10 @@ void ManufactureState::fillProductionList()
 		std::wostringstream s1;
 		s1 << (*iter)->getAssignedEngineers();
 		std::wostringstream s2;
-		if ((*iter)->getSellItems()) s2 << "$";
 		s2 << (*iter)->getAmountProduced() << "/";
 		if ((*iter)->getInfiniteAmount()) s2 << Language::utf8ToWstr("∞");
 		else s2 << (*iter)->getAmountTotal();
+		if ((*iter)->getSellItems()) s2 << " $";
 		std::wostringstream s3;
 		s3 << Text::formatFunding((*iter)->getRules()->getManufactureCost());
 		std::wostringstream s4;

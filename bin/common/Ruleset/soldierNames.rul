@@ -1,4 +1,0 @@
-# pull in all *.nam files in the SoldierName virtual directory by default
-# mods can override with specific files if desired
-soldierNames:
-  - SoldierName/

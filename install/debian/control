@@ -1,16 +1,17 @@
 Source: openxcom
 Section: games
-Priority: optional
+Priority: extra
 Maintainer: Krzysztof Knapik <knapsu@gmail.com>
 Build-Depends:
 	debhelper (>=9),
+	cmake,
 	libsdl1.2-dev,
 	libsdl-mixer1.2-dev,
-	libsdl-gfx1.2-dev (>= 2.0.22),
+	libsdl-gfx1.2-dev,
 	libsdl-image1.2-dev,
-	libyaml-cpp-dev (>= 0.5.1),
+	libyaml-cpp-dev (>= 0.5),
 	libboost-dev
-Standards-Version: 3.9.4
+Standards-Version: 3.9.6
 Homepage: http://openxcom.org/
 Vcs-Git: git://github.com/SupSuper/OpenXcom.git
 Vcs-Browser: https://github.com/SupSuper/OpenXcom
@@ -18,7 +19,6 @@ Vcs-Browser: https://github.com/SupSuper/OpenXcom
 Package: openxcom
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Suggests: openxcom-data
 Description: Open-source clone of UFO: Enemy Unknown
  OpenXcom is an open-source clone of the popular UFO: Enemy Unknown (X-COM: UFO Defense in USA)
  turn-based strategy game by MicroProse. It is written in C++ / SDL and licensed under the GPL.

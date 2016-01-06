@@ -19,10 +19,8 @@
 #include "ResearchState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Engine/Screen.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -31,7 +29,7 @@
 #include "../Savegame/Base.h"
 #include "NewResearchListState.h"
 #include "../Savegame/ResearchProject.h"
-#include "../Ruleset/RuleResearch.h"
+#include "../Mod/RuleResearch.h"
 #include "ResearchInfoState.h"
 
 namespace OpenXcom
@@ -75,7 +73,7 @@ ResearchState::ResearchState(Base *base) : _base(base)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK05.SCR"));
 
 	_btnNew->setText(tr("STR_NEW_PROJECT"));
 	_btnNew->onMouseClick((ActionHandler)&ResearchState::btnNewClick);

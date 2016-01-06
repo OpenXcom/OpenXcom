@@ -1,0 +1,99 @@
+ufoTrajectories: #done
+  - id: P0
+    groundTimer: 3000
+    waypoints:
+      - [5, 4, 100]
+      - [0, 3, 74]
+      - [0, 1, 28]
+      - [1, 1, 47]
+      - [5, 2, 100]
+  - id: P1
+    groundTimer: 4000
+    waypoints:
+      - [5, 4, 100]
+      - [0, 2, 76]
+      - [0, 2, 20]
+      - [1, 1, 44]
+      - [0, 0, 20]
+      - [0, 2, 32]
+      - [2, 1, 65]
+      - [5, 0, 100]
+  - id: P2
+    groundTimer: 5000
+    waypoints:
+      - [5, 4, 100]
+      - [0, 3, 57]
+      - [0, 2, 26]
+      - [1, 1, 50]
+      - [5, 0, 100]
+  - id: P3
+    groundTimer: 6000
+    waypoints:
+      - [5, 4, 100]
+      - [0, 3, 30]
+      - [0, 2, 25]
+      - [2, 1, 20]
+      - [5, 0, 100]
+  - id: P4
+    groundTimer: 7000
+    waypoints:
+      - [5, 4, 100]
+      - [0, 2, 67]
+      - [0, 2, 52]
+      - [2, 1, 40]
+      - [0, 0, 30]
+      - [0, 2, 20]
+      - [2, 1, 30]
+      - [5, 0, 100]
+  - id: P5
+    groundTimer: 4000
+    waypoints:
+      - [5, 4, 100]
+      - [0, 2, 50]
+      - [0, 2, 20]
+      - [4, 1, 15]
+      - [0, 0, 20]
+      - [0, 2, 29]
+      - [4, 1, 42]
+      - [5, 0, 90]
+  - id: P6
+    groundTimer: 5000
+    waypoints:
+      - [5, 4, 100]
+      - [0, 3, 50]
+      - [0, 2, 25]
+      - [4, 1, 16]
+      - [5, 0, 100]
+  - id: P7
+    groundTimer: 9000
+    waypoints:
+      - [5, 4, 100]
+      - [0, 3, 60]
+      - [0, 2, 30]
+      - [3, 1, 20]
+      - [5, 0, 100]
+  - id: P8
+    groundTimer: 6000
+    waypoints:
+      - [5, 4, 100]
+      - [1, 1, 60]
+      - [2, 1, 20]
+      - [3, 1, 30]
+      - [4, 1, 20]
+      - [0, 1, 42]
+      - [2, 1, 56]
+      - [5, 4, 100]
+  - id: P9
+    groundTimer: 2000
+    waypoints:
+      - [5, 4, 80]
+      - [5, 0, 100]
+  - id: __RETALIATION_ASSAULT_RUN
+    groundTimer: 1000
+    waypoints:
+      - [5, 4, 100] #This should always be 5, 4, 100
+      - [5, 0, 100] #only the 0 altitude matters
+  - id: P10
+    groundTimer: 0
+    waypoints:
+      - [0, 0, 0]

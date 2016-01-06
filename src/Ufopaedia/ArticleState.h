@@ -21,7 +21,7 @@
 #define OPENXCOM_ARTICLESTATE_H
 
 #include "../Engine/State.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/RuleItem.h"
 #include <string>
 
 namespace OpenXcom

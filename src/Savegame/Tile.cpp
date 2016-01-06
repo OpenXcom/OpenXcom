@@ -18,16 +18,15 @@
  */
 #include "Tile.h"
 #include <algorithm>
-#include "../Ruleset/MapData.h"
-#include "../Ruleset/MapDataSet.h"
+#include "../Mod/MapData.h"
+#include "../Mod/MapDataSet.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
 #include "../Engine/RNG.h"
-#include "../Engine/Exception.h"
 #include "BattleUnit.h"
 #include "BattleItem.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Armor.h"
+#include "../Mod/RuleItem.h"
+#include "../Mod/Armor.h"
 #include "SerializationHelper.h"
 #include "../Battlescape/Particle.h"
 
@@ -46,9 +45,9 @@ Tile::SerializationKey Tile::serializationKey =
 };
 
 /**
-* constructor
-* @param pos Position.
-*/
+ * constructor
+ * @param pos Position.
+ */
 Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _explosiveType(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(-1), _overlaps(0), _danger(false)
 {
 	for (int i = 0; i < 4; ++i)
@@ -256,7 +255,7 @@ int Tile::getTUCost(int part, MovementType movementType) const
 	{
 		if (_objects[part]->isUFODoor() && _currentFrame[part] > 1)
 			return 0;
-		if (part == MapData::O_OBJECT && _objects[part]->getBigWall() >= 4)
+		if (part == O_OBJECT && _objects[part]->getBigWall() >= 4)
 			return 0;
 		return _objects[part]->getTUCost(movementType);
 	}
@@ -273,8 +272,8 @@ bool Tile::hasNoFloor(Tile *tileBelow) const
 {
 	if (tileBelow != 0 && tileBelow->getTerrainLevel() == -24)
 		return false;
-	if (_objects[MapData::O_FLOOR])
-		return _objects[MapData::O_FLOOR]->isNoFloor();
+	if (_objects[O_FLOOR])
+		return _objects[O_FLOOR]->isNoFloor();
 	else
 		return true;
 }
@@ -285,8 +284,8 @@ bool Tile::hasNoFloor(Tile *tileBelow) const
  */
 bool Tile::isBigWall() const
 {
-	if (_objects[MapData::O_OBJECT])
-		return (_objects[MapData::O_OBJECT]->getBigWall() != 0);
+	if (_objects[O_OBJECT])
+		return (_objects[O_OBJECT]->getBigWall() != 0);
 	else
 		return false;
 }
@@ -299,11 +298,11 @@ int Tile::getTerrainLevel() const
 {
 	int level = 0;
 
-	if (_objects[MapData::O_FLOOR])
-		level = _objects[MapData::O_FLOOR]->getTerrainLevel();
+	if (_objects[O_FLOOR])
+		level = _objects[O_FLOOR]->getTerrainLevel();
 	// whichever's higher, but not the sum.
-	if (_objects[MapData::O_OBJECT])
-		level = std::min(_objects[MapData::O_OBJECT]->getTerrainLevel(), level);
+	if (_objects[O_OBJECT])
+		level = std::min(_objects[O_OBJECT]->getTerrainLevel(), level);
 
 	return level;
 }
@@ -317,12 +316,12 @@ int Tile::getFootstepSound(Tile *tileBelow) const
 {
 	int sound = -1;
 
-	if (_objects[MapData::O_FLOOR])
-		sound = _objects[MapData::O_FLOOR]->getFootstepSound();
-	if (_objects[MapData::O_OBJECT] && _objects[MapData::O_OBJECT]->getBigWall() <= 1 && _objects[MapData::O_OBJECT]->getFootstepSound() > -1)
-		sound = _objects[MapData::O_OBJECT]->getFootstepSound();
-	if (!_objects[MapData::O_FLOOR] && !_objects[MapData::O_OBJECT] && tileBelow != 0 && tileBelow->getTerrainLevel() == -24)
-		sound = tileBelow->getMapData(MapData::O_OBJECT)->getFootstepSound();
+	if (_objects[O_FLOOR])
+		sound = _objects[O_FLOOR]->getFootstepSound();
+	if (_objects[O_OBJECT] && _objects[O_OBJECT]->getBigWall() <= 1 && _objects[O_OBJECT]->getFootstepSound() > -1)
+		sound = _objects[O_OBJECT]->getFootstepSound();
+	if (!_objects[O_FLOOR] && !_objects[O_OBJECT] && tileBelow != 0 && tileBelow->getTerrainLevel() == -24)
+		sound = tileBelow->getMapData(O_OBJECT)->getFootstepSound();
 
 	return sound;
 }
@@ -339,7 +338,7 @@ int Tile::openDoor(int part, BattleUnit *unit, BattleActionType reserve)
 {
 	if (!_objects[part]) return -1;
 
-	if (_objects[part]->isDoor())
+	if (_objects[part]->isDoor() && unit->getArmor()->getSize() == 1) // don't allow double-wide units to open swinging doors due to engine limitations
 	{
 		if (unit && unit->getTimeUnits() < _objects[part]->getTUCost(unit->getMovementType()) + unit->getActionTUs(reserve, unit->getMainHandWeapon(false)))
 			return 4;
@@ -368,7 +367,7 @@ int Tile::closeUfoDoor()
 {
 	int retval = 0;
 
-	for (int part = 0; part < 4; part++)
+	for (int part = 0; part < 4; ++part)
 	{
 		if (isUfoDoorOpen(part))
 		{
@@ -457,17 +456,18 @@ int Tile::getShade() const
  * Destroy a part on this tile. We first remove the old object, then replace it with the destroyed one.
  * This is because the object type of the old and new one are not necessarily the same.
  * If the destroyed part is an explosive, set the tile's explosive value, which will trigger a chained explosion.
- * @param part
- * @return bool Return true objective was destroyed
+ * @param part the part to destroy.
+ * @param type the objective type for this mission we are checking against.
+ * @return bool Return true objective was destroyed.
  */
-bool Tile::destroy(int part)
+bool Tile::destroy(int part, SpecialTileType type)
 {
 	bool _objective = false;
 	if (_objects[part])
 	{
 		if (_objects[part]->isGravLift())
 			return false;
-		_objective = _objects[part]->getSpecialType() == MUST_DESTROY;
+		_objective = _objects[part]->getSpecialType() == type;
 		MapData *originalPart = _objects[part];
 		int originalMapDataSetID = _mapDataSetID[part];
 		setMapData(0, -1, -1, part);
@@ -482,10 +482,10 @@ bool Tile::destroy(int part)
 		}
 	}
 	/* check if the floor on the lowest level is gone */
-	if (part == MapData::O_FLOOR && getPosition().z == 0 && _objects[MapData::O_FLOOR] == 0)
+	if (part == O_FLOOR && getPosition().z == 0 && _objects[O_FLOOR] == 0)
 	{
 		/* replace with scorched earth */
-		setMapData(MapDataSet::getScorchedEarthTile(), 1, 0, MapData::O_FLOOR);
+		setMapData(MapDataSet::getScorchedEarthTile(), 1, 0, O_FLOOR);
 	}
 	return _objective;
 }
@@ -494,13 +494,14 @@ bool Tile::destroy(int part)
  * damage terrain - check against armor
  * @param part Part to check.
  * @param power Power of the damage.
+ * @param type the objective type for this mission we are checking against.
  * @return bool Return true objective was destroyed
  */
-bool Tile::damage(int part, int power)
+bool Tile::damage(int part, int power, SpecialTileType type)
 {
 	bool objective = false;
 	if (power >= _objects[part]->getArmor())
-		objective = destroy(part);
+		objective = destroy(part, type);
 	return objective;
 }
 
@@ -808,7 +809,7 @@ int Tile::getTopItemSprite()
  */
 void Tile::prepareNewTurn()
 {
-	// we've recieved new smoke in this turn, but we're not on fire, average out the smoke.
+	// we've received new smoke in this turn, but we're not on fire, average out the smoke.
 	if ( _overlaps != 0 && _smoke != 0 && _fire == 0)
 	{
 		_smoke = std::max(0, std::min((_smoke / _overlaps)- 1, 15));
@@ -821,7 +822,9 @@ void Tile::prepareNewTurn()
 			if (_fire)
 			{
 				// this is how we avoid hitting the same unit multiple times.
-				if (_unit->getArmor()->getSize() == 1 || !_unit->tookFireDamage())
+				if ((_unit->getArmor()->getSize() == 1 || !_unit->tookFireDamage())
+					//and avoid setting fire elementals on fire
+					&& _unit->getSpecialAbility() != SPECAB_BURNFLOOR && _unit->getSpecialAbility() != SPECAB_BURN_AND_EXPLODE)
 				{
 					_unit->toggleFireDamage();
 					// _smoke becomes our damage value
@@ -829,7 +832,7 @@ void Tile::prepareNewTurn()
 					// try to set the unit on fire.
 					if (RNG::percent(40 * _unit->getArmor()->getDamageModifier(DT_IN)))
 					{
-						int burnTime = RNG::generate(0, int(5 * _unit->getArmor()->getDamageModifier(DT_IN)));
+						int burnTime = RNG::generate(0, int(5.0f * _unit->getArmor()->getDamageModifier(DT_IN)));
 						if (_unit->getFire() < burnTime)
 						{
 							_unit->setFire(burnTime);

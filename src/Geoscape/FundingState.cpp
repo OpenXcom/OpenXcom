@@ -19,15 +19,14 @@
 #include "FundingState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Savegame/Country.h"
-#include "../Ruleset/RuleCountry.h"
+#include "../Mod/RuleCountry.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
 
@@ -65,7 +64,7 @@ FundingState::FundingState()
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK13.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&FundingState::btnOkClick);
@@ -107,6 +106,7 @@ FundingState::FundingState()
 	_lstCountries->addRow(2, tr("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
 	_lstCountries->setRowColor(_game->getSavedGame()->getCountries()->size(), _txtCountry->getColor());
 }
+
 /**
  *
  */

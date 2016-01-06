@@ -59,9 +59,9 @@ public:
 	/// Resets state.
 	void init();
 	/// Loads New Battle settings.
-	void load();
+	void load(const std::string &filename = "battle");
 	/// Saves New Battle settings.
-	void save();
+	void save(const std::string &filename = "battle");
 	/// Initializes a blank savegame.
 	void initSave();
 	/// Handler for clicking the OK button.

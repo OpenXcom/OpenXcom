@@ -33,12 +33,12 @@ class SavedBattleGame;
 class BattleItem;
 class BattleState;
 class BattlescapeState;
-class ResourcePack;
 class Map;
 class TileEngine;
 class Pathfinding;
-class Ruleset;
+class Mod;
 class InfoboxOKState;
+class SoldierDiary;
 
 enum BattleActionType { BA_NONE, BA_TURN, BA_WALK, BA_PRIME, BA_THROW, BA_AUTOSHOT, BA_SNAPSHOT, BA_AIMEDSHOT, BA_HIT, BA_USE, BA_LAUNCH, BA_MINDCONTROL, BA_PANIC, BA_RETHINK };
 
@@ -120,8 +120,6 @@ public:
 	void setStateInterval(Uint32 interval);
 	/// Checks for casualties in battle.
 	void checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion = false, bool terrainExplosion = false);
-	/// Checks if a unit panics.
-	void checkForPanic(BattleUnit *unit);
 	/// Checks reserved tu.
 	bool checkReservedTU(BattleUnit *bu, int tu, bool justChecking = false);
 	/// Handles unit AI.
@@ -129,7 +127,7 @@ public:
 	/// Drops an item and affects it with gravity.
 	void dropItem(const Position &position, BattleItem *item, bool newItem = false, bool removeItem = false);
 	/// Converts a unit into a unit of another type.
-	BattleUnit *convertUnit(BattleUnit *unit, const std::string &newType);
+	BattleUnit *convertUnit(BattleUnit *unit);
 	/// Handles kneeling action.
 	bool kneel(BattleUnit *bu);
 	/// Cancels the current action.
@@ -162,10 +160,8 @@ public:
 	TileEngine *getTileEngine();
 	/// Gets the pathfinding.
 	Pathfinding *getPathfinding();
-	/// Gets the resourcepack.
-	ResourcePack *getResourcePack();
-	/// Gets the ruleset.
-	const Ruleset *getRuleset() const;
+	/// Gets the mod.
+	Mod *getMod();
 	/// Returns whether panic has been handled.
 	bool getPanicHandled() { return _playerPanicHandled; }
 	/// Tries to find an item and pick it up if possible.
@@ -192,7 +188,9 @@ public:
 	/// Cleans up all the deleted states.
 	void cleanupDeleted();
 	/// Get the depth of the saved game.
-	const int getDepth() const;
+	int getDepth() const;
+	/// Sets up a mission complete notification.
+	void missionComplete();
 };
 
 }

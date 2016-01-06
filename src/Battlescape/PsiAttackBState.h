@@ -20,7 +20,6 @@
 #define OPENXCOM_PSIATTACKBSTATE_H
 
 #include "BattleState.h"
-#include "Position.h"
 
 namespace OpenXcom
 {

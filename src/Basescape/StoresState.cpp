@@ -19,17 +19,15 @@
 #include "StoresState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
-#include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/RuleItem.h"
 #include "../Savegame/ItemContainer.h"
 
 namespace OpenXcom
@@ -65,7 +63,7 @@ StoresState::StoresState(Base *base) : _base(base)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK13.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&StoresState::btnOkClick);
@@ -87,13 +85,13 @@ StoresState::StoresState(Base *base) : _base(base)
 	_lstStores->setBackground(_window);
 	_lstStores->setMargin(2);
 
-	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
+	const std::vector<std::string> &items = _game->getMod()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
-		int qty = _base->getItems()->getItem(*i);
+		int qty = _base->getStorageItems()->getItem(*i);
 		if (qty > 0)
 		{
-			RuleItem *rule = _game->getRuleset()->getItem(*i);
+			RuleItem *rule = _game->getMod()->getItem(*i);
 			std::wostringstream ss, ss2;
 			ss << qty;
 			ss2 << qty * rule->getSize();

@@ -20,7 +20,6 @@
 #define OPENXCOM_ListLoadOriginalState_H
 
 #include "../Engine/State.h"
-#include <vector>
 #include "../Savegame/SaveConverter.h"
 
 namespace OpenXcom

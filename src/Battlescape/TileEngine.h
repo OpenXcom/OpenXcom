@@ -21,7 +21,7 @@
 
 #include <vector>
 #include "Position.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/RuleItem.h"
 #include <SDL.h>
 
 namespace OpenXcom

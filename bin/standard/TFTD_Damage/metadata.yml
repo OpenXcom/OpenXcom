@@ -1,0 +1,9 @@
+#
+# metadata.yaml for TFTD Damage Model
+
+name: "TFTD Damage Model"
+version: 1.0
+description: "Direct-fire weapons do 50-150% of their damage instead of 0-200%. WARNING: makes sectopods extremely hard to kill!"
+author: the OpenXcom team
+
+master: xcom1

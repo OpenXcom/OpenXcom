@@ -38,6 +38,8 @@ enum SaveSort { SORT_NAME_ASC, SORT_NAME_DESC, SORT_DATE_ASC, SORT_DATE_DESC };
 enum MusicFormat { MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI };
 /// Sound format preferences.
 enum SoundFormat { SOUND_AUTO, SOUND_14, SOUND_10 };
+/// Video format preferences.
+enum VideoFormat { VIDEO_FMV, VIDEO_SLIDE };
 /// Path preview modes (can be OR'd together).
 enum PathPreview {
 	PATH_NONE    = 0x00, // 0000 (must always be zero)
@@ -85,10 +87,14 @@ namespace Options
 	std::string getUserFolder();
 	/// Gets the game's config folder.
 	std::string getConfigFolder();
+	/// Gets the game's master mod user folder.
+	std::string getMasterUserFolder();
 	/// Gets the game's options.
 	const std::vector<OptionInfo> &getOptionInfo();
 	/// Sets the game's data, user and config folders.
 	void setFolders();
+	/// Sets the game's user master folders.
+	void userSplitMasters();
 	/// Update game options from config file and command line.
 	void updateOptions();
 	/// Backup display options.
@@ -101,6 +107,8 @@ namespace Options
 	void mapResources();
 	/// Gets the map of mod ids to mod infos
 	const std::map<std::string, ModInfo> &getModInfos();
+	/// Refreshes the mods and filemaps.
+	void updateMods();
 }
 
 }

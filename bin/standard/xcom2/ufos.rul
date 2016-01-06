@@ -1,0 +1,224 @@
+ufos: #done
+  - type: STR_SURVEY_SHIP
+    size: STR_VERY_SMALL
+    sprite: 0
+    damageMax: 60
+    speedMax: 2000
+    accel: 12
+    power: 0
+    range: 0
+    score: 50
+    reload: 56
+    breakOffTime: 200
+    battlescapeTerrainData:
+      name: UFO01
+      mapDataSets:
+        - BLANKS
+        - UEXT2
+        - UEXT3
+        - UINT1
+        - UINT2
+        - UINT3
+      mapBlocks:
+        - name: UFO01
+          width: 10
+          length: 10
+  - type: STR_ESCORT
+    size: STR_SMALL
+    sprite: 1
+    damageMax: 300
+    speedMax: 2800
+    accel: 9
+    power: 30
+    range: 13
+    score: 75
+    reload: 56
+    breakOffTime: 250
+    battlescapeTerrainData:
+      name: UFO02
+      mapDataSets:
+        - BLANKS
+        - UEXT2
+        - UEXT3
+        - UINT1
+        - UINT2
+        - UINT3
+      mapBlocks:
+        - name: UFO02
+          width: 10
+          length: 10
+          items:
+            STR_ZRBITE:
+              - [2, 2, 0]
+  - type: STR_CRUISER
+    size: STR_SMALL
+    sprite: 2
+    damageMax: 300
+    speedMax: 2600
+    accel: 9
+    power: 25
+    range: 35
+    score: 125
+    reload: 48
+    breakOffTime: 300
+    battlescapeTerrainData:
+      name: UFO03
+      mapDataSets:
+        - BLANKS
+        - UEXT2
+        - UEXT3
+        - UINT1
+        - UINT2
+        - UINT3
+      mapBlocks:
+        - name: UFO03
+          width: 20
+          length: 20
+          items:
+            STR_ZRBITE:
+              - [10, 3, 0]
+  - type: STR_HEAVY_CRUISER
+    size: STR_MEDIUM_UC
+    sprite: 4
+    damageMax: 450
+    speedMax: 3800
+    accel: 8
+    power: 60
+    range: 20
+    score: 250
+    reload: 48
+    breakOffTime: 500
+    battlescapeTerrainData:
+      name: UFO04
+      mapDataSets:
+        - BLANKS
+        - UEXT2
+        - UEXT3
+        - UINT1
+        - UINT2
+        - UINT3
+      mapBlocks:
+        - name: UFO04
+          width: 20
+          length: 20
+          items:
+            STR_ZRBITE:
+              - [5, 8, 0]
+              - [3, 8, 0]
+  - type: STR_HUNTER
+    size: STR_MEDIUM_UC
+    sprite: 3
+    damageMax: 500
+    speedMax: 4500
+    accel: 8
+    power: 50
+    range: 18
+    score: 250
+    reload: 32
+    breakOffTime: 500
+    battlescapeTerrainData:
+      name: UFO05
+      mapDataSets:
+        - BLANKS
+        - UEXT2
+        - UEXT3
+        - UINT1
+        - UINT2
+        - UINT3
+      mapBlocks:
+        - name: UFO05
+          width: 20
+          length: 20
+          items:
+            STR_ZRBITE:
+              - [9, 3, 1]
+              - [10, 3, 1]
+  - type: STR_BATTLESHIP
+    size: STR_LARGE
+    sprite: 7
+    damageMax: 1400
+    speedMax: 4200
+    accel: 6
+    power: 120
+    range: 50
+    score: 500
+    reload: 24
+    breakOffTime: 2000
+    battlescapeTerrainData:
+      name: UFO06
+      mapDataSets:
+        - BLANKS
+        - UEXT2
+        - UEXT3
+        - UINT1
+        - UINT2
+        - UINT3
+      mapBlocks:
+        - name: UFO06
+          width: 20
+          length: 30
+          items:
+            STR_ZRBITE:
+              - [8, 12, 0]
+              - [9, 14, 0]
+              - [6, 14, 1]
+              - [5, 15, 1]
+  - type: STR_DREADNOUGHT
+    size: STR_VERY_LARGE
+    sprite: 6
+    damageMax: 3400
+    speedMax: 4800
+    accel: 6
+    power: 140
+    range: 60
+    score: 700
+    reload: 24
+    breakOffTime: 4000
+    battlescapeTerrainData:
+      name: UFO07
+      mapDataSets:
+        - BLANKS
+        - UEXT2
+        - UEXT3
+        - UINT1
+        - UINT2
+        - UINT3
+      mapBlocks:
+        - name: UFO07
+          width: 30
+          length: 30
+          items:
+            STR_ZRBITE:
+              - [17, 2, 0]
+              - [16, 3, 0]
+              - [3, 12, 0]
+              - [26, 12, 0]
+  - type: STR_FLEET_SUPPLY_CRUISER
+    size: STR_LARGE
+    sprite: 5
+    damageMax: 2000
+    speedMax: 3400
+    accel: 6
+    power: 70
+    range: 38
+    score: 400
+    reload: 24
+    breakOffTime: 3000
+    battlescapeTerrainData:
+      name: UFO08
+      mapDataSets:
+        - BLANKS
+        - UEXT2
+        - UEXT3
+        - UINT1
+        - UINT2
+        - UINT3
+      mapBlocks:
+        - name: UFO08
+          width: 20
+          length: 30
+          items:
+            STR_ZRBITE:
+              - [11, 2, 0]
+              - [10, 3, 0]
+              - [8, 2, 0]

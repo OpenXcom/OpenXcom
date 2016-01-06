@@ -104,7 +104,7 @@ int PathfindingNode::getPrevDir() const
  * @param prevNode The previous node along the path.
  * @param prevDir The direction FROM the previous node.
  * @param target The target position (used to update our guess cost).
-*/
+ */
 void PathfindingNode::connect(int tuCost, PathfindingNode* prevNode, int prevDir, const Position &target)
 {
 	_tuCost = tuCost;
@@ -123,7 +123,7 @@ void PathfindingNode::connect(int tuCost, PathfindingNode* prevNode, int prevDir
  * @param tuCost The total cost of the path so far.
  * @param prevNode The previous node along the path.
  * @param prevDir The direction FROM the previous node.
-*/
+ */
 void PathfindingNode::connect(int tuCost, PathfindingNode* prevNode, int prevDir)
 {
 	_tuCost = tuCost;

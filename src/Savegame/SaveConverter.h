@@ -38,11 +38,12 @@ struct SaveOriginal
 };
 
 class SavedGame;
-class Ruleset;
+class Mod;
 class Language;
 class Target;
 class Soldier;
 class AlienMission;
+class RuleConverter;
 
 /**
  * Handles conversion operations for original X-COM savegames.
@@ -52,9 +53,9 @@ class SaveConverter
 {
 private:
 	std::string _saveName, _savePath;
-	std::vector<std::string> _idMarkers, _idCountries, _idRegions, _idFacilities, _idItems, _idCrews, _idCrafts, _idUfos, _idCraftWeapons, _idMissions, _idArmor, _idAlienRaces, _idAlienRanks, _idResearch, _idManufacture, _idUfopaedia;
 	SavedGame *_save;
-	Ruleset *_rule;
+	Mod *_mod;
+	RuleConverter *_rules;
 	int _year, _funds;
 	std::vector<Target*> _targets;
 	std::vector<int> _targetDat;
@@ -63,7 +64,7 @@ private:
 	std::map<std::pair<int, int>, AlienMission*> _missions;
 
 	/// Loads a binary file into a vector.
-	char *binaryBuffer(const std::string &filename, std::vector<char> &buffer);
+	char *binaryBuffer(const std::string &filename, std::vector<char> &buffer) const;
 	/// Corrects a vector of graph data.
 	template <typename T> void graphVector(std::vector<T> &vector, int month, bool year);
 
@@ -113,7 +114,7 @@ public:
 	static const int NUM_SAVES = 10;
 
 	/// Creates a converter for the specified save.
-	SaveConverter(int save, Ruleset *rule);
+	SaveConverter(int save, Mod *mod);
 	/// Cleans up the converter.
 	~SaveConverter();
 	/// Gets list of saves in the user directory.

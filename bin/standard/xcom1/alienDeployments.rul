@@ -833,11 +833,13 @@ alienDeployments:
     terrains:
       - URBAN
     alert: STR_ALIENS_TERRORISE
+    alertBackground: BACK03.SCR
     briefing:
       palette: 2
       music: GMENBASE    
     markerName: STR_TERROR_SITE
     duration: [4, 10]
+    despawnPenalty: 1000
   - type: STR_ALIEN_BASE_ASSAULT
     data:
       - alienRank: 6
@@ -994,6 +996,9 @@ alienDeployments:
       textOffset: -16
       background: BACK01.SCR
       showTarget: false
+    objectiveType: 3
+    objectiveComplete: [STR_ALIEN_BASE_CONTROL_DESTROYED, 500]
+    objectivePopup: STR_CONTROL_CENTER_DESTROYED
   - type: STR_BASE_DEFENSE
     data:
       - alienRank: 5
@@ -1224,7 +1229,7 @@ alienDeployments:
     race: STR_SECTOID
     nextStage: STR_MARS_THE_FINAL_ASSAULT
     finalDestination: true
-    loseCutscene: losegame
+    loseCutscene: loseGame
     briefing:
       textOffset: -16
       palette: 6
@@ -1380,8 +1385,8 @@ alienDeployments:
       - UBASE
     shade: 5
     race: STR_MIXED
-    winCutscene: wingame
-    loseCutscene: losegame
+    winCutscene: winGame
+    loseCutscene: loseGame
     briefing:
       textOffset: -16
       palette: 6
@@ -1390,3 +1395,5 @@ alienDeployments:
       showCraft: false
       background: BACK01.SCR
     script: BOSSBATTLE
+    objectiveType: 14
+    objectivesRequired: 1

@@ -27,14 +27,14 @@
 namespace OpenXcom
 {
 
-class Ruleset;
+class Mod;
 class BaseFacility;
 class Soldier;
 class Craft;
 class ItemContainer;
 class Transfer;
 class Language;
-class Ruleset;
+class Mod;
 class SavedGame;
 class ResearchProject;
 class Production;
@@ -48,7 +48,7 @@ class Base : public Target
 {
 private:
 	static const int BASE_SIZE = 6;
-	const Ruleset *_rule;
+	const Mod *_mod;
 	std::wstring _name;
 	std::vector<BaseFacility*> _facilities;
 	std::vector<Soldier*> _soldiers;
@@ -66,7 +66,7 @@ private:
 	double getIgnoredStores();
 public:
 	/// Creates a new base.
-	Base(const Ruleset *rule);
+	Base(const Mod *mod);
 	/// Cleans up the base.
 	~Base();
 	/// Loads the base from YAML.
@@ -90,7 +90,7 @@ public:
 	/// Gets the base's transfers.
 	std::vector<Transfer*> *getTransfers();
 	/// Gets the base's items.
-	ItemContainer *getItems();
+	ItemContainer *getStorageItems();
 	/// Gets the base's scientists.
 	int getScientists() const;
 	/// Sets the base's scientists.
@@ -155,6 +155,8 @@ public:
 	int getCraftCount(const std::string &craft) const;
 	/// Gets the base's craft maintenance.
 	int getCraftMaintenance() const;
+	/// Gets the base's soldiers of a certain type.
+	int getSoldierCount(const std::string &soldier) const;
 	/// Gets the base's personnel maintenance.
 	int getPersonnelMaintenance() const;
 	/// Gets the base's facility maintenance.

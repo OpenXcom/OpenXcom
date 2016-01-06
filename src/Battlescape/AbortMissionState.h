@@ -37,11 +37,11 @@ class AbortMissionState : public State
 {
 private:
 	Window *_window;
-	Text *_txtInExit, *_txtOutsideExit, *_txtAbort;
+	Text *_txtInEntrance, *_txtInExit, *_txtOutside, *_txtAbort;
 	TextButton *_btnOk, *_btnCancel;
 	SavedBattleGame *_battleGame;
 	BattlescapeState *_state;
-	int _inExitArea, _outExitArea;
+	int _inEntrance, _inExit, _outside;
 public:
 	/// Creates the Abort Mission state.
 	AbortMissionState(SavedBattleGame *battleGame, BattlescapeState *state);

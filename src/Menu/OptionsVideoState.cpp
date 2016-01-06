@@ -17,13 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "OptionsVideoState.h"
-#include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Engine/Action.h"
-#include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextEdit.h"
 #include "../Interface/ToggleTextButton.h"
@@ -373,6 +369,7 @@ void OptionsVideoState::updateDisplayResolution()
 	Options::newDisplayWidth = _res[_resCurrent]->w;
 	Options::newDisplayHeight = _res[_resCurrent]->h;
 }
+
 /**
  * Changes the Display Width option.
  * @param action Pointer to an action.

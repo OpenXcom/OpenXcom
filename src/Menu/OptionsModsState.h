@@ -21,15 +21,15 @@
 
 #include "OptionsBaseState.h"
 #include "../Engine/ModInfo.h"
-#include "../Interface/ComboBox.h"
 #include <vector>
 #include <string>
-#include <map>
+#include <utility>
 
 namespace OpenXcom
 {
 
 class TextList;
+class ComboBox;
 
 /**
  * Options window that displays the

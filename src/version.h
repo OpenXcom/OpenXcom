@@ -23,6 +23,10 @@
 #define OPENXCOM_VERSION_LONG "1.0.0.0"
 #define OPENXCOM_VERSION_NUMBER 1,0,0,0
 
+#ifdef GIT_BUILD
+#include "git_version.h"
+#endif
+
 #ifndef OPENXCOM_VERSION_GIT
 #define OPENXCOM_VERSION_GIT ""
 #endif

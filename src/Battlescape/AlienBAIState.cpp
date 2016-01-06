@@ -21,24 +21,22 @@
 #include <climits>
 #include <algorithm>
 #include "AlienBAIState.h"
-#include "ProjectileFlyBState.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Node.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
-#include "../Battlescape/TileEngine.h"
-#include "../Battlescape/Map.h"
-#include "../Battlescape/BattlescapeState.h"
+#include "TileEngine.h"
+#include "Map.h"
+#include "BattlescapeState.h"
 #include "../Savegame/Tile.h"
-#include "../Battlescape/Pathfinding.h"
+#include "Pathfinding.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
-#include "../Ruleset/Armor.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/Armor.h"
+#include "../Mod/Mod.h"
+#include "../Mod/RuleItem.h"
 
 namespace OpenXcom
 {
@@ -145,7 +143,7 @@ void AlienBAIState::think(BattleAction *action)
  	action->type = BA_RETHINK;
 	action->actor = _unit;
 	action->weapon = _unit->getMainHandWeapon();
-	_attackAction->diff = (int)(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
+	_attackAction->diff = _save->getBattleState()->getGame()->getSavedGame()->getDifficultyCoefficient();
 	_attackAction->actor = _unit;
 	_attackAction->weapon = action->weapon;
 	_attackAction->number = action->number;
@@ -507,7 +505,7 @@ void AlienBAIState::setupPatrol()
 				for (int i = x; i < x+9; i++)
 				for (int j = y; j < y+9; j++)
 				{
-					MapData *md = _save->getTile(Position(i, j, 1))->getMapData(MapData::O_OBJECT);
+					MapData *md = _save->getTile(Position(i, j, 1))->getMapData(O_OBJECT);
 					if (md && md->isBaseModule())
 					{
 						_patrolAction->actor = _unit;
@@ -797,7 +795,7 @@ void AlienBAIState::setupEscape()
 	const int FIRE_PENALTY = 40;
 	const int BASE_SYSTEMATIC_SUCCESS = 100;
 	const int BASE_DESPERATE_SUCCESS = 110;
-	const int FAST_PASS_THRESHOLD = 100; // a score that's good engouh to quit the while loop early; it's subjective, hand-tuned and may need tweaking
+	const int FAST_PASS_THRESHOLD = 100; // a score that's good enough to quit the while loop early; it's subjective, hand-tuned and may need tweaking
 
 	std::vector<Position> randomTileSearch = _save->getTileSearch();
 	RNG::shuffle(randomTileSearch);
@@ -1497,15 +1495,15 @@ bool AlienBAIState::findFirePoint()
 bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff, bool grenade) const
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
-	Ruleset *ruleset = _save->getBattleState()->getGame()->getRuleset();
-	if ((!grenade && _save->getTurn() < ruleset->getTurnAIUseBlaster()) ||
-		 (grenade && _save->getTurn() < ruleset->getTurnAIUseGrenade()))
+	Mod *mod = _save->getBattleState()->getGame()->getMod();
+	if ((!grenade && _save->getTurn() < mod->getTurnAIUseBlaster()) ||
+		 (grenade && _save->getTurn() < mod->getTurnAIUseGrenade()))
 	{
 		return false;
 	}
 	if (diff == -1)
 	{
-		diff = (int)(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
+		diff = _save->getBattleState()->getGame()->getSavedGame()->getDifficultyCoefficient();
 	}
 	int distance = _save->getTileEngine()->distance(attackingUnit->getPosition(), targetPos);
 	int injurylevel = attackingUnit->getBaseStats()->health - attackingUnit->getHealth();
@@ -1522,11 +1520,7 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 	{
 		efficacy -= 4;
 	}
-
-	// we don't want to ruin our own base, but we do want to ruin XCom's day.
-	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT") efficacy -= 3;
-	else if (_save->getMissionType() == "STR_BASE_DEFENSE" || _save->getMissionType() == "STR_TERROR_MISSION") efficacy += 3;
-
+	
 	// allow difficulty to have its influence
 	efficacy += diff/2;
 
@@ -1589,6 +1583,12 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
  */
 void AlienBAIState::meleeAction()
 {
+	int attackCost = _unit->getActionTUs(BA_HIT, _unit->getMeleeWeapon());
+	if (_unit->getTimeUnits() < attackCost)
+	{
+		// cannot make a melee attack - consider some other behaviour, like running away, or standing motionless.
+		return;
+	}
 	if (_aggroTarget != 0 && !_aggroTarget->isOut())
 	{
 		if (_save->getTileEngine()->validMeleeRange(_unit, _aggroTarget, _save->getTileEngine()->getDirectionTo(_unit->getPosition(), _aggroTarget->getPosition())))
@@ -1597,7 +1597,6 @@ void AlienBAIState::meleeAction()
 			return;
 		}
 	}
-	int attackCost = _unit->getActionTUs(BA_HIT, _unit->getMainHandWeapon());
 	int chargeReserve = _unit->getTimeUnits() - attackCost;
 	int distance = (chargeReserve / 4) + 1;
 	_aggroTarget = 0;
@@ -1638,6 +1637,12 @@ void AlienBAIState::meleeAction()
  */
 void AlienBAIState::wayPointAction()
 {
+	int attackCost = _unit->getActionTUs(BA_LAUNCH, _unit->getMainHandWeapon());
+	if (_unit->getTimeUnits() < attackCost)
+	{
+		// cannot make a launcher attack - consider some other behaviour, like running away, or standing motionless.
+		return;
+	}
 	_aggroTarget = 0;
 	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end() && _aggroTarget == 0; ++i)
 	{
@@ -2059,7 +2064,7 @@ void AlienBAIState::selectMeleeOrRanged()
 bool AlienBAIState::getNodeOfBestEfficacy(BattleAction *action)
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
-	if (_save->getTurn() < _save->getBattleState()->getGame()->getRuleset()->getTurnAIUseGrenade())
+	if (_save->getTurn() < _save->getBattleState()->getGame()->getMod()->getTurnAIUseGrenade())
 		return false;
 
 	int bestScore = 2;
@@ -2069,7 +2074,7 @@ bool AlienBAIState::getNodeOfBestEfficacy(BattleAction *action)
 	{
 		int dist = _save->getTileEngine()->distance((*i)->getPosition(), _unit->getPosition());
 		if (dist <= 20 && dist > action->weapon->getRules()->getExplosionRadius() &&
-			_save->getTileEngine()->canTargetTile(&originVoxel, _save->getTile((*i)->getPosition()), MapData::O_FLOOR, &targetVoxel, _unit))
+			_save->getTileEngine()->canTargetTile(&originVoxel, _save->getTile((*i)->getPosition()), O_FLOOR, &targetVoxel, _unit))
 		{
 			int nodePoints = 0;
 			for (std::vector<BattleUnit*>::const_iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
@@ -2078,7 +2083,7 @@ bool AlienBAIState::getNodeOfBestEfficacy(BattleAction *action)
 				if (!(*j)->isOut() && dist < action->weapon->getRules()->getExplosionRadius())
 				{
 					Position targetOriginVoxel = _save->getTileEngine()->getSightOriginVoxel(*j);
-					if (_save->getTileEngine()->canTargetTile(&targetOriginVoxel, _save->getTile((*i)->getPosition()), MapData::O_FLOOR, &targetVoxel, *j))
+					if (_save->getTileEngine()->canTargetTile(&targetOriginVoxel, _save->getTile((*i)->getPosition()), O_FLOOR, &targetVoxel, *j))
 					{
 						if ((*j)->getFaction() != FACTION_HOSTILE)
 						{

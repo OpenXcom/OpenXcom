@@ -20,20 +20,20 @@
 #include "MedikitView.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Action.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Text.h"
 #include "../Engine/Screen.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Resource/ResourcePack.h"
-#include <iostream>
+#include "../Mod/RuleItem.h"
+#include "../Mod/Mod.h"
 #include <sstream>
 #include "../Engine/Options.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/BattleUnitStatistics.h"
 
 namespace OpenXcom
 {
@@ -152,7 +152,7 @@ MedikitState::MedikitState (BattleUnit *targetUnit, BattleAction *action) : _tar
 	_healTxt = new MedikitTxt (124);
 	add(_bg);
 	add(_medikitView, "body", "medikit", _bg);
-	add(_endButton);
+	add(_endButton, "buttonEnd", "medikit", _bg);
 	add(new MedikitTitle (37, tr("STR_PAIN_KILLER")), "textPK", "medikit", _bg);
 	add(new MedikitTitle (73, tr("STR_STIMULANT")), "textStim", "medikit", _bg);
 	add(new MedikitTitle (109, tr("STR_HEAL")), "textHeal", "medikit", _bg);
@@ -167,7 +167,7 @@ MedikitState::MedikitState (BattleUnit *targetUnit, BattleAction *action) : _tar
 
 	centerAllSurfaces();
 
-	_game->getResourcePack()->getSurface("MEDIBORD.PCK")->blit(_bg);
+	_game->getMod()->getSurface("MEDIBORD.PCK")->blit(_bg);
 	_pkText->setBig();
 	_stimulantTxt->setBig();
 	_healTxt->setBig();
@@ -231,7 +231,9 @@ void MedikitState::onHealClick(Action *)
 		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS && _targetUnit->getStunlevel() < _targetUnit->getHealth() && _targetUnit->getHealth() > 0)
 		{
 			_targetUnit->setTimeUnits(0);
+			_action->actor->getStatistics()->revivedSoldier++;
 		}
+		_unit->getStatistics()->woundsHealed++;
 	}
 	else
 	{
@@ -256,6 +258,7 @@ void MedikitState::onStimulantClick(Action *)
 	{
 		_targetUnit->stimulant(rule->getEnergyRecovery(), rule->getStunRecovery());
 		_item->setStimulantQuantity(--stimulant);
+		_action->actor->getStatistics()->appliedStimulant++;
 		update();
 
 		// if the unit has revived we quit this screen automatically
@@ -288,6 +291,7 @@ void MedikitState::onPainKillerClick(Action *)
 	{
 		_targetUnit->painKillers();
 		_item->setPainKillerQuantity(--pk);
+		_action->actor->getStatistics()->appliedPainKill++;
 		update();
 	}
 	else

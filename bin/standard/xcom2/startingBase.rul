@@ -1,0 +1,132 @@
+startingBase: #done
+  facilities:
+    - type: STR_AIR_LOCK
+      x: 2
+      y: 2
+    - type: STR_SUB_PEN
+      x: 2
+      y: 0
+    - type: STR_SUB_PEN
+      x: 0
+      y: 4
+    - type: STR_SUB_PEN
+      x: 4
+      y: 4
+    - type: STR_LIVING_QUARTERS
+      x: 3
+      y: 2
+    - type: STR_GENERAL_STORES
+      x: 2
+      y: 3
+    - type: STR_LABORATORY
+      x: 3
+      y: 3
+    - type: STR_WORKSHOP
+      x: 4
+      y: 3
+    - type: STR_STANDARD_SONAR
+      x: 1
+      y: 3
+  randomSoldiers: 8
+  crafts:
+    - lon: 0.0
+      lat: 0.0
+      speedLon: 0
+      speedLat: 0
+      speedRadian: 0
+      speed: 0
+      type: STR_TRITON
+      id: 1
+      fuel: 1400
+      damage: 0
+      weapons:
+        []
+      items:
+        STR_MAGNA_BLAST_GRENADE: 8
+        STR_GC_AP_AMMO: 2
+        STR_GC_HE_AMMO: 2
+        STR_GAS_CANNON: 1
+        STR_DART_PISTOL: 3
+        STR_DART_POD: 5
+        STR_JET_HARPOON: 6
+        STR_HARPOON_POD: 12
+      vehicles:
+        []
+      status: STR_READY
+      lowFuel: false
+      inBattlescape: false
+      inDogfight: false
+      interceptionOrder: 0
+    - lon: 0.0
+      lat: 0.0
+      speedLon: 0
+      speedLat: 0
+      speedRadian: 0
+      speed: 0
+      type: STR_BARRACUDA
+      id: 1
+      fuel: 800
+      damage: 0
+      weapons:
+        - type: STR_AJAX
+          ammo: 6
+          rearming: false
+        - type: STR_CRAFT_GAS_CANNON_UC
+          ammo: 200
+          rearming: false
+      items:
+        {}
+      vehicles:
+        []
+      status: STR_READY
+      lowFuel: false
+      inBattlescape: false
+      inDogfight: false
+      interceptionOrder: 0
+    - lon: 0.0
+      lat: 0.0
+      speedLon: 0
+      speedLat: 0
+      speedRadian: 0
+      speed: 0
+      type: STR_BARRACUDA
+      id: 2
+      fuel: 800
+      damage: 0
+      weapons:
+        - type: STR_AJAX
+          ammo: 6
+          rearming: false
+        - type: STR_CRAFT_GAS_CANNON_UC
+          ammo: 200
+          rearming: false
+      items:
+        {}
+      vehicles:
+        []
+      status: STR_READY
+      lowFuel: false
+      inBattlescape: false
+      inDogfight: false
+      interceptionOrder: 0
+  items:
+    STR_HJC_AP_AMMO: 6
+    STR_HYDRO_JET_CANNON: 1
+    STR_DUP_HEAD_LAUNCHER: 1
+    STR_DUP_HEAD_TORPEDOES: 10
+    STR_CRAFT_GAS_CANNON: 2
+    STR_CRAFT_GAS_CANNON_ROUNDS_X50: 1
+    STR_MAGNA_BLAST_GRENADE: 5
+    STR_GC_AP_AMMO: 6
+    STR_GAS_CANNON: 1
+    STR_DART_PISTOL: 2
+    STR_DART_POD: 8
+    STR_JET_HARPOON: 2
+    STR_HARPOON_POD: 8
+    STR_TORPEDO_LAUNCHER: 1
+    STR_SMALL_TORPEDO: 4
+    STR_DYE_GRENADE: 5
+    STR_AJAX_LAUNCHER: 1
+    STR_AJAX_TORPEDOES: 25
+  scientists: 10
+  engineers: 10

@@ -19,7 +19,6 @@
 #ifndef OPENXCOM_VEHICLE_H
 #define OPENXCOM_VEHICLE_H
 
-#include <string>
 #include <yaml-cpp/yaml.h>
 
 namespace OpenXcom

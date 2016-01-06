@@ -85,7 +85,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)..\deps\include;$(ProjectDir)..\deps\include\SDL;$(ProjectDir)..\deps\include\yaml-cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;WIN32;_CRT_SECURE_NO_DEPRECATE;_DEBUG;_CONSOLE;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE;_DEBUG;_CONSOLE;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -117,7 +117,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)..\deps\include;$(ProjectDir)..\deps\include\SDL;$(ProjectDir)..\deps\include\yaml-cpp%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;WIN32;_CRT_SECURE_NO_DEPRECATE;_DEBUG;_CONSOLE;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE;_DEBUG;_CONSOLE;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -146,7 +146,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)..\deps\include;$(ProjectDir)..\deps\include\SDL;$(ProjectDir)..\deps\include\yaml-cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;WIN32;_CRT_SECURE_NO_DEPRECATE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
@@ -179,7 +179,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)..\deps\include;$(ProjectDir)..\deps\include\SDL;$(ProjectDir)..\deps\include\yaml-cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;WIN32;_CRT_SECURE_NO_DEPRECATE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
@@ -238,6 +238,9 @@
     <ClCompile Include="Basescape\SackSoldierState.cpp" />
     <ClCompile Include="Basescape\SellState.cpp" />
     <ClCompile Include="Basescape\SoldierArmorState.cpp" />
+    <ClCompile Include="Basescape\SoldierDiaryMissionState.cpp" />
+    <ClCompile Include="Basescape\SoldierDiaryOverviewState.cpp" />
+    <ClCompile Include="Basescape\SoldierDiaryPerformanceState.cpp" />
     <ClCompile Include="Basescape\SoldierInfoState.cpp" />
     <ClCompile Include="Basescape\SoldierMemorialState.cpp" />
     <ClCompile Include="Basescape\SoldiersState.cpp" />
@@ -260,6 +263,8 @@
     <ClCompile Include="Battlescape\BriefingState.cpp" />
     <ClCompile Include="Battlescape\Camera.cpp" />
     <ClCompile Include="Battlescape\CannotReequipState.cpp" />
+    <ClCompile Include="Battlescape\CommendationLateState.cpp" />
+    <ClCompile Include="Battlescape\CommendationState.cpp" />
     <ClCompile Include="Battlescape\DebriefingState.cpp" />
     <ClCompile Include="Battlescape\Explosion.cpp" />
     <ClCompile Include="Battlescape\ExplosionBState.cpp" />
@@ -338,6 +343,7 @@
     <ClCompile Include="Engine\Timer.cpp" />
     <ClCompile Include="Engine\Zoom.cpp" />
     <ClCompile Include="Geoscape\AlienBaseState.cpp" />
+    <ClCompile Include="Geoscape\DogfightErrorState.cpp" />
     <ClCompile Include="Geoscape\MissionDetectedState.cpp" />
     <ClCompile Include="Geoscape\AllocatePsiTrainingState.cpp" />
     <ClCompile Include="Geoscape\BaseDefenseState.cpp" />
@@ -420,54 +426,55 @@
     <ClCompile Include="Menu\StartState.cpp" />
     <ClCompile Include="Menu\TestState.cpp" />
     <ClCompile Include="Menu\VideoState.cpp" />
+    <ClCompile Include="Mod\RuleCommendations.cpp" />
+    <ClCompile Include="Mod\RuleConverter.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Resource\ResourcePack.cpp" />
-    <ClCompile Include="Resource\XcomResourcePack.cpp" />
-    <ClCompile Include="Ruleset\ExtraSounds.cpp" />
-    <ClCompile Include="Ruleset\ExtraSprites.cpp" />
-    <ClCompile Include="Ruleset\ExtraStrings.cpp" />
-    <ClCompile Include="Ruleset\Texture.cpp" />
-    <ClCompile Include="Ruleset\MapScript.cpp" />
-    <ClCompile Include="Ruleset\MCDPatch.cpp" />
-    <ClCompile Include="Ruleset\Polygon.cpp" />
-    <ClCompile Include="Ruleset\Polyline.cpp" />
-    <ClCompile Include="Ruleset\RuleAlienMission.cpp" />
-    <ClCompile Include="Ruleset\ArticleDefinition.cpp" />
-    <ClCompile Include="Ruleset\City.cpp" />
-    <ClCompile Include="Ruleset\MapBlock.cpp" />
-    <ClCompile Include="Ruleset\MapDataSet.cpp" />
-    <ClCompile Include="Ruleset\MapData.cpp" />
-    <ClCompile Include="Ruleset\AlienDeployment.cpp" />
-    <ClCompile Include="Ruleset\AlienRace.cpp" />
-    <ClCompile Include="Ruleset\RuleGlobe.cpp" />
-    <ClCompile Include="Ruleset\RuleMusic.cpp" />
-    <ClCompile Include="Ruleset\RuleVideo.cpp" />
-    <ClCompile Include="Ruleset\SoundDefinition.cpp" />
-    <ClCompile Include="Ruleset\StatString.cpp" />
-    <ClCompile Include="Ruleset\StatStringCondition.cpp" />
-    <ClCompile Include="Ruleset\RuleInterface.cpp" />
-    <ClCompile Include="Ruleset\Unit.cpp" />
-    <ClCompile Include="Ruleset\Armor.cpp" />
-    <ClCompile Include="Ruleset\RuleBaseFacility.cpp" />
-    <ClCompile Include="Ruleset\RuleCountry.cpp" />
-    <ClCompile Include="Ruleset\RuleCraft.cpp" />
-    <ClCompile Include="Ruleset\RuleCraftWeapon.cpp" />
-    <ClCompile Include="Ruleset\RuleInventory.cpp" />
-    <ClCompile Include="Ruleset\RuleItem.cpp" />
-    <ClCompile Include="Ruleset\RuleManufacture.cpp" />
-    <ClCompile Include="Ruleset\RuleRegion.cpp" />
-    <ClCompile Include="Ruleset\RuleResearch.cpp" />
-    <ClCompile Include="Ruleset\Ruleset.cpp" />
-    <ClCompile Include="Ruleset\RuleSoldier.cpp" />
-    <ClCompile Include="Ruleset\RuleUfo.cpp" />
-    <ClCompile Include="Ruleset\RuleTerrain.cpp" />
-    <ClCompile Include="Ruleset\SoldierNamePool.cpp" />
-    <ClCompile Include="Ruleset\UfoTrajectory.cpp" />
+    <ClCompile Include="Mod\ExtraSounds.cpp" />
+    <ClCompile Include="Mod\ExtraSprites.cpp" />
+    <ClCompile Include="Mod\ExtraStrings.cpp" />
+    <ClCompile Include="Mod\RuleMissionScript.cpp" />
+    <ClCompile Include="Mod\Texture.cpp" />
+    <ClCompile Include="Mod\MapScript.cpp" />
+    <ClCompile Include="Mod\MCDPatch.cpp" />
+    <ClCompile Include="Mod\Polygon.cpp" />
+    <ClCompile Include="Mod\Polyline.cpp" />
+    <ClCompile Include="Mod\RuleAlienMission.cpp" />
+    <ClCompile Include="Mod\ArticleDefinition.cpp" />
+    <ClCompile Include="Mod\City.cpp" />
+    <ClCompile Include="Mod\MapBlock.cpp" />
+    <ClCompile Include="Mod\MapDataSet.cpp" />
+    <ClCompile Include="Mod\MapData.cpp" />
+    <ClCompile Include="Mod\AlienDeployment.cpp" />
+    <ClCompile Include="Mod\AlienRace.cpp" />
+    <ClCompile Include="Mod\RuleGlobe.cpp" />
+    <ClCompile Include="Mod\RuleMusic.cpp" />
+    <ClCompile Include="Mod\RuleVideo.cpp" />
+    <ClCompile Include="Mod\SoundDefinition.cpp" />
+    <ClCompile Include="Mod\StatString.cpp" />
+    <ClCompile Include="Mod\StatStringCondition.cpp" />
+    <ClCompile Include="Mod\RuleInterface.cpp" />
+    <ClCompile Include="Mod\Unit.cpp" />
+    <ClCompile Include="Mod\Armor.cpp" />
+    <ClCompile Include="Mod\RuleBaseFacility.cpp" />
+    <ClCompile Include="Mod\RuleCountry.cpp" />
+    <ClCompile Include="Mod\RuleCraft.cpp" />
+    <ClCompile Include="Mod\RuleCraftWeapon.cpp" />
+    <ClCompile Include="Mod\RuleInventory.cpp" />
+    <ClCompile Include="Mod\RuleItem.cpp" />
+    <ClCompile Include="Mod\RuleManufacture.cpp" />
+    <ClCompile Include="Mod\RuleRegion.cpp" />
+    <ClCompile Include="Mod\RuleResearch.cpp" />
+    <ClCompile Include="Mod\Mod.cpp" />
+    <ClCompile Include="Mod\RuleSoldier.cpp" />
+    <ClCompile Include="Mod\RuleUfo.cpp" />
+    <ClCompile Include="Mod\RuleTerrain.cpp" />
+    <ClCompile Include="Mod\SoldierNamePool.cpp" />
+    <ClCompile Include="Mod\UfoTrajectory.cpp" />
     <ClCompile Include="Savegame\AlienBase.cpp" />
     <ClCompile Include="Savegame\AlienStrategy.cpp" />
     <ClCompile Include="Savegame\AlienMission.cpp" />
@@ -493,6 +500,7 @@
     <ClCompile Include="Savegame\Soldier.cpp" />
     <ClCompile Include="Savegame\Node.cpp" />
     <ClCompile Include="Savegame\SoldierDeath.cpp" />
+    <ClCompile Include="Savegame\SoldierDiary.cpp" />
     <ClCompile Include="Savegame\Target.cpp" />
     <ClCompile Include="Savegame\MissionSite.cpp" />
     <ClCompile Include="Savegame\Tile.cpp" />
@@ -553,6 +561,9 @@
     <ClInclude Include="Basescape\SackSoldierState.h" />
     <ClInclude Include="Basescape\SellState.h" />
     <ClInclude Include="Basescape\SoldierArmorState.h" />
+    <ClInclude Include="Basescape\SoldierDiaryMissionState.h" />
+    <ClInclude Include="Basescape\SoldierDiaryOverviewState.h" />
+    <ClInclude Include="Basescape\SoldierDiaryPerformanceState.h" />
     <ClInclude Include="Basescape\SoldierInfoState.h" />
     <ClInclude Include="Basescape\SoldierMemorialState.h" />
     <ClInclude Include="Basescape\SoldiersState.h" />
@@ -575,6 +586,8 @@
     <ClInclude Include="Battlescape\BriefingState.h" />
     <ClInclude Include="Battlescape\Camera.h" />
     <ClInclude Include="Battlescape\CannotReequipState.h" />
+    <ClInclude Include="Battlescape\CommendationLateState.h" />
+    <ClInclude Include="Battlescape\CommendationState.h" />
     <ClInclude Include="Battlescape\DebriefingState.h" />
     <ClInclude Include="Battlescape\Explosion.h" />
     <ClInclude Include="Battlescape\ExplosionBState.h" />
@@ -662,6 +675,8 @@
     <ClInclude Include="Engine\Zoom.h" />
     <ClInclude Include="fmath.h" />
     <ClInclude Include="Geoscape\AlienBaseState.h" />
+    <ClInclude Include="Geoscape\Cord.h" />
+    <ClInclude Include="Geoscape\DogfightErrorState.h" />
     <ClInclude Include="Geoscape\MissionDetectedState.h" />
     <ClInclude Include="Geoscape\AllocatePsiTrainingState.h" />
     <ClInclude Include="Geoscape\BaseDefenseState.h" />
@@ -743,50 +758,51 @@
     <ClInclude Include="Menu\StartState.h" />
     <ClInclude Include="Menu\TestState.h" />
     <ClInclude Include="Menu\VideoState.h" />
+    <ClInclude Include="Mod\RuleCommendations.h" />
+    <ClInclude Include="Mod\RuleConverter.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Resource\ResourcePack.h" />
-    <ClInclude Include="Resource\XcomResourcePack.h" />
-    <ClInclude Include="Ruleset\ArticleDefinition.h" />
-    <ClInclude Include="Ruleset\City.h" />
-    <ClInclude Include="Ruleset\ExtraSounds.h" />
-    <ClInclude Include="Ruleset\ExtraSprites.h" />
-    <ClInclude Include="Ruleset\ExtraStrings.h" />
-    <ClInclude Include="Ruleset\Texture.h" />
-    <ClInclude Include="Ruleset\MapBlock.h" />
-    <ClInclude Include="Ruleset\MapDataSet.h" />
-    <ClInclude Include="Ruleset\MapData.h" />
-    <ClInclude Include="Ruleset\AlienDeployment.h" />
-    <ClInclude Include="Ruleset\AlienRace.h" />
-    <ClInclude Include="Ruleset\MapScript.h" />
-    <ClInclude Include="Ruleset\MCDPatch.h" />
-    <ClInclude Include="Ruleset\Polygon.h" />
-    <ClInclude Include="Ruleset\Polyline.h" />
-    <ClInclude Include="Ruleset\RuleGlobe.h" />
-    <ClInclude Include="Ruleset\RuleMusic.h" />
-    <ClInclude Include="Ruleset\RuleVideo.h" />
-    <ClInclude Include="Ruleset\SoundDefinition.h" />
-    <ClInclude Include="Ruleset\StatString.h" />
-    <ClInclude Include="Ruleset\StatStringCondition.h" />
-    <ClInclude Include="Ruleset\RuleInterface.h" />
-    <ClInclude Include="Ruleset\Unit.h" />
-    <ClInclude Include="Ruleset\Armor.h" />
-    <ClInclude Include="Ruleset\RuleAlienMission.h" />
-    <ClInclude Include="Ruleset\RuleBaseFacility.h" />
-    <ClInclude Include="Ruleset\RuleCountry.h" />
-    <ClInclude Include="Ruleset\RuleCraft.h" />
-    <ClInclude Include="Ruleset\RuleCraftWeapon.h" />
-    <ClInclude Include="Ruleset\RuleInventory.h" />
-    <ClInclude Include="Ruleset\RuleItem.h" />
-    <ClInclude Include="Ruleset\RuleManufacture.h" />
-    <ClInclude Include="Ruleset\RuleRegion.h" />
-    <ClInclude Include="Ruleset\RuleResearch.h" />
-    <ClInclude Include="Ruleset\Ruleset.h" />
-    <ClInclude Include="Ruleset\RuleSoldier.h" />
-    <ClInclude Include="Ruleset\RuleUfo.h" />
-    <ClInclude Include="Ruleset\RuleTerrain.h" />
-    <ClInclude Include="Ruleset\SoldierNamePool.h" />
-    <ClInclude Include="Ruleset\UfoTrajectory.h" />
+    <ClInclude Include="Mod\ArticleDefinition.h" />
+    <ClInclude Include="Mod\City.h" />
+    <ClInclude Include="Mod\ExtraSounds.h" />
+    <ClInclude Include="Mod\ExtraSprites.h" />
+    <ClInclude Include="Mod\ExtraStrings.h" />
+    <ClInclude Include="Mod\RuleMissionScript.h" />
+    <ClInclude Include="Mod\Texture.h" />
+    <ClInclude Include="Mod\MapBlock.h" />
+    <ClInclude Include="Mod\MapDataSet.h" />
+    <ClInclude Include="Mod\MapData.h" />
+    <ClInclude Include="Mod\AlienDeployment.h" />
+    <ClInclude Include="Mod\AlienRace.h" />
+    <ClInclude Include="Mod\MapScript.h" />
+    <ClInclude Include="Mod\MCDPatch.h" />
+    <ClInclude Include="Mod\Polygon.h" />
+    <ClInclude Include="Mod\Polyline.h" />
+    <ClInclude Include="Mod\RuleGlobe.h" />
+    <ClInclude Include="Mod\RuleMusic.h" />
+    <ClInclude Include="Mod\RuleVideo.h" />
+    <ClInclude Include="Mod\SoundDefinition.h" />
+    <ClInclude Include="Mod\StatString.h" />
+    <ClInclude Include="Mod\StatStringCondition.h" />
+    <ClInclude Include="Mod\RuleInterface.h" />
+    <ClInclude Include="Mod\Unit.h" />
+    <ClInclude Include="Mod\Armor.h" />
+    <ClInclude Include="Mod\RuleAlienMission.h" />
+    <ClInclude Include="Mod\RuleBaseFacility.h" />
+    <ClInclude Include="Mod\RuleCountry.h" />
+    <ClInclude Include="Mod\RuleCraft.h" />
+    <ClInclude Include="Mod\RuleCraftWeapon.h" />
+    <ClInclude Include="Mod\RuleInventory.h" />
+    <ClInclude Include="Mod\RuleItem.h" />
+    <ClInclude Include="Mod\RuleManufacture.h" />
+    <ClInclude Include="Mod\RuleRegion.h" />
+    <ClInclude Include="Mod\RuleResearch.h" />
+    <ClInclude Include="Mod\Mod.h" />
+    <ClInclude Include="Mod\RuleSoldier.h" />
+    <ClInclude Include="Mod\RuleUfo.h" />
+    <ClInclude Include="Mod\RuleTerrain.h" />
+    <ClInclude Include="Mod\SoldierNamePool.h" />
+    <ClInclude Include="Mod\UfoTrajectory.h" />
     <ClInclude Include="Savegame\AlienBase.h" />
     <ClInclude Include="Savegame\AlienStrategy.h" />
     <ClInclude Include="Savegame\AlienMission.h" />
@@ -794,6 +810,7 @@
     <ClInclude Include="Savegame\BaseFacility.h" />
     <ClInclude Include="Savegame\BattleItem.h" />
     <ClInclude Include="Savegame\BattleUnit.h" />
+    <ClInclude Include="Savegame\BattleUnitStatistics.h" />
     <ClInclude Include="Savegame\Country.h" />
     <ClInclude Include="Savegame\Craft.h" />
     <ClInclude Include="Savegame\CraftWeapon.h" />
@@ -801,18 +818,19 @@
     <ClInclude Include="Savegame\EquipmentLayoutItem.h" />
     <ClInclude Include="Savegame\GameTime.h" />
     <ClInclude Include="Savegame\ItemContainer.h" />
+    <ClInclude Include="Savegame\MissionStatistics.h" />
     <ClInclude Include="Savegame\MovingTarget.h" />
     <ClInclude Include="Savegame\Production.h" />
     <ClInclude Include="Savegame\Region.h" />
     <ClInclude Include="Savegame\ResearchProject.h" />
     <ClInclude Include="Savegame\SaveConverter.h" />
-    <ClInclude Include="Savegame\SaveConverterXcom1.h" />
     <ClInclude Include="Savegame\SavedBattleGame.h" />
     <ClInclude Include="Savegame\SavedGame.h" />
     <ClInclude Include="Savegame\SerializationHelper.h" />
     <ClInclude Include="Savegame\Soldier.h" />
     <ClInclude Include="Savegame\Node.h" />
     <ClInclude Include="Savegame\SoldierDeath.h" />
+    <ClInclude Include="Savegame\SoldierDiary.h" />
     <ClInclude Include="Savegame\Target.h" />
     <ClInclude Include="Savegame\MissionSite.h" />
     <ClInclude Include="Savegame\Tile.h" />

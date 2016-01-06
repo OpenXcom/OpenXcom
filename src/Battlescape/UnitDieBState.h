@@ -20,7 +20,7 @@
 #define OPENXCOM_UNITDIEBSTATE_H
 
 #include "BattleState.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Mod/RuleItem.h"
 
 namespace OpenXcom
 {
@@ -50,8 +50,6 @@ public:
 	void cancel();
 	/// Runs state functionality every cycle.
 	void think();
-	/// Gets the result of the state.
-	std::string getResult() const;
 	/// Converts a unit to a corpse.
 	void convertUnitToCorpse();
 	/// Plays the death sound.

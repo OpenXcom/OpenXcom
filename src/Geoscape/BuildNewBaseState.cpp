@@ -21,9 +21,8 @@
 #include "../fmath.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Screen.h"
@@ -36,6 +35,8 @@
 #include "BaseNameState.h"
 #include "ConfirmNewBaseState.h"
 #include "../Engine/Options.h"
+#include "../Menu/ErrorMessageState.h"
+#include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
 {
@@ -125,7 +126,7 @@ BuildNewBaseState::BuildNewBaseState(Base *base, Globe *globe, bool first) : _ba
 	_btnRotateUp->setListButton();
 	_btnRotateDown->setListButton();
 
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&BuildNewBaseState::btnCancelClick);
@@ -229,7 +230,7 @@ void BuildNewBaseState::globeClick(Action *action)
 		return;
 	}
 
-	// Clicking on land for a base location
+	// Clicking on a polygon for a base location
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		if (_globe->insideLand(lon, lat))
@@ -249,6 +250,10 @@ void BuildNewBaseState::globeClick(Action *action)
 			{
 				_game->pushState(new ConfirmNewBaseState(_base, _globe));
 			}
+		}
+		else
+		{
+			_game->pushState(new ErrorMessageState(tr("STR_XCOM_BASE_CANNOT_BE_BUILT"), _palette, _game->getMod()->getInterface("geoscape")->getElement("genericWindow")->color, "BACK01.SCR", _game->getMod()->getInterface("geoscape")->getElement("palette")->color));
 		}
 	}
 }

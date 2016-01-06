@@ -21,7 +21,6 @@
 
 #include <list>
 #include <string>
-#include <vector>
 #include <SDL.h>
 
 namespace OpenXcom
@@ -31,9 +30,8 @@ class State;
 class Screen;
 class Cursor;
 class Language;
-class ResourcePack;
 class SavedGame;
-class Ruleset;
+class Mod;
 class FpsCounter;
 
 /**
@@ -50,9 +48,8 @@ private:
 	Cursor *_cursor;
 	Language *_lang;
 	std::list<State*> _states, _deleted;
-	ResourcePack *_res;
 	SavedGame *_save;
-	Ruleset *_rules;
+	Mod *_mod;
 	bool _quit, _init;
 	FpsCounter *_fpsCounter;
 	bool _mouseActive;
@@ -89,18 +86,14 @@ public:
 	Language *getLanguage() const;
 	/// Loads a new language for the game.
 	void loadLanguage(const std::string &filename);
-	/// Gets the currently loaded resource pack.
-	ResourcePack *getResourcePack() const;
-	/// Sets a new resource pack for the game.
-	void setResourcePack(ResourcePack *res);
 	/// Gets the currently loaded saved game.
 	SavedGame *getSavedGame() const;
 	/// Sets a new saved game for the game.
 	void setSavedGame(SavedGame *save);
-	/// Gets the currently loaded ruleset.
-	Ruleset *getRuleset() const;
-	/// Loads the rulesets specified in the game options.
-	void loadRulesets();
+	/// Gets the currently loaded mod.
+	Mod *getMod() const;
+	/// Loads the mods specified in the game options.
+	void loadMods();
 	/// Sets whether the mouse cursor is activated.
 	void setMouseActive(bool active);
 	/// Returns whether current state is the param state

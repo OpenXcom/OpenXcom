@@ -49,6 +49,7 @@ void Frame::setColor(Uint8 color)
 	_color = color;
 	_redraw = true;
 }
+
 /**
  * Changes the color used to draw the shaded border.
  * only really to be used in conjunction with the State add()
@@ -71,9 +72,9 @@ Uint8 Frame::getColor() const
 }
 
 /**
-* Changes the color used to draw the background.
-* @param bg Color value.
-*/
+ * Changes the color used to draw the background.
+ * @param bg Color value.
+ */
 void Frame::setSecondaryColor(Uint8 bg)
 {
 	_bg = bg;
@@ -81,9 +82,9 @@ void Frame::setSecondaryColor(Uint8 bg)
 }
 
 /**
-* Returns the color used to draw the background.
-* @return Color value.
-*/
+ * Returns the color used to draw the background.
+ * @return Color value.
+ */
 Uint8 Frame::getSecondaryColor() const
 {
 	return _bg;
@@ -101,9 +102,9 @@ void Frame::setHighContrast(bool contrast)
 }
 
 /**
-* Changes the thickness of the border to draw.
-* @param thickness Thickness in pixels.
-*/
+ * Changes the thickness of the border to draw.
+ * @param thickness Thickness in pixels.
+ */
 void Frame::setThickness(int thickness)
 {
 	_thickness = thickness;

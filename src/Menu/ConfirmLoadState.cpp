@@ -18,9 +18,8 @@
  */
 #include "ConfirmLoadState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -47,7 +46,7 @@ ConfirmLoadState::ConfirmLoadState(OptionsOrigin origin, const std::string &file
 	_txtText = new Text(204, 58, 58, 60);
 
 	// Set palette
-	setInterface("saveMenus", false, _origin == OPT_BATTLESCAPE);
+	setInterface("saveMenus", false, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : 0);
 
 	add(_window, "confirmLoad", "saveMenus");
 	add(_btnYes, "confirmLoad", "saveMenus");
@@ -57,7 +56,7 @@ ConfirmLoadState::ConfirmLoadState(OptionsOrigin origin, const std::string &file
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&ConfirmLoadState::btnYesClick);

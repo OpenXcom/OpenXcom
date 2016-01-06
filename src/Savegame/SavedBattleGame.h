@@ -19,11 +19,8 @@
 #ifndef OPENXCOM_SAVEDBATTLEGAME_H
 #define OPENXCOM_SAVEDBATTLEGAME_H
 
-#include <iostream>
-#include <algorithm>
 #include <vector>
 #include <string>
-#include <SDL.h>
 #include <yaml-cpp/yaml.h>
 #include "BattleUnit.h"
 
@@ -34,13 +31,12 @@ class Tile;
 class SavedGame;
 class MapDataSet;
 class Node;
-class Game;
 class BattlescapeState;
 class Position;
 class Pathfinding;
 class TileEngine;
 class BattleItem;
-class Ruleset;
+class Mod;
 class State;
 
 /**
@@ -68,7 +64,7 @@ private:
 	bool _debugMode;
 	bool _aborted;
 	int _itemId;
-	int _objectivesDestroyed, _objectivesNeeded;
+	int _objectiveType, _objectivesDestroyed, _objectivesNeeded;
 	std::vector<BattleUnit*> _exposedUnits;
 	std::list<BattleUnit*> _fallingUnits;
 	bool _unitsFalling, _cheating;
@@ -77,6 +73,7 @@ private:
 	bool _kneelReserved;
 	std::vector< std::vector<std::pair<int, int> > > _baseModules;
 	int _depth, _ambience;
+	double _ambientVolume;
 	std::vector<BattleItem*> _recoverGuaranteed, _recoverConditional;
 	std::string _music;
 	/// Selects a soldier.
@@ -87,13 +84,13 @@ public:
 	/// Cleans up the saved game.
 	~SavedBattleGame();
 	/// Loads a saved battle game from YAML.
-	void load(const YAML::Node& node, Ruleset *rule, SavedGame* savedGame);
+	void load(const YAML::Node& node, Mod *mod, SavedGame* savedGame);
 	/// Saves a saved battle game to YAML.
 	YAML::Node save() const;
 	/// Sets the dimensions of the map and initializes it.
 	void initMap(int mapsize_x, int mapsize_y, int mapsize_z);
 	/// Initialises the pathfinding and tileengine.
-	void initUtilities(ResourcePack *res);
+	void initUtilities(Mod *mod);
 	/// Gets the game's mapdatafiles.
 	std::vector<MapDataSet*> *getMapDataSets();
 	/// Sets the mission type.
@@ -176,7 +173,7 @@ public:
 	/// Gets debug mode.
 	bool getDebugMode() const;
 	/// Load map resources.
-	void loadMapResources(Game *game);
+	void loadMapResources(Mod *mod);
 	/// Resets tiles units are standing on
 	void resetUnitTiles();
 	/// Removes an item from the game.
@@ -186,10 +183,10 @@ public:
 	/// Checks if the mission was aborted.
 	bool isAborted() const;
 	/// Sets how many objectives need to be destroyed.
-	void addToObjectiveCount();
+	void setObjectiveCount(int counter);
 	/// increments the objective counter.
 	void addDestroyedObjective();
-	/// Checks if all the objectives are detroyed.
+	/// Checks if all the objectives are destroyed.
 	bool allObjectivesDestroyed();
 	/// Gets the current item ID.
 	int *getCurrentItemId();
@@ -226,7 +223,7 @@ public:
 	/// Checks whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit).
 	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
 	/// Attempts to place a unit on or near entryPoint.
-	bool placeUnitNearPosition(BattleUnit *unit, Position entryPoint);
+	bool placeUnitNearPosition(BattleUnit *unit, Position entryPoint, bool largeFriend);
 	/// Resets the turn counter.
 	void resetTurnCounter();
 	/// Resets the visibility of all tiles on the map.
@@ -271,6 +268,14 @@ public:
 	std::string &getMusic();
 	/// Set the name of the music track.
 	void setMusic(std::string track);
+	/// Sets the objective type for this mission.
+	void setObjectiveType(int type);
+	/// Gets the objective type of this mission.
+	SpecialTileType getObjectiveType();
+	/// sets the ambient sound effect;
+	void setAmbientVolume(double volume);
+	/// gets the ambient sound effect;
+	double getAmbientVolume() const;
 };
 
 }

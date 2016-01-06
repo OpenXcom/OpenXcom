@@ -23,11 +23,10 @@
 #include "../Engine/Action.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
-#include "../Ruleset/RuleBaseFacility.h"
+#include "../Mod/RuleBaseFacility.h"
 #include "../Savegame/Craft.h"
-#include "../Ruleset/RuleCraft.h"
+#include "../Mod/RuleCraft.h"
 #include "../Interface/Text.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
 #include <limits>

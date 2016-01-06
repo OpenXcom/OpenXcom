@@ -10,6 +10,7 @@ configure
 Makefile
 Makefile.in
 depcomp
+compile
 .deps/
 *.tar.gz
 *.tar.xz
@@ -82,8 +83,6 @@ bin/TFTD/SOUND
 bin/TFTD/TERRAIN
 bin/TFTD/UFOGRAPH
 bin/TFTD/UNITS
-#Ignore TFTD ruleset for the time being
-bin/standard/xcom2/Xcom2Ruleset.rul
 deps/
 docs/html/
 build/
@@ -93,3 +92,4 @@ Dependencies/
 *.swp
 #Ignore NetBeans project directory
 nbproject/
+.tx/

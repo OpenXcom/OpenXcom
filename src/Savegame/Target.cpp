@@ -19,7 +19,6 @@
 #define _USE_MATH_DEFINES
 #include "Target.h"
 #include <cmath>
-#include "../Engine/Language.h"
 #include "Craft.h"
 #include "SerializationHelper.h"
 

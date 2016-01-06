@@ -21,7 +21,6 @@
 
 #include "../Engine/State.h"
 #include "../Interface/TextButton.h"
-#include "../Savegame/BattleItem.h"
 #include "../Savegame/EquipmentLayoutItem.h"
 
 
@@ -83,6 +82,8 @@ public:
 	void btnApplyTemplateClick(Action *action);
 	/// Handler for hitting the Clear Inventory hotkey.
 	void onClearInventory(Action *action);
+	/// Handler for hitting the Autoequip hotkey.
+	void onAutoequip(Action *action);
 	/// Handler for clicking on the inventory.
 	void invClick(Action *action);
 	/// Handler for showing item info.

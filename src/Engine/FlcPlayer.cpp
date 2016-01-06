@@ -1,25 +1,25 @@
 /*
-* Copyright 2010-2015 OpenXcom Developers.
-*
-* This file is part of OpenXcom.
-*
-* OpenXcom is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OpenXcom is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright 2010-2015 OpenXcom Developers.
+ *
+ * This file is part of OpenXcom.
+ *
+ * OpenXcom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenXcom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /*
-* Based on http://www.libsdl.org/projects/flxplay/
-*/
+ * Based on http://www.libsdl.org/projects/flxplay/
+ */
 
 #include "FlcPlayer.h"
 #include <string.h>
@@ -28,12 +28,9 @@
 #include <fstream>
 
 #include "Logger.h"
-#include "Exception.h"
-#include "Zoom.h"
 #include "Screen.h"
 #include "Surface.h"
 #include "Options.h"
-#include "../fmath.h"
 #include "Game.h"
 
 namespace OpenXcom
@@ -80,6 +77,7 @@ enum PlayingState
 
 FlcPlayer::FlcPlayer() : _fileBuf(0), _mainScreen(0), _realScreen(0), _game(0)
 {
+	_volume = Game::volumeExponent(Options::musicVolume);
 }
 
 FlcPlayer::~FlcPlayer()
@@ -88,13 +86,13 @@ FlcPlayer::~FlcPlayer()
 }
 
 /**
-* Initialize data structures needed buy the player and read the whole file into memory
-* @param filename Video file name
-* @param frameCallback Function to call each video frame
-* @param game Pointer to the Game instance
-* @param dx An offset on the x axis for the video to be rendered
-* @param dy An offset on the y axis for the video to be rendered
-*/
+ * Initialize data structures needed buy the player and read the whole file into memory
+ * @param filename Video file name
+ * @param frameCallback Function to call each video frame
+ * @param game Pointer to the Game instance
+ * @param dx An offset on the x axis for the video to be rendered
+ * @param dy An offset on the y axis for the video to be rendered
+ */
 bool FlcPlayer::init(const char *filename, void(*frameCallBack)(), Game *game, int dx, int dy)
 {
 	if (_fileBuf != 0)
@@ -186,8 +184,8 @@ void FlcPlayer::deInit()
 }
 
 /**
-* Starts decoding and playing the FLI/FLC file
-*/
+ * Starts decoding and playing the FLI/FLC file
+ */
 void FlcPlayer::play(bool skipLastFrame)
 {
 	_playingState = PLAYING;
@@ -467,10 +465,9 @@ void FlcPlayer::playAudioFrame(Uint16 sampleRate)
 		loadingBuff->sampleBufSize = newSize;
 	}
 
-	float volume = Game::volumeExponent(Options::musicVolume);
 	for (unsigned int i = 0; i < _audioFrameSize; i++)
 	{
-		loadingBuff->samples[loadingBuff->sampleCount + i] = (float)((_chunkData[i]) -128) * 240 * volume;
+		loadingBuff->samples[loadingBuff->sampleCount + i] = (float)((_chunkData[i]) -128) * 240 * _volume;
 	}
 	loadingBuff->sampleCount += _audioFrameSize;
 

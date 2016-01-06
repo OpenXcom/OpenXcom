@@ -74,13 +74,14 @@ void create()
 
 	_info.push_back(OptionInfo("maxFrameSkip", &maxFrameSkip, 0));
 	_info.push_back(OptionInfo("traceAI", &traceAI, false));
+	_info.push_back(OptionInfo("verboseLogging", &verboseLogging, false));
 	_info.push_back(OptionInfo("StereoSound", &StereoSound, true));
-	_info.push_back(OptionInfo("baseXResolution", &baseXResolution, Screen::ORIGINAL_WIDTH));
-	_info.push_back(OptionInfo("baseYResolution", &baseYResolution, Screen::ORIGINAL_HEIGHT));
-	_info.push_back(OptionInfo("baseXGeoscape", &baseXGeoscape, Screen::ORIGINAL_WIDTH));
-	_info.push_back(OptionInfo("baseYGeoscape", &baseYGeoscape, Screen::ORIGINAL_HEIGHT));
-	_info.push_back(OptionInfo("baseXBattlescape", &baseXBattlescape, Screen::ORIGINAL_WIDTH));
-	_info.push_back(OptionInfo("baseYBattlescape", &baseYBattlescape, Screen::ORIGINAL_HEIGHT));
+	//_info.push_back(OptionInfo("baseXResolution", &baseXResolution, Screen::ORIGINAL_WIDTH));
+	//_info.push_back(OptionInfo("baseYResolution", &baseYResolution, Screen::ORIGINAL_HEIGHT));
+	//_info.push_back(OptionInfo("baseXGeoscape", &baseXGeoscape, Screen::ORIGINAL_WIDTH));
+	//_info.push_back(OptionInfo("baseYGeoscape", &baseYGeoscape, Screen::ORIGINAL_HEIGHT));
+	//_info.push_back(OptionInfo("baseXBattlescape", &baseXBattlescape, Screen::ORIGINAL_WIDTH));
+	//_info.push_back(OptionInfo("baseYBattlescape", &baseYBattlescape, Screen::ORIGINAL_HEIGHT));
 	_info.push_back(OptionInfo("geoscapeScale", &geoscapeScale, 0));
 	_info.push_back(OptionInfo("battlescapeScale", &battlescapeScale, 0));
 	_info.push_back(OptionInfo("useScaleFilter", &useScaleFilter, false));
@@ -88,7 +89,7 @@ void create()
 	_info.push_back(OptionInfo("useXBRZFilter", &useXBRZFilter, false));
 	_info.push_back(OptionInfo("useOpenGL", &useOpenGL, false));
 	_info.push_back(OptionInfo("checkOpenGLErrors", &checkOpenGLErrors, false));
-	_info.push_back(OptionInfo("useOpenGLShader", &useOpenGLShader, "Shaders/Openxcom.OpenGL.shader"));
+	_info.push_back(OptionInfo("useOpenGLShader", &useOpenGLShader, "Shaders/Raw.OpenGL.shader"));
 	_info.push_back(OptionInfo("vSyncForOpenGL", &vSyncForOpenGL, true));
 	_info.push_back(OptionInfo("useOpenGLSmoothing", &useOpenGLSmoothing, true));
 	_info.push_back(OptionInfo("debug", &debug, false));
@@ -134,6 +135,7 @@ void create()
 	_info.push_back(OptionInfo("geoDragScrollButton", &geoDragScrollButton, SDL_BUTTON_MIDDLE));
 	_info.push_back(OptionInfo("preferredMusic", (int*)&preferredMusic, MUSIC_AUTO));
 	_info.push_back(OptionInfo("preferredSound", (int*)&preferredSound, SOUND_AUTO));
+	_info.push_back(OptionInfo("preferredVideo", (int*)&preferredVideo, VIDEO_FMV));
 	_info.push_back(OptionInfo("musicAlwaysLoop", &musicAlwaysLoop, false));
 
 	// advanced options
@@ -173,6 +175,7 @@ void create()
 	_info.push_back(OptionInfo("canManufactureMoreItemsPerHour", &canManufactureMoreItemsPerHour, false, "STR_CANMANUFACTUREMOREITEMSPERHOUR", "STR_GEOSCAPE"));
 	_info.push_back(OptionInfo("spendResearchedItems", &spendResearchedItems, false, "STR_SPENDRESEARCHEDITEMS", "STR_GEOSCAPE"));
 	_info.push_back(OptionInfo("fieldPromotions", &fieldPromotions, false, "STR_FIELDPROMOTIONS", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("meetingPoint", &meetingPoint, false, "STR_MEETINGPOINT", "STR_GEOSCAPE"));
 	
 	_info.push_back(OptionInfo("battleDragScrollInvert", &battleDragScrollInvert, false, "STR_DRAGSCROLLINVERT", "STR_BATTLESCAPE")); // true drags away from the cursor, false drags towards (like a grab)
 	_info.push_back(OptionInfo("sneakyAI", &sneakyAI, false, "STR_SNEAKYAI", "STR_BATTLESCAPE"));
@@ -192,7 +195,6 @@ void create()
 	_info.push_back(OptionInfo("strafe", &strafe, false, "STR_STRAFE", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("forceFire", &forceFire, true, "STR_FORCE_FIRE", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("skipNextTurnScreen", &skipNextTurnScreen, false, "STR_SKIPNEXTTURNSCREEN", "STR_BATTLESCAPE"));
-	_info.push_back(OptionInfo("TFTDDamage", &TFTDDamage, false, "STR_TFTDDAMAGE", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("noAlienPanicMessages", &noAlienPanicMessages, false, "STR_NOALIENPANICMESSAGES", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("alienBleeding", &alienBleeding, false, "STR_ALIENBLEEDING", "STR_BATTLESCAPE"));
 	
@@ -272,10 +274,11 @@ void create()
 	_info.push_back(OptionInfo("keyInvCreateTemplate", &keyInvCreateTemplate, SDLK_c, "STR_CREATE_INVENTORY_TEMPLATE", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("keyInvApplyTemplate", &keyInvApplyTemplate, SDLK_v, "STR_APPLY_INVENTORY_TEMPLATE", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("keyInvClear", &keyInvClear, SDLK_x, "STR_CLEAR_INVENTORY", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("keyInvAutoEquip", &keyInvAutoEquip, SDLK_z, "STR_AUTO_EQUIP", "STR_BATTLESCAPE"));
 
 #ifdef __MORPHOS__
-	_info.push_back(OptionInfo("FPS", &FPS, 15));
-	_info.push_back(OptionInfo("FPS_INACTIVE", &FPSInactive, 15));
+	_info.push_back(OptionInfo("FPS", &FPS, 15, "STR_FPS_LIMIT", "STR_GENERAL"));
+	_info.push_back(OptionInfo("FPSInactive", &FPSInactive, 15, "STR_FPS_INACTIVE_LIMIT", "STR_GENERAL"));
 #else
 	_info.push_back(OptionInfo("FPS", &FPS, 60, "STR_FPS_LIMIT", "STR_GENERAL"));
 	_info.push_back(OptionInfo("FPSInactive", &FPSInactive, 30, "STR_FPS_INACTIVE_LIMIT", "STR_GENERAL"));
@@ -304,29 +307,20 @@ static bool _ufoIsInstalled()
 
 static bool _tftdIsInstalled()
 {
-	// ensure both the resource data and the mod data is in place
-	return _gameIsInstalled("TFTD")
-		&& CrossPlatform::fileExists(CrossPlatform::searchDataFile("standard/xcom2/Xcom2Ruleset.rul"));
+	return _gameIsInstalled("TFTD");
 }
 
 static void _setDefaultMods()
 {
-	// try to find xcom1
 	bool haveUfo = _ufoIsInstalled();
 	if (haveUfo)
 	{
-		Log(LOG_DEBUG) << "detected UFO";
 		mods.push_back(std::pair<std::string, bool>("xcom1", true));
 	}
 
 	if (_tftdIsInstalled())
 	{
-		Log(LOG_DEBUG) << "detected TFTD";
 		mods.push_back(std::pair<std::string, bool>("xcom2", !haveUfo));
-	}
-	else if (!haveUfo)
-	{
-		Log(LOG_ERROR) << "neither UFO or TFTD data was detected";
 	}
 }
 
@@ -346,8 +340,6 @@ void resetDefault()
 	{
 		_setDefaultMods();
 	}
-
-	purchaseExclusions.clear();
 }
 
 /**
@@ -447,7 +439,7 @@ static void _scanMods(const std::string &modsDir)
 {
 	if (!CrossPlatform::folderExists(modsDir))
 	{
-		Log(LOG_INFO) << "skipping non-existent mod directory: '" << modsDir << "'";
+		Log(LOG_VERBOSE) << "skipping non-existent mod directory: '" << modsDir << "'";
 		return;
 	}
 
@@ -461,37 +453,37 @@ static void _scanMods(const std::string &modsDir)
 			continue;
 		}
 
-		Log(LOG_INFO) << "- " << modPath;
+		Log(LOG_VERBOSE) << "- " << modPath;
 		ModInfo modInfo(modPath);
 
 		std::string metadataPath = modPath + "/metadata.yml";
 		if (!CrossPlatform::fileExists(metadataPath))
 		{
-			Log(LOG_WARNING) << metadataPath << " not found; using default values for mod: " << *i;
+			Log(LOG_VERBOSE) << metadataPath << " not found; using default values for mod: " << *i;
 		}
 		else
 		{
 			modInfo.load(metadataPath);
 		}
 
-		Log(LOG_DEBUG) << "  id: " << modInfo.getId();
-		Log(LOG_DEBUG) << "  name: " << modInfo.getName();
-		Log(LOG_DEBUG) << "  version: " << modInfo.getVersion();
-		Log(LOG_DEBUG) << "  description: " << modInfo.getDescription();
-		Log(LOG_DEBUG) << "  author: " << modInfo.getAuthor();
-		Log(LOG_DEBUG) << "  master: " << modInfo.getMaster();
-		Log(LOG_DEBUG) << "  isMaster: " << modInfo.isMaster();
-		Log(LOG_DEBUG) << "  loadResources:";
+		Log(LOG_VERBOSE) << "  id: " << modInfo.getId();
+		Log(LOG_VERBOSE) << "  name: " << modInfo.getName();
+		Log(LOG_VERBOSE) << "  version: " << modInfo.getVersion();
+		Log(LOG_VERBOSE) << "  description: " << modInfo.getDescription();
+		Log(LOG_VERBOSE) << "  author: " << modInfo.getAuthor();
+		Log(LOG_VERBOSE) << "  master: " << modInfo.getMaster();
+		Log(LOG_VERBOSE) << "  isMaster: " << modInfo.isMaster();
+		Log(LOG_VERBOSE) << "  loadResources:";
 		std::vector<std::string> externals = modInfo.getExternalResourceDirs();
 		for (std::vector<std::string>::iterator j = externals.begin(); j != externals.end(); ++j)
 		{
-			Log(LOG_DEBUG) << "    " << *j;
+			Log(LOG_VERBOSE) << "    " << *j;
 		}
 
 		if (("xcom1" == modInfo.getId() && !_ufoIsInstalled())
 		 || ("xcom2" == modInfo.getId() && !_tftdIsInstalled()))
 		{
-			Log(LOG_DEBUG) << "skipping " << modInfo.getId() << " since related game data isn't installed";
+			Log(LOG_VERBOSE) << "skipping " << modInfo.getId() << " since related game data isn't installed";
 			continue;
 		}
 
@@ -537,6 +529,14 @@ bool init(int argc, char *argv[])
 	Log(LOG_INFO) << "Config folder is: " << _configFolder;
 	Log(LOG_INFO) << "Options loaded successfully.";
 
+	// pick up stuff in common
+	FileMap::load("common", CrossPlatform::searchDataFolder("common"), true);
+
+	return true;
+}
+
+void updateMods()
+{
 	std::string modPath = CrossPlatform::searchDataFolder("standard");
 	Log(LOG_INFO) << "Scanning standard mods in '" << modPath << "'...";
 	_scanMods(modPath);
@@ -549,8 +549,8 @@ bool init(int argc, char *argv[])
 	{
 		std::map<std::string, ModInfo>::const_iterator modIt = _modInfos.find(i->first);
 		if (_modInfos.end() == modIt
-		 || (i->first == "xcom1" && !_ufoIsInstalled())
-		 || (i->first == "xcom2" && !_tftdIsInstalled()))
+			|| (i->first == "xcom1" && !_ufoIsInstalled())
+			|| (i->first == "xcom2" && !_tftdIsInstalled()))
 		{
 			Log(LOG_INFO) << "removing references to missing mod: " << i->first;
 			i = mods.erase(i);
@@ -628,6 +628,7 @@ bool init(int argc, char *argv[])
 		if (inactiveMaster.empty())
 		{
 			Log(LOG_ERROR) << "no mod masters available";
+			throw Exception("No X-COM installations found");
 		}
 		else
 		{
@@ -637,8 +638,7 @@ bool init(int argc, char *argv[])
 	}
 
 	mapResources();
-
-	return true;
+	userSplitMasters();
 }
 
 std::string getActiveMaster()
@@ -697,8 +697,16 @@ static void _loadMod(const ModInfo &modInfo, std::set<std::string> circDepCheck)
 	{
 		// add self to circDepCheck so we can avoid circular dependencies
 		circDepCheck.insert(modInfo.getId());
-		const ModInfo &masterInfo = _modInfos.find(modInfo.getMaster())->second;
-		_loadMod(masterInfo, circDepCheck);
+		std::map<std::string, ModInfo>::const_iterator it = _modInfos.find(modInfo.getMaster());
+		if (it != _modInfos.end())
+		{
+			const ModInfo &masterInfo = it->second;
+			_loadMod(masterInfo, circDepCheck);
+		}
+		else
+		{
+			throw Exception(modInfo.getId() + " mod requires " + modInfo.getMaster() + " master");
+		}
 	}
 }
 
@@ -712,14 +720,14 @@ void mapResources()
 	{
 		if (!i->second)
 		{
-			Log(LOG_DEBUG) << "skipping inactive mod: " << i->first;
+			Log(LOG_VERBOSE) << "skipping inactive mod: " << i->first;
 			continue;
 		}
 
 		const ModInfo &modInfo = _modInfos.find(i->first)->second;
 		if (!modInfo.isMaster() && !modInfo.getMaster().empty() && modInfo.getMaster() != curMaster)
 		{
-			Log(LOG_DEBUG) << "skipping mod for non-current master: " << i->first << "(" << modInfo.getMaster() << " != " << curMaster << ")";
+			Log(LOG_VERBOSE) << "skipping mod for non-current master: " << i->first << "(" << modInfo.getMaster() << " != " << curMaster << ")";
 			continue;
 		}
 
@@ -727,7 +735,8 @@ void mapResources()
 		_loadMod(modInfo, circDepCheck);
 	}
 	// pick up stuff in common
-	FileMap::load("common", CrossPlatform::searchDataFolder("common"), false);
+	FileMap::load("common", CrossPlatform::searchDataFolder("common"), true);
+	Log(LOG_INFO) << "Resources files mapped successfully.";
 }
 
 /**
@@ -772,24 +781,72 @@ void setFolders()
 	}
 	if (!_userFolder.empty())
 	{
-		// create mods subfolder if it doesn't already exist
-		std::string modsFolder = _userFolder + "mods";
-		if (!CrossPlatform::folderExists(modsFolder))
-		{
-			if (CrossPlatform::createFolder(modsFolder))
-			{
-				Log(LOG_INFO) << "created mods folder: '" << modsFolder << "'";
-			}
-			else
-			{
-				Log(LOG_WARNING) << "failed to create mods folder: '" << modsFolder << "'";
-			}
-		}
+		// create mod folder if it doesn't already exist
+		CrossPlatform::createFolder(_userFolder + "mods");
 	}
 
 	if (_configFolder.empty())
 	{
 		_configFolder = _userFolder;
+	}
+}
+
+/**
+ * Splits the game's User folder by master mod,
+ * creating a subfolder for each one and moving
+ * the apppropriate user data among them.
+ */
+void userSplitMasters()
+{
+	// get list of master mods
+	const std::map<std::string, ModInfo> &modInfos(Options::getModInfos());
+	if (modInfos.empty())
+	{
+		return;
+	}
+	std::vector<std::string> masters;
+	for (std::vector< std::pair<std::string, bool> >::const_iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
+	{
+		std::string modId = i->first;
+		ModInfo modInfo = modInfos.find(modId)->second;
+		if (modInfo.isMaster())
+		{
+			masters.push_back(modId);
+		}
+	}
+
+	// create master subfolders if they don't already exist
+	std::vector<std::string> saves;
+	for (std::vector<std::string>::const_iterator i = masters.begin(); i != masters.end(); ++i)
+	{
+		std::string masterFolder = _userFolder + (*i);
+		if (!CrossPlatform::folderExists(masterFolder))
+		{
+			CrossPlatform::createFolder(masterFolder);
+			// move any old saves to the appropriate folders
+			if (saves.empty())
+			{
+				saves = CrossPlatform::getFolderContents(_userFolder, "sav");
+				std::vector<std::string> autosaves = CrossPlatform::getFolderContents(_userFolder, "asav");
+				saves.insert(saves.end(), autosaves.begin(), autosaves.end());				
+			}
+			for (std::vector<std::string>::iterator j = saves.begin(); j != saves.end();)
+			{
+				std::string srcFile = _userFolder + (*j);
+				YAML::Node doc = YAML::LoadFile(srcFile);
+				std::vector<std::string> mods = doc["mods"].as<std::vector< std::string> >(std::vector<std::string>());
+				if (std::find(mods.begin(), mods.end(), (*i)) != mods.end())
+				{
+					std::string dstFile = masterFolder + "/" + (*j);
+					CrossPlatform::moveFile(srcFile, dstFile);
+					j = saves.erase(j);
+				}
+				else
+				{
+					++j;
+				}
+			}
+		}
 	}
 }
 
@@ -845,7 +902,6 @@ void load(const std::string &filename)
 		{
 			i->load(doc["options"]);
 		}
-		purchaseExclusions = doc["purchaseexclusions"].as< std::vector<std::string> >(purchaseExclusions);
 
 		mods.clear();
 		for (YAML::const_iterator i = doc["mods"].begin(); i != doc["mods"].end(); ++i)
@@ -859,7 +915,7 @@ void load(const std::string &filename)
 			_setDefaultMods();
 		}
 	}
-	catch (YAML::Exception e)
+	catch (YAML::Exception &e)
 	{
 		Log(LOG_WARNING) << e.what();
 	}
@@ -888,7 +944,6 @@ void save(const std::string &filename)
 			i->save(node);
 		}
 		doc["options"] = node;
-		doc["purchaseexclusions"] = purchaseExclusions;
 
 		for (std::vector< std::pair<std::string, bool> >::iterator i = mods.begin(); i != mods.end(); ++i)
 		{
@@ -902,7 +957,7 @@ void save(const std::string &filename)
 
 		sav << out.c_str();
 	}
-	catch (YAML::Exception e)
+	catch (YAML::Exception &e)
 	{
 		Log(LOG_WARNING) << e.what();
 	}
@@ -957,6 +1012,16 @@ std::string getUserFolder()
 std::string getConfigFolder()
 {
 	return _configFolder;
+}
+
+/**
+ * Returns the game's User folder for the
+ * currently loaded master mod.
+ * @return Full path to User folder.
+ */
+std::string getMasterUserFolder()
+{
+	return _userFolder + getActiveMaster() + "/";
 }
 
 /**

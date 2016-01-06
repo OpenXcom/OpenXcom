@@ -17,12 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ConfirmDestinationState.h"
-#include <sstream>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Surface.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -48,10 +45,10 @@ ConfirmDestinationState::ConfirmDestinationState(Craft *craft, Target *target) :
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 224, 72, 16, 64);
+	_window = new Window(this, 244, 72, 6, 64);
 	_btnOk = new TextButton(50, 12, 68, 104);
 	_btnCancel = new TextButton(50, 12, 138, 104);
-	_txtTarget = new Text(212, 32, 22, 72);
+	_txtTarget = new Text(232, 32, 12, 72);
 
 	// Set palette
 	setInterface("confirmDestination", w != 0 && w->getId() == 0);
@@ -64,7 +61,7 @@ ConfirmDestinationState::ConfirmDestinationState(Craft *craft, Target *target) :
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK12.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ConfirmDestinationState::btnOkClick);

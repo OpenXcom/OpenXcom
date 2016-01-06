@@ -17,14 +17,14 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../Ruleset/ArticleDefinition.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleUfo.h"
+#include "../Mod/ArticleDefinition.h"
+#include "../Mod/Mod.h"
+#include "../Mod/RuleUfo.h"
 #include "ArticleStateTFTD.h"
 #include "ArticleStateTFTDUso.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/TextList.h"
 
 namespace OpenXcom
@@ -32,13 +32,13 @@ namespace OpenXcom
 
 	ArticleStateTFTDUso::ArticleStateTFTDUso(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs)
 	{
-		RuleUfo *ufo = _game->getRuleset()->getUfo(defs->id);
+		RuleUfo *ufo = _game->getMod()->getUfo(defs->id);
 		
 		_lstInfo = new TextList(150, 50, 168, 142);
 		add(_lstInfo);
 
 		_lstInfo->setColor(Palette::blockOffset(0)+2);
-		_lstInfo->setColumns(2, 90, 78);
+		_lstInfo->setColumns(2, 100, 50);
 		_lstInfo->setDot(true);
 
 		_lstInfo->addRow(2, tr("STR_DAMAGE_CAPACITY").c_str(), Text::formatNumber(ufo->getMaxDamage()).c_str());

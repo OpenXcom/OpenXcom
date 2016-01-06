@@ -1,0 +1,851 @@
+ufopaedia: #done
+  - id: STR_TRITON
+    type_id: 11
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: UP001.BDY
+    text: STR_TRITON_UFOPEDIA
+  - id: STR_HAMMERHEAD
+    type_id: 11
+    section: STR_XCOM_CRAFT_ARMAMENT
+    requires:
+      - STR_NEW_FIGHTER_TRANSPORTER
+    image_id: UP005.BDY
+    text: STR_HAMMERHEAD_UFOPEDIA
+  - id: STR_LEVIATHAN
+    type_id: 11
+    section: STR_XCOM_CRAFT_ARMAMENT
+    requires:
+      - STR_THE_LATEST_FLYING_SUB
+    image_id: UP003.BDY
+    text: STR_LEVIATHAN_UFOPEDIA
+  - id: STR_BARRACUDA
+    type_id: 11
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: UP004.BDY
+    text: STR_BARRACUDA_UFOPEDIA
+  - id: STR_MANTA
+    type_id: 11
+    section: STR_XCOM_CRAFT_ARMAMENT
+    requires:
+      - STR_NEW_FIGHTER_FLYING_SUB
+    image_id: UP002.BDY
+    text: STR_MANTA_UFOPEDIA
+  - id: STR_AJAX
+    type_id: 12
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: UP054.BDY
+    text: STR_AJAX_UFOPEDIA
+  - id: STR_DUP_HEAD
+    type_id: 12
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: UP055.BDY
+    text: STR_DUP_HEAD_UFOPEDIA
+  - id: STR_CRAFT_GAS_CANNON_UC
+    type_id: 12
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: UP056.BDY
+    text: STR_CRAFT_GAS_CANNON_UFOPEDIA
+  - id: STR_PWT_CANNON_UC
+    type_id: 12
+    section: STR_XCOM_CRAFT_ARMAMENT
+    requires:
+      - STR_PWT_CANNON
+    image_id: UP074.BDY
+    text: STR_PWT_CANNON_UFOPEDIA
+  - id: STR_GAUSS_CANNON_UC
+    type_id: 12
+    section: STR_XCOM_CRAFT_ARMAMENT
+    requires:
+      - STR_GAUSS_CANNON
+    image_id: UP073.BDY
+    text: STR_GAUSS_CANNON_UFOPEDIA
+  - id: STR_SONIC_OSCILLATOR_UC
+    type_id: 12
+    section: STR_XCOM_CRAFT_ARMAMENT
+    requires:
+      - STR_SONIC_OSCILLATOR
+    image_id: UP075.BDY
+    text: STR_SONIC_OSCILLATOR_UFOPEDIA
+  - id: STR_COELACANTH_GAS_CANNON
+    type_id: 13
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    text: STR_COELACANTH_GAS_CANNON_UFOPEDIA
+    weapon: STR_DAMAGE_ARMOR_PIERCING
+    image_id: UP027.BDY
+  - id: STR_COELACANTH_AQUA_JET
+    type_id: 13
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    text: STR_COELACANTH_AQUA_JET_UFOPEDIA
+    weapon: STR_TORPEDO_LAUNCHER
+    image_id: UP057.BDY
+  - id: STR_COELACANTH_GAUSS
+    type_id: 13
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    weapon: STR_DAMAGE_LASER_BEAM
+    image_id: UP068.BDY
+    requires:
+      - STR_GAUSS_CANNON
+      - STR_NEW_FIGHTER_FLYING_SUB
+    text: STR_COELACANTH_GAUSS_UFOPEDIA
+  - id: STR_DISPLACER_SONIC
+    type_id: 13
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    weapon: STR_DAMAGE_PLASMA_BEAM
+    requires:
+      - STR_SONIC_OSCILLATOR
+      - STR_NEW_FIGHTER_FLYING_SUB
+    text: STR_DISPLACER_SONIC_UFOPEDIA
+    image_id: UP028.BDY
+  - id: STR_DISPLACER_PWT
+    type_id: 13
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    weapon: STR_PWT_CANNON
+    requires:
+      - STR_PWT_CANNON
+      - STR_NEW_FIGHTER_FLYING_SUB
+    text: STR_DISPLACER_PWT_UFOPEDIA
+    image_id: UP058.BDY
+  - id: STR_PLASTIC_AQUA_ARMOR_UC
+    type_id: 15
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_PLASTIC_AQUA_ARMOR
+    text: STR_PLASTIC_AQUA_ARMOR_UFOPEDIA
+    image_id: UP023.BDY
+  - id: STR_ION_ARMOR_UC
+    type_id: 15
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_ION_ARMOR
+    text: STR_ION_ARMOR_UFOPEDIA
+    image_id: UP024.BDY
+  - id: STR_MAGNETIC_ION_ARMOR_UC
+    type_id: 15
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_MAGNETIC_ION_ARMOR
+    text: STR_MAGNETIC_ION_ARMOR_UFOPEDIA
+    image_id: UP022.BDY
+  - id: STR_DART_PISTOL
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    image_id: UP034.BDY
+    text: STR_DART_PISTOL_UFOPEDIA
+  - id: STR_DART_POD
+    type_id: 14
+    section: STR_NOT_AVAILABLE
+  - id: STR_JET_HARPOON
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_JET_HARPOON_UFOPEDIA
+    image_id: UP035.BDY
+  - id: STR_HARPOON_POD
+    type_id: 14
+    section: STR_NOT_AVAILABLE
+  - id: STR_GAS_CANNON
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_GAS_CANNON_UFOPEDIA
+    image_id: UP036.BDY
+  - id: STR_GC_AP_AMMO
+    type_id: 14
+    section: STR_NOT_AVAILABLE
+  - id: STR_GC_HE_AMMO
+    type_id: 14
+    section: STR_NOT_AVAILABLE
+  - id: STR_GC_P_AMMO
+    type_id: 14
+    section: STR_NOT_AVAILABLE
+  - id: STR_HYDRO_JET_CANNON
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_HYDRO_JET_CANNON_UFOPEDIA
+    image_id: UP037.BDY
+  - id: STR_HJC_AP_AMMO
+    type_id: 14
+    section: STR_NOT_AVAILABLE
+  - id: STR_HJC_HE_AMMO
+    type_id: 14
+    section: STR_NOT_AVAILABLE
+  - id: STR_HJC_P_AMMO
+    type_id: 14
+    section: STR_NOT_AVAILABLE
+  - id: STR_TORPEDO_LAUNCHER
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_TORPEDO_LAUNCHER_UFOPEDIA
+    image_id: UP038.BDY
+  - id: STR_SMALL_TORPEDO
+    type_id: 14
+    section: STR_NOT_AVAILABLE
+  - id: STR_LARGE_TORPEDO
+    type_id: 14
+    section: STR_NOT_AVAILABLE
+  - id: STR_PHOSPHOROUS_TORPEDO
+    type_id: 14
+    section: STR_NOT_AVAILABLE
+  - id: STR_GAUSS_PISTOL
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    image_id: UP031.BDY
+    requires:
+      - STR_GAUSS_PISTOL
+    text: STR_GAUSS_PISTOL_UFOPEDIA
+  - id: STR_GAUSS_PISTOL_CLIP
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_GAUSS_PISTOL_CLIP
+    text: STR_GAUSS_PISTOL_CLIP_UFOPEDIA
+    image_id: UP110.BDY
+  - id: STR_GAUSS_RIFLE
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    image_id: UP032.BDY
+    requires:
+      - STR_GAUSS_RIFLE
+    text: STR_GAUSS_RIFLE_UFOPEDIA
+  - id: STR_GAUSS_RIFLE_CLIP
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_GAUSS_RIFLE_CLIP
+    text: STR_GAUSS_RIFLE_CLIP_UFOPEDIA
+    image_id: UP111.BDY
+  - id: STR_HEAVY_GAUSS
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    image_id: UP033.BDY
+    requires:
+      - STR_HEAVY_GAUSS
+    text: STR_HEAVY_GAUSS_UFOPEDIA
+  - id: STR_HEAVY_GAUSS_CLIP
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_HEAVY_GAUSS_CLIP
+    text: STR_HEAVY_GAUSS_CLIP_UFOPEDIA
+    image_id: UP112.BDY
+  - id: STR_MAGNA_BLAST_GRENADE
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_MAGNA_BLAST_GRENADE_UFOPEDIA
+    image_id: UP039.BDY
+  - id: STR_DYE_GRENADE
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_DYE_GRENADE_UFOPEDIA
+    image_id: UP040.BDY
+  - id: STR_PARTICLE_DISTURBANCE_GRENADE
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_PARTICLE_DISTURBANCE_GRENADE_UFOPEDIA
+    image_id: UP041.BDY
+  - id: STR_MAGNA_PACK_EXPLOSIVE
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_MAGNA_PACK_EXPLOSIVE_UFOPEDIA
+    image_id: UP042.BDY
+  - id: STR_PARTICLE_DISTURBANCE_SENSOR
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    image_id: UP030.BDY
+    requires:
+      - STR_PARTICLE_DISTURBANCE_SENSOR
+    text: STR_PARTICLE_DISTURBANCE_SENSOR_UFOPEDIA
+  - id: STR_MEDI_KIT
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_MEDI_KIT
+    text: STR_MEDI_KIT_UFOPEDIA
+    image_id: UP052.BDY
+  - id: STR_MC_DISRUPTOR
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    requires:
+      - STR_MC_DISRUPTOR
+    text: STR_MC_DISRUPTOR_UFOPEDIA
+    image_id: UP106.BDY
+  - id: STR_THERMAL_TAZER
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_THERMAL_TAZER_UFOPEDIA
+    image_id: UP044.BDY
+  - id: STR_CHEMICAL_FLARE
+    type_id: 14
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_CHEMICAL_FLARE_UFOPEDIA
+    image_id: UP043.BDY
+  - id: STR_VIBRO_BLADE
+    type_id: 14
+    section: STR_ALIEN_ARTIFACTS
+    text: STR_VIBRO_BLADE_UFOPEDIA
+    image_id: UP107.BDY
+    requires:
+      - STR_VIBRO_BLADE
+  - id: STR_THERMIC_LANCE
+    type_id: 14
+    section: STR_ALIEN_ARTIFACTS
+    text: STR_THERMIC_LANCE_UFOPEDIA
+    image_id: UP108.BDY
+    requires:
+      - STR_THERMIC_LANCE
+  - id: STR_HEAVY_THERMIC_LANCE
+    type_id: 14
+    section: STR_ALIEN_ARTIFACTS
+    text: STR_HEAVY_THERMIC_LANCE_UFOPEDIA
+    image_id: UP109.BDY
+    requires:
+      - STR_HEAVY_THERMIC_LANCE
+  - id: STR_SONIC_CANNON
+    type_id: 14
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_SONIC_CANNON
+    text: STR_SONIC_CANNON_UFOPEDIA
+    image_id: UP051.BDY
+  - id: STR_CANNON_POWER_CLIP
+    type_id: 14
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_CANNON_POWER_CLIP
+    text: STR_CANNON_POWER_CLIP_UFOPEDIA
+    image_id: UP104.BDY
+  - id: STR_SONIC_BLASTA_RIFLE
+    type_id: 14
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_SONIC_BLASTA_RIFLE
+    text: STR_SONIC_BLASTA_RIFLE_UFOPEDIA
+    image_id: UP050.BDY
+  - id: STR_BLASTA_POWER_CLIP
+    type_id: 14
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_BLASTA_POWER_CLIP
+    text: STR_BLASTA_POWER_CLIP_UFOPEDIA
+    image_id: UP103.BDY
+  - id: STR_SONIC_PISTOL
+    type_id: 14
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_SONIC_PISTOL
+    text: STR_SONIC_PISTOL_UFOPEDIA
+    image_id: UP049.BDY
+  - id: STR_PISTOL_POWER_CLIP
+    type_id: 14
+    section: STR_ALIEN_ARTIFACTS
+    image_id: UP102.BDY
+    requires:
+      - STR_PISTOL_POWER_CLIP
+    text: STR_PISTOL_POWER_CLIP_UFOPEDIA
+  - id: STR_DISRUPTOR_PULSE_LAUNCHER
+    type_id: 14
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_DISRUPTOR_PULSE_LAUNCHER
+    text: STR_DISRUPTOR_PULSE_LAUNCHER_UFOPEDIA
+    image_id: UP047.BDY
+  - id: STR_DISRUPTOR_AMMO
+    type_id: 14
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_DISRUPTOR_AMMO
+    text: STR_DISRUPTOR_AMMO_UFOPEDIA
+    image_id: UP072.BDY
+  - id: STR_THERMAL_SHOK_LAUNCHER
+    type_id: 14
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_THERMAL_SHOK_LAUNCHER
+    text: STR_THERMAL_SHOK_LAUNCHER_UFOPEDIA
+    image_id: UP048.BDY
+  - id: STR_THERMAL_SHOK_BOMB
+    type_id: 14
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_THERMAL_SHOK_BOMB
+    text: STR_THERMAL_SHOK_BOMB_UFOPEDIA
+    image_id: UP101.BDY
+  - id: STR_SONIC_PULSER
+    type_id: 14
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_SONIC_PULSER
+    text: STR_SONIC_PULSER_UFOPEDIA
+    image_id: UP045.BDY
+  - id: STR_ZRBITE
+    type_id: 14
+    section: STR_ALIEN_ARTIFACTS
+    requires:
+      - STR_ZRBITE
+    text: STR_ZRBITE_UFOPEDIA
+    image_id: UP067.BDY
+  - id: STR_MC_READER
+    type_id: 14
+    section: STR_ALIEN_ARTIFACTS
+    text: STR_MC_READER_UFOPEDIA
+    requires:
+      - STR_MC_READER
+    image_id: UP046.BDY
+  - id: STR_AIR_LOCK
+    type_id: 16
+    section: STR_BASE_FACILITIES
+    text: STR_AIR_LOCK_UFOPEDIA
+    image_id: UP078.BDY
+  - id: STR_LIVING_QUARTERS
+    type_id: 16
+    section: STR_BASE_FACILITIES
+    text: STR_LIVING_QUARTERS_UFOPEDIA
+    image_id: UP076.BDY
+  - id: STR_LABORATORY
+    type_id: 16
+    section: STR_BASE_FACILITIES
+    text: STR_LABORATORY_UFOPEDIA
+    image_id: UP084.BDY
+  - id: STR_WORKSHOP
+    type_id: 16
+    section: STR_BASE_FACILITIES
+    text: STR_WORKSHOP_UFOPEDIA
+    image_id: UP087.BDY
+  - id: STR_STANDARD_SONAR
+    type_id: 16
+    section: STR_BASE_FACILITIES
+    text: STR_STANDARD_SONAR_UFOPEDIA
+    image_id: UP077.BDY
+  - id: STR_WIDE_ARRAY_SONAR
+    type_id: 16
+    section: STR_BASE_FACILITIES
+    text: STR_WIDE_ARRAY_SONAR_UFOPEDIA
+    image_id: UP079.BDY
+  - id: STR_TORPEDO_DEFENSES
+    type_id: 16
+    section: STR_BASE_FACILITIES
+    text: STR_TORPEDO_DEFENSES_UFOPEDIA
+    image_id: UP082.BDY
+  - id: STR_GENERAL_STORES
+    type_id: 16
+    section: STR_BASE_FACILITIES
+    text: STR_GENERAL_STORES_UFOPEDIA
+    image_id: UP081.BDY
+  - id: STR_ALIEN_CONTAINMENT
+    type_id: 16
+    section: STR_BASE_FACILITIES
+    text: STR_ALIEN_CONTAINMENT_UFOPEDIA
+    image_id: UP080.BDY
+  - id: STR_GAUSS_DEFENSES
+    type_id: 16
+    section: STR_BASE_FACILITIES
+    requires:
+      - STR_GAUSS_DEFENSES
+    text: STR_GAUSS_DEFENSES_UFOPEDIA
+    image_id: UP083.BDY
+  - id: STR_SONIC_DEFENSES
+    type_id: 16
+    section: STR_BASE_FACILITIES
+    requires:
+      - STR_SONIC_DEFENSES
+    text: STR_SONIC_DEFENSES_UFOPEDIA
+    image_id: UP085.BDY
+  - id: STR_PWT_DEFENSES
+    type_id: 16
+    section: STR_BASE_FACILITIES
+    text: STR_PWT_DEFENSES_UFOPEDIA
+    requires:
+      - STR_PWT_DEFENSES
+    image_id: UP086.BDY
+  - id: STR_BOMBARDMENT_SHIELD
+    type_id: 16
+    section: STR_BASE_FACILITIES
+    requires:
+      - STR_BOMBARDMENT_SHIELD
+    text: STR_BOMBARDMENT_SHIELD_UFOPEDIA
+    image_id: UP090.BDY
+  - id: STR_MC_GENERATOR
+    type_id: 16
+    section: STR_BASE_FACILITIES
+    requires:
+      - STR_MC_GENERATOR
+    text: STR_MC_GENERATOR_UFOPEDIA
+    image_id: UP092.BDY
+  - id: STR_MC_LAB
+    type_id: 16
+    section: STR_BASE_FACILITIES
+    requires:
+      - STR_MC_LAB
+    text: STR_MC_LAB_UFOPEDIA
+    image_id: UP088.BDY
+  - id: STR_TRANSMISSION_RESOLVER
+    type_id: 16
+    section: STR_BASE_FACILITIES
+    requires:
+      - STR_TRANSMISSION_RESOLVER
+    text: STR_TRANSMISSION_RESOLVER_UFOPEDIA
+    image_id: UP091.BDY
+  - id: STR_SUB_PEN
+    type_id: 16
+    section: STR_BASE_FACILITIES
+    text: STR_SUB_PEN_UFOPEDIA
+    image_id: UP089.BDY
+  - id: STR_AQUATOID
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_AQUATOID
+    image_id: UP006.BDY
+    text: STR_AQUATOID_UFOPEDIA
+  - id: STR_AQUATOID_AUTOPSY
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP007.BDY
+    text: STR_AQUATOID_AUTOPSY_UFOPEDIA
+    requires:
+      - STR_AQUATOID_AUTOPSY
+  - id: STR_GILLMAN
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_GILLMAN
+    image_id: UP008.BDY
+    text: STR_GILLMAN_UFOPEDIA
+  - id: STR_GILLMAN_AUTOPSY
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_GILLMAN_AUTOPSY
+    image_id: UP009.BDY
+    text: STR_GILLMAN_AUTOPSY_UFOPEDIA
+  - id: STR_LOBSTERMAN
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_LOBSTERMAN
+    image_id: UP010.BDY
+    text: STR_LOBSTERMAN_UFOPEDIA
+  - id: STR_LOBSTERMAN_AUTOPSY
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_LOBSTERMAN_AUTOPSY
+    image_id: UP011.BDY
+    text: STR_LOBSTERMAN_AUTOPSY_UFOPEDIA
+  - id: STR_TASOTH
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_TASOTH
+    image_id: UP012.BDY
+    text: STR_TASOTH_UFOPEDIA
+  - id: STR_TASOTH_AUTOPSY
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_TASOTH_AUTOPSY
+    image_id: UP053.BDY
+    text: STR_TASOTH_AUTOPSY_UFOPEDIA
+  - id: STR_CALCINITE
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_CALCINITE
+    image_id: UP025.BDY
+    text: STR_CALCINITE_UFOPEDIA
+  - id: STR_CALCINITE_AUTOPSY
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_CALCINITE_AUTOPSY
+    image_id: UP026.BDY
+    text: STR_CALCINITE_AUTOPSY_UFOPEDIA
+  - id: STR_DEEP_ONE
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_DEEP_ONE
+    image_id: UP013.BDY
+    text: STR_DEEP_ONE_UFOPEDIA
+  - id: STR_DEEP_ONE_AUTOPSY
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_DEEP_ONE_AUTOPSY
+    image_id: UP014.BDY
+    text: STR_DEEP_ONE_AUTOPSY_UFOPEDIA
+  - id: STR_BIODRONE
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_BIODRONE
+    image_id: UP070.BDY
+    text: STR_BIODRONE_UFOPEDIA
+  - id: STR_BIODRONE_AUTOPSY
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_BIODRONE_AUTOPSY
+    image_id: UP071.BDY
+    text: STR_BIODRONE_AUTOPSY_UFOPEDIA
+  - id: STR_TENTACULAT
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_TENTACULAT
+    image_id: UP015.BDY
+    text: STR_TENTACULAT_UFOPEDIA
+  - id: STR_TENTACULAT_AUTOPSY
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_TENTACULAT_AUTOPSY
+    image_id: UP016.BDY
+    text: STR_TENTACULAT_AUTOPSY_UFOPEDIA
+  - id: STR_TRISCENE
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_TRISCENE
+    image_id: UP017.BDY
+    text: STR_TRISCENE_UFOPEDIA
+  - id: STR_TRISCENE_AUTOPSY
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_TRISCENE_AUTOPSY
+    image_id: UP029.BDY
+    text: STR_TRISCENE_AUTOPSY_UFOPEDIA
+  - id: STR_HALLUCINOID
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_HALLUCINOID
+    image_id: UP018.BDY
+    text: STR_HALLUCINOID_UFOPEDIA
+  - id: STR_HALLUCINOID_AUTOPSY
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_HALLUCINOID_AUTOPSY
+    image_id: UP019.BDY
+    text: STR_HALLUCINOID_AUTOPSY_UFOPEDIA
+  - id: STR_XARQUID
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_XARQUID
+    image_id: UP020.BDY
+    text: STR_XARQUID_UFOPEDIA
+  - id: STR_XARQUID_AUTOPSY
+    type_id: 10
+    section: STR_ALIEN_LIFE_FORMS
+    requires:
+      - STR_XARQUID_AUTOPSY
+    image_id: UP021.BDY
+    text: STR_XARQUID_AUTOPSY_UFOPEDIA
+  - id: STR_ALIEN_ORIGINS
+    type_id: 10
+    section: STR_ALIEN_RESEARCH_UC
+    requires:
+      - STR_ALIEN_ORIGINS
+    text: STR_ALIEN_ORIGINS_UFOPEDIA
+    image_id: UP105.BDY
+    text_width: 308
+  - id: STR_THE_ULTIMATE_THREAT
+    type_id: 10
+    section: STR_ALIEN_RESEARCH_UC
+    requires:
+      - STR_THE_ULTIMATE_THREAT
+    text: STR_THE_ULTIMATE_THREAT_UFOPEDIA
+    image_id: UP105.BDY
+    text_width: 308
+  - id: STR_TLETH_THE_ALIEN_CITY
+    type_id: 10
+    section: STR_ALIEN_RESEARCH_UC
+    requires:
+      - STR_TLETH_ALIEN_CITY
+    text: STR_TLETH_THE_ALIEN_CITY_UFOPEDIA
+    image_id: UP105.BDY
+    text_width: 308
+  - id: STR_ALIEN_PROBE_MISSION
+    type_id: 10
+    section: STR_ALIEN_RESEARCH_UC
+    requires:
+      - STR_ALIEN_PROBE_MISSION
+    text: STR_ALIEN_PROBE_MISSION_UFOPEDIA
+    image_id: UP105.BDY
+    text_width: 308
+  - id: STR_ALIEN_INTERDICTION
+    type_id: 10
+    section: STR_ALIEN_RESEARCH_UC
+    requires:
+      - STR_ALIEN_INTERDICTION
+    text: STR_ALIEN_INTERDICTION_UFOPEDIA
+    image_id: UP105.BDY
+    text_width: 308
+  - id: STR_ALIEN_RESOURCE_RAID
+    type_id: 10
+    section: STR_ALIEN_RESEARCH_UC
+    requires:
+      - STR_ALIEN_RESOURCE_RAID
+    text: STR_ALIEN_RESOURCE_RAID_UFOPEDIA
+    image_id: UP105.BDY
+    text_width: 308
+  - id: STR_ALIEN_INFILTRATION
+    type_id: 10
+    section: STR_ALIEN_RESEARCH_UC
+    requires:
+      - STR_ALIEN_INFILTRATION
+    text: STR_ALIEN_INFILTRATION_UFOPEDIA
+    image_id: UP105.BDY
+    text_width: 308
+  - id: STR_ALIEN_BASE
+    type_id: 10
+    section: STR_ALIEN_RESEARCH_UC
+    requires:
+      - STR_ALIEN_BASE
+    text: STR_ALIEN_BASE_UFOPEDIA
+    image_id: UP105.BDY
+    text_width: 308
+  - id: STR_ALIEN_SURFACE_ATTACK
+    type_id: 10
+    section: STR_ALIEN_RESEARCH_UC
+    requires:
+      - STR_ALIEN_SURFACE_ATTACK
+    text: STR_ALIEN_SURFACE_ATTACK_UFOPEDIA
+    image_id: UP105.BDY
+    text_width: 308
+  - id: STR_ALIEN_RETALIATION
+    type_id: 10
+    section: STR_ALIEN_RESEARCH_UC
+    requires:
+      - STR_ALIEN_RETALIATION
+    text: STR_ALIEN_RETALIATION_UFOPEDIA
+    image_id: UP105.BDY
+    text_width: 308
+  - id: STR_ALIEN_SUPPLY
+    type_id: 10
+    section: STR_ALIEN_RESEARCH_UC
+    requires:
+      - STR_ALIEN_SUPPLY
+    text: STR_ALIEN_SUPPLY_UFOPEDIA
+    image_id: UP105.BDY
+    text_width: 308
+  - id: STR_ION_BEAM_ACCELERATORS
+    type_id: 10
+    section: STR_UFO_COMPONENTS
+    requires:
+      - STR_ION_BEAM_ACCELERATORS
+    image_id: UP059.BDY
+    text: STR_ION_BEAM_ACCELERATORS_UFOPEDIA
+  - id: STR_MAGNETIC_NAVIGATION
+    type_id: 10
+    section: STR_UFO_COMPONENTS
+    requires:
+      - STR_MAGNETIC_NAVIGATION
+    image_id: UP060.BDY
+    text: STR_MAGNETIC_NAVIGATION_UFOPEDIA
+  - id: STR_ALIEN_SUB_CONSTRUCTION
+    type_id: 10
+    section: STR_UFO_COMPONENTS
+    requires:
+      - STR_ALIEN_SUB_CONSTRUCTION
+    image_id: UP069.BDY
+    text: STR_ALIEN_SUB_CONSTRUCTION_UFOPEDIA
+  - id: STR_ALIEN_CRYOGENICS
+    type_id: 10
+    section: STR_UFO_COMPONENTS
+    requires:
+      - STR_ALIEN_CRYOGENICS
+    image_id: UP061.BDY
+    text: STR_ALIEN_CRYOGENICS_UFOPEDIA
+  - id: STR_ALIEN_CLONING
+    type_id: 10
+    section: STR_UFO_COMPONENTS
+    requires:
+      - STR_ALIEN_CLONING
+    image_id: UP062.BDY
+    text: STR_ALIEN_CLONING_UFOPEDIA
+  - id: STR_ALIEN_LEARNING_ARRAYS
+    type_id: 10
+    section: STR_UFO_COMPONENTS
+    requires:
+      - STR_ALIEN_LEARNING_ARRAYS
+    image_id: UP063.BDY
+    text: STR_ALIEN_LEARNING_ARRAYS_UFOPEDIA
+  - id: STR_ALIEN_IMPLANTER
+    type_id: 10
+    section: STR_UFO_COMPONENTS
+    requires:
+      - STR_ALIEN_IMPLANTER
+    image_id: UP064.BDY
+    text: STR_ALIEN_IMPLANTER_UFOPEDIA
+  - id: STR_EXAMINATION_ROOM
+    type_id: 10
+    section: STR_UFO_COMPONENTS
+    requires:
+      - STR_EXAMINATION_ROOM
+    image_id: UP065.BDY
+    text: STR_EXAMINATION_ROOM_UFOPEDIA
+  - id: STR_AQUA_PLASTICS
+    type_id: 10
+    section: STR_UFO_COMPONENTS
+    requires:
+      - STR_AQUA_PLASTICS
+    image_id: UP066.BDY
+    text: STR_AQUA_PLASTICS_UFOPEDIA
+  - id: STR_SURVEY_SHIP
+    type_id: 17
+    section: STR_UFOS
+    requires:
+      - STR_SURVEY_SHIP
+    text: STR_SURVEY_SHIP_UFOPEDIA
+    image_id: UP093.BDY
+  - id: STR_ESCORT
+    type_id: 17
+    section: STR_UFOS
+    requires:
+      - STR_ESCORT
+    text: STR_ESCORT_UFOPEDIA
+    image_id: UP094.BDY
+  - id: STR_CRUISER
+    type_id: 17
+    section: STR_UFOS
+    requires:
+      - STR_CRUISER
+    text: STR_CRUISER_UFOPEDIA
+    image_id: UP095.BDY
+  - id: STR_HEAVY_CRUISER
+    type_id: 17
+    section: STR_UFOS
+    requires:
+      - STR_HEAVY_CRUISER
+    text: STR_HEAVY_CRUISER_UFOPEDIA
+    image_id: UP096.BDY
+  - id: STR_HUNTER
+    type_id: 17
+    section: STR_UFOS
+    requires:
+      - STR_HUNTER
+    text: STR_HUNTER_UFOPEDIA
+    image_id: UP097.BDY
+  - id: STR_BATTLESHIP
+    type_id: 17
+    section: STR_UFOS
+    requires:
+      - STR_BATTLESHIP
+    text: STR_BATTLESHIP_UFOPEDIA
+    image_id: UP098.BDY
+  - id: STR_DREADNOUGHT
+    type_id: 17
+    section: STR_UFOS
+    requires:
+      - STR_DREADNOUGHT
+    text: STR_DREADNOUGHT_UFOPEDIA
+    image_id: UP099.BDY
+  - id: STR_FLEET_SUPPLY_CRUISER
+    type_id: 17
+    section: STR_UFOS
+    requires:
+      - STR_FLEET_SUPPLY_CRUISER
+    text: STR_FLEET_SUPPLY_CRUISER_UFOPEDIA
+    image_id: UP100.BDY

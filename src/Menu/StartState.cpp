@@ -23,10 +23,8 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Action.h"
 #include "../Engine/Surface.h"
-#include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Music.h"
 #include "../Engine/Font.h"
@@ -35,10 +33,7 @@
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
-#include "../Resource/XcomResourcePack.h"
 #include "MainMenuState.h"
-#include "VideoState.h"
-#include "ErrorMessageState.h"
 #include "CutsceneState.h"
 #include <SDL_mixer.h>
 #include <SDL_thread.h>
@@ -58,7 +53,8 @@ StartState::StartState() : _anim(0)
 	//updateScale() uses newDisplayWidth/Height and needs to be set ahead of time
 	Options::newDisplayWidth = Options::displayWidth;
 	Options::newDisplayHeight = Options::displayHeight;
-
+	Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, false);
+	Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, false);
 	Options::baseXResolution = Options::displayWidth;
 	Options::baseYResolution = Options::displayHeight;
 	_game->getScreen()->resetDisplay(false);
@@ -132,7 +128,6 @@ void StartState::init()
 	// Silence!
 	Sound::stop();
 	Music::stop();
-	_game->setResourcePack(0);
 	if (!Options::mute && Options::reload)
 	{
 		Mix_CloseAudio();
@@ -171,16 +166,13 @@ void StartState::think()
 	case LOADING_SUCCESSFUL:
 		CrossPlatform::flashWindow();
 		Log(LOG_INFO) << "OpenXcom started successfully!";
+		_game->setState(new GoToMainMenuState);
 		if (!Options::reload && Options::playIntro)
 		{
-			_game->setState(new GoToMainMenuState);
 			_game->pushState(new CutsceneState("intro"));
 		}
 		else
 		{
-			Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
-			_game->getScreen()->resetDisplay(false);
-			_game->setState(new MainMenuState);
 			Options::reload = false;
 		}
 		_game->getCursor()->setVisible(true);
@@ -287,12 +279,10 @@ int StartState::load(void *game_ptr)
 	Game *game = (Game*)game_ptr;
 	try
 	{
-		Log(LOG_INFO) << "Loading rulesets...";
-		game->loadRulesets();
-		Log(LOG_INFO) << "Rulesets loaded successfully.";
-		Log(LOG_INFO) << "Loading resources...";
-		game->setResourcePack(new XcomResourcePack(game->getRuleset()));
-		Log(LOG_INFO) << "Resources loaded successfully.";
+		Log(LOG_INFO) << "Loading data...";
+		Options::updateMods();
+		game->loadMods();
+		Log(LOG_INFO) << "Data loaded successfully.";
 		Log(LOG_INFO) << "Loading language...";
 		game->defaultLanguage();
 		Log(LOG_INFO) << "Language loaded successfully.";

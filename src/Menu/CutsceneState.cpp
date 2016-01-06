@@ -28,6 +28,8 @@
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
 #include "../Savegame/SavedGame.h"
+#include "../Engine/FileMap.h"
+#include "../Mod/Mod.h"
 
 namespace OpenXcom
 {
@@ -50,34 +52,46 @@ void CutsceneState::init()
 	// pop self off stack and replace with actual player state
 	_game->popState();
 
-	const std::map<std::string, RuleVideo*> *videoRulesets = _game->getRuleset()->getVideos();
-	std::map<std::string, RuleVideo*>::const_iterator videoRuleIt = videoRulesets->find(_cutsceneId);
+	const std::map<std::string, RuleVideo*> *videoMods = _game->getMod()->getVideos();
+	std::map<std::string, RuleVideo*>::const_iterator videoRuleIt = videoMods->find(_cutsceneId);
 
-	if (videoRuleIt == videoRulesets->end())
+	if (videoRuleIt == videoMods->end())
 	{
 		Log(LOG_WARNING) << "cutscene definition not found: " << _cutsceneId;
 		return;
 	}
 
-	if (_cutsceneId == "wingame" || _cutsceneId == "losegame")
+	if (_cutsceneId == "winGame" || _cutsceneId == "loseGame")
 	{
 		if (_game->getSavedGame() && _game->getSavedGame()->isIronman()
 		    && !_game->getSavedGame()->getName().empty())
 		{
 			std::string filename = CrossPlatform::sanitizeFilename(
 				Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
-			CrossPlatform::deleteFile(Options::getUserFolder() + filename);
+			CrossPlatform::deleteFile(Options::getMasterUserFolder() + filename);
 		}
 		_game->setSavedGame(0);
 		_game->setState(new GoToMainMenuState);
 	}
 
 	const RuleVideo *videoRule = videoRuleIt->second;
+	bool fmv = false, slide = false;
 	if (!videoRule->getVideos()->empty())
+	{
+		std::string file = FileMap::getFilePath(videoRule->getVideos()->front());
+		fmv = CrossPlatform::fileExists(file);
+	}
+	if (!videoRule->getSlides()->empty())
+	{
+		std::string file = FileMap::getFilePath(videoRule->getSlides()->front().imagePath);
+		slide = CrossPlatform::fileExists(file);
+	}
+
+	if (fmv && (!slide || Options::preferredVideo == VIDEO_FMV))
 	{
 		_game->pushState(new VideoState(videoRule->getVideos(), videoRule->useUfoAudioSequence()));
 	}
-	else if (!videoRule->getSlides()->empty())
+	else if (slide && (!fmv || Options::preferredVideo == VIDEO_SLIDE))
 	{
 		_game->pushState(new SlideshowState(videoRule->getSlideshowHeader(), videoRule->getSlides()));
 	}

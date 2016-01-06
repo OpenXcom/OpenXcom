@@ -1,7 +1,8 @@
 project ( OpenXcom )
 
-cmake_minimum_required ( VERSION 2.8 )
+cmake_minimum_required ( VERSION 2.8.5 )
 set ( CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" )
+include(GNUInstallDirs)
 
 option ( DEV_BUILD "Development Build. Disable this for release builds" ON )
 option ( BUILD_PACKAGE "Prepares build for creation of a package with CPack" ON )
@@ -11,6 +12,8 @@ option ( ENABLE_CLANG_ANALYSIS "When building with clang, enable the static anal
 set ( MSVC_WARNING_LEVEL 3 CACHE STRING "Visual Studio warning levels" )
 option ( FORCE_INSTALL_DATA_TO_BIN "Force installation of data to binary directory" OFF )
 set ( DATADIR "" CACHE STRING "Where to place datafiles" )
+set ( OPENXCOM_VERSION_STRING "" CACHE STRING "Version string (after x.x)" )
+
 
 if ( WIN32 )
   set ( default_deps_dir "${CMAKE_SOURCE_DIR}/deps" )
@@ -39,16 +42,11 @@ if ( IS_DIRECTORY ${DEPS_DIR} )
    set ( SDLMIXER_LIBRARY SDL_mixer )
    set ( SDLIMAGE_LIBRARY SDL_image )
    set ( YAMLCPP_LIBRARY yaml-cpp )
+   set ( YAMLCPP_LIBRARY_DEBUG yaml-cppd )
 else ( )
   find_package ( SDL2 COMPONENTS mixer gfx image)
   find_package ( Yaml_cpp 0.5.0)
-  find_package ( OpenGL )
-
-  if ( NOT OPENGL_FOUND )
-	  message ( FATAL_ERROR "Can't find OpenGL; how does that even happen?" )
-  else ()
-	  include_directories ( ${OPENGL_INCLUDE_DIR} )
-  endif ()
+  set ( YAMLCPP_LIBRARY_DEBUG ${YAMLCPP_LIBRARY} )
 
   if ( NOT SDL_FOUND )
     message ( FATAL_ERROR "Can't find SDL which is required" )
@@ -86,6 +84,15 @@ else ( )
   endif ( NOT YAMLCPP_FOUND )
 endif()
 
+# Find OpenGL
+find_package ( OpenGL )
+if ( NOT OPENGL_FOUND )
+  message ( WARNING "Can't find OpenGL; how does that even happen?\n"
+    "Continuing building without OpenGL support."
+    )
+  add_definitions(-D__NO_OPENGL)
+endif ()
+
 # Read version number
 set ( file "${CMAKE_SOURCE_DIR}/src/version.h" )
 file ( READ ${file} lines )
@@ -93,22 +100,31 @@ string ( REGEX MATCH "[.]*OPENXCOM_VERSION_SHORT \"([0-9]).([0-9])" version_line
 set ( CPACK_PACKAGE_VERSION_MAJOR ${CMAKE_MATCH_1} )
 set ( CPACK_PACKAGE_VERSION_MINOR ${CMAKE_MATCH_2} )
 set ( CPACK_PACKAGE_VERSION_PATCH "" )
-find_package ( Git )
-if ( GIT_FOUND )
-  message("git found: ${GIT_EXECUTABLE}")
-  execute_process ( COMMAND ${GIT_EXECUTABLE} describe --dirty
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_VARIABLE git_describe_out
-    ERROR_VARIABLE git_describe_error
-    RESULT_VARIABLE git_describe_result
-    )
-  string ( REGEX MATCH "([a-z|0-9|.]*)-([0-9]*)-([a-z|0-9]*)([-|a-z]*)" git_commit "${git_describe_out}" )
-  set ( git_tag ${CMAKE_MATCH_1} )
-  set ( git_nb_commit ${CMAKE_MATCH_2} )
-  set ( git_commit ${CMAKE_MATCH_3} )
-  set ( git_dirty ${CMAKE_MATCH_4} )
-  add_definitions( -DOPENXCOM_VERSION_GIT="${git_commit}" )
+
+if ( "${OPENXCOM_VERSION_STRING}" STREQUAL "" )
+  find_package ( Git )
+  if ( GIT_FOUND )
+    message("git found: ${GIT_EXECUTABLE}")
+    execute_process ( COMMAND ${GIT_EXECUTABLE} describe --dirty
+      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+      OUTPUT_VARIABLE git_describe_out
+      ERROR_VARIABLE git_describe_error
+      RESULT_VARIABLE git_describe_result
+      )
+    string ( REGEX MATCH "([a-z|0-9|.]*)-([0-9]*)-g([a-z|0-9]*)([-|a-z]*)" git_commit "${git_describe_out}" )
+    set ( git_tag ${CMAKE_MATCH_1} )
+    set ( git_nb_commit ${CMAKE_MATCH_2} )
+    set ( git_commit ${CMAKE_MATCH_3} )
+    set ( git_dirty ${CMAKE_MATCH_4} )
+    set ( OPENXCOM_VERSION_STRING ".${git_commit}${git_dirty}" )
+  endif()
 endif()
+
+add_definitions( -DGIT_BUILD=1 )
+
+configure_file("${CMAKE_SOURCE_DIR}/src/git_version.h.in" "${CMAKE_CURRENT_BINARY_DIR}/git_version.h" )
+include_directories ( "${CMAKE_CURRENT_BINARY_DIR}" )
+
 
 if ( DEV_BUILD )
   # Append the commit to version number

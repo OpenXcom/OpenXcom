@@ -19,7 +19,6 @@
 
 #include "../Engine/RNG.h"
 #include "Particle.h"
-#include "Position.h"
 
 namespace OpenXcom
 {

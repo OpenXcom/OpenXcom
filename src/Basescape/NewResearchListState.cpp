@@ -17,11 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "NewResearchListState.h"
-#include <algorithm>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -29,9 +27,8 @@
 #include "../Interface/TextList.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
-#include "../Ruleset/RuleResearch.h"
+#include "../Mod/RuleResearch.h"
 #include "ResearchInfoState.h"
-#include "../Savegame/ItemContainer.h"
 
 namespace OpenXcom
 {
@@ -60,7 +57,7 @@ NewResearchListState::NewResearchListState(Base *base) : _base(base)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK05.SCR"));
 
 	_btnOK->setText(tr("STR_OK"));
 	_btnOK->onMouseClick((ActionHandler)&NewResearchListState::btnOKClick);
@@ -111,7 +108,7 @@ void NewResearchListState::fillProjectList()
 {
 	_projects.clear();
 	_lstResearch->clearList();
-	_game->getSavedGame()->getAvailableResearchProjects(_projects, _game->getRuleset() , _base);
+	_game->getSavedGame()->getAvailableResearchProjects(_projects, _game->getMod() , _base);
 	std::vector<RuleResearch*>::iterator it = _projects.begin();
 	while (it != _projects.end())
 	{

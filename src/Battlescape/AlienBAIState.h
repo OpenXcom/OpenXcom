@@ -20,7 +20,7 @@
 #define OPENXCOM_ALIENBAISTATE_H
 
 #include "BattleAIState.h"
-#include "../Battlescape/BattlescapeGame.h"
+#include "BattlescapeGame.h"
 #include "Position.h"
 #include <vector>
 

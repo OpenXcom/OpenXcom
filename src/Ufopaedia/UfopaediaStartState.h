@@ -22,6 +22,7 @@
 
 #include "../Engine/State.h"
 #include <string>
+#include <vector>
 
 namespace OpenXcom
 {
@@ -43,13 +44,10 @@ namespace OpenXcom
 		virtual ~UfopaediaStartState();
 
 	protected:
-		static const int NUM_SECTIONS = 9;
-		static const std::string SECTIONS[NUM_SECTIONS];
-		
 		Window *_window;
 		Text *_txtTitle;
 		TextButton *_btnOk;
-		TextButton *_btnSection[NUM_SECTIONS];
+		std::vector<TextButton*> _btnSections;
 
 		// navigation callbacks
 		void btnSectionClick(Action *action);

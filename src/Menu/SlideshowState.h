@@ -20,7 +20,7 @@
 #define OPENXCOM_SLIDESHOWSTATE_H
 
 #include "../Engine/State.h"
-#include "../Ruleset/RuleVideo.h"
+#include "../Mod/RuleVideo.h"
 
 namespace OpenXcom
 {
@@ -53,6 +53,8 @@ public:
 	void screenTimer();
 	/// Handler for clicking the screen.
 	void screenClick(Action *action);
+	/// Handler for skipping the screen.
+	void screenSkip(Action *action);
 };
 
 }

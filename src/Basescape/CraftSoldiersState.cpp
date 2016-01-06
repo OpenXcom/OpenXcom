@@ -17,14 +17,11 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CraftSoldiersState.h"
-#include <string>
-#include <sstream>
 #include <climits>
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/ComboBox.h"
 #include "../Interface/TextButton.h"
@@ -38,6 +35,7 @@
 #include "../Ruleset/RuleCraft.h"
 #include "../Engine/LocalizedText.h"
 #include "SoldierInfoState.h"
+#include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
 {
@@ -124,12 +122,12 @@ CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft)
 	add(_lstSoldiers, "list", "craftSoldiers");
 	add(_cbxSortBy, "button", "craftSoldiers");
 
-	_otherCraftColor = _game->getRuleset()->getInterface("craftSoldiers")->getElement("otherCraft")->color;
+	_otherCraftColor = _game->getMod()->getInterface("craftSoldiers")->getElement("otherCraft")->color;
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK02.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftSoldiersState::btnOkClick);
@@ -283,6 +281,7 @@ void CraftSoldiersState::initList()
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
 }
+
 /**
  * Shows the soldiers in a list.
  */
@@ -328,7 +327,6 @@ void CraftSoldiersState::moveSoldierUp(Action *action, unsigned int row, bool ma
 	{
 		_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 		_base->getSoldiers()->insert(_base->getSoldiers()->begin(), s);
-		initList();
 	}
 	else
 	{
@@ -342,8 +340,8 @@ void CraftSoldiersState::moveSoldierUp(Action *action, unsigned int row, bool ma
 		{
 			_lstSoldiers->scrollUp(false);
 		}
-		initList();
 	}
+	initList();
 }
 
 /**
@@ -382,7 +380,6 @@ void CraftSoldiersState::moveSoldierDown(Action *action, unsigned int row, bool 
 	{
 		_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 		_base->getSoldiers()->insert(_base->getSoldiers()->end(), s);
-		initList();
 	}
 	else
 	{
@@ -396,8 +393,8 @@ void CraftSoldiersState::moveSoldierDown(Action *action, unsigned int row, bool 
 		{
 			_lstSoldiers->scrollDown(false);
 		}
-		initList();
 	}
+	initList();
 }
 
 /**

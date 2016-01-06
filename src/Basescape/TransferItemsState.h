@@ -23,6 +23,7 @@
 #include "../Savegame/Transfer.h"
 #include <vector>
 #include <string>
+#include <set>
 
 namespace OpenXcom
 {
@@ -31,10 +32,9 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
+class ComboBox;
 class Timer;
 class Base;
-class Soldier;
-class Craft;
 
 /**
  * Transfer screen that lets the player pick
@@ -46,29 +46,25 @@ private:
 	Base *_baseFrom, *_baseTo;
 	TextButton *_btnOk, *_btnCancel;
 	Window *_window;
-	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtAmountTransfer, *_txtAmountDestination;
+	Text *_txtTitle, *_txtQuantity, *_txtAmountTransfer, *_txtAmountDestination;
+	ComboBox *_cbxCategory;
 	TextList *_lstItems;
-	std::vector<int> _baseQty, _transferQty;
-	std::vector<Soldier*> _soldiers;
-	std::vector<Craft*> _crafts;
-	std::vector<std::string> _items;
-	size_t _sel, _itemOffset;
+	std::vector<TransferRow> _items;
+	std::vector<int> _rows;
+	std::vector<std::string> _cats;
+	std::set<std::string> _craftWeapons, _armors;
+	size_t _sel;
 	int _total, _pQty, _cQty, _aQty;
 	double _iQty;
-	int _hasSci, _hasEng;
 	double _distance;
 	Uint8 _ammoColor;
 	Timer *_timerInc, *_timerDec;
-	/// Gets selected cost.
-	int getCost() const;
-	/// Gets selected quantity.
-	int getQuantity() const;
+	/// Gets the category of the current selection.
+	std::string getCategory(int sel) const;
+	/// Gets the row of the current selection.
+	TransferRow &getRow() { return _items[_rows[_sel]]; }
 	/// Gets distance between bases.
 	double getDistance() const;
-	/// Gets type of selected item.
-	enum TransferType getType(size_t selected) const;
-	/// Gets item Index.
-	size_t getItemIndex(size_t selected) const;
 public:
 	/// Creates the Transfer Items state.
 	TransferItemsState(Base *baseFrom, Base *baseTo);
@@ -76,6 +72,8 @@ public:
 	~TransferItemsState();
 	/// Runs the timers.
 	void think();
+	/// Updates the item list.
+	void updateList();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Completes the transfer between bases.
@@ -108,6 +106,8 @@ public:
 	void updateItemStrings();
 	/// Gets the total of the transfer.
 	int getTotal() const;
+	/// Handler for changing the category filter.
+	void cbxCategoryChange(Action *action);
 };
 
 }

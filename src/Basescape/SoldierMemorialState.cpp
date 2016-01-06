@@ -20,10 +20,8 @@
 #include <sstream>
 #include <iomanip>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Music.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -59,8 +57,6 @@ SoldierMemorialState::SoldierMemorialState()
 	// Set palette
 	setInterface("soldierMemorial");
 
-	_game->getResourcePack()->playMusic("GMLOSE");
-
 	add(_window, "window", "soldierMemorial");
 	add(_btnOk, "button", "soldierMemorial");
 	add(_txtTitle, "text", "soldierMemorial");
@@ -74,7 +70,7 @@ SoldierMemorialState::SoldierMemorialState()
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK02.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldierMemorialState::btnOkClick);
@@ -134,7 +130,7 @@ SoldierMemorialState::~SoldierMemorialState()
 void SoldierMemorialState::btnOkClick(Action *)
 {
 	_game->popState();
-	_game->getResourcePack()->playMusic("GMGEO", true);
+	_game->getMod()->playMusic("GMGEO");
 }
 
 /**

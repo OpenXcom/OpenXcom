@@ -17,11 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SoldiersState.h"
-#include <string>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Mod/Mod.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Geoscape/AllocatePsiTrainingState.h"
 #include "../Interface/TextButton.h"
@@ -30,8 +28,6 @@
 #include "../Interface/TextList.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/Craft.h"
-#include "../Ruleset/RuleCraft.h"
 #include "SoldierInfoState.h"
 #include "SoldierMemorialState.h"
 
@@ -83,13 +79,13 @@ SoldiersState::SoldiersState(Base *base) : _base(base)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
+	_window->setBackground(_game->getMod()->getSurface("BACK02.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldiersState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SoldiersState::btnOkClick, Options::keyCancel);
 
-	_btnPsiTraining->setText(tr("STR_PSIONIC_TRAINING"));
+	_btnPsiTraining->setText(tr("STR_PSI_TRAINING"));
 	_btnPsiTraining->onMouseClick((ActionHandler)&SoldiersState::btnPsiTrainingClick);
 	_btnPsiTraining->setVisible(isPsiBtnVisible);
 

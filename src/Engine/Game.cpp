@@ -20,7 +20,6 @@
 #include <cmath>
 #include <sstream>
 #include <SDL_mixer.h>
-#include "Adlib/adlplayer.h"
 #include "State.h"
 #include "Screen.h"
 #include "Sound.h"
@@ -29,13 +28,11 @@
 #include "Logger.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/Ruleset.h"
+#include "../Mod/Mod.h"
 #include "../Savegame/SavedGame.h"
-#include "Palette.h"
+#include "../Savegame/SavedBattleGame.h"
 #include "Action.h"
 #include "Exception.h"
-#include "InteractiveSurface.h"
 #include "Options.h"
 #include "CrossPlatform.h"
 #include "FileMap.h"
@@ -51,7 +48,7 @@ const double Game::VOLUME_GRADIENT = 10.0;
  * creates the display screen and sets up the cursor.
  * @param title Title of the game window.
  */
-Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _res(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true), _timeUntilNextFrame(0)
+Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _save(0), _mod(0), _quit(false), _init(false), _mouseActive(true), _timeUntilNextFrame(0)
 {
 	Options::reload = false;
 	Options::mute = false;
@@ -123,9 +120,8 @@ Game::~Game()
 
 	delete _cursor;
 	delete _lang;
-	delete _res;
 	delete _save;
-	delete _rules;
+	delete _mod;
 	delete _screen;
 	delete _fpsCounter;
 
@@ -281,7 +277,7 @@ void Game::run()
 
 			if (_init && _timeUntilNextFrame <= 0)
 			{
-				// make a note of when this frame update occured.
+				// make a note of when this frame update occurred.
 				_timeOfLastFrame = SDL_GetTicks();
 				_fpsCounter->addFrame();
 				_screen->clear();
@@ -345,8 +341,15 @@ void Game::setVolume(int sound, int music, int ui)
 		{
 			sound = volumeExponent(sound) * (double)SDL_MIX_MAXVOLUME;
 			Mix_Volume(-1, sound);
-			// channel 3: reserved for ambient sound effect.
-			Mix_Volume(3, sound / 2);
+			if (_save && _save->getSavedBattle())
+			{
+				Mix_Volume(3, sound * _save->getSavedBattle()->getAmbientVolume());
+			}
+			else
+			{
+				// channel 3: reserved for ambient sound effect.
+				Mix_Volume(3, sound / 2);
+			}
 		}
 		if (music >= 0)
 		{
@@ -366,6 +369,7 @@ double Game::volumeExponent(int volume)
 {
 	return (exp(log(Game::VOLUME_GRADIENT + 1.0) * volume / (double)SDL_MIX_MAXVOLUME) -1.0 ) / Game::VOLUME_GRADIENT;
 }
+
 /**
  * Returns the display screen used by the game.
  * @return Pointer to the screen.
@@ -443,59 +447,47 @@ Language *Game::getLanguage() const
 }
 
 /**
-* Changes the language currently in use by the game.
-* @param filename Filename of the language file.
-*/
+ * Changes the language currently in use by the game.
+ * @param filename Filename of the language file.
+ */
 void Game::loadLanguage(const std::string &filename)
 {
 	std::ostringstream ss;
-	ss << "Language/" << filename << ".yml";
+	ss << "/Language/" << filename << ".yml";
+	std::string path = CrossPlatform::searchDataFile("common" + ss.str());
+	try
+	{
+		_lang->load(path);
+	}
+	catch (YAML::Exception &e)
+	{
+		throw Exception(path + ": " + std::string(e.what()));
+	}
+
+	for (std::vector< std::pair<std::string, bool> >::const_iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
+	{
+		if (i->second)
+		{
+			std::string modId = i->first;
+			ModInfo modInfo = Options::getModInfos().find(modId)->second;
+			std::string file = modInfo.getPath() + ss.str();
+			if (CrossPlatform::fileExists(file))
+			{
+				_lang->load(file);				
+			}
+		}
+	}
 
 	ExtraStrings *strings = 0;
-	std::map<std::string, ExtraStrings *> extraStrings = _rules->getExtraStrings();
+	std::map<std::string, ExtraStrings *> extraStrings = _mod->getExtraStrings();
 	if (!extraStrings.empty())
 	{
 		if (extraStrings.find(filename) != extraStrings.end())
 		{
 			strings = extraStrings[filename];
 		}
-		// Fallback
-		else if (extraStrings.find("en-US") != extraStrings.end())
-		{
-			strings = extraStrings["en-US"];
-		}
-		else if (extraStrings.find("en-GB") != extraStrings.end())
-		{
-			strings = extraStrings["en-GB"];
-		}
-		else
-		{
-			strings = extraStrings.begin()->second;
-		}
 	}
-
-	_lang->load(FileMap::getFilePath(ss.str()), strings);
-
-	Options::language = filename;
-}
-
-/**
- * Returns the resource pack currently in use by the game.
- * @return Pointer to the resource pack.
- */
-ResourcePack *Game::getResourcePack() const
-{
-	return _res;
-}
-
-/**
- * Sets a new resource pack for the game to use.
- * @param res Pointer to the resource pack.
- */
-void Game::setResourcePack(ResourcePack *res)
-{
-	delete _res;
-	_res = res;
+	_lang->load(strings);
 }
 
 /**
@@ -518,55 +510,23 @@ void Game::setSavedGame(SavedGame *save)
 }
 
 /**
- * Returns the ruleset currently in use by the game.
- * @return Pointer to the ruleset.
+ * Returns the mod currently in use by the game.
+ * @return Pointer to the mod.
  */
-Ruleset *Game::getRuleset() const
+Mod *Game::getMod() const
 {
-	return _rules;
+	return _mod;
 }
 
 /**
- * Loads the rulesets specified in the game options.
+ * Loads the mods specified in the game options.
  */
-void Game::loadRulesets()
+void Game::loadMods()
 {
-	Ruleset::resetGlobalStatics();
-	delete _rules;
-	_rules = new Ruleset();
-	const std::vector<std::pair<std::string, std::vector<std::string> > > &rulesets(FileMap::getRulesets());
-	for (size_t i = 0; rulesets.size() > i; ++i)
-	{
-		try
-		{
-			_rules->loadModRulesets(rulesets[i].second, i);
-		}
-		catch (YAML::Exception &e)
-		{
-			const std::string &modId = rulesets[i].first;
-			Log(LOG_WARNING) << "disabling mod with invalid ruleset: " << modId;
-			std::vector<std::pair<std::string, bool> >::iterator it =
-				std::find(Options::mods.begin(), Options::mods.end(),
-					  std::pair<std::string, bool>(modId, true));
-			if (it == Options::mods.end())
-			{
-				Log(LOG_ERROR) << "cannot find broken mod in mods list: " << modId;
-				Log(LOG_ERROR) << "clearing mods list";
-				Options::mods.clear();
-			}
-			else
-			{
-				it->second = false;
-			}
-			Options::save();
-
-			throw Exception("failed to load ruleset from mod '" +
-				Options::getModInfos().at(modId).getName() +
-				"' (" + std::string(e.what()) +
-				"); disabling mod for next startup");
-		}
-	}
-	_rules->sortLists();
+	Mod::resetGlobalStatics();
+	delete _mod;
+	_mod = new Mod();
+	_mod->loadAll(FileMap::getRulesets());
 }
 
 /**
@@ -606,44 +566,64 @@ bool Game::isQuitting() const
  */
 void Game::defaultLanguage()
 {
-	std::string defaultLang = "en-US";
+	const std::string defaultLang = "en-US";
+	std::string currentLang = defaultLang;
+
+	delete _lang;
+	_lang = new Language();
+
+	std::ostringstream ss;
+	ss << "common/Language/" << defaultLang << ".yml";
+	std::string defaultPath = CrossPlatform::searchDataFile(ss.str());
+	std::string path = defaultPath;
+
 	// No language set, detect based on system
 	if (Options::language.empty())
 	{
 		std::string locale = CrossPlatform::getLocale();
 		std::string lang = locale.substr(0, locale.find_first_of('-'));
 		// Try to load full locale
-		try
+		Language::replace(path, defaultLang, locale);
+		if (CrossPlatform::fileExists(path))
 		{
-			loadLanguage(locale);
+			currentLang = locale;
 		}
-		catch (std::exception)
+		else
 		{
 			// Try to load language locale
-			try
+			Language::replace(path, locale, lang);
+			if (CrossPlatform::fileExists(path))
 			{
-				loadLanguage(lang);
+				currentLang = lang;
 			}
 			// Give up, use default
-			catch (std::exception)
+			else
 			{
-				loadLanguage(defaultLang);
+				currentLang = defaultLang;
 			}
 		}
 	}
 	else
 	{
 		// Use options language
-		try
+		Language::replace(path, defaultLang, Options::language);
+		if (CrossPlatform::fileExists(path))
 		{
-			loadLanguage(Options::language);
+			currentLang = Options::language;
 		}
 		// Language not found, use default
-		catch (std::exception)
+		else
 		{
-			loadLanguage(defaultLang);
+			currentLang = defaultLang;
 		}
 	}
+
+	loadLanguage(defaultLang);
+	if (currentLang != defaultLang)
+	{
+		loadLanguage(currentLang);
+	}
+	Options::language = currentLang;
 }
 
 /**

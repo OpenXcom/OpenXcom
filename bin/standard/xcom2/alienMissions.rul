@@ -1,0 +1,348 @@
+alienMissions: #done
+  - type: STR_ALIEN_PROBE_MISSION
+    points: 0
+    raceWeights:
+      0:
+          STR_AQUATOID: 70
+          STR_GILLMAN: 30
+      1:
+          STR_AQUATOID: 60
+          STR_GILLMAN: 30
+          STR_LOBSTERMAN: 10
+      3:
+          STR_AQUATOID: 30
+          STR_GILLMAN: 40
+          STR_LOBSTERMAN: 30
+      5:
+          STR_AQUATOID: 20
+          STR_GILLMAN: 10
+          STR_LOBSTERMAN: 40
+          STR_TASOTH: 30
+      7:
+          STR_AQUATOID: 20
+          STR_GILLMAN: 20
+          STR_LOBSTERMAN: 20
+          STR_TASOTH: 40
+    waves:
+      - ufo: STR_SURVEY_SHIP
+        count: 1
+        trajectory: P0
+        timer: 9000
+      - ufo: STR_ESCORT
+        count: 1
+        trajectory: P2
+        timer: 7800
+      - ufo: STR_CRUISER
+        count: 2
+        trajectory: P4
+        timer: 9000
+  - type: STR_ALIEN_INTERDICTION
+    points: 30
+    raceWeights:
+      0:
+          STR_AQUATOID: 50
+          STR_GILLMAN: 50
+      1:
+          STR_AQUATOID: 50
+          STR_GILLMAN: 50
+      3:
+          STR_AQUATOID: 30
+          STR_GILLMAN: 50
+          STR_LOBSTERMAN: 20
+      5:
+          STR_AQUATOID: 10
+          STR_LOBSTERMAN: 40
+          STR_TASOTH: 50
+      7:
+          STR_AQUATOID: 30
+          STR_LOBSTERMAN: 30
+          STR_TASOTH: 40
+    waves:
+      - ufo: STR_SURVEY_SHIP
+        count: 1
+        trajectory: P0
+        timer: 7800
+      - ufo: STR_SURVEY_SHIP
+        count: 1
+        trajectory: P2
+        timer: 7800
+      - ufo: STR_ESCORT
+        count: 1
+        trajectory: P2
+        timer: 6000
+      - ufo: STR_CRUISER
+        count: 1
+        trajectory: P0
+        timer: 7800
+      - ufo: STR_CRUISER
+        count: 1
+        trajectory: P3
+        timer: 9000
+      - ufo: STR_HUNTER
+        count: 1
+        trajectory: P4
+        timer: 3000
+      - ufo: STR_HUNTER
+        count: 1
+        trajectory: P4
+        timer: 750
+      - ufo: STR_DREADNOUGHT
+        count: 1
+        trajectory: P2
+        timer: 1500
+  - type: STR_ALIEN_RESOURCE_RAID
+    points: 50
+    raceWeights:
+      0:
+          STR_AQUATOID: 60
+          STR_GILLMAN: 40
+      1:
+          STR_AQUATOID: 40
+          STR_GILLMAN: 60
+      3:
+          STR_AQUATOID: 50
+          STR_GILLMAN: 50
+      5:
+          STR_AQUATOID: 30
+          STR_TASOTH: 70
+      7:
+          STR_AQUATOID: 50
+          STR_TASOTH: 50
+    waves:
+      - ufo: STR_SURVEY_SHIP
+        count: 1
+        trajectory: P0
+        timer: 15000
+      - ufo: STR_ESCORT
+        count: 1
+        trajectory: P1
+        timer: 18000
+      - ufo: STR_CRUISER
+        count: 1
+        trajectory: P3
+        timer: 9000
+      - ufo: STR_HEAVY_CRUISER
+        count: 1
+        trajectory: P3
+        timer: 9000
+      - ufo: STR_HEAVY_CRUISER
+        count: 2
+        trajectory: P4
+        timer: 60
+  - type: STR_ALIEN_INFILTRATION
+    points: 0
+    objective: 1
+    spawnZone: 4 #Mission zone for alien bases
+    raceWeights:
+      0:
+          STR_AQUATOID: 60
+          STR_GILLMAN: 40
+      1:
+          STR_AQUATOID: 50
+          STR_GILLMAN: 30
+          STR_LOBSTERMAN: 20
+      3:
+          STR_AQUATOID: 20
+          STR_GILLMAN: 50
+          STR_LOBSTERMAN: 30
+      5:
+          STR_AQUATOID: 10
+          STR_GILLMAN: 30
+          STR_LOBSTERMAN: 20
+          STR_TASOTH: 40
+      7:
+          STR_AQUATOID: 30
+          STR_GILLMAN: 10
+          STR_LOBSTERMAN: 50
+          STR_TASOTH: 10
+    waves:
+      - ufo: STR_SURVEY_SHIP
+        count: 1
+        trajectory: P0
+        timer: 16500
+      - ufo: STR_ESCORT
+        count: 1
+        trajectory: P1
+        timer: 15000
+      - ufo: STR_ESCORT
+        count: 1
+        trajectory: P6
+        timer: 13800
+      - ufo: STR_CRUISER
+        count: 1
+        trajectory: P7
+        timer: 9000
+      - ufo: STR_CRUISER
+        count: 1
+        trajectory: P7
+        timer: 60
+      - ufo: STR_BATTLESHIP
+        count: 1
+        trajectory: P7
+        timer: 60
+      - ufo: STR_FLEET_SUPPLY_CRUISER
+        count: 1
+        trajectory: P7
+        timer: 60
+      - ufo: STR_DREADNOUGHT
+        count: 2
+        trajectory: P7
+        timer: 60
+  - type: STR_ALIEN_BASE
+    points: 50
+    objective: 2
+    spawnZone: 4 #Mission zone for alien bases
+    raceWeights:
+      0:
+          STR_AQUATOID: 30
+          STR_GILLMAN: 70
+      1:
+          STR_AQUATOID: 40
+          STR_GILLMAN: 40
+          STR_LOBSTERMAN: 20
+      3:
+          STR_AQUATOID: 10
+          STR_GILLMAN: 30
+          STR_LOBSTERMAN: 60
+      5:
+          STR_AQUATOID: 10
+          STR_GILLMAN: 40
+          STR_LOBSTERMAN: 30
+          STR_TASOTH: 20
+      7:
+          STR_AQUATOID: 10
+          STR_GILLMAN: 20
+          STR_LOBSTERMAN: 60
+          STR_TASOTH: 10
+    waves:
+      - ufo: STR_SURVEY_SHIP
+        count: 1
+        trajectory: P1
+        timer: 13500
+      - ufo: STR_ESCORT
+        count: 1
+        trajectory: P5
+        timer: 15000
+      - ufo: STR_CRUISER
+        count: 1
+        trajectory: P5
+        timer: 60
+      - ufo: STR_FLEET_SUPPLY_CRUISER
+        count: 2
+        trajectory: P5
+        timer: 60
+      - ufo: STR_DREADNOUGHT
+        count: 1
+        trajectory: P6
+        timer: 60
+  - type: STR_ALIEN_SURFACE_ATTACK
+    points: 10
+    objective: 3
+    spawnZone: 3 #Mission zone for terror missions
+    raceWeights:
+      0:
+          STR_GILLMAN: 100
+      1:
+          STR_AQUATOID: 20
+          STR_GILLMAN: 80
+      3:
+          STR_AQUATOID: 20
+          STR_GILLMAN: 30
+          STR_LOBSTERMAN: 50
+      5:
+          STR_AQUATOID: 10
+          STR_GILLMAN: 30
+          STR_LOBSTERMAN: 20
+          STR_TASOTH: 20
+          STR_MIXED_CREW: 20
+      7:
+          STR_AQUATOID: 20
+          STR_GILLMAN: 20
+          STR_LOBSTERMAN: 20
+          STR_TASOTH: 10
+          STR_MIXED_CREW: 30
+    waves:
+      - ufo: STR_ESCORT
+        count: 1
+        trajectory: P1
+        timer: 15000
+      - ufo: STR_CRUISER
+        count: 1
+        trajectory: P1
+        timer: 9600
+      - ufo: STR_BATTLESHIP
+        count: 1
+        trajectory: P0
+        timer: 12000
+      - ufo: STR_BATTLESHIP
+        count: 1
+        trajectory: P7
+        timer: 9000
+        objective: true
+  - type: STR_ALIEN_SHIP_ATTACK
+    points: 0
+    objective: 3
+    spawnZone: 0 #Mission zone for terror missions
+    raceWeights:
+      0:
+        STR_AQUATOID: 10
+        STR_GILLMAN: 30
+        STR_MIXED_CREW: 20
+        STR_LOBSTERMAN: 20
+        STR_TASOTH: 20
+    waves:
+      - ufo: dummy #don't spawn a ufo, we only want the site
+        count: 1
+        trajectory: P10
+        timer: 0
+        objective: true
+  - type: STR_ALIEN_RETALIATION
+    points: 0
+    objective: 4
+    spawnUfo: STR_DREADNOUGHT #Spawned for the final retaliation run
+    raceWeights:
+      0:
+        STR_AQUATOID: 20
+        STR_GILLMAN: 20
+        STR_TASOTH: 20
+        STR_LOBSTERMAN: 20
+    waves:
+      - ufo: STR_SURVEY_SHIP
+        count: 1
+        trajectory: P8
+        timer: 3000
+      - ufo: STR_ESCORT
+        count: 2
+        trajectory: P8
+        timer: 3000
+      - ufo: STR_CRUISER
+        count: 3
+        trajectory: P8
+        timer: 3000
+      - ufo: STR_DREADNOUGHT
+        count: 2
+        trajectory: P8
+        timer: 3000
+  - type: STR_ALIEN_SUPPLY
+    points: 0
+    objective: 5
+    raceWeights: {} #Special case, race comes from base.
+    waves:
+      - ufo: STR_FLEET_SUPPLY_CRUISER
+        count: 1
+        trajectory: P9
+        timer: 6000
+        objective: true
+  - type: STR_ALIEN_ARTIFACT
+    points: 0
+    objective: 3
+    spawnZone: 0 #Mission zone for terror missions
+    raceWeights:
+      0:
+        STR_MIXED_CREW: 100
+    waves:
+      - ufo: STR_ARTIFACT_SITE_P1 # spawn this site directly
+        count: 1
+        trajectory: P10
+        timer: 0
+        objective: true

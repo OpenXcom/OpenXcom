@@ -77,16 +77,12 @@ items:
     costSell: 100
     transferTime: 48
     weight: 1
-    bigSprite: -1
-    floorSprite: 12
     hitSound: 13
     hitAnimation: 26
     power: 60
     damageType: 1
     clipSize: 30
     battleType: 2
-    invWidth: 2
-    invHeight: 1
   - type: STR_TANK_ROCKET_LAUNCHER
     size: 6
     costBuy: 480000
@@ -115,16 +111,12 @@ items:
     costSell: 2250
     transferTime: 48
     weight: 1
-    bigSprite: -1
-    floorSprite: 16
     hitSound: 0
     hitAnimation: 0
     power: 85
     damageType: 3
     clipSize: 8
     battleType: 2
-    invWidth: 1
-    invHeight: 3
   - type: STR_TANK_LASER_CANNON
     size: 6
     costSell: 594000
@@ -198,16 +190,12 @@ items:
     costSell: 31500
     transferTime: 48
     weight: 1
-    bigSprite: -1
-    floorSprite: 35
     hitSound: 0
     hitAnimation: 0
     power: 140
     damageType: 3
     clipSize: 8
     battleType: 2
-    invWidth: 1
-    invHeight: 1
     blastRadius: 11
   - type: STR_PISTOL
     size: 0.1
@@ -1337,7 +1325,7 @@ items:
     recover: false
   - type: ZOMBIE_WEAPON
     weight: 3
-    bigSprite: 26
+    bigSprite: -5
     meleeSound: 48
     strengthApplied: true
     damageType: 7
@@ -1345,7 +1333,7 @@ items:
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
-    invWidth: 1
+    invWidth: 2
     invHeight: 3
     clipSize: -1
     recover: false

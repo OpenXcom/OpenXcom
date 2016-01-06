@@ -20,19 +20,21 @@
 #define OPENXCOM_CRAFT_H
 
 #include "MovingTarget.h"
+#include <utility>
 #include <vector>
 #include <string>
-#include "CraftId.h"
 
 namespace OpenXcom
 {
+
+typedef std::pair<std::string, int> CraftId;
 
 class RuleCraft;
 class Base;
 class Soldier;
 class CraftWeapon;
 class ItemContainer;
-class Ruleset;
+class Mod;
 class SavedGame;
 class Vehicle;
 
@@ -60,7 +62,7 @@ public:
 	/// Cleans up the craft.
 	~Craft();
 	/// Loads the craft from YAML.
-	void load(const YAML::Node& node, const Ruleset *rule, SavedGame *save);
+	void load(const YAML::Node& node, const Mod *mod, SavedGame *save);
 	/// Saves the craft to YAML.
 	YAML::Node save() const;
 	/// Saves the craft's ID to YAML.
@@ -137,6 +139,8 @@ public:
 	void returnToBase();
 	/// Checks if a target is detected by the craft's radar.
 	bool detect(Target *target) const;
+	/// Checks if a target is inside the craft's radar range.
+	bool insideRadarRange(Target *target) const;
 	/// Handles craft logic.
 	void think();
 	/// Does a craft full checkup.
@@ -148,7 +152,7 @@ public:
 	/// Refuels the craft.
 	void refuel();
 	/// Rearms the craft.
-	std::string rearm(Ruleset *rules);
+	std::string rearm(Mod *mod);
 	/// Sets the craft's battlescape status.
 	void setInBattlescape(bool inbattle);
 	/// Gets if the craft is in battlescape.
