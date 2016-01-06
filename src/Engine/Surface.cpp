@@ -283,7 +283,9 @@ void Surface::loadImage(const std::string &filename)
 					{
 						setPixelIterative(&x, &y, *i);
 					}
-					setPalette((SDL_Color*)color->palette, 0, color->palettesize);					
+					setPalette((SDL_Color*)color->palette, 0, color->palettesize);
+
+					SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
 				}
 			}
 		}
@@ -303,8 +305,6 @@ void Surface::loadImage(const std::string &filename)
 		std::string err = filename + ":" + IMG_GetError();
 		throw Exception(err);
 	}
-
-	SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
 }
 
 /**

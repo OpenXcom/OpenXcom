@@ -29,7 +29,7 @@ namespace OpenXcom
 /**
  * Initializes a moving target with blank coordinates.
  */
-MovingTarget::MovingTarget() : Target(), _dest(0), _speedLon(0.0), _speedLat(0.0), _speedRadian(0.0), _speed(0)
+MovingTarget::MovingTarget() : Target(), _dest(0), _speedLon(0.0), _speedLat(0.0), _speedRadian(0.0), _meetPointLon(0.0), _meetPointLat(0.0), _speed(0)
 {
 }
 
@@ -229,18 +229,19 @@ void MovingTarget::calculateMeetPoint()
 	_meetPointLon = _dest->getLongitude();
 
 	MovingTarget *u = dynamic_cast<MovingTarget*>(_dest);
-	if (!u) return;
+	if (!u || !u->getDestination()) return;
 
 	// Speed ratio
-	const double	speedRatio = _speedRadian/ u->getSpeedRadian();
+	if (AreSame(u->getSpeedRadian(), 0.0)) return;
+	const double speedRatio = _speedRadian/ u->getSpeedRadian();
 	if (speedRatio <= 1) return;
 
 	// The direction pseudovector
 	double	nx = cos(u->getLatitude())*sin(u->getLongitude())*sin(u->getDestination()->getLatitude()) -
-				   sin(u->getLatitude())*cos(u->getDestination()->getLatitude())*sin(u->getDestination()->getLongitude()),
-			  ny = sin(u->getLatitude())*cos(u->getDestination()->getLatitude())*cos(u->getDestination()->getLongitude()) -
-				   cos(u->getLatitude())*cos(u->getLongitude())*sin(u->getDestination()->getLatitude()),
-			  nz = cos(u->getLatitude())*cos(u->getDestination()->getLatitude())*sin(u->getDestination()->getLongitude() - u->getLongitude());
+					sin(u->getLatitude())*cos(u->getDestination()->getLatitude())*sin(u->getDestination()->getLongitude()),
+			ny = sin(u->getLatitude())*cos(u->getDestination()->getLatitude())*cos(u->getDestination()->getLongitude()) -
+					cos(u->getLatitude())*cos(u->getLongitude())*sin(u->getDestination()->getLatitude()),
+			nz = cos(u->getLatitude())*cos(u->getDestination()->getLatitude())*sin(u->getDestination()->getLongitude() - u->getLongitude());
 	// Normalize and multiplex with radian speed
 	double	nk = _speedRadian/sqrt(nx*nx+ny*ny+nz*nz);
 	nx *= nk;
@@ -255,55 +256,18 @@ void MovingTarget::calculateMeetPoint()
 	{
 		_meetPointLat += nx*sin(_meetPointLon) - ny*cos(_meetPointLon);
 		// using std::abs instead of abs since abs can't handle floating point
-		if (std::abs(_meetPointLat) < M_PI/2) _meetPointLon += nz - (nx*cos(_meetPointLon) + ny*sin(_meetPointLon))*tan(_meetPointLat); else _meetPointLon += M_PI;
+		if (std::abs(_meetPointLat) < M_PI_2) _meetPointLon += nz - (nx*cos(_meetPointLon) + ny*sin(_meetPointLon))*tan(_meetPointLat); else _meetPointLon += M_PI;
 		path += _speedRadian;
 
 		distance = acos(cos(_lat) * cos(_meetPointLat) * cos(_meetPointLon - _lon) + sin(_lat) * sin(_meetPointLat));
 	} while (path < M_PI && distance - path*speedRatio > 0);
 
 	// Correction overflowing angles
-	while (std::abs(_meetPointLon) > M_PI)
-	{
-		if (_meetPointLon > 0)
-		{
-			_meetPointLon -= 2*M_PI;
-		}
-		else
-		{
-			_meetPointLon += 2*M_PI;
-		}
-	}
-	while (std::abs(_meetPointLat) > M_PI)
-	{
-		if (_meetPointLat > 0)
-		{
-			_meetPointLat -= 2*M_PI;
-		}
-		else
-		{
-			_meetPointLat += 2*M_PI;
-		}
-	}
-	if (std::abs(_meetPointLat) > M_PI/2)
-	{
-		if (_meetPointLat > 0)
-		{
-			_meetPointLat = 2*M_PI - std::abs(_meetPointLat);
-		}
-		else
-		{
-			_meetPointLat = -(2*M_PI - std::abs(_meetPointLat));
-		}
-
-		if (_meetPointLon > 0)
-		{
-			_meetPointLon -= 2*M_PI - std::abs(_meetPointLon);
-		}
-		else
-		{
-			_meetPointLon += 2*M_PI - std::abs(_meetPointLon);
-		}
-	}
+	double lonSign = Sign(_meetPointLon);
+	double latSign = Sign(_meetPointLat);
+	while (std::abs(_meetPointLon) > M_PI) _meetPointLon -= lonSign * 2 * M_PI;
+	while (std::abs(_meetPointLat) > M_PI) _meetPointLat -= latSign * 2 * M_PI;
+	if (std::abs(_meetPointLat) > M_PI_2) { _meetPointLat = latSign * abs(2 * M_PI - abs(_meetPointLat)); _meetPointLon -= lonSign * M_PI; }
 }
 
 /**

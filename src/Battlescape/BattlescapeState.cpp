@@ -499,6 +499,7 @@ void BattlescapeState::init()
 	}
 
 	State::init();
+	_barHealthColor = _barHealth->getColor();
 	_animTimer->start();
 	_gameTimer->start();
 	_map->setFocus(true);
@@ -1239,7 +1240,6 @@ bool BattlescapeState::playableUnitSelected()
  */
 void BattlescapeState::updateSoldierInfo()
 {
-	static Uint8 barHealthColor = _barHealth->getColor();
 	BattleUnit *battleUnit = _save->getSelectedUnit();
 
 	for (int i = 0; i < VISIBLE_MAX; ++i)
@@ -1295,7 +1295,6 @@ void BattlescapeState::updateSoldierInfo()
 	_barHealth->setMax(battleUnit->getBaseStats()->health);
 	_barHealth->setValue(battleUnit->getHealth());
 	_barHealth->setValue2(battleUnit->getStunlevel());
-	_barHealth->setColor(barHealthColor);
 	_numMorale->setValue(battleUnit->getMorale());
 	_barMorale->setMax(100);
 	_barMorale->setValue(battleUnit->getMorale());
@@ -1371,7 +1370,7 @@ void BattlescapeState::blinkVisibleUnitButtons()
  */
 void BattlescapeState::blinkHealthBar()
 {
-	static Uint8 color = _barHealth->getColor(), maxcolor = color + 3, step = 0;
+	static Uint8 color = 0, maxcolor = 3, step = 0;
 
 	step ^= 1;	// 1, 0, 1, 0, ...
 	BattleUnit *bu = _save->getSelectedUnit();
@@ -1383,7 +1382,7 @@ void BattlescapeState::blinkHealthBar()
 	{
 		if (bu->getFatalWound(i) > 0)
 		{
-			_barHealth->setColor(color);
+			_barHealth->setColor(_barHealthColor + color);
 			break;
 		}
 	}
