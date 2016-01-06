@@ -81,6 +81,7 @@ private:
 	bool _mouseOverIcons;
 	std::string _currentTooltip;
 	Position _cursorPosition;
+	Uint8 _barHealthColor;
 	/// Popups a context sensitive list of actions the user can choose from.
 	void handleItemClick(BattleItem *item);
 	/// Shifts the red colors of the visible unit buttons backgrounds.
