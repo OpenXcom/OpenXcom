@@ -365,7 +365,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 				if (numberOfPartsFalling == (size+1)*(size+1) && direction != DIR_DOWN)
 				{
-						return false;
+						return 0;
 				}
 			}
 			startTile = _save->getTile(startTile->getPosition() + verticalOffset);

@@ -356,7 +356,7 @@ void TextButton::setHeight(int height)
 
 void TextButton::setSecondaryColor(Uint8 color)
 {
-	_text->setColor(color);
+	_text->setSecondaryColor(color);
 	_redraw = true;
 }
 void TextButton::setGeoscapeButton(bool geo)
