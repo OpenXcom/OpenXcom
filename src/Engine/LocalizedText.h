@@ -1,5 +1,6 @@
+#pragma once
 /*
- * Copyright 2010-2015 OpenXcom Developers.
+ * Copyright 2010-2016 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,9 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_LOCALIZEDTEXT_H
-#define OPENXCOM_LOCALIZEDTEXT_H
-
 #include <string>
 #include <sstream>
 
@@ -157,5 +155,3 @@ inline std::wostream &operator<<(std::wostream &os, const LocalizedText &txt)
 	return os;
 }
 }
-
-#endif
