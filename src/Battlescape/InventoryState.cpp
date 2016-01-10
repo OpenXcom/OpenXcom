@@ -36,7 +36,6 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/Tile.h"
 #include "../Mod/AlienDeployment.h"
 #include "../Mod/RuleItem.h"
 #include "../Mod/RuleInventory.h"

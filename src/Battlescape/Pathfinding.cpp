@@ -18,7 +18,6 @@
  */
 #include <list>
 #include "Pathfinding.h"
-#include "PathfindingNode.h"
 #include "PathfindingOpenSet.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"

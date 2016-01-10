@@ -22,7 +22,6 @@
 #include "Map.h"
 #include "Camera.h"
 #include "UnitSprite.h"
-#include "Position.h"
 #include "Pathfinding.h"
 #include "TileEngine.h"
 #include "Projectile.h"
