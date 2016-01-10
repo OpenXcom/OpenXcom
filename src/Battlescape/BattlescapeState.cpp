@@ -1590,8 +1590,6 @@ void BattlescapeState::saveAIMap()
 	int h = _save->getMapSizeY();
 	Position pos(unit->getPosition());
 
-	int expMax = 0;
-
 	SDL_Surface *img = SDL_AllocSurface(0, w * 8, h * 8, 24, 0xff, 0xff00, 0xff0000, 0);
 	Log(LOG_INFO) << "unit = " << unit->getId();
 	memset(img->pixels, 0, img->pitch * img->h);
@@ -1614,8 +1612,6 @@ void BattlescapeState::saveAIMap()
 
 		}
 	}
-
-	if (expMax < 100) expMax = 100;
 
 	for (int y = 0; y < h; ++y)
 	{
