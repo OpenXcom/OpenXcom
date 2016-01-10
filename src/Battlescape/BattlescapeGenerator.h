@@ -28,7 +28,6 @@ class SavedBattleGame;
 class Mod;
 class Craft;
 class Ufo;
-class RuleTerrain;
 class BattleItem;
 class MapBlock;
 class Vehicle;
@@ -43,7 +42,6 @@ class Base;
 class MissionSite;
 class AlienBase;
 class BattleUnit;
-class MapScript;
 class Texture;
 
 /**

@@ -33,6 +33,9 @@ struct SaveOriginal
 	int id;
 	std::wstring name, date, time;
 	bool tactical;
+	SaveOriginal() : tactical(false)
+	{
+	}
 };
 
 class SavedGame;

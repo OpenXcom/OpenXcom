@@ -27,7 +27,6 @@ class Window;
 class Text;
 class TextList;
 class Base;
-class Craft;
 
 /**
  * Select Squad screen that lets the player

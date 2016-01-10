@@ -26,7 +26,6 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
-class Base;
 
 /**
  * Screen that shows all the soldiers
