@@ -2211,7 +2211,7 @@ const std::vector<MapScript*> *Mod::getMapScript(std::string id) const
 	}
 	else
 	{
-		Log(LOG_ERROR) << "Map Script " << id << "not found";
+		// Log(LOG_ERROR) << "Map Script " << id << "not found";
 		return 0;
 	}
 }

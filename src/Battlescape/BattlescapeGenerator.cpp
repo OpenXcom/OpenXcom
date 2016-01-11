@@ -60,6 +60,7 @@
 #include "../Savegame/EquipmentLayoutItem.h"
 #include "CivilianBAIState.h"
 #include "AlienBAIState.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -70,8 +71,8 @@ static bool _addItem(BattleItem *item, BattleUnit *unit, Mod *mod, SavedBattleGa
  * Sets up a BattlescapeGenerator.
  * @param game pointer to Game object.
  */
-BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game), _save(game->getSavedGame()->getSavedBattle()), _mod(game->getMod()), _craft(0), _ufo(0), _base(0), _mission(0), _alienBase(0), _terrain(0),
-														 _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienItemLevel(0), _baseInventory(false), _generateFuel(true), _craftDeployed(false), _craftZ(0)
+BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game), _save(game->getSavedGame()->getSavedBattle()), _mod(game->getMod()), _craft(0), _ufo(0), _base(0), _mission(0), _alienBase(0), _terrain(0), _mapsize_x(0), _mapsize_y(0), _mapsize_z(0),
+														 _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienItemLevel(0), _baseInventory(false), _generateFuel(true), _craftDeployed(false), _craftZ(0), _blocksToDo(0), _dummy(0), _error(false)
 {
 	_allowAutoLoadout = !Options::disableAutoEquip;
 }
@@ -1638,9 +1639,8 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 		}
 		else
 		{
-			std::stringstream ss;
-			ss << "Error in RMP file: " << filename.str() << " Node #" << nodeNumber << " is outside map boundaries at X:" << pos_x << " Y:" << pos_y << " Z:" << pos_z;
-			throw Exception(ss.str());
+			_error = true;
+			Log(LOG_ERROR) << "Error in RMP file: " << filename.str() << " Node #" << nodeNumber << " is outside map boundaries at X:" << pos_x << " Y:" << pos_y << " Z:" << pos_z;
 		}
 		nodeNumber++;
 	}
@@ -1843,6 +1843,8 @@ void BattlescapeGenerator::loadWeapons()
  */
 void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 {
+	_error = false;
+
 	// set our ambient sound
 	_save->setAmbientSound(_terrain->getAmbience());
 	_save->setAmbientVolume(_terrain->getAmbientVolume());
@@ -2183,6 +2185,11 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 	}
 
 	attachNodeLinks();
+
+	if (_error)
+	{
+		throw Exception("Map failed to fully generate, check log.");
+	}
 }
 
 /**
