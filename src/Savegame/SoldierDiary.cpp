@@ -559,13 +559,14 @@ bool SoldierDiary::manageCommendations(Mod *mod)
 								}
 
                                 // See if we find no matches with any criteria. If so, break and try the next kill.
-								if ( (*singleKill)->weapon == "STR_WEAPON_UNKNOWN" || (*singleKill)->weaponAmmo == "STR_WEAPON_UNKNOWN" ||
+								RuleItem *weapon = mod->getItem((*singleKill)->weaponAmmo);
+								RuleItem *weaponAmmo = mod->getItem((*singleKill)->weaponAmmo);
+								if (weapon == 0 || weaponAmmo == 0 ||
 									((*singleKill)->rank != (*detail) && (*singleKill)->race != (*detail) &&
 									 (*singleKill)->weapon != (*detail) && (*singleKill)->weaponAmmo != (*detail) &&
-									 (*singleKill)->getUnitStatusString() != (*detail) && (*singleKill)->getUnitFactionString() != (*detail)  &&
-									 mod->getItem((*singleKill)->weaponAmmo)->getDamageType() != damageType && 
-									 mod->getItem((*singleKill)->weapon)->getBattleType() != battleType &&
-                                     (*singleKill)->getUnitSideString() != (*detail) && (*singleKill)->getUnitBodyPartString() != (*detail)) )
+									 (*singleKill)->getUnitStatusString() != (*detail) && (*singleKill)->getUnitFactionString() != (*detail) &&
+                                     (*singleKill)->getUnitSideString() != (*detail) && (*singleKill)->getUnitBodyPartString() != (*detail) && 
+									 weaponAmmo->getDamageType() != damageType && weapon->getBattleType() != battleType))
                                 {
                                     foundMatch = false;
                                     break;
