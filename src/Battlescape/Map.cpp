@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 OpenXcom Developers.
+ * Copyright 2010-2016 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,7 +22,6 @@
 #include "Map.h"
 #include "Camera.h"
 #include "UnitSprite.h"
-#include "Position.h"
 #include "Pathfinding.h"
 #include "TileEngine.h"
 #include "Projectile.h"

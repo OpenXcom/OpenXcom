@@ -7,8 +7,7 @@
   version: 0.08 (2011-11-25)
   license: public domain
  */
-#ifndef OXC_OPENGL_H
-#define OXC_OPENGL_H
+#pragma once
 
 #ifndef __NO_OPENGL
 
@@ -99,7 +98,5 @@ public:
 #else
 
 namespace OpenXcom { class OpenGL {}; }
-
-#endif
 
 #endif

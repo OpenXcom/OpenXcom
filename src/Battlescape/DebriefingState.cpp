@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 OpenXcom Developers.
+ * Copyright 2010-2016 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,7 +44,6 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDiary.h"
 #include "../Savegame/MissionSite.h"

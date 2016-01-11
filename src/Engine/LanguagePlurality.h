@@ -1,5 +1,6 @@
+#pragma once
 /*
- * Copyright 2010-2015 OpenXcom Developers.
+ * Copyright 2010-2016 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,9 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_LANGUAGEPLURALITY_H
-#define OPENXCOM_LANGUAGEPLURALITY_H
-
 #include <string>
 #include <map>
 
@@ -54,5 +52,3 @@ private:
 	static std::map<std::string, PFCreate> s_factoryFunctions;
 };
 }
-
-#endif

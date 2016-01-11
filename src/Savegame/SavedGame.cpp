@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 OpenXcom Developers.
+ * Copyright 2010-2016 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -604,9 +604,12 @@ void SavedGame::save(const std::string &filename) const
 	{
 		node["deadSoldiers"].push_back((*i)->save());
 	}
-	for (std::vector<MissionStatistics*>::const_iterator i = _missionStatistics.begin(); i != _missionStatistics.end(); ++i)
+	if (Options::soldierDiaries)
 	{
-		node["missionStatistics"].push_back((*i)->save());
+		for (std::vector<MissionStatistics*>::const_iterator i = _missionStatistics.begin(); i != _missionStatistics.end(); ++i)
+		{
+			node["missionStatistics"].push_back((*i)->save());
+		}
 	}
 	if (_battleGame != 0)
 	{

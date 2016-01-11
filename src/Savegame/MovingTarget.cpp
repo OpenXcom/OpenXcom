@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 OpenXcom Developers.
+ * Copyright 2010-2016 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -267,7 +267,7 @@ void MovingTarget::calculateMeetPoint()
 	double latSign = Sign(_meetPointLat);
 	while (std::abs(_meetPointLon) > M_PI) _meetPointLon -= lonSign * 2 * M_PI;
 	while (std::abs(_meetPointLat) > M_PI) _meetPointLat -= latSign * 2 * M_PI;
-	if (std::abs(_meetPointLat) > M_PI_2) { _meetPointLat = latSign * abs(2 * M_PI - abs(_meetPointLat)); _meetPointLon -= lonSign * M_PI; }
+	if (std::abs(_meetPointLat) > M_PI_2) { _meetPointLat = latSign * std::abs(2 * M_PI - std::abs(_meetPointLat)); _meetPointLon -= lonSign * M_PI; }
 }
 
 /**

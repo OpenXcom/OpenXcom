@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 OpenXcom Developers.
+ * Copyright 2010-2016 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -2211,7 +2211,7 @@ const std::vector<MapScript*> *Mod::getMapScript(std::string id) const
 	}
 	else
 	{
-		Log(LOG_ERROR) << "Map Script " << id << "not found";
+		// Log(LOG_ERROR) << "Map Script " << id << "not found";
 		return 0;
 	}
 }

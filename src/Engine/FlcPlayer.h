@@ -1,5 +1,6 @@
+#pragma once
 /*
- * Copyright 2010-2015 OpenXcom Developers.
+ * Copyright 2010-2016 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,17 +18,15 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
 /*
  * Based on http://www.libsdl.org/projects/flxplay/
  */
-
-#ifndef OPENXCOM_FLCPLAYER_H
-#define OPENXCOM_FLCPLAYER_H
-
 #include <SDL.h>
 
 namespace OpenXcom
 {
+
 class Screen;
 class Game;
 
@@ -145,5 +144,3 @@ public:
 };
 
 }
-
-#endif

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 OpenXcom Developers.
+ * Copyright 2010-2016 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -1337,8 +1337,10 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 					Pathfinding::vectorToDirection(origin->getPosition() - dest->getPosition(), dir);
 					if (dir != -1 && dir %2) power_ -= 5; // diagonal movement costs an extra 50% for fire.
 				}
-				if (l>0.5) power_-= horizontalBlockage(origin, dest, type, l<1.5) * 2;
-				if (l>0.5) power_-= verticalBlockage(origin, dest, type, l<1.5) * 2;
+				if (l > 0.5) {
+					power_ -= horizontalBlockage(origin, dest, type, l < 1.5) * 2;
+					power_ -= verticalBlockage(origin, dest, type, l < 1.5) * 2;
+				}
 			}
 		}
 	}

@@ -1,5 +1,6 @@
+#pragma once
 /*
- * Copyright 2010-2015 OpenXcom Developers.
+ * Copyright 2010-2016 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,9 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_INVENTORY_H
-#define OPENXCOM_INVENTORY_H
-
 #include "../Engine/InteractiveSurface.h"
 #include <map>
 #include <string>
@@ -108,5 +106,3 @@ public:
 };
 
 }
-
-#endif

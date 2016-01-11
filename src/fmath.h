@@ -1,5 +1,6 @@
+#pragma once
 /*
- * Copyright 2010-2015 OpenXcom Developers.
+ * Copyright 2010-2016 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,9 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_FMATH_H
-#define OPENXCOM_FMATH_H
-
 #include <limits>
 #define _USE_MATH_DEFINES
 #include <cmath>
@@ -51,5 +49,3 @@ inline _Tx Sign(const _Tx& x)
 {
 	return (_Tx(0) < x) - (x < _Tx(0));
 }
-
-#endif

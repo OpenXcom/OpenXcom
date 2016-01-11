@@ -1,5 +1,4 @@
-#ifndef __OXC_PCH_H
-#define __OXC_PCH_H
+#pragma once
 
 // uncomment to check memory leaks in VS
 //#define _CRTDBG_MAP_ALLOC
@@ -193,5 +192,3 @@
 #include "./Interface/TextList.h"
 #include "./Interface/ToggleTextButton.h"
 #include "./Interface/Window.h"
-
-#endif

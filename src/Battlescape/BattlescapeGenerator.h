@@ -1,5 +1,6 @@
+#pragma once
 /*
- * Copyright 2010-2015 OpenXcom Developers.
+ * Copyright 2010-2016 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,20 +17,17 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_BATTLESCAPEGENERATOR_H
-#define OPENXCOM_BATTLESCAPEGENERATOR_H
-
 #include <vector>
 #include "../Mod/RuleTerrain.h"
 #include "../Mod/MapScript.h"
 
 namespace OpenXcom
 {
+
 class SavedBattleGame;
 class Mod;
 class Craft;
 class Ufo;
-class RuleTerrain;
 class BattleItem;
 class MapBlock;
 class Vehicle;
@@ -44,7 +42,6 @@ class Base;
 class MissionSite;
 class AlienBase;
 class BattleUnit;
-class MapScript;
 class Texture;
 
 /**
@@ -78,6 +75,7 @@ private:
 	std::vector< std::vector<bool> > _landingzone;
 	std::vector< std::vector<int> > _segments, _drillMap;
 	MapBlock *_dummy;
+	bool _error;
 
 	/// sets the map size and associated vars
 	void init();
@@ -174,5 +172,3 @@ public:
 };
 
 }
-
-#endif

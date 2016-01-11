@@ -1,7 +1,4 @@
-
-#ifndef __FMOPL_H_
-#define __FMOPL_H_
-
+#pragma once
 
 /* --- select emulation chips --- */
 #define BUILD_YM3812 (HAS_YM3812)
@@ -173,5 +170,3 @@ int OPLTimerOver(FM_OPL *OPL,int c);
 void YM3812UpdateOne(FM_OPL *OPL, INT16 *buffer, int length, int stripe, float volume);
 
 void Y8950UpdateOne(FM_OPL *OPL, INT16 *buffer, int length);
-
-#endif

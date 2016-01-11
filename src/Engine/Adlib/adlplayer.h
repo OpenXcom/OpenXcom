@@ -1,12 +1,9 @@
+#pragma once
 /* ADLPLAYER.H
  *
  * player functions for midi-like adlib music
  *
  */
-
-#ifndef ADLPLAYER_H
-
-#define ADLPLAYER_H
 
 //MAIN FUNCTION - instantly stops music
 void func_mute();
@@ -22,5 +19,3 @@ void func_set_music_volume(int value);
 int func_get_polyphony();
 void func_save_music_state(int i);
 void func_load_music_state(int i);
-
-#endif

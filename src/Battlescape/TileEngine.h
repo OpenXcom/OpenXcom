@@ -1,5 +1,6 @@
+#pragma once
 /*
- * Copyright 2010-2015 OpenXcom Developers.
+ * Copyright 2010-2016 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,9 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_TILEENGINE_H
-#define OPENXCOM_TILEENGINE_H
-
 #include <vector>
 #include "Position.h"
 #include "../Mod/RuleItem.h"
@@ -142,5 +140,3 @@ public:
 };
 
 }
-
-#endif

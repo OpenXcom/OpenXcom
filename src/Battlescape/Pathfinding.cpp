@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 OpenXcom Developers.
+ * Copyright 2010-2016 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,7 +18,6 @@
  */
 #include <list>
 #include "Pathfinding.h"
-#include "PathfindingNode.h"
 #include "PathfindingOpenSet.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
@@ -365,7 +364,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 				if (numberOfPartsFalling == (size+1)*(size+1) && direction != DIR_DOWN)
 				{
-						return false;
+						return 0;
 				}
 			}
 			startTile = _save->getTile(startTile->getPosition() + verticalOffset);

@@ -1,5 +1,6 @@
+#pragma once
 /*
- * Copyright 2010-2015 OpenXcom Developers.
+ * Copyright 2010-2016 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,9 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_CRAFTSOLDIERSSTATE_H
-#define OPENXCOM_CRAFTSOLDIERSSTATE_H
-
 #include "../Engine/State.h"
 #include <vector>
 
@@ -31,7 +29,6 @@ class Text;
 class TextList;
 class ComboBox;
 class Base;
-class Craft;
 class Soldier;
 struct SortFunctor;
 
@@ -82,5 +79,3 @@ public:
 };
 
 }
-
-#endif
