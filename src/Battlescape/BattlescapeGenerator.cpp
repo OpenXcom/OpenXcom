@@ -1604,7 +1604,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 	}
 
 	size_t nodeOffset = _save->getNodes()->size();
-
+	int nodeNumber = 0;
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
 		int pos_x = value[1];
@@ -1636,11 +1636,18 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 			}
 			_save->getNodes()->push_back(node);
 		}
+		else
+		{
+			std::stringstream ss;
+			ss << "Error in RMP file: " << filename.str() << " Node #" << nodeNumber << " is outside map boundaries at X:" << pos_x << " Y:" << pos_y << " Z:" << pos_z;
+			throw Exception(ss.str());
+		}
+		nodeNumber++;
 	}
 
 	if (!mapFile.eof())
 	{
-		throw Exception("Invalid RMP file");
+		throw Exception("Invalid RMP file: " + filename.str());
 	}
 
 	mapFile.close();
