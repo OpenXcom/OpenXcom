@@ -42,6 +42,7 @@ private:
 	int _reserved;
 	int _priority;
 	bool _allocated;
+	bool _dummy;
 public:
 	static const int CRAFTSEGMENT = 1000;
 	static const int UFOSEGMENT = 2000;
@@ -82,6 +83,8 @@ public:
 	void allocateNode();
 	void freeNode();
 	bool isTarget() const;
+	void setDummy(bool dummy);
+	bool isDummy() const;
 	
 };
 

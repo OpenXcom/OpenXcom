@@ -476,6 +476,10 @@ void CivilianBAIState::setupPatrol()
 		int closest = 1000000;
 		for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
 		{
+			if ((*i)->isDummy())
+			{
+				continue;
+			}
 			node = *i;
 			int d = _save->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
 			if (_unit->getPosition().z == node->getPosition().z 

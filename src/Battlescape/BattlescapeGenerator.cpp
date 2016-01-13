@@ -1605,7 +1605,6 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 	}
 
 	size_t nodeOffset = _save->getNodes()->size();
-	int nodeNumber = 0;
 	std::vector<int> badNodes;
 	int nodesAdded = 0;
 	while (mapFile.read((char*)&value, sizeof(value)))
@@ -1613,6 +1612,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 		int pos_x = value[1];
 		int pos_y = value[0];
 		int pos_z = value[2];
+		Node *node;
 		if (pos_x < mapblock->getSizeX() && pos_y < mapblock->getSizeY() && pos_z < _mapsize_z)
 		{
 			Position pos = Position(xoff + pos_x, yoff + pos_y, mapblock->getSizeZ() - 1 - pos_z);
@@ -1621,7 +1621,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 			int flags    = value[21];
 			int reserved = value[22];
 			int priority = value[23];
-			Node *node = new Node(_save->getNodes()->size(), pos, segment, type, rank, flags, reserved, priority);
+			node = new Node(_save->getNodes()->size(), pos, segment, type, rank, flags, reserved, priority);
 			for (int j = 0; j < 5; ++j)
 			{
 				int connectID = value[4 + j * 3];
@@ -1637,37 +1637,40 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 				}
 				node->getNodeLinks()->push_back(connectID);
 			}
-			_save->getNodes()->push_back(node);
-			nodesAdded++;
 		}
 		else
 		{
-			Log(LOG_INFO) << "Bad node in RMP file: " << filename.str() << " Node #" << nodeNumber << " is outside map boundaries at X:" << pos_x << " Y:" << pos_y << " Z:" << pos_z << ". Culling Node.";
-			badNodes.push_back(nodeNumber);
+			// since we use getNodes()->at(n) a lot, we have to push a dummy node into the vector to keep the connections sane,
+			// or else convert the node vector to a map, either way is as much work, so i'm sticking with vector for faster operation.
+			// this is because the "built in" nodeLinks reference each other by number, and it's gonna be implementational hell to try
+			// to adjust those numbers retroactively, post-culling. far better to simply mark these culled nodes as dummies, and discount their use
+			// that way, all the connections will still line up properly in the array.
+			node = new Node();
+			node->setDummy(true);
+			Log(LOG_INFO) << "Bad node in RMP file: " << filename.str() << " Node #" << nodesAdded << " is outside map boundaries at X:" << pos_x << " Y:" << pos_y << " Z:" << pos_z << ". Culling Node.";
+			badNodes.push_back(nodesAdded);
 		}
-		nodeNumber++;
+		_save->getNodes()->push_back(node);
+		nodesAdded++;
 	}
 
 	for (std::vector<int>::iterator i = badNodes.begin(); i != badNodes.end(); ++i)
 	{
 		int nodeCounter = nodesAdded;
-		int RMPIndex = nodesAdded + badNodes.size() - 1;
 		for (std::vector<Node*>::reverse_iterator j = _save->getNodes()->rbegin(); j != _save->getNodes()->rend() && nodeCounter > 0; ++j)
 		{
-			while (std::find(badNodes.begin(), badNodes.end(), RMPIndex) != badNodes.end())
+			if (!(*j)->isDummy())
 			{
-				RMPIndex--;
-			}
-			for(std::vector<int>::iterator k = (*j)->getNodeLinks()->begin(); k != (*j)->getNodeLinks()->end(); ++k)
-			{
-				if (*k - nodeOffset == *i)
+				for(std::vector<int>::iterator k = (*j)->getNodeLinks()->begin(); k != (*j)->getNodeLinks()->end(); ++k)
 				{
-					Log(LOG_INFO) << "RMP file: " << filename.str() << " Node #" << RMPIndex << " is linked to Node #" << *i << ", which was culled. Terminating Link.";
-					*k = -1;
+					if (*k - nodeOffset == *i)
+					{
+						Log(LOG_INFO) << "RMP file: " << filename.str() << " Node #" << nodeCounter - 1 << " is linked to Node #" << *i << ", which was culled. Terminating Link.";
+						*k = -1;
+					}
 				}
 			}
 			nodeCounter--;
-			RMPIndex--;
 		}
 	}
 
@@ -2347,6 +2350,10 @@ void BattlescapeGenerator::attachNodeLinks()
 {
 	for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
 	{
+		if ((*i)->isDummy())
+		{
+			continue;
+		}
 		Node *node = (*i);
 		int segmentX = node->getPosition().x / 10;
 		int segmentY = node->getPosition().y / 10;
@@ -2379,6 +2386,10 @@ void BattlescapeGenerator::attachNodeLinks()
 				{
 					for (std::vector<Node*>::iterator k = _save->getNodes()->begin(); k != _save->getNodes()->end(); ++k)
 					{
+						if ((*k)->isDummy())
+						{
+							continue;
+						}
 						if ((*k)->getSegment() == neighbourSegments[n])
 						{
 							for (std::vector<int>::iterator l = (*k)->getNodeLinks()->begin(); l != (*k)->getNodeLinks()->end(); ++l )

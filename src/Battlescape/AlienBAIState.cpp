@@ -455,6 +455,10 @@ void AlienBAIState::setupPatrol()
 		int closest = 1000000;
 		for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
 		{
+			if ((*i)->isDummy())
+			{
+				continue;
+			}
 			node = *i;
 			int d = _save->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
 			if (_unit->getPosition().z == node->getPosition().z 
@@ -523,6 +527,10 @@ void AlienBAIState::setupPatrol()
 				int closest = 1000000;
 				for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
 				{
+					if ((*i)->isDummy())
+					{
+						continue;
+					}
 					if ((*i)->isTarget() && !(*i)->isAllocated())
 					{
 						node = *i;
@@ -595,6 +603,10 @@ void AlienBAIState::setupAmbush()
 		// we'll use node positions for this, as it gives map makers a good degree of control over how the units will use the environment.
 		for (std::vector<Node*>::const_iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
 		{
+			if ((*i)->isDummy())
+			{
+				continue;
+			}
 			Position pos = (*i)->getPosition();
 			Tile *tile = _save->getTile(pos);
 			if (tile == 0 || _save->getTileEngine()->distance(pos, _unit->getPosition()) > 10 || pos.z != _unit->getPosition().z || tile->getDangerous() ||
@@ -2072,6 +2084,10 @@ bool AlienBAIState::getNodeOfBestEfficacy(BattleAction *action)
 	Position targetVoxel;
 	for (std::vector<Node*>::const_iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
 	{
+		if ((*i)->isDummy())
+		{
+			continue;
+		}
 		int dist = _save->getTileEngine()->distance((*i)->getPosition(), _unit->getPosition());
 		if (dist <= 20 && dist > action->weapon->getRules()->getExplosionRadius() &&
 			_save->getTileEngine()->canTargetTile(&originVoxel, _save->getTile((*i)->getPosition()), O_FLOOR, &targetVoxel, _unit))

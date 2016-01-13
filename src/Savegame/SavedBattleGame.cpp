@@ -1150,6 +1150,10 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 
 	for (std::vector<Node*>::iterator i = getNodes()->begin(); i != getNodes()->end(); ++i)
 	{
+		if ((*i)->isDummy())
+		{
+			continue;
+		}
 		if ((*i)->getRank() == nodeRank								// ranks must match
 			&& (!((*i)->getType() & Node::TYPE_SMALL)
 				|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
@@ -1193,6 +1197,10 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 	{
 		if (Options::traceAI) { Log(LOG_INFO) << "This alien got lost. :("; }
 		fromNode = getNodes()->at(RNG::generate(0, getNodes()->size() - 1));
+		while (fromNode->isDummy())
+		{
+			fromNode = getNodes()->at(RNG::generate(0, getNodes()->size() - 1));
+		}
 	}
 
 	// scouts roam all over while all others shuffle around to adjacent nodes at most:
@@ -1203,9 +1211,10 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 		if (!scout && fromNode->getNodeLinks()->at(i) < 1) continue;
 
 		Node *n = getNodes()->at(scout ? i : fromNode->getNodeLinks()->at(i));
-		if ((n->getFlags() > 0 || n->getRank() > 0 || scout)											// for non-scouts we find a node with a desirability above 0
+		if ( !n->isDummy()																				// don't consider dummy nodes.
+			&& (n->getFlags() > 0 || n->getRank() > 0 || scout)											// for non-scouts we find a node with a desirability above 0
 			&& (!(n->getType() & Node::TYPE_SMALL) || unit->getArmor()->getSize() == 1)					// the small unit bit is not set or the unit is small
-			&& (!(n->getType() & Node::TYPE_FLYING) || unit->getMovementType() == MT_FLY)	// the flying unit bit is not set or the unit can fly
+			&& (!(n->getType() & Node::TYPE_FLYING) || unit->getMovementType() == MT_FLY)				// the flying unit bit is not set or the unit can fly
 			&& !n->isAllocated()																		// check if not allocated
 			&& !(n->getType() & Node::TYPE_DANGEROUS)													// don't go there if an alien got shot there; stupid behavior like that
 			&& setUnitPosition(unit, n->getPosition(), true)											// check if not already occupied
