@@ -163,7 +163,6 @@ set ( battlescape_src
   Battlescape/PathfindingNode.h
   Battlescape/PathfindingOpenSet.cpp
   Battlescape/PathfindingOpenSet.h
-  Battlescape/Position.cpp
   Battlescape/Position.h
   Battlescape/PrimeGrenadeState.cpp
   Battlescape/PrimeGrenadeState.h
