@@ -275,9 +275,6 @@
     <ClCompile Include="Battlescape\UnitSprite.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
-    <ClCompile Include="Battlescape\Position.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
     <ClCompile Include="Interface\NumberText.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
