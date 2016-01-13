@@ -72,7 +72,7 @@ static bool _addItem(BattleItem *item, BattleUnit *unit, Mod *mod, SavedBattleGa
  * @param game pointer to Game object.
  */
 BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game), _save(game->getSavedGame()->getSavedBattle()), _mod(game->getMod()), _craft(0), _ufo(0), _base(0), _mission(0), _alienBase(0), _terrain(0), _mapsize_x(0), _mapsize_y(0), _mapsize_z(0),
-														 _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienItemLevel(0), _baseInventory(false), _generateFuel(true), _craftDeployed(false), _craftZ(0), _blocksToDo(0), _dummy(0), _error(false)
+														 _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienItemLevel(0), _baseInventory(false), _generateFuel(true), _craftDeployed(false), _craftZ(0), _blocksToDo(0), _dummy(0)
 {
 	_allowAutoLoadout = !Options::disableAutoEquip;
 }
@@ -1606,6 +1606,8 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 
 	size_t nodeOffset = _save->getNodes()->size();
 	int nodeNumber = 0;
+	std::vector<int> badNodes;
+	int nodesAdded = 0;
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
 		int pos_x = value[1];
@@ -1636,13 +1638,37 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 				node->getNodeLinks()->push_back(connectID);
 			}
 			_save->getNodes()->push_back(node);
+			nodesAdded++;
 		}
 		else
 		{
-			_error = true;
-			Log(LOG_ERROR) << "Error in RMP file: " << filename.str() << " Node #" << nodeNumber << " is outside map boundaries at X:" << pos_x << " Y:" << pos_y << " Z:" << pos_z;
+			Log(LOG_INFO) << "Bad node in RMP file: " << filename.str() << " Node #" << nodeNumber << " is outside map boundaries at X:" << pos_x << " Y:" << pos_y << " Z:" << pos_z << ". Culling Node.";
+			badNodes.push_back(nodeNumber);
 		}
 		nodeNumber++;
+	}
+
+	for (std::vector<int>::iterator i = badNodes.begin(); i != badNodes.end(); ++i)
+	{
+		int nodeCounter = nodesAdded;
+		int RMPIndex = nodesAdded + badNodes.size() - 1;
+		for (std::vector<Node*>::reverse_iterator j = _save->getNodes()->rbegin(); j != _save->getNodes()->rend() && nodeCounter > 0; ++j)
+		{
+			while (std::find(badNodes.begin(), badNodes.end(), RMPIndex) != badNodes.end())
+			{
+				RMPIndex--;
+			}
+			for(std::vector<int>::iterator k = (*j)->getNodeLinks()->begin(); k != (*j)->getNodeLinks()->end(); ++k)
+			{
+				if (*k - nodeOffset == *i)
+				{
+					Log(LOG_INFO) << "RMP file: " << filename.str() << " Node #" << RMPIndex << " is linked to Node #" << *i << ", which was culled. Terminating Link.";
+					*k = -1;
+				}
+			}
+			nodeCounter--;
+			RMPIndex--;
+		}
 	}
 
 	if (!mapFile.eof())
@@ -1843,8 +1869,6 @@ void BattlescapeGenerator::loadWeapons()
  */
 void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 {
-	_error = false;
-
 	// set our ambient sound
 	_save->setAmbientSound(_terrain->getAmbience());
 	_save->setAmbientVolume(_terrain->getAmbientVolume());
@@ -2185,11 +2209,6 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 	}
 
 	attachNodeLinks();
-
-	if (_error)
-	{
-		throw Exception("Map failed to fully generate, check log.");
-	}
 }
 
 /**
