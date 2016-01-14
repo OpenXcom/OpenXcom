@@ -28,7 +28,7 @@ FIND_PATH(SDLGFX_INCLUDE_DIR SDL_gfx.h
   HINTS
   $ENV{SDLGFXDIR}
   $ENV{SDLDIR}
-  PATH_SUFFIXES include
+  PATH_SUFFIXES include SDL 
   PATHS
   ~/Library/Frameworks
   /Library/Frameworks
@@ -72,7 +72,7 @@ IF(NOT SDLGFX_INCLUDE_DIR)
     HINTS
     $ENV{SDLGFXDIR}
     $ENV{SDLDIR}
-    PATH_SUFFIXES include
+    PATH_SUFFIXES include SDL
     PATHS
     ~/Library/Frameworks
     /Library/Frameworks

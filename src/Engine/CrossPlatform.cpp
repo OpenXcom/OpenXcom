@@ -64,6 +64,10 @@
 #endif
 #include <SDL.h>
 #include <SDL_syswm.h>
+#ifdef __HAIKU__
+#include <FindDirectory.h>
+#include <StorageDefs.h>
+#endif
 
 namespace OpenXcom
 {
@@ -175,7 +179,10 @@ std::vector<std::string> findDataFolders()
 #else
 	char const *home = getHome();
 #ifdef __HAIKU__
-	list.push_back("/boot/apps/OpenXcom/");
+	char data_path[B_PATH_NAME_LENGTH];
+	find_directory(B_SYSTEM_SETTINGS_DIRECTORY, 0, true, data_path, sizeof(data_path)-strlen("/OpenXcom/"));
+	strcat(data_path,"/OpenXcom/");
+	list.push_back(data_path);
 #endif
 	char path[MAXPATHLEN];
 
@@ -267,7 +274,10 @@ std::vector<std::string> findUserFolders()
 	}
 #else
 #ifdef __HAIKU__
-	list.push_back("/boot/apps/OpenXcom/");
+	char user_path[B_PATH_NAME_LENGTH];
+	find_directory(B_USER_SETTINGS_DIRECTORY, 0, true, user_path, sizeof(user_path)-strlen("/OpenXcom/"));
+	strcat(user_path,"/OpenXcom/");
+	list.push_back(user_path);
 #endif
 	char const *home = getHome();
 	char path[MAXPATHLEN];
@@ -311,7 +321,10 @@ std::string findConfigFolder()
 #if defined(_WIN32) || defined(__APPLE__)
 	return "";
 #elif defined (__HAIKU__)
-	return "/boot/home/config/settings/openxcom/";
+	char settings_path[B_PATH_NAME_LENGTH];
+	find_directory(B_USER_SETTINGS_DIRECTORY, 0, true, settings_path, sizeof(settings_path)-strlen("/OpenXcom/"));
+	strcat(settings_path,"/OpenXcom/");
+	return settings_path;
 #else
 	char const *home = getHome();
 	char path[MAXPATHLEN];
