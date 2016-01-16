@@ -2764,18 +2764,16 @@ void BattleUnit::deriveRank()
 {
 	if (_faction == FACTION_PLAYER)
 	{
-		if (_rank == "STR_COMMANDER")
-			_rankInt = 5;
-		else if (_rank == "STR_COLONEL")
-			_rankInt = 4;
-		else if (_rank == "STR_CAPTAIN")
-			_rankInt = 3;
-		else if (_rank == "STR_SERGEANT")
-			_rankInt = 2;
-		else if (_rank == "STR_SQUADDIE")
-			_rankInt = 1;
-		else if (_rank == "STR_ROOKIE")
-			_rankInt = 0;
+		switch(_rank)
+		{
+		case RANK_COMMANDER:	_rankInt = 5; break;
+		case RANK_COLONEL:	_rankInt = 4; break;
+		case RANK_CAPTAIN:	_rankInt = 3; break;
+		case RANK_SERGEANT:	_rankInt = 2; break;
+		case RANK_SQUADDIE:	_rankInt = 1; break;
+		case RANK_ROOKIE:	_rankInt = 0; break;
+		default: 		_rankInt = 0; break;
+		}
 	}
 }
 
