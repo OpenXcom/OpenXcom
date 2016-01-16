@@ -188,7 +188,6 @@ openxcom_SOURCES = \
 	src/Battlescape/PathfindingNode.h \
 	src/Battlescape/PathfindingOpenSet.cpp \
 	src/Battlescape/PathfindingOpenSet.h \
-	src/Battlescape/Position.cpp \
 	src/Battlescape/Position.h \
 	src/Battlescape/PrimeGrenadeState.cpp \
 	src/Battlescape/PrimeGrenadeState.h \
@@ -235,7 +234,6 @@ openxcom_SOURCES = \
 	src/Engine/CrossPlatform.cpp \
 	src/Engine/CrossPlatform.h \
 	src/Engine/DosFont.h \
-	src/Engine/Exception.cpp \
 	src/Engine/Exception.h \
 	src/Engine/FastLineClip.cpp \
 	src/Engine/FastLineClip.h \

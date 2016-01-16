@@ -59,7 +59,6 @@
 #endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <direct.h>
 #include <malloc.h>
 #else
 #include <alloca.h>

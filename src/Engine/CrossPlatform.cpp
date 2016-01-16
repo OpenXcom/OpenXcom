@@ -36,7 +36,6 @@
 #include <windows.h>
 #include <shlobj.h>
 #include <shlwapi.h>
-#include <direct.h>
 #include <dbghelp.h>
 #ifndef SHGFP_TYPE_CURRENT
 #define SHGFP_TYPE_CURRENT 0
@@ -637,7 +636,15 @@ std::string getLocale()
 	return Language::wstrToUtf8(locale);
 	*/
 #else
-	std::locale l("");
+	std::locale l;
+	try
+	{
+		l = std::locale("");
+	}
+	catch (std::runtime_error)
+	{
+		return "x-";
+	}
 	std::string name = l.name();
 	size_t dash = name.find_first_of('_'), dot = name.find_first_of('.');
 	if (dot != std::string::npos)

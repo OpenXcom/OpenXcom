@@ -23,7 +23,6 @@
 #include <sstream>
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/BattlescapeGame.h"
@@ -56,7 +55,7 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) :
 	_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0),
 	_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
 	_statistics(), _murdererId(0), _fatalShotSide(SIDE_FRONT), _fatalShotBodyPart(BODYPART_HEAD),
-	_geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false), _respawn(false)
+	_geoscapeSoldier(soldier), _unitRules(0), _rankInt(0), _turretType(-1), _hidingForTurn(false), _respawn(false)
 {
 	_name = soldier->getName(true);
 	_id = soldier->getId();
@@ -169,7 +168,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, St
 	_expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0), _motionPoints(0), _kills(0), _hitByFire(false),
 	_moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
 	_statistics(), _murdererId(0), _fatalShotSide(SIDE_FRONT), _fatalShotBodyPart(BODYPART_HEAD),
-	_armor(armor), _geoscapeSoldier(0),  _unitRules(unit), _rankInt(-1),
+	_armor(armor), _geoscapeSoldier(0),  _unitRules(unit), _rankInt(0),
 	_turretType(-1), _hidingForTurn(false), _respawn(false)
 {
 	_type = unit->getType();
@@ -2762,20 +2761,18 @@ int BattleUnit::getRankInt() const
  */
 void BattleUnit::deriveRank()
 {
-	if (_faction == FACTION_PLAYER)
+	if (_geoscapeSoldier)
 	{
-		if (_rank == "STR_COMMANDER")
-			_rankInt = 5;
-		else if (_rank == "STR_COLONEL")
-			_rankInt = 4;
-		else if (_rank == "STR_CAPTAIN")
-			_rankInt = 3;
-		else if (_rank == "STR_SERGEANT")
-			_rankInt = 2;
-		else if (_rank == "STR_SQUADDIE")
-			_rankInt = 1;
-		else if (_rank == "STR_ROOKIE")
-			_rankInt = 0;
+		switch (_geoscapeSoldier->getRank())
+		{
+		case RANK_ROOKIE:    _rankInt = 0; break;
+		case RANK_SQUADDIE:  _rankInt = 1; break;
+		case RANK_SERGEANT:  _rankInt = 2; break;
+		case RANK_CAPTAIN:   _rankInt = 3; break;
+		case RANK_COLONEL:   _rankInt = 4; break;
+		case RANK_COMMANDER: _rankInt = 5; break;
+		default:             _rankInt = 0; break;
+		}
 	}
 }
 

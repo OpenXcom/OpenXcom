@@ -17,19 +17,14 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Language.h"
-#include <assert.h>
-#include <locale>
 #include <fstream>
 #include <cassert>
 #include <set>
 #include "CrossPlatform.h"
-#include "FileMap.h"
 #include "Logger.h"
-#include "Exception.h"
 #include "Options.h"
 #include "LanguagePlurality.h"
 #include "../Mod/ExtraStrings.h"
-#include "../Interface/TextList.h"
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX

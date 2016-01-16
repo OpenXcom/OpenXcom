@@ -47,7 +47,6 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 #include "../Battlescape/Pathfinding.h"
-#include "SoldierNamePool.h"
 #include "RuleCountry.h"
 #include "RuleRegion.h"
 #include "RuleBaseFacility.h"

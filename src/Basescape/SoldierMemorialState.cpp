@@ -18,7 +18,6 @@
  */
 #include "SoldierMemorialState.h"
 #include <sstream>
-#include <iomanip>
 #include "../Engine/Game.h"
 #include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"

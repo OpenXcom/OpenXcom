@@ -25,10 +25,6 @@
 namespace OpenXcom
 {
 
-class Polygon;
-class Polyline;
-class Texture;
-
 /**
  * Represents game-specific contents needed
  * for save convertion and ID matching.

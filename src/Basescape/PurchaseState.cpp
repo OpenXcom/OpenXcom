@@ -43,7 +43,6 @@
 #include "../Menu/ErrorMessageState.h"
 #include "../Mod/RuleInterface.h"
 #include "../Mod/RuleSoldier.h"
-#include "../Savegame/Soldier.h"
 #include "../Mod/RuleCraftWeapon.h"
 #include "../Mod/Armor.h"
 

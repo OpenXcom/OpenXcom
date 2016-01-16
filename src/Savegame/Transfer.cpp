@@ -23,7 +23,6 @@
 #include "ItemContainer.h"
 #include "../Engine/Language.h"
 #include "../Mod/Mod.h"
-#include "../Mod/RuleSoldier.h"
 
 namespace OpenXcom
 {

@@ -104,8 +104,6 @@
 #include "../Mod/RuleGlobe.h"
 #include "../Engine/Exception.h"
 #include "../Mod/AlienDeployment.h"
-#include "../Savegame/CraftWeapon.h"
-#include "../Mod/RuleCraftWeapon.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
