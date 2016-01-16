@@ -19,6 +19,13 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/UI/reserve.png
+  - type: KneelButton
+    width: 32
+    height: 32
+    subX: 32
+    subY: 16
+    files:
+      0: Resources/UI/kneelButton.png
   - type: InvCopy
     width: 16
     height: 16
