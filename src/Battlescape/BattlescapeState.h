@@ -86,6 +86,8 @@ private:
 	void blinkVisibleUnitButtons();
 	/// Shifts the colors of the health bar when unit has fatal wounds.
 	void blinkHealthBar();
+	/// Shows the unit kneel state.
+	void toggleKneelButton(BattleUnit* unit);
 public:
 	/// Selects the next soldier.
 	void selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
