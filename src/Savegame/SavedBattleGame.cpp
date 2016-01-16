@@ -1224,7 +1224,9 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 			&& n->getPosition().x > 0 && n->getPosition().y > 0)
 		{
 			if (!preferred
-				|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
+				|| (unit->getRankInt() >=0 &&
+					preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] &&
+					preferred->getFlags() < n->getFlags())
 				|| preferred->getFlags() < n->getFlags())
 			{
 				preferred = n;
