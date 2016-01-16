@@ -299,6 +299,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _xBeforeMouseScrolling(0), _
 	_btnKneel->setTooltip("STR_KNEEL");
 	_btnKneel->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
 	_btnKneel->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
+	_btnKneel->allowToggleInversion();
 
 	_btnInventory->onMouseClick((ActionHandler)&BattlescapeState::btnInventoryClick);
 	_btnInventory->onKeyboardPress((ActionHandler)&BattlescapeState::btnInventoryClick, Options::keyBattleInventory);
@@ -857,10 +858,14 @@ void BattlescapeState::btnShowMapClick(Action *)
 
 void BattlescapeState::toggleKneelButton(BattleUnit* unit)
 {
-	if ((unit) && (unit->isKneeled()))
-		_game->getMod()->getSurfaceSet("KneelButton")->getFrame(1)->blit(_btnKneel);
+	if (_btnKneel->isTFTDMode())
+	{
+		_btnKneel->toggle(unit && unit->isKneeled());
+	}
 	else
-		_game->getMod()->getSurfaceSet("KneelButton")->getFrame(0)->blit(_btnKneel);
+	{
+		_game->getMod()->getSurfaceSet("KneelButton")->getFrame((unit && unit->isKneeled()) ? 1 : 0)->blit(_btnKneel);
+	}
 }
 
 /**

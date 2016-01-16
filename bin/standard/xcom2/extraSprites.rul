@@ -58,12 +58,3 @@ extraSprites: #done
     subY: 48
     files:
       -9: Resources/Weapons/Terror.png
-  - type: KneelButton
-    width: 32
-    height: 32
-    subX: 32
-    subY: 16
-    files:
-      0: Resources/UI/kneelButton.png
-
-
