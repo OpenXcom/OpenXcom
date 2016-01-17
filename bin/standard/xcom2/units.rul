@@ -432,7 +432,6 @@ units: #done
     builtInWeapons:
       - STR_TRISCENE_MELEE_WEAPON
       - STR_TRIBIO_SONIC_WEAPON
-      - STR_TRIBIO_SONIC_WEAPON_AMMO
     moveSound: 62
   - type: STR_XARQUID_TERRORIST
     race: STR_XARQUID
