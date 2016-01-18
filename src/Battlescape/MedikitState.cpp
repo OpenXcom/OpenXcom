@@ -128,6 +128,7 @@ MedikitState::MedikitState (BattleUnit *targetUnit, BattleAction *action) : _tar
 		_game->getScreen()->resetDisplay(false);
 	}
 
+	_tu = action->TU;
 	_unit = action->actor;
 	_item = action->weapon;
 	_bg = new Surface(320, 200);
@@ -220,7 +221,7 @@ void MedikitState::onHealClick(Action *)
 	{
 		return;
 	}
-	if (_unit->spendTimeUnits (rule->getTUUse()))
+	if (_unit->spendTimeUnits(_tu))
 	{
 		_targetUnit->heal(_medikitView->getSelectedPart(), rule->getWoundRecovery(), rule->getHealthRecovery());
 		_item->setHealQuantity(--heal);
@@ -254,7 +255,7 @@ void MedikitState::onStimulantClick(Action *)
 	{
 		return;
 	}
-	if (_unit->spendTimeUnits (rule->getTUUse()))
+	if (_unit->spendTimeUnits (_tu))
 	{
 		_targetUnit->stimulant(rule->getEnergyRecovery(), rule->getStunRecovery());
 		_item->setStimulantQuantity(--stimulant);
@@ -287,7 +288,7 @@ void MedikitState::onPainKillerClick(Action *)
 	{
 		return;
 	}
-	if (_unit->spendTimeUnits (rule->getTUUse()))
+	if (_unit->spendTimeUnits (_tu))
 	{
 		_targetUnit->painKillers();
 		_item->setPainKillerQuantity(--pk);
