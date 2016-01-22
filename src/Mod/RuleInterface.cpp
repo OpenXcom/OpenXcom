@@ -42,6 +42,10 @@ RuleInterface::~RuleInterface()
  */
 void RuleInterface::load(const YAML::Node& node)
 {
+	if (const YAML::Node &parent = node["refNode"])
+	{
+		load(parent);
+	}
 	_palette = node["palette"].as<std::string>(_palette);
 	_parent = node["parent"].as<std::string>(_parent);
 	_music = node["music"].as<std::string>(_music);

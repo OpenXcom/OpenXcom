@@ -52,6 +52,10 @@ RuleItem::~RuleItem()
  */
 void RuleItem::load(const YAML::Node &node, Mod *mod, int listOrder)
 {
+	if (const YAML::Node &parent = node["refNode"])
+	{
+		load(parent, mod, listOrder);
+	}
 	_type = node["type"].as<std::string>(_type);
 	_name = node["name"].as<std::string>(_name);
 	_requires = node["requires"].as< std::vector<std::string> >(_requires);

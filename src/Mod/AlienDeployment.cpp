@@ -131,6 +131,10 @@ AlienDeployment::~AlienDeployment()
  */
 void AlienDeployment::load(const YAML::Node &node)
 {
+	if (const YAML::Node &parent = node["refNode"])
+	{
+		load(parent);
+	}
 	_type = node["type"].as<std::string>(_type);
 	_data = node["data"].as< std::vector<DeploymentData> >(_data);
 	_width = node["width"].as<int>(_width);

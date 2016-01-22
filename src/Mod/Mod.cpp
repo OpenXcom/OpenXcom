@@ -1255,6 +1255,33 @@ void Mod::loadFile(const std::string &filename)
 }
 
 /**
+ * Helper function protecting from circual references in node definition.
+ * @param node Node to test
+ * @param name Name of original node.
+ * @param limit Current deepth.
+ */
+static void refNodeTestDeepth(const YAML::Node &node, const std::string &name, int limit)
+{
+	if (limit > 64)
+	{
+		throw Exception("Nest limit of refNode reach in " + name);
+	}
+	if (const YAML::Node &nested = node["refNode"])
+	{
+		if (!nested.IsMap())
+		{
+			std::stringstream ss;
+			ss << "Invaild refNode at nest level of ";
+			ss << limit;
+			ss << " in ";
+			ss << name;
+			throw Exception(ss.str());
+		}
+		refNodeTestDeepth(nested, name, limit + 1);
+	}
+}
+
+/**
  * Loads a rule element, adding/removing from vectors as necessary.
  * @param node YAML node.
  * @param map Map associated to the rule type.
@@ -1283,6 +1310,9 @@ T *Mod::loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::ve
 				index->push_back(type);
 			}
 		}
+
+		// protection from self referecing refNode node
+		refNodeTestDeepth(node, type, 0);
 	}
 	else if (node["delete"])
 	{

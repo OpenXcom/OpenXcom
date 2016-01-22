@@ -52,6 +52,10 @@ RuleRegion::~RuleRegion()
  */
 void RuleRegion::load(const YAML::Node &node)
 {
+	if (const YAML::Node &parent = node["refNode"])
+	{
+		load(parent);
+	}
 	_type = node["type"].as<std::string>(_type);
 	_cost = node["cost"].as<int>(_cost);
 	std::vector< std::vector<double> > areas;

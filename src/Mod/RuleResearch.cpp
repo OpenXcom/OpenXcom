@@ -32,6 +32,10 @@ RuleResearch::RuleResearch(const std::string & name) : _name(name), _cost(0), _p
  */
 void RuleResearch::load(const YAML::Node &node, int listOrder)
 {
+	if (const YAML::Node &parent = node["refNode"])
+	{
+		load(parent, listOrder);
+	}
 	_name = node["name"].as<std::string>(_name);
 	_lookup = node["lookup"].as<std::string>(_lookup);
 	_cutscene = node["cutscene"].as<std::string>(_cutscene);

@@ -46,6 +46,10 @@ Unit::~Unit()
  */
 void Unit::load(const YAML::Node &node, Mod *mod)
 {
+	if (const YAML::Node &parent = node["refNode"])
+	{
+		load(parent, mod);
+	}
 	_type = node["type"].as<std::string>(_type);
 	_race = node["race"].as<std::string>(_race);
 	_rank = node["rank"].as<std::string>(_rank);

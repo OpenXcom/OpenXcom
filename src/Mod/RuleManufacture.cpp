@@ -36,6 +36,10 @@ RuleManufacture::RuleManufacture(const std::string &name) : _name(name), _space(
  */
 void RuleManufacture::load(const YAML::Node &node, int listOrder)
 {
+	if (const YAML::Node &parent = node["refNode"])
+	{
+		load(parent, listOrder);
+	}
 	bool same = (1 == _producedItems.size() && _name == _producedItems.begin()->first);
 	_name = node["name"].as<std::string>(_name);
 	if (same)

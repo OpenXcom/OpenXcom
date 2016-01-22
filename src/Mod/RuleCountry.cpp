@@ -46,6 +46,10 @@ RuleCountry::~RuleCountry()
  */
 void RuleCountry::load(const YAML::Node &node)
 {
+	if (const YAML::Node &parent = node["refNode"])
+	{
+		load(parent);
+	}
 	_type = node["type"].as<std::string>(_type);
 	_fundingBase = node["fundingBase"].as<int>(_fundingBase);
 	_fundingCap = node["fundingCap"].as<int>(_fundingCap);

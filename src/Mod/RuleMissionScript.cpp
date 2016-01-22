@@ -57,6 +57,10 @@ RuleMissionScript::~RuleMissionScript()
  */
 void RuleMissionScript::load(const YAML::Node& node)
 {
+	if (const YAML::Node &parent = node["refNode"])
+	{
+		load(parent);
+	}
 	_varName = node["varName"].as<std::string>(_varName);
 	_firstMonth = node["firstMonth"].as<int>(_firstMonth);
 	_lastMonth = node["lastMonth"].as<int>(_lastMonth);

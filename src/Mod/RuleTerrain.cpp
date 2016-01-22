@@ -51,6 +51,10 @@ RuleTerrain::~RuleTerrain()
  */
 void RuleTerrain::load(const YAML::Node &node, Mod *mod)
 {
+	if (const YAML::Node &parent = node["refNode"])
+	{
+		load(parent, mod);
+	}
 	if (const YAML::Node &map = node["mapDataSets"])
 	{
 		_mapDataSets.clear();

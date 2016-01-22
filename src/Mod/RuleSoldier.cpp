@@ -51,6 +51,10 @@ RuleSoldier::~RuleSoldier()
  */
 void RuleSoldier::load(const YAML::Node &node, Mod *mod)
 {
+	if (const YAML::Node &parent = node["refNode"])
+	{
+		load(parent, mod);
+	}
 	_type = node["type"].as<std::string>(_type);
 	// Just in case
 	if (_type == "XCOM")
