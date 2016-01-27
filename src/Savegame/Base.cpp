@@ -242,7 +242,8 @@ YAML::Node Base::save() const
 	node["items"] = _items->save();
 	node["scientists"] = _scientists;
 	node["engineers"] = _engineers;
-	node["inBattlescape"] = _inBattlescape;
+	if (_inBattlescape)
+		node["inBattlescape"] = _inBattlescape;
 	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
 	{
 		node["transfers"].push_back((*i)->save());
@@ -255,7 +256,8 @@ YAML::Node Base::save() const
 	{
 		node["productions"].push_back((*i)->save());
 	}
-	node["retaliationTarget"] = _retaliationTarget;
+	if (_retaliationTarget)
+		node["retaliationTarget"] = _retaliationTarget;
 	return node;
 }
 

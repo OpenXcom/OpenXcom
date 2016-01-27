@@ -382,42 +382,10 @@ void SellState::btnOkClick(Action *)
 			case TRANSFER_CRAFT:
 				craft = (Craft*)i->rule;
 
-				// Remove weapons from craft
-				for (std::vector<CraftWeapon*>::iterator w = craft->getWeapons()->begin(); w != craft->getWeapons()->end(); ++w)
-				{
-					if ((*w) != 0)
-					{
-						_base->getStorageItems()->addItem((*w)->getRules()->getLauncherItem());
-						_base->getStorageItems()->addItem((*w)->getRules()->getClipItem(), (*w)->getClipsLoaded(_game->getMod()));
-					}
-				}
+				// Unload craft
+				craft->unload(_game->getMod());
 
-				// Remove items from craft
-				for (std::map<std::string, int>::iterator it = craft->getItems()->getContents()->begin(); it != craft->getItems()->getContents()->end(); ++it)
-				{
-					_base->getStorageItems()->addItem(it->first, it->second);
-				}
-
-				// Remove vehicles from craft
-				for (std::vector<Vehicle*>::iterator v = craft->getVehicles()->begin(); v != craft->getVehicles()->end(); ++v)
-				{
-					_base->getStorageItems()->addItem((*v)->getRules()->getType());
-					if (!(*v)->getRules()->getCompatibleAmmo()->empty())
-					{
-						_base->getStorageItems()->addItem((*v)->getRules()->getCompatibleAmmo()->front(), (*v)->getAmmo());
-					}
-				}
-
-				// Remove soldiers from craft
-				for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
-				{
-					if ((*s)->getCraft() == craft)
-					{
-						(*s)->setCraft(0);
-					}
-				}
-
-				// Clear Hangar
+				// Clear hangar
 				for (std::vector<BaseFacility*>::iterator f = _base->getFacilities()->begin(); f != _base->getFacilities()->end(); ++f)
 				{
 					if ((*f)->getCraft() == craft)

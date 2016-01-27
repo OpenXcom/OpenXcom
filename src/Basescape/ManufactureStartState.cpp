@@ -118,7 +118,6 @@ ManufactureStartState::ManufactureStartState(Base *base, RuleManufacture *item) 
 	_lstRequiredItems->setColumns(3, 140, 75, 55);
 	_lstRequiredItems->setBackground(_window);
 
-	ItemContainer *itemContainer(base->getStorageItems());
 	int row = 0;
 	for (std::map<std::string, int>::const_iterator iter = requiredItems.begin();
 		iter != requiredItems.end();
@@ -126,8 +125,16 @@ ManufactureStartState::ManufactureStartState(Base *base, RuleManufacture *item) 
 	{
 		std::wostringstream s1, s2;
 		s1 << iter->second;
-		s2 << itemContainer->getItem(iter->first);
-		productionPossible &= (itemContainer->getItem(iter->first) >= iter->second);
+		if (_game->getMod()->getItem(iter->first) != 0)
+		{
+			s2 << base->getStorageItems()->getItem(iter->first);
+			productionPossible &= (base->getStorageItems()->getItem(iter->first) >= iter->second);
+		}
+		else if (_game->getMod()->getCraft(iter->first) != 0)
+		{
+			s2 << base->getCraftCount(iter->first);
+			productionPossible &= (base->getCraftCount(iter->first) >= iter->second);
+		}
 		_lstRequiredItems->addRow(3, tr(iter->first).c_str(), s1.str().c_str(), s2.str().c_str());
 		_lstRequiredItems->setCellColor(row, 1, _lstRequiredItems->getSecondaryColor());
 		_lstRequiredItems->setCellColor(row, 2, _lstRequiredItems->getSecondaryColor());

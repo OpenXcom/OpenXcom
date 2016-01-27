@@ -589,9 +589,9 @@ void DebriefingState::prepareDebriefing()
 
 	bool aborted = battle->isAborted();
 	bool success = !aborted || battle->allObjectivesDestroyed();
-	Craft* craft = 0;
+	Craft *craft = 0;
 	std::vector<Craft*>::iterator craftIterator;
-	Base* base = 0;
+	Base *base = 0;
 	std::string target;
 
 	int playerInExitArea = 0; // if this stays 0 the craft is lost...

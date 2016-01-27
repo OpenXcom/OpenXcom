@@ -150,7 +150,7 @@ public:
 	/// Refuels the craft.
 	void refuel();
 	/// Rearms the craft.
-	std::string rearm(Mod *mod);
+	std::string rearm(const Mod *mod);
 	/// Sets the craft's battlescape status.
 	void setInBattlescape(bool inbattle);
 	/// Gets if the craft is in battlescape.
@@ -173,6 +173,8 @@ public:
 	int getInterceptionOrder() const;
 	/// Gets the craft's unique id.
 	CraftId getUniqueId() const;
+	/// Unloads the craft.
+	void unload(const Mod *mod);
 };
 
 }
