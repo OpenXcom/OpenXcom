@@ -396,7 +396,8 @@ void NewBattleState::initSave()
 	// Generate soldiers
 	for (int i = 0; i < 30; ++i)
 	{
-		Soldier *soldier = mod->genSoldier(save);
+		int randomType = RNG::generate(0, _game->getMod()->getSoldiersList().size() - 1);
+		Soldier *soldier = mod->genSoldier(save, _game->getMod()->getSoldiersList().at(randomType));
 
 		for (int n = 0; n < 5; ++n)
 		{
