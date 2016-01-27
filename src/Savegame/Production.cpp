@@ -104,12 +104,6 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Mod *m)
 	int done = getAmountProduced();
 	_timeSpent += _engineers;
 
-	if (!Options::canManufactureMoreItemsPerHour && done < getAmountProduced())
-	{
-		// enforce pre-TFTD manufacturing rules: extra hours are wasted
-		_timeSpent = (done + 1) * _rules->getManufactureTime();
-	}
-
 	if (done < getAmountProduced())
 	{
 		int produced;
