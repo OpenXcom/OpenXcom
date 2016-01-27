@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ManufactureStartState.h"
+#include <sstream>
 #include "../Interface/Window.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
@@ -30,7 +31,8 @@
 #include "../Savegame/ItemContainer.h"
 #include "ManufactureInfoState.h"
 #include "../Savegame/SavedGame.h"
-#include <sstream>
+#include "../Menu/ErrorMessageState.h"
+#include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
 {
@@ -41,7 +43,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param item The RuleManufacture to produce.
  */
-ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item) :  _base(base), _item(item)
+ManufactureStartState::ManufactureStartState(Base *base, RuleManufacture *item) :  _base(base), _item(item)
 {
 	_screen = false;
 
@@ -116,17 +118,19 @@ ManufactureStartState::ManufactureStartState(Base * base, RuleManufacture * item
 	_lstRequiredItems->setColumns(3, 140, 75, 55);
 	_lstRequiredItems->setBackground(_window);
 
-	ItemContainer * itemContainer (base->getStorageItems());
+	ItemContainer *itemContainer(base->getStorageItems());
 	int row = 0;
 	for (std::map<std::string, int>::const_iterator iter = requiredItems.begin();
 		iter != requiredItems.end();
 		++iter)
 	{
 		std::wostringstream s1, s2;
-		s1 << L'\x01' << iter->second;
-		s2 << L'\x01' << itemContainer->getItem(iter->first);
+		s1 << iter->second;
+		s2 << itemContainer->getItem(iter->first);
 		productionPossible &= (itemContainer->getItem(iter->first) >= iter->second);
 		_lstRequiredItems->addRow(3, tr(iter->first).c_str(), s1.str().c_str(), s2.str().c_str());
+		_lstRequiredItems->setCellColor(row, 1, _lstRequiredItems->getSecondaryColor());
+		_lstRequiredItems->setCellColor(row, 2, _lstRequiredItems->getSecondaryColor());
 		row++;
 	}
 	_txtRequiredItemsTitle->setVisible(!requiredItems.empty());
@@ -156,6 +160,18 @@ void ManufactureStartState::btnCancelClick(Action *)
  */
 void ManufactureStartState::btnStartClick(Action *)
 {
-	_game->pushState(new ManufactureInfoState(_base, _item));
+	if (_item->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() <= 0)
+	{
+		_game->pushState(new ErrorMessageState(tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"), _palette, _game->getMod()->getInterface("basescape")->getElement("errorMessage")->color, "BACK17.SCR", _game->getMod()->getInterface("basescape")->getElement("errorPalette")->color));
+	}
+	else if (_item->getRequiredSpace() > _base->getFreeWorkshops())
+	{
+		_game->pushState(new ErrorMessageState(tr("STR_NOT_ENOUGH_WORK_SPACE"), _palette, _game->getMod()->getInterface("basescape")->getElement("errorMessage")->color, "BACK17.SCR", _game->getMod()->getInterface("basescape")->getElement("errorPalette")->color));
+	}
+	else
+	{
+		_game->pushState(new ManufactureInfoState(_base, _item));
+	}
 }
+
 }

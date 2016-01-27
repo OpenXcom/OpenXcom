@@ -41,19 +41,19 @@ private:
 	Base *_base;
 	TextButton *_btnOk;
 	TextButton *_btnCancel;
-	ArrowButton * _btnMore, *_btnLess;
+	ArrowButton *_btnMore, *_btnLess;
 	Window *_window;
 	Text *_txtTitle, *_txtAvailableScientist, *_txtAvailableSpace, *_txtAllocatedScientist, *_txtMore, *_txtLess;
 	void setAssignedScientist();
-	ResearchProject * _project;
-	RuleResearch * _rule;
+	ResearchProject *_project;
+	RuleResearch *_rule;
 	void buildUi();
 	Timer *_timerMore, *_timerLess;
 	InteractiveSurface *_surfaceScientists;
 public:
 	/// Creates the ResearchProject state.
-	ResearchInfoState(Base *base, RuleResearch * rule);
-	ResearchInfoState(Base *base, ResearchProject * project);
+	ResearchInfoState(Base *base, RuleResearch *rule);
+	ResearchInfoState(Base *base, ResearchProject *project);
 	/// Cleans up the ResearchInfo state
 	~ResearchInfoState();
 	/// Handler for clicking the OK button.
