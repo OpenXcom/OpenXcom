@@ -289,6 +289,10 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 				}
 				toContainer[pass]->push_back(item);
 			}
+			else
+			{
+				Log(LOG_ERROR) << "Failed to load item " << type;
+			}
 		}
 	}
 

@@ -36,6 +36,7 @@
 #include "Vehicle.h"
 #include "../Mod/RuleItem.h"
 #include "../Mod/AlienDeployment.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -108,17 +109,23 @@ void Craft::load(const YAML::Node &node, const Mod *mod, SavedGame *save)
 			else
 			{
 				_weapons[j] = 0;
+				if (type != "0")
+				{
+					Log(LOG_ERROR) << "Failed to load craft weapon " << type;
+				}
 			}
 			j++;
 		}
 	}
 
 	_items->load(node["items"]);
+	// Some old saves have bad items, better get rid of them to avoid further bugs
 	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end();)
 	{
-		if (std::find(mod->getItemsList().begin(), mod->getItemsList().end(), i->first) == mod->getItemsList().end())
+		if (mod->getItem(i->first) == 0)
 		{
-			_items->getContents()->erase(i++);
+			i = _items->getContents()->erase(i);
+			Log(LOG_ERROR) << "Failed to load item " << i->first;
 		}
 		else
 		{
@@ -134,12 +141,16 @@ void Craft::load(const YAML::Node &node, const Mod *mod, SavedGame *save)
 			v->load(*i);
 			_vehicles.push_back(v);
 		}
+		else
+		{
+			Log(LOG_ERROR) << "Failed to load item " << type;			
+		}
 	}
 	_status = node["status"].as<std::string>(_status);
 	_lowFuel = node["lowFuel"].as<bool>(_lowFuel);
 	_mission = node["mission"].as<bool>(_mission);
 	_interceptionOrder = node["interceptionOrder"].as<int>(_interceptionOrder);
-	if (const YAML::Node name = node["name"])
+	if (const YAML::Node &name = node["name"])
 	{
 		_name = Language::utf8ToWstr(name.as<std::string>());
 	}

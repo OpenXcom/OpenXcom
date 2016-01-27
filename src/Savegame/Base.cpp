@@ -45,6 +45,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 #include "../Mod/RuleSoldier.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -120,6 +121,10 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 				f->load(*i);
 				_facilities.push_back(f);
 			}
+			else
+			{
+				Log(LOG_ERROR) << "Failed to load facility " << type;
+			}
 		}
 	}
 
@@ -131,6 +136,10 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 			Craft *c = new Craft(_mod->getCraft(type), this);
 			c->load(*i, _mod, save);
 			_crafts.push_back(c);
+		}
+		else
+		{
+			Log(LOG_ERROR) << "Failed to load craft " << type;
 		}
 	}
 
@@ -156,15 +165,20 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 			}
 			_soldiers.push_back(s);
 		}
+		else
+		{
+			Log(LOG_ERROR) << "Failed to load soldier " << type;
+		}
 	}
 
 	_items->load(node["items"]);
 	// Some old saves have bad items, better get rid of them to avoid further bugs
 	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end();)
 	{
-		if (std::find(_mod->getItemsList().begin(), _mod->getItemsList().end(), i->first) == _mod->getItemsList().end())
+		if (_mod->getItem(i->first) == 0)
 		{
-			_items->getContents()->erase(i++);
+			i = _items->getContents()->erase(i);
+			Log(LOG_ERROR) << "Failed to load item " << i->first;
 		}
 		else
 		{
@@ -198,6 +212,7 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 		else
 		{
 			_scientists += (*i)["assigned"].as<int>(0);
+			Log(LOG_ERROR) << "Failed to load research " << research;
 		}
 	}
 
@@ -213,6 +228,7 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 		else
 		{
 			_engineers += (*i)["assigned"].as<int>(0);
+			Log(LOG_ERROR) << "Failed to load manufacture " << item;
 		}
 	}
 
