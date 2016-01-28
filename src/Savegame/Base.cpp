@@ -177,8 +177,8 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 	{
 		if (_mod->getItem(i->first) == 0)
 		{
-			i = _items->getContents()->erase(i);
 			Log(LOG_ERROR) << "Failed to load item " << i->first;
+			_items->getContents()->erase(i++);
 		}
 		else
 		{

@@ -124,8 +124,8 @@ void Craft::load(const YAML::Node &node, const Mod *mod, SavedGame *save)
 	{
 		if (mod->getItem(i->first) == 0)
 		{
-			i = _items->getContents()->erase(i);
 			Log(LOG_ERROR) << "Failed to load item " << i->first;
+			_items->getContents()->erase(i++);
 		}
 		else
 		{
