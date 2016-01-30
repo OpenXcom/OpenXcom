@@ -475,6 +475,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _xBeforeMouseScrolling(0), _
 	_firstInit = true;
 	_isMouseScrolling = false;
 	_isMouseScrolled = false;
+	_barHealthColor = _barHealth->getColor();
 }
 
 
@@ -500,7 +501,6 @@ void BattlescapeState::init()
 	}
 
 	State::init();
-	_barHealthColor = _barHealth->getColor();
 	_animTimer->start();
 	_gameTimer->start();
 	_map->setFocus(true);
