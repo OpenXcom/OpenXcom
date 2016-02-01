@@ -450,15 +450,61 @@ void BattlescapeGame::endTurn()
 	// if all units from either faction are killed - the mission is over.
 	int liveAliens = 0;
 	int liveSoldiers = 0;
+	int inExit = 0;
 
-	tallyUnits(liveAliens, liveSoldiers);
+	// Calculate values
+	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	{
+		if (!(*j)->isOut())
+		{
+			if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
+			{
+				if (!Options::allowPsionicCapture || (*j)->getFaction() != FACTION_PLAYER)
+				{
+					liveAliens++;
+				}
+			}
+			else if ((*j)->getOriginalFaction() == FACTION_PLAYER)
+			{
+				if ((*j)->isInExitArea(END_POINT))
+				{
+					inExit++;
+				}
+				if ((*j)->getFaction() == FACTION_PLAYER)
+				{
+					liveSoldiers++;
+				}
+				else
+				{
+					liveAliens++;
+				}
+			}
+		}
+	}
 
 	if (_save->allObjectivesDestroyed() && _save->getObjectiveType() == MUST_DESTROY)
 	{
 		_parentState->finishBattle(false, liveSoldiers);
 		return;
 	}
-
+	if (_save->getTurnLimit() > 0 && _save->getTurn() > _save->getTurnLimit())
+	{
+		switch (_save->getChronoTrigger())
+		{
+		case FORCE_ABORT:
+			_save->setAborted(true);
+			_parentState->finishBattle(true, inExit);
+			return;
+		case FORCE_WIN:
+			_parentState->finishBattle(false, liveSoldiers);
+			return;
+		case FORCE_LOSE:
+		default:
+			_save->setAborted(true);
+			_parentState->finishBattle(true, 0);
+			return;
+		}
+	}
 
 	if (liveAliens > 0 && liveSoldiers > 0)
 	{

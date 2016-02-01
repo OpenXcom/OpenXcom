@@ -333,6 +333,8 @@ void BattlescapeGenerator::nextStage()
 	}
 
 	AlienDeployment *ruleDeploy = _game->getMod()->getDeployment(_save->getMissionType());
+	_save->setTurnLimit(ruleDeploy->getTurnLimit());
+	_save->setChronoTrigger(ruleDeploy->getChronoTrigger());
 	ruleDeploy->getDimensions(&_mapsize_x, &_mapsize_y, &_mapsize_z);
 	size_t pick = RNG::generate(0, ruleDeploy->getTerrains().size() -1);
 	_terrain = _game->getMod()->getTerrain(ruleDeploy->getTerrains().at(pick));
@@ -456,6 +458,8 @@ void BattlescapeGenerator::run()
 {
 	AlienDeployment *ruleDeploy = _game->getMod()->getDeployment(_ufo?_ufo->getRules()->getType():_save->getMissionType());
 
+	_save->setTurnLimit(ruleDeploy->getTurnLimit());
+	_save->setChronoTrigger(ruleDeploy->getChronoTrigger());
 	ruleDeploy->getDimensions(&_mapsize_x, &_mapsize_y, &_mapsize_z);
 
 	_unitSequence = BattleUnit::MAX_SOLDIER_ID; // geoscape soldier IDs should stay below this number

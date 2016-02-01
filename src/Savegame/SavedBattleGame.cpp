@@ -47,8 +47,9 @@ namespace OpenXcom
 /**
  * Initializes a brand new battlescape saved game.
  */
-SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _selectedUnit(0), _lastSelectedUnit(0), _pathfinding(0), _tileEngine(0), _globalShade(0), _side(FACTION_PLAYER), _turn(1),
-                                     _debugMode(false), _aborted(false), _itemId(0), _objectiveType(-1), _objectivesDestroyed(0), _objectivesNeeded(0), _unitsFalling(false), _cheating(false), _tuReserved(BA_NONE), _kneelReserved(false), _depth(0), _ambience(-1), _ambientVolume(0.5)
+SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _selectedUnit(0), _lastSelectedUnit(0), _pathfinding(0), _tileEngine(0), _globalShade(0),
+	_side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0), _objectiveType(-1), _objectivesDestroyed(0), _objectivesNeeded(0), _unitsFalling(false), _cheating(false),
+	_tuReserved(BA_NONE), _kneelReserved(false), _depth(0), _ambience(-1), _ambientVolume(0.5), _turnLimit(0), _chronoTrigger(FORCE_LOSE)
 {
 	_tileSearch.resize(11*11);
 	for (int i = 0; i < 121; ++i)
@@ -325,6 +326,8 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 	_ambience = node["ambience"].as<int>(_ambience);
 	_ambientVolume = node["ambientVolume"].as<double>(_ambientVolume);
 	_music = node["music"].as<std::string>(_music);
+	_turnLimit = node["turnLimit"].as<int>(_turnLimit);
+	_chronoTrigger = ChronoTrigger(node["chronoTrigger"].as<int>(_chronoTrigger));
 }
 
 /**
@@ -455,6 +458,8 @@ YAML::Node SavedBattleGame::save() const
 		node["recoverConditional"].push_back((*i)->save());
 	}
 	node["music"] = _music;
+	node["turnLimit"] = _turnLimit;
+	node["chronoTrigger"] = int(_chronoTrigger);
 
 	return node;
 }
@@ -1958,14 +1963,57 @@ SpecialTileType SavedBattleGame::getObjectiveType()
 
 
 
-/// sets the ambient sound effect;
+/**
+ * Sets the ambient sound effect volume.
+ * @param volume the ambient volume.
+ */
 void SavedBattleGame::setAmbientVolume(double volume)
 {
 	_ambientVolume = volume;
 }
-/// gets the ambient sound effect;
+
+/**
+ * Gets the ambient sound effect volume.
+ * @return the ambient sound volume.
+ */
 double SavedBattleGame::getAmbientVolume() const
 {
 	return _ambientVolume;
+}
+
+/**
+ * Gets the maximum number of turns we have before this mission ends.
+ * @return the turn limit.
+ */
+const int SavedBattleGame::getTurnLimit() const
+{
+	return _turnLimit;
+}
+
+/**
+ * Gets the action type to perform when the timer expires.
+ * @return the action type to perform.
+ */
+const ChronoTrigger SavedBattleGame::getChronoTrigger() const
+{
+	return _chronoTrigger;
+}
+
+/**
+ * Sets the turn limit for this mission.
+ * @param limit the turn limit.
+ */
+void SavedBattleGame::setTurnLimit(int limit)
+{
+	_turnLimit = limit;
+}
+
+/**
+ * Sets the action type to occur when the timer runs out.
+ * @param trigger the action type to perform.
+ */
+void SavedBattleGame::setChronoTrigger(ChronoTrigger trigger)
+{
+	_chronoTrigger = trigger;
 }
 }

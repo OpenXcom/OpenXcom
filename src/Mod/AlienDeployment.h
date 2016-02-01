@@ -46,6 +46,7 @@ struct BriefingData
 	bool showCraft, showTarget;
 	BriefingData() : palette(0), textOffset(0), music("GMDEFEND"), background("BACK16.SCR"), showCraft(true), showTarget(true) { /*Empty by Design*/ };
 };
+enum ChronoTrigger { FORCE_LOSE, FORCE_ABORT, FORCE_WIN };
 /**
  * Represents a specific type of Alien Deployment.
  * Contains constant info about a Alien Deployment like
@@ -71,7 +72,8 @@ private:
 	BriefingData _briefingData;
 	std::string _markerName, _objectivePopup, _objectiveCompleteText, _objectiveFailedText;
 	int _markerIcon, _durationMin, _durationMax, _minDepth, _maxDepth, _minSiteDepth, _maxSiteDepth;
-	int _objectiveType, _objectivesRequired, _objectiveCompleteScore, _objectiveFailedScore, _despawnPenalty, _points;
+	int _objectiveType, _objectivesRequired, _objectiveCompleteScore, _objectiveFailedScore, _despawnPenalty, _points, _turnLimit;
+	ChronoTrigger _chronoTrigger;
 public:
 	/// Creates a blank Alien Deployment ruleset.
 	AlienDeployment(const std::string &type);
@@ -141,6 +143,10 @@ public:
 	int getDespawnPenalty() const;
 	/// Gets the (half hourly) score penalty XCom receives for this site existing.
 	int getPoints() const;
+	/// Gets the turn limit for this deployment.
+	const int getTurnLimit() const;
+	/// Gets the action that triggers when the timer runs out.
+	const ChronoTrigger getChronoTrigger() const;
 };
 
 }
