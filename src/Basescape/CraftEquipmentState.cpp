@@ -538,7 +538,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 
 				int baseQty = _base->getStorageItems()->getItem(ammo->getType()) / ammoPerVehicle;
 				if (_game->getSavedGame()->getMonthsPassed() == -1)
-					baseQty = 1;
+					baseQty = change;
 				int canBeAdded = std::min(change, baseQty);
 				if (canBeAdded > 0)
 				{
