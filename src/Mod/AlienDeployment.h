@@ -72,7 +72,7 @@ private:
 	BriefingData _briefingData;
 	std::string _markerName, _objectivePopup, _objectiveCompleteText, _objectiveFailedText;
 	int _markerIcon, _durationMin, _durationMax, _minDepth, _maxDepth, _minSiteDepth, _maxSiteDepth;
-	int _objectiveType, _objectivesRequired, _objectiveCompleteScore, _objectiveFailedScore, _despawnPenalty, _points, _turnLimit;
+	int _objectiveType, _objectivesRequired, _objectiveCompleteScore, _objectiveFailedScore, _despawnPenalty, _points, _turnLimit, _cheatTurn;
 	ChronoTrigger _chronoTrigger;
 public:
 	/// Creates a blank Alien Deployment ruleset.
@@ -147,6 +147,8 @@ public:
 	const int getTurnLimit() const;
 	/// Gets the action that triggers when the timer runs out.
 	const ChronoTrigger getChronoTrigger() const;
+	/// Gets which turn the aliens start cheating on.
+	const int getCheatTurn() const;
 };
 
 }

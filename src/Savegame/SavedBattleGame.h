@@ -75,7 +75,7 @@ private:
 	double _ambientVolume;
 	std::vector<BattleItem*> _recoverGuaranteed, _recoverConditional;
 	std::string _music;
-	int _turnLimit;
+	int _turnLimit, _cheatTurn;
 	ChronoTrigger _chronoTrigger;
 	/// Selects a soldier.
 	BattleUnit *selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
@@ -285,6 +285,8 @@ public:
 	void setTurnLimit(int limit);
 	/// Sets the action that triggers when the timer runs out.
 	void setChronoTrigger(ChronoTrigger trigger);
+	/// Sets the turn to start the aliens cheating.
+	void setCheatTurn(int turn);
 };
 
 }

@@ -49,7 +49,7 @@ namespace OpenXcom
  */
 SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _selectedUnit(0), _lastSelectedUnit(0), _pathfinding(0), _tileEngine(0), _globalShade(0),
 	_side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0), _objectiveType(-1), _objectivesDestroyed(0), _objectivesNeeded(0), _unitsFalling(false), _cheating(false),
-	_tuReserved(BA_NONE), _kneelReserved(false), _depth(0), _ambience(-1), _ambientVolume(0.5), _turnLimit(0), _chronoTrigger(FORCE_LOSE)
+	_tuReserved(BA_NONE), _kneelReserved(false), _depth(0), _ambience(-1), _ambientVolume(0.5), _turnLimit(0), _cheatTurn(20), _chronoTrigger(FORCE_LOSE)
 {
 	_tileSearch.resize(11*11);
 	for (int i = 0; i < 121; ++i)
@@ -328,6 +328,7 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 	_music = node["music"].as<std::string>(_music);
 	_turnLimit = node["turnLimit"].as<int>(_turnLimit);
 	_chronoTrigger = ChronoTrigger(node["chronoTrigger"].as<int>(_chronoTrigger));
+	_cheatTurn = node["cheatTurn"].as<int>(_cheatTurn);
 }
 
 /**
@@ -460,6 +461,7 @@ YAML::Node SavedBattleGame::save() const
 	node["music"] = _music;
 	node["turnLimit"] = _turnLimit;
 	node["chronoTrigger"] = int(_chronoTrigger);
+	node["cheatTurn"] = _cheatTurn;
 
 	return node;
 }
@@ -857,7 +859,7 @@ void SavedBattleGame::endTurn()
 
 	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers);
 
-	if ((_turn > 10 && liveAliens <= 2) || _turn > 20)
+	if ((_turn > _cheatTurn / 2 && liveAliens <= 2) || _turn > _cheatTurn)
 	{
 		_cheating = true;
 	}
@@ -2015,5 +2017,14 @@ void SavedBattleGame::setTurnLimit(int limit)
 void SavedBattleGame::setChronoTrigger(ChronoTrigger trigger)
 {
 	_chronoTrigger = trigger;
+}
+
+/**
+ * Sets the turn at which the players become exposed to the AI.
+ * @param turn the turn to start cheating.
+ */
+void SavedBattleGame::setCheatTurn(int turn)
+{
+	_cheatTurn = turn;
 }
 }
