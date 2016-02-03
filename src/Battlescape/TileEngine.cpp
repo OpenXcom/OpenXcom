@@ -943,6 +943,7 @@ int TileEngine::determineReactionType(BattleUnit *unit, BattleUnit *target)
 		// has a gun capable of snap shot with ammo
 		(weapon->getRules()->getBattleType() != BT_MELEE &&
 		weapon->getRules()->getTUSnap() &&
+		distance(unit->getPosition(), target->getPosition()) < weapon->getRules()->getMaxRange() &&
 		weapon->getAmmoItem() &&
 		unit->getActionTUs(BA_SNAPSHOT, weapon) > 0 &&
 		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon)) &&
