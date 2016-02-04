@@ -548,7 +548,7 @@ void SavedGame::save(const std::string &filename) const
 	brief["name"] = Language::wstrToUtf8(_name);
 	brief["version"] = OPENXCOM_VERSION_SHORT;
 	std::string git_sha = OPENXCOM_VERSION_GIT;
-	if (git_sha[0] ==  '.')
+	if (!git_sha.empty() && git_sha[0] ==  '.')
 	{
 		git_sha.erase(0,1);
 	}
