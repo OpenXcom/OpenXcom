@@ -166,7 +166,6 @@ CommendationLateState::CommendationLateState(std::vector<Soldier*> soldiersMedal
 				++commList;
 			}
 		} // END COMMS LOOPS
-		_lstSoldiers->addRow(5, L"", L"", L"", L"", L""); // Seperator
 	} // END SOLDIER LOOP    
 }
 
