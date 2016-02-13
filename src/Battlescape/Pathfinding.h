@@ -90,7 +90,7 @@ public:
 	/// Gets the strafe move setting.
 	bool getStrafeMove() const;
 	/// Checks, for the up/down button, if the movement is valid.
-	bool validateUpDown(BattleUnit *bu, Position startPosition, const int direction);
+	bool validateUpDown(BattleUnit *bu, Position startPosition, const int direction, bool missile = false);
 	/// Previews the path.
 	bool previewPath(bool bRemove = false);
 	/// Removes the path preview.
