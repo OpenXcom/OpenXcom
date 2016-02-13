@@ -1966,6 +1966,18 @@ BattleItem *BattleUnit::getMainHandWeapon(bool quickest) const
 	int tuRightHand = weaponRightHand->getRules()->getTUSnap();
 	int tuLeftHand = weaponLeftHand->getRules()->getTUSnap();
 	BattleItem *weaponCurrentHand = getItem(getActiveHand());
+	//prioritize blasters
+	if (!quickest && _faction != FACTION_PLAYER)
+	{
+		if (weaponRightHand->getRules()->isWaypoint() || weaponRightHand->getAmmoItem()->getRules()->isWaypoint())
+		{
+			return weaponRightHand;
+		}
+		if (weaponLeftHand->getRules()->isWaypoint() || weaponLeftHand->getAmmoItem()->getRules()->isWaypoint())
+		{
+			return weaponLeftHand;
+		}
+	}
 	// if only one weapon has snapshot, pick that one
 	if (tuLeftHand <= 0 && tuRightHand > 0)
 		return weaponRightHand;
