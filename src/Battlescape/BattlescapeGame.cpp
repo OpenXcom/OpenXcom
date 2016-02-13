@@ -239,8 +239,8 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	}
 
 	_AIActionCounter = action.number;
-
-	if (!unit->getMainHandWeapon() || !unit->getMainHandWeapon()->getAmmoItem())
+	BattleItem *weapon = unit->getMainHandWeapon();
+	if (!weapon || !weapon->getAmmoItem())
 	{
 		if (unit->getOriginalFaction() == FACTION_HOSTILE && unit->getVisibleUnits()->empty())
 		{
