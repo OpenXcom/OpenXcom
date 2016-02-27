@@ -43,7 +43,7 @@ StatString::~StatString()
  */
 void StatString::load(const YAML::Node &node)
 {
-    std::string conditionNames[] = {"psiStrength", "psiSkill", "bravery", "strength", "firing", "reactions", "stamina", "tu", "health", "throwing", "melee"};
+    std::string conditionNames[] = {"psiStrength", "psiSkill", "bravery", "strength", "firing", "reactions", "stamina", "tu", "health", "throwing", "melee", "psiTraining"};
 	_stringToBeAddedIfAllConditionsAreMet = node["string"].as<std::string>(_stringToBeAddedIfAllConditionsAreMet);
     for (size_t i = 0; i < sizeof(conditionNames)/sizeof(conditionNames[0]); i++)
 	{
@@ -101,7 +101,7 @@ std::string StatString::getString() const
  * @param psiStrengthEval Are psi stats available?
  * @return Resulting string of all valid StatStrings.
  */
-std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings, bool psiStrengthEval)
+std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings, bool psiStrengthEval, bool inTraining)
 {
 	size_t conditionsMet;
 	int minVal, maxVal;
@@ -109,7 +109,10 @@ std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vect
 	std::wstring wstring, statString;
 	bool continueCalc = true;
 	std::map<std::string, int> currentStatsMap = getCurrentStats(currentStats);
-
+	if (inTraining)
+	{
+		currentStatsMap["psiTraining"] = 1;
+	}
 	for (std::vector<StatString *>::const_iterator i1 = statStrings.begin(); i1 != statStrings.end() && continueCalc; ++i1)
 	{
 		string = (*i1)->getString();
@@ -122,8 +125,8 @@ std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vect
 			maxVal = (*i2)->getMaxVal();
 			if (currentStatsMap.find(conditionName) != currentStatsMap.end())
 			{
-				if (currentStatsMap[conditionName] >= minVal && currentStatsMap[conditionName] <= maxVal
-					&& (conditionName != "psiStrength" || (currentStats.psiSkill > 0 || psiStrengthEval)))
+				if (conditionName == "psiTraining" || (currentStatsMap[conditionName] >= minVal && currentStatsMap[conditionName] <= maxVal
+					&& (conditionName != "psiStrength" || (currentStats.psiSkill > 0 || psiStrengthEval))))
 				{
 					conditionsMet++;
 				}
