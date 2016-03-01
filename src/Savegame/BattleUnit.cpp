@@ -2625,6 +2625,14 @@ void BattleUnit::convertToFaction(UnitFaction f)
 }
 
 /**
+* Set health to 0 - used when getting killed unconscious.
+*/
+void BattleUnit::kill()
+{
+	_health = 0;
+}
+
+/**
  * Set health to 0 and set status dead - used when getting zombified.
  */
 void BattleUnit::instaKill()

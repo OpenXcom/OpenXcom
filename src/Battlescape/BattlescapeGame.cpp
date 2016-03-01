@@ -658,10 +658,16 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			}
 		}
 
+		bool noSound = false;
+		bool noCorpse = false;
 		if ((*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
 		{
 			if ((*j)->getHealth() == 0)
 			{
+				if ((*j)->getStatus() == STATUS_UNCONSCIOUS)
+				{
+					noCorpse = true;
+				}
 				if (murderer)
 				{
 					murderer->addKillCount();
@@ -722,26 +728,27 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				}
 				if (murderweapon)
 				{
-					statePushNext(new UnitDieBState(this, (*j), murderweapon->getRules()->getDamageType(), false));
+					statePushNext(new UnitDieBState(this, (*j), murderweapon->getRules()->getDamageType(), noSound, noCorpse));
 				}
 				else
 				{
 					if (hiddenExplosion)
 					{
 						// this is instant death from UFO powersources, without screaming sounds
-						statePushNext(new UnitDieBState(this, (*j), DT_HE, true));
+						noSound = true;
+						statePushNext(new UnitDieBState(this, (*j), DT_HE, noSound, noCorpse));
 					}
 					else
 					{
 						if (terrainExplosion)
 						{
 							// terrain explosion
-							statePushNext(new UnitDieBState(this, (*j), DT_HE, false));
+							statePushNext(new UnitDieBState(this, (*j), DT_HE, noSound, noCorpse));
 						}
 						else
 						{
 							// no murderer, and no terrain explosion, must be fatal wounds
-							statePushNext(new UnitDieBState(this, (*j), DT_NONE, false));  // DT_NONE = STR_HAS_DIED_FROM_A_FATAL_WOUND
+							statePushNext(new UnitDieBState(this, (*j), DT_NONE, noSound, noCorpse));  // DT_NONE = STR_HAS_DIED_FROM_A_FATAL_WOUND
 						}
 					}
 				}
@@ -764,7 +771,8 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				{
 					victim->getStatistics()->wasUnconcious = true;
 				}
-				statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));
+				noSound = true;
+				statePushNext(new UnitDieBState(this, (*j), DT_STUN, noSound, noCorpse));
 			}
 		}
 	}

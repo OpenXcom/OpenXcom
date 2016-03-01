@@ -46,8 +46,9 @@ namespace OpenXcom
  * @param unit Dying unit.
  * @param damageType Type of damage that caused the death.
  * @param noSound Whether to disable the death sound.
+ * @param noCorpse Whether to disable the corpse spawn.
  */
-UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound), _extraFrame(0)
+UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound, bool noCorpse) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound), _noCorpse(noCorpse), _extraFrame(0)
 {
 	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
 	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS || noSound)
@@ -208,7 +209,7 @@ void UnitDieBState::think()
 			// converts the dead zombie to a chryssalid
 			_parent->convertUnit(_unit);
 		}
-		else
+		else if (!_noCorpse)
 		{
 			convertUnitToCorpse();
 		}
