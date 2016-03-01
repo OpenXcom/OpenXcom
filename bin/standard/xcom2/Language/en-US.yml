@@ -1007,7 +1007,7 @@ en-US:
   STR_HALLUCINOID_CORPSE: "Hallucinoid Corpse"
   STR_XARQUID_CORPSE: "Xarquid Corpse"
 
-  STR_NOT_ENOUGH_AMMO_TO_ARM_HWP: "Not enough {0} to arm SWS"
+  STR_NOT_ENOUGH_AMMO_TO_ARM_HWP: "Not enough ammunition to arm SWS{SMALLLINE}Each SWS requires {0} {1}."
   STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD: "Not enough equipment to fully re-equip squad"
   STR_YOU_NEED_TO_RESEARCH_ITEM_TO_PRODUCE_ITEM: "You will need to research a{NEWLINE}{0}{NEWLINE}in order to produce the{NEWLINE}{1}"
   STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE: "The Aliens have destroyed the undefended base {0}"

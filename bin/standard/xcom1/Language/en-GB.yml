@@ -859,7 +859,7 @@ en-GB:
   STR_REAPER_CORPSE: "Reaper Corpse"
   STR_SECTOPOD_CORPSE: "Sectopod Corpse"
   STR_CYBERDISC_CORPSE: "Cyberdisc Corpse"
-  STR_NOT_ENOUGH_AMMO_TO_ARM_HWP: "Not enough {0} to arm HWP"
+  STR_NOT_ENOUGH_AMMO_TO_ARM_HWP: "Not enough ammunition to arm HWP{SMALLLINE}Each HWP requires {0} {1}."
   STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD: "Not enough equipment to fully re-equip squad"
   STR_MARS_CYDONIA_LANDING: "Mars: Cydonia Landing"
   STR_MARS_CYDONIA_LANDING_BRIEFING: "Your Avenger craft has landed in the region of Cydonia on the surface of Mars. Our information indicates that one of the pyramid constructions contains a green access lift to an underground complex. Once you have assembled all your soldiers in the lift area click on the 'abort mission' icon to continue to the next stage."

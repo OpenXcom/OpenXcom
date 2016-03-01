@@ -542,7 +542,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 				int canBeAdded = std::min(change, baseQty);
 				if (canBeAdded > 0)
 				{
-					for (int i=0; i < canBeAdded; ++i)
+					for (int i = 0; i < canBeAdded; ++i)
 					{
 						if (_game->getSavedGame()->getMonthsPassed() != -1)
 						{
@@ -556,12 +556,12 @@ void CraftEquipmentState::moveRightByValue(int change)
 				{
 					// So we haven't managed to increase the count of vehicles because of the ammo
 					_timerRight->stop();
-					LocalizedText msg(tr("STR_NOT_ENOUGH_AMMO_TO_ARM_HWP").arg(tr(ammo->getType())));
+					LocalizedText msg(tr("STR_NOT_ENOUGH_AMMO_TO_ARM_HWP").arg(ammoPerVehicle).arg(tr(ammo->getType())));
 					_game->pushState(new ErrorMessageState(msg, _palette, _game->getMod()->getInterface("craftEquipment")->getElement("errorMessage")->color, "BACK04.SCR", _game->getMod()->getInterface("craftEquipment")->getElement("errorPalette")->color));
 				}
 			}
 			else
-				for (int i=0; i < change; ++i)
+				for (int i = 0; i < change; ++i)
 				{
 					c->getVehicles()->push_back(new Vehicle(item, item->getClipSize(), size));
 					if (_game->getSavedGame()->getMonthsPassed() != -1)
