@@ -495,11 +495,22 @@ void UnitSprite::drawRoutine0()
 	// offset everything but legs when kneeled
 	if (_unit->isKneeled())
 	{
-		leftArm->setY(offYKneel);
-		rightArm->setY(offYKneel);
-		torso->setY(offYKneel);
-		itemA?itemA->setY(itemA->getY() + offYKneel):void();
-		itemB?itemB->setY(itemB->getY() + offYKneel):void();
+		if (_drawingRoutine == 13) // tftd torsos are stubby.
+		{
+			leftArm->setY(offYKneel + 1);
+			rightArm->setY(offYKneel + 1);
+			torso->setY(offYKneel + 1);
+			itemA?itemA->setY(itemA->getY() + offYKneel + 1):void();
+			itemB?itemB->setY(itemB->getY() + offYKneel + 1):void();
+		}
+		else
+		{
+			leftArm->setY(offYKneel);
+			rightArm->setY(offYKneel);
+			torso->setY(offYKneel);
+			itemA?itemA->setY(itemA->getY() + offYKneel):void();
+			itemB?itemB->setY(itemB->getY() + offYKneel):void();
+		}
 	}
 	else if (_unit->getStatus() != STATUS_WALKING)
 	{
