@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "InventoryState.h"
+#include <algorithm>
 #include "Inventory.h"
 #include "../Engine/Game.h"
 #include "../Engine/FileMap.h"

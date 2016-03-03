@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "TransferItemsState.h"
+#include <algorithm>
 #include <sstream>
 #include <climits>
 #include <cfloat>

@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BaseView.h"
+#include <algorithm>
 #include <sstream>
 #include <cmath>
 #include "../Engine/SurfaceSet.h"
