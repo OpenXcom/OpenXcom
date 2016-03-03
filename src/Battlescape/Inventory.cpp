@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Inventory.h"
+#include <algorithm>
 #include <cmath>
 #include "../Mod/Mod.h"
 #include "../Mod/RuleInventory.h"

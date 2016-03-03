@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ListGamesState.h"
+#include <algorithm>
 #include "../Engine/Logger.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Game.h"
