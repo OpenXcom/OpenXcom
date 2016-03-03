@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "OptionInfo.h"
+#include <algorithm>
 #include "Exception.h"
 
 namespace OpenXcom
