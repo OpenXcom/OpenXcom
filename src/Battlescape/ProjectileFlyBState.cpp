@@ -18,6 +18,7 @@
  */
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <algorithm>
 #include "ProjectileFlyBState.h"
 #include "ExplosionBState.h"
 #include "Projectile.h"

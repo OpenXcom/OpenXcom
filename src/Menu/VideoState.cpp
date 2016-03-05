@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "VideoState.h"
+#include <algorithm>
 #include <SDL_mixer.h>
 #include "../Engine/Adlib/adlplayer.h"
 #include "../Engine/Logger.h"
