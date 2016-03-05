@@ -1669,7 +1669,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 			{
 				for(std::vector<int>::iterator k = (*j)->getNodeLinks()->begin(); k != (*j)->getNodeLinks()->end(); ++k)
 				{
-					if (*k - nodeOffset == *i)
+					if (*k - nodeOffset == (unsigned)*i)
 					{
 						Log(LOG_INFO) << "RMP file: " << filename.str() << " Node #" << nodeCounter - 1 << " is linked to Node #" << *i << ", which was culled. Terminating Link.";
 						*k = -1;

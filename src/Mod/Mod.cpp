@@ -1408,7 +1408,7 @@ SavedGame *Mod::newSave() const
 		for (size_t i = 0; i < randomTypes.size(); ++i)
 		{
 			Soldier *soldier = genSoldier(save, randomTypes[i]);
-			if (transportCraft != 0 && i < transportCraft->getRules()->getSoldiers())
+			if (transportCraft != 0 && i < (unsigned)transportCraft->getRules()->getSoldiers())
 			{
 				soldier->setCraft(transportCraft);
 			}
