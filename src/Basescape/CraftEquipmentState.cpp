@@ -428,24 +428,34 @@ void CraftEquipmentState::moveLeftByValue(int change)
 	{
 		if (!item->getCompatibleAmmo()->empty())
 		{
-			// First we remove all vehicles because we want to redistribute the ammo
+			// Calculate how much ammo needs to be added to the base.
 			RuleItem *ammo = _game->getMod()->getItem(item->getCompatibleAmmo()->front());
-			for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); )
+			int ammoPerVehicle;
+			if (ammo->getClipSize() > 0 && item->getClipSize() > 0)
+			{
+				ammoPerVehicle = item->getClipSize() / ammo->getClipSize();
+			}
+			else
+			{
+				ammoPerVehicle = ammo->getClipSize();
+			}
+			// Put the vehicles and their ammo back as seperate items.
+			if (_game->getSavedGame()->getMonthsPassed() != -1)
+			{
+				_base->getStorageItems()->addItem(_items[_sel], change);
+				_base->getStorageItems()->addItem(ammo->getType(), ammoPerVehicle * change);
+			}
+			// now delete the vehicles from the craft.
+			for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end() && change > 0; )
 			{
 				if ((*i)->getRules() == item)
 				{
-					_base->getStorageItems()->addItem(ammo->getType(), (*i)->getAmmo());
 					delete (*i);
 					i = c->getVehicles()->erase(i);
+					--change;
 				}
 				else ++i;
 			}
-			if (_game->getSavedGame()->getMonthsPassed() != -1)
-			{
-				_base->getStorageItems()->addItem(_items[_sel], cQty);
-			}
-			// And now reAdd the count we want to keep in the craft (and redistribute the ammo among them)
-			if (cQty > change) moveRightByValue(cQty - change);
 		}
 		else
 		{
@@ -453,13 +463,13 @@ void CraftEquipmentState::moveLeftByValue(int change)
 			{
 				_base->getStorageItems()->addItem(_items[_sel], change);
 			}
-			for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); )
+			for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end() && change > 0; )
 			{
 				if ((*i)->getRules() == item)
 				{
 					delete (*i);
 					i = c->getVehicles()->erase(i);
-					if (0 >= --change) break;
+					--change;
 				}
 				else ++i;
 			}
