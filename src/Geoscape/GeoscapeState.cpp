@@ -688,7 +688,15 @@ void GeoscapeState::time5Seconds()
 	// Game over if there are no more bases.
 	if (_game->getSavedGame()->getBases()->empty())
 	{
-		_game->pushState(new CutsceneState("loseGame"));
+		_game->getSavedGame()->setEnding(END_LOSE);
+	}
+	if (_game->getSavedGame()->getEnding() == END_LOSE)
+	{
+		_game->pushState(new CutsceneState(CutsceneState::LOSE_GAME));
+		if (_game->getSavedGame()->isIronman())
+		{
+			_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN, _palette));
+		}
 		return;
 	}
 

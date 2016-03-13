@@ -38,6 +38,8 @@ public:
 	/// Replace this state on the stack with the real player state.
 	void init();
 
+	static const std::string WIN_GAME;
+	static const std::string LOSE_GAME;
 	// shared utility methods for SlideshowState and VideoState
 	/// returns whether the display was letterboxed (for restoration in resetDisplay)
 	static bool initDisplay();

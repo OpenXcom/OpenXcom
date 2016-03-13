@@ -79,7 +79,7 @@ namespace OpenXcom
  * Initializes all the elements in the Battlescape screen.
  * @param game Pointer to the core game.
  */
-BattlescapeState::BattlescapeState() : _reserve(0), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(0)
+BattlescapeState::BattlescapeState() : _reserve(0), _firstInit(true), _isMouseScrolling(false), _isMouseScrolled(false), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(0), _mouseOverIcons(false), _autosave(false)
 {
 	std::fill_n(_visibleUnit, 10, (BattleUnit*)(0));
 
@@ -88,7 +88,6 @@ BattlescapeState::BattlescapeState() : _reserve(0), _xBeforeMouseScrolling(0), _
 	const int iconsWidth = _game->getMod()->getInterface("battlescape")->getElement("icons")->w;
 	const int iconsHeight = _game->getMod()->getInterface("battlescape")->getElement("icons")->h;
 	const int visibleMapHeight = screenHeight - iconsHeight;
-	_mouseOverIcons = false;
 	const int x = screenWidth/2 - iconsWidth/2;
 	const int y = screenHeight - iconsHeight;
 
@@ -473,9 +472,6 @@ BattlescapeState::BattlescapeState() : _reserve(0), _xBeforeMouseScrolling(0), _
 
 	_battleGame = new BattlescapeGame(_save, this);
 
-	_firstInit = true;
-	_isMouseScrolling = false;
-	_isMouseScrolled = false;
 	_barHealthColor = _barHealth->getColor();
 }
 
@@ -538,6 +534,18 @@ void BattlescapeState::init()
 	_txtTooltip->setText(L"");
 	_btnReserveKneel->toggle(_save->getKneelReserved());
 	_battleGame->setKneelReserved(_save->getKneelReserved());
+	if (_autosave)
+	{
+		_autosave = false;
+		if (_game->getSavedGame()->isIronman())
+		{
+			_game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_IRONMAN, _palette));
+		}
+		else if (Options::autosave)
+		{
+			_game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_AUTO_BATTLESCAPE, _palette));
+		}
+	}
 }
 
 /**
@@ -1997,6 +2005,21 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 			// pushed above will get popped without being shown.  otherwise
 			// it will get shown after the cutscene.
 			_game->pushState(new CutsceneState(cutscene));
+
+			if (cutscene == CutsceneState::WIN_GAME)
+			{
+				_game->getSavedGame()->setEnding(END_WIN);
+			}
+			else if (cutscene == CutsceneState::LOSE_GAME)
+			{
+				_game->getSavedGame()->setEnding(END_LOSE);				
+			}
+			// Autosave if game is over
+			if (_game->getSavedGame()->getEnding() != END_NONE && _game->getSavedGame()->isIronman())
+			{
+				_game->getSavedGame()->setBattleGame(0);
+				_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN, _palette));
+			}
 		}
 	}
 }
@@ -2234,6 +2257,14 @@ void BattlescapeState::stopScrolling(Action *action)
 	}
 	// reset our "mouse position stored" flag
 	_cursorPosition.z = 0;
+}
+
+/**
+ * Autosave the game the next time the battlescape is displayed.
+ */
+void BattlescapeState::autosave()
+{
+	_autosave = true;
 }
 
 }
