@@ -776,6 +776,7 @@ void UnitSprite::drawRoutine2()
 	if (_part > 0 && hoverTank != 0)
 	{
 		s = _unitSurface->getFrame(104 + ((_part-1) * 8) + _animationFrame);
+		s->setX(16);
 		drawRecolored(s);
 	}
 
@@ -792,10 +793,10 @@ void UnitSprite::drawRoutine2()
 		int turretOffsetY = -4;
 		if (hoverTank)
 		{
-			turretOffsetX += offX[_unit->getDirection()] + 16;
+			turretOffsetX += offX[_unit->getDirection()];
 			turretOffsetY += offy[_unit->getDirection()];
 		}
-		s->setX(turretOffsetX);
+		s->setX(turretOffsetX + 16);
 		s->setY(turretOffsetY);
 		drawRecolored(s);
 	}
