@@ -278,9 +278,9 @@ public:
 	/// gets the ambient sound effect;
 	double getAmbientVolume() const;
 	/// Gets the turn limit for this mission.
-	const int getTurnLimit() const;
+	int getTurnLimit() const;
 	/// Gets the action that triggers when the timer runs out.
-	const ChronoTrigger getChronoTrigger() const;
+	ChronoTrigger getChronoTrigger() const;
 	/// Sets the turn limit for this mission.
 	void setTurnLimit(int limit);
 	/// Sets the action that triggers when the timer runs out.

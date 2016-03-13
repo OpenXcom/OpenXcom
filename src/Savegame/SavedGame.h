@@ -54,7 +54,7 @@ struct MissionStatistics;
 struct BattleUnitKills;
 
 /**
- *Enumerator containing all the possible game difficulties.
+ * Enumerator containing all the possible game difficulties.
  */
 enum GameDifficulty { DIFF_BEGINNER = 0, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
 
@@ -64,7 +64,7 @@ enum GameDifficulty { DIFF_BEGINNER = 0, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GE
 enum SaveType { SAVE_DEFAULT, SAVE_QUICK, SAVE_AUTO_GEOSCAPE, SAVE_AUTO_BATTLESCAPE, SAVE_IRONMAN, SAVE_IRONMAN_END };
 
 /**
- *Container for savegame info displayed on listings.
+ * Container for savegame info displayed on listings.
  */
 struct SaveInfo
 {
