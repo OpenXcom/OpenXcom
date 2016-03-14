@@ -875,7 +875,7 @@ void Map::drawTerrain(Surface *surface)
 								Position offset;
 								calculateWalkingOffset(tunit, &offset);
 								offset.y += 24;
-								tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, ttile->getShade());
+								tmpSurface->blitNShade(surface, screenPosition.x + offset.x - _spriteWidth / 2, screenPosition.y + offset.y, ttile->getShade());
 								if (tunit->getArmor()->getSize() > 1)
 								{
 									offset.y += 4;
