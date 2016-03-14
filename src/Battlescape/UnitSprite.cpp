@@ -309,6 +309,7 @@ void UnitSprite::drawRoutine0()
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		torso->setX(offXSprite);
 		drawRecolored(torso);
 		return;
 	}
@@ -623,6 +624,7 @@ void UnitSprite::drawRoutine1()
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		torso->setX(offXSprite);
 		drawRecolored(torso);
 		return;
 	}
@@ -883,6 +885,7 @@ void UnitSprite::drawRoutine4()
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		s->setX(offXSprite);
 		drawRecolored(s);
 		return;
 	}
@@ -1038,6 +1041,7 @@ void UnitSprite::drawRoutine6()
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		torso->setX(offXSprite);
 		drawRecolored(torso);
 		return;
 	}
@@ -1226,6 +1230,7 @@ void UnitSprite::drawRoutine7()
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		torso->setX(offXSprite);
 		drawRecolored(torso);
 		return;
 	}
@@ -1298,7 +1303,7 @@ void UnitSprite::drawRoutine8()
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 		legs = _unitSurface->getFrame(die + _unit->getFallingPhase());
 
-	if (_unit->getStatus() == STATUS_AIMING)
+	else if (_unit->getStatus() == STATUS_AIMING)
 		legs = _unitSurface->getFrame(aim);
 	
 	// offset everything to the right by 16 pixels.
@@ -1403,8 +1408,6 @@ void UnitSprite::drawRoutine12()
 	{
 		// biodrone death frames
 		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
-		drawRecolored(s);
-		return;
 	}
 	s->setX(offXSprite);
 	drawRecolored(s);
@@ -1429,11 +1432,8 @@ void UnitSprite::drawRoutine19()
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
-		drawRecolored(s);
-		return;
 	}
-
-	if (_unit->getStatus() == STATUS_WALKING)
+	else if (_unit->getStatus() == STATUS_WALKING)
 	{
 		s = _unitSurface->getFrame(move + _unit->getDirection());
 	}
