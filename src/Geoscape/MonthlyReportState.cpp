@@ -228,11 +228,6 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 	ss5 << countryList(_pactList, "STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT", "STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT");
 
 	_txtDesc->setText(ss5.str());
-
-	if (_gameOver)
-	{
-		_game->getSavedGame()->setEnding(END_LOSE);
-	}
 }
 
 /**
@@ -240,6 +235,17 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
  */
 MonthlyReportState::~MonthlyReportState()
 {
+}
+
+/**
+ * Make sure the game is over.
+ */
+void MonthlyReportState::init()
+{
+	if (_gameOver)
+	{
+		_game->getSavedGame()->setEnding(END_LOSE);
+	}
 }
 
 /**
