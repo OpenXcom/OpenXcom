@@ -1570,7 +1570,7 @@ inline void BattlescapeState::handle(Action *action)
 					// "ctrl-j" - stun all aliens
 					else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_j && (SDL_GetModState() & KMOD_CTRL) != 0)
 					{
-						debug(L"Deploying Celine Dione album");
+						debug(L"Deploying Celine Dion album");
 						for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i !=_save->getUnits()->end(); ++i)
 						{
 							if ((*i)->getOriginalFaction() == FACTION_HOSTILE && !(*i)->isOut())
