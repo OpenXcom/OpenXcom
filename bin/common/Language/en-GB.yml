@@ -304,6 +304,8 @@ en-GB:
   STR_DISABLED: "Disabled"
   STR_MAXIMIZE_INFO_SCREENS: "Maximize info screens"
   STR_MAXIMIZE_INFO_SCREENS_DESC: "Inventory and various other screens will be displayed at full screen, regardless of scale settings."  
+  STR_3DFLIGHT: "Hovering units full 3D flight"
+  STR_3DFLIGHT_DESC: "Enables full 3D flight (vertical + horizontal simultaneously) for hovering units"
   STR_DIARY: "DIARY"
   STR_KILLED: "KILLED"
   STR_STUNNED: "STUNNED"

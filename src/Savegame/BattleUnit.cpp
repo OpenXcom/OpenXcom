@@ -606,7 +606,9 @@ void BattleUnit::startWalking(int direction, const Position &destination, Tile *
 {
 	if (direction >= Pathfinding::DIR_UP)
 	{
-		_verticalDirection = direction;
+		_verticalDirection = ((direction >= Pathfinding::DIR_DOWN) ? Pathfinding::DIR_DOWN : Pathfinding::DIR_UP );
+		if (direction != Pathfinding::DIR_UP && direction != Pathfinding::DIR_DOWN)
+			_direction = Pathfinding::horizontalDirection(direction);
 		_status = STATUS_FLYING;
 	}
 	else
@@ -649,7 +651,7 @@ void BattleUnit::startWalking(int direction, const Position &destination, Tile *
 void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 {
 	int middle, end;
-	if (_verticalDirection)
+	if (_verticalDirection == Pathfinding::DIR_UP || _verticalDirection == Pathfinding::DIR_DOWN)
 	{
 		middle = 4;
 		end = 8;
@@ -762,7 +764,7 @@ void BattleUnit::lookAt(const Position &point, bool turret)
 	{
 		_toDirection = dir;
 		if (_toDirection != _direction
-			&& _toDirection < 8
+			&& _toDirection < Pathfinding::DIR_UP
 			&& _toDirection > -1)
 		{
 			_status = STATUS_TURNING;
@@ -779,8 +781,8 @@ void BattleUnit::lookAt(int direction, bool force)
 {
 	if (!force)
 	{
-		if (direction < 0 || direction >= 8) return;
-		_toDirection = direction;
+		if (direction < 0 || direction == Pathfinding::DIR_UP || direction == Pathfinding::DIR_DOWN) return;
+		_toDirection = Pathfinding::horizontalDirection(direction);
 		if (_toDirection != _direction)
 		{
 			_status = STATUS_TURNING;
@@ -788,8 +790,11 @@ void BattleUnit::lookAt(int direction, bool force)
 	}
 	else
 	{
-		_toDirection = direction;
-		_direction = direction;
+		_toDirection = Pathfinding::horizontalDirection(direction);
+		if (_toDirection == -1)
+			_toDirection = _direction = direction;
+		else
+			_direction = _toDirection;
 	}
 }
 
@@ -996,39 +1001,39 @@ int BattleUnit::directionTo(const Position &point) const
 	double angle = atan2(ox, -oy);
 	// divide the pie in 4 angles each at 1/8th before each quarter
 	double pie[4] = {(M_PI_4 * 4.0) - M_PI_4 / 2.0, (M_PI_4 * 3.0) - M_PI_4 / 2.0, (M_PI_4 * 2.0) - M_PI_4 / 2.0, (M_PI_4 * 1.0) - M_PI_4 / 2.0};
-	int dir = 0;
+	int dir = Pathfinding::DIR_HN;
 
 	if (angle > pie[0] || angle < -pie[0])
 	{
-		dir = 4;
+		dir = Pathfinding::DIR_HS;
 	}
 	else if (angle > pie[1])
 	{
-		dir = 3;
+		dir = Pathfinding::DIR_HSE;
 	}
 	else if (angle > pie[2])
 	{
-		dir = 2;
+		dir = Pathfinding::DIR_HE;
 	}
 	else if (angle > pie[3])
 	{
-		dir = 1;
+		dir = Pathfinding::DIR_HNE;
 	}
 	else if (angle < -pie[1])
 	{
-		dir = 5;
+		dir = Pathfinding::DIR_HSW;
 	}
 	else if (angle < -pie[2])
 	{
-		dir = 6;
+		dir = Pathfinding::DIR_HW;
 	}
 	else if (angle < -pie[3])
 	{
-		dir = 7;
+		dir = Pathfinding::DIR_HNW;
 	}
 	else if (angle < pie[0])
 	{
-		dir = 0;
+		dir = Pathfinding::DIR_HN;
 	}
 	return dir;
 }
