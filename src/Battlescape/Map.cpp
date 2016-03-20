@@ -638,16 +638,15 @@ void Map::drawTerrain(Surface *surface)
 									{
 										Position offset;
 										calculateWalkingOffset(westUnit, &offset);
-										tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x + offset.x - _spriteWidth / 2, screenPosition.y + tileOffset.y + offset.y + getTerrainLevel(westUnit->getPosition(), westUnit->getArmor()->getSize()), tileWestShade, true);
+										tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x + offset.x - _spriteWidth / 2, screenPosition.y + tileOffset.y + offset.y, tileWestShade, true);
 										if (westUnit->getFire() > 0)
 										{
 											frameNumber = 4 + (_animFrame / 2);
 											tmpSurface = _game->getMod()->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
-											tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x + offset.x, screenPosition.y + tileOffset.y + offset.y + getTerrainLevel(westUnit->getPosition(), westUnit->getArmor()->getSize()), 0, true);
+											tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x + offset.x, screenPosition.y + tileOffset.y + offset.y, 0, true);
 										}
 									}
 								}
-
 								// Draw smoke/fire
 								if (tileWest->getSmoke() && tileWest->isDiscovered(2))
 								{
