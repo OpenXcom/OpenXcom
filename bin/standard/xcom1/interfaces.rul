@@ -528,7 +528,6 @@ interfaces:
         color2: 138  # yellow
       - id: button
         color: 239   # bright green
-    elements: 
   - type: geoscape
     elements:
       - id: palette

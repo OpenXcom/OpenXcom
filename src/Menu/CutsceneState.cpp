@@ -23,16 +23,17 @@
 #include "VideoState.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
-#include "../Savegame/SavedGame.h"
 #include "../Engine/FileMap.h"
 #include "../Mod/Mod.h"
 
 namespace OpenXcom
 {
+
+const std::string CutsceneState::WIN_GAME = "winGame";
+const std::string CutsceneState::LOSE_GAME = "loseGame";
 
 CutsceneState::CutsceneState(const std::string &cutsceneId)
 	: _cutsceneId(cutsceneId)
@@ -61,15 +62,8 @@ void CutsceneState::init()
 		return;
 	}
 
-	if (_cutsceneId == "winGame" || _cutsceneId == "loseGame")
+	if (_cutsceneId == WIN_GAME || _cutsceneId == LOSE_GAME)
 	{
-		if (_game->getSavedGame() && _game->getSavedGame()->isIronman()
-		    && !_game->getSavedGame()->getName().empty())
-		{
-			std::string filename = CrossPlatform::sanitizeFilename(
-				Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
-			CrossPlatform::deleteFile(Options::getMasterUserFolder() + filename);
-		}
 		_game->setSavedGame(0);
 		_game->setState(new GoToMainMenuState);
 	}

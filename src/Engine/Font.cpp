@@ -26,13 +26,6 @@ namespace OpenXcom
 
 std::wstring Font::_index;
 
-SDL_Color Font::_palette[] = {{0, 0, 0, 0},
-			      {255, 255, 255, 255},
-			      {207, 207, 207, 255},
-			      {159, 159, 159, 255},
-			      {111, 111, 111, 255},
-			      {63, 63, 63, 255}};
-
 /**
  * Initializes the font with a blank surface.
  */
@@ -69,13 +62,8 @@ void Font::load(const YAML::Node &node)
 	_spacing = node["spacing"].as<int>(_spacing);
 	_monospace = node["monospace"].as<bool>(_monospace);
 	std::string image = "Language/" + node["image"].as<std::string>();
-
-	Surface *fontTemp = new Surface(_width, _height);
-	fontTemp->loadImage(FileMap::getFilePath(image));
-	_surface = new Surface(fontTemp->getWidth(), fontTemp->getHeight());
-	_surface->setPalette(_palette, 0, 6);
-	fontTemp->blit(_surface);
-	delete fontTemp;
+	_surface = new Surface(_width, _height);
+	_surface->loadImage(FileMap::getFilePath(image));
 	init();
 }
 
@@ -254,36 +242,6 @@ SDL_Rect Font::getCharSize(wchar_t c)
 Surface *Font::getSurface() const
 {
 	return _surface;
-}
-
-void Font::fix(const std::string &file, int width)
-{
-	Surface *s = new Surface(width, 512);
-
-	s->setPalette(_palette, 0, 6);
-	_surface->setPalette(_palette, 0, 6);
-
-	int x = 0;
-	int y = 0;
-	for (size_t i = 0; i < _index.length(); ++i)
-	{
-		SDL_Rect rect = _chars[_index[i]];
-		_surface->getCrop()->x = rect.x;
-		_surface->getCrop()->y = rect.y;
-		_surface->getCrop()->w = rect.w;
-		_surface->getCrop()->h = rect.h;
-		_surface->setX(x);
-		_surface->setY(y);
-		_surface->blit(s);
-		x += _width;
-		if (x == width)
-		{
-			x = 0;
-			y += _height;
-		}
-	}
-
-	SDL_SaveBMP(s->getSurface(), file.c_str());
 }
 
 }

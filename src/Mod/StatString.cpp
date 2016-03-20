@@ -19,6 +19,7 @@
 #define _USE_MATH_DEFINES
 #include "StatString.h"
 #include <vector>
+#include "../Engine/Language.h"
 
 namespace OpenXcom
 {
@@ -43,7 +44,7 @@ StatString::~StatString()
  */
 void StatString::load(const YAML::Node &node)
 {
-    std::string conditionNames[] = {"psiStrength", "psiSkill", "bravery", "strength", "firing", "reactions", "stamina", "tu", "health", "throwing", "melee"};
+    std::string conditionNames[] = {"psiStrength", "psiSkill", "bravery", "strength", "firing", "reactions", "stamina", "tu", "health", "throwing", "melee", "psiTraining"};
 	_stringToBeAddedIfAllConditionsAreMet = node["string"].as<std::string>(_stringToBeAddedIfAllConditionsAreMet);
     for (size_t i = 0; i < sizeof(conditionNames)/sizeof(conditionNames[0]); i++)
 	{
@@ -60,7 +61,7 @@ void StatString::load(const YAML::Node &node)
  * @param node YAML node.
  * @return New StatStringCondition.
  */
-StatStringCondition *StatString::getCondition(const std::string &conditionName, const YAML::Node &node) const
+StatStringCondition *StatString::getCondition(const std::string &conditionName, const YAML::Node &node)
 {
 	// These are the defaults from xcomutil
 	int minValue = 0, maxValue = 255;
@@ -80,7 +81,7 @@ StatStringCondition *StatString::getCondition(const std::string &conditionName, 
  * Returns the conditions associated with this StatString.
  * @return List of StatStringConditions.
  */
-std::vector< StatStringCondition* > StatString::getConditions() const
+const std::vector<StatStringCondition*> &StatString::getConditions() const
 {
 	return _conditions;
 }
@@ -101,41 +102,32 @@ std::string StatString::getString() const
  * @param psiStrengthEval Are psi stats available?
  * @return Resulting string of all valid StatStrings.
  */
-std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings, bool psiStrengthEval)
+std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings, bool psiStrengthEval, bool inTraining)
 {
-	size_t conditionsMet;
-	int minVal, maxVal;
-	std::string conditionName, string;
-	std::wstring wstring, statString;
-	bool continueCalc = true;
+	std::wstring statString;
 	std::map<std::string, int> currentStatsMap = getCurrentStats(currentStats);
-
-	for (std::vector<StatString *>::const_iterator i1 = statStrings.begin(); i1 != statStrings.end() && continueCalc; ++i1)
+	if (inTraining)
 	{
-		string = (*i1)->getString();
-		const std::vector<StatStringCondition* > conditions = (*i1)->getConditions();
-		conditionsMet = 0;
-		for (std::vector<StatStringCondition* >::const_iterator i2 = conditions.begin(); i2 != conditions.end() && continueCalc; ++i2)
+		currentStatsMap["psiTraining"] = 1;
+	}
+	for (std::vector<StatString *>::const_iterator i = statStrings.begin(); i != statStrings.end(); ++i)
+	{
+		bool conditionsMet = true;
+		for (std::vector<StatStringCondition*>::const_iterator j = (*i)->getConditions().begin(); j != (*i)->getConditions().end() && conditionsMet; ++j)
 		{
-			conditionName = (*i2)->getConditionName();
-			minVal = (*i2)->getMinVal();
-			maxVal = (*i2)->getMaxVal();
-			if (currentStatsMap.find(conditionName) != currentStatsMap.end())
+			std::map<std::string, int>::iterator name = currentStatsMap.find((*j)->getConditionName());
+			if (name != currentStatsMap.end())
 			{
-				if (currentStatsMap[conditionName] >= minVal && currentStatsMap[conditionName] <= maxVal
-					&& (conditionName != "psiStrength" || (currentStats.psiSkill > 0 || psiStrengthEval)))
-				{
-					conditionsMet++;
-				}
-				if (conditionsMet == conditions.size())
-				{
-					wstring.assign(string.begin(), string.end());
-					statString = statString + wstring;
-					if (wstring.length() > 1)
-					{
-						continueCalc = false;
-					}
-				}
+				conditionsMet = conditionsMet && (*j)->isMet(name->second, currentStats.psiSkill > 0 || psiStrengthEval);
+			}
+		}
+		if (conditionsMet)
+		{
+			std::wstring wstring = Language::utf8ToWstr((*i)->getString());
+			statString += wstring;
+			if (wstring.length() > 1)
+			{
+				break;
 			}
 		}
 	}

@@ -47,7 +47,6 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 #include "../Battlescape/Pathfinding.h"
-#include "SoldierNamePool.h"
 #include "RuleCountry.h"
 #include "RuleRegion.h"
 #include "RuleBaseFacility.h"
@@ -739,13 +738,17 @@ void Mod::loadMod(const std::vector<std::string> &rulesetFiles, size_t modIdx)
 		if (!missions.empty())
 		{
 			std::set<std::string>::const_iterator j = missions.begin();
-			bool isSiteType = getAlienMission(*j) && getAlienMission(*j)->getObjective() == OBJECTIVE_SITE;
+			if (!getAlienMission(*j))
+			{
+				throw Exception("Error with MissionScript: " + (*i).first + ": alien mission type: " + *j + "not defined, do not incite the judgement of Amaunator."); 
+			}
+			bool isSiteType = getAlienMission(*j)->getObjective() == OBJECTIVE_SITE;
 			rule->setSiteType(isSiteType);
 			for (;j != missions.end(); ++j)
 			{
 				if (getAlienMission(*j) && (getAlienMission(*j)->getObjective() == OBJECTIVE_SITE) != isSiteType)
 				{
-					throw Exception("Error with MissionScript: " + (*i).first + " cannot mix terror/non-terror missions in a single command, so sayeth the wise Alaundo."); 
+					throw Exception("Error with MissionScript: " + (*i).first + ": cannot mix terror/non-terror missions in a single command, so sayeth the wise Alaundo."); 
 				}
 			}
 		}
@@ -1351,18 +1354,72 @@ SavedGame *Mod::newSave() const
 		save->getId((*i)->getRules()->getType());
 	}
 
-	// Generate soldiers
-	int soldiers = _startingBase["randomSoldiers"].as<int>(0);
-	for (int i = 0; i < soldiers; ++i)
+	// Determine starting transport craft
+	Craft *transportCraft = 0;
+	for (std::vector<Craft*>::iterator c = base->getCrafts()->begin(); c != base->getCrafts()->end(); ++c)
 	{
-		Soldier *soldier = genSoldier(save);
-		soldier->setCraft(base->getCrafts()->front());
-		base->getSoldiers()->push_back(soldier);
-		// Award soldier a special 'original eigth' commendation
-		soldier->getDiary()->awardOriginalEightCommendation();
-		for (std::vector<SoldierCommendations*>::iterator comm = soldier->getDiary()->getSoldierCommendations()->begin(); comm != soldier->getDiary()->getSoldierCommendations()->end(); ++comm)
+		if ((*c)->getRules()->getSoldiers() > 0)
 		{
-			(*comm)->makeOld();
+			transportCraft = (*c);
+			break;
+		}
+	}
+
+	// Determine starting soldier types
+	std::vector<std::string> soldierTypes = _soldiersIndex;
+	for (std::vector<std::string>::iterator i = soldierTypes.begin(); i != soldierTypes.end();)
+	{
+		if (getSoldier(*i)->getRequirements().empty())
+		{
+			++i;
+		}
+		else
+		{
+			i = soldierTypes.erase(i);
+		}
+	}
+
+	const YAML::Node &node = _startingBase["randomSoldiers"];
+	std::vector<std::string> randomTypes;
+	if (node)
+	{
+		// Starting soldiers specified by type
+		if (node.IsMap())
+		{
+			std::map<std::string, int> randomSoldiers = node.as< std::map<std::string, int> >(std::map<std::string, int>());
+			for (std::map<std::string, int>::iterator i = randomSoldiers.begin(); i != randomSoldiers.end(); ++i)
+			{
+				for (int s = 0; s < i->second; ++s)
+				{
+					randomTypes.push_back(i->first);
+				}
+			}
+		}
+		// Starting soldiers specified by amount
+		else if (node.IsScalar())
+		{
+			int randomSoldiers = node.as<int>(0);
+			for (int s = 0; s < randomSoldiers; ++s)
+			{
+				randomTypes.push_back(soldierTypes[RNG::generate(0, soldierTypes.size() - 1)]);
+			}
+		}
+		// Generate soldiers
+		for (size_t i = 0; i < randomTypes.size(); ++i)
+		{
+			Soldier *soldier = genSoldier(save, randomTypes[i]);
+			if (transportCraft != 0 && i < (unsigned)transportCraft->getRules()->getSoldiers())
+			{
+				soldier->setCraft(transportCraft);
+			}
+			base->getSoldiers()->push_back(soldier);
+			// Award soldier a special 'original eigth' commendation
+			SoldierDiary *diary = soldier->getDiary();
+			diary->awardOriginalEightCommendation();
+			for (std::vector<SoldierCommendations*>::iterator comm = diary->getSoldierCommendations()->begin(); comm != diary->getSoldierCommendations()->end(); ++comm)
+			{
+				(*comm)->makeOld();
+			}
 		}
 	}
 

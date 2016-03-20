@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Game.h"
+#include <algorithm>
 #include <cmath>
 #include <sstream>
 #include <SDL_mixer.h>

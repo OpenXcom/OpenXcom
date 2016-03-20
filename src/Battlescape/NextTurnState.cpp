@@ -22,15 +22,14 @@
 #include "../Engine/Timer.h"
 #include "../Engine/Screen.h"
 #include "../Mod/Mod.h"
+#include "../Mod/RuleInterface.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Engine/Action.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/SavedGame.h"
 #include "BattlescapeState.h"
-#include "../Menu/SaveGameState.h"
 #include "Map.h"
 
 namespace OpenXcom
@@ -96,7 +95,18 @@ NextTurnState::NextTurnState(SavedBattleGame *battleGame, BattlescapeState *stat
 	_txtTurn->setBig();
 	_txtTurn->setAlign(ALIGN_CENTER);
 	_txtTurn->setHighContrast(true);
-	_txtTurn->setText(tr("STR_TURN").arg(_battleGame->getTurn()));
+	std::wstringstream ss;
+	ss << tr("STR_TURN").arg(_battleGame->getTurn());
+	if (battleGame->getTurnLimit() > 0)
+	{
+		ss << L"/" << battleGame->getTurnLimit();
+		if (battleGame->getTurnLimit() - _battleGame->getTurn() <= 3)
+		{
+			// gonna borrow the inventory's "over weight" colour when we're down to the last three turns
+			_txtTurn->setColor(_game->getMod()->getInterface("inventory")->getElement("weight")->color2);
+		}
+	}
+	_txtTurn->setText(ss.str());
 
 
 	_txtSide->setBig();
@@ -176,14 +186,7 @@ void NextTurnState::close()
 		// Autosave every set amount of turns
 		if ((_battleGame->getTurn() == 1 || _battleGame->getTurn() % Options::autosaveFrequency == 0) && _battleGame->getSide() == FACTION_PLAYER)
 		{
-			if (_game->getSavedGame()->isIronman())
-			{
-				_game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_IRONMAN, _palette));
-			}
-			else if (Options::autosave)
-			{
-				_game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_AUTO_BATTLESCAPE, _palette));
-			}
+			_state->autosave();
 		}
 	}
 }

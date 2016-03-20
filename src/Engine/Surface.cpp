@@ -284,8 +284,17 @@ void Surface::loadImage(const std::string &filename)
 						setPixelIterative(&x, &y, *i);
 					}
 					setPalette((SDL_Color*)color->palette, 0, color->palettesize);
-
-					SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
+					int transparent = 0;
+					for (int c = 0; c < _surface->format->palette->ncolors; ++c)
+					{
+						SDL_Color *palColor = _surface->format->palette->colors + c;
+						if (palColor->unused == 0)
+						{
+							transparent = c;
+							break;
+						}
+					}
+					SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, transparent);
 				}
 			}
 		}

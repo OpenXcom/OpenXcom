@@ -102,7 +102,7 @@ crafts: #done
     speedMax: 5800
     accel: 9
     weapons: 2
-    soldiers: 24
+    soldiers: 26
     vehicles: 4
     refuelItem: STR_ZRBITE
     spacecraft: true
@@ -143,3 +143,5 @@ crafts: #done
       - [3, 6, 0, 4]
       - [6, 5, 0, 4]
       - [3, 5, 0, 4]
+      - [6, 4, 0, 4]
+      - [3, 4, 0, 4]

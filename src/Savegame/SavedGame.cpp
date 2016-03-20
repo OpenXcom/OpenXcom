@@ -51,7 +51,6 @@
 #include "AlienStrategy.h"
 #include "AlienMission.h"
 #include "../Mod/RuleRegion.h"
-#include "../Mod/RuleSoldier.h"
 #include "MissionStatistics.h"
 #include "SoldierDeath.h"
 
@@ -99,7 +98,7 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _ironman(false), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _monthsPassed(-1), _selectedBase(0)
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _end(END_NONE), _ironman(false), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _monthsPassed(-1), _selectedBase(0)
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	_alienStrategy = new AlienStrategy();
@@ -336,6 +335,7 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 	// Get full save data
 	YAML::Node doc = file[1];
 	_difficulty = (GameDifficulty)doc["difficulty"].as<int>(_difficulty);
+	_end = (GameEnding)doc["end"].as<int>(_end);
 	if (doc["rng"] && (_ironman || !Options::newSeedOnLoad))
 		RNG::setSeed(doc["rng"].as<uint64_t>());
 	_monthsPassed = doc["monthsPassed"].as<int>(_monthsPassed);
@@ -362,6 +362,10 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 			c->load(*i);
 			_countries.push_back(c);
 		}
+		else
+		{
+			Log(LOG_ERROR) << "Failed to load country " << type;
+		}
 	}
 
 	for (YAML::const_iterator i = doc["regions"].begin(); i != doc["regions"].end(); ++i)
@@ -372,6 +376,10 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 			Region *r = new Region(mod->getRegion(type));
 			r->load(*i);
 			_regions.push_back(r);
+		}
+		else
+		{
+			Log(LOG_ERROR) << "Failed to load region " << type;
 		}
 	}
 
@@ -388,10 +396,17 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 	for (YAML::const_iterator it = missions.begin(); it != missions.end(); ++it)
 	{
 		std::string missionType = (*it)["type"].as<std::string>();
-		const RuleAlienMission &mRule = *mod->getAlienMission(missionType);
-		std::auto_ptr<AlienMission> mission(new AlienMission(mRule));
-		mission->load(*it, *this);
-		_activeMissions.push_back(mission.release());
+		if (mod->getAlienMission(missionType))
+		{
+			const RuleAlienMission &mRule = *mod->getAlienMission(missionType);
+			std::auto_ptr<AlienMission> mission(new AlienMission(mRule));
+			mission->load(*it, *this);
+			_activeMissions.push_back(mission.release());
+		}
+		else
+		{
+			Log(LOG_ERROR) << "Failed to load mission " << missionType;
+		}
 	}
 
 	for (YAML::const_iterator i = doc["ufos"].begin(); i != doc["ufos"].end(); ++i)
@@ -402,6 +417,10 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 			Ufo *u = new Ufo(mod->getUfo(type));
 			u->load(*i, *mod, *this);
 			_ufos.push_back(u);
+		}
+		else
+		{
+			Log(LOG_ERROR) << "Failed to load UFO " << type;
 		}
 	}
 
@@ -415,18 +434,34 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 	// Backwards compatibility
 	for (YAML::const_iterator i = doc["terrorSites"].begin(); i != doc["terrorSites"].end(); ++i)
 	{
-		MissionSite *m = new MissionSite(mod->getAlienMission("STR_ALIEN_TERROR"), mod->getDeployment("STR_TERROR_MISSION"));
-		m->load(*i);
-		_missionSites.push_back(m);
+		std::string type = "STR_ALIEN_TERROR";
+		std::string deployment = "STR_TERROR_MISSION";
+		if (mod->getAlienMission(type) && mod->getDeployment(deployment))
+		{
+			MissionSite *m = new MissionSite(mod->getAlienMission(type), mod->getDeployment(deployment));
+			m->load(*i);
+			_missionSites.push_back(m);
+		}
+		else
+		{
+			Log(LOG_ERROR) << "Failed to load mission " << type << " deployment " << deployment;
+		}
 	}
 
 	for (YAML::const_iterator i = doc["missionSites"].begin(); i != doc["missionSites"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
 		std::string deployment = (*i)["deployment"].as<std::string>("STR_TERROR_MISSION");
-		MissionSite *m = new MissionSite(mod->getAlienMission(type), mod->getDeployment(deployment));
-		m->load(*i);
-		_missionSites.push_back(m);
+		if (mod->getAlienMission(type) && mod->getDeployment(deployment))
+		{
+			MissionSite *m = new MissionSite(mod->getAlienMission(type), mod->getDeployment(deployment));
+			m->load(*i);
+			_missionSites.push_back(m);
+		}
+		else
+		{
+			Log(LOG_ERROR) << "Failed to load mission " << type << " deployment " << deployment;
+		}
 	}
 
 	// Discovered Techs Should be loaded before Bases (e.g. for PSI evaluation)
@@ -436,6 +471,10 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 		if (mod->getResearch(research))
 		{
 			_discovered.push_back(mod->getResearch(research));
+		}
+		else
+		{
+			Log(LOG_ERROR) << "Failed to load research " << research;
 		}
 	}
 
@@ -454,6 +493,10 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 		{
 			_poppedResearch.push_back(mod->getResearch(id));
 		}
+		else
+		{
+			Log(LOG_ERROR) << "Failed to load research " << id;
+		}
 	}
 	_alienStrategy->load(doc["alienStrategy"]);
 
@@ -465,6 +508,10 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 			Soldier *soldier = new Soldier(mod->getSoldier(type), 0);
 			soldier->load(*i, mod, this);
 			_deadSoldiers.push_back(soldier);
+		}
+		else
+		{
+			Log(LOG_ERROR) << "Failed to load soldier " << type;
 		}
 	}
 
@@ -502,7 +549,7 @@ void SavedGame::save(const std::string &filename) const
 	brief["name"] = Language::wstrToUtf8(_name);
 	brief["version"] = OPENXCOM_VERSION_SHORT;
 	std::string git_sha = OPENXCOM_VERSION_GIT;
-	if (git_sha[0] ==  '.')
+	if (!git_sha.empty() && git_sha[0] ==  '.')
 	{
 		git_sha.erase(0,1);
 	}
@@ -541,6 +588,7 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::BeginDoc;
 	YAML::Node node;
 	node["difficulty"] = (int)_difficulty;
+	node["end"] = (int)_end;
 	node["monthsPassed"] = _monthsPassed;
 	node["graphRegionToggles"] = _graphRegionToggles;
 	node["graphCountryToggles"] = _graphCountryToggles;
@@ -647,14 +695,6 @@ GameDifficulty SavedGame::getDifficulty() const
 	return _difficulty;
 }
 
-int SavedGame::getDifficultyCoefficient() const
-{
-	if (_difficulty > 4)
-		return Mod::DIFFICULTY_COEFFICIENT[4];
-
-	return Mod::DIFFICULTY_COEFFICIENT[_difficulty];
-}
-
 /**
  * Changes the game's difficulty to a new level.
  * @param difficulty New difficulty.
@@ -662,6 +702,34 @@ int SavedGame::getDifficultyCoefficient() const
 void SavedGame::setDifficulty(GameDifficulty difficulty)
 {
 	_difficulty = difficulty;
+}
+
+/**
+ * Returns the game's difficulty coefficient based
+ * on the current level.
+ * @return Difficulty coefficient.
+ */
+int SavedGame::getDifficultyCoefficient() const
+{
+	return Mod::DIFFICULTY_COEFFICIENT[std::min((int)_difficulty, 4)];
+}
+
+/**
+ * Returns the game's current ending.
+ * @return Ending state.
+ */
+GameEnding SavedGame::getEnding() const
+{
+	return _end;
+}
+
+/**
+ * Changes the game's current ending.
+ * @param end New ending.
+ */
+void SavedGame::setEnding(GameEnding end)
+{
+	_end = end;
 }
 
 /**

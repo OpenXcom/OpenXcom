@@ -18,6 +18,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "../Engine/State.h"
+#include <vector>
 #include <string>
 
 namespace OpenXcom
@@ -54,6 +55,8 @@ public:
 	MonthlyReportState(bool psi, Globe *globe);
 	/// Cleans up the Monthly Report state.
 	~MonthlyReportState();
+	/// Updates the ending.
+	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Calculate monthly scores.

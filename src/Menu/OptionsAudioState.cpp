@@ -162,7 +162,7 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	_txtVideoFormat->setText(tr("STR_PREFERRED_VIDEO_FORMAT"));
 
 	_cbxVideoFormat->setOptions(videoText);
-	_cbxSoundFormat->setSelected(Options::preferredVideo);
+	_cbxVideoFormat->setSelected(Options::preferredVideo);
 	_cbxVideoFormat->setTooltip("STR_PREFERRED_VIDEO_FORMAT_DESC");
 	_cbxVideoFormat->onChange((ActionHandler)&OptionsAudioState::cbxVideoFormatChange);
 	_cbxVideoFormat->onMouseIn((ActionHandler)&OptionsAudioState::txtTooltipIn);

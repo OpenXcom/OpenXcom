@@ -191,6 +191,8 @@ struct BattleUnitKills
 	// Decide victim name, race and rank.
 	void setUnitStats(BattleUnit *unit)
 	{
+		name = L"";
+		type = "";
 		if (unit->getGeoscapeSoldier())
 		{
 			name = unit->getGeoscapeSoldier()->getName();

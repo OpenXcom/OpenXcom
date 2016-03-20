@@ -943,6 +943,7 @@ int TileEngine::determineReactionType(BattleUnit *unit, BattleUnit *target)
 		// has a gun capable of snap shot with ammo
 		(weapon->getRules()->getBattleType() != BT_MELEE &&
 		weapon->getRules()->getTUSnap() &&
+		distance(unit->getPosition(), target->getPosition()) < weapon->getRules()->getMaxRange() &&
 		weapon->getAmmoItem() &&
 		unit->getActionTUs(BA_SNAPSHOT, weapon) > 0 &&
 		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon)) &&
@@ -1252,8 +1253,10 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 										if (power_ > (*it)->getRules()->getArmor())
 										{
 											if ((*it)->getUnit() && (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
-												(*it)->getUnit()->instaKill();
-											_save->removeItem((*it));
+											{
+												(*it)->getUnit()->kill();
+											}
+											_save->removeItem(*it);
 											break;
 										}
 										else

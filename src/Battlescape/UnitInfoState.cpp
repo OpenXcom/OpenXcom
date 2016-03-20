@@ -30,7 +30,6 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Engine/InteractiveSurface.h"
-#include "../Mod/Armor.h"
 #include "../Mod/Unit.h"
 #include "../Engine/Options.h"
 #include "BattlescapeGame.h"

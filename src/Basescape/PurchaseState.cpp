@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "PurchaseState.h"
+#include <algorithm>
 #include <sstream>
 #include <climits>
 #include <cfloat>
@@ -43,7 +44,6 @@
 #include "../Menu/ErrorMessageState.h"
 #include "../Mod/RuleInterface.h"
 #include "../Mod/RuleSoldier.h"
-#include "../Savegame/Soldier.h"
 #include "../Mod/RuleCraftWeapon.h"
 #include "../Mod/Armor.h"
 

@@ -22,7 +22,6 @@
 #include "../Mod/Mod.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
-#include "../Engine/Screen.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Savegame/Country.h"
 #include "../Savegame/Region.h"

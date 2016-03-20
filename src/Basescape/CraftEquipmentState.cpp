@@ -428,24 +428,34 @@ void CraftEquipmentState::moveLeftByValue(int change)
 	{
 		if (!item->getCompatibleAmmo()->empty())
 		{
-			// First we remove all vehicles because we want to redistribute the ammo
+			// Calculate how much ammo needs to be added to the base.
 			RuleItem *ammo = _game->getMod()->getItem(item->getCompatibleAmmo()->front());
-			for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); )
+			int ammoPerVehicle;
+			if (ammo->getClipSize() > 0 && item->getClipSize() > 0)
+			{
+				ammoPerVehicle = item->getClipSize() / ammo->getClipSize();
+			}
+			else
+			{
+				ammoPerVehicle = ammo->getClipSize();
+			}
+			// Put the vehicles and their ammo back as seperate items.
+			if (_game->getSavedGame()->getMonthsPassed() != -1)
+			{
+				_base->getStorageItems()->addItem(_items[_sel], change);
+				_base->getStorageItems()->addItem(ammo->getType(), ammoPerVehicle * change);
+			}
+			// now delete the vehicles from the craft.
+			for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end() && change > 0; )
 			{
 				if ((*i)->getRules() == item)
 				{
-					_base->getStorageItems()->addItem(ammo->getType(), (*i)->getAmmo());
 					delete (*i);
 					i = c->getVehicles()->erase(i);
+					--change;
 				}
 				else ++i;
 			}
-			if (_game->getSavedGame()->getMonthsPassed() != -1)
-			{
-				_base->getStorageItems()->addItem(_items[_sel], cQty);
-			}
-			// And now reAdd the count we want to keep in the craft (and redistribute the ammo among them)
-			if (cQty > change) moveRightByValue(cQty - change);
 		}
 		else
 		{
@@ -453,13 +463,13 @@ void CraftEquipmentState::moveLeftByValue(int change)
 			{
 				_base->getStorageItems()->addItem(_items[_sel], change);
 			}
-			for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); )
+			for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end() && change > 0; )
 			{
 				if ((*i)->getRules() == item)
 				{
 					delete (*i);
 					i = c->getVehicles()->erase(i);
-					if (0 >= --change) break;
+					--change;
 				}
 				else ++i;
 			}
@@ -538,11 +548,11 @@ void CraftEquipmentState::moveRightByValue(int change)
 
 				int baseQty = _base->getStorageItems()->getItem(ammo->getType()) / ammoPerVehicle;
 				if (_game->getSavedGame()->getMonthsPassed() == -1)
-					baseQty = 1;
+					baseQty = change;
 				int canBeAdded = std::min(change, baseQty);
 				if (canBeAdded > 0)
 				{
-					for (int i=0; i < canBeAdded; ++i)
+					for (int i = 0; i < canBeAdded; ++i)
 					{
 						if (_game->getSavedGame()->getMonthsPassed() != -1)
 						{
@@ -556,12 +566,12 @@ void CraftEquipmentState::moveRightByValue(int change)
 				{
 					// So we haven't managed to increase the count of vehicles because of the ammo
 					_timerRight->stop();
-					LocalizedText msg(tr("STR_NOT_ENOUGH_AMMO_TO_ARM_HWP").arg(tr(ammo->getType())));
+					LocalizedText msg(tr("STR_NOT_ENOUGH_AMMO_TO_ARM_HWP").arg(ammoPerVehicle).arg(tr(ammo->getType())));
 					_game->pushState(new ErrorMessageState(msg, _palette, _game->getMod()->getInterface("craftEquipment")->getElement("errorMessage")->color, "BACK04.SCR", _game->getMod()->getInterface("craftEquipment")->getElement("errorPalette")->color));
 				}
 			}
 			else
-				for (int i=0; i < change; ++i)
+				for (int i = 0; i < change; ++i)
 				{
 					c->getVehicles()->push_back(new Vehicle(item, item->getClipSize(), size));
 					if (_game->getSavedGame()->getMonthsPassed() != -1)

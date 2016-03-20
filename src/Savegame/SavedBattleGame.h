@@ -21,6 +21,7 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 #include "BattleUnit.h"
+#include "../Mod/AlienDeployment.h"
 
 namespace OpenXcom
 {
@@ -74,6 +75,8 @@ private:
 	double _ambientVolume;
 	std::vector<BattleItem*> _recoverGuaranteed, _recoverConditional;
 	std::string _music;
+	int _turnLimit, _cheatTurn;
+	ChronoTrigger _chronoTrigger;
 	/// Selects a soldier.
 	BattleUnit *selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 public:
@@ -274,6 +277,16 @@ public:
 	void setAmbientVolume(double volume);
 	/// gets the ambient sound effect;
 	double getAmbientVolume() const;
+	/// Gets the turn limit for this mission.
+	int getTurnLimit() const;
+	/// Gets the action that triggers when the timer runs out.
+	ChronoTrigger getChronoTrigger() const;
+	/// Sets the turn limit for this mission.
+	void setTurnLimit(int limit);
+	/// Sets the action that triggers when the timer runs out.
+	void setChronoTrigger(ChronoTrigger trigger);
+	/// Sets the turn to start the aliens cheating.
+	void setCheatTurn(int turn);
 };
 
 }

@@ -142,7 +142,7 @@ void AlienBAIState::think(BattleAction *action)
 {
  	action->type = BA_RETHINK;
 	action->actor = _unit;
-	action->weapon = _unit->getMainHandWeapon();
+	action->weapon = _unit->getMainHandWeapon(false);
 	_attackAction->diff = _save->getBattleState()->getGame()->getSavedGame()->getDifficultyCoefficient();
 	_attackAction->actor = _unit;
 	_attackAction->weapon = action->weapon;
@@ -455,6 +455,10 @@ void AlienBAIState::setupPatrol()
 		int closest = 1000000;
 		for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
 		{
+			if ((*i)->isDummy())
+			{
+				continue;
+			}
 			node = *i;
 			int d = _save->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
 			if (_unit->getPosition().z == node->getPosition().z 
@@ -493,10 +497,10 @@ void AlienBAIState::setupPatrol()
 		{
 			// can i shoot an object?
 			if (_fromNode->isTarget() &&
-				_unit->getMainHandWeapon() &&
-				_unit->getMainHandWeapon()->getRules()->getAccuracySnap() &&
-				_unit->getMainHandWeapon()->getAmmoItem() &&
-				_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE &&
+				_attackAction->weapon &&
+				_attackAction->weapon->getRules()->getAccuracySnap() &&
+				_attackAction->weapon->getAmmoItem() &&
+				_attackAction->weapon->getAmmoItem()->getRules()->getDamageType() != DT_HE &&
 				_save->getModuleMap()[_fromNode->getPosition().x / 10][_fromNode->getPosition().y / 10].second > 0)
 			{
 				// scan this room for objects to destroy
@@ -510,7 +514,7 @@ void AlienBAIState::setupPatrol()
 					{
 						_patrolAction->actor = _unit;
 						_patrolAction->target = Position(i, j, 1);
-						_patrolAction->weapon = _patrolAction->actor->getMainHandWeapon();
+						_patrolAction->weapon = _attackAction->weapon;
 						_patrolAction->type = BA_SNAPSHOT;
 						_patrolAction->TU = _patrolAction->actor->getActionTUs(_patrolAction->type, _patrolAction->weapon);
 						return;
@@ -523,6 +527,10 @@ void AlienBAIState::setupPatrol()
 				int closest = 1000000;
 				for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
 				{
+					if ((*i)->isDummy())
+					{
+						continue;
+					}
 					if ((*i)->isTarget() && !(*i)->isAllocated())
 					{
 						node = *i;
@@ -595,6 +603,10 @@ void AlienBAIState::setupAmbush()
 		// we'll use node positions for this, as it gives map makers a good degree of control over how the units will use the environment.
 		for (std::vector<Node*>::const_iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
 		{
+			if ((*i)->isDummy())
+			{
+				continue;
+			}
 			Position pos = (*i)->getPosition();
 			Tile *tile = _save->getTile(pos);
 			if (tile == 0 || _save->getTileEngine()->distance(pos, _unit->getPosition()) > 10 || pos.z != _unit->getPosition().z || tile->getDangerous() ||
@@ -1048,7 +1060,7 @@ int AlienBAIState::selectNearestTarget()
 				{
 					BattleAction action;
 					action.actor = _unit;
-					action.weapon = _unit->getMainHandWeapon();
+					action.weapon = _attackAction->weapon;
 					action.target = (*i)->getPosition();
 					Position origin = _save->getTileEngine()->getOriginVoxel(action, 0);
 					valid = _save->getTileEngine()->canTargetUnit(&origin, (*i)->getTile(), &target, _unit);
@@ -1175,7 +1187,7 @@ bool AlienBAIState::selectPointNearTarget(BattleUnit *target, int maxTUs) const
  */
 void AlienBAIState::evaluateAIMode()
 {
-	if (_unit->getCharging() && _attackAction->type != BA_RETHINK)
+	if ((_unit->getCharging() && _attackAction->type != BA_RETHINK))
 	{
 		_AIMode = AI_COMBAT;
 		return;
@@ -1637,7 +1649,7 @@ void AlienBAIState::meleeAction()
  */
 void AlienBAIState::wayPointAction()
 {
-	int attackCost = _unit->getActionTUs(BA_LAUNCH, _unit->getMainHandWeapon());
+	int attackCost = _unit->getActionTUs(BA_LAUNCH, _attackAction->weapon);
 	if (_unit->getTimeUnits() < attackCost)
 	{
 		// cannot make a launcher attack - consider some other behaviour, like running away, or standing motionless.
@@ -1650,7 +1662,7 @@ void AlienBAIState::wayPointAction()
 			continue;
 		_save->getPathfinding()->calculate(_unit, (*i)->getPosition(), *i, -1);
 		if (_save->getPathfinding()->getStartDirection() != -1 &&
-			explosiveEfficacy((*i)->getPosition(), _unit, (_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower()/20)+1, _attackAction->diff))
+			explosiveEfficacy((*i)->getPosition(), _unit, (_attackAction->weapon->getAmmoItem()->getRules()->getPower()/20)+1, _attackAction->diff))
 		{
 			_aggroTarget = *i;
 		}
@@ -2002,7 +2014,7 @@ BattleActionType AlienBAIState::getReserveMode()
  */
 void AlienBAIState::selectMeleeOrRanged()
 {
-	RuleItem *rangedWeapon = _unit->getMainHandWeapon()->getRules();
+	RuleItem *rangedWeapon = _attackAction->weapon->getRules();
 	RuleItem *meleeWeapon = _unit->getMeleeWeapon() ? _unit->getMeleeWeapon()->getRules() : 0;
 
 	if (!meleeWeapon)
@@ -2011,7 +2023,7 @@ void AlienBAIState::selectMeleeOrRanged()
 		_melee = false;
 		return;
 	}
-	if (!rangedWeapon || _unit->getMainHandWeapon()->getAmmoItem() == 0)
+	if (!rangedWeapon || _attackAction->weapon->getAmmoItem() == 0)
 	{
 		_rifle = false;
 		return;
@@ -2072,6 +2084,10 @@ bool AlienBAIState::getNodeOfBestEfficacy(BattleAction *action)
 	Position targetVoxel;
 	for (std::vector<Node*>::const_iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
 	{
+		if ((*i)->isDummy())
+		{
+			continue;
+		}
 		int dist = _save->getTileEngine()->distance((*i)->getPosition(), _unit->getPosition());
 		if (dist <= 20 && dist > action->weapon->getRules()->getExplosionRadius() &&
 			_save->getTileEngine()->canTargetTile(&originVoxel, _save->getTile((*i)->getPosition()), O_FLOOR, &targetVoxel, _unit))

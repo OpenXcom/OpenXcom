@@ -59,11 +59,9 @@ alienRaces: #done
       - STR_LOBSTERMAN_SOLDIER
       - STR_TENTACULAT_TERRORIST
       - STR_TENTACULAT_TERRORIST
-# 50% (random) of bio-drones on the land in tasoth crew are transformed into triscene
-# (they are both Bio-drones by default).
-# The thing is, that the first rank of LAND crew is never spawned.
-# Vanilla has 50/50 ratio (for each spawned terrorist of Tasoth race) to be
-# either biodrone or Triscene. So in this scenario we better to have rare triscene.
+# Small departure from vanilla here: we've applied the same 50% upgrade
+# of biodrones to triscenes as was the case with mixed race 1.
+# This was done in order to reduce the ridiculous rarity of their appearance.
   - id: STR_TASOTH 
     members:
       - STR_TASOTH_SQUAD_LEADER
@@ -84,6 +82,11 @@ alienRaces: #done
       - STR_TASOTH_SOLDIER
       - STR_TENTACULAT_TERRORIST
       - STR_TENTACULAT_TERRORIST
+# Vanilla has a 50% chance for each biodrone that spawns on a mixed crew
+# to be "upgraded" to a Triscene on land missions.
+# This unfortunately also upgrades 50% of the calcinites to xarquids,
+# which is very likely unintended.
+# The method to re-implement that should be fairly obvious.
   - id: STR_MIXED_CREW
     members:
       - STR_CALCINITE_TERRORIST
@@ -93,7 +96,7 @@ alienRaces: #done
       - STR_TASOTH_SQUAD_LEADER
       - STR_TASOTH_SOLDIER
       - STR_BIODRONE_TERRORIST
-      - STR_BIODRONE_TERRORIST
+      - STR_TRISCENE_TERRORIST
   - id: STR_MIXED_CREW_UNDERWATER
     members:
       - STR_HALLUCINOID_TERRORIST

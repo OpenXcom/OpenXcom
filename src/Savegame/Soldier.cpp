@@ -640,7 +640,7 @@ SoldierDiary *Soldier::getDiary()
  */
 void Soldier::calcStatString(const std::vector<StatString *> &statStrings, bool psiStrengthEval)
 {
-	_statString = StatString::calcStatString(_currentStats, statStrings, psiStrengthEval);
+	_statString = StatString::calcStatString(_currentStats, statStrings, psiStrengthEval, _psiTraining);
 }
 
 }

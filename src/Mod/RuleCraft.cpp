@@ -83,12 +83,8 @@ void RuleCraft::load(const YAML::Node &node, Mod *mod, int listOrder)
 		RuleTerrain *rule = new RuleTerrain(terrain["name"].as<std::string>());
 		rule->load(terrain, mod);
 		_battlescapeTerrainData = rule;
-		
-		if (const YAML::Node &deployment = node["deployment"])
-		{
-			_deployment = deployment.as<std::vector<std::vector<int> > >(_deployment);
-		}
 	}
+	_deployment = node["deployment"].as< std::vector< std::vector<int> > >(_deployment);
 	_spacecraft = node["spacecraft"].as<bool>(_spacecraft);
 	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)

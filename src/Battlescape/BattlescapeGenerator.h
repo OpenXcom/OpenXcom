@@ -75,7 +75,6 @@ private:
 	std::vector< std::vector<bool> > _landingzone;
 	std::vector< std::vector<int> > _segments, _drillMap;
 	MapBlock *_dummy;
-	bool _error;
 
 	/// sets the map size and associated vars
 	void init();

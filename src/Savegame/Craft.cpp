@@ -36,6 +36,7 @@
 #include "Vehicle.h"
 #include "../Mod/RuleItem.h"
 #include "../Mod/AlienDeployment.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -108,16 +109,22 @@ void Craft::load(const YAML::Node &node, const Mod *mod, SavedGame *save)
 			else
 			{
 				_weapons[j] = 0;
+				if (type != "0")
+				{
+					Log(LOG_ERROR) << "Failed to load craft weapon " << type;
+				}
 			}
 			j++;
 		}
 	}
 
 	_items->load(node["items"]);
+	// Some old saves have bad items, better get rid of them to avoid further bugs
 	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end();)
 	{
-		if (std::find(mod->getItemsList().begin(), mod->getItemsList().end(), i->first) == mod->getItemsList().end())
+		if (mod->getItem(i->first) == 0)
 		{
+			Log(LOG_ERROR) << "Failed to load item " << i->first;
 			_items->getContents()->erase(i++);
 		}
 		else
@@ -134,12 +141,16 @@ void Craft::load(const YAML::Node &node, const Mod *mod, SavedGame *save)
 			v->load(*i);
 			_vehicles.push_back(v);
 		}
+		else
+		{
+			Log(LOG_ERROR) << "Failed to load item " << type;			
+		}
 	}
 	_status = node["status"].as<std::string>(_status);
 	_lowFuel = node["lowFuel"].as<bool>(_lowFuel);
 	_mission = node["mission"].as<bool>(_mission);
 	_interceptionOrder = node["interceptionOrder"].as<int>(_interceptionOrder);
-	if (const YAML::Node name = node["name"])
+	if (const YAML::Node &name = node["name"])
 	{
 		_name = Language::utf8ToWstr(name.as<std::string>());
 	}
@@ -818,7 +829,7 @@ void Craft::refuel()
  * @param mod Pointer to mod.
  * @return The ammo ID missing for rearming, or "" if none.
  */
-std::string Craft::rearm(Mod *mod)
+std::string Craft::rearm(const Mod *mod)
 {
 	std::string ammo;
 	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); ; ++i)
@@ -978,6 +989,48 @@ int Craft::getInterceptionOrder() const
 CraftId Craft::getUniqueId() const
 {
 	return std::make_pair(_rules->getType(), _id);
+}
+
+/**
+ * Unloads all the craft contents to the base.
+ * @param mod Pointer to mod.
+ */
+void Craft::unload(const Mod *mod)
+{
+	// Remove weapons
+	for (std::vector<CraftWeapon*>::iterator w = _weapons.begin(); w != _weapons.end(); ++w)
+	{
+		if ((*w) != 0)
+		{
+			_base->getStorageItems()->addItem((*w)->getRules()->getLauncherItem());
+			_base->getStorageItems()->addItem((*w)->getRules()->getClipItem(), (*w)->getClipsLoaded(mod));
+		}
+	}
+
+	// Remove items
+	for (std::map<std::string, int>::iterator it = _items->getContents()->begin(); it != _items->getContents()->end(); ++it)
+	{
+		_base->getStorageItems()->addItem(it->first, it->second);
+	}
+
+	// Remove vehicles
+	for (std::vector<Vehicle*>::iterator v = _vehicles.begin(); v != _vehicles.end(); ++v)
+	{
+		_base->getStorageItems()->addItem((*v)->getRules()->getType());
+		if (!(*v)->getRules()->getCompatibleAmmo()->empty())
+		{
+			_base->getStorageItems()->addItem((*v)->getRules()->getCompatibleAmmo()->front(), (*v)->getAmmo());
+		}
+	}
+
+	// Remove soldiers
+	for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
+	{
+		if ((*s)->getCraft() == this)
+		{
+			(*s)->setCraft(0);
+		}
+	}
 }
 
 }

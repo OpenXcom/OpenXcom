@@ -78,7 +78,7 @@
 FIND_PATH(SDL_INCLUDE_DIR SDL.h
   HINTS
   $ENV{SDLDIR}
-  PATH_SUFFIXES include/SDL include
+  PATH_SUFFIXES include/SDL include SDL
   PATHS
   ~/Library/Frameworks
   /Library/Frameworks
@@ -219,7 +219,7 @@ macro ( FindSDL_component _component )
     HINTS
     $ENV{SDL${UPPERCOMPONENT}DIR}
     $ENV{SDLDIR}
-    PATH_SUFFIXES include/SDL include
+    PATH_SUFFIXES include/SDL include SDL
     PATHS
     ~/Library/Frameworks
     /Library/Frameworks

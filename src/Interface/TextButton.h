@@ -43,6 +43,8 @@ private:
 	TextButton **_group;
 	bool _contrast, _geoscapeButton;
 	ComboBox *_comboBox;
+	// for use by RuleInterface
+	void setSecondaryColor(Uint8 color) { setTextColor(color); }
 protected:
 	bool isButtonHandled(Uint8 button = 0);
 public:
@@ -85,7 +87,6 @@ public:
 	void setComboBox(ComboBox *comboBox);
 	void setWidth(int width);
 	void setHeight(int height);
-	void setSecondaryColor(Uint8 color);
 	void setGeoscapeButton(bool geo);
 };
 

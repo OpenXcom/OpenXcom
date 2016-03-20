@@ -372,7 +372,7 @@ private:
  */
 void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe)
 {
-	const Mod &rules = *engine.getMod();
+	const Mod &mod = *engine.getMod();
 	SavedGame &game = *engine.getSavedGame();
 	const size_t curWaypoint = ufo.getTrajectoryPoint();
 	const size_t nextWaypoint = curWaypoint + 1;
@@ -392,7 +392,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 	}
 	ufo.setAltitude(trajectory.getAltitude(nextWaypoint));
 	ufo.setTrajectoryPoint(nextWaypoint);
-	const RuleRegion &regionRules = *rules.getRegion(_region);
+	const RuleRegion &regionRules = *mod.getRegion(_region);
 	std::pair<double, double> pos = getWaypoint(trajectory, nextWaypoint, globe, regionRules);
 
 	Waypoint *wp = new Waypoint();
@@ -411,15 +411,23 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 	else
 	{
 		// UFO landed.
-		if (wave.objective && trajectory.getZone(curWaypoint) == (size_t)(_rule.getSpawnZone()))
+		if (_missionSiteZone != -1 && wave.objective && trajectory.getZone(curWaypoint) == (size_t)(_rule.getSpawnZone()))
 		{
 			// Remove UFO, replace with MissionSite.
 			addScore(ufo.getLongitude(), ufo.getLatitude(), game);
 			ufo.setStatus(Ufo::DESTROYED);
 
 			MissionArea area = regionRules.getMissionZones().at(trajectory.getZone(curWaypoint)).areas.at(_missionSiteZone);
-			Texture *texture = rules.getGlobe()->getTexture(area.texture);
-			AlienDeployment *deployment = rules.getDeployment(texture->getRandomDeployment());
+			Texture *texture = mod.getGlobe()->getTexture(area.texture);
+			AlienDeployment *deployment;
+			if (mod.getDeployment(_rule.getSiteType()))
+			{
+				deployment = mod.getDeployment(_rule.getSiteType());
+			}
+			else
+			{
+				deployment = mod.getDeployment(texture->getRandomDeployment());
+			}
 			MissionSite *missionSite = spawnMissionSite(game, deployment, area);
 			if (missionSite)
 			{

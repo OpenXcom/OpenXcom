@@ -27,6 +27,12 @@ MCDPatches: #will never be done
     data:
       - MCDIndex: 31
         bigWall: 0
+  - type: ISLAND1
+    data:
+      - MCDIndex: 30
+        TUWalk: 0
+        TUFly: 0
+        TUSlide: 0
   - type: CARGO1
     data:
       - MCDIndex: 10

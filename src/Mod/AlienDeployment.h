@@ -46,6 +46,7 @@ struct BriefingData
 	bool showCraft, showTarget;
 	BriefingData() : palette(0), textOffset(0), music("GMDEFEND"), background("BACK16.SCR"), showCraft(true), showTarget(true) { /*Empty by Design*/ };
 };
+enum ChronoTrigger { FORCE_LOSE, FORCE_ABORT, FORCE_WIN };
 /**
  * Represents a specific type of Alien Deployment.
  * Contains constant info about a Alien Deployment like
@@ -71,7 +72,8 @@ private:
 	BriefingData _briefingData;
 	std::string _markerName, _objectivePopup, _objectiveCompleteText, _objectiveFailedText;
 	int _markerIcon, _durationMin, _durationMax, _minDepth, _maxDepth, _minSiteDepth, _maxSiteDepth;
-	int _objectiveType, _objectivesRequired, _objectiveCompleteScore, _objectiveFailedScore, _despawnPenalty, _points;
+	int _objectiveType, _objectivesRequired, _objectiveCompleteScore, _objectiveFailedScore, _despawnPenalty, _points, _turnLimit, _cheatTurn;
+	ChronoTrigger _chronoTrigger;
 public:
 	/// Creates a blank Alien Deployment ruleset.
 	AlienDeployment(const std::string &type);
@@ -120,27 +122,33 @@ public:
 	/// Gets the list of music to pick from.
 	std::vector<std::string> &getMusic();
 	/// Gets the minimum depth.
-	int getMinDepth();
+	int getMinDepth() const;
 	/// Gets the maximum depth.
-	int getMaxDepth();
+	int getMaxDepth() const;
 	/// Gets the minimum site depth.
-	int getMinSiteDepth();
+	int getMinSiteDepth() const;
 	/// Gets the maximum site depth.
-	int getMaxSiteDepth();
+	int getMaxSiteDepth() const;
 	/// Gets the target type for this mission.
-	int getObjectiveType();
+	int getObjectiveType() const;
 	/// Gets a fixed number of objectives requires (if any).
-	int getObjectivesRequired();
+	int getObjectivesRequired() const;
 	/// Gets the string to pop up when the mission objectives are complete.
-	std::string getObjectivePopup();
+	std::string getObjectivePopup() const;
 	/// Fills out the objective complete info.
-	bool getObjectiveCompleteInfo(std::string &text, int &score);
+	bool getObjectiveCompleteInfo(std::string &text, int &score) const;
 	/// Fills out the objective failed info.
-	bool getObjectiveFailedInfo(std::string &text, int &score);
+	bool getObjectiveFailedInfo(std::string &text, int &score) const;
 	/// Gets the score penalty XCom receives for ignoring this site.
 	int getDespawnPenalty() const;
 	/// Gets the (half hourly) score penalty XCom receives for this site existing.
 	int getPoints() const;
+	/// Gets the turn limit for this deployment.
+	int getTurnLimit() const;
+	/// Gets the action that triggers when the timer runs out.
+	ChronoTrigger getChronoTrigger() const;
+	/// Gets which turn the aliens start cheating on.
+	int getCheatTurn() const;
 };
 
 }

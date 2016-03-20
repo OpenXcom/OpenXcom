@@ -33,12 +33,14 @@ public:
 	StatStringCondition(const std::string &conditionName, int minVal, int maxVal);
 	/// Cleans up the StatStringCondition.
 	virtual ~StatStringCondition();
-	/// Get MinVal.
-	std::string getConditionName();
-	/// Get MinVal.
-	int getMinVal();
-	/// Get MaxVal.
-	int getMaxVal();
+	/// Gets the condition name.
+	std::string getConditionName() const;
+	/// Gets the minimum value.
+	int getMinVal() const;
+	/// Gets the maximum value.
+	int getMaxVal() const;
+	/// Checks if the condition has been met.
+	bool isMet(int stat, bool psi) const;
 };
 
 }

@@ -35,19 +35,19 @@ class TextList;
 class ManufactureStartState : public State
 {
 private:
-	Base * _base;
-	RuleManufacture * _item;
-	Window * _window;
-	TextButton * _btnCancel, * _btnStart;
-	Text * _txtTitle, * _txtManHour, * _txtCost, * _txtWorkSpace, * _txtRequiredItemsTitle, * _txtItemNameColumn, * _txtUnitRequiredColumn, * _txtUnitAvailableColumn;
-	TextList * _lstRequiredItems;
+	Base *_base;
+	RuleManufacture *_item;
+	Window *_window;
+	TextButton *_btnCancel, *_btnStart;
+	Text *_txtTitle, *_txtManHour, *_txtCost, *_txtWorkSpace, *_txtRequiredItemsTitle, *_txtItemNameColumn, *_txtUnitRequiredColumn, *_txtUnitAvailableColumn;
+	TextList *_lstRequiredItems;
 public:
 	/// Creates the State.
-	ManufactureStartState(Base * base, RuleManufacture * item);
+	ManufactureStartState(Base *base, RuleManufacture *item);
 	/// Handler for the Cancel button.
-	void btnCancelClick(Action * action);
+	void btnCancelClick(Action *action);
 	/// Handler for the start button.
-	void btnStartClick(Action * action);
+	void btnStartClick(Action *action);
 };
 
 }

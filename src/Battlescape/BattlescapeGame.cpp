@@ -239,8 +239,8 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	}
 
 	_AIActionCounter = action.number;
-
-	if (!unit->getMainHandWeapon() || !unit->getMainHandWeapon()->getAmmoItem())
+	BattleItem *weapon = unit->getMainHandWeapon();
+	if (!weapon || !weapon->getAmmoItem())
 	{
 		if (unit->getOriginalFaction() == FACTION_HOSTILE && unit->getVisibleUnits()->empty())
 		{
@@ -450,15 +450,61 @@ void BattlescapeGame::endTurn()
 	// if all units from either faction are killed - the mission is over.
 	int liveAliens = 0;
 	int liveSoldiers = 0;
+	int inExit = 0;
 
-	tallyUnits(liveAliens, liveSoldiers);
+	// Calculate values
+	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	{
+		if (!(*j)->isOut())
+		{
+			if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
+			{
+				if (!Options::allowPsionicCapture || (*j)->getFaction() != FACTION_PLAYER)
+				{
+					liveAliens++;
+				}
+			}
+			else if ((*j)->getOriginalFaction() == FACTION_PLAYER)
+			{
+				if ((*j)->isInExitArea(END_POINT))
+				{
+					inExit++;
+				}
+				if ((*j)->getFaction() == FACTION_PLAYER)
+				{
+					liveSoldiers++;
+				}
+				else
+				{
+					liveAliens++;
+				}
+			}
+		}
+	}
 
 	if (_save->allObjectivesDestroyed() && _save->getObjectiveType() == MUST_DESTROY)
 	{
 		_parentState->finishBattle(false, liveSoldiers);
 		return;
 	}
-
+	if (_save->getTurnLimit() > 0 && _save->getTurn() > _save->getTurnLimit())
+	{
+		switch (_save->getChronoTrigger())
+		{
+		case FORCE_ABORT:
+			_save->setAborted(true);
+			_parentState->finishBattle(true, inExit);
+			return;
+		case FORCE_WIN:
+			_parentState->finishBattle(false, liveSoldiers);
+			return;
+		case FORCE_LOSE:
+		default:
+			_save->setAborted(true);
+			_parentState->finishBattle(true, 0);
+			return;
+		}
+	}
 
 	if (liveAliens > 0 && liveSoldiers > 0)
 	{
@@ -612,10 +658,16 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			}
 		}
 
+		bool noSound = false;
+		bool noCorpse = false;
 		if ((*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
 		{
 			if ((*j)->getHealth() == 0)
 			{
+				if ((*j)->getStatus() == STATUS_UNCONSCIOUS)
+				{
+					noCorpse = true;
+				}
 				if (murderer)
 				{
 					murderer->addKillCount();
@@ -676,26 +728,27 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				}
 				if (murderweapon)
 				{
-					statePushNext(new UnitDieBState(this, (*j), murderweapon->getRules()->getDamageType(), false));
+					statePushNext(new UnitDieBState(this, (*j), murderweapon->getRules()->getDamageType(), noSound, noCorpse));
 				}
 				else
 				{
 					if (hiddenExplosion)
 					{
 						// this is instant death from UFO powersources, without screaming sounds
-						statePushNext(new UnitDieBState(this, (*j), DT_HE, true));
+						noSound = true;
+						statePushNext(new UnitDieBState(this, (*j), DT_HE, noSound, noCorpse));
 					}
 					else
 					{
 						if (terrainExplosion)
 						{
 							// terrain explosion
-							statePushNext(new UnitDieBState(this, (*j), DT_HE, false));
+							statePushNext(new UnitDieBState(this, (*j), DT_HE, noSound, noCorpse));
 						}
 						else
 						{
 							// no murderer, and no terrain explosion, must be fatal wounds
-							statePushNext(new UnitDieBState(this, (*j), DT_NONE, false));  // DT_NONE = STR_HAS_DIED_FROM_A_FATAL_WOUND
+							statePushNext(new UnitDieBState(this, (*j), DT_NONE, noSound, noCorpse));  // DT_NONE = STR_HAS_DIED_FROM_A_FATAL_WOUND
 						}
 					}
 				}
@@ -718,7 +771,8 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				{
 					victim->getStatistics()->wasUnconcious = true;
 				}
-				statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));
+				noSound = true;
+				statePushNext(new UnitDieBState(this, (*j), DT_STUN, noSound, noCorpse));
 			}
 		}
 	}
@@ -1450,7 +1504,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				_save->getPathfinding()->removePreview();
 			}
 			_currentAction.run = false;
-			_currentAction.strafe = Options::strafe && modifierPressed && _save->getSelectedUnit()->getTurretType() == -1;
+			_currentAction.strafe = Options::strafe && modifierPressed && _save->getSelectedUnit()->getArmor()->getSize() == 1;
 			if (_currentAction.strafe && _save->getTileEngine()->distance(_currentAction.actor->getPosition(), pos) > 1)
 			{
 				_currentAction.run = true;

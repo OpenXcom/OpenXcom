@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "TransferItemsState.h"
+#include <algorithm>
 #include <sstream>
 #include <climits>
 #include <cfloat>
@@ -405,7 +406,7 @@ void TransferItemsState::completeTransfer()
 							t->setCraft(*c);
 							_baseTo->getTransfers()->push_back(t);
 						}
-						// Clear Hangar
+						// Clear hangar
 						for (std::vector<BaseFacility*>::iterator f = _baseFrom->getFacilities()->begin(); f != _baseFrom->getFacilities()->end(); ++f)
 						{
 							if ((*f)->getCraft() == *c)

@@ -21,7 +21,6 @@
 #include "../Engine/Game.h"
 #include "../Mod/Mod.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -183,10 +182,6 @@ void ManufactureState::fillProductionList()
 		{
 			int timeLeft = (*iter)->getAmountTotal() * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent();
 			int numEffectiveEngineers = (*iter)->getAssignedEngineers();
-			if (!Options::canManufactureMoreItemsPerHour)
-			{
-				numEffectiveEngineers = std::min(numEffectiveEngineers, (*iter)->getRules()->getManufactureTime());
-			}
 			// ensure we round up since it takes an entire hour to manufacture any part of that hour's capacity
 			int hoursLeft = (timeLeft + numEffectiveEngineers - 1) / numEffectiveEngineers;
 			int daysLeft = hoursLeft / 24;

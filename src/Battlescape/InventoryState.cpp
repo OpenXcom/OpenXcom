@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "InventoryState.h"
+#include <algorithm>
 #include "Inventory.h"
 #include "../Engine/Game.h"
 #include "../Engine/FileMap.h"
@@ -36,7 +37,6 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
-#include "../Mod/AlienDeployment.h"
 #include "../Mod/RuleItem.h"
 #include "../Mod/RuleInventory.h"
 #include "../Mod/Armor.h"

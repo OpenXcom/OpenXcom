@@ -45,7 +45,7 @@ public:
 	void setSellItems (bool);
 	productionProgress_e step(Base * b, SavedGame * g, const Mod *m);
 	const RuleManufacture * getRules() const;
-	void startItem(Base * b, SavedGame * g);
+	void startItem(Base * b, SavedGame * g, const Mod *m);
 	YAML::Node save() const;
 	void load(const YAML::Node &node);
 private:
@@ -55,8 +55,8 @@ private:
 	int _timeSpent;
 	int _engineers;
 	bool _sell;
-	bool haveEnoughMoneyForOneMoreUnit(SavedGame * g);
-	bool haveEnoughMaterialsForOneMoreUnit(Base * b);
+	bool haveEnoughMoneyForOneMoreUnit(SavedGame * g) const;
+	bool haveEnoughMaterialsForOneMoreUnit(Base * b, const Mod *m) const;
 };
 
 }

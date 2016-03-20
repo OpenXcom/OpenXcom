@@ -39,7 +39,6 @@ class Font
 {
 private:
 	static std::wstring _index;
-	static SDL_Color _palette[6];
 	Surface *_surface;
 	int _width, _height, _spacing;
 	std::map<wchar_t, SDL_Rect> _chars;
@@ -77,8 +76,6 @@ public:
 	SDL_Rect getCharSize(wchar_t c);
 	/// Gets the font's surface.
 	Surface *getSurface() const;
-
-	void fix(const std::string &file, int width);
 };
 
 }

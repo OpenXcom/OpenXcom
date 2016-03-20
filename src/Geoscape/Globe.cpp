@@ -1600,10 +1600,13 @@ void Globe::mouseOver(Action *action, State *state)
 
 		_isMouseScrolled = true;
 
-		// Set the mouse cursor back
-		SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-		SDL_WarpMouse((_game->getScreen()->getWidth() - 100) / 2 , _game->getScreen()->getHeight() / 2);
-		SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
+		if (Options::touchEnabled == false)
+		{
+			// Set the mouse cursor back
+			SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
+			SDL_WarpMouse((_game->getScreen()->getWidth() - 100) / 2 , _game->getScreen()->getHeight() / 2);
+			SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
+		}
 
 		// Check the threshold
 		_totalMouseMoveX += action->getDetails()->motion.xrel;
@@ -1626,13 +1629,18 @@ void Globe::mouseOver(Action *action, State *state)
 			center(_cenLon + newLon / (Options::geoScrollSpeed / 10), _cenLat + newLat / (Options::geoScrollSpeed / 10));
 		}
 
-		// We don't want to look the mouse-cursor jumping :)
-		action->setMouseAction(_xBeforeMouseScrolling, _yBeforeMouseScrolling, getX(), getY());
-		action->getDetails()->motion.x = _xBeforeMouseScrolling; action->getDetails()->motion.y = _yBeforeMouseScrolling;
+		if (Options::touchEnabled == false)
+		{
+			// We don't want to see the mouse-cursor jumping :)
+			action->setMouseAction(_xBeforeMouseScrolling, _yBeforeMouseScrolling, getX(), getY());
+			action->getDetails()->motion.x = _xBeforeMouseScrolling; action->getDetails()->motion.y = _yBeforeMouseScrolling;
+		}
+
 		_game->getCursor()->handle(action);
 	}
 
-	if (_isMouseScrolling &&
+	if (Options::touchEnabled == false &&
+		_isMouseScrolling &&
 		(action->getDetails()->motion.x != _xBeforeMouseScrolling ||
 		action->getDetails()->motion.y != _yBeforeMouseScrolling))
 	{
