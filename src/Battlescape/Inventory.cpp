@@ -40,6 +40,7 @@
 #include "WarningMessage.h"
 #include "../Savegame/Tile.h"
 #include "PrimeGrenadeState.h"
+#include "../Engine/Screen.h"
 
 namespace OpenXcom
 {
@@ -857,8 +858,8 @@ void Inventory::arrangeGround(bool alterOffset)
 {
 	RuleInventory *ground = _game->getMod()->getInventory("STR_GROUND");
 
-	int slotsX = (320 - ground->getX()) / RuleInventory::SLOT_W;
-	int slotsY = (200 - ground->getY()) / RuleInventory::SLOT_H;
+	int slotsX = (Screen::ORIGINAL_WIDTH - ground->getX()) / RuleInventory::SLOT_W;
+	int slotsY = (Screen::ORIGINAL_HEIGHT - ground->getY()) / RuleInventory::SLOT_H;
 	int x = 0;
 	int y = 0;
 	bool ok = false;
@@ -928,9 +929,9 @@ void Inventory::arrangeGround(bool alterOffset)
 	}
 	if (alterOffset)
 	{
-		if (xMax >= _groundOffset + slotsX - 1)
+		if (xMax >= _groundOffset + slotsX)
 		{
-			_groundOffset += slotsX - 1;
+			_groundOffset += slotsX;
 		}
 		else
 		{
