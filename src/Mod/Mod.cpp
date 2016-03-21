@@ -2273,9 +2273,14 @@ const std::vector<MapScript*> *Mod::getMapScript(std::string id) const
 	}
 }
 
-const std::map<std::string, RuleVideo *> *Mod::getVideos() const
+/**
+ * Returns the data for the specified video cutscene.
+ * @param id Video id.
+ * @return A pointer to the data for the specified video.
+ */
+RuleVideo *Mod::getVideo(const std::string &id) const
 {
-	return &_videos;
+	return getRule(id, "Video", _videos);
 }
 
 const std::map<std::string, RuleMusic *> *Mod::getMusic() const

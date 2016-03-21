@@ -33,6 +33,7 @@
 #include "../Mod/Mod.h"
 #include "../Engine/Sound.h"
 #include "../Mod/RuleInterface.h"
+#include "StatisticsState.h"
 
 namespace OpenXcom
 {
@@ -156,19 +157,29 @@ void LoadGameState::think()
 		{
 			s->load(_filename, _game->getMod());
 			_game->setSavedGame(s);
-			Options::baseXResolution = Options::baseXGeoscape;
-			Options::baseYResolution = Options::baseYGeoscape;
-			_game->getScreen()->resetDisplay(false);
-			_game->setState(new GeoscapeState);
-			if (_game->getSavedGame()->getSavedBattle() != 0)
+			if (_game->getSavedGame()->getEnding() != END_NONE)
 			{
-				_game->getSavedGame()->getSavedBattle()->loadMapResources(_game->getMod());
-				Options::baseXResolution = Options::baseXBattlescape;
-				Options::baseYResolution = Options::baseYBattlescape;
+				Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+				Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
 				_game->getScreen()->resetDisplay(false);
-				BattlescapeState *bs = new BattlescapeState;
-				_game->pushState(bs);
-				_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
+				_game->setState(new StatisticsState);
+			}
+			else
+			{
+				Options::baseXResolution = Options::baseXGeoscape;
+				Options::baseYResolution = Options::baseYGeoscape;
+				_game->getScreen()->resetDisplay(false);
+				_game->setState(new GeoscapeState);
+				if (_game->getSavedGame()->getSavedBattle() != 0)
+				{
+					_game->getSavedGame()->getSavedBattle()->loadMapResources(_game->getMod());
+					Options::baseXResolution = Options::baseXBattlescape;
+					Options::baseYResolution = Options::baseYBattlescape;
+					_game->getScreen()->resetDisplay(false);
+					BattlescapeState *bs = new BattlescapeState;
+					_game->pushState(bs);
+					_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
+				}
 			}
 		}
 		catch (Exception &e)

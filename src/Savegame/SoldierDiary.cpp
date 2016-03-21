@@ -847,7 +847,15 @@ void SoldierDiary::addMonthlyService()
 }
 
 /**
- *  Award special commendation to the original 8 soldiers.
+ * Returns the total months this soldier has been in service.
+ */
+int SoldierDiary::getMonthsService() const
+{
+	return _monthsService;
+}
+
+/**
+ * Award special commendation to the original 8 soldiers.
  */
 void SoldierDiary::awardOriginalEightCommendation()
 {
@@ -855,7 +863,7 @@ void SoldierDiary::awardOriginalEightCommendation()
 }
 
 /**
- *  Award post-humous best-of commendation.
+ * Award post-humous best-of commendation.
  */
 void SoldierDiary::awardBestOfRank(SoldierRank rank)
 {
@@ -863,7 +871,7 @@ void SoldierDiary::awardBestOfRank(SoldierRank rank)
 }
 
 /**
- *  Award post-humous best-of commendation.
+ * Award post-humous best-of commendation.
  */
 void SoldierDiary::awardBestOverall()
 {
@@ -871,7 +879,7 @@ void SoldierDiary::awardBestOverall()
 }
 
 /**
- *  Award post-humous kills commendation.
+ * Award post-humous kills commendation.
  */
 void SoldierDiary::awardPostMortemKill(int kills)
 {

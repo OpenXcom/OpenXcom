@@ -134,6 +134,8 @@ public:
 	bool manageCommendations(Mod *rules);
 	/// Increment the soldier's service time.
 	void addMonthlyService();
+	/// Get the total months in service.
+	int getMonthsService() const;
     /// Get the mission id list.
     std::vector<int> &getMissionIdList();
     /// Get the kill list.

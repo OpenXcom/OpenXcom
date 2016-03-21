@@ -28,6 +28,8 @@
 #include "../Engine/Screen.h"
 #include "../Engine/FileMap.h"
 #include "../Mod/Mod.h"
+#include "../Savegame/SavedGame.h"
+#include "StatisticsState.h"
 
 namespace OpenXcom
 {
@@ -53,22 +55,25 @@ void CutsceneState::init()
 	// pop self off stack and replace with actual player state
 	_game->popState();
 
-	const std::map<std::string, RuleVideo*> *videoMods = _game->getMod()->getVideos();
-	std::map<std::string, RuleVideo*>::const_iterator videoRuleIt = videoMods->find(_cutsceneId);
-
-	if (videoRuleIt == videoMods->end())
+	if (_cutsceneId == WIN_GAME || _cutsceneId == LOSE_GAME)
 	{
-		Log(LOG_WARNING) << "cutscene definition not found: " << _cutsceneId;
+		if (_game->getSavedGame()->getMonthsPassed() > -1)
+		{
+			_game->setState(new StatisticsState);
+		}
+		else
+		{
+			_game->setSavedGame(0);
+			_game->setState(new GoToMainMenuState);
+		}
+	}
+
+	const RuleVideo *videoRule = _game->getMod()->getVideo(_cutsceneId);
+	if (videoRule == 0)
+	{
 		return;
 	}
 
-	if (_cutsceneId == WIN_GAME || _cutsceneId == LOSE_GAME)
-	{
-		_game->setSavedGame(0);
-		_game->setState(new GoToMainMenuState);
-	}
-
-	const RuleVideo *videoRule = videoRuleIt->second;
 	bool fmv = false, slide = false;
 	if (!videoRule->getVideos()->empty())
 	{
