@@ -936,14 +936,14 @@ bool Pathfinding::previewPath(bool bRemove)
 		int dir = *i;
 		int tu = getTUCost(pos, dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
 		int energyUse = tu;
-		if (running)
-		{
-			tu *= 0.75;
-			energyUse *= 1.5;
-		}
 		if (dir >= Pathfinding::DIR_UP)
 		{
 			energyUse = 0;
+		}
+		else if (running)
+		{
+			tu *= 0.75;
+			energyUse *= 1.5;
 		}
 		energy -= energyUse / 2;
 		tus -= tu;
