@@ -242,6 +242,7 @@ MonthlyReportState::~MonthlyReportState()
  */
 void MonthlyReportState::init()
 {
+	State::init();
 	if (_gameOver)
 	{
 		_game->getSavedGame()->setEnding(END_LOSE);
