@@ -41,7 +41,7 @@ class Font
 private:
 	std::vector<Surface*> _surfaces;
 	int _width, _height, _spacing;
-	std::map<wchar_t, std::pair<size_t, SDL_Rect>> _chars;
+	std::map< wchar_t, std::pair<size_t, SDL_Rect> > _chars;
 	bool _monospace;
 	/// Determines the size and position of each character in the font.
 	void init(size_t index, const std::wstring &str);
