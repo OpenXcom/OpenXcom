@@ -572,7 +572,7 @@ void Mod::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); ++i)
 	{
-		i->second->getSurface()->setPalette(colors, firstcolor, ncolors);
+		i->second->setPalette(colors, firstcolor, ncolors);
 	}
 	for (std::map<std::string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
@@ -2914,8 +2914,7 @@ void Mod::loadExtraResources()
 {
 	// Load fonts
 	YAML::Node doc = YAML::LoadFile(FileMap::getFilePath("Language/" + _fontName));
-	Log(LOG_INFO) << "Loading font... " << _fontName;
-	Font::setIndex(Language::utf8ToWstr(doc["chars"].as<std::string>()));
+	Log(LOG_INFO) << "Loading fonts... " << _fontName;
 	for (YAML::const_iterator i = doc["fonts"].begin(); i != doc["fonts"].end(); ++i)
 	{
 		std::string id = (*i)["id"].as<std::string>();
