@@ -416,7 +416,7 @@ void VideoState::init()
 		{
 			// ensure user can hear both music and sound effects for the
 			// vanilla intro sequence
-			Options::musicVolume = Options::soundVolume = std::max(prevMusicVol, prevSoundVol/8);
+			Options::musicVolume = Options::soundVolume = std::max(prevMusicVol, prevSoundVol);
 			_game->setVolume(Options::soundVolume, Options::musicVolume, -1);
 		}
 	}
