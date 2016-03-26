@@ -1363,7 +1363,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 		if ((*it)->getRules()->getName() == _game->getMod()->getAlienFuelName())
 		{
 			// special case of an item counted as a stat
-			addStat(_game->getMod()->getAlienFuelName(), _game->getMod()->getAlienFuelQuantity(), 5);
+			addStat(_game->getMod()->getAlienFuelName(), _game->getMod()->getAlienFuelQuantity(), (*it)->getRules()->getRecoveryPoints());
 		}
 		else
 		{
