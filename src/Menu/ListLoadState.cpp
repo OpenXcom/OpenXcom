@@ -66,7 +66,7 @@ ListLoadState::~ListLoadState()
  */
 void ListLoadState::btnOldClick(Action *)
 {
-	_game->pushState(new ListLoadOriginalState);
+	_game->pushState(new ListLoadOriginalState(_origin));
 }
 
 /**

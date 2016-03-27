@@ -41,8 +41,9 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Saved Game screen.
  * @param game Pointer to the core game.
+ * @param origin Game section that originated this state.
  */
-ListLoadOriginalState::ListLoadOriginalState()
+ListLoadOriginalState::ListLoadOriginalState(OptionsOrigin origin) : _origin(origin)
 {
 	_screen = false;
 
@@ -56,7 +57,7 @@ ListLoadOriginalState::ListLoadOriginalState()
 	_txtDate = new Text(90, 9, 225, 24);
 
 	// Set palette
-	setInterface("saveMenus");
+	setInterface("geoscape", true, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : 0);
 
 	add(_window, "window", "saveMenus");
 	add(_btnNew, "button", "saveMenus");
@@ -126,6 +127,19 @@ ListLoadOriginalState::ListLoadOriginalState()
 ListLoadOriginalState::~ListLoadOriginalState()
 {
 
+}
+
+/**
+* Refreshes the saves list.
+*/
+void ListLoadOriginalState::init()
+{
+	State::init();
+
+	if (_origin == OPT_BATTLESCAPE)
+	{
+		applyBattlescapeTheme();
+	}
 }
 
 /**

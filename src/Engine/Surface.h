@@ -63,6 +63,8 @@ public:
 	void clear(Uint32 color = 0);
 	/// Offsets the surface's colors by a set amount.
 	void offset(int off, int min = -1, int max = -1, int mul = 1);
+	/// Offsets the surface's colors in a color block.
+	void offsetBlock(int off, int blk = 16, int mul = 1);
 	/// Inverts the surface's colors.
 	void invert(Uint8 mid);
 	/// Runs surface functionality every cycle
