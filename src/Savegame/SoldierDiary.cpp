@@ -887,6 +887,16 @@ void SoldierDiary::awardPostMortemKill(int kills)
 }
 
 /**
+ *  Get the soldier's accuracy.
+ */
+int SoldierDiary::getAccuracy() const
+{
+	if (_shotsFiredCounterTotal == 0)
+		return 0;
+	return _shotsLandedCounterTotal / _shotsFiredCounterTotal;
+}
+
+/**
  * Initializes a new commendation entry from YAML.
  * @param node YAML node.
  */
