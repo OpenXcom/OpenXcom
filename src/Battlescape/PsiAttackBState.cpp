@@ -169,7 +169,7 @@ void PsiAttackBState::psiAttack()
 			{
 				killStat.status = STATUS_PANICKING;
 				_unit->getStatistics()->kills.push_back(new BattleUnitKills(killStat));
-				_target->setMurdererId(_unit->getId());
+				_target->setMindControllerId(_unit->getId());
 			}
 			if (_parent->getSave()->getSide() == FACTION_PLAYER)
 			{
@@ -183,7 +183,7 @@ void PsiAttackBState::psiAttack()
 			{
 				killStat.status = STATUS_TURNING;
 				_unit->getStatistics()->kills.push_back(new BattleUnitKills(killStat));
-				_target->setMurdererId(_unit->getId());
+				_target->setMindControllerId(_unit->getId());
 			}
 			_target->convertToFaction(_unit->getFaction());
 			_parent->getTileEngine()->calculateFOV(_target->getPosition());

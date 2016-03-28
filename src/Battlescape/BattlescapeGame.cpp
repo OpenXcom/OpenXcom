@@ -639,7 +639,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				// This must be a mind controlled unit. Find out who mind controlled him and award the kill to that unit.
 				for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 				{
-					if ((*i)->getId() == murderer->getMurdererId() && (*i)->getGeoscapeSoldier())
+					if ((*i)->getId() == murderer->getMindControllerId() && (*i)->getGeoscapeSoldier())
 					{
 						(*i)->getStatistics()->kills.push_back(new BattleUnitKills(killStat));
 						if (victim->getFaction() == FACTION_HOSTILE)
