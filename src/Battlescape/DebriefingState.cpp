@@ -726,6 +726,16 @@ void DebriefingState::prepareDebriefing()
 					break;
 				}
 			}
+			// Loop through the UFOs and see which one is sitting on top of the base... that is probably the one attacking you.
+			for (std::vector<Ufo*>::iterator k = save->getUfos()->begin(); k != save->getUfos()->end(); ++k)
+			{
+				if ((*k)->getLongitude() == base->getLongitude() && (*k)->getLatitude() == base->getLatitude())
+				{
+					_missionStatistics->ufo = (*k)->getRules()->getType();
+					_missionStatistics->alienRace = (*k)->getAlienRace();
+					break;
+				}
+			}
 			if (aborted)
 			{
 				_destroyBase = true;
