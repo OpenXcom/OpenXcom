@@ -291,14 +291,14 @@ void UnitWalkBState::think()
 				tu = 0;
 			}
 			int energy = tu;
-			if (_action.run)
-			{
-				tu *= 0.75;
-				energy *= 1.5;
-			}
 			if (dir >= Pathfinding::DIR_UP)
 			{
 				energy = 0;
+			}
+			else if (_action.run)
+			{
+				tu *= 0.75;
+				energy *= 1.5;
 			}
 			if (tu > _unit->getTimeUnits())
 			{
