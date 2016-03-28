@@ -42,10 +42,30 @@ namespace OpenXcom
 		_lstInfo->setDot(true);
 
 		std::wostringstream ss;
-		int row = 0;
+		int row = 0, offy=0;
+		if (facility->getDefenseValue() > 0)
+			offy += 16;
+		if (facility->getRadarRange() > 0)
+			offy += 16;
+		if (facility->getStorage() > 0)
+			offy += 8;
+		if (facility->getPersonnel() > 0)
+			offy += 8;
+		if (facility->getAliens() > 0)
+			offy += 8;
+		if (facility->getCrafts() > 0)
+			offy += 8;
+		if (facility->getLaboratories() > 0)
+			offy += 8;
+		if (facility->getWorkshops() > 0)
+			offy += 8;
+		if (facility->getPsiLaboratories() > 0)
+			offy += 8;
+		if (offy)
+			_lstInfo->setY(_lstInfo->getY() - offy);
+
 		if (facility->getDefenseValue() > 0)
 		{
-			_lstInfo->setY(_lstInfo->getY() - 16);
 			ss.str(L"");ss.clear();
 			ss << facility->getDefenseValue();
 			_lstInfo->addRow(2, tr("STR_DEFENSE_VALUE").c_str(), ss.str().c_str());
@@ -56,7 +76,70 @@ namespace OpenXcom
 			_lstInfo->addRow(2, tr("STR_HIT_RATIO").c_str(), ss.str().c_str());
 			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
 		}
-		
+		if (facility->getRadarRange() > 0)
+		{
+			ss.str(L""); ss.clear();
+			ss << facility->getRadarRange();
+			_lstInfo->addRow(2, tr("STR_RADAR_RANGE").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
+
+			ss.str(L""); ss.clear();
+			ss << Text::formatPercentage(facility->getRadarChance());
+			if (facility->isHyperwave())
+				ss << tr("STR_HYPERWAVE_MARK");
+			_lstInfo->addRow(2, tr("STR_RADAR_CHANCE").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
+		}
+		if (facility->getStorage() > 0)
+		{
+			ss.str(L""); ss.clear();
+			ss << facility->getStorage();
+			_lstInfo->addRow(2, tr("STR_STORAGE_CAP").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
+		}
+		if (facility->getPersonnel() > 0)
+		{
+			ss.str(L""); ss.clear();
+			ss << facility->getPersonnel();
+			_lstInfo->addRow(2, tr("STR_PERSONNEL_CAP").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
+		}
+		if (facility->getAliens() > 0)
+		{
+			ss.str(L""); ss.clear();
+			ss << facility->getAliens();
+			_lstInfo->addRow(2, tr("STR_ALIENS_CAP").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
+		}
+		if (facility->getCrafts() > 0)
+		{
+			ss.str(L""); ss.clear();
+			ss << facility->getCrafts();
+			_lstInfo->addRow(2, tr("STR_CRAFT_CAP").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
+		}
+		if (facility->getLaboratories() > 0)
+		{
+			ss.str(L""); ss.clear();
+			ss << facility->getLaboratories();
+			_lstInfo->addRow(2, tr("STR_LABORATORY_CAP").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
+		}
+		if (facility->getWorkshops() > 0)
+		{
+			ss.str(L""); ss.clear();
+			ss << facility->getWorkshops();
+			_lstInfo->addRow(2, tr("STR_WORKSHOP_CAP").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
+		}
+		if (facility->getPsiLaboratories() > 0)
+		{
+			ss.str(L""); ss.clear();
+			ss << facility->getPsiLaboratories();
+			_lstInfo->addRow(2, tr("STR_PSILAB_CAP").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
+		}
+
 		ss.str(L"");ss.clear();
 		_lstInfo->addRow(2, tr("STR_CONSTRUCTION_TIME").c_str(), tr("STR_DAY", facility->getBuildTime()).c_str());
 		_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
