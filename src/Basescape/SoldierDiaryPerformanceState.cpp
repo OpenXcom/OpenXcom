@@ -65,7 +65,7 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
     _btnOk = new TextButton(70, 16, 242, 176);
 	_txtTitle = new Text(310, 16, 5, 8);
 	_lstPerformance = new TextList(288, 128, 8, 28);
-	_lstKillTotals = new TextList(302, 9, 8, 164);
+	_lstKillTotals = new TextList(302, 18, 8, 156);
 	_lstMissionTotals = new TextList(302, 9, 8, 164);
     // Commendation stats
     _txtMedalName = new Text(120, 18, 16, 36);
@@ -265,6 +265,7 @@ void SoldierDiaryPerformanceState::init()
 			}
 		}
 
+		_lstKillTotals->addRow(1, tr("STR_DIARY_ACCURACY").arg(_soldier->getDiary()->getAccuracy()).c_str());
 		if (_soldier->getCurrentStats()->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getMod()->getPsiRequirements())))
 		{
 			_lstKillTotals->addRow(4, tr("STR_KILLS").arg(_soldier->getDiary()->getKillTotal()).c_str(),
@@ -275,8 +276,9 @@ void SoldierDiaryPerformanceState::init()
 		else
 		{
 			_lstKillTotals->addRow(2, tr("STR_KILLS").arg(_soldier->getDiary()->getKillTotal()).c_str(),
-				tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str());
-		}
+										tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str());
+		}		
+		
 	}
 	else if (_display == DIARY_MISSIONS)
 	{

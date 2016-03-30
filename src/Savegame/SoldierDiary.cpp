@@ -301,6 +301,8 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 	_totalShotFriendlyCounter += unitStatistics->shotFriendlyCounter;
 	_longDistanceHitCounterTotal += unitStatistics->longDistanceHitCounter;
 	_lowAccuracyHitCounterTotal += unitStatistics->lowAccuracyHitCounter;
+	_shotsFiredCounterTotal += unitStatistics->shotsFiredCounter;
+	_shotsLandedCounterTotal += unitStatistics->shotsLandedCounter;
 	if (missionStatistics->valiantCrux)
 		_valiantCruxTotal++;
 	if (unitStatistics->KIA)
@@ -893,7 +895,7 @@ int SoldierDiary::getAccuracy() const
 {
 	if (_shotsFiredCounterTotal == 0)
 		return 0;
-	return _shotsLandedCounterTotal / _shotsFiredCounterTotal;
+	return 100 * _shotsLandedCounterTotal / _shotsFiredCounterTotal;
 }
 
 /**
