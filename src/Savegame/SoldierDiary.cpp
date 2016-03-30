@@ -893,9 +893,9 @@ void SoldierDiary::awardPostMortemKill(int kills)
  */
 int SoldierDiary::getAccuracy() const
 {
-	if (_shotsFiredCounterTotal == 0)
-		return 0;
-	return 100 * _shotsLandedCounterTotal / _shotsFiredCounterTotal;
+	if (_shotsFiredCounterTotal != 0)
+		return 100 * _shotsLandedCounterTotal / _shotsFiredCounterTotal;
+	return 0;
 }
 
 /**
