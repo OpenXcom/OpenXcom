@@ -37,13 +37,13 @@ SoldierDiary::SoldierDiary(const YAML::Node &node)
 /**
  * Initializes a new blank diary.
  */
-SoldierDiary::SoldierDiary() : _scoreTotal(0), _killTotal(0), _winTotal(0), _stunTotal(0), _daysWoundedTotal(0), _baseDefenseMissionTotal(0), _totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0),
+SoldierDiary::SoldierDiary() : _scoreTotal(0), _winTotal(0), _daysWoundedTotal(0), _baseDefenseMissionTotal(0), _totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0),
 	_loneSurvivorTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0), _nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0),
 	_shotAtCounterTotal(0), _hitCounterTotal(0), _ironManTotal(0), _importantMissionTotal(0), _longDistanceHitCounterTotal(0),
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
 	_reactionFireTotal(0), _timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0), _trapKillTotal(0), _alienBaseAssaultTotal(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0),
     _woundsHealedTotal(0), _allUFOs(0), _allMissionTypes(0), _statGainTotal(0), _revivedUnitTotal(0), _wholeMedikitTotal(0), _braveryGainTotal(0), _bestOfRank(0),
-    _MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _slaveKillsTotal(0), _panickTotal(0), _controlTotal(0), _lootValueTotal(0), _bestSoldier(false), _globeTrotter(false)
+    _MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _slaveKillsTotal(0), _lootValueTotal(0), _bestSoldier(false), _globeTrotter(false)
 {
 }
 
@@ -93,9 +93,7 @@ void SoldierDiary::load(const YAML::Node& node)
 	_typeTotal = newTypeTotal;
 	_UFOTotal = node["UFOTotal"].as< std::map<std::string, int> >(_UFOTotal);
 	_scoreTotal = node["scoreTotal"].as<int>(_scoreTotal);
-	_killTotal = node["killTotal"].as<int>(_killTotal);
 	_winTotal = node["winTotal"].as<int>(_winTotal);
-	_stunTotal = node["stunTotal"].as<int>(_stunTotal);
 	_daysWoundedTotal = node["daysWoundedTotal"].as<int>(_daysWoundedTotal);
 	_baseDefenseMissionTotal = node["baseDefenseMissionTotal"].as<int>(_baseDefenseMissionTotal);
 	_totalShotByFriendlyCounter = node["totalShotByFriendlyCounter"].as<int>(_totalShotByFriendlyCounter);
@@ -136,8 +134,6 @@ void SoldierDiary::load(const YAML::Node& node)
     _postMortemKills = node["postMortemKills"].as<int>(_postMortemKills);
 	_globeTrotter = node["globeTrotter"].as<bool>(_globeTrotter);
 	_slaveKillsTotal = node["slaveKillsTotal"].as<int>(_slaveKillsTotal);
-    _panickTotal = node["panickTotal"].as<int>(_panickTotal);
-    _controlTotal = node["controlTotal"].as<int>(_controlTotal);
     _lootValueTotal = node["lootValueTotal"].as<int>(_lootValueTotal);
 }
 
@@ -158,9 +154,7 @@ YAML::Node SoldierDiary::save() const
     if (!_typeTotal.empty()) node["typeTotal"] = _typeTotal;
     if (!_UFOTotal.empty()) node["UFOTotal"] = _UFOTotal;
     if (_scoreTotal) node["scoreTotal"] = _scoreTotal;
-    if (_killTotal) node["killTotal"] = _killTotal;
     if (_winTotal) node["winTotal"] = _winTotal;
-    if (_stunTotal) node["stunTotal"] = _stunTotal;
     if (_daysWoundedTotal) node["daysWoundedTotal"] = _daysWoundedTotal;
     if (_baseDefenseMissionTotal) node["baseDefenseMissionTotal"] = _baseDefenseMissionTotal;
     if (_totalShotByFriendlyCounter) node["totalShotByFriendlyCounter"] = _totalShotByFriendlyCounter;
@@ -201,8 +195,6 @@ YAML::Node SoldierDiary::save() const
     if (_postMortemKills) node["postMortemKills"] = _postMortemKills;
 	if (_globeTrotter) node["globeTrotter"] = _globeTrotter;
 	if (_slaveKillsTotal) node["slaveKillsTotal"] = _slaveKillsTotal;
-    if (_panickTotal) node["panickTotal"] =_panickTotal;
-    if (_controlTotal) node["controlTotal"] = _controlTotal;
     if (_lootValueTotal) node["lootValueTotal"] = _lootValueTotal;
 	return node;
 }
@@ -221,22 +213,6 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
         _killList.push_back(*kill);
         if ((*kill)->faction == FACTION_HOSTILE)
         {
-            if ((*kill)->status == STATUS_DEAD)
-            {
-                _killTotal++;
-            }
-            else if ((*kill)->status == STATUS_UNCONSCIOUS)
-            {
-                _stunTotal++;
-            }
-            else if ((*kill)->status == STATUS_PANICKING)
-            {
-                _panickTotal++;
-            }
-            else if ((*kill)->status == STATUS_TURNING)
-            {
-                _controlTotal++;
-            }
             if ((*kill)->hostileTurn())
             {
 				RuleItem *item = rules->getItem((*kill)->weapon);
@@ -389,11 +365,11 @@ bool SoldierDiary::manageCommendations(Mod *mod)
 			}
             // These criteria have no nouns, so only the nextCommendationLevel["noNoun"] will ever be used.
 			else if( nextCommendationLevel.count("noNoun") == 1 &&
-				      ( ((*j).first == "totalKills" && _killList.size() < (unsigned int)(*j).second.at(nextCommendationLevel["noNoun"])) ||
+				  ( ((*j).first == "totalKills" && (unsigned int)getKillTotal() < (unsigned int)(*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalMissions" && _missionIdList.size() < (unsigned int)(*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalWins" && _winTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalScore" && _scoreTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalStuns" && _stunTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalStuns" && getStunTotal() < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalDaysWounded" && _daysWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalBaseDefenseMissions" && _baseDefenseMissionTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalTerrorMissions" && _terrorMissionTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
@@ -787,7 +763,17 @@ int SoldierDiary::getScoreTotal() const
  */
 int SoldierDiary::getKillTotal() const
 {
-	return _killTotal;
+	int killTotal = 0;
+		
+	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
+	{
+		if ((*i)->status == STATUS_DEAD && (*i)->faction == FACTION_HOSTILE)
+		{
+			killTotal++;
+		}
+	}
+	
+	return killTotal;
 }
 
 /**
@@ -811,7 +797,17 @@ int SoldierDiary::getWinTotal() const
  */
 int SoldierDiary::getStunTotal() const
 {
-	return _stunTotal;
+	int stunTotal = 0;
+	
+	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
+	{
+		if ((*i)->status == STATUS_UNCONSCIOUS && (*i)->faction == FACTION_HOSTILE)
+		{
+			stunTotal++;
+		}
+	}
+	
+	return stunTotal;
 }
 
 /**
@@ -819,7 +815,17 @@ int SoldierDiary::getStunTotal() const
  */
 int SoldierDiary::getPanickTotal() const
 {
-    return _panickTotal;
+	int panickTotal = 0;
+	
+	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
+	{
+		if ((*i)->status == STATUS_PANICKING && (*i)->faction == FACTION_HOSTILE)
+		{
+			panickTotal++;
+		}
+	}
+	
+	return panickTotal;
 }
 
 /**
@@ -827,7 +833,17 @@ int SoldierDiary::getPanickTotal() const
  */
 int SoldierDiary::getControlTotal() const
 {
-    return _controlTotal;
+	int controlTotal = 0;
+	
+	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
+	{
+		if ((*i)->status == STATUS_TURNING && (*i)->faction == FACTION_HOSTILE)
+		{
+			controlTotal++;
+		}
+	}
+	
+	return controlTotal;
 }
 
 /**
