@@ -41,7 +41,7 @@ SoldierDiary::SoldierDiary() : _scoreTotal(0), _winTotal(0), _daysWoundedTotal(0
 	_loneSurvivorTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0), _nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0),
 	_shotAtCounterTotal(0), _hitCounterTotal(0), _ironManTotal(0), _importantMissionTotal(0), _longDistanceHitCounterTotal(0),
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
-	_reactionFireTotal(0), _timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0), _trapKillTotal(0), _alienBaseAssaultTotal(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0),
+	_reactionFireTotal(0), _timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0), _alienBaseAssaultTotal(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0),
     _woundsHealedTotal(0), _allUFOs(0), _allMissionTypes(0), _statGainTotal(0), _revivedUnitTotal(0), _wholeMedikitTotal(0), _braveryGainTotal(0), _bestOfRank(0),
     _MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _slaveKillsTotal(0), _lootValueTotal(0), _bestSoldier(false), _globeTrotter(false)
 {
@@ -117,7 +117,6 @@ void SoldierDiary::load(const YAML::Node& node)
 	_reactionFireTotal = node["reactionFireTotal"].as<int>(_reactionFireTotal);
     _timesWoundedTotal = node["timesWoundedTotal"].as<int>(_timesWoundedTotal);
 	_valiantCruxTotal = node["valiantCruxTotal"].as<int>(_valiantCruxTotal);
-	_trapKillTotal = node["trapKillTotal"].as<int>(_trapKillTotal);
 	_alienBaseAssaultTotal = node["alienBaseAssaultTotal"].as<int>(_alienBaseAssaultTotal);
 	_allAliensKilledTotal = node["allAliensKilledTotal"].as<int>(_allAliensKilledTotal);
     _allAliensStunnedTotal = node["allAliensStunnedTotal"].as<int>(_allAliensStunnedTotal);
@@ -178,7 +177,6 @@ YAML::Node SoldierDiary::save() const
 	if (_reactionFireTotal) node["reactionFireTotal"] = _reactionFireTotal;
     if (_timesWoundedTotal) node["timesWoundedTotal"] = _timesWoundedTotal;
 	if (_valiantCruxTotal) node["valiantCruxTotal"] = _valiantCruxTotal;
-	if (_trapKillTotal) node["trapKillTotal"] = _trapKillTotal;
 	if (_alienBaseAssaultTotal) node["alienBaseAssaultTotal"] = _alienBaseAssaultTotal;
 	if (_allAliensKilledTotal) node["allAliensKilledTotal"] = _allAliensKilledTotal;
     if (_allAliensStunnedTotal) node["allAliensStunnedTotal"] = _allAliensStunnedTotal;
@@ -218,7 +216,7 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 				RuleItem *item = rules->getItem((*kill)->weapon);
                 if (item == 0 || item->getBattleType() == BT_GRENADE || item->getBattleType() == BT_PROXIMITYGRENADE)
                 {
-                    _trapKillTotal++;
+
                 }
                 else
                 {
@@ -390,7 +388,7 @@ bool SoldierDiary::manageCommendations(Mod *mod)
                     ((*j).first == "totalDaysWounded" && _daysWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalValientCrux" && _valiantCruxTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
 					((*j).first == "isDead" && _KIA < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalTrapKills" && _trapKillTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalTrapKills" && getTrapKillTotal() < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalAlienBaseAssaults" && _alienBaseAssaultTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalAllAliensKilled" && _allAliensKilledTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
                     ((*j).first == "totalAllAliensStunned" && _allAliensStunnedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
@@ -900,6 +898,25 @@ void SoldierDiary::awardBestOverall()
 void SoldierDiary::awardPostMortemKill(int kills)
 {
     _postMortemKills = kills;
+}
+
+/**
+ *  Get trap kills total.
+ */
+int SoldierDiary::getTrapKillTotal() const
+{
+	int trapKillTotal = 0;
+		
+	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
+	{
+		RuleItem *item = rules->getItem((*i)->weapon);
+		if ((*i)->hostileTurn() && (item == 0 || item->getBattleType() == BT_GRENADE || item->getBattleType() == BT_PROXIMITYGRENADE))
+		{
+			trapKillTotal++;
+		}
+	}
+	
+	return trapKillTotal;
 }
 
 /**

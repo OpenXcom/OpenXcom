@@ -77,7 +77,7 @@ private:
 	int _scoreTotal, _winTotal, _daysWoundedTotal, _baseDefenseMissionTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal,
 		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal, _ironManTotal,
 		_importantMissionTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal, _shotAtCounter10in1Mission,
-		_hitCounter5in1Mission, _reactionFireTotal, _timesWoundedTotal, _valiantCruxTotal, _KIA, _trapKillTotal, _alienBaseAssaultTotal, _allAliensKilledTotal, _allAliensStunnedTotal,
+		_hitCounter5in1Mission, _reactionFireTotal, _timesWoundedTotal, _valiantCruxTotal, _KIA, _alienBaseAssaultTotal, _allAliensKilledTotal, _allAliensStunnedTotal,
         _woundsHealedTotal, _allUFOs, _allMissionTypes, _statGainTotal, _revivedUnitTotal, _wholeMedikitTotal, _braveryGainTotal, _bestOfRank, _MIA, _martyrKillsTotal, _postMortemKills,
         _slaveKillsTotal, _lootValueTotal;
     bool _bestSoldier, _globeTrotter;
@@ -148,6 +148,8 @@ public:
     void awardBestOverall();
     /// Award post-humous kills commendation.
     void awardPostMortemKill(int kills);
+    /// Get the total number of trap kills.
+    int getTrapKillTotal() const;
 };
 
 }
