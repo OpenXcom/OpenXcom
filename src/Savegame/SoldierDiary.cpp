@@ -41,7 +41,7 @@ SoldierDiary::SoldierDiary() : _scoreTotal(0), _winTotal(0), _daysWoundedTotal(0
 	_loneSurvivorTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0), _nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0),
 	_shotAtCounterTotal(0), _hitCounterTotal(0), _ironManTotal(0), _importantMissionTotal(0), _longDistanceHitCounterTotal(0),
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
-	_reactionFireTotal(0), _timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0), _alienBaseAssaultTotal(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0),
+	_timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0), _alienBaseAssaultTotal(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0),
     _woundsHealedTotal(0), _allUFOs(0), _allMissionTypes(0), _statGainTotal(0), _revivedUnitTotal(0), _wholeMedikitTotal(0), _braveryGainTotal(0), _bestOfRank(0),
     _MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _slaveKillsTotal(0), _lootValueTotal(0), _bestSoldier(false), _globeTrotter(false)
 {
@@ -114,7 +114,6 @@ void SoldierDiary::load(const YAML::Node& node)
 	_shotsLandedCounterTotal = node["shotsLandedCounterTotal"].as<int>(_shotsLandedCounterTotal);
 	_shotAtCounter10in1Mission = node["shotAtCounter10in1Mission"].as<int>(_shotAtCounter10in1Mission);
 	_hitCounter5in1Mission = node["hitCounter5in1Mission"].as<int>(_hitCounter5in1Mission);
-	_reactionFireTotal = node["reactionFireTotal"].as<int>(_reactionFireTotal);
     _timesWoundedTotal = node["timesWoundedTotal"].as<int>(_timesWoundedTotal);
 	_valiantCruxTotal = node["valiantCruxTotal"].as<int>(_valiantCruxTotal);
 	_alienBaseAssaultTotal = node["alienBaseAssaultTotal"].as<int>(_alienBaseAssaultTotal);
@@ -174,7 +173,6 @@ YAML::Node SoldierDiary::save() const
 	if (_shotsLandedCounterTotal) node["shotsLandedCounterTotal"] = _shotsLandedCounterTotal;
 	if (_shotAtCounter10in1Mission) node["shotAtCounter10in1Mission"] = _shotAtCounter10in1Mission;
 	if (_hitCounter5in1Mission) node["hitCounter5in1Mission"] = _hitCounter5in1Mission;
-	if (_reactionFireTotal) node["reactionFireTotal"] = _reactionFireTotal;
     if (_timesWoundedTotal) node["timesWoundedTotal"] = _timesWoundedTotal;
 	if (_valiantCruxTotal) node["valiantCruxTotal"] = _valiantCruxTotal;
 	if (_alienBaseAssaultTotal) node["alienBaseAssaultTotal"] = _alienBaseAssaultTotal;
@@ -209,21 +207,6 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
     {
 		(*kill)->makeTurnUnique();
         _killList.push_back(*kill);
-        if ((*kill)->faction == FACTION_HOSTILE)
-        {
-            if ((*kill)->hostileTurn())
-            {
-				RuleItem *item = rules->getItem((*kill)->weapon);
-                if (item == 0 || item->getBattleType() == BT_GRENADE || item->getBattleType() == BT_PROXIMITYGRENADE)
-                {
-
-                }
-                else
-                {
-                    _reactionFireTotal++;
-                }
-            }
-        }
     }
     _regionTotal[missionStatistics->region]++;
     _countryTotal[missionStatistics->country]++;
@@ -383,7 +366,7 @@ bool SoldierDiary::manageCommendations(Mod *mod)
 					((*j).first == "totalImportantMissions" && _importantMissionTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
 					((*j).first == "totalLongDistanceHits" && _longDistanceHitCounterTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
 					((*j).first == "totalLowAccuracyHits" && _lowAccuracyHitCounterTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalReactionFire" && _reactionFireTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalReactionFire" && getReactionFireKillTotal() < (*j).second.at(nextCommendationLevel["noNoun"])) ||
                     ((*j).first == "totalTimesWounded" && _timesWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
                     ((*j).first == "totalDaysWounded" && _daysWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalValientCrux" && _valiantCruxTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
@@ -918,6 +901,25 @@ int SoldierDiary::getTrapKillTotal() const
 	
 	return trapKillTotal;
 }
+
+/**
+ *  Get reaction kill total.
+ */
+ int SoldierDiary::getReactionFireKillTotal() const
+ {
+	int reactionFireKillTotal = 0;
+		
+	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
+	{
+		RuleItem *item = rules->getItem((*i)->weapon);
+		if ((*i)->hostileTurn() && item != 0 && item->getBattleType() != BT_GRENADE && item->getBattleType() != BT_PROXIMITYGRENADE)
+		{
+			reactionFireKillTotal++;
+		}
+	}
+	
+	return reactionFireKillTotal;
+ }
 
 /**
  * Initializes a new commendation entry from YAML.
