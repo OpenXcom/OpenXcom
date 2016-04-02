@@ -149,9 +149,9 @@ public:
     /// Award post-humous kills commendation.
     void awardPostMortemKill(int kills);
     /// Get the total number of trap kills.
-    int getTrapKillTotal() const;
+    int getTrapKillTotal(Mod*) const;
     /// Get the total number of reaction fire kills.
-    int getReactionFireKillTotal() const;
+    int getReactionFireKillTotal(Mod*) const;
 };
 
 }

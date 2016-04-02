@@ -897,13 +897,13 @@ void SoldierDiary::awardPostMortemKill(int kills)
 /**
  *  Get trap kills total.
  */
-int SoldierDiary::getTrapKillTotal() const
+int SoldierDiary::getTrapKillTotal(Mod *mod) const
 {
 	int trapKillTotal = 0;
 		
 	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
 	{
-		RuleItem *item = rules->getItem((*i)->weapon);
+		RuleItem *item = mod->getItem((*i)->weapon);
 		if ((*i)->hostileTurn() && (item == 0 || item->getBattleType() == BT_GRENADE || item->getBattleType() == BT_PROXIMITYGRENADE))
 		{
 			trapKillTotal++;
@@ -916,13 +916,13 @@ int SoldierDiary::getTrapKillTotal() const
 /**
  *  Get reaction kill total.
  */
- int SoldierDiary::getReactionFireKillTotal() const
+ int SoldierDiary::getReactionFireKillTotal(Mod *mod) const
  {
 	int reactionFireKillTotal = 0;
 		
 	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
 	{
-		RuleItem *item = rules->getItem((*i)->weapon);
+		RuleItem *item = mod->getItem((*i)->weapon);
 		if ((*i)->hostileTurn() && item != 0 && item->getBattleType() != BT_GRENADE && item->getBattleType() != BT_PROXIMITYGRENADE)
 		{
 			reactionFireKillTotal++;
