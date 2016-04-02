@@ -270,7 +270,12 @@ void TextList::addRow(int cols, ...)
 	va_list args;
 	va_start(args, cols);
 	std::vector<Text*> temp;
-	int rowX = 0, rows = 1, rowHeight = 0;
+	// Positions are relative to list surface.
+	int rowX = 0, rowY = 0, rows = 1, rowHeight = 0;
+	if (!_texts.empty())
+	{
+		rowY = _texts.back().front()->getY() + _texts.back().front()->getHeight() + _font->getSpacing();
+	}
 
 	for (int i = 0; i < cols; ++i)
 	{
@@ -284,7 +289,7 @@ void TextList::addRow(int cols, ...)
         {
             width = _columns[i];
         }
-		Text* txt = new Text(width, _font->getHeight(), _margin + rowX, getY());
+		Text* txt = new Text(width, _font->getHeight(), _margin + rowX, rowY);
 		txt->setPalette(this->getPalette());
 		txt->initText(_big, _small, _lang);
 		txt->setColor(_color);
@@ -350,8 +355,8 @@ void TextList::addRow(int cols, ...)
 		_rows.push_back(_texts.size() - 1);
 	}
 
-
 	// Place arrow buttons
+	// Position defined w.r.t. main window, NOT TextList.
 	if (_arrowPos != -1)
 	{
 		ArrowShape shape1, shape2;
