@@ -73,7 +73,6 @@ private:
 	std::vector<SoldierCommendations*> _commendations;
 	std::vector<BattleUnitKills*> _killList;
     std::vector<int> _missionIdList;
-	std::map<std::string, int> _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
 	int _scoreTotal, _winTotal, _daysWoundedTotal, _baseDefenseMissionTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal,
 		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal, _ironManTotal,
 		_importantMissionTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal, _shotAtCounter10in1Mission,
@@ -95,7 +94,7 @@ public:
 	/// Save a diary.
 	YAML::Node save() const;
 	/// Update the diary statistics.
-	void updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics, Mod *rules);
+	void updateDiary(BattleUnitStatistics*, std::vector<MissionStatistics*>*, Mod*);
 	/// Get the list of kills, mapped by rank.
 	std::map<std::string, int> getAlienRankTotal();
 	/// Get the list of kills, mapped by race.
@@ -107,11 +106,11 @@ public:
 	/// Get the list of missions, mapped by region.
 	std::map<std::string, int> getRegionTotal(std::vector<MissionStatistics*>*) const;
 	/// Get the list of missions, mapped by country.
-	std::map<std::string, int> &getCountryTotal();
+	std::map<std::string, int> getCountryTotal(std::vector<MissionStatistics*>*) const;
 	/// Get the list of missions, mapped by type.
-	std::map<std::string, int> &getTypeTotal();
+	std::map<std::string, int> getTypeTotal(std::vector<MissionStatistics*>*) const;
 	/// Get the list of missions, mapped by UFO.
-	std::map<std::string, int> &getUFOTotal();
+	std::map<std::string, int> getUFOTotal(std::vector<MissionStatistics*>*) const;
 	/// Get the total score.
 	int getScoreTotal() const;
 	/// Get the total number of kills.

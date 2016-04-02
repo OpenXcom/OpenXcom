@@ -79,18 +79,6 @@ void SoldierDiary::load(const YAML::Node& node)
 			_killList.push_back(new BattleUnitKills(*i));
 	}
     _missionIdList = node["missionIdList"].as<std::vector<int> >(_missionIdList);
-	_countryTotal = node["countryTotal"].as< std::map<std::string, int> >(_countryTotal);
-	_typeTotal = node["typeTotal"].as< std::map<std::string, int> >(_typeTotal);
-	// Backwards compatibility
-	std::map<std::string, int> newTypeTotal;
-	for (std::map<std::string, int>::const_iterator i = _typeTotal.begin(); i != _typeTotal.end(); ++i)
-	{
-		std::string key = i->first;
-		Language::replace(key, "_LC", "");
-		newTypeTotal[key] = i->second;
-	}
-	_typeTotal = newTypeTotal;
-	_UFOTotal = node["UFOTotal"].as< std::map<std::string, int> >(_UFOTotal);
 	_scoreTotal = node["scoreTotal"].as<int>(_scoreTotal);
 	_winTotal = node["winTotal"].as<int>(_winTotal);
 	_daysWoundedTotal = node["daysWoundedTotal"].as<int>(_daysWoundedTotal);
@@ -146,9 +134,6 @@ YAML::Node SoldierDiary::save() const
 	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
 			node["killList"].push_back((*i)->save());
     if (!_missionIdList.empty()) node["missionIdList"] = _missionIdList;
-    if (!_countryTotal.empty()) node["countryTotal"] = _countryTotal;
-    if (!_typeTotal.empty()) node["typeTotal"] = _typeTotal;
-    if (!_UFOTotal.empty()) node["UFOTotal"] = _UFOTotal;
     if (_scoreTotal) node["scoreTotal"] = _scoreTotal;
     if (_winTotal) node["winTotal"] = _winTotal;
     if (_daysWoundedTotal) node["daysWoundedTotal"] = _daysWoundedTotal;
@@ -198,17 +183,16 @@ YAML::Node SoldierDiary::save() const
  * @param unitStatistics BattleUnitStatistics to get stats from.
  * @param missionStatistics MissionStatistics to get stats from.
  */
-void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics, Mod *rules)
+void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, std::vector<MissionStatistics*> *allMissionStatistics, Mod *rules)
 {
+	if (allMissionStatistics->empty()) return;
+	MissionStatistics* missionStatistics = allMissionStatistics->back();
 	std::vector<BattleUnitKills*> unitKills = unitStatistics->kills;
 	for (std::vector<BattleUnitKills*>::const_iterator kill = unitKills.begin() ; kill != unitKills.end() ; ++kill)
     {
 		(*kill)->makeTurnUnique();
         _killList.push_back(*kill);
     }
-    _countryTotal[missionStatistics->country]++;
-    _typeTotal[missionStatistics->type]++;
-    _UFOTotal[missionStatistics->ufo]++;
     _scoreTotal += missionStatistics->score;
     _lootValueTotal += missionStatistics->lootValue;
     if (missionStatistics->success)
@@ -262,10 +246,12 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
     if (unitStatistics->MIA)
         _MIA++;
 	_woundsHealedTotal = unitStatistics->woundsHealed++;
-	if (_UFOTotal.size() >= rules->getUfosList().size())
+	if (getUFOTotal(allMissionStatistics).size() >= rules->getUfosList().size())
 		_allUFOs = 1;
-	if ((_UFOTotal.size() + _typeTotal.size()) == (rules->getUfosList().size() + rules->getDeploymentsList().size() - 2))
+	if ((getUFOTotal(allMissionStatistics).size() + getTypeTotal(allMissionStatistics).size()) == (rules->getUfosList().size() + rules->getDeploymentsList().size() - 2))
 		_allMissionTypes = 1;
+	if (getCountryTotal(allMissionStatistics).size() == rules->getCountriesList().size())
+		_globeTrotter = true;
 	_martyrKillsTotal += unitStatistics->martyr;
 	_slaveKillsTotal += unitStatistics->slaveKills;
 
@@ -286,12 +272,7 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
     _braveryGainTotal = unitStatistics->delta.bravery;
     _revivedUnitTotal += unitStatistics->revivedSoldier;
     _wholeMedikitTotal += std::min( std::min(unitStatistics->woundsHealed, unitStatistics->appliedStimulant), unitStatistics->appliedPainKill);
-    _missionIdList.push_back(missionStatistics->id);    
-
-	if (_countryTotal.size() == rules->getCountriesList().size())
-	{
-		_globeTrotter = true;
-	}
+    _missionIdList.push_back(missionStatistics->id);
 }
 
 /**
@@ -719,27 +700,69 @@ std::map<std::string, int> SoldierDiary::getRegionTotal(std::vector<MissionStati
 }
 
 /**
- *
+ *  Get a map of the amount of missions done in each country.
+ *  @param MissionStatistics
  */
-std::map<std::string, int> &SoldierDiary::getCountryTotal()
+std::map<std::string, int> SoldierDiary::getCountryTotal(std::vector<MissionStatistics*> *missionStatistics) const
 {
-	return _countryTotal;
+	std::map<std::string, int> countryTotal;
+
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				countryTotal[(*i)->country]++;
+			}
+		}
+	}
+
+	return countryTotal;
 }
 
 /**
- *
+ *  Get a map of the amount of missions done in each type.
+ *  @param MissionStatistics
  */
-std::map<std::string, int> &SoldierDiary::getTypeTotal()
+std::map<std::string, int> SoldierDiary::getTypeTotal(std::vector<MissionStatistics*> *missionStatistics) const
 {
-	return _typeTotal;
+	std::map<std::string, int> typeTotal;
+
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				typeTotal[(*i)->type]++;
+			}
+		}
+	}
+
+	return typeTotal;
 }
 
 /**
- *
+ *  Get a map of the amount of missions done in each UFO.
+ *  @param MissionStatistics
  */
-std::map<std::string, int> &SoldierDiary::getUFOTotal()
+std::map<std::string, int> SoldierDiary::getUFOTotal(std::vector<MissionStatistics*> *missionStatistics) const
 {
-	return _UFOTotal;
+	std::map<std::string, int> ufoTotal;
+
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				ufoTotal[(*i)->ufo]++;
+			}
+		}
+	}
+
+	return ufoTotal;
 }
 
 /**
