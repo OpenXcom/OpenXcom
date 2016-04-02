@@ -391,3 +391,4 @@ en-GB:
   STR_TOTAL_SCIENTISTS: "Scientists hired"
   STR_TOTAL_ENGINEERS: "Engineers hired"
   STR_TOTAL_RESEARCH: "Research completed"
+  STR_DIARY_ACCURACY: "ACCURACY> {ALT}{0}%"

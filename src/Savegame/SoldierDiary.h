@@ -148,6 +148,8 @@ public:
     void awardBestOverall();
     /// Award post-humous kills commendation.
     void awardPostMortemKill(int kills);
+    /// Get the soldier's accuracy.
+    int getAccuracy() const;
 };
 
 }
