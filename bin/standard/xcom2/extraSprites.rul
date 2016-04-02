@@ -58,3 +58,6 @@ extraSprites: #done
     subY: 48
     files:
       -9: Resources/Weapons/Terror.png
+  - type: TDXCOM_2.PCK
+    files:
+      233: Resources/Sprite/missing_arm.png
