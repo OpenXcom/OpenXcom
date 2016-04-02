@@ -105,7 +105,7 @@ public:
 	/// Get the list of kills, mapped by weapon ammo used.
 	std::map<std::string, int> getWeaponAmmoTotal();
 	/// Get the list of missions, mapped by region.
-	std::map<std::string, int> &getRegionTotal();
+	std::map<std::string, int> getRegionTotal(std::vector<MissionStatistics*>*) const;
 	/// Get the list of missions, mapped by country.
 	std::map<std::string, int> &getCountryTotal();
 	/// Get the list of missions, mapped by type.
@@ -131,7 +131,7 @@ public:
 	/// Get the solder's commendations.
 	std::vector<SoldierCommendations*> *getSoldierCommendations();
 	/// Manage commendations, return true if a medal is awarded.
-	bool manageCommendations(Mod *rules);
+	bool manageCommendations(Mod*, std::vector<MissionStatistics*>*);
 	/// Increment the soldier's service time.
 	void addMonthlyService();
 	/// Get the total months in service.

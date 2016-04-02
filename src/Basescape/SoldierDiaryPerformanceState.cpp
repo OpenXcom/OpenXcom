@@ -280,7 +280,7 @@ void SoldierDiaryPerformanceState::init()
 	}
 	else if (_display == DIARY_MISSIONS)
 	{
-		std::map<std::string, int> mapArray[] = { _soldier->getDiary()->getRegionTotal(), _soldier->getDiary()->getTypeTotal(), _soldier->getDiary()->getUFOTotal() };
+		std::map<std::string, int> mapArray[] = { _soldier->getDiary()->getRegionTotal(_game->getSavedGame()->getMissionStatistics()), _soldier->getDiary()->getTypeTotal(), _soldier->getDiary()->getUFOTotal() };
 		std::string titleArray[] = { "STR_MISSIONS_BY_LOCATION", "STR_MISSIONS_BY_TYPE", "STR_MISSIONS_BY_UFO" };
 
 		for (int i = 0; i != 3; ++i)

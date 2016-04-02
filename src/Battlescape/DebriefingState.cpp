@@ -399,13 +399,13 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 			(*j)->getStatistics()->delta = *(*j)->getGeoscapeSoldier()->getCurrentStats() - *(*j)->getGeoscapeSoldier()->getInitStats();
 
             (*j)->getGeoscapeSoldier()->getDiary()->updateDiary((*j)->getStatistics(), _missionStatistics, _game->getMod());
-			if (!(*j)->getStatistics()->MIA && !(*j)->getStatistics()->KIA && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getMod()))
+			if (!(*j)->getStatistics()->MIA && !(*j)->getStatistics()->KIA && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getMod(), _game->getSavedGame()->getMissionStatistics()))
 			{
 				_soldiersCommended.push_back((*j)->getGeoscapeSoldier());
 			}
             else if ((*j)->getStatistics()->MIA || (*j)->getStatistics()->KIA)
             {
-                (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getMod());
+                (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getMod(), _game->getSavedGame()->getMissionStatistics());
                 _deadSoldiersCommended.push_back((*j)->getGeoscapeSoldier());
             }
 		}

@@ -79,7 +79,6 @@ void SoldierDiary::load(const YAML::Node& node)
 			_killList.push_back(new BattleUnitKills(*i));
 	}
     _missionIdList = node["missionIdList"].as<std::vector<int> >(_missionIdList);
-	_regionTotal = node["regionTotal"].as< std::map<std::string, int> >(_regionTotal);
 	_countryTotal = node["countryTotal"].as< std::map<std::string, int> >(_countryTotal);
 	_typeTotal = node["typeTotal"].as< std::map<std::string, int> >(_typeTotal);
 	// Backwards compatibility
@@ -147,7 +146,6 @@ YAML::Node SoldierDiary::save() const
 	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
 			node["killList"].push_back((*i)->save());
     if (!_missionIdList.empty()) node["missionIdList"] = _missionIdList;
-    if (!_regionTotal.empty()) node["regionTotal"] = _regionTotal;
     if (!_countryTotal.empty()) node["countryTotal"] = _countryTotal;
     if (!_typeTotal.empty()) node["typeTotal"] = _typeTotal;
     if (!_UFOTotal.empty()) node["UFOTotal"] = _UFOTotal;
@@ -208,7 +206,6 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 		(*kill)->makeTurnUnique();
         _killList.push_back(*kill);
     }
-    _regionTotal[missionStatistics->region]++;
     _countryTotal[missionStatistics->country]++;
     _typeTotal[missionStatistics->type]++;
     _UFOTotal[missionStatistics->ufo]++;
@@ -311,7 +308,7 @@ std::vector<SoldierCommendations*> *SoldierDiary::getSoldierCommendations()
  * Award new ones, if deserved.
  * @return bool Has a commendation been awarded?
  */
-bool SoldierDiary::manageCommendations(Mod *mod)
+bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*> *missionStatistics)
 {
 	std::map<std::string, RuleCommendations *> commendationsList = mod->getCommendation();
 	bool awardedCommendation = false;                   // This value is returned if at least one commendation was given.
@@ -366,12 +363,12 @@ bool SoldierDiary::manageCommendations(Mod *mod)
 					((*j).first == "totalImportantMissions" && _importantMissionTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
 					((*j).first == "totalLongDistanceHits" && _longDistanceHitCounterTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
 					((*j).first == "totalLowAccuracyHits" && _lowAccuracyHitCounterTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalReactionFire" && getReactionFireKillTotal() < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalReactionFire" && getReactionFireKillTotal(mod) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
                     ((*j).first == "totalTimesWounded" && _timesWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
                     ((*j).first == "totalDaysWounded" && _daysWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalValientCrux" && _valiantCruxTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
 					((*j).first == "isDead" && _KIA < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalTrapKills" && getTrapKillTotal() < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalTrapKills" && getTrapKillTotal(mod) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalAlienBaseAssaults" && _alienBaseAssaultTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalAllAliensKilled" && _allAliensKilledTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
                     ((*j).first == "totalAllAliensStunned" && _allAliensStunnedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
@@ -402,7 +399,7 @@ bool SoldierDiary::manageCommendations(Mod *mod)
 				if ((*j).first == "totalKillsWithAWeapon")
 					tempTotal = getWeaponTotal();
 				else if ((*j).first == "totalMissionsInARegion")
-					tempTotal = _regionTotal;
+					tempTotal = getRegionTotal(missionStatistics);
 				else if ((*j).first == "totalKillsByRace")
 					tempTotal = getAlienRaceTotal();
 				else if ((*j).first == "totalKillsByRank")
@@ -700,11 +697,25 @@ std::map<std::string, int> SoldierDiary::getWeaponAmmoTotal()
 }
 
 /**
- *
+ *  Get a map of the amount of missions done in each region.
+ *  @param MissionStatistics
  */
-std::map<std::string, int> &SoldierDiary::getRegionTotal()
+std::map<std::string, int> SoldierDiary::getRegionTotal(std::vector<MissionStatistics*> *missionStatistics) const
 {
-	return _regionTotal;
+	std::map<std::string, int> regionTotal;
+
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				regionTotal[(*i)->region]++;
+			}
+		}
+	}
+
+	return regionTotal;
 }
 
 /**
