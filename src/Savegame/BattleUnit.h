@@ -101,6 +101,7 @@ private:
 	std::string _activeHand;
 	BattleUnitStatistics* _statistics;
 	int _murdererId;	// used to credit the murderer with the kills that this unit got by blowing up on death
+	int _mindControllerID;	// used to credit the mind controller with the kills of the mind controllee
 	UnitSide _fatalShotSide;
 	UnitBodyPart _fatalShotBodyPart;
 	std::string _murdererWeapon, _murdererWeaponAmmo;
@@ -486,10 +487,15 @@ public:
     std::string getMurdererWeapon() const;
     /// Set the unit murderer's weapon.
     void setMurdererWeapon(std::string weapon);
-       /// Get the unit murderer's weapon's ammo.
+    /// Get the unit murderer's weapon's ammo.
     std::string getMurdererWeaponAmmo() const;
     /// Set the unit murderer's weapon's ammo.
-    void setMurdererWeaponAmmo(std::string weaponAmmo);   
+    void setMurdererWeaponAmmo(std::string weaponAmmo);
+    /// Set the unit mind controller's id.
+	void setMindControllerId(int id);
+	/// Get the unit mind controller's id.
+	int getMindControllerId() const;
+    
 };
 
 }

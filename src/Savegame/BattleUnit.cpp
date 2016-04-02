@@ -55,7 +55,7 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) :
 	_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0),
 	_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
 	_statistics(), _murdererId(0), _fatalShotSide(SIDE_FRONT), _fatalShotBodyPart(BODYPART_HEAD),
-	_geoscapeSoldier(soldier), _unitRules(0), _rankInt(0), _turretType(-1), _hidingForTurn(false), _respawn(false)
+	_geoscapeSoldier(soldier), _unitRules(0), _rankInt(0), _turretType(-1), _hidingForTurn(false), _respawn(false), _mindControllerID(0)
 {
 	_name = soldier->getName(true);
 	_id = soldier->getId();
@@ -169,7 +169,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, St
 	_moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
 	_statistics(), _murdererId(0), _fatalShotSide(SIDE_FRONT), _fatalShotBodyPart(BODYPART_HEAD),
 	_armor(armor), _geoscapeSoldier(0),  _unitRules(unit), _rankInt(0),
-	_turretType(-1), _hidingForTurn(false), _respawn(false)
+	_turretType(-1), _hidingForTurn(false), _respawn(false), _mindControllerID(0)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -371,6 +371,7 @@ void BattleUnit::load(const YAML::Node &node)
 			_recolor.push_back(std::make_pair(p[i][0].as<int>(), p[i][1].as<int>()));
 		}
 	}
+	_mindControllerID = node["mincControllerID"].as<int>(_mindControllerID);
 }
 
 /**
@@ -441,6 +442,7 @@ YAML::Node BattleUnit::save() const
 		p.push_back((int)_recolor[i].second);
 		node["recolor"].push_back(p);
 	}
+	node["mindControllerID"] = _mindControllerID;
 
 	return node;
 }
@@ -3219,6 +3221,24 @@ std::string BattleUnit::getMurdererWeaponAmmo() const
 void BattleUnit::setMurdererWeaponAmmo(std::string weaponAmmo)
 {
     _murdererWeaponAmmo = weaponAmmo;
+}
+
+/**
+ * Sets the unit mind controller's id.
+ * @param int mind controller id.
+ */
+void BattleUnit::setMindControllerId(int id)
+{
+	_mindControllerID = id;
+}
+
+/**
+ * Gets the unit mind controller's id.
+ * @return int mind controller id.
+ */
+int BattleUnit::getMindControllerId() const
+{
+	return _mindControllerID;
 }
 
 }
