@@ -320,12 +320,6 @@ void TextList::addRow(int cols, ...)
 		}
 		if (cols > 0)
 			txt->setText(va_arg(args, wchar_t*));
-		else
-		{
-			wchar_t d[1];
-			mbstowcs(d, "", 1);
-			txt->setText(d);
-		}
 		// grab this before we enable word wrapping so we can use it to calculate
 		// the total row height below
 		int vmargin = _font->getHeight() - txt->getTextHeight();
