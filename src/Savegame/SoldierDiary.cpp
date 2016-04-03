@@ -41,7 +41,7 @@ SoldierDiary::SoldierDiary() : _daysWoundedTotal(0), _totalShotByFriendlyCounter
 	_loneSurvivorTotal(0), _monthsService(0), _unconciousTotal(0),
 	_shotAtCounterTotal(0), _hitCounterTotal(0), _ironManTotal(0), _longDistanceHitCounterTotal(0),
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
-	_timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0),
+	_timesWoundedTotal(0), _KIA(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0),
     _woundsHealedTotal(0), _allUFOs(0), _allMissionTypes(0), _statGainTotal(0), _revivedUnitTotal(0), _wholeMedikitTotal(0), _braveryGainTotal(0), _bestOfRank(0),
     _MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _slaveKillsTotal(0), _lootValueTotal(0), _bestSoldier(false), _globeTrotter(false)
 {
@@ -95,7 +95,6 @@ void SoldierDiary::load(const YAML::Node& node)
 	_shotAtCounter10in1Mission = node["shotAtCounter10in1Mission"].as<int>(_shotAtCounter10in1Mission);
 	_hitCounter5in1Mission = node["hitCounter5in1Mission"].as<int>(_hitCounter5in1Mission);
     _timesWoundedTotal = node["timesWoundedTotal"].as<int>(_timesWoundedTotal);
-	_valiantCruxTotal = node["valiantCruxTotal"].as<int>(_valiantCruxTotal);
 	_allAliensKilledTotal = node["allAliensKilledTotal"].as<int>(_allAliensKilledTotal);
     _allAliensStunnedTotal = node["allAliensStunnedTotal"].as<int>(_allAliensStunnedTotal);
     _woundsHealedTotal = node["woundsHealedTotal"].as<int>(_woundsHealedTotal);
@@ -142,7 +141,6 @@ YAML::Node SoldierDiary::save() const
 	if (_shotAtCounter10in1Mission) node["shotAtCounter10in1Mission"] = _shotAtCounter10in1Mission;
 	if (_hitCounter5in1Mission) node["hitCounter5in1Mission"] = _hitCounter5in1Mission;
     if (_timesWoundedTotal) node["timesWoundedTotal"] = _timesWoundedTotal;
-	if (_valiantCruxTotal) node["valiantCruxTotal"] = _valiantCruxTotal;
 	if (_allAliensKilledTotal) node["allAliensKilledTotal"] = _allAliensKilledTotal;
     if (_allAliensStunnedTotal) node["allAliensStunnedTotal"] = _allAliensStunnedTotal;
     if (_woundsHealedTotal) node["woundsHealedTotal"] = _woundsHealedTotal;
@@ -203,8 +201,6 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, std::vector
 	_totalShotFriendlyCounter += unitStatistics->shotFriendlyCounter;
 	_longDistanceHitCounterTotal += unitStatistics->longDistanceHitCounter;
 	_lowAccuracyHitCounterTotal += unitStatistics->lowAccuracyHitCounter;
-	if (missionStatistics->valiantCrux)
-		_valiantCruxTotal++;
 	if (unitStatistics->KIA)
 		_KIA++;
     if (unitStatistics->MIA)
@@ -311,7 +307,7 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 					((*j).first == "totalReactionFire" && getReactionFireKillTotal(mod) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
                     ((*j).first == "totalTimesWounded" && _timesWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
                     ((*j).first == "totalDaysWounded" && _daysWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalValientCrux" && _valiantCruxTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
+					((*j).first == "totalValientCrux" && getValiantCruxTotal(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) || 
 					((*j).first == "isDead" && _KIA < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalTrapKills" && getTrapKillTotal(mod) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalAlienBaseAssaults" && getAlienBaseAssaultTotal(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
@@ -1099,6 +1095,28 @@ int SoldierDiary::getScoreTotal(std::vector<MissionStatistics*> *missionStatisti
 	}
 	
 	return scoreTotal;
+}
+
+/**
+ *  Get the Valient Crux total.
+ *  @param Mission Statistics
+ */
+int SoldierDiary::getValiantCruxTotal(std::vector<MissionStatistics*> *missionStatistics) const
+{	
+	int valiantCruxTotal = 0;
+	
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id && (*i)->valiantCrux)
+			{
+				valiantCruxTotal++;
+			}
+		}
+	}
+	
+	return valiantCruxTotal;
 }
 
 /**

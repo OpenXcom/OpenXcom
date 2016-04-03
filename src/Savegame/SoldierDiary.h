@@ -163,6 +163,8 @@ public:
     int getImportantMissionTotal(std::vector<MissionStatistics*>*) const;
     /// Get the total score.
     int getScoreTotal(std::vector<MissionStatistics*>*) const;
+    /// Get the Valiant Crux total.
+    int getValiantCruxTotal(std::vector<MissionStatistics*>*) const;
 };
 
 }
