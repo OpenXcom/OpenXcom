@@ -37,7 +37,7 @@ SoldierDiary::SoldierDiary(const YAML::Node &node)
 /**
  * Initializes a new blank diary.
  */
-SoldierDiary::SoldierDiary() : _scoreTotal(0), _daysWoundedTotal(0), _totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0),
+SoldierDiary::SoldierDiary() : _daysWoundedTotal(0), _totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0),
 	_loneSurvivorTotal(0), _monthsService(0), _unconciousTotal(0),
 	_shotAtCounterTotal(0), _hitCounterTotal(0), _ironManTotal(0), _longDistanceHitCounterTotal(0),
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
@@ -79,7 +79,6 @@ void SoldierDiary::load(const YAML::Node& node)
 			_killList.push_back(new BattleUnitKills(*i));
 	}
     _missionIdList = node["missionIdList"].as<std::vector<int> >(_missionIdList);
-	_scoreTotal = node["scoreTotal"].as<int>(_scoreTotal);
 	_daysWoundedTotal = node["daysWoundedTotal"].as<int>(_daysWoundedTotal);
 	_totalShotByFriendlyCounter = node["totalShotByFriendlyCounter"].as<int>(_totalShotByFriendlyCounter);
 	_totalShotFriendlyCounter = node["totalShotFriendlyCounter"].as<int>(_totalShotFriendlyCounter);
@@ -127,7 +126,6 @@ YAML::Node SoldierDiary::save() const
 	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
 			node["killList"].push_back((*i)->save());
     if (!_missionIdList.empty()) node["missionIdList"] = _missionIdList;
-    if (_scoreTotal) node["scoreTotal"] = _scoreTotal;
     if (_daysWoundedTotal) node["daysWoundedTotal"] = _daysWoundedTotal;
     if (_totalShotByFriendlyCounter) node["totalShotByFriendlyCounter"] = _totalShotByFriendlyCounter;
 	if (_totalShotFriendlyCounter) node["totalShotFriendlyCounter"] = _totalShotFriendlyCounter;
@@ -179,7 +177,6 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, std::vector
 		(*kill)->makeTurnUnique();
         _killList.push_back(*kill);
     }
-    _scoreTotal += missionStatistics->score;
     _lootValueTotal += missionStatistics->lootValue;
     if (missionStatistics->success)
     {
@@ -294,7 +291,7 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 				  ( ((*j).first == "totalKills" && (unsigned int)getKillTotal() < (unsigned int)(*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalMissions" && _missionIdList.size() < (unsigned int)(*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalWins" && getWinTotal(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalScore" && _scoreTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalScore" && getScoreTotal(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalStuns" && getStunTotal() < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalDaysWounded" && _daysWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalBaseDefenseMissions" && getBaseDefenseMissionTotal(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
@@ -735,14 +732,6 @@ std::map<std::string, int> SoldierDiary::getUFOTotal(std::vector<MissionStatisti
 /**
  *
  */
-int SoldierDiary::getScoreTotal() const
-{
-	return _scoreTotal;
-}
-
-/**
- *
- */
 int SoldierDiary::getKillTotal() const
 {
 	int killTotal = 0;
@@ -1046,6 +1035,22 @@ int SoldierDiary::getImportantMissionTotal(std::vector<MissionStatistics*> *miss
 	}
 	
 	return importantMissionTotal;
+}
+
+/**
+ *  Get the total score.
+ *  @param Mission Statistics
+ */
+int SoldierDiary::getScoreTotal(std::vector<MissionStatistics*> *missionStatistics) const
+{	
+	int scoreTotal = 0;
+	
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		scoreTotal++;
+	}
+	
+	return scoreTotal;
 }
 
 /**

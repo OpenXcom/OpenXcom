@@ -73,7 +73,7 @@ private:
 	std::vector<SoldierCommendations*> _commendations;
 	std::vector<BattleUnitKills*> _killList;
     std::vector<int> _missionIdList;
-	int _scoreTotal, _daysWoundedTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal,
+	int _daysWoundedTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal,
 		_monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal, _ironManTotal,
 		_longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal, _shotAtCounter10in1Mission,
 		_hitCounter5in1Mission, _timesWoundedTotal, _valiantCruxTotal, _KIA, _allAliensKilledTotal, _allAliensStunnedTotal,
@@ -111,8 +111,6 @@ public:
 	std::map<std::string, int> getTypeTotal(std::vector<MissionStatistics*>*) const;
 	/// Get the list of missions, mapped by UFO.
 	std::map<std::string, int> getUFOTotal(std::vector<MissionStatistics*>*) const;
-	/// Get the total score.
-	int getScoreTotal() const;
 	/// Get the total number of kills.
 	int getKillTotal() const;
 	/// Get the total number of missions.
@@ -163,6 +161,8 @@ public:
     int getAlienBaseAssaultTotal(std::vector<MissionStatistics*>*) const;
     /// Get the total number of important missions.
     int getImportantMissionTotal(std::vector<MissionStatistics*>*) const;
+    /// Get the total score.
+    int getScoreTotal(std::vector<MissionStatistics*>*) const;
 };
 
 }
