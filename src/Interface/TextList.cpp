@@ -268,7 +268,18 @@ size_t TextList::getVisibleRows() const
 void TextList::addRow(int cols, ...)
 {
 	va_list args;
-	va_start(args, cols);
+	int ncols;
+	if (cols > 0)
+	{
+		va_start(args, cols);
+		ncols = cols;
+	}
+	else
+	{
+		ncols = 1;
+	}
+		
+
 	std::vector<Text*> temp;
 	// Positions are relative to list surface.
 	int rowX = 0, rowY = 0, rows = 1, rowHeight = 0;
@@ -277,18 +288,18 @@ void TextList::addRow(int cols, ...)
 		rowY = _texts.back().front()->getY() + _texts.back().front()->getHeight() + _font->getSpacing();
 	}
 
-	for (int i = 0; i < cols; ++i)
+	for (int i = 0; i < ncols; ++i)
 	{
 		int width;
 		// Place text
-        if (_flooding)
-        {
-            width = 340;
-        }
-        else
-        {
-            width = _columns[i];
-        }
+		if (_flooding)
+		{
+			width = 340;
+		}
+		else
+		{
+			width = _columns[i];
+		}
 		Text* txt = new Text(width, _font->getHeight(), _margin + rowX, rowY);
 		txt->setPalette(this->getPalette());
 		txt->initText(_big, _small, _lang);
@@ -307,7 +318,8 @@ void TextList::addRow(int cols, ...)
 		{
 			txt->setSmall();
 		}
-		txt->setText(va_arg(args, wchar_t*));
+		if (cols > 0)
+			txt->setText(va_arg(args, wchar_t*));
 		// grab this before we enable word wrapping so we can use it to calculate
 		// the total row height below
 		int vmargin = _font->getHeight() - txt->getTextHeight();
