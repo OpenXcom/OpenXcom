@@ -41,7 +41,7 @@ SoldierDiary::SoldierDiary() : _scoreTotal(0), _daysWoundedTotal(0), _totalShotB
 	_loneSurvivorTotal(0), _monthsService(0), _unconciousTotal(0),
 	_shotAtCounterTotal(0), _hitCounterTotal(0), _ironManTotal(0), _importantMissionTotal(0), _longDistanceHitCounterTotal(0),
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
-	_timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0), _alienBaseAssaultTotal(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0),
+	_timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0),
     _woundsHealedTotal(0), _allUFOs(0), _allMissionTypes(0), _statGainTotal(0), _revivedUnitTotal(0), _wholeMedikitTotal(0), _braveryGainTotal(0), _bestOfRank(0),
     _MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _slaveKillsTotal(0), _lootValueTotal(0), _bestSoldier(false), _globeTrotter(false)
 {
@@ -98,7 +98,6 @@ void SoldierDiary::load(const YAML::Node& node)
 	_hitCounter5in1Mission = node["hitCounter5in1Mission"].as<int>(_hitCounter5in1Mission);
     _timesWoundedTotal = node["timesWoundedTotal"].as<int>(_timesWoundedTotal);
 	_valiantCruxTotal = node["valiantCruxTotal"].as<int>(_valiantCruxTotal);
-	_alienBaseAssaultTotal = node["alienBaseAssaultTotal"].as<int>(_alienBaseAssaultTotal);
 	_allAliensKilledTotal = node["allAliensKilledTotal"].as<int>(_allAliensKilledTotal);
     _allAliensStunnedTotal = node["allAliensStunnedTotal"].as<int>(_allAliensStunnedTotal);
     _woundsHealedTotal = node["woundsHealedTotal"].as<int>(_woundsHealedTotal);
@@ -148,7 +147,6 @@ YAML::Node SoldierDiary::save() const
 	if (_hitCounter5in1Mission) node["hitCounter5in1Mission"] = _hitCounter5in1Mission;
     if (_timesWoundedTotal) node["timesWoundedTotal"] = _timesWoundedTotal;
 	if (_valiantCruxTotal) node["valiantCruxTotal"] = _valiantCruxTotal;
-	if (_alienBaseAssaultTotal) node["alienBaseAssaultTotal"] = _alienBaseAssaultTotal;
 	if (_allAliensKilledTotal) node["allAliensKilledTotal"] = _allAliensKilledTotal;
     if (_allAliensStunnedTotal) node["allAliensStunnedTotal"] = _allAliensStunnedTotal;
     if (_woundsHealedTotal) node["woundsHealedTotal"] = _woundsHealedTotal;
@@ -187,14 +185,8 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, std::vector
     _lootValueTotal += missionStatistics->lootValue;
     if (missionStatistics->success)
     {
-		bool ufo = missionStatistics->ufo != "NO_UFO";
-		bool baseDefense = missionStatistics->type == "STR_BASE_DEFENSE";
-		bool alienBase = missionStatistics->type.find("STR_ALIEN_BASE") != std::string::npos ||
-						 missionStatistics->type.find("STR_ALIEN_COLONY") != std::string::npos;
         if (missionStatistics->type != "STR_UFO_CRASH_RECOVERY")
             _importantMissionTotal++;
-		if (alienBase)
-			_alienBaseAssaultTotal++;
         if (unitStatistics->loneSurvivor)
             _loneSurvivorTotal++;
         if (unitStatistics->ironMan)
@@ -329,7 +321,7 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 					((*j).first == "totalValientCrux" && _valiantCruxTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
 					((*j).first == "isDead" && _KIA < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalTrapKills" && getTrapKillTotal(mod) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalAlienBaseAssaults" && _alienBaseAssaultTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalAlienBaseAssaults" && getAlienBaseAssaultTotal(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalAllAliensKilled" && _allAliensKilledTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
                     ((*j).first == "totalAllAliensStunned" && _allAliensStunnedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalWoundsHealed" && _woundsHealedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
@@ -1020,6 +1012,25 @@ int SoldierDiary::getBaseDefenseMissionTotal(std::vector<MissionStatistics*> *mi
 	}
 	
 	return baseDefenseMissionTotal;
+}
+
+/**
+ *  Get the total of alien base assaults.
+ *  @param Mission Statistics
+ */
+int SoldierDiary::getAlienBaseAssaultTotal(std::vector<MissionStatistics*> *missionStatistics) const
+{	
+	int alienBaseAssaultTotal = 0;
+	
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		if ((*i)->isAlienBase())
+		{
+			alienBaseAssaultTotal++;
+		}
+	}
+	
+	return alienBaseAssaultTotal;
 }
 
 /**

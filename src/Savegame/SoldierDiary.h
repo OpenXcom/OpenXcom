@@ -76,7 +76,7 @@ private:
 	int _scoreTotal, _daysWoundedTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal,
 		_monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal, _ironManTotal,
 		_importantMissionTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal, _shotAtCounter10in1Mission,
-		_hitCounter5in1Mission, _timesWoundedTotal, _valiantCruxTotal, _KIA, _alienBaseAssaultTotal, _allAliensKilledTotal, _allAliensStunnedTotal,
+		_hitCounter5in1Mission, _timesWoundedTotal, _valiantCruxTotal, _KIA, _allAliensKilledTotal, _allAliensStunnedTotal,
         _woundsHealedTotal, _allUFOs, _allMissionTypes, _statGainTotal, _revivedUnitTotal, _wholeMedikitTotal, _braveryGainTotal, _bestOfRank, _MIA, _martyrKillsTotal, _postMortemKills,
         _slaveKillsTotal, _lootValueTotal;
     bool _bestSoldier, _globeTrotter;
@@ -159,6 +159,8 @@ public:
     int getNightTerrorMissionTotal(std::vector<MissionStatistics*>*) const;
     /// Get the total number of base defense missions.
     int getBaseDefenseMissionTotal(std::vector<MissionStatistics*>*) const;
+    /// Get the total number of alien base assaults.
+    int getAlienBaseAssaultTotal(std::vector<MissionStatistics*>*) const;
 };
 
 }
