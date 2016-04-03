@@ -73,8 +73,8 @@ private:
 	std::vector<SoldierCommendations*> _commendations;
 	std::vector<BattleUnitKills*> _killList;
     std::vector<int> _missionIdList;
-	int _scoreTotal, _winTotal, _daysWoundedTotal, _baseDefenseMissionTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal,
-		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal, _ironManTotal,
+	int _scoreTotal, _daysWoundedTotal, _baseDefenseMissionTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal,
+		_nightTerrorMissionTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal, _ironManTotal,
 		_importantMissionTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal, _shotAtCounter10in1Mission,
 		_hitCounter5in1Mission, _timesWoundedTotal, _valiantCruxTotal, _KIA, _alienBaseAssaultTotal, _allAliensKilledTotal, _allAliensStunnedTotal,
         _woundsHealedTotal, _allUFOs, _allMissionTypes, _statGainTotal, _revivedUnitTotal, _wholeMedikitTotal, _braveryGainTotal, _bestOfRank, _MIA, _martyrKillsTotal, _postMortemKills,
@@ -118,7 +118,7 @@ public:
 	/// Get the total number of missions.
 	int getMissionTotal() const;
 	/// Get the total number of wins.
-	int getWinTotal() const;
+	int getWinTotal(std::vector<MissionStatistics*>*) const;
 	/// Get the total number of stuns.
 	int getStunTotal() const;
     /// Get the total number of psi panicks.
@@ -151,6 +151,10 @@ public:
     int getTrapKillTotal(Mod*) const;
     /// Get the total number of reaction fire kills.
     int getReactionFireKillTotal(Mod*) const;
+    /// Get the total number of terror missions.
+    int getTerrorMissionTotal(std::vector<MissionStatistics*>*) const;
+    /// Get the total number of night missions.
+    int getNightMissionTotal(std::vector<MissionStatistics*>*) const;
 };
 
 }
