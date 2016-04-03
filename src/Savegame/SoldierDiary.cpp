@@ -765,9 +765,15 @@ int SoldierDiary::getWinTotal(std::vector<MissionStatistics*> *missionStatistics
 	
 	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
 	{
-		if ((*i)->success)
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
 		{
-			winTotal++;
+			if ((*j) == (*i)->id)
+			{
+				if ((*i)->success)
+				{
+					winTotal++;
+				}
+			}
 		}
 	}
 	
@@ -933,9 +939,15 @@ int SoldierDiary::getTerrorMissionTotal(std::vector<MissionStatistics*> *mission
 	
 	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
 	{
-		if ((*i)->success && !(*i)->isBaseDefense() && !(*i)->isUfoMission() && !(*i)->isAlienBase())
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
 		{
-			terrorMissionTotal++;
+			if ((*j) == (*i)->id)
+			{
+				if ((*i)->success && !(*i)->isBaseDefense() && !(*i)->isUfoMission() && !(*i)->isAlienBase())
+				{
+					terrorMissionTotal++;
+				}
+			}
 		}
 	}
 	
@@ -952,9 +964,15 @@ int SoldierDiary::getNightMissionTotal(std::vector<MissionStatistics*> *missionS
 	
 	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
 	{
-		if ((*i)->success && (*i)->daylight > 5 && !(*i)->isBaseDefense() && !(*i)->isAlienBase())
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
 		{
-			nightMissionTotal++;
+			if ((*j) == (*i)->id)
+			{
+				if ((*i)->success && (*i)->daylight > 5 && !(*i)->isBaseDefense() && !(*i)->isAlienBase())
+				{
+					nightMissionTotal++;
+				}
+			}
 		}
 	}
 	
@@ -971,9 +989,15 @@ int SoldierDiary::getNightTerrorMissionTotal(std::vector<MissionStatistics*> *mi
 	
 	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
 	{
-		if ((*i)->success && (*i)->daylight > 5 && !(*i)->isBaseDefense() && !(*i)->isUfoMission() && !(*i)->isAlienBase())
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
 		{
-			nightTerrorMissionTotal++;
+			if ((*j) == (*i)->id)
+			{
+				if ((*i)->success && (*i)->daylight > 5 && !(*i)->isBaseDefense() && !(*i)->isUfoMission() && !(*i)->isAlienBase())
+				{
+					nightTerrorMissionTotal++;
+				}
+			}
 		}
 	}
 	
@@ -990,9 +1014,15 @@ int SoldierDiary::getBaseDefenseMissionTotal(std::vector<MissionStatistics*> *mi
 	
 	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
 	{
-		if ((*i)->success && (*i)->isBaseDefense())
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
 		{
-			baseDefenseMissionTotal++;
+			if ((*j) == (*i)->id)
+			{
+				if ((*i)->success && (*i)->isBaseDefense())
+				{
+					baseDefenseMissionTotal++;
+				}
+			}
 		}
 	}
 	
@@ -1009,9 +1039,15 @@ int SoldierDiary::getAlienBaseAssaultTotal(std::vector<MissionStatistics*> *miss
 	
 	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
 	{
-		if ((*i)->success && (*i)->isAlienBase())
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
 		{
-			alienBaseAssaultTotal++;
+			if ((*j) == (*i)->id)
+			{
+				if ((*i)->success && (*i)->isAlienBase())
+				{
+					alienBaseAssaultTotal++;
+				}
+			}
 		}
 	}
 	
@@ -1026,11 +1062,17 @@ int SoldierDiary::getImportantMissionTotal(std::vector<MissionStatistics*> *miss
 {	
 	int importantMissionTotal = 0;
 	
-	for ((*i)->success && std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
 	{
-		if ((*i)->type != "STR_UFO_CRASH_RECOVERY")
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
 		{
-			importantMissionTotal++;
+			if ((*j) == (*i)->id)
+			{
+				if ((*i)->success && (*i)->type != "STR_UFO_CRASH_RECOVERY")
+				{
+					importantMissionTotal++;
+				}
+			}
 		}
 	}
 	
@@ -1047,7 +1089,13 @@ int SoldierDiary::getScoreTotal(std::vector<MissionStatistics*> *missionStatisti
 	
 	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
 	{
-		scoreTotal++;
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				scoreTotal++;
+			}
+		}
 	}
 	
 	return scoreTotal;

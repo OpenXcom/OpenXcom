@@ -301,7 +301,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 		// Find the best soldier per rank by comparing score.
 		for (std::vector<Soldier*>::iterator j = _game->getSavedGame()->getDeadSoldiers()->begin(); j != _game->getSavedGame()->getDeadSoldiers()->end(); ++j)
 		{
-			int score = (*j)->getDiary()->getScoreTotal();
+			int score = (*j)->getDiary()->getScoreTotal(_game->getSavedGame()->getMissionStatistics());
 
 			// Don't forget this mission's score!
 			if ((*j)->getId() == (*deadUnit)->getId())
