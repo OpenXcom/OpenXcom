@@ -146,7 +146,7 @@ struct MissionStatistics
 
 	bool isAlienBase() const
 	{
-		if (type.find("STR_ALIEN_BASE") != std::string::npos || type.find("STR_ALIEN_COLONY") != std::string::npos;)
+		if (type.find("STR_ALIEN_BASE") != std::string::npos || type.find("STR_ALIEN_COLONY") != std::string::npos)
 		{
 			return true;
 		}
