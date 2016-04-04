@@ -962,9 +962,11 @@ void DebriefingState::prepareDebriefing()
 				{ // so game is not aborted or aborted and unit is on exit area
 					(*j)->postMissionProcedures(save);
 					playerInExitArea++;
+
+					recoverItems((*j)->getInventory(), base);
+
 					if (soldier != 0)
 					{
-						recoverItems((*j)->getInventory(), base);
 						// calculate new statString
 						soldier->calcStatString(_game->getMod()->getStatStrings(), (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getMod()->getPsiRequirements())));
 					}
