@@ -37,13 +37,12 @@ SoldierDiary::SoldierDiary(const YAML::Node &node)
 /**
  * Initializes a new blank diary.
  */
-SoldierDiary::SoldierDiary() : _daysWoundedTotal(0), _totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0),
-	_loneSurvivorTotal(0), _monthsService(0), _unconciousTotal(0),
-	_shotAtCounterTotal(0), _hitCounterTotal(0), _ironManTotal(0), _longDistanceHitCounterTotal(0),
+SoldierDiary::SoldierDiary() : _daysWoundedTotal(0), _totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0), _loneSurvivorTotal(0),
+	_monthsService(0), _unconciousTotal(0),	_shotAtCounterTotal(0), _hitCounterTotal(0), _ironManTotal(0), _longDistanceHitCounterTotal(0),
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
-	_timesWoundedTotal(0), _KIA(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0),
-    _woundsHealedTotal(0), _allUFOs(0), _allMissionTypes(0), _statGainTotal(0), _revivedUnitTotal(0), _wholeMedikitTotal(0), _braveryGainTotal(0), _bestOfRank(0),
-    _MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _slaveKillsTotal(0), _lootValueTotal(0), _bestSoldier(false), _globeTrotter(false)
+	_timesWoundedTotal(0), _KIA(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0), _woundsHealedTotal(0), _allUFOs(0), _allMissionTypes(0),
+	_statGainTotal(0), _revivedUnitTotal(0), _wholeMedikitTotal(0), _braveryGainTotal(0), _bestOfRank(0),
+    _MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _slaveKillsTotal(0), _bestSoldier(false), _globeTrotter(false)
 {
 }
 
@@ -110,7 +109,6 @@ void SoldierDiary::load(const YAML::Node& node)
     _postMortemKills = node["postMortemKills"].as<int>(_postMortemKills);
 	_globeTrotter = node["globeTrotter"].as<bool>(_globeTrotter);
 	_slaveKillsTotal = node["slaveKillsTotal"].as<int>(_slaveKillsTotal);
-    _lootValueTotal = node["lootValueTotal"].as<int>(_lootValueTotal);
 }
 
 /**
@@ -156,7 +154,6 @@ YAML::Node SoldierDiary::save() const
     if (_postMortemKills) node["postMortemKills"] = _postMortemKills;
 	if (_globeTrotter) node["globeTrotter"] = _globeTrotter;
 	if (_slaveKillsTotal) node["slaveKillsTotal"] = _slaveKillsTotal;
-    if (_lootValueTotal) node["lootValueTotal"] = _lootValueTotal;
 	return node;
 }
 
@@ -175,7 +172,6 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, std::vector
 		(*kill)->makeTurnUnique();
         _killList.push_back(*kill);
     }
-    _lootValueTotal += missionStatistics->lootValue;
     if (missionStatistics->success)
     {
         if (unitStatistics->loneSurvivor)
@@ -1089,7 +1085,7 @@ int SoldierDiary::getScoreTotal(std::vector<MissionStatistics*> *missionStatisti
 		{
 			if ((*j) == (*i)->id)
 			{
-				scoreTotal++;
+				scoreTotal += (*i)->score;
 			}
 		}
 	}
@@ -1117,6 +1113,28 @@ int SoldierDiary::getValiantCruxTotal(std::vector<MissionStatistics*> *missionSt
 	}
 	
 	return valiantCruxTotal;
+}
+
+/**
+ *  Get the loot value total.
+ *  @param Mission Statistics
+ */
+int SoldierDiary::getLootValueTotal(std::vector<MissionStatistics*> *missionStatistics) const
+{	
+	int lootValueTotal = 0;
+	
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				lootValueTotal += (*i)->lootValue;
+			}
+		}
+	}
+	
+	return lootValueTotal;
 }
 
 /**

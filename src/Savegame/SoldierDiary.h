@@ -73,12 +73,11 @@ private:
 	std::vector<SoldierCommendations*> _commendations;
 	std::vector<BattleUnitKills*> _killList;
     std::vector<int> _missionIdList;
-	int _daysWoundedTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal,
-		_monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal, _ironManTotal,
-		_longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal, _shotAtCounter10in1Mission,
-		_hitCounter5in1Mission, _timesWoundedTotal, _valiantCruxTotal, _KIA, _allAliensKilledTotal, _allAliensStunnedTotal,
-        _woundsHealedTotal, _allUFOs, _allMissionTypes, _statGainTotal, _revivedUnitTotal, _wholeMedikitTotal, _braveryGainTotal, _bestOfRank, _MIA, _martyrKillsTotal, _postMortemKills,
-        _slaveKillsTotal, _lootValueTotal;
+	int _daysWoundedTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal,
+		_hitCounterTotal, _ironManTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal,
+		_shotAtCounter10in1Mission,	_hitCounter5in1Mission, _timesWoundedTotal, _valiantCruxTotal, _KIA, _allAliensKilledTotal, _allAliensStunnedTotal,
+        _woundsHealedTotal, _allUFOs, _allMissionTypes, _statGainTotal, _revivedUnitTotal, _wholeMedikitTotal, _braveryGainTotal, _bestOfRank, _MIA,
+        _martyrKillsTotal, _postMortemKills, _slaveKillsTotal;
     bool _bestSoldier, _globeTrotter;
 	void manageModularCommendations(std::map<std::string, int> &nextCommendationLevel, std::map<std::string, int> &modularCommendations, std::pair<std::string, int> statTotal, int criteria);
 	void awardCommendation(std::string type, std::string noun = "noNoun");
@@ -165,6 +164,8 @@ public:
     int getScoreTotal(std::vector<MissionStatistics*>*) const;
     /// Get the Valiant Crux total.
     int getValiantCruxTotal(std::vector<MissionStatistics*>*) const;
+    /// Get the loot value total.
+    int getLootValueTotal(std::vector<MissionStatistics*>*) const;
 };
 
 }
