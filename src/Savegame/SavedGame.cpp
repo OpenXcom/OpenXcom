@@ -906,10 +906,19 @@ int SavedGame::getId(const std::string &name)
 }
 
 /**
+* Resets the list of unique object IDs.
+* @param ids New ID list.
+*/
+const std::map<std::string, int> &SavedGame::getAllIds() const
+{
+	return _ids;
+}
+
+/**
  * Resets the list of unique object IDs.
  * @param ids New ID list.
  */
-void SavedGame::setIds(const std::map<std::string, int> &ids)
+void SavedGame::setAllIds(const std::map<std::string, int> &ids)
 {
 	_ids = ids;
 }

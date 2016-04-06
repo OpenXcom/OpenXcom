@@ -190,7 +190,9 @@ public:
 	/// Gets the current ID for an object.
 	int getId(const std::string &name);
 	/// Resets the list of object IDs.
-	void setIds(const std::map<std::string, int> &ids);
+	const std::map<std::string, int> &getAllIds() const;
+	/// Resets the list of object IDs.
+	void setAllIds(const std::map<std::string, int> &ids);
 	/// Gets the list of countries.
 	std::vector<Country*> *getCountries();
 	/// Gets the total country funding.

@@ -112,6 +112,10 @@ void StatisticsState::listStats()
 	{
 		ss << tr("STR_DEFEAT");
 	}
+	else
+	{
+		ss << tr("STR_STATISTICS");
+	}
 	ss << L'\x02' << time->getDayString(_game->getLanguage()) << L" " << tr(time->getMonthString()) << L" " << time->getYear();
 	_txtTitle->setText(ss.str());
 
@@ -153,7 +157,8 @@ void StatisticsState::listStats()
 
 	int aliensKilled = 0, aliensCaptured = 0, friendlyKills = 0;
 	int daysWounded = 0, longestMonths = 0;
-	std::map<std::string, int> weaponKills;
+	int shotsFired = 0, shotsLanded = 0;
+	std::map<std::string, int> weaponKills, alienKills;
 	for (std::vector<Soldier*>::iterator i = allSoldiers.begin(); i != allSoldiers.end(); ++i)
 	{
 		SoldierDiary *diary = (*i)->getDiary();
@@ -162,6 +167,8 @@ void StatisticsState::listStats()
 		daysWounded += diary->getDaysWoundedTotal();
 		longestMonths = std::max(longestMonths, diary->getMonthsService());
 		std::map<std::string, int> weaponTotal = diary->getWeaponTotal();
+		shotsFired += diary->getShotsFiredTotal();
+		shotsLanded += diary->getShotsLandedTotal();
 		for (std::map<std::string, int>::const_iterator j = weaponTotal.begin(); j != weaponTotal.end(); ++j)
 		{
 			if (weaponKills.find(j->first) == weaponKills.end())
@@ -181,7 +188,23 @@ void StatisticsState::listStats()
 			{
 				friendlyKills++;
 			}
+			if (!kills->race.empty())
+			{
+				if (alienKills.find(kills->race) == alienKills.end())
+				{
+					alienKills[kills->race] = 1;
+				}
+				else
+				{
+					alienKills[kills->race] += 1;
+				}
+			}
 		}
+	}
+	int accuracy = 0;
+	if (shotsFired > 0)
+	{
+		accuracy = 100 * shotsLanded / shotsFired;
 	}
 
 	int maxWeapon = 0;
@@ -194,14 +217,25 @@ void StatisticsState::listStats()
 			highestWeapon = i->first;
 		}
 	}
+	int maxAlien = 0;
+	std::string highestAlien = "STR_NONE";
+	for (std::map<std::string, int>::const_iterator i = alienKills.begin(); i != alienKills.end(); ++i)
+	{
+		if (i->second > maxAlien)
+		{
+			maxAlien = i->second;
+			highestAlien = i->first;
+		}
+	}
 
-	int ufosDetected = save->getId("STR_UFO") - 1;
-	int alienBases = save->getId("STR_ALIEN_BASE") - 1;
-	int terrorSites = save->getId("STR_TERROR_SITE") - 1;
+	std::map<std::string, int> ids = save->getAllIds();
+	int ufosDetected = ids["STR_UFO"];
+	int alienBases = ids["STR_ALIEN_BASE"];
+	int terrorSites = ids["STR_TERROR_SITE"];
 	int totalCrafts = 0;
 	for (std::vector<std::string>::const_iterator i = _game->getMod()->getCraftsList().begin(); i != _game->getMod()->getCraftsList().end(); ++i)
 	{
-		totalCrafts += save->getId(*i) - 1;
+		totalCrafts += ids[*i];
 	}
 
 	int currentBases = save->getBases()->size();
@@ -239,7 +273,9 @@ void StatisticsState::listStats()
 	_lstStats->addRow(2, tr("STR_ALIEN_KILLS").c_str(), Text::formatNumber(aliensKilled).c_str());
 	_lstStats->addRow(2, tr("STR_ALIEN_CAPTURES").c_str(), Text::formatNumber(aliensCaptured).c_str());
 	_lstStats->addRow(2, tr("STR_FRIENDLY_KILLS").c_str(), Text::formatNumber(friendlyKills).c_str());
+	_lstStats->addRow(2, tr("STR_AVERAGE_ACCURACY").c_str(), Text::formatPercentage(accuracy).c_str());
 	_lstStats->addRow(2, tr("STR_WEAPON_MOST_KILLS").c_str(), tr(highestWeapon).c_str());
+	_lstStats->addRow(2, tr("STR_ALIEN_MOST_KILLS").c_str(), tr(highestAlien).c_str());
 	_lstStats->addRow(2, tr("STR_LONGEST_SERVICE").c_str(), Text::formatNumber(longestMonths).c_str());
 	_lstStats->addRow(2, tr("STR_TOTAL_DAYS_WOUNDED").c_str(), Text::formatNumber(daysWounded).c_str());
 	_lstStats->addRow(2, tr("STR_TOTAL_UFOS").c_str(), Text::formatNumber(ufosDetected).c_str());
@@ -259,8 +295,15 @@ void StatisticsState::listStats()
  */
 void StatisticsState::btnOkClick(Action *)
 {
-	_game->setSavedGame(0);
-	_game->setState(new MainMenuState);
+	if (_game->getSavedGame()->getEnding() == END_NONE)
+	{
+		_game->popState();
+	}
+	else
+	{
+		_game->setSavedGame(0);
+		_game->setState(new MainMenuState);		
+	}
 }
 
 }

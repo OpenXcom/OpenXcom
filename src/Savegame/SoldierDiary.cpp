@@ -889,6 +889,22 @@ void SoldierDiary::awardPostMortemKill(int kills)
 }
 
 /**
+ *
+ */
+int SoldierDiary::getShotsFiredTotal() const
+{
+	return _shotsFiredCounterTotal;
+}
+
+/**
+ *
+ */
+int SoldierDiary::getShotsLandedTotal() const
+{
+	return _shotsLandedCounterTotal;
+}
+
+/**
  *  Get the soldier's accuracy.
  */
 int SoldierDiary::getAccuracy() const

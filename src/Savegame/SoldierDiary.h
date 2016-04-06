@@ -148,6 +148,10 @@ public:
     void awardBestOverall();
     /// Award post-humous kills commendation.
     void awardPostMortemKill(int kills);
+	/// Get the total number of shots fired.
+	int getShotsFiredTotal() const;
+	/// Get the total number of shots landed on target.
+	int getShotsLandedTotal() const;
     /// Get the soldier's accuracy.
     int getAccuracy() const;
 };

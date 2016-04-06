@@ -343,7 +343,7 @@ void SaveConverter::loadDatUIGlob()
 		ids[_rules->getMarkers()[i]] = load<Uint16>(data + i * sizeof(Uint16));
 	}
 	ids["STR_CRASH_SITE"] = ids["STR_LANDING_SITE"] = ids["STR_UFO"];
-	_save->setIds(ids);
+	_save->setAllIds(ids);
 
 	_year = load<Uint16>(data + 0x16);
 
