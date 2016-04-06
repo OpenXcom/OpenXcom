@@ -1043,7 +1043,7 @@ items: #done
     invWidth: 2
     invHeight: 1
     attraction: 4
-    recoveryPoints: 1
+    recoveryPoints: 5
   - type: STR_MC_READER
     requires:
       - STR_MC_READER
