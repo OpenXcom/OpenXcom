@@ -252,6 +252,14 @@ void State::init()
 	{
 		_game->getMod()->setPalette(_palette);
 	}
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		Window* window = dynamic_cast<Window*>(*i);
+		if (window)
+		{
+			window->invalidate(true);
+		}
+	}
 	if (_ruleInterface != 0 && !_ruleInterface->getMusic().empty())
 	{
 		_game->getMod()->playMusic(_ruleInterface->getMusic());
@@ -306,7 +314,7 @@ void State::blit()
 void State::hideAll()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
-			(*i)->setHidden(true);
+		(*i)->setHidden(true);
 }
 
 /**
@@ -389,62 +397,22 @@ void State::applyBattlescapeTheme()
 	Element * element = _game->getMod()->getInterface("mainMenu")->getElement("battlescapeTheme");
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
+		(*i)->setColor(element->color);
+		(*i)->setHighContrast(true);
 		Window* window = dynamic_cast<Window*>(*i);
 		if (window)
 		{
-			window->setColor(element->color);
-			window->setHighContrast(true);
 			window->setBackground(_game->getMod()->getSurface("TAC00.SCR"));
-			continue;
-		}
-		Text* text = dynamic_cast<Text*>(*i);
-		if (text)
-		{
-			text->setColor(element->color);
-			text->setHighContrast(true);
-			continue;
-		}
-		TextButton* button = dynamic_cast<TextButton*>(*i);
-		if (button)
-		{
-			button->setColor(element->color);
-			button->setHighContrast(true);
-			continue;
-		}
-		TextEdit* edit = dynamic_cast<TextEdit*>(*i);
-		if (edit)
-		{
-			edit->setColor(element->color);
-			edit->setHighContrast(true);
-			continue;
 		}
 		TextList* list = dynamic_cast<TextList*>(*i);
 		if (list)
 		{
-			list->setColor(element->color);
 			list->setArrowColor(element->border);
-			list->setHighContrast(true);
-			continue;
-		}
-		ArrowButton *arrow = dynamic_cast<ArrowButton*>(*i);
-		if (arrow)
-		{
-			arrow->setColor(element->border);
-			continue;
-		}
-		Slider *slider = dynamic_cast<Slider*>(*i);
-		if (slider)
-		{
-			slider->setColor(element->color);
-			slider->setHighContrast(true);
-			continue;
 		}
 		ComboBox *combo = dynamic_cast<ComboBox*>(*i);
 		if (combo)
 		{
-			combo->setColor(element->color);
 			combo->setArrowColor(element->border);
-			combo->setHighContrast(true);
 		}
 	}
 }
