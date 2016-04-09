@@ -67,6 +67,10 @@ void SoldierNamePool::load(const std::string &filename)
 		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
 		_femaleLast.push_back(name);
 	}
+	if (_femaleFirst.empty())
+	{
+		_femaleFirst = _maleFirst;
+	}
 	if (_femaleLast.empty())
 	{
 		_femaleLast = _maleLast;

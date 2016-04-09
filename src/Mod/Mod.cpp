@@ -1347,6 +1347,7 @@ SavedGame *Mod::newSave() const
 	// Set up starting base
 	Base *base = new Base(this);
 	base->load(_startingBase, save, true);
+	save->getBases()->push_back(base);
 
 	// Correct IDs
 	for (std::vector<Craft*>::const_iterator i = base->getCrafts()->begin(); i != base->getCrafts()->end(); ++i)
@@ -1423,7 +1424,6 @@ SavedGame *Mod::newSave() const
 		}
 	}
 
-	save->getBases()->push_back(base);
 	// Setup alien strategy
 	save->getAlienStrategy().init(this);
 	save->setTime(_startingTime);
@@ -2137,7 +2137,7 @@ Soldier *Mod::genSoldier(SavedGame *save, std::string type) const
 	// Check for duplicates
 	// Original X-COM gives up after 10 tries so might as well do the same here
 	bool duplicate = true;
-	for (int i = 0; i < 10 && duplicate; i++)
+	for (int i = 0; i < 10 && duplicate; ++i)
 	{
 		delete soldier;
 		soldier = new Soldier(getSoldier(type), getArmor(getSoldier(type)->getArmor()), newId);
