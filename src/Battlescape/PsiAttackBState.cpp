@@ -164,12 +164,12 @@ void PsiAttackBState::psiAttack()
 			int moraleLoss = (110-_target->getBaseStats()->bravery);
 			if (moraleLoss > 0)
 			_target->moraleChange(-moraleLoss);
+			_target->setMindControllerId(_unit->getId());
 			// Award Panic battle unit kill
 			if (!_unit->getStatistics()->duplicateEntry(STATUS_PANICKING, _target->getId()))
 			{
 				killStat.status = STATUS_PANICKING;
-				_unit->getStatistics()->kills.push_back(new BattleUnitKills(killStat));
-				_target->setMurdererId(_unit->getId());
+				_unit->getStatistics()->kills.push_back(new BattleUnitKills(killStat));				
 			}
 			if (_parent->getSave()->getSide() == FACTION_PLAYER)
 			{
@@ -182,9 +182,9 @@ void PsiAttackBState::psiAttack()
 			if (!_unit->getStatistics()->duplicateEntry(STATUS_TURNING, _target->getId()))
 			{
 				killStat.status = STATUS_TURNING;
-				_unit->getStatistics()->kills.push_back(new BattleUnitKills(killStat));
-				_target->setMurdererId(_unit->getId());
+				_unit->getStatistics()->kills.push_back(new BattleUnitKills(killStat));				
 			}
+			_target->setMindControllerId(_unit->getId());
 			_target->convertToFaction(_unit->getFaction());
 			_parent->getTileEngine()->calculateFOV(_target->getPosition());
 			_parent->getTileEngine()->calculateUnitLighting();

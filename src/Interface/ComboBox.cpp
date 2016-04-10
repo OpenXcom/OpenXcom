@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ComboBox.h"
+#include <algorithm>
 #include "TextButton.h"
 #include "Window.h"
 #include "TextList.h"

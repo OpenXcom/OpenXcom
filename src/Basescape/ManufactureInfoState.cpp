@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ManufactureInfoState.h"
+#include <algorithm>
 #include "../Interface/Window.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/ToggleTextButton.h"
@@ -300,35 +301,6 @@ void ManufactureInfoState::exitState()
 	}
 }
 
-static void _formatProfit (int profit, std::wostringstream &outStream)
-{
-	bool profitIsNeg = false;
-	if (0 > profit)
-	{
-		profit = -profit;
-		profitIsNeg = true;
-	}
-
-	std::wstring suffix = L"";
-	if (1000000000 <= profit)
-	{
-		profit /= 1000000000;
-		suffix = L"B";
-	}
-	else if (1000000 <= profit)
-	{
-		profit /= 1000000;
-		suffix = L"M";
-	}
-	else if (1000 <= profit)
-	{
-		profit /= 1000;
-		suffix = L"K";
-	}
-
-	outStream << (profitIsNeg ? L"-" : L"+") << L"$" << profit << suffix;
-}
-
 /**
  * Updates display of assigned/available engineer/workshop space.
  */
@@ -344,9 +316,7 @@ void ManufactureInfoState::setAssignedEngineer()
 	if (_production->getInfiniteAmount()) s4 << Language::utf8ToWstr("∞");
 	else s4 << _production->getAmountTotal();
 	_txtTodo->setText(s4.str());
-	std::wostringstream s6;
-	_formatProfit(getMonthlyNetFunds(), s6);
-	_txtMonthlyProfit->setText(tr("STR_NET_FUNDS_PER_MONTH_UC").arg(s6.str()));
+	_txtMonthlyProfit->setText(tr("STR_MONTHLY_PROFIT").arg(Text::formatFunding(getMonthlyNetFunds()).c_str()));
 }
 
 /**

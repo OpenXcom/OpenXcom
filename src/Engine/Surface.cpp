@@ -284,8 +284,17 @@ void Surface::loadImage(const std::string &filename)
 						setPixelIterative(&x, &y, *i);
 					}
 					setPalette((SDL_Color*)color->palette, 0, color->palettesize);
-
-					SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
+					int transparent = 0;
+					for (int c = 0; c < _surface->format->palette->ncolors; ++c)
+					{
+						SDL_Color *palColor = _surface->format->palette->colors + c;
+						if (palColor->unused == 0)
+						{
+							transparent = c;
+							break;
+						}
+					}
+					SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, transparent);
 				}
 			}
 		}
@@ -451,6 +460,58 @@ void Surface::offset(int off, int min, int max, int mul)
 	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
 	{
 		Uint8 pixel = getPixel(x, y);
+		int p;
+		if (off > 0)
+		{
+			p = pixel * mul + off;
+		}
+		else
+		{
+			p = (pixel + off) / mul;
+		}
+		if (min != -1 && p < min)
+		{
+			p = min;
+		}
+		else if (max != -1 && p > max)
+		{
+			p = max;
+		}
+
+		if (pixel > 0)
+		{
+			setPixelIterative(&x, &y, p);
+		}
+		else
+		{
+			setPixelIterative(&x, &y, 0);
+		}
+	}
+
+	// Unlock the surface
+	unlock();
+}
+
+/**
+ * Shifts all the colors in the surface by a set amount, but
+ * keeping them inside a fixed-size color block chunk.
+ * @param off Amount to shift.
+ * @param blk Color block size.
+ * @param mul Shift multiplier.
+ */
+void Surface::offsetBlock(int off, int blk, int mul)
+{
+	if (off == 0)
+		return;
+
+	// Lock the surface
+	lock();
+
+	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
+	{
+		Uint8 pixel = getPixel(x, y);
+		int min = pixel / blk * blk;
+		int max = min + blk;
 		int p;
 		if (off > 0)
 		{

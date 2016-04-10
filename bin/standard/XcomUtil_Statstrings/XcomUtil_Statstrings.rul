@@ -2,6 +2,7 @@
 # See http://ufopaedia.org/index.php?title=Statstrings
 # These are the default statStrings from XcomUtil.
 # Melee has been added as a value that can be reported by statstrings.  Use "melee:" as the criteria.
+# Psionic Training has been added as a value that can be reported by statstrings.  Use "psiTraining:" as the criteria, values will be ignored.
   statStrings:
   - string: "x"
     psiStrength: [~, 30]

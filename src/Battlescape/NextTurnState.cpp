@@ -29,9 +29,7 @@
 #include "../Interface/Text.h"
 #include "../Engine/Action.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/SavedGame.h"
 #include "BattlescapeState.h"
-#include "../Menu/SaveGameState.h"
 #include "Map.h"
 
 namespace OpenXcom
@@ -188,14 +186,7 @@ void NextTurnState::close()
 		// Autosave every set amount of turns
 		if ((_battleGame->getTurn() == 1 || _battleGame->getTurn() % Options::autosaveFrequency == 0) && _battleGame->getSide() == FACTION_PLAYER)
 		{
-			if (_game->getSavedGame()->isIronman())
-			{
-				_game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_IRONMAN, _palette));
-			}
-			else if (Options::autosave)
-			{
-				_game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_AUTO_BATTLESCAPE, _palette));
-			}
+			_state->autosave();
 		}
 	}
 }

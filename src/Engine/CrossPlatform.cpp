@@ -977,18 +977,18 @@ void stackTrace(void *ctx)
 			}
 			else
 			{
-				Log(LOG_FATAL) << "0x" << std::hex << symbol->Address << std::dec << " " << symbol->Name << " (SymGetLineFromAddr64 failed: " << GetLastError() << ")";
+				Log(LOG_FATAL) << "0x" << std::hex << symbol->Address << std::dec << " " << symbol->Name << " (??: " << GetLastError() << ")";
 			}
 		}
 		else
 		{
-			Log(LOG_FATAL) << "SymFromAddr failed: " << GetLastError();
+			Log(LOG_FATAL) << "??: " << GetLastError();
 		}
 	}
 	DWORD err = GetLastError();
 	if (err)
 	{
-		Log(LOG_FATAL) << "StackWalk64 failed: " << err;
+		Log(LOG_FATAL) << "No stack trace generated: " << err;
 	}
 	SymCleanup(process);
 #else
@@ -1071,7 +1071,7 @@ void crashDump(void *ex, const std::string &err)
 	}
 	else
 	{
-		Log(LOG_FATAL) << "MiniDumpWriteDump failed: " << GetLastError();
+		Log(LOG_FATAL) << "No crash dump generated: " << GetLastError();
 	}
 #else
 	if (ex == 0)
@@ -1089,7 +1089,7 @@ void crashDump(void *ex, const std::string &err)
 	std::ostringstream msg;
 	msg << "OpenXcom has crashed: " << error.str() << std::endl;
 	msg << "Extra information has been saved to openxcom.log." << std::endl;
-	msg << "Please report this to the developers.";
+	msg << "If this was unexpected, please report this to the developers.";
 	showError(msg.str());
 }
 

@@ -134,6 +134,8 @@ public:
 	bool manageCommendations(Mod *rules);
 	/// Increment the soldier's service time.
 	void addMonthlyService();
+	/// Get the total months in service.
+	int getMonthsService() const;
     /// Get the mission id list.
     std::vector<int> &getMissionIdList();
     /// Get the kill list.
@@ -146,6 +148,12 @@ public:
     void awardBestOverall();
     /// Award post-humous kills commendation.
     void awardPostMortemKill(int kills);
+	/// Get the total number of shots fired.
+	int getShotsFiredTotal() const;
+	/// Get the total number of shots landed on target.
+	int getShotsLandedTotal() const;
+    /// Get the soldier's accuracy.
+    int getAccuracy() const;
 };
 
 }

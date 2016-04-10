@@ -244,17 +244,13 @@ void ScrollBar::drawTrack()
 	if (_bg)
 	{
 		_track->copy(_bg);
-		if (_contrast)
-		{
-			_track->offset(-5, 1);
-		}
-		else if (_list->getComboBox())
+		if (_list->getComboBox())
 		{
 			_track->offset(+1, Palette::backPos);
 		}
 		else
 		{
-			_track->offset(-5, Palette::backPos);
+			_track->offsetBlock(-5);
 		}
 	}
 }

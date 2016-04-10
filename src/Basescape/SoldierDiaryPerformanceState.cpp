@@ -269,14 +269,16 @@ void SoldierDiaryPerformanceState::init()
 		{
 			_lstKillTotals->addRow(4, tr("STR_KILLS").arg(_soldier->getDiary()->getKillTotal()).c_str(),
 										tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str(),
-										tr("STR_PANICKS").arg(_soldier->getDiary()->getPanickTotal()).c_str(),
+										tr("STR_DIARY_ACCURACY").arg(_soldier->getDiary()->getAccuracy()).c_str(),
 										tr("STR_MINDCONTROLS").arg(_soldier->getDiary()->getControlTotal()).c_str());
 		}
 		else
 		{
-			_lstKillTotals->addRow(2, tr("STR_KILLS").arg(_soldier->getDiary()->getKillTotal()).c_str(),
-				tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str());
-		}
+			_lstKillTotals->addRow(3, tr("STR_KILLS").arg(_soldier->getDiary()->getKillTotal()).c_str(),
+										tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str(),
+										tr("STR_DIARY_ACCURACY").arg(_soldier->getDiary()->getAccuracy()).c_str());
+		}		
+		
 	}
 	else if (_display == DIARY_MISSIONS)
 	{

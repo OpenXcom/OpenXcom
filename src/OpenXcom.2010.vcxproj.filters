@@ -943,6 +943,9 @@
     <ClCompile Include="Mod\RuleConverter.cpp">
       <Filter>Mod</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\StatisticsState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1925,6 +1928,9 @@
     </ClInclude>
     <ClInclude Include="Mod\RuleConverter.h">
       <Filter>Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\StatisticsState.h">
+      <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

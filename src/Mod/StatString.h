@@ -106,8 +106,8 @@ class StatString
 {
 private:
 	std::string _stringToBeAddedIfAllConditionsAreMet;
-	std::vector< StatStringCondition* > _conditions;
-	StatStringCondition *getCondition(const std::string &conditionName, const YAML::Node &node) const;
+	std::vector<StatStringCondition*> _conditions;
+	static StatStringCondition *getCondition(const std::string &conditionName, const YAML::Node &node);
 public:
 	/// Creates a blank StatString ruleset.
 	StatString();
@@ -116,11 +116,11 @@ public:
 	/// Loads the StatString from YAML.
 	void load(const YAML::Node& node);
  	/// Get the conditions for this StatString.
-	std::vector< StatStringCondition* > getConditions() const;
+	const std::vector<StatStringCondition*> &getConditions() const;
 	/// Get the StatString string.
 	std::string getString() const;
 	/// Calculate a StatString.
-	static std::wstring calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings, bool psiStrengthEval);
+	static std::wstring calcStatString(UnitStats &currentStats, const std::vector<StatString*> &statStrings, bool psiStrengthEval, bool inTraining);
 	/// Get the CurrentStats.
 	static std::map<std::string, int> getCurrentStats(UnitStats &currentStats);
 };

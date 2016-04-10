@@ -52,8 +52,8 @@ private:
 	int _accuracyAuto, _accuracySnap, _accuracyAimed, _tuAuto, _tuSnap, _tuAimed;
 	int _clipSize, _accuracyMelee, _tuMelee;
 	BattleType _battleType;
-	bool _twoHanded, _waypoint, _fixedWeapon;
-	int _invWidth, _invHeight;
+	bool _twoHanded, _fixedWeapon;
+	int _waypoints, _invWidth, _invHeight;
 	int _painKiller, _heal, _stimulant;
 	int _woundRecovery, _healthRecovery, _stunRecovery, _energyRecovery;
 	int _tuUse;
@@ -98,10 +98,10 @@ public:
 	int getHandSprite() const;
 	/// Gets if the item is two-handed.
 	bool isTwoHanded() const;
-	/// Gets if the item is a launcher.
-	bool isWaypoint() const;
 	/// Gets if the item is fixed.
 	bool isFixed() const;
+	/// Gets if the item is a launcher.
+	int getWaypoints() const;
 	/// Gets the item's bullet sprite reference.
 	int getBulletSprite() const;
 	/// Gets the item's fire sound.

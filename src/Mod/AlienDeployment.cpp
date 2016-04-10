@@ -380,7 +380,7 @@ std::vector<std::string> &AlienDeployment::getMusic()
  * Gets The minimum depth for this deployment.
  * @return The minimum depth.
  */
-int AlienDeployment::getMinDepth()
+int AlienDeployment::getMinDepth() const
 {
 	return _minDepth;
 }
@@ -389,7 +389,7 @@ int AlienDeployment::getMinDepth()
  * Gets The maximum depth for this deployment.
  * @return The maximum depth.
  */
-int AlienDeployment::getMaxDepth()
+int AlienDeployment::getMaxDepth() const
 {
 	return _maxDepth;
 }
@@ -398,7 +398,7 @@ int AlienDeployment::getMaxDepth()
  * Gets The minimum depth for this deployment's mission site.
  * @return The minimum depth.
  */
-int AlienDeployment::getMinSiteDepth()
+int AlienDeployment::getMinSiteDepth() const
 {
 	return _minSiteDepth;
 }
@@ -407,7 +407,7 @@ int AlienDeployment::getMinSiteDepth()
  * Gets The maximum depth for this deployment's mission site.
  * @return The maximum depth.
  */
-int AlienDeployment::getMaxSiteDepth()
+int AlienDeployment::getMaxSiteDepth() const
 {
 	return _maxSiteDepth;
 }
@@ -416,7 +416,7 @@ int AlienDeployment::getMaxSiteDepth()
  * Gets the target type for this mission (ie: alien control consoles and synonium devices).
  * @return the target type for this mission.
  */
-int AlienDeployment::getObjectiveType()
+int AlienDeployment::getObjectiveType() const
 {
 	return _objectiveType;
 }
@@ -425,7 +425,7 @@ int AlienDeployment::getObjectiveType()
  * Gets the number of objectives required by this mission.
  * @return the number of objectives required.
  */
-int AlienDeployment::getObjectivesRequired()
+int AlienDeployment::getObjectivesRequired() const
 {
 	return _objectivesRequired;
 }
@@ -434,7 +434,7 @@ int AlienDeployment::getObjectivesRequired()
  * Gets the string name for the popup to splash when the objective conditions are met.
  * @return the string to pop up.
  */
-std::string AlienDeployment::getObjectivePopup()
+std::string AlienDeployment::getObjectivePopup() const
 {
 	return _objectivePopup;
 }
@@ -445,11 +445,11 @@ std::string AlienDeployment::getObjectivePopup()
  * @param &score a reference to the score we wish to alter.
  * @return if there is anything worthwhile processing.
  */
-bool AlienDeployment::getObjectiveCompleteInfo(std::string &text, int &score)
+bool AlienDeployment::getObjectiveCompleteInfo(std::string &text, int &score) const
 {
 	text = _objectiveCompleteText;
 	score = _objectiveCompleteScore;
-	return text != "";
+	return !text.empty();
 }
 
 /**
@@ -458,11 +458,11 @@ bool AlienDeployment::getObjectiveCompleteInfo(std::string &text, int &score)
  * @param &score a reference to the score we wish to alter.
  * @return if there is anything worthwhile processing.
  */
-bool AlienDeployment::getObjectiveFailedInfo(std::string &text, int &score)
+bool AlienDeployment::getObjectiveFailedInfo(std::string &text, int &score) const
 {
 	text = _objectiveFailedText;
 	score = _objectiveFailedScore;
-	return text != "";
+	return !text.empty();
 }
 
 /**
@@ -487,7 +487,7 @@ int AlienDeployment::getPoints() const
  * Gets the maximum number of turns we have before this mission ends.
  * @return the turn limit.
  */
-const int AlienDeployment::getTurnLimit() const
+int AlienDeployment::getTurnLimit() const
 {
 	return _turnLimit;
 }
@@ -496,7 +496,7 @@ const int AlienDeployment::getTurnLimit() const
  * Gets the action type to perform when the timer expires.
  * @return the action type to perform.
  */
-const ChronoTrigger AlienDeployment::getChronoTrigger() const
+ChronoTrigger AlienDeployment::getChronoTrigger() const
 {
 	return _chronoTrigger;
 }
@@ -505,8 +505,9 @@ const ChronoTrigger AlienDeployment::getChronoTrigger() const
  * Gets the turn at which the players become exposed to the AI.
  * @return the turn to start cheating.
  */
-const int AlienDeployment::getCheatTurn() const
+int AlienDeployment::getCheatTurn() const
 {
 	return _cheatTurn;
 }
+
 }

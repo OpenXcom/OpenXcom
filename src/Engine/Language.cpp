@@ -20,6 +20,7 @@
 #include <fstream>
 #include <cassert>
 #include <set>
+#include <limits.h>
 #include "CrossPlatform.h"
 #include "Logger.h"
 #include "Options.h"
@@ -469,22 +470,16 @@ std::wstring Language::getName() const
 const LocalizedText &Language::getString(const std::string &id) const
 {
 	static LocalizedText hack(L"");
-	static std::set<std::string> notFoundIds;
 	if (id.empty())
 	{
 		hack = LocalizedText(L"");
 		return hack;
 	}
 	std::map<std::string, LocalizedText>::const_iterator s = _strings.find(id);
+	// Check if translation strings recently learned pluralization.
 	if (s == _strings.end())
 	{
-		// only output the warning once so as not to spam the logs
-		if (notFoundIds.end() == notFoundIds.find(id))
-		{
-			notFoundIds.insert(id);
-			Log(LOG_WARNING) << id << " not found in " << Options::language;
-		}
-		hack = LocalizedText(utf8ToWstr(id));
+		hack = getString(id, UINT_MAX);
 		return hack;
 	}
 	else
@@ -504,6 +499,7 @@ const LocalizedText &Language::getString(const std::string &id) const
 LocalizedText Language::getString(const std::string &id, unsigned n) const
 {
 	assert(!id.empty());
+	static std::set<std::string> notFoundIds;
 	std::map<std::string, LocalizedText>::const_iterator s = _strings.end();
 	// Try specialized form.
 	if (n == 0)
@@ -523,14 +519,32 @@ LocalizedText Language::getString(const std::string &id, unsigned n) const
 	// Give up
 	if (s == _strings.end())
 	{
-		Log(LOG_WARNING) << id << " not found in " << Options::language;
+		if (notFoundIds.end() == notFoundIds.find(id))
+		{
+			notFoundIds.insert(id);
+			Log(LOG_WARNING) << id << " not found in " << Options::language;
+		}
 		return LocalizedText(utf8ToWstr(id));
 	}
-	std::wostringstream ss;
-	ss << n;
-	std::wstring marker(L"{N}"), val(ss.str()), txt(s->second);
-	replace(txt, marker, val);
-	return txt;
+	if (n == UINT_MAX) // Special case
+	{
+		if (notFoundIds.end() == notFoundIds.find(id))
+		{
+			notFoundIds.insert(id);
+			Log(LOG_WARNING) << id << " has plural format in ``" << Options::language << "``. Code assumes singular format.";
+//		Hint: Change ``getstring(ID).arg(value)`` to ``getString(ID, value)`` in appropriate files.
+		}
+		return s->second;
+	}
+	else
+	{
+		std::wostringstream ss;
+		ss << n;
+		std::wstring marker(L"{N}"), val(ss.str()), txt(s->second);
+		replace(txt, marker, val);
+		return txt;
+	}
+
 }
 
 /**

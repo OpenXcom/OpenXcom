@@ -39,20 +39,12 @@ ListLoadState::ListLoadState(OptionsOrigin origin) : ListGamesState(origin, 0, t
 {
 	// Create objects
 	_btnOld = new TextButton(80, 16, 60, 172);
+	_btnCancel->setX(180);
 
 	add(_btnOld, "button", "saveMenus");
 	
 	// Set up objects
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
-
-	if (origin != OPT_MENU)
-	{
-		_btnOld->setVisible(false);
-	}
-	else
-	{
-		_btnCancel->setX(180);
-	}
 
 	_btnOld->setText(tr("STR_ORIGINAL_XCOM"));
 	_btnOld->onMouseClick((ActionHandler)&ListLoadState::btnOldClick);
@@ -74,7 +66,7 @@ ListLoadState::~ListLoadState()
  */
 void ListLoadState::btnOldClick(Action *)
 {
-	_game->pushState(new ListLoadOriginalState);
+	_game->pushState(new ListLoadOriginalState(_origin));
 }
 
 /**

@@ -23,16 +23,19 @@
 #include "VideoState.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
-#include "../Savegame/SavedGame.h"
 #include "../Engine/FileMap.h"
 #include "../Mod/Mod.h"
+#include "../Savegame/SavedGame.h"
+#include "StatisticsState.h"
 
 namespace OpenXcom
 {
+
+const std::string CutsceneState::WIN_GAME = "winGame";
+const std::string CutsceneState::LOSE_GAME = "loseGame";
 
 CutsceneState::CutsceneState(const std::string &cutsceneId)
 	: _cutsceneId(cutsceneId)
@@ -52,29 +55,25 @@ void CutsceneState::init()
 	// pop self off stack and replace with actual player state
 	_game->popState();
 
-	const std::map<std::string, RuleVideo*> *videoMods = _game->getMod()->getVideos();
-	std::map<std::string, RuleVideo*>::const_iterator videoRuleIt = videoMods->find(_cutsceneId);
-
-	if (videoRuleIt == videoMods->end())
+	if (_cutsceneId == WIN_GAME || _cutsceneId == LOSE_GAME)
 	{
-		Log(LOG_WARNING) << "cutscene definition not found: " << _cutsceneId;
+		if (_game->getSavedGame()->getMonthsPassed() > -1)
+		{
+			_game->setState(new StatisticsState);
+		}
+		else
+		{
+			_game->setSavedGame(0);
+			_game->setState(new GoToMainMenuState);
+		}
+	}
+
+	const RuleVideo *videoRule = _game->getMod()->getVideo(_cutsceneId);
+	if (videoRule == 0)
+	{
 		return;
 	}
 
-	if (_cutsceneId == "winGame" || _cutsceneId == "loseGame")
-	{
-		if (_game->getSavedGame() && _game->getSavedGame()->isIronman()
-		    && !_game->getSavedGame()->getName().empty())
-		{
-			std::string filename = CrossPlatform::sanitizeFilename(
-				Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
-			CrossPlatform::deleteFile(Options::getMasterUserFolder() + filename);
-		}
-		_game->setSavedGame(0);
-		_game->setState(new GoToMainMenuState);
-	}
-
-	const RuleVideo *videoRule = videoRuleIt->second;
 	bool fmv = false, slide = false;
 	if (!videoRule->getVideos()->empty())
 	{

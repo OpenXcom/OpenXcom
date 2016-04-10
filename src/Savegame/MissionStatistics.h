@@ -110,11 +110,11 @@ struct MissionStatistics
 		std::wostringstream ss;
 		if (success)
 		{
-			ss << lang->getString("STR_MISSION_WIN");
+			ss << lang->getString("STR_VICTORY");
 		}
 		else
 		{
-			ss << lang->getString("STR_MISSION_LOSS");
+			ss << lang->getString("STR_DEFEAT");
 		}
 		ss << L" - " << lang->getString(rating);
 		return ss.str();

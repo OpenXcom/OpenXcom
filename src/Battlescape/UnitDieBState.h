@@ -35,11 +35,11 @@ class UnitDieBState : public BattleState
 private:
 	BattleUnit *_unit;
 	ItemDamageType _damageType;
-	bool _noSound;
+	bool _noSound, _noCorpse;
 	int _extraFrame;
 public:
 	/// Creates a new UnitDieBState class
-	UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound);
+	UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound, bool noCorpse);
 	/// Cleans up the UnitDieBState.
 	~UnitDieBState();
 	/// Initializes the state.

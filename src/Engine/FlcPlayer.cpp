@@ -22,6 +22,8 @@
  */
 
 #include "FlcPlayer.h"
+#include <algorithm>
+#include <cassert>
 #include <string.h>
 #include <math.h>
 #include <SDL_mixer.h>
@@ -159,10 +161,8 @@ bool FlcPlayer::init(const char *filename, void(*frameCallBack)(), Game *game, i
 	}
 	else // Otherwise create a new one
 	{
-		_mainScreen = SDL_AllocSurface(SDL_SWSURFACE, _screenWidth, _screenHeight, 8, 0, 0, 0, 0);
-	}
-
-	
+		_mainScreen = SDL_AllocSurface(SDL_SWSURFACE, _realScreen->getSurface()->getWidth(), _realScreen->getSurface()->getHeight(), 8, 0, 0, 0, 0);
+	}	
 
 	return true;
 }
@@ -501,6 +501,8 @@ void FlcPlayer::color256()
 			_colors[i].b = *(pSrc++);
 		}
 
+		if (_mainScreen != _realScreen->getSurface()->getSurface())
+			SDL_SetColors(_mainScreen, _colors, numColorsSkip, numColors);
 		_realScreen->setPalette(_colors, numColorsSkip, numColors, true);
 
 		if (numColorPackets >= 1)
@@ -714,6 +716,8 @@ void FlcPlayer::color64()
 			_colors[i].b = *(pSrc++) << 2;
 		}
 
+		if (_mainScreen != _realScreen->getSurface()->getSurface())
+			SDL_SetColors(_mainScreen, _colors, NumColorsSkip, NumColors);
 		_realScreen->setPalette(_colors, NumColorsSkip, NumColors, true);
 	}
 }

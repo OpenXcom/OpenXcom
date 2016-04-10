@@ -189,7 +189,7 @@ items: #done
     tuAimed: 66
     battleType: 1
     fixedWeapon: true
-    waypoint: true
+    waypoints: 9
     invWidth: 2
     invHeight: 3
     turretType: 4
@@ -944,7 +944,7 @@ items: #done
     tuAimed: 66
     battleType: 1
     twoHanded: true
-    waypoint: true
+    waypoints: 9
     invWidth: 2
     invHeight: 3
     recoveryPoints: 5
@@ -1043,6 +1043,7 @@ items: #done
     invWidth: 2
     invHeight: 1
     attraction: 4
+    recoveryPoints: 5
   - type: STR_MC_READER
     requires:
       - STR_MC_READER

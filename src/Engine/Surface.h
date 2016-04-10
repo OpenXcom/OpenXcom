@@ -63,6 +63,8 @@ public:
 	void clear(Uint32 color = 0);
 	/// Offsets the surface's colors by a set amount.
 	void offset(int off, int min = -1, int max = -1, int mul = 1);
+	/// Offsets the surface's colors in a color block.
+	void offsetBlock(int off, int blk = 16, int mul = 1);
 	/// Inverts the surface's colors.
 	void invert(Uint8 mid);
 	/// Runs surface functionality every cycle
@@ -216,14 +218,17 @@ public:
 	std::string getTooltip() const;
 	/// Sets the tooltip of the surface.
 	void setTooltip(const std::string &tooltip);
+
 	/// Sets the color of the surface.
 	virtual void setColor(Uint8 /*color*/) { /* empty by design */ };
 	/// Sets the secondary color of the surface.
 	virtual void setSecondaryColor(Uint8 /*color*/) { /* empty by design */ };
 	/// Sets the border colour of the surface.
 	virtual void setBorderColor(Uint8 /*color*/) { /* empty by design */ };
+	/// Sets the high contrast color setting of the surface.
+	virtual void setHighContrast(bool /*contrast*/) { /* empty by design */ };
 	/// Sets this button to use a colour lookup table instead of inversion for its alternate form.
-	virtual void setTFTDMode(bool mode);
+	void setTFTDMode(bool mode);
 	/// checks if this is a TFTD mode surface.
 	bool isTFTDMode();
 

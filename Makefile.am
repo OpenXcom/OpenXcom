@@ -468,6 +468,8 @@ openxcom_SOURCES = \
 	src/Menu/SlideshowState.h \
 	src/Menu/StartState.cpp \
 	src/Menu/StartState.h \
+	src/Menu/StatisticsState.cpp \
+	src/Menu/StatisticsState.h \
 	src/Menu/TestState.cpp \
 	src/Menu/TestState.h \
 	src/Menu/VideoState.cpp \

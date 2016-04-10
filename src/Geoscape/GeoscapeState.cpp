@@ -688,7 +688,15 @@ void GeoscapeState::time5Seconds()
 	// Game over if there are no more bases.
 	if (_game->getSavedGame()->getBases()->empty())
 	{
-		_game->pushState(new CutsceneState("loseGame"));
+		_game->getSavedGame()->setEnding(END_LOSE);
+	}
+	if (_game->getSavedGame()->getEnding() == END_LOSE)
+	{
+		_game->pushState(new CutsceneState(CutsceneState::LOSE_GAME));
+		if (_game->getSavedGame()->isIronman())
+		{
+			_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN, _palette));
+		}
 		return;
 	}
 
@@ -1718,17 +1726,20 @@ void GeoscapeState::time1Month()
 
 	// Handle Psi-Training and initiate a new retaliation mission, if applicable
 	bool psi = false;
-	for (std::vector<Base*>::const_iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
+	if (!Options::anytimePsiTraining)
 	{
-		if ((*b)->getAvailablePsiLabs() > 0 && !Options::anytimePsiTraining)
+		for (std::vector<Base*>::const_iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
 		{
-			psi = true;
-			for (std::vector<Soldier*>::const_iterator s = (*b)->getSoldiers()->begin(); s != (*b)->getSoldiers()->end(); ++s)
+			if ((*b)->getAvailablePsiLabs() > 0)
 			{
-				if ((*s)->isInPsiTraining())
+				psi = true;
+				for (std::vector<Soldier*>::const_iterator s = (*b)->getSoldiers()->begin(); s != (*b)->getSoldiers()->end(); ++s)
 				{
-					(*s)->trainPsi();
-					(*s)->calcStatString(_game->getMod()->getStatStrings(), (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getMod()->getPsiRequirements())));
+					if ((*s)->isInPsiTraining())
+					{
+						(*s)->trainPsi();
+						(*s)->calcStatString(_game->getMod()->getStatStrings(), (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getMod()->getPsiRequirements())));
+					}
 				}
 			}
 		}

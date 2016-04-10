@@ -1987,7 +1987,7 @@ double SavedBattleGame::getAmbientVolume() const
  * Gets the maximum number of turns we have before this mission ends.
  * @return the turn limit.
  */
-const int SavedBattleGame::getTurnLimit() const
+int SavedBattleGame::getTurnLimit() const
 {
 	return _turnLimit;
 }
@@ -1996,7 +1996,7 @@ const int SavedBattleGame::getTurnLimit() const
  * Gets the action type to perform when the timer expires.
  * @return the action type to perform.
  */
-const ChronoTrigger SavedBattleGame::getChronoTrigger() const
+ChronoTrigger SavedBattleGame::getChronoTrigger() const
 {
 	return _chronoTrigger;
 }

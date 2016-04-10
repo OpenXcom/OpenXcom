@@ -214,6 +214,12 @@ void UnitSprite::draw()
  */
 void UnitSprite::drawRoutine0()
 {
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
 	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0, *itemA = 0, *itemB = 0;
 	// magic numbers
 	const int legsStand = 16, legsKneel = 24;
@@ -294,13 +300,8 @@ void UnitSprite::drawRoutine0()
 	const int offX7[8] = { 0, 6, 8, 12, 2, -5, -5, -13 }; // for the left handed rifles (muton)
 	const int offY7[8] = { -4, -6, -1, 0, 3, 0, 1, 0 }; // for the left handed rifles (muton)
 	const int offYKneel = 4;
-	const int offXAiming = 16;
-
-	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	}
+	const int offXSprite = 16; // sprites are double width
+	const int soldierHeight = 22;
 
 	const int unitDir = _unit->getDirection();
 	const int walkPhase = _unit->getWalkingPhase();
@@ -308,6 +309,7 @@ void UnitSprite::drawRoutine0()
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		torso->setX(offXSprite);
 		drawRecolored(torso);
 		return;
 	}
@@ -339,7 +341,6 @@ void UnitSprite::drawRoutine0()
 	// when walking, torso(fixed sprite) has to be animated up/down
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
-
 		if (_drawingRoutine == 10)
 			torsoHandsWeaponY = mutonYoffWalk[walkPhase];
 		else if (_drawingRoutine == 13 || _drawingRoutine == 14)
@@ -495,11 +496,22 @@ void UnitSprite::drawRoutine0()
 	// offset everything but legs when kneeled
 	if (_unit->isKneeled())
 	{
-		leftArm->setY(offYKneel);
-		rightArm->setY(offYKneel);
-		torso->setY(offYKneel);
-		itemA?itemA->setY(itemA->getY() + offYKneel):void();
-		itemB?itemB->setY(itemB->getY() + offYKneel):void();
+		if (_drawingRoutine == 13) // tftd torsos are stubby.
+		{
+			leftArm->setY(offYKneel + 1);
+			rightArm->setY(offYKneel + 1);
+			torso->setY(offYKneel + 1);
+			itemA?itemA->setY(itemA->getY() + offYKneel + 1):void();
+			itemB?itemB->setY(itemB->getY() + offYKneel + 1):void();
+		}
+		else
+		{
+			leftArm->setY(offYKneel);
+			rightArm->setY(offYKneel);
+			torso->setY(offYKneel);
+			itemA?itemA->setY(itemA->getY() + offYKneel):void();
+			itemB?itemB->setY(itemB->getY() + offYKneel):void();
+		}
 	}
 	else if (_unit->getStatus() != STATUS_WALKING)
 	{
@@ -511,27 +523,28 @@ void UnitSprite::drawRoutine0()
 	// items are calculated for soldier height (22) - some aliens are smaller, so item is drawn lower.
 	if (itemA)
 	{
-		itemA->setY(itemA->getY() + (22 - _unit->getStandHeight()));
+		itemA->setY(itemA->getY() + (soldierHeight - _unit->getStandHeight()));
 	}
 	if (itemB)
 	{
-		itemB->setY(itemB->getY() + (22 - _unit->getStandHeight()));
+		itemB->setY(itemB->getY() + (soldierHeight - _unit->getStandHeight()));
 	}
 
-	if (_unit->getStatus() == STATUS_AIMING)
+	// offset everything to the left by 16 pixels.
+	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	torso->setX(offXSprite);
+	legs->setX(offXSprite);
+	leftArm->setX(offXSprite);
+	rightArm->setX(offXSprite);
+	if (itemA)
+		itemA->setX(itemA->getX() + offXSprite);
+	if (itemB)
+		itemB->setX(itemB->getX() + offXSprite);
+	
+	// fix the errant muton arm.
+	if (!itemA && _drawingRoutine == 10 && _unit->getStatus() == STATUS_WALKING && unitDir == 2)
 	{
-		torso->setX(offXAiming);
-		legs->setX(offXAiming);
-		leftArm->setX(offXAiming);
-		rightArm->setX(offXAiming);
-		if (itemA)
-			itemA->setX(itemA->getX() + offXAiming);
-		if (itemB)
-			itemB->setX(itemB->getX() + offXAiming);
-	}
-	else if (!itemA && _drawingRoutine == 10 && _unit->getStatus() == STATUS_WALKING && unitDir == 2)
-	{
-		rightArm->setX(-6);
+		rightArm->setX(10);
 	}
 
 	// blit order depends on unit direction, and whether we are holding a 2 handed weapon.
@@ -589,6 +602,11 @@ void UnitSprite::drawRoutine0()
  */
 void UnitSprite::drawRoutine1()
 {
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
 
 	Surface *torso = 0, *leftArm = 0, *rightArm = 0, *itemA = 0, *itemB = 0;
 	// magic numbers
@@ -601,17 +619,12 @@ void UnitSprite::drawRoutine1()
 	const int offY2[8] = { 1, -4, -1, 0, 3, 3, 5, 0 }; // for the weapons
 	const int offX3[8] = { 0, 6, 6, 12, -4, -5, -5, -13 }; // for the left handed rifles
 	const int offY3[8] = { -4, -4, -1, 0, 5, 0, 1, 0 }; // for the left handed rifles
-	const int offXAiming = 16;
-
-	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	}
+	const int offXSprite = 16; // sprites are double width
 
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		torso->setX(offXSprite);
 		drawRecolored(torso);
 		return;
 	}
@@ -711,16 +724,17 @@ void UnitSprite::drawRoutine1()
 		rightArm->setY(0);
 		torso->setY(0);
 	}
-	if (_unit->getStatus() == STATUS_AIMING)
-	{
-		torso->setX(offXAiming);
-		leftArm->setX(offXAiming);
-		rightArm->setX(offXAiming);
-		if (itemA)
-			itemA->setX(itemA->getX() + offXAiming);
-		if (itemB)
-			itemB->setX(itemB->getX() + offXAiming);
-	}
+	
+	// offset everything to the left by 16 pixels.
+	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	torso->setX(offXSprite);
+	leftArm->setX(offXSprite);
+	rightArm->setX(offXSprite);
+	if (itemA)
+		itemA->setX(itemA->getX() + offXSprite);
+	if (itemB)
+		itemB->setX(itemB->getX() + offXSprite);
+
 	// blit order depends on unit direction.
 	switch (unitDir)
 	{
@@ -755,6 +769,7 @@ void UnitSprite::drawRoutine2()
 
 	const int offX[8] = { -2, -7, -5, 0, 5, 7, 2, 0 }; // hovertank offsets
 	const int offy[8] = { -1, -3, -4, -5, -4, -3, -1, -1 }; // hovertank offsets
+	const int offXSprite = 16; // sprites are double width
 
 	Surface *s = 0;
 
@@ -765,11 +780,13 @@ void UnitSprite::drawRoutine2()
 	if (_part > 0 && hoverTank != 0)
 	{
 		s = _unitSurface->getFrame(104 + ((_part-1) * 8) + _animationFrame);
+		s->setX(offXSprite);
 		drawRecolored(s);
 	}
 
 	// draw the tank itself
 	s = _unitSurface->getFrame(hoverTank + (_part * 8) + _unit->getDirection());
+	s->setX(offXSprite);
 	drawRecolored(s);
 
 	// draw the turret, together with the last part
@@ -783,7 +800,7 @@ void UnitSprite::drawRoutine2()
 			turretOffsetX += offX[_unit->getDirection()];
 			turretOffsetY += offy[_unit->getDirection()];
 		}
-		s->setX(turretOffsetX);
+		s->setX(turretOffsetX + offXSprite);
 		s->setY(turretOffsetY);
 		drawRecolored(s);
 	}
@@ -802,15 +819,21 @@ void UnitSprite::drawRoutine3()
 	}
 
 	Surface *s = 0;
+	const int offXSprite = 16; // sprites are double width
 
 	// draw the animated propulsion below the hwp
 	if (_part > 0)
 	{
 		s = _unitSurface->getFrame(32 + ((_part-1) * 8) + _animationFrame);
+		s->setX(offXSprite);
 		drawRecolored(s);
 	}
 
 	s = _unitSurface->getFrame((_part * 8) + _unit->getDirection());
+	
+	// offset everything to the left by 16 pixels.
+	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	s->setX(offXSprite);
 
 	drawRecolored(s);
 }
@@ -837,7 +860,7 @@ void UnitSprite::drawRoutine4()
 	const int offX3[8] = { 0, 6, 6, 12, -4, -5, -5, -13 }; // for the left handed rifles
 	const int offY3[8] = { -4, -4, -1, 0, 5, 0, 1, 0 }; // for the left handed rifles
 	const int standConvert[8] = { 3, 2, 1, 0, 7, 6, 5, 4 }; // array for converting stand frames for some tftd civilians
-	const int offXAiming = 16;
+	const int offXSprite = 16; // sprites are double width
 
 	if (_drawingRoutine == 17) // tftd civilian - first set
 	{
@@ -862,6 +885,7 @@ void UnitSprite::drawRoutine4()
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		s->setX(offXSprite);
 		drawRecolored(s);
 		return;
 	}
@@ -930,15 +954,15 @@ void UnitSprite::drawRoutine4()
 			itemB->setY(offY3[unitDir]);
 		}
 	}
+	
+	// offset everything to the right by 16 pixels.
+	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	s->setX(offXSprite);
+	if (itemA)
+		itemA->setX(itemA->getX() + offXSprite);
+	if (itemB)
+		itemB->setX(itemB->getX() + offXSprite);
 
-	if (_unit->getStatus() == STATUS_AIMING)
-	{
-		s->setX(offXAiming);
-		if (itemA)
-			itemA->setX(itemA->getX() + offXAiming);
-		if (itemB)
-			itemB->setX(itemB->getX() + offXAiming);
-	}
 	switch (unitDir)
 	{
 	case 0: itemB?itemB->blit(this):void(); itemA?itemA->blit(this):void(); drawRecolored(s); break;
@@ -969,6 +993,7 @@ void UnitSprite::drawRoutine5()
 	}
 
 	Surface *s = 0;
+	const int offXSprite = 16; // sprites are double width
 
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
@@ -978,7 +1003,10 @@ void UnitSprite::drawRoutine5()
 	{
 		s = _unitSurface->getFrame((_part * 8) + _unit->getDirection());
 	}
-
+	
+	// offset everything to the right by 16 pixels.
+	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	s->setX(offXSprite);
 	drawRecolored(s);
 }
 
@@ -987,6 +1015,12 @@ void UnitSprite::drawRoutine5()
  */
 void UnitSprite::drawRoutine6()
 {
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
 	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0, *itemA = 0, *itemB = 0;
 	// magic numbers
 	const int Torso = 24, legsStand = 16, die = 96;
@@ -1002,17 +1036,12 @@ void UnitSprite::drawRoutine6()
 	const int offY2[8] = { 1, -4, -2, 0, 3, 3, 5, 0 }; // for the weapons
 	const int offX3[8] = { 0, 6, 6, 12, -4, -5, -5, -13 }; // for the left handed rifles
 	const int offY3[8] = { -4, -4, -1, 0, 5, 0, 1, 0 }; // for the left handed rifles
-	const int offXAiming = 16;
-
-	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	}
+	const int offXSprite = 16; // sprites are double width
 
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		torso->setX(offXSprite);
 		drawRecolored(torso);
 		return;
 	}
@@ -1144,17 +1173,16 @@ void UnitSprite::drawRoutine6()
 		rightArm->setY(0);
 		torso->setY(0);
 	}
-	if (_unit->getStatus() == STATUS_AIMING)
-	{
-		torso->setX(offXAiming);
-		legs->setX(offXAiming);
-		leftArm->setX(offXAiming);
-		rightArm->setX(offXAiming);
-		if (itemA)
-			itemA->setX(itemA->getX() + offXAiming);
-		if (itemB)
-			itemB->setX(itemB->getX() + offXAiming);
-	}
+	// offset everything to the right by 16 pixels.
+	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	torso->setX(offXSprite);
+	legs->setX(offXSprite);
+	leftArm->setX(offXSprite);
+	rightArm->setX(offXSprite);
+	if (itemA)
+		itemA->setX(itemA->getX() + offXSprite);
+	if (itemB)
+		itemB->setX(itemB->getX() + offXSprite);
 
 	// blit order depends on unit direction.
 	switch (unitDir)
@@ -1183,6 +1211,11 @@ void UnitSprite::drawRoutine6()
  */
 void UnitSprite::drawRoutine7()
 {
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
 
 	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0;
 	// magic numbers
@@ -1192,16 +1225,12 @@ void UnitSprite::drawRoutine7()
 	const int larmWalk[8] = { 32, 32+24, 32+24*2, 32+24*3, 32+24*4, 32+24*5, 32+24*6, 32+24*7 };
 	const int rarmWalk[8] = { 40, 40+24, 40+24*2, 40+24*3, 40+24*4, 40+24*5, 40+24*6, 40+24*7 };
 	const int yoffWalk[8] = {1, 0, -1, 0, 1, 0, -1, 0}; // bobbing up and down
-
-	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	}
+	const int offXSprite = 16; // sprites are double width
 
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		torso->setX(offXSprite);
 		drawRecolored(torso);
 		return;
 	}
@@ -1230,6 +1259,12 @@ void UnitSprite::drawRoutine7()
 		rightArm->setY(0);
 		torso->setY(0);
 	}
+	// offset everything to the right by 16 pixels.
+	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	torso->setX(offXSprite);
+	legs->setX(offXSprite);
+	leftArm->setX(offXSprite);
+	rightArm->setX(offXSprite);
 
 	// blit order depends on unit direction
 	switch (unitDir)
@@ -1250,16 +1285,17 @@ void UnitSprite::drawRoutine7()
  */
 void UnitSprite::drawRoutine8()
 {
-	Surface *legs = 0;
-	// magic numbers
-	const int Body = 0, aim = 5, die = 6;
-	const int Pulsate[8] = { 0, 1, 2, 3, 4, 3, 2, 1 };
-
 	if (_unit->isOut())
 	{
 		// unit is drawn as an item
 		return;
 	}
+
+	Surface *legs = 0;
+	// magic numbers
+	const int Body = 0, aim = 5, die = 6;
+	const int Pulsate[8] = { 0, 1, 2, 3, 4, 3, 2, 1 };
+	const int offXSprite = 16; // sprites are double width
 
 	legs = _unitSurface->getFrame(Body + Pulsate[_animationFrame]);
 	_redraw = true;
@@ -1267,8 +1303,12 @@ void UnitSprite::drawRoutine8()
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 		legs = _unitSurface->getFrame(die + _unit->getFallingPhase());
 
-	if (_unit->getStatus() == STATUS_AIMING)
+	else if (_unit->getStatus() == STATUS_AIMING)
 		legs = _unitSurface->getFrame(aim);
+	
+	// offset everything to the right by 16 pixels.
+	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	legs->setX(offXSprite);
 
 	drawRecolored(legs);
 }
@@ -1278,21 +1318,26 @@ void UnitSprite::drawRoutine8()
  */
 void UnitSprite::drawRoutine9()
 {
-	Surface *torso = 0;
-	// magic numbers
-	const int Body = 0, die = 25;
-
 	if (_unit->isOut())
 	{
 		// unit is drawn as an item
 		return;
 	}
 
+	Surface *torso = 0;
+	// magic numbers
+	const int Body = 0, die = 25;
+	const int offXSprite = 16; // sprites are double width
+
 	torso = _unitSurface->getFrame(Body + _animationFrame);
 	_redraw = true;
 
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
+	
+	// offset everything to the right by 16 pixels.
+	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	torso->setX(offXSprite);
 
 	drawRecolored(torso);
 }
@@ -1311,6 +1356,7 @@ void UnitSprite::drawRoutine11()
 	const int offTurretX[8] = { -2, -6, -5, 0, 5, 6, 2, 0 }; // turret offsets
 	const int offTurretYAbove[8] = { 5, 3, 0, 0, 0, 3, 5, 4 }; // turret offsets
 	const int offTurretYBelow[8] = { -12, -13, -16, -16, -16, -13, -12, -12 }; // turret offsets
+	const int offXSprite = 16; // sprites are double width
 
 	int body = 0;
 	int animFrame = _unit->getWalkingPhase() % 4;
@@ -1322,6 +1368,7 @@ void UnitSprite::drawRoutine11()
 
 	Surface *s = _unitSurface->getFrame(body + (_part * 4) + 16 * _unit->getDirection() + animFrame);
 	s->setY(4);
+	s->setX(offXSprite);
 	drawRecolored(s);
 
 	int turret = _unit->getTurretType();
@@ -1329,7 +1376,7 @@ void UnitSprite::drawRoutine11()
 	if ((_part == 3 || _part == 0) && turret != -1 && !_unit->getFloorAbove())
 	{
 		s = _unitSurface->getFrame(256 + (turret * 8) + _unit->getTurretDirection());
-		s->setX(offTurretX[_unit->getDirection()]);
+		s->setX(offTurretX[_unit->getDirection()] + offXSprite);
 		if (_part == 3)
 			s->setY(offTurretYBelow[_unit->getDirection()]);
 		else
@@ -1344,13 +1391,14 @@ void UnitSprite::drawRoutine11()
  */
 void UnitSprite::drawRoutine12()
 {
-	const int die = 8;
-
 	if (_unit->isOut())
 	{
 		// unit is drawn as an item
 		return;
 	}
+
+	const int die = 8;
+	const int offXSprite = 16; // sprites are double width
 
 	Surface *s = 0;
 	s = _unitSurface->getFrame((_part * 8) + _animationFrame);
@@ -1360,10 +1408,8 @@ void UnitSprite::drawRoutine12()
 	{
 		// biodrone death frames
 		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
-		drawRecolored(s);
-		return;
 	}
-
+	s->setX(offXSprite);
 	drawRecolored(s);
 }
 
@@ -1372,24 +1418,22 @@ void UnitSprite::drawRoutine12()
  */
 void UnitSprite::drawRoutine19()
 {
-	Surface *s = 0;
-	// magic numbers
-	const int stand = 0, move = 8, die = 16;
-
 	if (_unit->isOut())
 	{
 		// unit is drawn as an item
 		return;
 	}
 
+	Surface *s = 0;
+	// magic numbers
+	const int stand = 0, move = 8, die = 16;
+	const int offXSprite = 16; // sprites are double width
+
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
-		drawRecolored(s);
-		return;
 	}
-
-	if (_unit->getStatus() == STATUS_WALKING)
+	else if (_unit->getStatus() == STATUS_WALKING)
 	{
 		s = _unitSurface->getFrame(move + _unit->getDirection());
 	}
@@ -1397,7 +1441,7 @@ void UnitSprite::drawRoutine19()
 	{
 		s = _unitSurface->getFrame(stand + _unit->getDirection());
 	}
-
+	s->setX(offXSprite);
 	drawRecolored(s);
 }
 
@@ -1413,6 +1457,7 @@ void UnitSprite::drawRoutine20()
 	}
 
 	Surface *s = 0;
+	const int offXSprite = 16; // sprites are double width
 
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
@@ -1422,7 +1467,7 @@ void UnitSprite::drawRoutine20()
 	{
 		s = _unitSurface->getFrame(5 * (_part + 4 * _unit->getDirection()));
 	}
-
+	s->setX(offXSprite);
 	drawRecolored(s);
 }
 
@@ -1438,10 +1483,11 @@ void UnitSprite::drawRoutine21()
 	}
 
 	Surface *s = 0;
+	const int offXSprite = 16; // sprites are double width
 
 	s = _unitSurface->getFrame((_part * 4) + (_unit->getDirection() * 16) + (_animationFrame % 4));
 	_redraw = true;
-
+	s->setX(offXSprite);
 	drawRecolored(s);
 }
 

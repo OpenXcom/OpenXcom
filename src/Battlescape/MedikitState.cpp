@@ -283,7 +283,6 @@ void MedikitState::onStimulantClick(Action *)
 void MedikitState::onPainKillerClick(Action *)
 {
 	int pk = _item->getPainKillerQuantity();
-	RuleItem *rule = _item->getRules();
 	if (pk == 0)
 	{
 		return;

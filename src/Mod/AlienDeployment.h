@@ -122,33 +122,33 @@ public:
 	/// Gets the list of music to pick from.
 	std::vector<std::string> &getMusic();
 	/// Gets the minimum depth.
-	int getMinDepth();
+	int getMinDepth() const;
 	/// Gets the maximum depth.
-	int getMaxDepth();
+	int getMaxDepth() const;
 	/// Gets the minimum site depth.
-	int getMinSiteDepth();
+	int getMinSiteDepth() const;
 	/// Gets the maximum site depth.
-	int getMaxSiteDepth();
+	int getMaxSiteDepth() const;
 	/// Gets the target type for this mission.
-	int getObjectiveType();
+	int getObjectiveType() const;
 	/// Gets a fixed number of objectives requires (if any).
-	int getObjectivesRequired();
+	int getObjectivesRequired() const;
 	/// Gets the string to pop up when the mission objectives are complete.
-	std::string getObjectivePopup();
+	std::string getObjectivePopup() const;
 	/// Fills out the objective complete info.
-	bool getObjectiveCompleteInfo(std::string &text, int &score);
+	bool getObjectiveCompleteInfo(std::string &text, int &score) const;
 	/// Fills out the objective failed info.
-	bool getObjectiveFailedInfo(std::string &text, int &score);
+	bool getObjectiveFailedInfo(std::string &text, int &score) const;
 	/// Gets the score penalty XCom receives for ignoring this site.
 	int getDespawnPenalty() const;
 	/// Gets the (half hourly) score penalty XCom receives for this site existing.
 	int getPoints() const;
 	/// Gets the turn limit for this deployment.
-	const int getTurnLimit() const;
+	int getTurnLimit() const;
 	/// Gets the action that triggers when the timer runs out.
-	const ChronoTrigger getChronoTrigger() const;
+	ChronoTrigger getChronoTrigger() const;
 	/// Gets which turn the aliens start cheating on.
-	const int getCheatTurn() const;
+	int getCheatTurn() const;
 };
 
 }

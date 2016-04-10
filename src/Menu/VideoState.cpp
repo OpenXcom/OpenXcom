@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "VideoState.h"
+#include <algorithm>
 #include <SDL_mixer.h>
 #include "../Engine/Adlib/adlplayer.h"
 #include "../Engine/Logger.h"
@@ -415,7 +416,7 @@ void VideoState::init()
 		{
 			// ensure user can hear both music and sound effects for the
 			// vanilla intro sequence
-			Options::musicVolume = Options::soundVolume = std::max(prevMusicVol, prevSoundVol/8);
+			Options::musicVolume = Options::soundVolume = std::max(prevMusicVol, prevSoundVol);
 			_game->setVolume(Options::soundVolume, Options::musicVolume, -1);
 		}
 	}
@@ -467,39 +468,55 @@ void VideoState::init()
 		delete flcPlayer;
 	}
 
+	// We can only do a fade out in 8bpp, otherwise instantly end it
+	bool fade = (_game->getScreen()->getSurface()->getSurface()->format->BitsPerPixel == 8);
+	const int FADE_DELAY = 45;
+	const int FADE_STEPS = 20;
+
 #ifndef __NO_MUSIC
 	// fade out!
-	Mix_FadeOutChannel(-1, 45 * 20);
-	if (Mix_GetMusicType(0) != MUS_MID)
+	if (fade)
 	{
+		Mix_FadeOutChannel(-1, FADE_DELAY * FADE_STEPS);
 		// SDL_Mixer has trouble with native midi and volume on windows,
 		// which is the most likely use case, so f@%# it.
-		Mix_FadeOutMusic(45 * 20);
-		func_fade();
+		if (Mix_GetMusicType(0) != MUS_MID)
+		{
+			Mix_FadeOutMusic(FADE_DELAY * FADE_STEPS);
+			func_fade();
+		}
+		else
+		{
+			Mix_HaltMusic();			
+		}
 	}
 	else
 	{
+		Mix_HaltChannel(-1);
 		Mix_HaltMusic();
 	}
 #endif
 
-	SDL_Color pal[256];
-	SDL_Color pal2[256];
-	memcpy(pal, _game->getScreen()->getPalette(), sizeof(SDL_Color) * 256);
-	for (int i = 20; i > 0; --i)
+	if (fade)
 	{
-		SDL_Event event;
-		if (SDL_PollEvent(&event) && event.type == SDL_KEYDOWN) break;
-		for (int color = 0; color < 256; ++color)
+		SDL_Color pal[256];
+		SDL_Color pal2[256];
+		memcpy(pal, _game->getScreen()->getPalette(), sizeof(SDL_Color) * 256);
+		for (int i = FADE_STEPS; i > 0; --i)
 		{
-			pal2[color].r = (((int)pal[color].r) * i) / 20;
-			pal2[color].g = (((int)pal[color].g) * i) / 20;
-			pal2[color].b = (((int)pal[color].b) * i) / 20;
-			pal2[color].unused = pal[color].unused;
+			SDL_Event event;
+			if (SDL_PollEvent(&event) && event.type == SDL_KEYDOWN) break;
+			for (int color = 0; color < 256; ++color)
+			{
+				pal2[color].r = (((int)pal[color].r) * i) / 20;
+				pal2[color].g = (((int)pal[color].g) * i) / 20;
+				pal2[color].b = (((int)pal[color].b) * i) / 20;
+				pal2[color].unused = pal[color].unused;
+			}
+			_game->getScreen()->setPalette(pal2, 0, 256, true);
+			_game->getScreen()->flip();
+			SDL_Delay(FADE_DELAY);
 		}
-		_game->getScreen()->setPalette(pal2, 0, 256, true);
-		_game->getScreen()->flip();
-		SDL_Delay(45);
 	}
 	_game->getScreen()->clear();
 	_game->getScreen()->flip();

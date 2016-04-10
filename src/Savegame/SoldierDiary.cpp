@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SoldierDiary.h"
+#include <algorithm>
 #include "../Mod/RuleCommendations.h"
 #include "../Mod/Mod.h"
 #include "BattleUnitStatistics.h"
@@ -300,6 +301,8 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 	_totalShotFriendlyCounter += unitStatistics->shotFriendlyCounter;
 	_longDistanceHitCounterTotal += unitStatistics->longDistanceHitCounter;
 	_lowAccuracyHitCounterTotal += unitStatistics->lowAccuracyHitCounter;
+	_shotsFiredCounterTotal += unitStatistics->shotsFiredCounter;
+	_shotsLandedCounterTotal += unitStatistics->shotsLandedCounter;
 	if (missionStatistics->valiantCrux)
 		_valiantCruxTotal++;
 	if (unitStatistics->KIA)
@@ -846,7 +849,15 @@ void SoldierDiary::addMonthlyService()
 }
 
 /**
- *  Award special commendation to the original 8 soldiers.
+ * Returns the total months this soldier has been in service.
+ */
+int SoldierDiary::getMonthsService() const
+{
+	return _monthsService;
+}
+
+/**
+ * Award special commendation to the original 8 soldiers.
  */
 void SoldierDiary::awardOriginalEightCommendation()
 {
@@ -854,7 +865,7 @@ void SoldierDiary::awardOriginalEightCommendation()
 }
 
 /**
- *  Award post-humous best-of commendation.
+ * Award post-humous best-of commendation.
  */
 void SoldierDiary::awardBestOfRank(SoldierRank rank)
 {
@@ -862,7 +873,7 @@ void SoldierDiary::awardBestOfRank(SoldierRank rank)
 }
 
 /**
- *  Award post-humous best-of commendation.
+ * Award post-humous best-of commendation.
  */
 void SoldierDiary::awardBestOverall()
 {
@@ -870,11 +881,37 @@ void SoldierDiary::awardBestOverall()
 }
 
 /**
- *  Award post-humous kills commendation.
+ * Award post-humous kills commendation.
  */
 void SoldierDiary::awardPostMortemKill(int kills)
 {
     _postMortemKills = kills;
+}
+
+/**
+ *
+ */
+int SoldierDiary::getShotsFiredTotal() const
+{
+	return _shotsFiredCounterTotal;
+}
+
+/**
+ *
+ */
+int SoldierDiary::getShotsLandedTotal() const
+{
+	return _shotsLandedCounterTotal;
+}
+
+/**
+ *  Get the soldier's accuracy.
+ */
+int SoldierDiary::getAccuracy() const
+{
+	if (_shotsFiredCounterTotal != 0)
+		return 100 * _shotsLandedCounterTotal / _shotsFiredCounterTotal;
+	return 0;
 }
 
 /**
