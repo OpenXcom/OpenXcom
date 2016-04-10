@@ -153,8 +153,6 @@ set ( battlescape_src
   Battlescape/MiniMapView.h
   Battlescape/NextTurnState.cpp
   Battlescape/NextTurnState.h
-  Battlescape/NoContainmentState.cpp
-  Battlescape/NoContainmentState.h
   Battlescape/Particle.cpp
   Battlescape/Particle.h
   Battlescape/Pathfinding.cpp

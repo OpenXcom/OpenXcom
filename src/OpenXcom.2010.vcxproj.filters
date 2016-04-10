@@ -558,9 +558,6 @@
     <ClCompile Include="Geoscape\PsiTrainingState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Battlescape\NoContainmentState.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
     <ClCompile Include="Savegame\WeightedOptions.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
@@ -1514,9 +1511,6 @@
     </ClInclude>
     <ClInclude Include="Geoscape\PsiTrainingState.h">
       <Filter>Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="Battlescape\NoContainmentState.h">
-      <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Savegame\WeightedOptions.h">
       <Filter>Savegame</Filter>

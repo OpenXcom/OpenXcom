@@ -25,7 +25,6 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
-#include "NoContainmentState.h"
 #include "PromotionsState.h"
 #include "CommendationState.h"
 #include "CommendationLateState.h"
@@ -447,6 +446,11 @@ void DebriefingState::init()
 	{
 		_game->getMod()->playMusic(Mod::DEBRIEF_MUSIC_BAD);
 	}
+	if (_noContainment)
+	{
+		_game->pushState(new ErrorMessageState(tr("STR_ALIEN_DIES_NO_ALIEN_CONTAINMENT_FACILITY"), _palette, _game->getMod()->getInterface("debriefing")->getElement("errorMessage")->color, "BACK01.SCR", _game->getMod()->getInterface("debriefing")->getElement("errorPalette")->color));
+		_noContainment = false;
+	}
 }
 
 /**
@@ -489,10 +493,6 @@ void DebriefingState::btnOkClick(Action *)
 			if (!_missingItems.empty())
 			{
 				_game->pushState(new CannotReequipState(_missingItems));
-			}
-			if (_noContainment)
-			{
-				_game->pushState(new NoContainmentState);
 			}
 			else if (_manageContainment)
 			{
@@ -1463,7 +1463,7 @@ void DebriefingState::recoverAlien(BattleUnit *from, Base *base)
 		return;
 	}
 	std::string type = from->getType();
-	if (base->getAvailableContainment() == 0)
+	if (base->getAvailableContainment() == 0/* && _game->getSavedGame()->getMonthsPassed() > -1*/)
 	{
 		_noContainment = true;
 		addStat("STR_ALIEN_CORPSES_RECOVERED", 1, from->getValue());
