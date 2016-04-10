@@ -189,7 +189,7 @@ items: #done
     tuAimed: 66
     battleType: 1
     fixedWeapon: true
-    waypoint: true
+    waypoints: 9
     invWidth: 2
     invHeight: 3
     turretType: 4
@@ -944,7 +944,7 @@ items: #done
     tuAimed: 66
     battleType: 1
     twoHanded: true
-    waypoint: true
+    waypoints: 9
     invWidth: 2
     invHeight: 3
     recoveryPoints: 5

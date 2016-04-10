@@ -191,15 +191,15 @@ void AlienBAIState::think(BattleAction *action)
 		{
 			if (rule->getBattleType() == BT_FIREARM)
 			{
-				if (!rule->isWaypoint())
-				{
-					_rifle = true;
-					_reachableWithAttack = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits() - _unit->getActionTUs(BA_SNAPSHOT, action->weapon));
-				}
-				else
+				if (rule->getWaypoints() != 0 || (action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getRules()->getWaypoints() != 0))
 				{
 					_blaster = true;
 					_reachableWithAttack = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits() - _unit->getActionTUs(BA_AIMEDSHOT, action->weapon));
+				}
+				else
+				{
+					_rifle = true;
+					_reachableWithAttack = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits() - _unit->getActionTUs(BA_SNAPSHOT, action->weapon));
 				}
 			}
 			else if (rule->getBattleType() == BT_MELEE)
@@ -1682,6 +1682,15 @@ void AlienBAIState::wayPointAction()
 
 		int PathDirection;
 		int CollidesWith;
+		int maxWaypoints = _attackAction->weapon->getRules()->getWaypoints();
+		if (maxWaypoints == 0)
+		{
+			maxWaypoints = _attackAction->weapon->getAmmoItem()->getRules()->getWaypoints();
+		}
+		if (maxWaypoints == -1)
+		{
+			maxWaypoints = 6 + (_attackAction->diff * 2);
+		}
 		Position LastWayPoint = _unit->getPosition();
 		Position LastPosition = _unit->getPosition();
 		Position CurrentPosition = _unit->getPosition();
@@ -1689,7 +1698,7 @@ void AlienBAIState::wayPointAction()
 
 		_save->getPathfinding()->calculate(_unit, _aggroTarget->getPosition(), _aggroTarget, -1);
 		PathDirection = _save->getPathfinding()->dequeuePath();
-		while (PathDirection != -1)
+		while (PathDirection != -1 && _attackAction->waypoints.size() < maxWaypoints)
 		{
 			LastPosition = CurrentPosition;
 			_save->getPathfinding()->directionToVector(PathDirection, &DirectionVector);
@@ -1711,11 +1720,10 @@ void AlienBAIState::wayPointAction()
 					LastWayPoint = CurrentPosition;
 				}
 			}
-
 			PathDirection = _save->getPathfinding()->dequeuePath();
 		}
 		_attackAction->target = _attackAction->waypoints.front();
-		if ((int) _attackAction->waypoints.size() > 6 + (_attackAction->diff * 2) || LastWayPoint != _aggroTarget->getPosition())
+		if (LastWayPoint != _aggroTarget->getPosition())
 		{
 			_attackAction->type = BA_RETHINK;
 		}
