@@ -1463,7 +1463,7 @@ void DebriefingState::recoverAlien(BattleUnit *from, Base *base)
 		return;
 	}
 	std::string type = from->getType();
-	if (base->getAvailableContainment() == 0/* && _game->getSavedGame()->getMonthsPassed() > -1*/)
+	if (base->getAvailableContainment() == 0 && _game->getSavedGame()->getMonthsPassed() > -1)
 	{
 		_noContainment = true;
 		addStat("STR_ALIEN_CORPSES_RECOVERED", 1, from->getValue());
