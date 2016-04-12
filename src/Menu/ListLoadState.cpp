@@ -82,8 +82,7 @@ void ListLoadState::lstSavesPress(Action *action)
 		const SaveInfo &saveInfo(_saves[_lstSaves->getSelectedRow()]);
 		for (std::vector<std::string>::const_iterator i = saveInfo.mods.begin(); i != saveInfo.mods.end(); ++i)
 		{
-			std::pair<std::string, bool> mod(*i, true);
-			if (std::find(Options::mods.begin(), Options::mods.end(), mod) == Options::mods.end())
+			if (std::find(Options::mods.begin(), Options::mods.end(), std::make_pair(*i, true)) == Options::mods.end())
 			{
 				confirm = true;
 				break;
