@@ -1411,7 +1411,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 			{
 				maxWaypoints = _currentAction.weapon->getAmmoItem()->getRules()->getWaypoints();
 			}
-			if (_currentAction.waypoints.size() < maxWaypoints || maxWaypoints == -1)
+			if ((int)_currentAction.waypoints.size() < maxWaypoints || maxWaypoints == -1)
 			{
 				_parentState->showLaunchButton(true);
 				_currentAction.waypoints.push_back(pos);

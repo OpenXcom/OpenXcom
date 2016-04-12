@@ -1698,7 +1698,7 @@ void AlienBAIState::wayPointAction()
 
 		_save->getPathfinding()->calculate(_unit, _aggroTarget->getPosition(), _aggroTarget, -1);
 		PathDirection = _save->getPathfinding()->dequeuePath();
-		while (PathDirection != -1 && _attackAction->waypoints.size() < maxWaypoints)
+		while (PathDirection != -1 && (int)_attackAction->waypoints.size() < maxWaypoints)
 		{
 			LastPosition = CurrentPosition;
 			_save->getPathfinding()->directionToVector(PathDirection, &DirectionVector);
