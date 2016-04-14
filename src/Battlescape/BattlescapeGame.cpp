@@ -1892,7 +1892,7 @@ bool BattlescapeGame::worthTaking(BattleItem* item, BattleAction *action)
 		worthToTake = item->getRules()->getAttraction();
 
 		// it's always going to be worth while to try and take a blaster launcher, apparently
-		if (!item->getRules()->getWaypoints() != 0 && item->getRules()->getBattleType() != BT_AMMO)
+		if (item->getRules()->getWaypoints() == 0 && item->getRules()->getBattleType() != BT_AMMO)
 		{
 			// we only want weapons that HAVE ammo, or weapons that we have ammo FOR
 			bool ammoFound = true;
