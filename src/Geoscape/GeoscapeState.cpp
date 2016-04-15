@@ -1608,7 +1608,7 @@ void GeoscapeState::time1Day()
 			{
 				popup(new CutsceneState(bonus->getCutscene()));
 			}
-			popup(new ResearchCompleteState(newResearch, bonus));
+			popup(new ResearchCompleteState(newResearch, bonus, research));
 			std::vector<RuleResearch *> newPossibleResearch;
 			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRules(), _game->getMod(), *i);
 			std::vector<RuleManufacture *> newPossibleManufacture;
