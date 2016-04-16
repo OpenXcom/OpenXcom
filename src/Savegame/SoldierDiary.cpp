@@ -37,13 +37,12 @@ SoldierDiary::SoldierDiary(const YAML::Node &node)
 /**
  * Initializes a new blank diary.
  */
-SoldierDiary::SoldierDiary() : _scoreTotal(0), _killTotal(0), _winTotal(0), _stunTotal(0), _daysWoundedTotal(0), _baseDefenseMissionTotal(0), _totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0),
-	_loneSurvivorTotal(0), _terrorMissionTotal(0), _nightMissionTotal(0), _nightTerrorMissionTotal(0), _monthsService(0), _unconciousTotal(0),
-	_shotAtCounterTotal(0), _hitCounterTotal(0), _ironManTotal(0), _importantMissionTotal(0), _longDistanceHitCounterTotal(0),
+SoldierDiary::SoldierDiary() : _daysWoundedTotal(0), _totalShotByFriendlyCounter(0), _totalShotFriendlyCounter(0), _loneSurvivorTotal(0),
+	_monthsService(0), _unconciousTotal(0),	_shotAtCounterTotal(0), _hitCounterTotal(0), _ironManTotal(0), _longDistanceHitCounterTotal(0),
     _lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
-	_reactionFireTotal(0), _timesWoundedTotal(0), _valiantCruxTotal(0), _KIA(0), _trapKillTotal(0), _alienBaseAssaultTotal(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0),
-    _woundsHealedTotal(0), _allUFOs(0), _allMissionTypes(0), _statGainTotal(0), _revivedUnitTotal(0), _wholeMedikitTotal(0), _braveryGainTotal(0), _bestOfRank(0),
-    _MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _slaveKillsTotal(0), _panickTotal(0), _controlTotal(0), _lootValueTotal(0), _bestSoldier(false), _globeTrotter(false)
+	_timesWoundedTotal(0), _KIA(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0), _woundsHealedTotal(0), _allUFOs(0), _allMissionTypes(0),
+	_statGainTotal(0), _revivedUnitTotal(0), _wholeMedikitTotal(0), _braveryGainTotal(0), _bestOfRank(0),
+    _MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _slaveKillsTotal(0), _bestSoldier(false), _globeTrotter(false)
 {
 }
 
@@ -79,48 +78,22 @@ void SoldierDiary::load(const YAML::Node& node)
 			_killList.push_back(new BattleUnitKills(*i));
 	}
     _missionIdList = node["missionIdList"].as<std::vector<int> >(_missionIdList);
-	_regionTotal = node["regionTotal"].as< std::map<std::string, int> >(_regionTotal);
-	_countryTotal = node["countryTotal"].as< std::map<std::string, int> >(_countryTotal);
-	_typeTotal = node["typeTotal"].as< std::map<std::string, int> >(_typeTotal);
-	// Backwards compatibility
-	std::map<std::string, int> newTypeTotal;
-	for (std::map<std::string, int>::const_iterator i = _typeTotal.begin(); i != _typeTotal.end(); ++i)
-	{
-		std::string key = i->first;
-		Language::replace(key, "_LC", "");
-		newTypeTotal[key] = i->second;
-	}
-	_typeTotal = newTypeTotal;
-	_UFOTotal = node["UFOTotal"].as< std::map<std::string, int> >(_UFOTotal);
-	_scoreTotal = node["scoreTotal"].as<int>(_scoreTotal);
-	_killTotal = node["killTotal"].as<int>(_killTotal);
-	_winTotal = node["winTotal"].as<int>(_winTotal);
-	_stunTotal = node["stunTotal"].as<int>(_stunTotal);
 	_daysWoundedTotal = node["daysWoundedTotal"].as<int>(_daysWoundedTotal);
-	_baseDefenseMissionTotal = node["baseDefenseMissionTotal"].as<int>(_baseDefenseMissionTotal);
 	_totalShotByFriendlyCounter = node["totalShotByFriendlyCounter"].as<int>(_totalShotByFriendlyCounter);
 	_totalShotFriendlyCounter = node["totalShotFriendlyCounter"].as<int>(_totalShotFriendlyCounter);
 	_loneSurvivorTotal = node["loneSurvivorTotal"].as<int>(_loneSurvivorTotal);
-	_terrorMissionTotal = node["terrorMissionTotal"].as<int>(_terrorMissionTotal);
-	_nightMissionTotal = node["nightMissionTotal"].as<int>(_nightMissionTotal);
-	_nightTerrorMissionTotal = node["nightTerrorMissionTotal"].as<int>(_nightTerrorMissionTotal);
 	_monthsService = node["monthsService"].as<int>(_monthsService);
     _unconciousTotal = node["unconciousTotal"].as<int>(_unconciousTotal);
     _shotAtCounterTotal = node["shotAtCounterTotal"].as<int>(_shotAtCounterTotal);
     _hitCounterTotal = node["hitCounterTotal"].as<int>(_hitCounterTotal);
     _ironManTotal = node["ironManTotal"].as<int>(_ironManTotal);
-    _importantMissionTotal = node["importantMissionTotal"].as<int>(_importantMissionTotal);
 	_longDistanceHitCounterTotal = node["longDistanceHitCounterTotal"].as<int>(_longDistanceHitCounterTotal);
 	_lowAccuracyHitCounterTotal = node["lowAccuracyHitCounterTotal"].as<int>(_lowAccuracyHitCounterTotal);
 	_shotsFiredCounterTotal = node["shotsFiredCounterTotal"].as<int>(_shotsFiredCounterTotal);
 	_shotsLandedCounterTotal = node["shotsLandedCounterTotal"].as<int>(_shotsLandedCounterTotal);
 	_shotAtCounter10in1Mission = node["shotAtCounter10in1Mission"].as<int>(_shotAtCounter10in1Mission);
 	_hitCounter5in1Mission = node["hitCounter5in1Mission"].as<int>(_hitCounter5in1Mission);
-	_reactionFireTotal = node["reactionFireTotal"].as<int>(_reactionFireTotal);
     _timesWoundedTotal = node["timesWoundedTotal"].as<int>(_timesWoundedTotal);
-	_valiantCruxTotal = node["valiantCruxTotal"].as<int>(_valiantCruxTotal);
-	_trapKillTotal = node["trapKillTotal"].as<int>(_trapKillTotal);
-	_alienBaseAssaultTotal = node["alienBaseAssaultTotal"].as<int>(_alienBaseAssaultTotal);
 	_allAliensKilledTotal = node["allAliensKilledTotal"].as<int>(_allAliensKilledTotal);
     _allAliensStunnedTotal = node["allAliensStunnedTotal"].as<int>(_allAliensStunnedTotal);
     _woundsHealedTotal = node["woundsHealedTotal"].as<int>(_woundsHealedTotal);
@@ -136,9 +109,6 @@ void SoldierDiary::load(const YAML::Node& node)
     _postMortemKills = node["postMortemKills"].as<int>(_postMortemKills);
 	_globeTrotter = node["globeTrotter"].as<bool>(_globeTrotter);
 	_slaveKillsTotal = node["slaveKillsTotal"].as<int>(_slaveKillsTotal);
-    _panickTotal = node["panickTotal"].as<int>(_panickTotal);
-    _controlTotal = node["controlTotal"].as<int>(_controlTotal);
-    _lootValueTotal = node["lootValueTotal"].as<int>(_lootValueTotal);
 }
 
 /**
@@ -153,39 +123,22 @@ YAML::Node SoldierDiary::save() const
 	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
 			node["killList"].push_back((*i)->save());
     if (!_missionIdList.empty()) node["missionIdList"] = _missionIdList;
-    if (!_regionTotal.empty()) node["regionTotal"] = _regionTotal;
-    if (!_countryTotal.empty()) node["countryTotal"] = _countryTotal;
-    if (!_typeTotal.empty()) node["typeTotal"] = _typeTotal;
-    if (!_UFOTotal.empty()) node["UFOTotal"] = _UFOTotal;
-    if (_scoreTotal) node["scoreTotal"] = _scoreTotal;
-    if (_killTotal) node["killTotal"] = _killTotal;
-    if (_winTotal) node["winTotal"] = _winTotal;
-    if (_stunTotal) node["stunTotal"] = _stunTotal;
     if (_daysWoundedTotal) node["daysWoundedTotal"] = _daysWoundedTotal;
-    if (_baseDefenseMissionTotal) node["baseDefenseMissionTotal"] = _baseDefenseMissionTotal;
     if (_totalShotByFriendlyCounter) node["totalShotByFriendlyCounter"] = _totalShotByFriendlyCounter;
 	if (_totalShotFriendlyCounter) node["totalShotFriendlyCounter"] = _totalShotFriendlyCounter;
     if (_loneSurvivorTotal) node["loneSurvivorTotal"] = _loneSurvivorTotal;
-    if (_terrorMissionTotal) node["terrorMissionTotal"] = _terrorMissionTotal;
-    if (_nightMissionTotal) node["nightMissionTotal"] = _nightMissionTotal;
-    if (_nightTerrorMissionTotal) node["nightTerrorMissionTotal"] = _nightTerrorMissionTotal;
     if (_monthsService) node["monthsService"] = _monthsService;
     if (_unconciousTotal) node["unconciousTotal"] = _unconciousTotal;
     if (_shotAtCounterTotal) node["shotAtCounterTotal"] = _shotAtCounterTotal;
     if (_hitCounterTotal) node["hitCounterTotal"] = _hitCounterTotal;
     if (_ironManTotal) node["ironManTotal"] = _ironManTotal;
-    if (_importantMissionTotal) node["importantMissionTotal"] = _importantMissionTotal;
 	if (_longDistanceHitCounterTotal) node["longDistanceHitCounterTotal"] = _longDistanceHitCounterTotal;
 	if (_lowAccuracyHitCounterTotal) node["lowAccuracyHitCounterTotal"] = _lowAccuracyHitCounterTotal;
 	if (_shotsFiredCounterTotal) node["shotsFiredCounterTotal"] = _shotsFiredCounterTotal;
 	if (_shotsLandedCounterTotal) node["shotsLandedCounterTotal"] = _shotsLandedCounterTotal;
 	if (_shotAtCounter10in1Mission) node["shotAtCounter10in1Mission"] = _shotAtCounter10in1Mission;
 	if (_hitCounter5in1Mission) node["hitCounter5in1Mission"] = _hitCounter5in1Mission;
-	if (_reactionFireTotal) node["reactionFireTotal"] = _reactionFireTotal;
     if (_timesWoundedTotal) node["timesWoundedTotal"] = _timesWoundedTotal;
-	if (_valiantCruxTotal) node["valiantCruxTotal"] = _valiantCruxTotal;
-	if (_trapKillTotal) node["trapKillTotal"] = _trapKillTotal;
-	if (_alienBaseAssaultTotal) node["alienBaseAssaultTotal"] = _alienBaseAssaultTotal;
 	if (_allAliensKilledTotal) node["allAliensKilledTotal"] = _allAliensKilledTotal;
     if (_allAliensStunnedTotal) node["allAliensStunnedTotal"] = _allAliensStunnedTotal;
     if (_woundsHealedTotal) node["woundsHealedTotal"] = _woundsHealedTotal;
@@ -201,9 +154,6 @@ YAML::Node SoldierDiary::save() const
     if (_postMortemKills) node["postMortemKills"] = _postMortemKills;
 	if (_globeTrotter) node["globeTrotter"] = _globeTrotter;
 	if (_slaveKillsTotal) node["slaveKillsTotal"] = _slaveKillsTotal;
-    if (_panickTotal) node["panickTotal"] =_panickTotal;
-    if (_controlTotal) node["controlTotal"] = _controlTotal;
-    if (_lootValueTotal) node["lootValueTotal"] = _lootValueTotal;
 	return node;
 }
 
@@ -212,62 +162,18 @@ YAML::Node SoldierDiary::save() const
  * @param unitStatistics BattleUnitStatistics to get stats from.
  * @param missionStatistics MissionStatistics to get stats from.
  */
-void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics, Mod *rules)
+void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, std::vector<MissionStatistics*> *allMissionStatistics, Mod *rules)
 {
+	if (allMissionStatistics->empty()) return;
+	MissionStatistics* missionStatistics = allMissionStatistics->back();
 	std::vector<BattleUnitKills*> unitKills = unitStatistics->kills;
 	for (std::vector<BattleUnitKills*>::const_iterator kill = unitKills.begin() ; kill != unitKills.end() ; ++kill)
     {
 		(*kill)->makeTurnUnique();
         _killList.push_back(*kill);
-        if ((*kill)->faction == FACTION_HOSTILE)
-        {
-            if ((*kill)->status == STATUS_DEAD)
-            {
-                _killTotal++;
-            }
-            else if ((*kill)->status == STATUS_UNCONSCIOUS)
-            {
-                _stunTotal++;
-            }
-            else if ((*kill)->status == STATUS_PANICKING)
-            {
-                _panickTotal++;
-            }
-            else if ((*kill)->status == STATUS_TURNING)
-            {
-                _controlTotal++;
-            }
-            if ((*kill)->hostileTurn())
-            {
-				RuleItem *item = rules->getItem((*kill)->weapon);
-                if (item == 0 || item->getBattleType() == BT_GRENADE || item->getBattleType() == BT_PROXIMITYGRENADE)
-                {
-                    _trapKillTotal++;
-                }
-                else
-                {
-                    _reactionFireTotal++;
-                }
-            }
-        }
     }
-    _regionTotal[missionStatistics->region]++;
-    _countryTotal[missionStatistics->country]++;
-    _typeTotal[missionStatistics->type]++;
-    _UFOTotal[missionStatistics->ufo]++;
-    _scoreTotal += missionStatistics->score;
-    _lootValueTotal += missionStatistics->lootValue;
     if (missionStatistics->success)
     {
-		bool ufo = missionStatistics->ufo != "NO_UFO";
-		bool baseDefense = missionStatistics->type == "STR_BASE_DEFENSE";
-		bool alienBase = missionStatistics->type.find("STR_ALIEN_BASE") != std::string::npos ||
-						 missionStatistics->type.find("STR_ALIEN_COLONY") != std::string::npos;
-        _winTotal++;
-        if (missionStatistics->type != "STR_UFO_CRASH_RECOVERY")
-            _importantMissionTotal++;
-		if (alienBase)
-			_alienBaseAssaultTotal++;
         if (unitStatistics->loneSurvivor)
             _loneSurvivorTotal++;
         if (unitStatistics->ironMan)
@@ -276,16 +182,6 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
             _allAliensKilledTotal++;
         if (unitStatistics->mercyCross)
             _allAliensStunnedTotal++;
-        if (missionStatistics->daylight > 5 && !alienBase && !baseDefense)
-            _nightMissionTotal++;
-        if (baseDefense)
-            _baseDefenseMissionTotal++;
-        else if (!alienBase && !ufo)
-        {
-            _terrorMissionTotal++;
-            if (missionStatistics->daylight > 5)
-                _nightTerrorMissionTotal++;
-        }
     }
     _daysWoundedTotal += unitStatistics->daysWounded;
     if (unitStatistics->daysWounded)
@@ -303,17 +199,17 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
 	_lowAccuracyHitCounterTotal += unitStatistics->lowAccuracyHitCounter;
 	_shotsFiredCounterTotal += unitStatistics->shotsFiredCounter;
 	_shotsLandedCounterTotal += unitStatistics->shotsLandedCounter;
-	if (missionStatistics->valiantCrux)
-		_valiantCruxTotal++;
 	if (unitStatistics->KIA)
 		_KIA++;
     if (unitStatistics->MIA)
         _MIA++;
 	_woundsHealedTotal = unitStatistics->woundsHealed++;
-	if (_UFOTotal.size() >= rules->getUfosList().size())
+	if (getUFOTotal(allMissionStatistics).size() >= rules->getUfosList().size())
 		_allUFOs = 1;
-	if ((_UFOTotal.size() + _typeTotal.size()) == (rules->getUfosList().size() + rules->getDeploymentsList().size() - 2))
+	if ((getUFOTotal(allMissionStatistics).size() + getTypeTotal(allMissionStatistics).size()) == (rules->getUfosList().size() + rules->getDeploymentsList().size() - 2))
 		_allMissionTypes = 1;
+	if (getCountryTotal(allMissionStatistics).size() == rules->getCountriesList().size())
+		_globeTrotter = true;
 	_martyrKillsTotal += unitStatistics->martyr;
 	_slaveKillsTotal += unitStatistics->slaveKills;
 
@@ -334,12 +230,7 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, MissionStat
     _braveryGainTotal = unitStatistics->delta.bravery;
     _revivedUnitTotal += unitStatistics->revivedSoldier;
     _wholeMedikitTotal += std::min( std::min(unitStatistics->woundsHealed, unitStatistics->appliedStimulant), unitStatistics->appliedPainKill);
-    _missionIdList.push_back(missionStatistics->id);    
-
-	if (_countryTotal.size() == rules->getCountriesList().size())
-	{
-		_globeTrotter = true;
-	}
+    _missionIdList.push_back(missionStatistics->id);
 }
 
 /**
@@ -356,7 +247,7 @@ std::vector<SoldierCommendations*> *SoldierDiary::getSoldierCommendations()
  * Award new ones, if deserved.
  * @return bool Has a commendation been awarded?
  */
-bool SoldierDiary::manageCommendations(Mod *mod)
+bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*> *missionStatistics)
 {
 	std::map<std::string, RuleCommendations *> commendationsList = mod->getCommendation();
 	bool awardedCommendation = false;                   // This value is returned if at least one commendation was given.
@@ -391,16 +282,16 @@ bool SoldierDiary::manageCommendations(Mod *mod)
 			}
             // These criteria have no nouns, so only the nextCommendationLevel["noNoun"] will ever be used.
 			else if( nextCommendationLevel.count("noNoun") == 1 &&
-				      ( ((*j).first == "totalKills" && _killList.size() < (unsigned int)(*j).second.at(nextCommendationLevel["noNoun"])) ||
+				  ( ((*j).first == "totalKills" && (unsigned int)getKillTotal() < (unsigned int)(*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalMissions" && _missionIdList.size() < (unsigned int)(*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalWins" && _winTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalScore" && _scoreTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalStuns" && _stunTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalWins" && getWinTotal(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalScore" && getScoreTotal(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalStuns" && getStunTotal() < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalDaysWounded" && _daysWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalBaseDefenseMissions" && _baseDefenseMissionTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalTerrorMissions" && _terrorMissionTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalNightMissions" && _nightMissionTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalNightTerrorMissions" && _nightTerrorMissionTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalBaseDefenseMissions" && getBaseDefenseMissionTotal(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalTerrorMissions" && getTerrorMissionTotal(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalNightMissions" && getNightMissionTotal(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalNightTerrorMissions" && getNightTerrorMissionTotal(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalMonthlyService" && _monthsService < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalFellUnconcious" && _unconciousTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
                     ((*j).first == "totalShotAt10Times" && _shotAtCounter10in1Mission < (*j).second.at(nextCommendationLevel["noNoun"])) || 
@@ -408,16 +299,16 @@ bool SoldierDiary::manageCommendations(Mod *mod)
 					((*j).first == "totalFriendlyFired" && (_totalShotByFriendlyCounter < (*j).second.at(nextCommendationLevel["noNoun"]) || _KIA || _MIA)) ||
 					((*j).first == "total_lone_survivor" && _loneSurvivorTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalIronMan" && _ironManTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalImportantMissions" && _importantMissionTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
+					((*j).first == "totalImportantMissions" && getImportantMissionTotal(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) || 
 					((*j).first == "totalLongDistanceHits" && _longDistanceHitCounterTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
 					((*j).first == "totalLowAccuracyHits" && _lowAccuracyHitCounterTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalReactionFire" && _reactionFireTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalReactionFire" && getReactionFireKillTotal(mod) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
                     ((*j).first == "totalTimesWounded" && _timesWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
                     ((*j).first == "totalDaysWounded" && _daysWoundedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalValientCrux" && _valiantCruxTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
+					((*j).first == "totalValientCrux" && getValiantCruxTotal(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) || 
 					((*j).first == "isDead" && _KIA < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalTrapKills" && _trapKillTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
-					((*j).first == "totalAlienBaseAssaults" && _alienBaseAssaultTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalTrapKills" && getTrapKillTotal(mod) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalAlienBaseAssaults" && getAlienBaseAssaultTotal(missionStatistics) < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalAllAliensKilled" && _allAliensKilledTotal < (*j).second.at(nextCommendationLevel["noNoun"])) || 
                     ((*j).first == "totalAllAliensStunned" && _allAliensStunnedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalWoundsHealed" && _woundsHealedTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
@@ -447,7 +338,7 @@ bool SoldierDiary::manageCommendations(Mod *mod)
 				if ((*j).first == "totalKillsWithAWeapon")
 					tempTotal = getWeaponTotal();
 				else if ((*j).first == "totalMissionsInARegion")
-					tempTotal = _regionTotal;
+					tempTotal = getRegionTotal(missionStatistics);
 				else if ((*j).first == "totalKillsByRace")
 					tempTotal = getAlienRaceTotal();
 				else if ((*j).first == "totalKillsByRank")
@@ -745,43 +636,91 @@ std::map<std::string, int> SoldierDiary::getWeaponAmmoTotal()
 }
 
 /**
- *
+ *  Get a map of the amount of missions done in each region.
+ *  @param MissionStatistics
  */
-std::map<std::string, int> &SoldierDiary::getRegionTotal()
+std::map<std::string, int> SoldierDiary::getRegionTotal(std::vector<MissionStatistics*> *missionStatistics) const
 {
-	return _regionTotal;
+	std::map<std::string, int> regionTotal;
+
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				regionTotal[(*i)->region]++;
+			}
+		}
+	}
+
+	return regionTotal;
 }
 
 /**
- *
+ *  Get a map of the amount of missions done in each country.
+ *  @param MissionStatistics
  */
-std::map<std::string, int> &SoldierDiary::getCountryTotal()
+std::map<std::string, int> SoldierDiary::getCountryTotal(std::vector<MissionStatistics*> *missionStatistics) const
 {
-	return _countryTotal;
+	std::map<std::string, int> countryTotal;
+
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				countryTotal[(*i)->country]++;
+			}
+		}
+	}
+
+	return countryTotal;
 }
 
 /**
- *
+ *  Get a map of the amount of missions done in each type.
+ *  @param MissionStatistics
  */
-std::map<std::string, int> &SoldierDiary::getTypeTotal()
+std::map<std::string, int> SoldierDiary::getTypeTotal(std::vector<MissionStatistics*> *missionStatistics) const
 {
-	return _typeTotal;
+	std::map<std::string, int> typeTotal;
+
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				typeTotal[(*i)->type]++;
+			}
+		}
+	}
+
+	return typeTotal;
 }
 
 /**
- *
+ *  Get a map of the amount of missions done in each UFO.
+ *  @param MissionStatistics
  */
-std::map<std::string, int> &SoldierDiary::getUFOTotal()
+std::map<std::string, int> SoldierDiary::getUFOTotal(std::vector<MissionStatistics*> *missionStatistics) const
 {
-	return _UFOTotal;
-}
+	std::map<std::string, int> ufoTotal;
 
-/**
- *
- */
-int SoldierDiary::getScoreTotal() const
-{
-	return _scoreTotal;
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				ufoTotal[(*i)->ufo]++;
+			}
+		}
+	}
+
+	return ufoTotal;
 }
 
 /**
@@ -789,7 +728,17 @@ int SoldierDiary::getScoreTotal() const
  */
 int SoldierDiary::getKillTotal() const
 {
-	return _killTotal;
+	int killTotal = 0;
+		
+	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
+	{
+		if ((*i)->status == STATUS_DEAD && (*i)->faction == FACTION_HOSTILE)
+		{
+			killTotal++;
+		}
+	}
+	
+	return killTotal;
 }
 
 /**
@@ -801,11 +750,28 @@ int SoldierDiary::getMissionTotal() const
 }
 
 /**
- *
+ *  Get the total if wins.
+ *  @param Mission Statistics
  */
-int SoldierDiary::getWinTotal() const
+int SoldierDiary::getWinTotal(std::vector<MissionStatistics*> *missionStatistics) const
 {
-	return _winTotal;
+	int winTotal = 0;
+	
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				if ((*i)->success)
+				{
+					winTotal++;
+				}
+			}
+		}
+	}
+	
+	return winTotal;
 }
 
 /**
@@ -813,7 +779,17 @@ int SoldierDiary::getWinTotal() const
  */
 int SoldierDiary::getStunTotal() const
 {
-	return _stunTotal;
+	int stunTotal = 0;
+	
+	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
+	{
+		if ((*i)->status == STATUS_UNCONSCIOUS && (*i)->faction == FACTION_HOSTILE)
+		{
+			stunTotal++;
+		}
+	}
+	
+	return stunTotal;
 }
 
 /**
@@ -821,7 +797,17 @@ int SoldierDiary::getStunTotal() const
  */
 int SoldierDiary::getPanickTotal() const
 {
-    return _panickTotal;
+	int panickTotal = 0;
+	
+	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
+	{
+		if ((*i)->status == STATUS_PANICKING && (*i)->faction == FACTION_HOSTILE)
+		{
+			panickTotal++;
+		}
+	}
+	
+	return panickTotal;
 }
 
 /**
@@ -829,7 +815,17 @@ int SoldierDiary::getPanickTotal() const
  */
 int SoldierDiary::getControlTotal() const
 {
-    return _controlTotal;
+	int controlTotal = 0;
+	
+	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
+	{
+		if ((*i)->status == STATUS_TURNING && (*i)->faction == FACTION_HOSTILE)
+		{
+			controlTotal++;
+		}
+	}
+	
+	return controlTotal;
 }
 
 /**
@@ -912,6 +908,261 @@ int SoldierDiary::getAccuracy() const
 	if (_shotsFiredCounterTotal != 0)
 		return 100 * _shotsLandedCounterTotal / _shotsFiredCounterTotal;
 	return 0;
+}
+
+/**
+ *  Get trap kills total.
+ */
+int SoldierDiary::getTrapKillTotal(Mod *mod) const
+{
+	int trapKillTotal = 0;
+		
+	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
+	{
+		RuleItem *item = mod->getItem((*i)->weapon);
+		if ((*i)->hostileTurn() && (item == 0 || item->getBattleType() == BT_GRENADE || item->getBattleType() == BT_PROXIMITYGRENADE))
+		{
+			trapKillTotal++;
+		}
+	}
+	
+	return trapKillTotal;
+}
+
+/**
+ *  Get reaction kill total.
+ */
+ int SoldierDiary::getReactionFireKillTotal(Mod *mod) const
+ {
+	int reactionFireKillTotal = 0;
+		
+	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
+	{
+		RuleItem *item = mod->getItem((*i)->weapon);
+		if ((*i)->hostileTurn() && item != 0 && item->getBattleType() != BT_GRENADE && item->getBattleType() != BT_PROXIMITYGRENADE)
+		{
+			reactionFireKillTotal++;
+		}
+	}
+	
+	return reactionFireKillTotal;
+ }
+
+/**
+ *  Get the total of terror missions.
+ *  @param Mission Statistics
+ */
+int SoldierDiary::getTerrorMissionTotal(std::vector<MissionStatistics*> *missionStatistics) const
+{
+	/// Not a UFO, not the base, not the alien base or colony
+	int terrorMissionTotal = 0;
+	
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				if ((*i)->success && !(*i)->isBaseDefense() && !(*i)->isUfoMission() && !(*i)->isAlienBase())
+				{
+					terrorMissionTotal++;
+				}
+			}
+		}
+	}
+	
+	return terrorMissionTotal;
+}
+
+/**
+ *  Get the total of night missions.
+ *  @param Mission Statistics
+ */
+int SoldierDiary::getNightMissionTotal(std::vector<MissionStatistics*> *missionStatistics) const
+{	
+	int nightMissionTotal = 0;
+	
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				if ((*i)->success && (*i)->daylight > 5 && !(*i)->isBaseDefense() && !(*i)->isAlienBase())
+				{
+					nightMissionTotal++;
+				}
+			}
+		}
+	}
+	
+	return nightMissionTotal;
+}
+
+/**
+ *  Get the total of night terror missions.
+ *  @param Mission Statistics
+ */
+int SoldierDiary::getNightTerrorMissionTotal(std::vector<MissionStatistics*> *missionStatistics) const
+{	
+	int nightTerrorMissionTotal = 0;
+	
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				if ((*i)->success && (*i)->daylight > 5 && !(*i)->isBaseDefense() && !(*i)->isUfoMission() && !(*i)->isAlienBase())
+				{
+					nightTerrorMissionTotal++;
+				}
+			}
+		}
+	}
+	
+	return nightTerrorMissionTotal;
+}
+
+/**
+ *  Get the total of base defense missions.
+ *  @param Mission Statistics
+ */
+int SoldierDiary::getBaseDefenseMissionTotal(std::vector<MissionStatistics*> *missionStatistics) const
+{	
+	int baseDefenseMissionTotal = 0;
+	
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				if ((*i)->success && (*i)->isBaseDefense())
+				{
+					baseDefenseMissionTotal++;
+				}
+			}
+		}
+	}
+	
+	return baseDefenseMissionTotal;
+}
+
+/**
+ *  Get the total of alien base assaults.
+ *  @param Mission Statistics
+ */
+int SoldierDiary::getAlienBaseAssaultTotal(std::vector<MissionStatistics*> *missionStatistics) const
+{	
+	int alienBaseAssaultTotal = 0;
+	
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				if ((*i)->success && (*i)->isAlienBase())
+				{
+					alienBaseAssaultTotal++;
+				}
+			}
+		}
+	}
+	
+	return alienBaseAssaultTotal;
+}
+
+/**
+ *  Get the total of important missions.
+ *  @param Mission Statistics
+ */
+int SoldierDiary::getImportantMissionTotal(std::vector<MissionStatistics*> *missionStatistics) const
+{	
+	int importantMissionTotal = 0;
+	
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				if ((*i)->success && (*i)->type != "STR_UFO_CRASH_RECOVERY")
+				{
+					importantMissionTotal++;
+				}
+			}
+		}
+	}
+	
+	return importantMissionTotal;
+}
+
+/**
+ *  Get the total score.
+ *  @param Mission Statistics
+ */
+int SoldierDiary::getScoreTotal(std::vector<MissionStatistics*> *missionStatistics) const
+{	
+	int scoreTotal = 0;
+	
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				scoreTotal += (*i)->score;
+			}
+		}
+	}
+	
+	return scoreTotal;
+}
+
+/**
+ *  Get the Valient Crux total.
+ *  @param Mission Statistics
+ */
+int SoldierDiary::getValiantCruxTotal(std::vector<MissionStatistics*> *missionStatistics) const
+{	
+	int valiantCruxTotal = 0;
+	
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id && (*i)->valiantCrux)
+			{
+				valiantCruxTotal++;
+			}
+		}
+	}
+	
+	return valiantCruxTotal;
+}
+
+/**
+ *  Get the loot value total.
+ *  @param Mission Statistics
+ */
+int SoldierDiary::getLootValueTotal(std::vector<MissionStatistics*> *missionStatistics) const
+{	
+	int lootValueTotal = 0;
+	
+	for (std::vector<MissionStatistics*>::const_iterator i = missionStatistics->begin(); i != missionStatistics->end(); ++i)
+	{
+		for (std::vector<int>::const_iterator j = _missionIdList.begin(); j != _missionIdList.end(); ++j)
+		{
+			if ((*j) == (*i)->id)
+			{
+				lootValueTotal += (*i)->lootValue;
+			}
+		}
+	}
+	
+	return lootValueTotal;
 }
 
 /**

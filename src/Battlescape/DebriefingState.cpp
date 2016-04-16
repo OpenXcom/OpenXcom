@@ -243,6 +243,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
     
     _missionStatistics->daylight = save->getSavedBattle()->getGlobalShade();
     _missionStatistics->id = _game->getSavedGame()->getMissionStatistics()->size();
+	_game->getSavedGame()->getMissionStatistics()->push_back(_missionStatistics);
 
 	// Award Best-of commendations.
 	int bestScoreID[7] = {0, 0, 0, 0, 0, 0, 0};
@@ -299,7 +300,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 		// Find the best soldier per rank by comparing score.
 		for (std::vector<Soldier*>::iterator j = _game->getSavedGame()->getDeadSoldiers()->begin(); j != _game->getSavedGame()->getDeadSoldiers()->end(); ++j)
 		{
-			int score = (*j)->getDiary()->getScoreTotal();
+			int score = (*j)->getDiary()->getScoreTotal(_game->getSavedGame()->getMissionStatistics());
 
 			// Don't forget this mission's score!
 			if ((*j)->getId() == (*deadUnit)->getId())
@@ -397,19 +398,18 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 			// Set the UnitStats delta
 			(*j)->getStatistics()->delta = *(*j)->getGeoscapeSoldier()->getCurrentStats() - *(*j)->getGeoscapeSoldier()->getInitStats();
 
-            (*j)->getGeoscapeSoldier()->getDiary()->updateDiary((*j)->getStatistics(), _missionStatistics, _game->getMod());
-			if (!(*j)->getStatistics()->MIA && !(*j)->getStatistics()->KIA && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getMod()))
+            (*j)->getGeoscapeSoldier()->getDiary()->updateDiary((*j)->getStatistics(), _game->getSavedGame()->getMissionStatistics(), _game->getMod());
+			if (!(*j)->getStatistics()->MIA && !(*j)->getStatistics()->KIA && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getMod(), _game->getSavedGame()->getMissionStatistics()))
 			{
 				_soldiersCommended.push_back((*j)->getGeoscapeSoldier());
 			}
             else if ((*j)->getStatistics()->MIA || (*j)->getStatistics()->KIA)
             {
-                (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getMod());
+                (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getMod(), _game->getSavedGame()->getMissionStatistics());
                 _deadSoldiersCommended.push_back((*j)->getGeoscapeSoldier());
             }
 		}
 	}
-    _game->getSavedGame()->getMissionStatistics()->push_back(_missionStatistics);
 
 	_positiveScore = (total > 0);
 }
