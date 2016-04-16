@@ -500,7 +500,7 @@ void Map::drawTerrain(Surface *surface)
 							 * Phase II: rerender any east wall type objects in the tile to the north of the unit
 							 * only applies to movement in the north/south direction.
 							 */
-							if ((bu->getDirection() == 0 || bu->getDirection() == 4) && mapPosition.y >= 2)
+							if ((bu->getDirection() == Pathfinding::DIR_HN || bu->getDirection() == Pathfinding::DIR_HS) && mapPosition.y >= 2)
 							{
 								Tile *tileTwoNorth = _save->getTile(mapPosition - Position(0,2,0));
 								if (tileTwoNorth->isDiscovered(2))
@@ -555,7 +555,7 @@ void Map::drawTerrain(Surface *surface)
 								 * only render half so it won't overlap other areas that are already drawn
 								 * and only apply this to movement in a north easterly or south westerly direction.
 								 */
-								if ( (bu->getDirection() == 1 || bu->getDirection() == 5) && mapPosition.y < endY-1)
+								if ((bu->getDirection() == Pathfinding::DIR_HNE || bu->getDirection() == Pathfinding::DIR_HSW) && mapPosition.y < endY - 1)
 								{
 									Tile *tileSouthWest = _save->getTile(mapPosition + Position(-1, 1, 0));
 									if (tileSouthWest->isDiscovered(2))
@@ -1384,7 +1384,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 	int offsetX[8] = { 1, 1, 1, 0, -1, -1, -1, 0 };
 	int offsetY[8] = { 1, 0, -1, -1, -1, 0, 1, 1 };
 	int phase = unit->getWalkingPhase() + unit->getDiagonalWalkingPhase();
-	int dir = unit->getDirection();
+	int dir = unit->getDirection(), vdir = unit->getVerticalDirection();
 	int midphase = 4 + 4 * (dir % 2);
 	int endphase = 8 + 8 * (dir % 2);
 	int size = unit->getArmor()->getSize();
@@ -1400,7 +1400,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 		else
 			midphase = 1;
 	}
-	if (unit->getVerticalDirection())
+	if (vdir == Pathfinding::DIR_UP || vdir == Pathfinding::DIR_DOWN)
 	{
 		midphase = 4;
 		endphase = 8;

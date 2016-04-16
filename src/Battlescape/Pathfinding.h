@@ -47,7 +47,7 @@ private:
 	/// Gets the node at certain position.
 	PathfindingNode *getNode(const Position& pos);
 	/// Determines whether a tile blocks a certain movementType.
-	bool isBlocked(Tile *tile, const int part, BattleUnit *missileTarget, int bigWallExclusion = -1);
+	bool isBlocked(Tile *tile, int part, BattleUnit *missileTarget, int bigWallExclusion = -1);
 	/// Tries to find a straight line path between two positions.
 	bool bresenhamPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak = false, int maxTUCost = 1000);
 	/// Tries to find a path between two positions.
@@ -56,14 +56,27 @@ private:
 	bool canFallDown(Tile *destinationTile);
 	/// Determines whether a unit can fall down from this tile.
 	bool canFallDown(Tile *destinationTile, int size);
+	/// get the tile pointed by the direction from origin
+	Tile *getTile(const Position& origin, int direction) const;
 	std::vector<int> _path;
 public:
+	/// symbolic name for directions on all 3 adjacent planes Horizontal, Up, Down and the from North
+	/// towards East trhrough South till NorthWest
+	enum directions {
+		DIR_HN, DIR_HNE, DIR_HE, DIR_HSE, DIR_HS, DIR_HSW, DIR_HW, DIR_HNW,
+		DIR_UP, DIR_UN, DIR_UNE, DIR_UE, DIR_USE, DIR_US, DIR_USW, DIR_UW, DIR_UNW,
+		DIR_DOWN, DIR_DN, DIR_DNE, DIR_DE, DIR_DSE, DIR_DS, DIR_DSW, DIR_DW, DIR_DNW, DIR_TOTAL
+	};
+	/// "steps" to be added to cycle cardinal directions
+	static const int DIR_CARD_STEP = 2;
+	/// steps to perform a full horizontal turn
+	static const int DIR_FULL_HTURN = 4;
+	/// get the next direction from th table above, checking if 3dFlight is enabled
+	static int nextDirection(int direction);
 	/// Determines whether the unit is going up a stairs.
 	bool isOnStairs(const Position &startPosition, const Position &endPosition);
 	/// Determines whether or not movement between starttile and endtile is possible in the direction.
-	bool isBlocked(Tile *startTile, Tile *endTile, const int direction, BattleUnit *missileTarget);
-	static const int DIR_UP = 8;
-	static const int DIR_DOWN = 9;
+	bool isBlocked(Tile *startTile, Tile *endTile, int direction, BattleUnit *missileTarget);
 	enum bigWallTypes{ BLOCK = 1, BIGWALLNESW, BIGWALLNWSE, BIGWALLWEST, BIGWALLNORTH, BIGWALLEAST, BIGWALLSOUTH, BIGWALLEASTANDSOUTH, BIGWALLWESTANDNORTH};
 	static const int O_BIGWALL = -1;
 	static int red;
@@ -76,7 +89,15 @@ public:
 	/// Calculates the shortest path.
 	void calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget = 0, int maxTUCost = 1000);
 	/// Converts direction to a vector.
-	static void directionToVector(const int direction, Position *vector);
+	static void directionToVector(int direction, Position *vector);
+	/// Converts direction to a vector (horizontal component only).
+	static void directionToVectorH(int direction, Position *vector);
+	/// Converts a 3d direction into it's horizontal direction projection
+	static int horizontalDirection(int direction);
+	/// handles turning
+	static void turnRight(int &direction);
+	static void turnLeft(int &direction);
+	static void turn(int &direction, int toDirection);
 	/// Converts a vector to a direction.
 	static void vectorToDirection(const Position &vector, int &dir);
 	/// Checks whether a path is ready and gives the first direction.
@@ -89,8 +110,8 @@ public:
 	void abortPath();
 	/// Gets the strafe move setting.
 	bool getStrafeMove() const;
-	/// Checks, for the up/down button, if the movement is valid.
-	bool validateUpDown(BattleUnit *bu, Position startPosition, const int direction, bool missile = false);
+	/// Checks, for a vertical or combo move, if the movement is valid (returns MAX_COST overflowing if impossible move).
+	int costUpDown(BattleUnit *bu, Position startPosition, const int direction, bool missile = false);
 	/// Previews the path.
 	bool previewPath(bool bRemove = false);
 	/// Removes the path preview.
