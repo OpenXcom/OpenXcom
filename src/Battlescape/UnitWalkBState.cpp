@@ -413,9 +413,13 @@ void UnitWalkBState::think()
 					// This is where we fake out the strafe movement direction so the unit "moonwalks"
 					int dirTemp = _unit->getDirection();
 					_unit->setDirection(_unit->getFaceDirection());
+					_parent->getMap()->cacheUnit(_unit);
 					_unit->setDirection(dirTemp);
 				}
-				_parent->getMap()->cacheUnit(_unit);
+				else
+				{
+					_parent->getMap()->cacheUnit(_unit);
+				}
 			}
 		}
 		else
@@ -569,7 +573,7 @@ void UnitWalkBState::playMovementSound()
 			Tile *tile = _unit->getTile();
 			Tile *tileBelow = _parent->getSave()->getTile(tile->getPosition() + Position(0,0,-1));
 			// play footstep sound 1
-			if (_unit->getWalkingPhase() == 3)
+			if (_unit->getWalkingPhase() == (_unit->isWalkingBackwards() ? 5 : 3))
 			{
 				if (tile->getFootstepSound(tileBelow) > -1)
 				{
@@ -577,7 +581,7 @@ void UnitWalkBState::playMovementSound()
 				}
 			}
 			// play footstep sound 2
-			if (_unit->getWalkingPhase() == 7)
+			if (_unit->getWalkingPhase() == (_unit->isWalkingBackwards() ? 1 : 7))
 			{
 				if (tile->getFootstepSound(tileBelow) > -1)
 				{
@@ -588,7 +592,7 @@ void UnitWalkBState::playMovementSound()
 		else if (_unit->getMovementType() == MT_FLY)
 		{
 			// play default flying sound
-			if (_unit->getWalkingPhase() == 1 && !_falling)
+			if (_unit->getWalkingPhase() == (_unit->isWalkingBackwards() ? 7 : 1) && !_falling)
 			{
 				_parent->getMod()->getSoundByDepth(_parent->getDepth(), Mod::FLYING_SOUND)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 			}

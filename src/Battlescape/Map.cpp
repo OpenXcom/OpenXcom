@@ -1389,6 +1389,9 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 	int endphase = 8 + 8 * (dir % 2);
 	int size = unit->getArmor()->getSize();
 
+	// If we are walking backwards-ish, reverse the walking phase for correct offset calculation
+	if (unit->isWalkingBackwards()) phase = endphase - phase;
+
 	if (size > 1)
 	{
 		if (dir < 1 || dir > 5)

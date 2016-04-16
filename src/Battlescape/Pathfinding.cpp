@@ -149,25 +149,24 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 			}
 		}
 	}
-	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
-	_strafeMove = Options::strafe && (SDL_GetModState() & KMOD_CTRL) != 0 && (startPosition.z == endPosition.z) &&
-							(abs(startPosition.x - endPosition.x) <= 1) && (abs(startPosition.y - endPosition.y) <= 1);
 
 	// look for a possible fast and accurate bresenham path and skip A*
 	if (startPosition.z == endPosition.z && bresenhamPath(startPosition,endPosition, target, sneak))
 	{
 		std::reverse(_path.begin(), _path.end()); //paths are stored in reverse order
-		return;
 	}
 	else
 	{
 		abortPath(); // if bresenham failed, we shouldn't keep the path it was attempting, in case A* fails too.
+		// Now try through A*.
+		if (!aStarPath(startPosition, endPosition, target, sneak, maxTUCost))
+		{
+			abortPath();
+		}
 	}
-	// Now try through A*.
-	if (!aStarPath(startPosition, endPosition, target, sneak, maxTUCost))
-	{
-		abortPath();
-	}
+
+	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
+	_strafeMove = Options::strafe && (SDL_GetModState() & KMOD_CTRL) != 0 && (startPosition.z == endPosition.z) && (_path.size() < 2);
 }
 
 /**
@@ -442,7 +441,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				cost += 2;
 			}
 
-			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
+			// Strafing costs +1 for forwards-ish or sidewards, and +2 for backwards-ish directions
 			// Maybe if flying then it makes no difference?
 			if (Options::strafe && _strafeMove) {
 				if (size) {
@@ -453,12 +452,13 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				else
 				{
 					if (std::min(abs(8 + direction - _unit->getDirection()), std::min( abs(_unit->getDirection() - direction), abs(8 + _unit->getDirection() - direction))) > 2) {
-						// Strafing backwards-ish currently unsupported, turn it off and continue.
-						_strafeMove = false;
+						// Strafing backwards-ish
+						cost += 2;
 					}
 					else
 					{
 						if (_unit->getDirection() != direction) {
+							// Strafing forwards-ish or sidewards
 							cost += 1;
 						}
 					}

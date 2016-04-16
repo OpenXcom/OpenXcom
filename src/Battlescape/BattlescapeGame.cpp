@@ -1513,13 +1513,13 @@ void BattlescapeGame::primaryAction(const Position &pos)
 			}
 			_currentAction.run = false;
 			_currentAction.strafe = Options::strafe && modifierPressed && _save->getSelectedUnit()->getArmor()->getSize() == 1;
-			if (_currentAction.strafe && _save->getTileEngine()->distance(_currentAction.actor->getPosition(), pos) + std::abs(_currentAction.actor->getPosition().z - pos.z) > 1)
+			_currentAction.target = pos;
+			_save->getPathfinding()->calculate(_currentAction.actor, _currentAction.target);
+			if (_currentAction.strafe && _save->getPathfinding()->getPath().size() > 1)
 			{
 				_currentAction.run = true;
 				_currentAction.strafe = false;
 			}
-			_currentAction.target = pos;
-			_save->getPathfinding()->calculate(_currentAction.actor, _currentAction.target);
 			if (bPreviewed && !_save->getPathfinding()->previewPath() && _save->getPathfinding()->getStartDirection() != -1)
 			{
 				_save->getPathfinding()->removePreview();
