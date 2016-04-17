@@ -24,6 +24,7 @@
 #include <locale>
 #include <stdint.h>
 #include <sys/stat.h>
+#include "../dirent.h"
 #include "Logger.h"
 #include "Exception.h"
 #include "Options.h"
@@ -60,7 +61,6 @@
 #include <pwd.h>
 #include <execinfo.h>
 #endif
-#include "../dirent.h"
 #include <SDL.h>
 #include <SDL_syswm.h>
 #ifdef __HAIKU__
