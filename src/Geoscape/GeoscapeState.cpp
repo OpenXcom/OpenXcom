@@ -452,7 +452,7 @@ void GeoscapeState::handle(Action *action)
 			if (_game->getSavedGame()->getDebugMode())
 			{
 				_txtDebug->setText(L"SOLDIER COMMENDATIONS DELETED");
-                for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+				for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 				{
 					for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
 					{

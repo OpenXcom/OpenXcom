@@ -1260,6 +1260,6 @@ int TextList::getScrollbarColor()
 
 void TextList::setFlooding(bool flooding)
 {
-    _flooding = flooding;
+	_flooding = flooding;
 }
 }

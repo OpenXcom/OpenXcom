@@ -383,7 +383,7 @@ public:
 	RuleConverter *getConverter() const;
 	/// Gets the list of selective files for insertion into our cat files.
 	const std::map<std::string, SoundDefinition *> *getSoundDefinitions() const;
-	/// Gets the list of transparency colors, 
+	/// Gets the list of transparency colors,
 	const std::vector<SDL_Color> *getTransparencies() const;
 	const std::vector<MapScript*> *getMapScript(std::string id) const;
 	/// Gets a video for intro/outro etc.

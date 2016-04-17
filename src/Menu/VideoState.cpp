@@ -115,7 +115,7 @@ static soundInFile sample3CatOnlySounds[]=
 {"SAMPLE3.CAT", 30, 32}, // energise
 {"SAMPLE3.CAT", 21, 32}, // hatch
 {"SAMPLE3.CAT", 0, 64}, // phizz -- no equivalent in sample3.cat?
-{"SAMPLE3.CAT", 13, 32}, // warning 
+{"SAMPLE3.CAT", 13, 32}, // warning
 {"SAMPLE3.CAT", 14, 32}, // detected
 {"SAMPLE3.CAT", 19, 64}, // UFO flyby whoosh?
 {"SAMPLE3.CAT", 3, 32}, // growl
@@ -150,7 +150,7 @@ static soundInFile hybridIntroSounds[]=
 {"SAMPLE3.CAT", 30, 32}, // energise
 {"SAMPLE3.CAT", 21, 32}, // hatch
 {"INTRO.CAT", 0x11, 64}, // phizz
-{"SAMPLE3.CAT", 13, 32}, // warning 
+{"SAMPLE3.CAT", 13, 32}, // warning
 {"SAMPLE3.CAT", 14, 32}, // detected
 {"SAMPLE3.CAT", 19, 64}, // UFO flyby whoosh?
 {"INTRO.CAT", 0x15, 32}, // growl
@@ -171,7 +171,7 @@ static soundInFile *introSounds[] =
 };
 
 
-typedef struct 
+typedef struct
 {
 	int frameNumber;
 	int sound;
@@ -354,7 +354,7 @@ static struct AudioSequence
 					//Mix_HookMusicFinished(_FlcPlayer::stop);
 					break;
 				}
-#endif		
+#endif
 			}
 			else if (command & 0x400)
 			{
@@ -369,7 +369,7 @@ static struct AudioSequence
 					soundInFile *sf = (*sounds) + command;
 					int channel = trackPosition % 4; // use at most four channels to play sound effects
 					double ratio = (double)Options::soundVolume / MIX_MAX_VOLUME;
-					Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command; 
+					Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command;
 					s = mod->getSound(sf->catFile, sf->sound);
 					if (s)
 					{
@@ -487,7 +487,7 @@ void VideoState::init()
 		}
 		else
 		{
-			Mix_HaltMusic();			
+			Mix_HaltMusic();
 		}
 	}
 	else

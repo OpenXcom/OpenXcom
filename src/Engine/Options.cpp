@@ -124,7 +124,7 @@ void create()
 	_info.push_back(OptionInfo("captureMouse", (bool*)&captureMouse, false));
 	_info.push_back(OptionInfo("battleTooltips", &battleTooltips, true));
 	_info.push_back(OptionInfo("keepAspectRatio", &keepAspectRatio, true));
-	_info.push_back(OptionInfo("nonSquarePixelRatio", &nonSquarePixelRatio, false));	
+	_info.push_back(OptionInfo("nonSquarePixelRatio", &nonSquarePixelRatio, false));
 	_info.push_back(OptionInfo("cursorInBlackBandsInFullscreen", &cursorInBlackBandsInFullscreen, false));
 	_info.push_back(OptionInfo("cursorInBlackBandsInWindow", &cursorInBlackBandsInWindow, true));
 	_info.push_back(OptionInfo("cursorInBlackBandsInBorderlessWindow", &cursorInBlackBandsInBorderlessWindow, false));
@@ -829,7 +829,7 @@ void userSplitMasters()
 			{
 				saves = CrossPlatform::getFolderContents(_userFolder, "sav");
 				std::vector<std::string> autosaves = CrossPlatform::getFolderContents(_userFolder, "asav");
-				saves.insert(saves.end(), autosaves.begin(), autosaves.end());				
+				saves.insert(saves.end(), autosaves.begin(), autosaves.end());
 			}
 			for (std::vector<std::string>::iterator j = saves.begin(); j != saves.end();)
 			{
@@ -1056,7 +1056,7 @@ void backupDisplay()
  * testing a new display setup.
  */
 void switchDisplay()
-{	
+{
 	std::swap(displayWidth, newDisplayWidth);
 	std::swap(displayHeight, newDisplayHeight);
 	std::swap(useOpenGL, newOpenGL);

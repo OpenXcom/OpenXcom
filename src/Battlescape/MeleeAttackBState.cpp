@@ -215,7 +215,7 @@ void MeleeAttackBState::performMeleeAttack()
 void MeleeAttackBState::resolveHit()
 {
 	if (RNG::percent(_unit->getFiringAccuracy(BA_HIT, _weapon)))
-	{	
+	{
 		// Give soldiers XP
 		if (_unit->getGeoscapeSoldier() &&
 			_target && _target->getOriginalFaction() == FACTION_HOSTILE)

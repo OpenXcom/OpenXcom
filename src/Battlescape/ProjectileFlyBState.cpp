@@ -568,7 +568,7 @@ void ProjectileFlyBState::think()
 							{
 								// as above: skip the shot to the end of it's path
 								proj->skipTrajectory();
-								// insert an explosion and hit 
+								// insert an explosion and hit
 								if (_projectileImpact != V_OUTOFBOUNDS)
 								{
 									Explosion *explosion = new Explosion(proj->getPosition(1), _ammo->getRules()->getHitAnimation());
@@ -691,29 +691,29 @@ bool ProjectileFlyBState::validThrowRange(BattleAction *action, Position origin,
  */
 int ProjectileFlyBState::getMaxThrowDistance(int weight, int strength, int level)
 {
-    double curZ = level + 0.5;
-    double dz = 1.0;
-    int dist = 0;
-    while (dist < 4000) //just in case
-    {
-        dist += 8;
-        if (dz<-1)
-            curZ -= 8;
-        else
-            curZ += dz * 8;
+	double curZ = level + 0.5;
+	double dz = 1.0;
+	int dist = 0;
+	while (dist < 4000) //just in case
+	{
+		dist += 8;
+		if (dz<-1)
+			curZ -= 8;
+		else
+			curZ += dz * 8;
 
-        if (curZ < 0 && dz < 0) //roll back
-        {
-            dz = std::max(dz, -1.0);
-            if (std::abs(dz)>1e-10) //rollback horizontal
-                dist -= curZ / dz;
-            break;
-        }
-        dz -= (double)(50 * weight / strength)/100;
-        if (dz <= -2.0) //become falling
-            break;
-    }
-    return dist;
+		if (curZ < 0 && dz < 0) //roll back
+		{
+			dz = std::max(dz, -1.0);
+			if (std::abs(dz)>1e-10) //rollback horizontal
+				dist -= curZ / dz;
+			break;
+		}
+		dz -= (double)(50 * weight / strength)/100;
+		if (dz <= -2.0) //become falling
+			break;
+	}
+	return dist;
 }
 
 /**

@@ -302,7 +302,7 @@ void StatisticsState::btnOkClick(Action *)
 	else
 	{
 		_game->setSavedGame(0);
-		_game->setState(new MainMenuState);		
+		_game->setState(new MainMenuState);
 	}
 }
 

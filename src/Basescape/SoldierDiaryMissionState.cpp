@@ -144,7 +144,7 @@ void SoldierDiaryMissionState::init()
 	_txtDaysWounded->setVisible(daysWounded != 0);
 	
 	int kills = 0;
-    bool stunOrKill = false;
+	bool stunOrKill = false;
 
 	for (std::vector<BattleUnitKills*>::iterator i = _soldier->getDiary()->getKills().begin() ; i != _soldier->getDiary()->getKills().end() ; ++i)
 	{
@@ -192,7 +192,7 @@ void SoldierDiaryMissionState::btnPrevClick(Action *)
 	if (_rowEntry == 0)
 		_rowEntry = _soldier->getDiary()->getMissionTotal() - 1;
 	else
-		_rowEntry--;		
+		_rowEntry--;
 	init();
 }
 

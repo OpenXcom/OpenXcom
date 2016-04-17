@@ -2012,7 +2012,7 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 			}
 			else if (cutscene == CutsceneState::LOSE_GAME)
 			{
-				_game->getSavedGame()->setEnding(END_LOSE);				
+				_game->getSavedGame()->setEnding(END_LOSE);
 			}
 			// Autosave if game is over
 			if (_game->getSavedGame()->getEnding() != END_NONE && _game->getSavedGame()->isIronman())

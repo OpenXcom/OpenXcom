@@ -535,7 +535,7 @@ bool fileExists(const std::string &path)
 		return 1;
 	}
 	return 0;
-#else 
+#else
 	struct stat info;
 	return (stat(path.c_str(), &info) == 0 && S_ISREG(info.st_mode));
 #endif
@@ -593,7 +593,7 @@ std::string sanitizeFilename(const std::string &filename)
 		if ((*i) == '<' ||
 			(*i) == '>' ||
 			(*i) == ':' ||
-			(*i) == '"' || 
+			(*i) == '"' ||
 			(*i) == '/' ||
 			(*i) == '?' ||
 			(*i) == '\\')

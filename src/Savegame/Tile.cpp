@@ -135,7 +135,7 @@ void Tile::loadBinary(Uint8 *buffer, Tile::SerializationKey& serKey)
 	_smoke = unserializeInt(&buffer, serKey._smoke);
 	_fire = unserializeInt(&buffer, serKey._fire);
 
-    Uint8 boolFields = unserializeInt(&buffer, serKey.boolFields);
+	Uint8 boolFields = unserializeInt(&buffer, serKey.boolFields);
 	_discovered[0] = (boolFields & 1) ? true : false;
 	_discovered[1] = (boolFields & 2) ? true : false;
 	_discovered[2] = (boolFields & 4) ? true : false;

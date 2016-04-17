@@ -568,7 +568,7 @@ void SaveConverter::loadDatMissions()
 				if (_mod->getRegion(_rules->getRegions()[region])->getMissionZones().size() >= 3)
 				{
 					// pick a city for terror missions
-					node["missionSiteZone"] = RNG::generate(0, _mod->getRegion(_rules->getRegions()[region])->getMissionZones().at(3).areas.size() - 1); 
+					node["missionSiteZone"] = RNG::generate(0, _mod->getRegion(_rules->getRegions()[region])->getMissionZones().at(3).areas.size() - 1);
 				}
 				else
 				{

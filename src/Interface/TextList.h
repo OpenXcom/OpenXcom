@@ -195,8 +195,8 @@ public:
 	ComboBox *getComboBox() const;
 	void setBorderColor(Uint8 color);
 	int getScrollbarColor();
-    /// Allows the cell to flood into other columns.
-    void setFlooding(bool flooding);
+	/// Allows the cell to flood into other columns.
+	void setFlooding(bool flooding);
 };
 
 }

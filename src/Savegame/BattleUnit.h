@@ -471,31 +471,31 @@ public:
 	BattleItem *getSpecialWeapon(BattleType type) const;
 	/// Recovers the unit's time units and energy.
 	void recoverTimeUnits();
-    /// Get the unit's mission statistics.
-    BattleUnitStatistics* getStatistics();
+	/// Get the unit's mission statistics.
+	BattleUnitStatistics* getStatistics();
 	/// Set the unit murderer's id.
 	void setMurdererId(int id);
 	/// Get the unit murderer's id.
 	int getMurdererId() const;
-    /// Set information on the unit's fatal shot.
-    void setFatalShotInfo(UnitSide side, UnitBodyPart bodypart);
-    /// Get information on the unit's fatal shot's side.
-    UnitSide getFatalShotSide() const;
-    /// Get information on the unit's fatal shot's body part.
-    UnitBodyPart getFatalShotBodyPart() const;
-    /// Get the unit murderer's weapon.
-    std::string getMurdererWeapon() const;
-    /// Set the unit murderer's weapon.
-    void setMurdererWeapon(std::string weapon);
-    /// Get the unit murderer's weapon's ammo.
-    std::string getMurdererWeaponAmmo() const;
-    /// Set the unit murderer's weapon's ammo.
-    void setMurdererWeaponAmmo(std::string weaponAmmo);
-    /// Set the unit mind controller's id.
+	/// Set information on the unit's fatal shot.
+	void setFatalShotInfo(UnitSide side, UnitBodyPart bodypart);
+	/// Get information on the unit's fatal shot's side.
+	UnitSide getFatalShotSide() const;
+	/// Get information on the unit's fatal shot's body part.
+	UnitBodyPart getFatalShotBodyPart() const;
+	/// Get the unit murderer's weapon.
+	std::string getMurdererWeapon() const;
+	/// Set the unit murderer's weapon.
+	void setMurdererWeapon(std::string weapon);
+	/// Get the unit murderer's weapon's ammo.
+	std::string getMurdererWeaponAmmo() const;
+	/// Set the unit murderer's weapon's ammo.
+	void setMurdererWeaponAmmo(std::string weaponAmmo);
+	/// Set the unit mind controller's id.
 	void setMindControllerId(int id);
 	/// Get the unit mind controller's id.
 	int getMindControllerId() const;
-    
+	
 };
 
 }

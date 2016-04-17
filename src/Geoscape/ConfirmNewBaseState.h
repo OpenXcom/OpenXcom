@@ -31,7 +31,7 @@ class Globe;
 /**
  * Screen that allows the player
  * to confirm a new base on the globe.
- * Note: This is different from the starting base screen, BaseNameState 
+ * Note: This is different from the starting base screen, BaseNameState
  */
 class ConfirmNewBaseState : public State
 {

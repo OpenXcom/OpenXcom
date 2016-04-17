@@ -549,7 +549,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				murderer = (*i);
 			}
 		}
-	}	
+	}
 
 	// Fetch the murder weapon
 	std::string tempWeapon = "STR_WEAPON_UNKNOWN", tempAmmo = "STR_WEAPON_UNKNOWN";
@@ -1001,7 +1001,7 @@ void BattlescapeGame::popState()
 	BattleAction action = _states.front()->getAction();
 
 	if (action.actor && !action.result.empty() && action.actor->getFaction() == FACTION_PLAYER
-    && _playerPanicHandled && (_save->getSide() == FACTION_PLAYER || _debugPlay))
+		&& _playerPanicHandled && (_save->getSide() == FACTION_PLAYER || _debugPlay))
 	{
 		_parentState->warning(action.result);
 		actionFailed = true;

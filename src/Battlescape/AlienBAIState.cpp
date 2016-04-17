@@ -140,7 +140,7 @@ void AlienBAIState::exit()
  */
 void AlienBAIState::think(BattleAction *action)
 {
- 	action->type = BA_RETHINK;
+	action->type = BA_RETHINK;
 	action->actor = _unit;
 	action->weapon = _unit->getMainHandWeapon(false);
 	_attackAction->diff = _save->getBattleState()->getGame()->getSavedGame()->getDifficultyCoefficient();
@@ -461,8 +461,8 @@ void AlienBAIState::setupPatrol()
 			}
 			node = *i;
 			int d = _save->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
-			if (_unit->getPosition().z == node->getPosition().z 
-				&& d < closest 
+			if (_unit->getPosition().z == node->getPosition().z
+				&& d < closest
 				&& (!(node->getType() & Node::TYPE_SMALL) || _unit->getArmor()->getSize() == 1))
 			{
 				_fromNode = node;
@@ -481,7 +481,7 @@ void AlienBAIState::setupPatrol()
 		{
 			// after turn 20 or if the morale is low, everyone moves out the UFO and scout
 			// also anyone standing in fire should also probably move
-			if (_save->isCheating() || !_fromNode || _fromNode->getRank() == 0 || 
+			if (_save->isCheating() || !_fromNode || _fromNode->getRank() == 0 ||
 				(_save->getTile(_unit->getPosition()) && _save->getTile(_unit->getPosition())->getFire()))
 			{
 				scout = true;
@@ -661,7 +661,7 @@ void AlienBAIState::setupAmbush()
 		{
 			_ambushAction->type = BA_WALK;
 			// i should really make a function for this
-			origin = (_ambushAction->target * Position(16,16,24)) + 
+			origin = (_ambushAction->target * Position(16,16,24)) +
 				// 4 because -2 is eyes and 2 below that is the rifle (or at least that's my understanding)
 				Position(8,8, _unit->getHeight() + _unit->getFloatHeight() - _save->getTile(_ambushAction->target)->getTerrainLevel() - 4);
 			Position currentPos = _aggroTarget->getPosition();
@@ -830,7 +830,7 @@ void AlienBAIState::setupEscape()
 			if (_save->getTile(_unit->lastCover) != 0)
 			{
 				_escapeAction->target = _unit->lastCover;
-			} 
+			}
 		}
 		else if (tries < 121) 
 		{
@@ -856,10 +856,10 @@ void AlienBAIState::setupEscape()
 		{
 			
 			if (tries == 121) 
-			{ 
+			{
 				if (_traceAI) 
 				{
-					Log(LOG_INFO) << "best score after systematic search was: " << bestTileScore; 
+					Log(LOG_INFO) << "best score after systematic search was: " << bestTileScore;
 				}
 			}
 						
@@ -1448,7 +1448,7 @@ bool AlienBAIState::findFirePoint()
 			continue;
 		int score = 0;
 		// i should really make a function for this
-		Position origin = (pos * Position(16,16,24)) + 
+		Position origin = (pos * Position(16,16,24)) +
 			// 4 because -2 is eyes and 2 below that is the rifle (or at least that's my understanding)
 			Position(8,8, _unit->getHeight() + _unit->getFloatHeight() - tile->getTerrainLevel() - 4);
 

@@ -399,8 +399,8 @@ double Globe::lastVisibleLat(double lon) const
 Polygon* Globe::getPolygonFromLonLat(double lon, double lat) const
 {
 	const double zDiscard=0.75f;
-    double coslat = cos(lat);
-    double sinlat = sin(lat);
+	double coslat = cos(lat);
+	double sinlat = sin(lat);
 
 	for (std::list<Polygon*>::iterator i = _rules->getPolygons()->begin(); i != _rules->getPolygons()->end(); ++i)
 	{
@@ -747,7 +747,7 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 		}
 	}
 	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin(); i != _game->getSavedGame()->getAlienBases()->end(); ++i)
- 	{
+	{
 		if (!(*i)->isDiscovered())
 		{
 			continue;

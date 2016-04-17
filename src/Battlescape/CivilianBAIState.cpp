@@ -336,10 +336,10 @@ void CivilianBAIState::setupEscape()
 		{
 			
 			if (tries == 121) 
-			{ 
+			{
 				if (_traceAI) 
 				{
-					Log(LOG_INFO) << "best score after systematic search was: " << bestTileScore; 
+					Log(LOG_INFO) << "best score after systematic search was: " << bestTileScore;
 				}
 			}
 						
@@ -482,8 +482,8 @@ void CivilianBAIState::setupPatrol()
 			}
 			node = *i;
 			int d = _save->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
-			if (_unit->getPosition().z == node->getPosition().z 
-				&& d < closest 
+			if (_unit->getPosition().z == node->getPosition().z
+				&& d < closest
 				&& node->getType() & Node::TYPE_SMALL)
 			{
 				_fromNode = node;

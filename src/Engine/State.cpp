@@ -542,7 +542,7 @@ void State::recenter(int dX, int dY)
 
 void State::setGamePtr(Game* game)
 {
-    _game = game;
+	_game = game;
 }
 
 }

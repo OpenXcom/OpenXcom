@@ -474,7 +474,7 @@ void Game::loadLanguage(const std::string &filename)
 			std::string file = modInfo.getPath() + ss.str();
 			if (CrossPlatform::fileExists(file))
 			{
-				_lang->load(file);				
+				_lang->load(file);
 			}
 		}
 	}

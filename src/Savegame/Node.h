@@ -49,7 +49,7 @@ public:
 	static const int TYPE_FLYING = 0x01; // non-flying unit can not spawn here when this bit is set
 	static const int TYPE_SMALL = 0x02; // large unit can not spawn here when this bit is set
 	static const int TYPE_DANGEROUS = 0x04; // an alien was shot here, stop patrolling to it like an idiot with a death wish
-	static const int nodeRank[8][7]; // maps alien ranks to node (.RMP) ranks		
+	static const int nodeRank[8][7]; // maps alien ranks to node (.RMP) ranks
 	/// Creates a Node.
 	Node();
 	Node(int id, Position pos, int segment, int type, int rank, int flags, int reserved, int priority);

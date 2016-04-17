@@ -138,7 +138,7 @@ void Map::init()
 	int b = 15; // black
 	int pixels[81] = { 0, 0, b, b, b, b, b, 0, 0,
 					   0, 0, b, f, f, f, b, 0, 0,
-				       0, 0, b, f, f, f, b, 0, 0,
+					   0, 0, b, f, f, f, b, 0, 0,
 					   b, b, b, f, f, f, b, b, b,
 					   b, f, f, f, f, f, f, f, b,
 					   0, b, f, f, f, f, f, b, 0,
@@ -824,7 +824,7 @@ void Map::drawTerrain(Surface *surface)
 							}
 						}
 					}
-			        unit = tile->getUnit();
+					unit = tile->getUnit();
 					// Draw soldier
 					if (unit && (unit->getVisible() || _save->getDebugMode()))
 					{
@@ -930,13 +930,13 @@ void Map::drawTerrain(Surface *surface)
 							switch ((*i)->getSize())
 							{
 							case 3:
-								surface->setPixel(vaporX+1, vaporY+1, (*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixel(vaporX+1, vaporY+1)]); 
+								surface->setPixel(vaporX+1, vaporY+1, (*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixel(vaporX+1, vaporY+1)]);
 							case 2:
-								surface->setPixel(vaporX + 1, vaporY, (*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixel(vaporX + 1, vaporY)]); 
+								surface->setPixel(vaporX + 1, vaporY, (*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixel(vaporX + 1, vaporY)]);
 							case 1:
-								surface->setPixel(vaporX, vaporY + 1, (*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixel(vaporX, vaporY + 1)]); 
+								surface->setPixel(vaporX, vaporY + 1, (*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixel(vaporX, vaporY + 1)]);
 							default:
-								surface->setPixel(vaporX, vaporY, (*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixel(vaporX, vaporY)]); 
+								surface->setPixel(vaporX, vaporY, (*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixel(vaporX, vaporY)]);
 								break;
 							}
 						}

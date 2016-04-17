@@ -58,7 +58,7 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, int id) : _id(id), _improveme
 		_initialStats.melee = RNG::generate(minStats.melee, maxStats.melee);
 		_initialStats.psiSkill = minStats.psiSkill;
 
-		_currentStats = _initialStats;	
+		_currentStats = _initialStats;
 
 		const std::vector<SoldierNamePool*> &names = rules->getNames();
 		if (!names.empty())
@@ -142,7 +142,7 @@ void Soldier::load(const YAML::Node& node, const Mod *mod, SavedGame *save)
 	{
 		_diary = new SoldierDiary();
 		_diary->load(node["diary"]);
-	}	
+	}
 	calcStatString(mod->getStatStrings(), (Options::psiStrengthEval && save->isResearched(mod->getPsiRequirements())));
 }
 

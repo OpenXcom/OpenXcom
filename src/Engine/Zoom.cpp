@@ -90,7 +90,7 @@ static int zoomSurface2X_64bit(SDL_Surface *src, SDL_Surface *dst)
 	for (sy = 0; sy < src->h; ++sy, pixelDstRow += dst->pitch*2)
 	{
 		Uint64 *pixelDst = (Uint64*)pixelDstRow;
-		Uint64 *pixelDst2 = (Uint64*)(pixelDstRow + dst->pitch);	
+		Uint64 *pixelDst2 = (Uint64*)(pixelDstRow + dst->pitch);
 		for (sx = 0; sx < src->w; sx += 8, pixelSrc += 8)
 		{
 			dataSrc = *((Uint64*) pixelSrc);
@@ -98,15 +98,15 @@ static int zoomSurface2X_64bit(SDL_Surface *src, SDL_Surface *dst)
 			(void)SDL_SwapLE64(dataSrc);
  */
 /* expanded form of data shift: 
-			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
-				((dataSrc & 0xFF00 ) << 8) | ((dataSrc & 0xFF00)) << 16)  | 
+			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) |
+				((dataSrc & 0xFF00 ) << 8) | ((dataSrc & 0xFF00)) << 16)  |
 				((dataSrc & 0xFF0000) << 16) | ((dataSrc & 0xFF0000) << 24) |
 				((dataSrc & 0xFF000000) << 24) | ((dataSrc & 0xFF000000) << 32);
  */
 			// compact form, combining terms with equal multipliers (shifts)
 /*
-			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
-				((dataSrc & 0xFFFF00) << 16)  | 
+			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) |
+				((dataSrc & 0xFFFF00) << 16)  |
 				((dataSrc & 0xFFFF0000) << 24) |
 				((dataSrc & 0xFF000000) << 32);
 
@@ -116,14 +116,14 @@ static int zoomSurface2X_64bit(SDL_Surface *src, SDL_Surface *dst)
 			pixelDst2++;
 			dataSrc >>= 32;
 
-			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
-				((dataSrc & 0xFFFF00) << 16)  | 
+			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) |
+				((dataSrc & 0xFFFF00) << 16)  |
 				((dataSrc & 0xFFFF0000) << 24) |
 				((dataSrc & 0xFF000000) << 32);
 
 			*pixelDst = dataDst;
 			*pixelDst2 = dataDst;
-			pixelDst++;	// 8 bytes again		
+			pixelDst++;	// 8 bytes again
 			pixelDst2++;
 		}
 	}
@@ -137,7 +137,7 @@ static int zoomSurface2X_64bit(SDL_Surface *src, SDL_Surface *dst)
 #else
 /**
  * Optimized 8-bit zoomer for resizing by a factor of 2. Doesn't flip.
- * 32-bit version for sad old x86 chips which run out of registers 
+ * 32-bit version for sad old x86 chips which run out of registers
  * with the 64-bit version.
  * Used internally by _zoomSurfaceY() below.
  * source and dest. widths must be multiples of 4 bytes for 32-bit access
@@ -166,7 +166,7 @@ static int zoomSurface2X_32bit(SDL_Surface *src, SDL_Surface *dst)
 	for (sy = 0; sy < src->h; ++sy, pixelDstRow += dst->pitch*2)
 	{
 		Uint32 *pixelDst = (Uint32*)pixelDstRow;
-		Uint32 *pixelDst2 = (Uint32*)(pixelDstRow + dst->pitch);	
+		Uint32 *pixelDst2 = (Uint32*)(pixelDstRow + dst->pitch);
 		for (sx = 0; sx < src->w; sx += 4, pixelSrc += 4)
 		{
 			dataSrc = *((Uint32*) pixelSrc);
@@ -174,7 +174,7 @@ static int zoomSurface2X_32bit(SDL_Surface *src, SDL_Surface *dst)
 			// boo
 			dataSrc = SDL_SwapLE32(dataSrc);
 			
-			dataDst = SDL_SwapLE32( (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
+			dataDst = SDL_SwapLE32( (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) |
 				((dataSrc & 0xFF00) << 16)  );
 
 			*pixelDst = dataDst;
@@ -182,9 +182,9 @@ static int zoomSurface2X_32bit(SDL_Surface *src, SDL_Surface *dst)
 			pixelDst++; // forward 4 bytes!
 			pixelDst2++;
 
-			dataSrc >>= 16; 
+			dataSrc >>= 16;
 
-			dataDst = SDL_SwapLE32( (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
+			dataDst = SDL_SwapLE32( (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) |
 				((dataSrc & 0xFF00) << 16)  );
 
 			*pixelDst = dataDst;
@@ -236,18 +236,18 @@ static int zoomSurface4X_64bit(SDL_Surface *src, SDL_Surface *dst)
 			(void)SDL_SwapLE64(dataSrc);
  */
 			/* expanded form of data shift:
-			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
+			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) |
 				((dataSrc & 0xFF) << 16 | ((datasrc & 0xFF) << 24) |
-				((dataSrc & 0xFF00 ) << 24) | ((dataSrc & 0xFF00) << 32)  | 
+				((dataSrc & 0xFF00 ) << 24) | ((dataSrc & 0xFF00) << 32)  |
 				((dataSrc & 0xFF00 ) << 40) | ((dataSrc & 0xFF00) << 48) ;
 				 */
 /*
 			for (int i = 0; i < 4; ++i)
 			{
 				// compact form, combining terms with equal multipliers (shifts)
-				dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
-					((dataSrc & 0xFF) << 16) | 
-					((dataSrc & 0xFFFF ) << 24) | ((dataSrc & 0xFF00) << 32)  | 
+				dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) |
+					((dataSrc & 0xFF) << 16) |
+					((dataSrc & 0xFFFF ) << 24) | ((dataSrc & 0xFF00) << 32)  |
 					((dataSrc & 0xFF00 ) << 40) | ((dataSrc & 0xFF00) << 48) ;
 
 				*((Uint64*)pixelDst) = dataDst;
@@ -307,8 +307,8 @@ static int zoomSurface4X_32bit(SDL_Surface *src, SDL_Surface *dst)
 			
 			for (int i = 0; i < 4; ++i)
 			{
-				dataDst = SDL_SwapLE32( (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
-					((dataSrc & 0xFF) << 16) | ((dataSrc & 0xFF ) << 24) ); 
+				dataDst = SDL_SwapLE32( (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) |
+					((dataSrc & 0xFF) << 16) | ((dataSrc & 0xFF ) << 24) );
 
 				*pixelDst = dataDst;
 				*pixelDst2 = dataDst;
@@ -394,7 +394,7 @@ static int zoomSurface2X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 			
 			for (int i = 0; i < 2; ++i)
 			{
-				dataDst = SDL_SwapLE32( (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
+				dataDst = SDL_SwapLE32( (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) |
 					((dataSrc & 0xFF00) << 16) );
 
 				int j = 0;
@@ -482,8 +482,8 @@ static int zoomSurface4X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 			
 			for (int i = 0; i < 4; ++i)
 			{
-				dataDst = SDL_SwapLE32( (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
-					((dataSrc & 0xFF) << 16) | ((dataSrc & 0xFF ) << 24) ); 
+				dataDst = SDL_SwapLE32( (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) |
+					((dataSrc & 0xFF) << 16) | ((dataSrc & 0xFF ) << 24) );
 			
 				int j = 0;
 				do
@@ -541,7 +541,7 @@ static int zoomSurface4X_SSE2(SDL_Surface *src, SDL_Surface *dst)
 		{
 			dataSrc = *((__m128i*) pixelSrc);
 
-			__m128i halfDone = _mm_unpacklo_epi8(dataSrc, dataSrc); 
+			__m128i halfDone = _mm_unpacklo_epi8(dataSrc, dataSrc);
 			dataDst = _mm_unpacklo_epi8(halfDone, halfDone);
  */
 /* #define WRITE_DST if ((char*)pixelDst4 + 128 > (char*)dst->pixels+(dst->w*dst->pitch)) { Log(LOG_ERROR) << "HELL"; exit(0); } \ */
@@ -565,7 +565,7 @@ static int zoomSurface4X_SSE2(SDL_Surface *src, SDL_Surface *dst)
 			dataDst = _mm_unpackhi_epi8(halfDone, halfDone);
 			
 			WRITE_DST;
-		}	
+		}
 	}
 
 	return 0;
@@ -608,7 +608,7 @@ static int zoomSurface2X_SSE2(SDL_Surface *src, SDL_Surface *dst)
 		{
 			dataSrc = *((__m128i*) pixelSrc);
 
-			dataDst = _mm_unpacklo_epi8(dataSrc, dataSrc); 
+			dataDst = _mm_unpacklo_epi8(dataSrc, dataSrc);
 
 #undef WRITE_DST
 #define WRITE_DST			*(pixelDst++) = dataDst; \
@@ -781,7 +781,7 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 		}
 	}
 
-	// if we're scaling by a factor of 2 or 4, try to use a more efficient function	
+	// if we're scaling by a factor of 2 or 4, try to use a more efficient function
 	/*
 	if (src->format->BytesPerPixel == 1 && dst->format->BytesPerPixel == 1)
 	{
@@ -790,7 +790,7 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 		static bool _haveSSE2 = haveSSE2();
 
 		if (_haveSSE2 &&
-			!((ptrdiff_t)src->pixels % 16) && 
+			!((ptrdiff_t)src->pixels % 16) &&
 			!((ptrdiff_t)dst->pixels % 16)) // alignment check
 		{
 			if (dst->w == src->w * 2 && dst->h == src->h * 2) return  zoomSurface2X_SSE2(src, dst);

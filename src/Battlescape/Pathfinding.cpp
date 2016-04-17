@@ -140,7 +140,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 						return;
 					if (x && y)
 					{
-						if ((checkTile->getMapData(O_NORTHWALL) && checkTile->getMapData(O_NORTHWALL)->isDoor()) || 
+						if ((checkTile->getMapData(O_NORTHWALL) && checkTile->getMapData(O_NORTHWALL)->isDoor()) ||
 							(checkTile->getMapData(O_WESTWALL) && checkTile->getMapData(O_WESTWALL)->isDoor()))
 							return;
 					}
@@ -393,7 +393,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			// don't let tanks phase through doors.
 			if (x && y)
 			{
-				if ((destinationTile->getMapData(O_NORTHWALL) && destinationTile->getMapData(O_NORTHWALL)->isDoor()) || 
+				if ((destinationTile->getMapData(O_NORTHWALL) && destinationTile->getMapData(O_NORTHWALL)->isDoor()) ||
 					(destinationTile->getMapData(O_WESTWALL) && destinationTile->getMapData(O_WESTWALL)->isDoor()))
 				{
 					return 255;
@@ -624,7 +624,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 			{
 				if (_unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
 				if (_unit->getFaction() == unit->getFaction()) return true;
-				if (_unit->getFaction() == FACTION_HOSTILE && 
+				if (_unit->getFaction() == FACTION_HOSTILE &&
 					std::find(_unit->getUnitsSpottedThisTurn().begin(), _unit->getUnitsSpottedThisTurn().end(), unit) != _unit->getUnitsSpottedThisTurn().end()) return true;
 			}
 		}
@@ -1168,7 +1168,7 @@ std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 			int tuCost = getTUCost(currentPos, direction, &nextPos, unit, 0, false);
 			if (tuCost == 255) // Skip unreachable / blocked
 				continue;
-			if (currentNode->getTUCost(false) + tuCost > tuMax || 
+			if (currentNode->getTUCost(false) + tuCost > tuMax ||
 				(currentNode->getTUCost(false) + tuCost) / 2 > energyMax) // Run out of TUs/Energy
 				continue;
 			PathfindingNode *nextNode = getNode(nextPos);

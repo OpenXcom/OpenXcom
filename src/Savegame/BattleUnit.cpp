@@ -1201,7 +1201,7 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 		}
 	}
 
-    setFatalShotInfo(side, bodypart);
+	setFatalShotInfo(side, bodypart);
 
 	return power < 0 ? 0:power;
 }
@@ -2327,7 +2327,7 @@ void BattleUnit::painKillers()
 	int lostHealth = getBaseStats()->health - _health;
 	if (lostHealth > _moraleRestored)
 	{
-        _morale = std::min(100, (lostHealth - _moraleRestored + _morale));
+		_morale = std::min(100, (lostHealth - _moraleRestored + _morale));
 		_moraleRestored = lostHealth;
 	}
 }
@@ -3165,8 +3165,8 @@ int BattleUnit::getMurdererId() const
  */
 void BattleUnit::setFatalShotInfo(UnitSide side, UnitBodyPart bodypart)
 {
-    _fatalShotSide = side;
-    _fatalShotBodyPart = bodypart;
+	_fatalShotSide = side;
+	_fatalShotBodyPart = bodypart;
 }
 
 /**
@@ -3175,7 +3175,7 @@ void BattleUnit::setFatalShotInfo(UnitSide side, UnitBodyPart bodypart)
  */
 UnitSide BattleUnit::getFatalShotSide() const
 {
-    return _fatalShotSide;
+	return _fatalShotSide;
 }
 
 /**
@@ -3184,7 +3184,7 @@ UnitSide BattleUnit::getFatalShotSide() const
  */
 UnitBodyPart BattleUnit::getFatalShotBodyPart() const
 {
-    return _fatalShotBodyPart;
+	return _fatalShotBodyPart;
 }
 
 /**
@@ -3202,7 +3202,7 @@ std::string BattleUnit::getMurdererWeapon() const
  */
 void BattleUnit::setMurdererWeapon(std::string weapon)
 {
-    _murdererWeapon = weapon;
+	_murdererWeapon = weapon;
 }
 
 /**
@@ -3220,7 +3220,7 @@ std::string BattleUnit::getMurdererWeaponAmmo() const
  */
 void BattleUnit::setMurdererWeaponAmmo(std::string weaponAmmo)
 {
-    _murdererWeaponAmmo = weaponAmmo;
+	_murdererWeaponAmmo = weaponAmmo;
 }
 
 /**

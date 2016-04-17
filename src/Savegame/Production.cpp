@@ -210,7 +210,7 @@ void Production::startItem(Base * b, SavedGame * g, const Mod *m)
 	{
 		if (m->getItem(iter->first) != 0)
 		{
-			b->getStorageItems()->removeItem(iter->first, iter->second);			
+			b->getStorageItems()->removeItem(iter->first, iter->second);
 		}
 		else if (m->getCraft(iter->first) != 0)
 		{

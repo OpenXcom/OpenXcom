@@ -82,13 +82,13 @@ struct GraphSubset
 	static inline void intersection_range(int& begin_a, int& end_a, const int& begin_b, const int& end_b)
 	{
 		if (begin_a >= end_b || begin_b >= end_a)
-		{			
+		{
 			//intersection is empty
 			end_a = begin_a;
 		}
 		else
 		{
-			begin_a = std::max(begin_a, begin_b); 
+			begin_a = std::max(begin_a, begin_b);
 			end_a = std::min(end_a, end_b);
 		}
 	}
@@ -103,14 +103,14 @@ struct GraphSubset
 	{
 		GraphSubset ret =  intersection(a, b);
 		intersection_range(ret.beg_x, ret.end_x, c.beg_x, c.end_x);
-		intersection_range(ret.beg_y, ret.end_y, c.beg_y, c.end_y);		
+		intersection_range(ret.beg_y, ret.end_y, c.beg_y, c.end_y);
 		return ret;
 	}
 	static inline GraphSubset intersection(const GraphSubset& a, const GraphSubset& b,  const GraphSubset& c, const GraphSubset& d)
 	{
 		GraphSubset ret =  intersection(a, b, c);
 		intersection_range(ret.beg_x, ret.end_x, d.beg_x, d.end_x);
-		intersection_range(ret.beg_y, ret.end_y, d.beg_y, d.end_y);		
+		intersection_range(ret.beg_y, ret.end_y, d.beg_y, d.end_y);
 		return ret;
 	}
 	

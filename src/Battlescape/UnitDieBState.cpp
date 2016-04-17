@@ -76,19 +76,19 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
 
-    if (_unit->getFaction() == FACTION_HOSTILE)
-    {
-        std::vector<Node *> *nodes = _parent->getSave()->getNodes();
-        if (!nodes) return; // this better not happen.
+	if (_unit->getFaction() == FACTION_HOSTILE)
+	{
+		std::vector<Node *> *nodes = _parent->getSave()->getNodes();
+		if (!nodes) return; // this better not happen.
 
-        for (std::vector<Node*>::iterator  n = nodes->begin(); n != nodes->end(); ++n)
-        {
+		for (std::vector<Node*>::iterator  n = nodes->begin(); n != nodes->end(); ++n)
+		{
 			if (!(*n)->isDummy() && _parent->getSave()->getTileEngine()->distanceSq((*n)->getPosition(), _unit->getPosition()) < 4)
-            {
-                (*n)->setType((*n)->getType() | Node::TYPE_DANGEROUS);
-            }
-        }
-    }
+			{
+				(*n)->setType((*n)->getType() | Node::TYPE_DANGEROUS);
+			}
+		}
+	}
 }
 
 /**
@@ -232,7 +232,7 @@ void UnitDieBState::convertUnitToCorpse()
 {
 	Position lastPosition = _unit->getPosition();
 	int size = _unit->getArmor()->getSize();
-	bool dropItems = (size == 1 && 
+	bool dropItems = (size == 1 &&
 		(!Options::weaponSelfDestruction ||
 		(_unit->getOriginalFaction() != FACTION_HOSTILE || _unit->getStatus() == STATUS_UNCONSCIOUS)));
 

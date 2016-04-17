@@ -143,7 +143,7 @@ void Craft::load(const YAML::Node &node, const Mod *mod, SavedGame *save)
 		}
 		else
 		{
-			Log(LOG_ERROR) << "Failed to load item " << type;			
+			Log(LOG_ERROR) << "Failed to load item " << type;
 		}
 	}
 	_status = node["status"].as<std::string>(_status);

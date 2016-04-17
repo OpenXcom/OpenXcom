@@ -74,9 +74,9 @@ namespace OpenXcom
  */
 DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(true), _noContainment(false), _manageContainment(false), _destroyBase(false)
 {
-    _missionStatistics = new MissionStatistics();
+	_missionStatistics = new MissionStatistics();
 
-    Options::baseXResolution = Options::baseXGeoscape;
+	Options::baseXResolution = Options::baseXGeoscape;
 	Options::baseYResolution = Options::baseYGeoscape;
 	_game->getScreen()->resetDisplay(false);
 
@@ -144,7 +144,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 
 	int total = 0, statsY = 0, recoveryY = 0;
 	int civiliansSaved = 0, civiliansDead = 0;
-    int aliensKilled = 0, aliensStunned = 0;
+	int aliensKilled = 0, aliensStunned = 0;
 	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 	{
 		if ((*i)->qty == 0)
@@ -172,14 +172,14 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 		{
 			civiliansDead += (*i)->qty;
 		}
-        if ((*i)->item == "STR_ALIENS_KILLED")
-        {
-            aliensKilled += (*i)->qty;
-        }
-        if ((*i)->item == "STR_LIVE_ALIENS_RECOVERED")
-        {
-            aliensStunned += (*i)->qty;
-        }
+		if ((*i)->item == "STR_ALIENS_KILLED")
+		{
+			aliensKilled += (*i)->qty;
+		}
+		if ((*i)->item == "STR_LIVE_ALIENS_RECOVERED")
+		{
+			aliensStunned += (*i)->qty;
+		}
 	}
 	if (civiliansSaved && !civiliansDead && _missionStatistics->success == true)
 	{
@@ -240,9 +240,9 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 
 	SavedGame *save = _game->getSavedGame();
 	SavedBattleGame *battle = save->getSavedBattle();
-    
-    _missionStatistics->daylight = save->getSavedBattle()->getGlobalShade();
-    _missionStatistics->id = _game->getSavedGame()->getMissionStatistics()->size();
+	
+	_missionStatistics->daylight = save->getSavedBattle()->getGlobalShade();
+	_missionStatistics->id = _game->getSavedGame()->getMissionStatistics()->size();
 	_game->getSavedGame()->getMissionStatistics()->push_back(_missionStatistics);
 
 	// Award Best-of commendations.
@@ -296,7 +296,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 			continue;
 		}
 
-        /// Best-of awards
+		/// Best-of awards
 		// Find the best soldier per rank by comparing score.
 		for (std::vector<Soldier*>::iterator j = _game->getSavedGame()->getDeadSoldiers()->begin(); j != _game->getSavedGame()->getDeadSoldiers()->end(); ++j)
 		{
@@ -318,7 +318,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 					bestOverallScore = score;
 				}
 			}
-		}					
+		}
 	}
 	// Now award those soldiers commendations!
 	for (std::vector<BattleUnit*>::iterator deadUnit = battle->getUnits()->begin(); deadUnit != battle->getUnits()->end(); ++deadUnit)
@@ -330,7 +330,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 		if ((*deadUnit)->getId() == bestScoreID[(*deadUnit)->getGeoscapeSoldier()->getRank()])
 		{
 			(*deadUnit)->getGeoscapeSoldier()->getDiary()->awardBestOfRank((*deadUnit)->getGeoscapeSoldier()->getRank());
-		}		
+		}
 		if ((*deadUnit)->getId() == bestOverallScorersID)
 		{
 			(*deadUnit)->getGeoscapeSoldier()->getDiary()->awardBestOverall();
@@ -398,16 +398,16 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 			// Set the UnitStats delta
 			(*j)->getStatistics()->delta = *(*j)->getGeoscapeSoldier()->getCurrentStats() - *(*j)->getGeoscapeSoldier()->getInitStats();
 
-            (*j)->getGeoscapeSoldier()->getDiary()->updateDiary((*j)->getStatistics(), _game->getSavedGame()->getMissionStatistics(), _game->getMod());
+			(*j)->getGeoscapeSoldier()->getDiary()->updateDiary((*j)->getStatistics(), _game->getSavedGame()->getMissionStatistics(), _game->getMod());
 			if (!(*j)->getStatistics()->MIA && !(*j)->getStatistics()->KIA && (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getMod(), _game->getSavedGame()->getMissionStatistics()))
 			{
 				_soldiersCommended.push_back((*j)->getGeoscapeSoldier());
 			}
-            else if ((*j)->getStatistics()->MIA || (*j)->getStatistics()->KIA)
-            {
-                (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getMod(), _game->getSavedGame()->getMissionStatistics());
-                _deadSoldiersCommended.push_back((*j)->getGeoscapeSoldier());
-            }
+			else if ((*j)->getStatistics()->MIA || (*j)->getStatistics()->KIA)
+			{
+				(*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getMod(), _game->getSavedGame()->getMissionStatistics());
+				_deadSoldiersCommended.push_back((*j)->getGeoscapeSoldier());
+			}
 		}
 	}
 
@@ -482,10 +482,10 @@ void DebriefingState::btnOkClick(Action *)
 			{
 				_game->pushState(new CommendationLateState(_deadSoldiersCommended));
 			}
-            if (!_soldiersCommended.empty())
-            {
-                _game->pushState(new CommendationState(_soldiersCommended));
-            }
+			if (!_soldiersCommended.empty())
+			{
+				_game->pushState(new CommendationState(_soldiersCommended));
+			}
 			if (_game->getSavedGame()->handlePromotions(participants))
 			{
 				_game->pushState(new PromotionsState);
@@ -634,7 +634,7 @@ void DebriefingState::prepareDebriefing()
 	}
 
 	_missionStatistics->time = *save->getTime();
-	_missionStatistics->type = battle->getMissionType();	
+	_missionStatistics->type = battle->getMissionType();
 	_stats.push_back(new DebriefingStat(_game->getMod()->getAlienFuelName(), true));
 
 	for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
@@ -713,7 +713,7 @@ void DebriefingState::prepareDebriefing()
 				if ((*k)->getRules()->insideRegion(base->getLongitude(), base->getLatitude()))
 				{
 					_region = (*k);
-                    _missionStatistics->region = _region->getRules()->getType();
+					_missionStatistics->region = _region->getRules()->getType();
 					break;
 				}
 			}
@@ -722,7 +722,7 @@ void DebriefingState::prepareDebriefing()
 				if ((*k)->getRules()->insideCountry(base->getLongitude(), base->getLatitude()))
 				{
 					_country = (*k);
-                    _missionStatistics->country= _country->getRules()->getType();
+					_missionStatistics->country= _country->getRules()->getType();
 					break;
 				}
 			}
@@ -1263,7 +1263,7 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
-    _missionStatistics->success = success;
+	_missionStatistics->success = success;
 }
 
 /**

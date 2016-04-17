@@ -199,7 +199,7 @@ void ScrollBar::mousePress(Action *action, State *state)
 		{
 			_offset = -_thumbRect.h / 2;
 		}
-		_pressed = true;		
+		_pressed = true;
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 	{

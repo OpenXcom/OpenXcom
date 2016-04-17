@@ -147,7 +147,7 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 		Tile::SerializationKey serKey;
 		size_t totalTiles = node["totalTiles"].as<size_t>();
 
-        memset(&serKey, 0, sizeof(Tile::SerializationKey));
+		memset(&serKey, 0, sizeof(Tile::SerializationKey));
 		serKey.index = node["tileIndexSize"].as<Uint8>(serKey.index);
 		serKey.totalBytes = node["tileTotalBytesPer"].as<Uint32>(serKey.totalBytes);
 		serKey._fire = node["tileFireSize"].as<Uint8>(serKey._fire);
@@ -407,7 +407,7 @@ YAML::Node SavedBattleGame::save() const
 	node["tileSmokeSize"] = Tile::serializationKey._smoke;
 	node["tileIDSize"] = Tile::serializationKey._mapDataID;
 	node["tileSetIDSize"] = Tile::serializationKey._mapDataSetID;
-    node["tileBoolFieldsSize"] = Tile::serializationKey.boolFields;
+	node["tileBoolFieldsSize"] = Tile::serializationKey.boolFields;
 
 	size_t tileDataSize = Tile::serializationKey.totalBytes * _mapsize_z * _mapsize_y * _mapsize_x;
 	Uint8* tileData = (Uint8*) calloc(tileDataSize, 1);
@@ -427,7 +427,7 @@ YAML::Node SavedBattleGame::save() const
 	}
 	node["totalTiles"] = tileDataSize / Tile::serializationKey.totalBytes; // not strictly necessary, just convenient
 	node["binTiles"] = YAML::Binary(tileData, tileDataSize);
-    free(tileData);
+	free(tileData);
 #endif
 	for (std::vector<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
 	{
@@ -446,8 +446,8 @@ YAML::Node SavedBattleGame::save() const
 		node["items"].push_back((*i)->save());
 	}
 	node["tuReserved"] = (int)_tuReserved;
-    node["kneelReserved"] = _kneelReserved;
-    node["depth"] = _depth;
+	node["kneelReserved"] = _kneelReserved;
+	node["depth"] = _depth;
 	node["ambience"] = _ambience;
 	node["ambientVolume"] = _ambientVolume;
 	for (std::vector<BattleItem*>::const_iterator i = _recoverGuaranteed.begin(); i != _recoverGuaranteed.end(); ++i)

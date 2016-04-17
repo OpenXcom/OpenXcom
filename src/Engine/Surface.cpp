@@ -635,7 +635,7 @@ void Surface::copy(Surface *surface)
 	SDL_BlitSurface uses colour matching,
 	and is therefor unreliable as a means
 	to copy the contents of one surface to another
-	instead we have to do this manually 
+	instead we have to do this manually
 
 	SDL_Rect from;
 	from.x = getX() - surface->getX();

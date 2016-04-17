@@ -180,7 +180,7 @@ void UnitSprite::draw()
 	Surface::draw();
 	// Array of drawing routines
 	void (UnitSprite::*routines[])() = {&UnitSprite::drawRoutine0,
-		                                &UnitSprite::drawRoutine1,
+										&UnitSprite::drawRoutine1,
 										&UnitSprite::drawRoutine2,
 										&UnitSprite::drawRoutine3,
 										&UnitSprite::drawRoutine4,
@@ -242,7 +242,7 @@ void UnitSprite::drawRoutine0()
 			die = 259; // aquanaut underwater death frame
 			maleTorso = 32; // aquanaut underwater ion armour torso
 
-            if (_unit->getArmor()->getForcedTorso() == TORSO_USE_GENDER)
+			if (_unit->getArmor()->getForcedTorso() == TORSO_USE_GENDER)
 			{
 				femaleTorso = 32; // aquanaut underwater plastic aqua armour torso
 			}
@@ -438,7 +438,7 @@ void UnitSprite::drawRoutine0()
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
 			itemA->setY(itemA->getY() + torsoHandsWeaponY);
-            rightArm->setY(torsoHandsWeaponY);
+			rightArm->setY(torsoHandsWeaponY);
 			if (_itemA->getRules()->isTwoHanded())
 				leftArm->setY(torsoHandsWeaponY);
 		}
@@ -488,7 +488,7 @@ void UnitSprite::drawRoutine0()
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
 			itemB->setY(itemB->getY() + torsoHandsWeaponY);
-            leftArm->setY(torsoHandsWeaponY);
+			leftArm->setY(torsoHandsWeaponY);
 			if (_itemB->getRules()->isTwoHanded())
 				rightArm->setY(torsoHandsWeaponY);
 		}

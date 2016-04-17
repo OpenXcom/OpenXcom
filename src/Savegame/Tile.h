@@ -42,7 +42,7 @@ class Particle;
 class Tile
 {
 public:
-	static struct SerializationKey 
+	static struct SerializationKey
 	{
 		// how many bytes to store for each variable or each member of array of the same name
 		Uint8 index; // for indexing the actual tile array
@@ -50,7 +50,7 @@ public:
 		Uint8 _mapDataID;
 		Uint8 _smoke;
 		Uint8 _fire;
-        Uint8 boolFields;
+		Uint8 boolFields;
 		Uint32 totalBytes; // per structure, including any data not mentioned here and accounting for all array members!
 	} serializationKey;
 	

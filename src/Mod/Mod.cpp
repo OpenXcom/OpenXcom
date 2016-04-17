@@ -541,7 +541,7 @@ Sound *Mod::getSound(const std::string &set, unsigned int sound) const
 			Sound *s = ss->getSound(sound);
 			if (s == 0)
 			{
-				Log(LOG_ERROR) << "Sound " << sound << " in " << set << " not found";				
+				Log(LOG_ERROR) << "Sound " << sound << " in " << set << " not found";
 			}
 			return s;
 		}
@@ -740,7 +740,7 @@ void Mod::loadMod(const std::vector<std::string> &rulesetFiles, size_t modIdx)
 			std::set<std::string>::const_iterator j = missions.begin();
 			if (!getAlienMission(*j))
 			{
-				throw Exception("Error with MissionScript: " + (*i).first + ": alien mission type: " + *j + "not defined, do not incite the judgement of Amaunator."); 
+				throw Exception("Error with MissionScript: " + (*i).first + ": alien mission type: " + *j + "not defined, do not incite the judgement of Amaunator.");
 			}
 			bool isSiteType = getAlienMission(*j)->getObjective() == OBJECTIVE_SITE;
 			rule->setSiteType(isSiteType);
@@ -748,7 +748,7 @@ void Mod::loadMod(const std::vector<std::string> &rulesetFiles, size_t modIdx)
 			{
 				if (getAlienMission(*j) && (getAlienMission(*j)->getObjective() == OBJECTIVE_SITE) != isSiteType)
 				{
-					throw Exception("Error with MissionScript: " + (*i).first + ": cannot mix terror/non-terror missions in a single command, so sayeth the wise Alaundo."); 
+					throw Exception("Error with MissionScript: " + (*i).first + ": cannot mix terror/non-terror missions in a single command, so sayeth the wise Alaundo.");
 				}
 			}
 		}
@@ -769,7 +769,7 @@ void Mod::loadMod(const std::vector<std::string> &rulesetFiles, size_t modIdx)
 		{
 			if (getAlienMission(*j)->getObjective() == OBJECTIVE_SITE)
 			{
-				throw Exception("Error with MissionWeights: Region: " + (*i).first + " has " + *j + " listed. Terror mission can only be invoked via missionScript, so sayeth the Spider Queen."); 
+				throw Exception("Error with MissionWeights: Region: " + (*i).first + " has " + *j + " listed. Terror mission can only be invoked via missionScript, so sayeth the Spider Queen.");
 			}
 		}
 	}
@@ -1240,7 +1240,7 @@ void Mod::loadFile(const std::string &filename)
 		std::string type = (*i)["type"].as<std::string>();
 		std::auto_ptr<RuleCommendations> commendations(new RuleCommendations());
 		commendations->load(*i);
-        _commendations[type] = commendations.release();
+		_commendations[type] = commendations.release();
 	}
 	size_t count = 0;
 	for (YAML::const_iterator i = doc["aimAndArmorMultipliers"].begin(); i != doc["aimAndArmorMultipliers"].end() && count < 5; ++i)
@@ -2299,7 +2299,7 @@ RuleMissionScript *Mod::getMissionScript(const std::string &name) const
 }
 std::string Mod::getFinalResearch() const
 {
-	return _finalResearch; 
+	return _finalResearch;
 }
 
 namespace
