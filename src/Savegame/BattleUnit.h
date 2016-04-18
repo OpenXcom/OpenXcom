@@ -176,6 +176,8 @@ public:
 	int getWalkingPhase() const;
 	/// Gets the walking phase for diagonal walking
 	int getDiagonalWalkingPhase() const;
+	/// Checks if the unit is walking backwards-ish
+	bool isWalkingBackwards() const;
 	/// Gets the unit's destination when walking
 	const Position &getDestination() const;
 	/// Look at a certain point.

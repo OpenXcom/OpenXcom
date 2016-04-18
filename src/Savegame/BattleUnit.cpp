@@ -679,8 +679,16 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 		end = 2;
 	}
 
-	_walkPhase++;
-
+	if (isWalkingBackwards())
+	{
+		if (_walkPhase == 0) _walkPhase = end;
+		_walkPhase--;
+		end = 0;
+	}
+	else
+	{
+		_walkPhase++;
+	}
 
 	if (_walkPhase == middle)
 	{
@@ -689,7 +697,7 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 		_pos = _destination;
 	}
 
-	if (_walkPhase >= end)
+	if (_walkPhase == end)
 	{
 		if (_floating && !_tile->hasNoFloor(tileBelowMe))
 		{
@@ -741,6 +749,18 @@ int BattleUnit::getWalkingPhase() const
 int BattleUnit::getDiagonalWalkingPhase() const
 {
 	return (_walkPhase / 8) * 8;
+}
+
+/**
+ * Checks if the unit is walking backwards-ish.
+ * @return true if walking backwards-ish, false if forwards-ish or sidewards
+ */
+bool BattleUnit::isWalkingBackwards() const
+{
+	if (_faceDirection < 0) return false;
+
+	int dirDiff = _direction - _faceDirection;
+	return (dirDiff > 2 && dirDiff < 6) || (dirDiff > -6 && dirDiff < -2);
 }
 
 /**
