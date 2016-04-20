@@ -28,7 +28,7 @@
 #include "../Mod/RuleItem.h"
 #include "../Mod/RuleCraft.h"
 #include "../Mod/RuleCraftWeapon.h"
-#include <limits>
+#include <climits>
 #include "BaseFacility.h"
 
 namespace OpenXcom
@@ -262,7 +262,7 @@ void Production::load(const YAML::Node &node)
 	setInfiniteAmount(node["infinite"].as<bool>(getInfiniteAmount()));
 	setSellItems(node["sell"].as<bool>(getSellItems()));
 	// backwards compatibility
-	if (getAmountTotal() == std::numeric_limits<int>::max())
+	if (getAmountTotal() == INT_MAX)
 	{
 		setAmountTotal(999);
 		setInfiniteAmount(true);

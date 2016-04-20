@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <limits>
+#include <cfloat>
 #define _USE_MATH_DEFINES
 #include <cmath>
 
@@ -27,9 +27,12 @@
 #define M_PI_4     0.785398163397448309616
 #endif
 
-template <class _Tx>
-inline bool AreSame(const _Tx& l, const _Tx& r) {
-	return std::fabs(l-r) <= std::numeric_limits<_Tx>::epsilon();
+inline bool AreSame(const float l, const float r) {
+	return std::fabs(l-r) <= FLT_EPSILON;
+}
+
+inline bool AreSame(const double l, const double r) {
+	return std::fabs(l-r) <= DBL_EPSILON;
 }
 
 template <class _Tx>

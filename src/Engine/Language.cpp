@@ -20,7 +20,7 @@
 #include <fstream>
 #include <cassert>
 #include <set>
-#include <limits.h>
+#include <climits>
 #include "CrossPlatform.h"
 #include "Logger.h"
 #include "Options.h"
