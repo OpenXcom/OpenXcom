@@ -16,8 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
-#include <cmath>
 #include <climits>
 #include <algorithm>
 #include "AlienBAIState.h"
@@ -37,6 +35,7 @@
 #include "../Mod/Armor.h"
 #include "../Mod/Mod.h"
 #include "../Mod/RuleItem.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {

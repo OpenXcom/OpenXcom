@@ -18,8 +18,6 @@
  */
 #include "Ufo.h"
 #include <assert.h>
-#define _USE_MATH_DEFINES
-#include <math.h>
 #include <algorithm>
 #include "../fmath.h"
 #include "Craft.h"

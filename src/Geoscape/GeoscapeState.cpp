@@ -16,9 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "GeoscapeState.h"
-#include <cmath>
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
@@ -105,6 +103,7 @@
 #include "../Engine/Exception.h"
 #include "../Mod/AlienDeployment.h"
 #include "../Mod/RuleInterface.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {

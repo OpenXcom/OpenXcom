@@ -16,10 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "MonthlyReportState.h"
 #include <sstream>
-#include <cmath>
 #include "../Engine/Game.h"
 #include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
@@ -40,6 +38,7 @@
 #include "../Savegame/SoldierDiary.h"
 #include "../Menu/SaveGameState.h"
 #include "../Mod/RuleInterface.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {
