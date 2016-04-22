@@ -398,7 +398,7 @@ void BattlescapeGenerator::nextStage()
 		}
 	}
 	// tanks only i guess?
-	if (_save->getSelectedUnit() == 0 || _save->getSelectedUnit()->getFaction() != FACTION_PLAYER)
+	if (_save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut() || _save->getSelectedUnit()->getFaction() != FACTION_PLAYER)
 	{
 		_save->selectNextPlayerUnit();
 	}
