@@ -1564,7 +1564,7 @@ void GeoscapeState::time1Day()
 				for (std::vector<std::string>::const_iterator f = (*iter)->getRules()->getGetOneFree().begin(); f != (*iter)->getRules()->getGetOneFree().end(); ++f)
 				{
 					bool newFound = true;
-					for (std::vector<const RuleResearch*>::const_iterator discovered = _game->getSavedGame()->getDiscoveredResearch().begin(); discovered != _game->getSavedGame()->getDiscoveredResearch().end(); ++discovered)
+					for (std::vector<const RuleResearch*>::const_iterator discovered = _game->getSavedGame()->getDiscoveredResearch().begin(); discovered != _game->getSavedGame()->getDiscoveredResearch().end() && newFound; ++discovered)
 					{
 						if (*f == (*discovered)->getName())
 						{
