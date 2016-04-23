@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Craft.h"
+#include "../fmath.h"
 #include "../Engine/Language.h"
 #include "../Engine/RNG.h"
 #include "../Mod/RuleCraft.h"
