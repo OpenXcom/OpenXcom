@@ -16,8 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
-#include <cmath>
 #include <sstream>
 #include "BattlescapeGame.h"
 #include "BattlescapeState.h"
@@ -59,6 +57,7 @@
 #include "UnitFallBState.h"
 #include "../Engine/Logger.h"
 #include "../Savegame/BattleUnitStatistics.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {

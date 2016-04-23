@@ -16,8 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
-#include <cmath>
 #include "Projectile.h"
 #include "TileEngine.h"
 #include "Map.h"
@@ -34,6 +32,7 @@
 #include "../Savegame/Tile.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {

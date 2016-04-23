@@ -28,12 +28,9 @@
 #include <functional>
 #include <iomanip>
 #include <iostream>
-#include <limits.h>
-#include <limits>
 #include <list>
 #include <locale>
 #include <map>
-#include <math.h>
 #include <memory.h>
 #include <queue>
 #include <set>

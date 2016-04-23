@@ -16,10 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "BattleUnit.h"
 #include "BattleItem.h"
-#include <cmath>
 #include <sstream>
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
@@ -38,6 +36,7 @@
 #include "SavedGame.h"
 #include "SavedBattleGame.h"
 #include "BattleUnitStatistics.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {

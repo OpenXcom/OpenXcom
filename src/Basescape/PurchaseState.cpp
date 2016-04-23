@@ -21,7 +21,6 @@
 #include <sstream>
 #include <climits>
 #include <cfloat>
-#include <cmath>
 #include <iomanip>
 #include "../fmath.h"
 #include "../Engine/Game.h"

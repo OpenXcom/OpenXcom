@@ -16,14 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
-#include <cmath>
 #include <fstream>
 #include "Camera.h"
 #include "Map.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
 #include "../Engine/Timer.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {

@@ -35,7 +35,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
+#include <cmath>
 //#include "driver.h"		/* use M.A.M.E. */
 #include "fmopl.h"
 

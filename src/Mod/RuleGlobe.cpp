@@ -16,10 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "RuleGlobe.h"
 #include <SDL_endian.h>
-#include <cmath>
 #include <fstream>
 #include "../Engine/Exception.h"
 #include "Polygon.h"
@@ -28,6 +26,7 @@
 #include "../Engine/Palette.h"
 #include "../Geoscape/Globe.h"
 #include "../Engine/FileMap.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {

@@ -16,10 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "RuleCountry.h"
 #include "../Engine/RNG.h"
-#include <math.h>
+#include "../fmath.h"
 
 namespace OpenXcom
 {
