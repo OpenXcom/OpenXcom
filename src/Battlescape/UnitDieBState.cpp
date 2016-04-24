@@ -59,6 +59,11 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 		{
 			_unit->keepFalling();
 		}
+		if (!noCorpse)
+		{
+			convertUnitToCorpse();
+		}
+		_extraFrame = 3; // shortcut to popState()
 	}
 	else
 	{
@@ -143,7 +148,12 @@ void UnitDieBState::think()
 			}
 		}
 	}
-	if (_extraFrame == 2)
+	if (_extraFrame == 3)
+	{
+		_parent->getMap()->setUnitDying(false);
+		_parent->popState();
+	}
+	else if (_extraFrame == 2)
 	{
 		_parent->getMap()->setUnitDying(false);
 		_parent->getTileEngine()->calculateUnitLighting();
@@ -236,7 +246,10 @@ void UnitDieBState::convertUnitToCorpse()
 		(!Options::weaponSelfDestruction ||
 		(_unit->getOriginalFaction() != FACTION_HOSTILE || _unit->getStatus() == STATUS_UNCONSCIOUS)));
 
-	_parent->getSave()->getBattleState()->showPsiButton(false);
+	if (!_noSound)
+	{
+		_parent->getSave()->getBattleState()->showPsiButton(false);
+	}
 	// remove the unconscious body item corresponding to this unit, and if it was being carried, keep track of what slot it was in
 	if (lastPosition != Position(-1,-1,-1))
 	{
