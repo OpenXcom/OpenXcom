@@ -601,7 +601,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		killStat.weaponAmmo = tempAmmo;
 
 		// Determine murder type
-		if ((*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
+		if ((*j)->getStatus() != STATUS_DEAD)
 		{
 			if ((*j)->getHealth() == 0)
 			{
@@ -659,7 +659,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 
 		bool noSound = false;
 		bool noCorpse = false;
-		if ((*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
+		if ((*j)->getStatus() != STATUS_DEAD)
 		{
 			if ((*j)->getHealth() == 0)
 			{
