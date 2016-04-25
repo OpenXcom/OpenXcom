@@ -166,10 +166,7 @@ void AlienDeployment::load(const YAML::Node &node)
 		_durationMin = node["duration"][0].as<int>(_durationMin);
 		_durationMax = node["duration"][1].as<int>(_durationMax);
 	}
-	for (YAML::const_iterator i = node["music"].begin(); i != node["music"].end(); ++i)
-	{
-		_music.push_back((*i).as<std::string>(""));
-	}
+	_music = node["music"].as< std::vector<std::string> >(_music);
 	_objectiveType = node["objectiveType"].as<int>(_objectiveType);
 	_objectivesRequired = node["objectivesRequired"].as<int>(_objectivesRequired);
 	_objectivePopup = node["objectivePopup"].as<std::string>(_objectivePopup);
