@@ -77,6 +77,7 @@ private:
 	std::string _music;
 	int _turnLimit, _cheatTurn;
 	ChronoTrigger _chronoTrigger;
+	bool _beforeGame;
 	/// Selects a soldier.
 	BattleUnit *selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 public:
@@ -287,6 +288,7 @@ public:
 	void setChronoTrigger(ChronoTrigger trigger);
 	/// Sets the turn to start the aliens cheating.
 	void setCheatTurn(int turn);
+	bool isBeforeGame();
 };
 
 }
