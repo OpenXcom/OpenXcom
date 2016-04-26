@@ -53,17 +53,34 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
 	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS || noSound)
 	{
+
+		/********************************************************
+		Proclamation from Lord Xenu:
+
+		any unit that is going to skip its death pirouette
+		MUST have its direction set to 3 first.
+
+		Failure to comply is treason, and treason is punishable
+		by death. (after being correctly oriented)
+
+		********************************************************/
+		_unit->setDirection(3);
+
+
 		_unit->startFalling();
 
 		while (_unit->getStatus() == STATUS_COLLAPSING)
 		{
 			_unit->keepFalling();
 		}
-		if (!noCorpse)
+		if (_parent->getSave()->isBeforeGame())
 		{
-			convertUnitToCorpse();
+			if (!noCorpse)
+			{
+				convertUnitToCorpse();
+			}
+			_extraFrame = 3; // shortcut to popState()
 		}
-		_extraFrame = 3; // shortcut to popState()
 	}
 	else
 	{
@@ -114,6 +131,11 @@ void UnitDieBState::init()
  */
 void UnitDieBState::think()
 {
+	if (_extraFrame == 3)
+	{
+		_parent->popState();
+		return;
+	}
 	if (_unit->getDirection() != 3 && _damageType != DT_HE)
 	{
 		int dir = _unit->getDirection() + 1;
@@ -148,12 +170,7 @@ void UnitDieBState::think()
 			}
 		}
 	}
-	if (_extraFrame == 3)
-	{
-		_parent->getMap()->setUnitDying(false);
-		_parent->popState();
-	}
-	else if (_extraFrame == 2)
+	if (_extraFrame == 2)
 	{
 		_parent->getMap()->setUnitDying(false);
 		_parent->getTileEngine()->calculateUnitLighting();
