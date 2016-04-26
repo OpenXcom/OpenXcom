@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CraftWeapon.h"
+#include <cmath>
 #include <algorithm>
 #include "../Mod/RuleCraftWeapon.h"
 #include "../Mod/Mod.h"

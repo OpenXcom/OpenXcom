@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CraftInfoState.h"
+#include <cmath>
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Mod/Mod.h"
