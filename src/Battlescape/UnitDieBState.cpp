@@ -332,6 +332,7 @@ void UnitDieBState::convertUnitToCorpse()
 				i++;
 			}
 		}
+		_unit->setPosition(lastPosition); // Position of corpse should equal position of unit.
 	}
 }
 
