@@ -95,3 +95,4 @@ Dependencies/
 #Ignore NetBeans project directory
 nbproject/
 .tx/
+/makefile
