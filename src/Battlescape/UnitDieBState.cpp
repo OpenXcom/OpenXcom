@@ -317,19 +317,19 @@ void UnitDieBState::convertUnitToCorpse()
 	}
 	else
 	{
-		int i = 0;
-		for (int y = 0; y < size; y++)
+		// Reverse iteration to ensure resulting corpse is assigned correct position.
+		for (int y = size - 1; y >= 0; y--)
 		{
-			for (int x = 0; x < size; x++)
+			for (int x = size - 1; x >= 0; x--)
 			{
-				BattleItem *corpse = new BattleItem(_parent->getMod()->getItem(_unit->getArmor()->getCorpseBattlescape()[i]), _parent->getSave()->getCurrentItemId());
+				int idx = size * y + x;
+				BattleItem *corpse = new BattleItem(_parent->getMod()->getItem(_unit->getArmor()->getCorpseBattlescape()[idx]), _parent->getSave()->getCurrentItemId());
 				corpse->setUnit(_unit);
 				if (_parent->getSave()->getTile(lastPosition + Position(x,y,0))->getUnit() == _unit) // check in case unit was displaced by another unit
 				{
 					_parent->getSave()->getTile(lastPosition + Position(x,y,0))->setUnit(0);
 				}
 				_parent->dropItem(lastPosition + Position(x,y,0), corpse, true);
-				i++;
 			}
 		}
 	}
