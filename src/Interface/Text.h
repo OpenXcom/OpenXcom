@@ -88,6 +88,8 @@ public:
 	TextHAlign getAlign() const;
 	/// Sets the text's vertical alignment.
 	void setVerticalAlign(TextVAlign valign);
+	/// Gets the text's vertical alignment.
+	TextVAlign getVerticalAlign() const;
 	/// Sets the text's color.
 	void setColor(Uint8 color);
 	/// Gets the text's color.

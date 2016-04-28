@@ -20,6 +20,7 @@
 #include "Craft.h"
 #include "SerializationHelper.h"
 #include "../fmath.h"
+#include "../Engine/Language.h"
 
 namespace OpenXcom
 {
@@ -54,6 +55,10 @@ void Target::load(const YAML::Node &node)
 {
 	_lon = node["lon"].as<double>(_lon);
 	_lat = node["lat"].as<double>(_lat);
+	if (const YAML::Node &name = node["name"])
+	{
+		_name = Language::utf8ToWstr(name.as<std::string>());
+	}
 	_depth = node["depth"].as<int>(_depth);
 }
 
@@ -66,6 +71,8 @@ YAML::Node Target::save() const
 	YAML::Node node;
 	node["lon"] = serializeDouble(_lon);
 	node["lat"] = serializeDouble(_lat);
+	if (!_name.empty())
+		node["name"] = Language::wstrToUtf8(_name);
 	if (_depth)
 		node["depth"] = _depth;
 	return node;
@@ -134,6 +141,28 @@ void Target::setLatitude(double lat)
 		_lat = M_PI - _lat;
 		setLongitude(_lon - M_PI);
 	}
+}
+
+/**
+ * Returns the target's unique identifying name.
+ * If there's no custom name, the language default is used.
+ * @param lang Language to get strings from.
+ * @return Full name.
+ */
+std::wstring Target::getName(Language *lang) const
+{
+	if (_name.empty())
+		return getDefaultName(lang);
+	return _name;
+}
+
+/**
+ * Changes the target's custom name.
+ * @param newName New custom name. If set to blank, the language default is used.
+ */
+void Target::setName(const std::wstring &newName)
+{
+	_name = newName;
 }
 
 /**

@@ -260,11 +260,11 @@ void Ufo::setId(int id)
 }
 
 /**
- * Returns the UFO's unique identifying name.
+ * Returns the UFO's unique default name.
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::wstring Ufo::getName(Language *lang) const
+std::wstring Ufo::getDefaultName(Language *lang) const
 {
 	switch (_status)
 	{

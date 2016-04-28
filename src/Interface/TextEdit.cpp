@@ -332,6 +332,20 @@ void TextEdit::draw()
 				x += _text->getFont()->getCharSize(_value[i]).w;
 			}
 			_caret->setX(x);
+			int y = 0;
+			switch (_text->getVerticalAlign())
+			{
+			case ALIGN_TOP:
+				y = 0;
+				break;
+			case ALIGN_MIDDLE:
+				y = (int)ceil((getHeight() - _text->getTextHeight()) / 2.0);
+				break;
+			case ALIGN_BOTTOM:
+				y = getHeight() - _text->getTextHeight();
+				break;
+			}
+			_caret->setY(y);
 			_caret->blit(this);
 		}
 	}

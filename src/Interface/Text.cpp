@@ -250,6 +250,16 @@ void Text::setVerticalAlign(TextVAlign valign)
 }
 
 /**
+ * Returns the way the text is aligned vertically
+ * relative to the drawing area.
+ * @return Horizontal alignment.
+ */
+TextVAlign Text::getVerticalAlign() const
+{
+	return _valign;
+}
+
+/**
  * Changes the color used to render the text. Unlike regular graphics,
  * fonts are greyscale so they need to be assigned a specific position
  * in the palette to be displayed.

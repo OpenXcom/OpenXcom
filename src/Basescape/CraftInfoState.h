@@ -40,7 +40,6 @@ private:
 	Base *_base;
 	size_t _craftId;
 	Craft *_craft;
-	std::wstring _defaultName;
 
 	TextButton *_btnOk, *_btnW1, *_btnW2, *_btnCrew, *_btnEquip, *_btnArmor;
 	Window *_window;

@@ -122,11 +122,11 @@ void MissionSite::setId(int id)
 }
 
 /**
- * Returns the mission site's unique identifying name.
+ * Returns the mission site's unique default name.
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::wstring MissionSite::getName(Language *lang) const
+std::wstring MissionSite::getDefaultName(Language *lang) const
 {
 	return lang->getString(_deployment->getMarkerName()).arg(_id);
 }
