@@ -83,7 +83,7 @@ public:
 	/// Sets the mission site's city.
 	void setCity(const std::string &city);
 	/// Gets the mission site's detection state.
-	bool getDetected();
+	bool getDetected() const;
 	/// Sets the mission site's detection state.
 	void setDetected(bool detected);
 };

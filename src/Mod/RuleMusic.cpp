@@ -52,7 +52,7 @@ void RuleMusic::load(const YAML::Node& node)
  * Gets the track's index in the catalog file.
  * @return the track's index in the file.
  */
-int RuleMusic::getCatPos()
+int RuleMusic::getCatPos() const
 {
 	return _catPos;
 }
@@ -61,7 +61,7 @@ int RuleMusic::getCatPos()
  * Gets the track's normalization level.
  * @return the track's normalization value.
  */
-float RuleMusic::getNormalization()
+float RuleMusic::getNormalization() const
 {
 	return _normalization;
 }

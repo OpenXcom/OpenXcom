@@ -214,11 +214,11 @@ public:
 	/// Set the tile marker color.
 	void setMarkerColor(int color);
 	/// Get the tile marker color.
-	int getMarkerColor();
+	int getMarkerColor() const;
 	/// Set the tile visible flag.
 	void setVisible(int visibility);
 	/// Get the tile visible flag.
-	int getVisible();
+	int getVisible() const;
 	/// set the direction (used for path previewing)
 	void setPreview(int dir);
 	/// retrieve the direction stored by the pathfinding.
@@ -234,7 +234,7 @@ public:
 	/// set the danger flag on this tile (so the AI will avoid it).
 	void setDangerous();
 	/// check the danger flag on this tile.
-	bool getDangerous();
+	bool getDangerous() const;
 	/// adds a particle to this tile's array.
 	void addParticle(Particle *particle);
 	/// gets a pointer to this tile's particle array.

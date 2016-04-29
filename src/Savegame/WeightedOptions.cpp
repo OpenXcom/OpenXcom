@@ -120,4 +120,5 @@ std::vector<std::string> WeightedOptions::getNames()
 	}
 	return names;
 }
+
 }

@@ -357,4 +357,5 @@ int RuleBaseFacility::getListOrder() const
 {
 	return _listOrder;
 }
+
 }

@@ -573,4 +573,5 @@ void OptionsVideoState::handle(Action *action)
 		_btnLockMouse->setPressed(Options::captureMouse == SDL_GRAB_ON);
 	}
 }
+
 }

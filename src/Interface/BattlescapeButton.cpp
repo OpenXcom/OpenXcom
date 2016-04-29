@@ -235,4 +235,5 @@ void BattlescapeButton::setY(int y)
 		_altSurface->setY(y);
 	}
 }
+
 }

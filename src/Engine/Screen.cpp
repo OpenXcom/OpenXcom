@@ -568,7 +568,7 @@ bool Screen::isOpenGLEnabled()
  * Gets the Horizontal offset from the mid-point of the screen, in pixels.
  * @return the horizontal offset.
  */
-int Screen::getDX()
+int Screen::getDX() const
 {
 	return (_baseWidth - ORIGINAL_WIDTH) / 2;
 }
@@ -577,7 +577,7 @@ int Screen::getDX()
  * Gets the Vertical offset from the mid-point of the screen, in pixels.
  * @return the vertical offset.
  */
-int Screen::getDY()
+int Screen::getDY() const
 {
 	return (_baseHeight - ORIGINAL_HEIGHT) / 2;
 }

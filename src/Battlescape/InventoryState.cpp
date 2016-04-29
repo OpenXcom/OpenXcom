@@ -965,4 +965,5 @@ void InventoryState::_updateTemplateButtons(bool isVisible)
 		_btnApplyTemplate->clear();
 	}
 }
+
 }

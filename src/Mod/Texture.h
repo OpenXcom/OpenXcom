@@ -57,7 +57,7 @@ public:
 	/// Gets a random texture terrain for a given target.
 	std::string getRandomTerrain(Target *target) const;
 	/// Gets the alien deployment for this texture.
-	const std::map<std::string, int> &getDeployments();
+	const std::map<std::string, int> &getDeployments() const;
 	/// Gets a random deployment.
 	std::string getRandomDeployment() const;
 };

@@ -239,7 +239,7 @@ void MissionSite::setCity(const std::string &city)
  * used for popups of sites spawned directly rather than by UFOs.
  * @return whether or not this site has been detected.
  */
-bool MissionSite::getDetected()
+bool MissionSite::getDetected() const
 {
 	return _detected;
 }
@@ -247,8 +247,10 @@ bool MissionSite::getDetected()
 /**
  * Sets the mission site's detection state.
  * @param detected whether we want this site to show on the geoscape or not.
- */void MissionSite::setDetected(bool detected)
+ */
+void MissionSite::setDetected(bool detected)
 {
 	_detected = detected;
 }
+
 }

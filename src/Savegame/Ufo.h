@@ -152,13 +152,13 @@ public:
 	/// Sets the UFO's hit frame.
 	void setHitFrame(int frame);
 	/// Gets the UFO's hit frame.
-	int getHitFrame();
+	int getHitFrame() const;
 	void setFireCountdown(int time);
-	int getFireCountdown();
+	int getFireCountdown() const;
 	void setEscapeCountdown(int time);
-	int getEscapeCountdown();
+	int getEscapeCountdown() const;
 	void setInterceptionProcessed(bool processed);
-	bool getInterceptionProcessed();
+	bool getInterceptionProcessed() const;
 
 };
 

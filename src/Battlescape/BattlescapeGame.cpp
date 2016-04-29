@@ -898,7 +898,7 @@ void BattlescapeGame::setupCursor()
  * Is used to see if stats can be displayed and action buttons will work.
  * @return Whether a playable unit is selected.
  */
-bool BattlescapeGame::playableUnitSelected()
+bool BattlescapeGame::playableUnitSelected() const
 {
 	return _save->getSelectedUnit() != 0 && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode());
 }
@@ -1388,7 +1388,7 @@ BattleAction *BattlescapeGame::getCurrentAction()
  * Determines whether an action is currently going on?
  * @return true or false.
  */
-bool BattlescapeGame::isBusy()
+bool BattlescapeGame::isBusy() const
 {
 	return !_states.empty();
 }
@@ -2178,7 +2178,7 @@ void BattlescapeGame::setKneelReserved(bool reserved)
  * Gets the kneel reservation setting.
  * @return Kneel reservation setting.
  */
-bool BattlescapeGame::getKneelReserved()
+bool BattlescapeGame::getKneelReserved() const
 {
 	return _save->getKneelReserved();
 }

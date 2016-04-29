@@ -305,4 +305,5 @@ void NumberText::setBordered(bool bordered)
 {
 	_bordered = bordered;
 }
+
 }

@@ -105,4 +105,5 @@ int Vehicle::getSize() const
 {
 	return _size;
 }
+
 }

@@ -565,7 +565,7 @@ void Soldier::trainPsi1Day()
  * returns whether or not the unit is in psi training
  * @return true/false
  */
-bool Soldier::isInPsiTraining()
+bool Soldier::isInPsiTraining() const
 {
 	return _psiTraining;
 }
@@ -582,7 +582,7 @@ void Soldier::setPsiTraining()
  * returns this soldier's psionic skill improvement score for this month.
  * @return score
  */
-int Soldier::getImprovement()
+int Soldier::getImprovement() const
 {
 	return _improvement;
 }
@@ -590,7 +590,7 @@ int Soldier::getImprovement()
 /**
  * returns this soldier's psionic strength improvement score for this month.
  */
-int Soldier::getPsiStrImprovement()
+int Soldier::getPsiStrImprovement() const
 {
 	return _psiStrImprovement;
 }

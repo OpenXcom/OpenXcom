@@ -1043,8 +1043,9 @@ void Surface::setTFTDMode(bool mode)
  * checks TFTD mode.
  * @return TFTD mode.
  */
-bool Surface::isTFTDMode()
+bool Surface::isTFTDMode() const
 {
 	return _tftdMode;
 }
+
 }

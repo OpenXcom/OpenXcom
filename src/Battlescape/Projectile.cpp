@@ -439,7 +439,7 @@ void Projectile::skipTrajectory()
  * Gets the Position of origin for the projectile
  * @return origin as a tile position.
  */
-Position Projectile::getOrigin()
+Position Projectile::getOrigin() const
 {
 	// instead of using the actor's position, we'll use the voxel origin translated to a tile position
 	// this is a workaround for large units.
@@ -452,7 +452,7 @@ Position Projectile::getOrigin()
  * but rather the targetted tile
  * @return target as a tile position.
  */
-Position Projectile::getTarget()
+Position Projectile::getTarget() const
 {
 	return _action.target;
 }
@@ -485,4 +485,5 @@ void Projectile::addVaporCloud()
 		}
 	}
 }
+
 }

@@ -1262,4 +1262,5 @@ void TextList::setFlooding(bool flooding)
 {
 	_flooding = flooding;
 }
+
 }

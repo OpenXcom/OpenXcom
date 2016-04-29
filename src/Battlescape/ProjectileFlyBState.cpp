@@ -731,4 +731,5 @@ void ProjectileFlyBState::targetFloor()
 {
 	_targetFloor = true;
 }
+
 }

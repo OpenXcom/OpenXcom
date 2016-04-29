@@ -423,4 +423,5 @@ std::wstring MonthlyReportState::countryList(const std::vector<std::string> &cou
 	}
 	return ss.str();
 }
+
 }

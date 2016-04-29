@@ -76,9 +76,9 @@ public:
 	/// Sets the node's type, surprisingly
 	void setType(int type);
 	/// gets "flags" variable, which is really the patrolling desirability value
-	int getFlags() { return _flags; }
+	int getFlags() const { return _flags; }
 	/// compares the _flags variables of the nodes (for the purpose of patrol decisions!)
-	bool operator<(Node &b) { return _flags < b.getFlags(); };
+	bool operator<(Node &b) const { return _flags < b.getFlags(); };
 	bool isAllocated() const;
 	void allocateNode();
 	void freeNode();

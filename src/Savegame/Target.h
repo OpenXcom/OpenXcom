@@ -69,7 +69,7 @@ public:
 	/// Gets the distance to another target.
 	double getDistance(const Target *target) const;
 	/// Gets the depth of the target.
-	int getSiteDepth();
+	int getSiteDepth() const;
 	/// Sets the depth of the target.
 	void setSiteDepth(int depth);
 };

@@ -136,4 +136,5 @@ bool RuleCountry::insideCountry(double lon, double lat) const
 	}
 	return false;
 }
+
 }

@@ -162,4 +162,5 @@ std::string ResearchProject::getResearchProgress() const
 		return "STR_EXCELLENT";
 	}
 }
+
 }

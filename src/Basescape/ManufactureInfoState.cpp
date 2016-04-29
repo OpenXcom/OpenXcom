@@ -611,4 +611,5 @@ void ManufactureInfoState::think()
 	_timerMoreUnit->think(this, 0);
 	_timerLessUnit->think(this, 0);
 }
+
 }

@@ -230,7 +230,7 @@ public:
 	/// Sets this button to use a colour lookup table instead of inversion for its alternate form.
 	void setTFTDMode(bool mode);
 	/// checks if this is a TFTD mode surface.
-	bool isTFTDMode();
+	bool isTFTDMode() const;
 
 };
 

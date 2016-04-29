@@ -188,4 +188,5 @@ int RuleAlienMission::getRetaliationOdds() const
 {
 	return _retaliationOdds;
 }
+
 }

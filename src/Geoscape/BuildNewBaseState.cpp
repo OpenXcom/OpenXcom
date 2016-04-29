@@ -391,4 +391,5 @@ void BuildNewBaseState::resize(int &dX, int &dY)
 		}
 	}
 }
+
 }

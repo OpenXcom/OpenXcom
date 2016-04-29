@@ -53,13 +53,13 @@ public:
 	/// Get commendation noun.
 	std::string getNoun() const;
 	/// Get the commendation's decoration level's name.
-	std::string getDecorationLevelName(int skipCounter);
+	std::string getDecorationLevelName(int skipCounter) const;
 	/// Get the commendation's decoration description.
-	std::string getDecorationDescription();
+	std::string getDecorationDescription() const;
 	/// Get the commendation's decoration level's int.
-	int getDecorationLevelInt();
+	int getDecorationLevelInt() const;
 	/// Get the newness of the commendation.
-	bool isNew();
+	bool isNew() const;
 	/// Set the commendation newness to false.
 	void makeOld();
 	/// Increment decoration level.

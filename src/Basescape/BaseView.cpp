@@ -565,4 +565,5 @@ void BaseView::setSecondaryColor(Uint8 color)
 {
 	_selectorColor = color;
 }
+
 }

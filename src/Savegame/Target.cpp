@@ -190,7 +190,7 @@ double Target::getDistance(const Target *target) const
  * Gets the mission site's depth.
  * @return the depth of the site.
  */
-int Target::getSiteDepth()
+int Target::getSiteDepth() const
 {
 	return _depth;
 }
@@ -203,4 +203,5 @@ void Target::setSiteDepth(int depth)
 {
 	_depth = depth;
 }
+
 }

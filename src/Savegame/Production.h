@@ -45,7 +45,7 @@ public:
 	void setSellItems (bool);
 	productionProgress_e step(Base * b, SavedGame * g, const Mod *m);
 	const RuleManufacture * getRules() const;
-	void startItem(Base * b, SavedGame * g, const Mod *m);
+	void startItem(Base * b, SavedGame * g, const Mod *m) const;
 	YAML::Node save() const;
 	void load(const YAML::Node &node);
 private:

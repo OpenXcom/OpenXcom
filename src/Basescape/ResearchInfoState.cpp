@@ -345,4 +345,5 @@ void ResearchInfoState::think()
 	_timerLess->think (this, 0);
 	_timerMore->think (this, 0);
 }
+
 }

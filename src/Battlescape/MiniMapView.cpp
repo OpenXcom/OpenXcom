@@ -406,4 +406,5 @@ void MiniMapView::stopScrolling(Action *action)
 	// reset our "mouse position stored" flag
 	_cursorPosition.z = 0;
 }
+
 }

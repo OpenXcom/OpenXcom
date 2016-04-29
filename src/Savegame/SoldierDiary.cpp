@@ -1235,7 +1235,7 @@ std::string SoldierCommendations::getNoun() const
  * Get the soldier commendation level's name.
  * @return string Commendation level.
  */
-std::string SoldierCommendations::getDecorationLevelName(int skipCounter)
+std::string SoldierCommendations::getDecorationLevelName(int skipCounter) const
 {
 	std::ostringstream ss;
 	ss << "STR_AWARD_" << _decorationLevel - skipCounter;
@@ -1246,7 +1246,7 @@ std::string SoldierCommendations::getDecorationLevelName(int skipCounter)
  * Get the soldier commendation level's description.
  * @return string Commendation level description.
  */
-std::string SoldierCommendations::getDecorationDescription()
+std::string SoldierCommendations::getDecorationDescription() const
 {
 	std::ostringstream ss;
 	ss << "STR_AWARD_DECOR_" << _decorationLevel;
@@ -1257,7 +1257,7 @@ std::string SoldierCommendations::getDecorationDescription()
  * Get the soldier commendation level's int.
  * @return int Commendation level.
  */
-int SoldierCommendations::getDecorationLevelInt()
+int SoldierCommendations::getDecorationLevelInt() const
 {
 	return _decorationLevel;
 }
@@ -1266,7 +1266,7 @@ int SoldierCommendations::getDecorationLevelInt()
  * Get newness of commendation.
  * @return bool Is the commendation new?
  */
-bool SoldierCommendations::isNew()
+bool SoldierCommendations::isNew() const
 {
 	return _isNew;
 }
@@ -1288,4 +1288,5 @@ void SoldierCommendations::addDecoration()
 	_decorationLevel++;
 	_isNew = true;
 }
+
 }

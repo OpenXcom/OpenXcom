@@ -1826,4 +1826,5 @@ bool DogfightState::getWaitForPoly()
 {
 	return _waitForPoly;
 }
+
 }

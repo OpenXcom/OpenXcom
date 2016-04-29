@@ -164,4 +164,5 @@ void MiniMapState::think()
 	State::think();
 	_timerAnimate->think(this, 0);
 }
+
 }

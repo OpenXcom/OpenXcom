@@ -737,8 +737,7 @@ void Ufo::setHitFrame(int frame)
  * Gets the UFO's hit frame.
  * @return the hit frame.
  */
-///
-int Ufo::getHitFrame()
+int Ufo::getHitFrame() const
 {
 	return _hitFrame;
 }
@@ -756,7 +755,7 @@ void Ufo::setEscapeCountdown(int time)
  * Gets the escape timer for dogfights.
  * @return how many ticks until the ship tries to leave.
  */
-int Ufo::getEscapeCountdown()
+int Ufo::getEscapeCountdown() const
 {
 	return _escapeCountdown;
 }
@@ -774,7 +773,7 @@ void Ufo::setFireCountdown(int time)
  * Gets the number of ticks until the ufo is ready to fire.
  * @return ticks until weapon is ready.
  */
-int Ufo::getFireCountdown()
+int Ufo::getFireCountdown() const
 {
 	return _fireCountdown;
 }
@@ -794,8 +793,9 @@ void Ufo::setInterceptionProcessed(bool processed)
  * Gets if the ufo has had its timers decremented on this cycle of interception updates.
  * @return if this ufo has already been processed.
  */
-bool Ufo::getInterceptionProcessed()
+bool Ufo::getInterceptionProcessed() const
 {
 	return _processedIntercept;
 }
+
 }

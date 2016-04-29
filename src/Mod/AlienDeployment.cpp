@@ -213,7 +213,7 @@ std::vector<DeploymentData>* AlienDeployment::getDeploymentData()
  * @param length Length.
  * @param height Height.
  */
-void AlienDeployment::getDimensions(int *width, int *length, int *height)
+void AlienDeployment::getDimensions(int *width, int *length, int *height) const
 {
 	*width = _width;
 	*length = _length;

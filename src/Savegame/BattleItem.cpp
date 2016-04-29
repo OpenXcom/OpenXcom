@@ -563,8 +563,9 @@ void BattleItem::setIsAmmo(bool ammo)
  * Checks if this item is loaded into a weapon.
  * @return if this is loaded into a weapon or not.
  */
-bool BattleItem::isAmmo()
+bool BattleItem::isAmmo() const
 {
 	return _isAmmo;
 }
+
 }

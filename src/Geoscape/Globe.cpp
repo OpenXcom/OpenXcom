@@ -86,7 +86,7 @@ struct GlobeStaticData
 	 * @param y cord of point where we getting this vector
 	 * @return normal vector of sphere surface
 	 */
-	inline Cord circle_norm(double ox, double oy, double r, double x, double y)
+	static inline Cord circle_norm(double ox, double oy, double r, double x, double y)
 	{
 		const double limit = r*r;
 		const double norm = 1./r;
@@ -1165,25 +1165,26 @@ void Globe::drawGlobeCircle(double lat, double lon, double radius, int segments)
 	}
 }
 
-
 void Globe::setNewBaseHover(void)
 {
 	_hover=true;
 }
+
 void Globe::unsetNewBaseHover(void)
 {
 	_hover=false;
 }
-bool Globe::getNewBaseHover(void)
+
+bool Globe::getNewBaseHover(void) const
 {
 	return _hover;
 }
+
 void Globe::setNewBaseHoverPos(double lon, double lat)
 {
 	_hoverLon=lon;
 	_hoverLat=lat;
 }
-
 
 void Globe::drawVHLine(Surface *surface, double lon1, double lat1, double lon2, double lat2, Uint8 color)
 {
@@ -1894,4 +1895,5 @@ void Globe::stopScrolling(Action *action)
 	SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
 	action->setMouseAction(_xBeforeMouseScrolling, _yBeforeMouseScrolling, getX(), getY());
 }
+
 }

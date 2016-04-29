@@ -61,9 +61,9 @@ public:
 	/// Cleans up the display screen.
 	~Screen();
 	/// Get horizontal offset.
-	int getDX();
+	int getDX() const;
 	/// Get vertical offset.
-	int getDY();
+	int getDY() const;
 	/// Gets the internal buffer.
 	Surface *getSurface();
 	/// Handles keyboard events.

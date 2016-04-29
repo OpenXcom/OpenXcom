@@ -95,7 +95,7 @@ std::string Texture::getRandomTerrain(Target *target) const
  * with this texture.
  * @return List of deployments.
  */
-const std::map<std::string, int> &Texture::getDeployments()
+const std::map<std::string, int> &Texture::getDeployments() const
 {
 	return _deployments;
 }
@@ -143,4 +143,5 @@ std::string Texture::getRandomDeployment() const
 
 	return "";
 }
+
 }

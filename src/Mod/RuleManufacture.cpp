@@ -140,4 +140,5 @@ int RuleManufacture::getListOrder() const
 {
 	return _listOrder;
 }
+
 }

@@ -203,7 +203,7 @@ const RuleManufacture * Production::getRules() const
 	return _rules;
 }
 
-void Production::startItem(Base * b, SavedGame * g, const Mod *m)
+void Production::startItem(Base * b, SavedGame * g, const Mod *m) const
 {
 	g->setFunds(g->getFunds() - _rules->getManufactureCost());
 	for (std::map<std::string,int>::const_iterator iter = _rules->getRequiredItems().begin(); iter != _rules->getRequiredItems().end(); ++iter)
@@ -269,4 +269,5 @@ void Production::load(const YAML::Node &node)
 		setSellItems(true);
 	}
 }
+
 }

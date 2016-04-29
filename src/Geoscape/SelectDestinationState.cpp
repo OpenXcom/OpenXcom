@@ -348,4 +348,5 @@ void SelectDestinationState::resize(int &dX, int &dY)
 		}
 	}
 }
+
 }

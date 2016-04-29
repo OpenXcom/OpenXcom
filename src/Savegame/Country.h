@@ -53,7 +53,7 @@ public:
 	/// Sets the country's funding.
 	void setFunding(int funding);
 	/// get the country's satisfaction level
-	int getSatisfaction();
+	int getSatisfaction() const;
 	/// add xcom activity in this country
 	void addActivityXcom(int activity);
 	/// add alien activity in this country

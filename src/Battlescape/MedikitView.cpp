@@ -141,4 +141,5 @@ void MedikitView::updateSelectedPart()
 		}
 	}
 }
+
 }

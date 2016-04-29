@@ -2913,4 +2913,5 @@ void BattlescapeGenerator::setupObjectives(AlienDeployment *ruleDeploy)
 		}
 	}
 }
+
 }

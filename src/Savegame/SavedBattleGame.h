@@ -189,7 +189,7 @@ public:
 	/// increments the objective counter.
 	void addDestroyedObjective();
 	/// Checks if all the objectives are destroyed.
-	bool allObjectivesDestroyed();
+	bool allObjectivesDestroyed() const;
 	/// Gets the current item ID.
 	int *getCurrentItemId();
 	/// Gets a spawn node.
@@ -231,9 +231,9 @@ public:
 	/// Resets the visibility of all tiles on the map.
 	void resetTiles();
 	/// get an 11x11 grid of positions (-10 to +10) to check.
-	const std::vector<Position> getTileSearch();
+	const std::vector<Position> &getTileSearch() const;
 	/// check if the AI has engaged cheat mode.
-	bool isCheating();
+	bool isCheating() const;
 	/// get the reserved fire mode.
 	BattleActionType getTUReserved() const;
 	/// set the reserved fire mode.
@@ -273,7 +273,7 @@ public:
 	/// Sets the objective type for this mission.
 	void setObjectiveType(int type);
 	/// Gets the objective type of this mission.
-	SpecialTileType getObjectiveType();
+	SpecialTileType getObjectiveType() const;
 	/// sets the ambient sound effect;
 	void setAmbientVolume(double volume);
 	/// gets the ambient sound effect;
@@ -288,7 +288,7 @@ public:
 	void setChronoTrigger(ChronoTrigger trigger);
 	/// Sets the turn to start the aliens cheating.
 	void setCheatTurn(int turn);
-	bool isBeforeGame();
+	bool isBeforeGame() const;
 };
 
 }
