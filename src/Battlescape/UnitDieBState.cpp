@@ -51,7 +51,7 @@ namespace OpenXcom
 UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound, bool noCorpse) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound), _noCorpse(noCorpse), _extraFrame(0)
 {
 	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
-	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS || noSound)
+	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
 
 		/********************************************************
@@ -98,7 +98,7 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
 
-	if (_unit->getFaction() == FACTION_HOSTILE)
+	if (!_parent->getSave()->isBeforeGame() && _unit->getFaction() == FACTION_HOSTILE)
 	{
 		std::vector<Node *> *nodes = _parent->getSave()->getNodes();
 		if (!nodes) return; // this better not happen.
@@ -240,6 +240,10 @@ void UnitDieBState::think()
 		{
 			convertUnitToCorpse();
 		}
+		if (_unit == _parent->getSave()->getSelectedUnit())
+		{
+			_parent->getSave()->setSelectedUnit(0);
+		}
 	}
 	
 	_parent->getMap()->cacheUnit(_unit);
@@ -259,7 +263,7 @@ void UnitDieBState::convertUnitToCorpse()
 {
 	Position lastPosition = _unit->getPosition();
 	int size = _unit->getArmor()->getSize();
-	bool dropItems = (size == 1 &&
+	bool dropItems = (_unit->hasInventory() &&
 		(!Options::weaponSelfDestruction ||
 		(_unit->getOriginalFaction() != FACTION_HOSTILE || _unit->getStatus() == STATUS_UNCONSCIOUS)));
 
@@ -317,10 +321,10 @@ void UnitDieBState::convertUnitToCorpse()
 	}
 	else
 	{
-		int i = 0;
-		for (int y = 0; y < size; y++)
+		int i = size * size - 1;
+		for (int y = size - 1; y >= 0; --y)
 		{
-			for (int x = 0; x < size; x++)
+			for (int x = size - 1; x >= 0; --x)
 			{
 				BattleItem *corpse = new BattleItem(_parent->getMod()->getItem(_unit->getArmor()->getCorpseBattlescape()[i]), _parent->getSave()->getCurrentItemId());
 				corpse->setUnit(_unit);
@@ -329,7 +333,7 @@ void UnitDieBState::convertUnitToCorpse()
 					_parent->getSave()->getTile(lastPosition + Position(x,y,0))->setUnit(0);
 				}
 				_parent->dropItem(lastPosition + Position(x,y,0), corpse, true);
-				i++;
+				--i;
 			}
 		}
 	}
