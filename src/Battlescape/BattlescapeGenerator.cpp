@@ -1627,7 +1627,9 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 		int pos_y = value[0];
 		int pos_z = value[2];
 		Node *node;
-		if (pos_x < mapblock->getSizeX() && pos_y < mapblock->getSizeY() && pos_z < _mapsize_z)
+		if (pos_x >= 0 && pos_x < mapblock->getSizeX() &&
+			pos_y >= 0 && pos_y < mapblock->getSizeY() &&
+			pos_z >= 0 && pos_z < _mapsize_z)
 		{
 			Position pos = Position(xoff + pos_x, yoff + pos_y, mapblock->getSizeZ() - 1 - pos_z);
 			int type     = value[19];
