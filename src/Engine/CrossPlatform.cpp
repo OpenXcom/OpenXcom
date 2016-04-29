@@ -28,6 +28,7 @@
 #include "Logger.h"
 #include "Exception.h"
 #include "Options.h"
+#include "Language.h"
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -48,7 +49,6 @@
 #pragma comment(lib, "dbghelp.lib")
 #endif
 #else
-#include "Language.h"
 #include <iostream>
 #include <fstream>
 #include <SDL_image.h>
@@ -87,12 +87,14 @@ void getErrorDialog()
 #ifndef _WIN32
 	if (system(NULL))
 	{
-		if (system("which kdialog") == 0)
-			errorDlg = "kdialog";
-		else if (system("which xdialog") == 0)
-			errorDlg = "xdialog";
-		else if (system("which gdialog") == 0)
-			errorDlg = "gdialog";
+		if (system("which zenity 2>&1 > /dev/null") == 0)
+			errorDlg = "zenity --error --text=";
+		else if (system("which kdialog 2>&1 > /dev/null") == 0)
+			errorDlg = "kdialog --error ";
+		else if (system("which gdialog 2>&1 > /dev/null") == 0)
+			errorDlg = "gdialog --msgbox ";
+		else if (system("which xdialog 2>&1 > /dev/null") == 0)
+			errorDlg = "xdialog --msgbox ";
 	}
 #endif
 }
@@ -112,8 +114,9 @@ void showError(const std::string &error)
 	}
 	else
 	{
-		std::string cmd = errorDlg;
-		cmd += " --title \"OpenXcom Error\" --error \"" + error + "\"";
+		std::string nError = '"' + error + '"';
+		Language::replace(nError, "\n", "\\n");
+		std::string cmd = errorDlg + nError;
 		if (system(cmd.c_str()) != 0)
 			std::cerr << error << std::endl;
 	}
