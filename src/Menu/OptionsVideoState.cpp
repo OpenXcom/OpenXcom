@@ -29,6 +29,8 @@
 #include "../Engine/FileMap.h"
 #include "../Engine/Logger.h"
 #include "../Interface/ComboBox.h"
+#include "../Engine/Game.h"
+#include "SetBorderlessRootState.h"
 
 namespace OpenXcom
 {
@@ -73,6 +75,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_txtOptions = new Text(114, 9, 206, 82);
 	_btnLetterbox = new ToggleTextButton(104, 16, 206, 92);
 	_btnLockMouse = new ToggleTextButton(104, 16, 206, 110);
+	_btnFixedBorderlessPos = new ToggleTextButton(104, 16, 206, 128);
 
 	// Get available fullscreen modes
 	_res = SDL_ListModes(NULL, SDL_FULLSCREEN);
@@ -115,6 +118,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	add(_txtOptions, "text", "videoMenu");
 	add(_btnLetterbox, "button", "videoMenu");
 	add(_btnLockMouse, "button", "videoMenu");
+	add(_btnFixedBorderlessPos, "button", "videoMenu");
 
 
 	add(_cbxFilter, "button", "videoMenu");
@@ -176,6 +180,14 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_btnLockMouse->setTooltip("STR_LOCK_MOUSE_DESC");
 	_btnLockMouse->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_btnLockMouse->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+
+	_btnFixedBorderlessPos->setText(tr("STR_FIXED_BORDERLESS_POSITION"));
+	_btnFixedBorderlessPos->setPressed(Options::borderlessRootMode);
+	_btnFixedBorderlessPos->onMouseClick((ActionHandler)&OptionsVideoState::btnFixedBorderlessPosClick);
+	_btnFixedBorderlessPos->setTooltip("STR_FIXED_BORDERLESS_POSITION_DESC");
+	_btnFixedBorderlessPos->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
+	_btnFixedBorderlessPos->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+	_btnFixedBorderlessPos->setVisible(Options::borderless);
 	
 	_txtLanguage->setText(tr("STR_DISPLAY_LANGUAGE"));
 	
@@ -506,6 +518,8 @@ void OptionsVideoState::updateDisplayMode(Action *)
 	default:
 		break;
 	}
+
+	_btnFixedBorderlessPos->setVisible(Options::borderless);
 }
 
 /**
@@ -525,6 +539,22 @@ void OptionsVideoState::btnLockMouseClick(Action *)
 {
 	Options::captureMouse = (SDL_GrabMode)_btnLockMouse->getPressed();
 	SDL_WM_GrabInput(Options::captureMouse);
+}
+
+/**
+ * Ask user where he wants to root screen.
+ * @param action Pointer to an action.
+ */
+void OptionsVideoState::btnFixedBorderlessPosClick(Action *)
+{
+	if ((SDL_GrabMode)_btnFixedBorderlessPos->getPressed())
+	{
+		_game->pushState(new SetBorderlessRootState(_origin, this));
+	}
+	else
+	{
+		Options::newBorderlessRootMode = false;
+	}
 }
 
 /**
@@ -572,6 +602,14 @@ void OptionsVideoState::handle(Action *action)
 	{
 		_btnLockMouse->setPressed(Options::captureMouse == SDL_GRAB_ON);
 	}
+}
+
+/**
+ * Unpresses Fixed Borderless Pos button
+ */
+void OptionsVideoState::unpressFixedBorderlessPos()
+{
+	_btnFixedBorderlessPos->setPressed(false);
 }
 
 }

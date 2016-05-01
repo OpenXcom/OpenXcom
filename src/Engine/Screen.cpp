@@ -75,8 +75,18 @@ void Screen::makeVideoFlags()
 	}
 	else if (Options::borderless)
 	{
-		SDL_putenv(const_cast<char*>("SDL_VIDEO_WINDOW_POS="));
-		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED=center"));
+		if (Options::borderlessRootMode)
+		{
+			std::ostringstream ss;
+			ss << "SDL_VIDEO_WINDOW_POS=" << std::dec << Options::borderlessModePositionX << "," << Options::borderlessModePositionY;
+			SDL_putenv(const_cast<char*>(ss.str().c_str()));
+			SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED="));
+		}
+		else
+		{
+			SDL_putenv(const_cast<char*>("SDL_VIDEO_WINDOW_POS="));
+			SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED=center"));
+		}
 	}
 	else
 	{
@@ -92,7 +102,17 @@ void Screen::makeVideoFlags()
 	if (Options::borderless)
 	{
 		_flags |= SDL_NOFRAME;
-		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED=center"));
+		if (Options::borderlessRootMode)
+		{
+			std::ostringstream ss;
+			ss << "SDL_VIDEO_WINDOW_POS=" << std::dec << Options::borderlessModePositionX << "," << Options::borderlessModePositionY;
+			SDL_putenv(const_cast<char*>(ss.str().c_str()));
+			SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED="));
+		}
+		else
+		{
+			SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED=center"));
+		}
 	}
 	else
 	{
@@ -342,6 +362,20 @@ void Screen::resetDisplay(bool resetVideo)
 		}
 #endif
 		Log(LOG_INFO) << "Attempting to set display to " << width << "x" << height << "x" << _bpp << "...";
+
+		// Workaround for window not moving when keeping same size
+		if (_screen != 0 && _screen->w == width && _screen->h == height && Options::borderless)
+		{
+			if (width != 320)
+			{
+				_screen = SDL_SetVideoMode(320, 200, _bpp, _flags);
+			}
+			else
+			{
+				_screen = SDL_SetVideoMode(640, 400, _bpp, _flags);
+			}
+		}
+		
 		_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
 		if (_screen == 0)
 		{

@@ -219,7 +219,12 @@ void OptionsBaseState::btnOkClick(Action *)
 			Options::useOpenGL != Options::newOpenGL ||
 			Options::useScaleFilter != Options::newScaleFilter ||
 			Options::useHQXFilter != Options::newHQXFilter ||
-			Options::useOpenGLShader != Options::newOpenGLShader)
+			Options::useOpenGLShader != Options::newOpenGLShader ||
+			(Options::borderless && Options::borderlessRootMode && 
+				(!Options::newBorderlessRootMode ||
+					Options::borderlessModePositionX != Options::newBorderlessModePositionX ||
+					Options::borderlessModePositionY != Options::newBorderlessModePositionY
+				)))
 		{
 			_game->pushState(new OptionsConfirmState(_origin));
 		}

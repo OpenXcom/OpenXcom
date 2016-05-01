@@ -121,6 +121,8 @@ void create()
 	_info.push_back(OptionInfo("windowedModePositionX", &windowedModePositionX, -1));
 	_info.push_back(OptionInfo("windowedModePositionY", &windowedModePositionY, -1));
 	_info.push_back(OptionInfo("borderless", &borderless, false));
+	_info.push_back(OptionInfo("borderlessModePositionX", &borderlessModePositionX, 0));
+	_info.push_back(OptionInfo("borderlessModePositionY", &borderlessModePositionY, 0));
 	_info.push_back(OptionInfo("captureMouse", (bool*)&captureMouse, false));
 	_info.push_back(OptionInfo("battleTooltips", &battleTooltips, true));
 	_info.push_back(OptionInfo("keepAspectRatio", &keepAspectRatio, true));
@@ -138,6 +140,7 @@ void create()
 	_info.push_back(OptionInfo("preferredVideo", (int*)&preferredVideo, VIDEO_FMV));
 	_info.push_back(OptionInfo("musicAlwaysLoop", &musicAlwaysLoop, false));
 	_info.push_back(OptionInfo("touchEnabled", &touchEnabled, false));
+	_info.push_back(OptionInfo("borderlessRootMode", &borderlessRootMode, false));
 
 	// advanced options
 	_info.push_back(OptionInfo("playIntro", &playIntro, true, "STR_PLAYINTRO", "STR_GENERAL"));
@@ -1049,6 +1052,9 @@ void backupDisplay()
 	Options::newHQXFilter = Options::useHQXFilter;
 	Options::newOpenGLShader = Options::useOpenGLShader;
 	Options::newXBRZFilter = Options::useXBRZFilter;
+	Options::newBorderlessRootMode = Options::borderlessRootMode;
+	Options::newBorderlessModePositionX = Options::borderlessModePositionX;
+	Options::newBorderlessModePositionY = Options::borderlessModePositionY;
 }
 
 /**
@@ -1066,6 +1072,9 @@ void switchDisplay()
 	std::swap(useHQXFilter, newHQXFilter);
 	std::swap(useOpenGLShader, newOpenGLShader);
 	std::swap(useXBRZFilter, newXBRZFilter);
+	std::swap(borderlessRootMode, newBorderlessRootMode);
+	std::swap(borderlessModePositionX, newBorderlessModePositionX);
+	std::swap(borderlessModePositionY, newBorderlessModePositionY);
 }
 
 }
