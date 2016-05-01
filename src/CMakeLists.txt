@@ -447,6 +447,8 @@ set ( menu_src
   Menu/PauseState.h
   Menu/SaveGameState.cpp
   Menu/SaveGameState.h
+  Menu/SetBorderlessRootState.cpp
+  Menu/SetBorderlessRootState.h
   Menu/SlideshowState.cpp
   Menu/SlideshowState.h
   Menu/StartState.cpp

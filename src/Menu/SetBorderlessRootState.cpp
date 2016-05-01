@@ -76,6 +76,7 @@ SetBorderlessRootState::SetBorderlessRootState(OptionsOrigin origin, OptionsVide
 	_txtWindowPositionNewY->setText(tr("STR_DISPLAY_BORDERLESS_WINDOW_POSITION_NEW_Y"));
 
 	_edtWindowPositionNewX->setText(std::to_wstring(Options::newBorderlessModePositionX));
+
 	_edtWindowPositionNewY->setText(std::to_wstring(Options::newBorderlessModePositionY));
 
 	centerAllSurfaces();
@@ -110,13 +111,14 @@ SetBorderlessRootState::~SetBorderlessRootState()
  */
 void SetBorderlessRootState::btnOkClick(Action *)
 {
-	std::wstringstream convStream;
+	std::wstringstream convStreamX, convStreamY;
 	int _newBorderlessModePositionX = 0, _newBorderlessModePositionY = 0;
 
-	convStream << _edtWindowPositionNewX->getText() << " " << _edtWindowPositionNewY->getText();
+	convStreamX << _edtWindowPositionNewX->getText();
+	convStreamY << _edtWindowPositionNewY->getText();
 
-	convStream >> _newBorderlessModePositionX;
-	convStream >> _newBorderlessModePositionY;
+	convStreamX >> _newBorderlessModePositionX;
+	convStreamY >> _newBorderlessModePositionY;
 
 	Options::newBorderlessRootMode = true;
 	Options::newBorderlessModePositionX = _newBorderlessModePositionX;
@@ -137,4 +139,3 @@ void SetBorderlessRootState::btnCancelClick(Action *)
 }
 
 }
-
