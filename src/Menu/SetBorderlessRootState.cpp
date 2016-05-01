@@ -113,7 +113,7 @@ void SetBorderlessRootState::btnOkClick(Action *)
 	std::wstringstream convStream;
 	int _newBorderlessModePositionX = 0, _newBorderlessModePositionY = 0;
 
-	convStream << _edtWindowPositionNewX->getText() << _edtWindowPositionNewY->getText();
+	convStream << _edtWindowPositionNewX->getText() << " " << _edtWindowPositionNewY->getText();
 
 	convStream >> _newBorderlessModePositionX;
 	convStream >> _newBorderlessModePositionY;
