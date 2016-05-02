@@ -24,6 +24,7 @@ namespace OpenXcom
 {
 
 class Timer;
+enum TextEditConstraint { TEC_NONE, TEC_NUMERIC, TEC_SIGNED_NUMERIC };
 
 /**
  * Editable version of Text.
@@ -39,7 +40,7 @@ private:
 	Timer *_timer;
 	wchar_t _ascii;
 	size_t _caretPos;
-	bool _numerical;
+	TextEditConstraint _textEditConstraint;
 	ActionHandler _change;
 	State *_state;
 	/// Checks if a character will exceed the maximum width.
@@ -75,6 +76,8 @@ public:
 	void setVerticalAlign(TextVAlign valign);
 	/// Sets the text edit to numerical input.
 	void setNumerical(bool numerical);
+	/// Sets the text edit to signed numerical input.
+	void setSignedNumerical(bool numerical);
 	/// Sets the text edit's color.
 	void setColor(Uint8 color);
 	/// Gets the text edit's color.

@@ -75,9 +75,11 @@ SetBorderlessRootState::SetBorderlessRootState(OptionsOrigin origin, OptionsVide
 	_txtWindowPositionNewY->setWordWrap(true);
 	_txtWindowPositionNewY->setText(tr("STR_DISPLAY_BORDERLESS_WINDOW_POSITION_NEW_Y"));
 
-	_edtWindowPositionNewX->setText(std::to_wstring(Options::newBorderlessModePositionX));
+	_edtWindowPositionNewX->setText(static_cast<std::wostringstream*>( &(std::wostringstream() << Options::newBorderlessModePositionX) )->str());
+	_edtWindowPositionNewX->setSignedNumerical(true);
 
-	_edtWindowPositionNewY->setText(std::to_wstring(Options::newBorderlessModePositionY));
+	_edtWindowPositionNewY->setText(static_cast<std::wostringstream*>( &(std::wostringstream() << Options::newBorderlessModePositionY) )->str());
+	_edtWindowPositionNewY->setSignedNumerical(true);
 
 	centerAllSurfaces();
 
@@ -112,17 +114,17 @@ SetBorderlessRootState::~SetBorderlessRootState()
 void SetBorderlessRootState::btnOkClick(Action *)
 {
 	std::wstringstream convStreamX, convStreamY;
-	int _newBorderlessModePositionX = 0, _newBorderlessModePositionY = 0;
+	int newBorderlessModePositionX = 0, newBorderlessModePositionY = 0;
 
 	convStreamX << _edtWindowPositionNewX->getText();
 	convStreamY << _edtWindowPositionNewY->getText();
 
-	convStreamX >> _newBorderlessModePositionX;
-	convStreamY >> _newBorderlessModePositionY;
+	convStreamX >> newBorderlessModePositionX;
+	convStreamY >> newBorderlessModePositionY;
 
 	Options::newBorderlessRootMode = true;
-	Options::newBorderlessModePositionX = _newBorderlessModePositionX;
-	Options::newBorderlessModePositionY = _newBorderlessModePositionY;
+	Options::newBorderlessModePositionX = newBorderlessModePositionX;
+	Options::newBorderlessModePositionY = newBorderlessModePositionY;
 
 	_game->popState();
 }

@@ -34,7 +34,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextEdit::TextEdit(State *state, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _blink(true), _modal(true), _ascii(L'A'), _caretPos(0), _numerical(false), _change(0), _state(state)
+TextEdit::TextEdit(State *state, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _blink(true), _modal(true), _ascii(L'A'), _caretPos(0), _textEditConstraint(TEC_NONE), _change(0), _state(state)
 {
 	_isFocused = false;
 	_text = new Text(width, height, 0, 0);
@@ -217,7 +217,16 @@ void TextEdit::setVerticalAlign(TextVAlign valign)
  */
 void TextEdit::setNumerical(bool numerical)
 {
-	_numerical = numerical;
+	_textEditConstraint = numerical ? TEC_NUMERIC : TEC_NONE;
+}
+
+/**
+ * Restricts the text to only numerical signed input.
+ * @param signedNumerical Signed mumerical restriction.
+ */
+void TextEdit::setSignedNumerical(bool signedNumerical)
+{
+	_textEditConstraint = signedNumerical ? TEC_SIGNED_NUMERIC : TEC_NONE;
 }
 
 /**
@@ -497,8 +506,14 @@ void TextEdit::keyboardPress(Action *action, State *state)
 			break;
 		default:
 			Uint16 key = action->getDetails()->key.keysym.unicode;
-			if (((_numerical && key >= L'0' && key <= L'9') ||
-				(!_numerical && ((key >= L' ' && key <= L'~') || key >= 160))) &&
+			// If constraint is "signed numeric", need to check:
+			// - user does not input a character before '-' or '+'
+			// - user enter either figure anywhere, or a sign at first position
+			if (((_textEditConstraint == TEC_NUMERIC && key >= L'0' && key <= L'9') ||
+				(_textEditConstraint == TEC_SIGNED_NUMERIC && 
+				    (_caretPos > 0 || (_value[0] != L'+' && _value[0] != L'-')) &&
+					((key >= L'0' && key <= L'9') || (_caretPos == 0 && (key == L'+' || key == L'-')))) ||
+				(_textEditConstraint == TEC_NONE && ((key >= L' ' && key <= L'~') || key >= 160))) &&
 				!exceedsMaxWidth((wchar_t)key))
 			{
 				_value.insert(_caretPos, 1, (wchar_t)action->getDetails()->key.keysym.unicode);
