@@ -20,23 +20,13 @@
 #include <sstream>
 #include <string>
 #include <stdio.h>
-#ifdef _WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#ifndef LOCALE_INVARIANT
-#define LOCALE_INVARIANT 0x007f
-#endif
-#else
-#include <time.h>
+#include "CrossPlatform.h"
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
 #endif
 
 namespace OpenXcom
 {
-
-inline std::string now();
 
 /**
  * Defines the various severity levels of
@@ -94,7 +84,7 @@ inline Logger::~Logger()
 		fflush(stderr);
 	}
 	std::ostringstream ss;
-	ss << "[" << now() << "]" << "\t" << os.str();
+	ss << "[" << CrossPlatform::now() << "]" << "\t" << os.str();
 	FILE *file = fopen(logFile().c_str(), "a");
 	fprintf(file, "%s", ss.str().c_str());
 	fflush(file);
@@ -122,32 +112,5 @@ inline std::string Logger::toString(SeverityLevel level)
 #define Log(level) \
 	if (level > Logger::reportingLevel()) ; \
 	else Logger().get(level)
-
-inline std::string now()
-{
-	const int MAX_LEN = 25, MAX_RESULT = 80;
-#ifdef _WIN32
-	char date[MAX_LEN], time[MAX_LEN];
-	if (GetDateFormatA(LOCALE_INVARIANT, 0, 0,
-			"dd'-'MM'-'yyyy", date, MAX_LEN) == 0)
-		return "Error in Now()";
-	if (GetTimeFormatA(LOCALE_INVARIANT, TIME_FORCE24HOURFORMAT, 0,
-			"HH':'mm':'ss", time, MAX_LEN) == 0)
-		return "Error in Now()";
-
-	char result[MAX_RESULT] = {0};
-	sprintf(result, "%s %s", date, time);
-#else
-	char buffer[MAX_LEN];
-	time_t rawtime;
-	struct tm *timeinfo;
-	time(&rawtime);
-	timeinfo = localtime(&rawtime);
-	strftime(buffer, MAX_LEN, "%d-%m-%Y %H:%M:%S", timeinfo);
-	char result[MAX_RESULT] = {0};
-	sprintf(result, "%s", buffer);
-#endif
-	return result;
-}
 
 }
