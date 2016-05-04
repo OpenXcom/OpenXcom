@@ -75,7 +75,7 @@ private:
 	std::vector<int> _missionIdList;
 	int _daysWoundedTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal,
 		_hitCounterTotal, _ironManTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal,
-		_shotAtCounter10in1Mission,	_hitCounter5in1Mission, _timesWoundedTotal, _valiantCruxTotal, _KIA, _allAliensKilledTotal, _allAliensStunnedTotal,
+		_shotAtCounter10in1Mission,	_hitCounter5in1Mission, _timesWoundedTotal, _KIA, _allAliensKilledTotal, _allAliensStunnedTotal,
 		_woundsHealedTotal, _allUFOs, _allMissionTypes, _statGainTotal, _revivedUnitTotal, _wholeMedikitTotal, _braveryGainTotal, _bestOfRank, _MIA,
 		_martyrKillsTotal, _postMortemKills, _slaveKillsTotal;
 	bool _bestSoldier, _globeTrotter;

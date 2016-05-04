@@ -60,13 +60,20 @@ void exceptionLogger()
 {
 	static bool logged = false;
 	std::string error;
-	try {
-		if (!logged++) throw;
+	try
+	{
+		if (!logged)
+		{
+			logged = true;
+			throw;
+		}
 	}
-	catch (const std::exception &e) {
+	catch (const std::exception &e)
+	{
 		error = e.what();
 	}
-	catch (...) {
+	catch (...)
+	{
 		error = "Unknown exception";
 	}
 	CrossPlatform::crashDump(0, error);
