@@ -494,24 +494,24 @@ void OptionsVideoState::updateDisplayMode(Action *)
 	switch(_cbxDisplayMode->getSelected())
 	{
 	case 0:
-		Options::fullscreen = false;
-		Options::borderless = false;
-		Options::allowResize = false;
+		Options::newFullscreen = false;
+		Options::newBorderless = false;
+		Options::newAllowResize = false;
 		break;
 	case 1:
-		Options::fullscreen = true;
-		Options::borderless = false;
-		Options::allowResize = false;
+		Options::newFullscreen = true;
+		Options::newBorderless = false;
+		Options::newAllowResize = false;
 		break;
 	case 2:
-		Options::fullscreen = false;
-		Options::borderless = true;
-		Options::allowResize = false;
+		Options::newFullscreen = false;
+		Options::newBorderless = true;
+		Options::newAllowResize = false;
 		break;
 	case 3:
-		Options::fullscreen = false;
-		Options::borderless = false;
-		Options::allowResize = true;
+		Options::newFullscreen = false;
+		Options::newBorderless = false;
+		Options::newAllowResize = true;
 		break;
 	default:
 		break;
@@ -549,7 +549,7 @@ void OptionsVideoState::btnRootWindowedModeClick(Action *)
 	}
 	else
 	{
-		Options::rootWindowedMode = false;
+		Options::newRootWindowedMode = false;
 	}
 }
 

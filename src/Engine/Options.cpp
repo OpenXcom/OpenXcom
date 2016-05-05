@@ -1053,6 +1053,9 @@ void backupDisplay()
 	Options::newRootWindowedMode = Options::rootWindowedMode;
 	Options::newWindowedModePositionX = Options::windowedModePositionX;
 	Options::newWindowedModePositionY = Options::windowedModePositionY;
+	Options::newFullscreen = Options::fullscreen;
+	Options::newAllowResize = Options::allowResize;
+	Options::newBorderless = Options::borderless;
 }
 
 /**
@@ -1073,6 +1076,9 @@ void switchDisplay()
 	std::swap(rootWindowedMode, newRootWindowedMode);
 	std::swap(windowedModePositionX, newWindowedModePositionX);
 	std::swap(windowedModePositionY, newWindowedModePositionY);
+	std::swap(fullscreen, newFullscreen);
+	std::swap(allowResize, newAllowResize);
+	std::swap(borderless, newBorderless);
 }
 
 }
