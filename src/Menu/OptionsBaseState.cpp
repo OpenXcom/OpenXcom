@@ -220,11 +220,7 @@ void OptionsBaseState::btnOkClick(Action *)
 			Options::useScaleFilter != Options::newScaleFilter ||
 			Options::useHQXFilter != Options::newHQXFilter ||
 			Options::useOpenGLShader != Options::newOpenGLShader ||
-			(Options::borderless && Options::borderlessRootMode && 
-				(!Options::newBorderlessRootMode ||
-					Options::borderlessModePositionX != Options::newBorderlessModePositionX ||
-					Options::borderlessModePositionY != Options::newBorderlessModePositionY
-				)))
+			(!Options::fullscreen && !Options::allowResize && Options::rootWindowedMode))
 		{
 			_game->pushState(new OptionsConfirmState(_origin));
 		}

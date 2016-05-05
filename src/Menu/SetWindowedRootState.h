@@ -33,20 +33,20 @@ enum OptionsOrigin;
  * Asks user new coordinates when he pushes Fixed Borderless Pos button.
  * are changed.
  */
-class SetBorderlessRootState : public State
+class SetWindowedRootState : public State
 {
 private:
 	OptionsOrigin _origin;
 	OptionsVideoState *_optionsVideoState;
 	TextButton *_btnOk, *_btnCancel;
 	Window *_window;
-	Text *_txtTitle, *_txtWindowPositionNewX, *_txtWindowPositionNewY;
-	TextEdit *_edtWindowPositionNewX, *_edtWindowPositionNewY;
+	Text *_txtTitle, *_txtWindowedModePositionX, *_txtWindowedModePositionY;
+	TextEdit *_edtWindowedModePositionX, *_edtWindowedModePositionY;
 public:
 	/// Creates the Confirm Display Options state.
-	SetBorderlessRootState(OptionsOrigin origin, OptionsVideoState *optionsVideoState);
+	SetWindowedRootState(OptionsOrigin origin, OptionsVideoState *optionsVideoState);
 	/// Cleans up the Confirm Display Options state.
-	~SetBorderlessRootState();
+	~SetWindowedRootState();
 	/// Handler for clicking the Ok button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.

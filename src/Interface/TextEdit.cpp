@@ -212,21 +212,12 @@ void TextEdit::setVerticalAlign(TextVAlign valign)
 }
 
 /**
- * Restricts the text to only numerical input.
- * @param numerical Numerical restriction.
+ * Restricts the text to only numerical input or signed numerical input.
+ * @param constraint TextEditConstraint to be applied.
  */
-void TextEdit::setNumerical(bool numerical)
+void TextEdit::setConstraint(TextEditConstraint constraint)
 {
-	_textEditConstraint = numerical ? TEC_NUMERIC : TEC_NONE;
-}
-
-/**
- * Restricts the text to only numerical signed input.
- * @param signedNumerical Signed mumerical restriction.
- */
-void TextEdit::setSignedNumerical(bool signedNumerical)
-{
-	_textEditConstraint = signedNumerical ? TEC_SIGNED_NUMERIC : TEC_NONE;
+	_textEditConstraint = constraint;
 }
 
 /**
@@ -383,6 +374,56 @@ bool TextEdit::exceedsMaxWidth(wchar_t c)
 }
 
 /**
+ * Checks if input key character is valid to
+ * be inserted at caret position in the text edit
+ * without breaking the constraint and wi
+ * @param key Key code.
+ * @return True if character can be inserted, False if it cannot.
+ */
+bool TextEdit::isValidChar(Uint16 key)
+{
+			// If constraint is "signed numeric", need to check:
+			// - user does not input a character before '-' or '+'
+			// - user enter either figure anywhere, or a sign at first position
+			//if (((_textEditConstraint == TEC_NUMERIC && key >= L'0' && key <= L'9') ||
+			//	(_textEditConstraint == TEC_SIGNED_NUMERIC && 
+			//	    (_caretPos > 0 || (_value[0] != L'+' && _value[0] != L'-')) &&
+			//		((key >= L'0' && key <= L'9') || (_caretPos == 0 && (key == L'+' || key == L'-')))) ||
+			//	(_textEditConstraint == TEC_NONE && ((key >= L' ' && key <= L'~') || key >= 160))) &&
+			//	!exceedsMaxWidth((wchar_t)key))
+
+	switch (_textEditConstraint)
+	{
+	case TEC_NUMERIC_POSITIVE:
+		return key >= L'0' && key <= L'9';
+		break;
+
+	// If constraint is "signed numeric", need to check:
+	// - user does not input a character before '-' or '+'
+	// - user enter either figure anywhere, or a sign at first position
+	case TEC_NUMERIC:
+		if (_caretPos > 0)
+		{
+			return key >= L'0' && key <= L'9';
+		}
+		else
+		{
+			return ((key >= L'0' && key <= L'9') || key == L'+' || key == L'-') &&
+				(_value.size() == 0 || (_value[0] != L'+' && _value[0] != L'-'));
+		}
+		break;
+
+	case TEC_NONE:
+		return (key >= L' ' && key <= L'~') || key >= 160;
+		break;
+
+	default:
+		return false;
+		break;
+	}
+}
+
+/**
  * Focuses the text edit when it's pressed on.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
@@ -505,16 +546,8 @@ void TextEdit::keyboardPress(Action *action, State *state)
 			}
 			break;
 		default:
-			Uint16 key = action->getDetails()->key.keysym.unicode;
-			// If constraint is "signed numeric", need to check:
-			// - user does not input a character before '-' or '+'
-			// - user enter either figure anywhere, or a sign at first position
-			if (((_textEditConstraint == TEC_NUMERIC && key >= L'0' && key <= L'9') ||
-				(_textEditConstraint == TEC_SIGNED_NUMERIC && 
-				    (_caretPos > 0 || (_value[0] != L'+' && _value[0] != L'-')) &&
-					((key >= L'0' && key <= L'9') || (_caretPos == 0 && (key == L'+' || key == L'-')))) ||
-				(_textEditConstraint == TEC_NONE && ((key >= L' ' && key <= L'~') || key >= 160))) &&
-				!exceedsMaxWidth((wchar_t)key))
+			Uint16 key = action->getDetails()->key.keysym.unicode;			
+			if (isValidChar(key) && !exceedsMaxWidth((wchar_t)key))
 			{
 				_value.insert(_caretPos, 1, (wchar_t)action->getDetails()->key.keysym.unicode);
 				_caretPos++;

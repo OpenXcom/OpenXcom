@@ -30,7 +30,7 @@
 #include "../Engine/Logger.h"
 #include "../Interface/ComboBox.h"
 #include "../Engine/Game.h"
-#include "SetBorderlessRootState.h"
+#include "SetWindowedRootState.h"
 
 namespace OpenXcom
 {
@@ -75,7 +75,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_txtOptions = new Text(114, 9, 206, 82);
 	_btnLetterbox = new ToggleTextButton(104, 16, 206, 92);
 	_btnLockMouse = new ToggleTextButton(104, 16, 206, 110);
-	_btnFixedBorderlessPos = new ToggleTextButton(104, 16, 206, 128);
+	_btnRootWindowedMode = new ToggleTextButton(104, 16, 206, 128);
 
 	// Get available fullscreen modes
 	_res = SDL_ListModes(NULL, SDL_FULLSCREEN);
@@ -118,8 +118,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	add(_txtOptions, "text", "videoMenu");
 	add(_btnLetterbox, "button", "videoMenu");
 	add(_btnLockMouse, "button", "videoMenu");
-	add(_btnFixedBorderlessPos, "button", "videoMenu");
-
+	add(_btnRootWindowedMode, "button", "videoMenu");
 
 	add(_cbxFilter, "button", "videoMenu");
 	add(_cbxDisplayMode, "button", "videoMenu");
@@ -142,7 +141,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 
 	_txtDisplayWidth->setAlign(ALIGN_CENTER);
 	_txtDisplayWidth->setBig();
-	_txtDisplayWidth->setNumerical(true);
+	_txtDisplayWidth->setConstraint(TEC_NUMERIC_POSITIVE);
 	_txtDisplayWidth->onChange((ActionHandler)&OptionsVideoState::txtDisplayWidthChange);
 
 	_txtDisplayX->setAlign(ALIGN_CENTER);
@@ -151,7 +150,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 
 	_txtDisplayHeight->setAlign(ALIGN_CENTER);
 	_txtDisplayHeight->setBig();
-	_txtDisplayHeight->setNumerical(true);
+	_txtDisplayHeight->setConstraint(TEC_NUMERIC_POSITIVE);
 	_txtDisplayHeight->onChange((ActionHandler)&OptionsVideoState::txtDisplayHeightChange);
 
 	std::wostringstream ssW, ssH;
@@ -181,13 +180,12 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_btnLockMouse->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_btnLockMouse->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
 
-	_btnFixedBorderlessPos->setText(tr("STR_FIXED_BORDERLESS_POSITION"));
-	_btnFixedBorderlessPos->setPressed(Options::borderlessRootMode);
-	_btnFixedBorderlessPos->onMouseClick((ActionHandler)&OptionsVideoState::btnFixedBorderlessPosClick);
-	_btnFixedBorderlessPos->setTooltip("STR_FIXED_BORDERLESS_POSITION_DESC");
-	_btnFixedBorderlessPos->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_btnFixedBorderlessPos->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-	_btnFixedBorderlessPos->setVisible(Options::borderless);
+	_btnRootWindowedMode->setText(tr("STR_FIXED_WINDOW_POSITION"));
+	_btnRootWindowedMode->setPressed(Options::rootWindowedMode);
+	_btnRootWindowedMode->onMouseClick((ActionHandler)&OptionsVideoState::btnRootWindowedModeClick);
+	_btnRootWindowedMode->setTooltip("STR_FIXED_WINDOW_POSITION_DESC");
+	_btnRootWindowedMode->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
+	_btnRootWindowedMode->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
 	
 	_txtLanguage->setText(tr("STR_DISPLAY_LANGUAGE"));
 	
@@ -518,8 +516,6 @@ void OptionsVideoState::updateDisplayMode(Action *)
 	default:
 		break;
 	}
-
-	_btnFixedBorderlessPos->setVisible(Options::borderless);
 }
 
 /**
@@ -545,15 +541,15 @@ void OptionsVideoState::btnLockMouseClick(Action *)
  * Ask user where he wants to root screen.
  * @param action Pointer to an action.
  */
-void OptionsVideoState::btnFixedBorderlessPosClick(Action *)
+void OptionsVideoState::btnRootWindowedModeClick(Action *)
 {
-	if ((SDL_GrabMode)_btnFixedBorderlessPos->getPressed())
+	if (_btnRootWindowedMode->getPressed())
 	{
-		_game->pushState(new SetBorderlessRootState(_origin, this));
+		_game->pushState(new SetWindowedRootState(_origin, this));
 	}
 	else
 	{
-		Options::newBorderlessRootMode = false;
+		Options::rootWindowedMode = false;
 	}
 }
 
@@ -607,9 +603,9 @@ void OptionsVideoState::handle(Action *action)
 /**
  * Unpresses Fixed Borderless Pos button
  */
-void OptionsVideoState::unpressFixedBorderlessPos()
+void OptionsVideoState::unpressRootWindowedMode()
 {
-	_btnFixedBorderlessPos->setPressed(false);
+	_btnRootWindowedMode->setPressed(false);
 }
 
 }

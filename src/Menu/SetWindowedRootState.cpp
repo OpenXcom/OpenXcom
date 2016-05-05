@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "SetBorderlessRootState.h"
+#include "SetWindowedRootState.h"
 #include <string>
 #include <sstream>
 #include "../Interface/Window.h"
@@ -37,19 +37,19 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param OptionsVideoState Options screen that originated this state.
  */
-SetBorderlessRootState::SetBorderlessRootState(OptionsOrigin origin, OptionsVideoState *optionsVideoState) : _origin(origin), _optionsVideoState(optionsVideoState)
+SetWindowedRootState::SetWindowedRootState(OptionsOrigin origin, OptionsVideoState *optionsVideoState) : _origin(origin), _optionsVideoState(optionsVideoState)
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(this, 216, 100, 52, 50, POPUP_BOTH);
 	_txtTitle = new Text(206, 20, 57, 70);
-	_txtWindowPositionNewX = new Text(160, 10, 25, 90);
-	_txtWindowPositionNewY = new Text(160, 10, 25, 100);
+	_txtWindowedModePositionX = new Text(160, 10, 25, 90);
+	_txtWindowedModePositionY = new Text(160, 10, 25, 100);
 	_btnOk = new TextButton(50, 20, 70, 120);
 	_btnCancel = new TextButton(50, 20, 200, 120);
-	_edtWindowPositionNewX = new TextEdit(this, 40, 10, 190, 90);
-	_edtWindowPositionNewY = new TextEdit(this, 40, 10, 190, 100);
+	_edtWindowedModePositionX = new TextEdit(this, 40, 10, 190, 90);
+	_edtWindowedModePositionY = new TextEdit(this, 40, 10, 190, 100);
 
 	// Set palette
 	setInterface("mainMenu", false, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : 0);
@@ -58,28 +58,28 @@ SetBorderlessRootState::SetBorderlessRootState(OptionsOrigin origin, OptionsVide
 	add(_btnOk, "confirmVideo", "mainMenu");
 	add(_btnCancel, "confirmVideo", "mainMenu");
 	add(_txtTitle, "confirmVideo", "mainMenu");
-	add(_txtWindowPositionNewX, "confirmVideo", "mainMenu");
-	add(_txtWindowPositionNewY, "confirmVideo", "mainMenu");
-	add(_edtWindowPositionNewX, "confirmVideo", "mainMenu");
-	add(_edtWindowPositionNewY, "confirmVideo", "mainMenu");
+	add(_txtWindowedModePositionX, "confirmVideo", "mainMenu");
+	add(_txtWindowedModePositionY, "confirmVideo", "mainMenu");
+	add(_edtWindowedModePositionX, "confirmVideo", "mainMenu");
+	add(_edtWindowedModePositionY, "confirmVideo", "mainMenu");
 
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setWordWrap(true);
 	_txtTitle->setText(tr("STR_DISPLAY_SET_BORDERLESS_WINDOW_POSITION"));
 
-	_txtWindowPositionNewX->setAlign(ALIGN_RIGHT);
-	_txtWindowPositionNewX->setWordWrap(true);
-	_txtWindowPositionNewX->setText(tr("STR_DISPLAY_BORDERLESS_WINDOW_POSITION_NEW_X"));
+	_txtWindowedModePositionX->setAlign(ALIGN_RIGHT);
+	_txtWindowedModePositionX->setWordWrap(true);
+	_txtWindowedModePositionX->setText(tr("STR_DISPLAY_BORDERLESS_WINDOW_POSITION_NEW_X"));
 
-	_txtWindowPositionNewY->setAlign(ALIGN_RIGHT);
-	_txtWindowPositionNewY->setWordWrap(true);
-	_txtWindowPositionNewY->setText(tr("STR_DISPLAY_BORDERLESS_WINDOW_POSITION_NEW_Y"));
+	_txtWindowedModePositionY->setAlign(ALIGN_RIGHT);
+	_txtWindowedModePositionY->setWordWrap(true);
+	_txtWindowedModePositionY->setText(tr("STR_DISPLAY_BORDERLESS_WINDOW_POSITION_NEW_Y"));
 
-	_edtWindowPositionNewX->setText(static_cast<std::wostringstream*>( &(std::wostringstream() << Options::newBorderlessModePositionX) )->str());
-	_edtWindowPositionNewX->setSignedNumerical(true);
+	_edtWindowedModePositionX->setText(static_cast<std::wostringstream*>( &(std::wostringstream() << Options::newWindowedModePositionX) )->str());
+	_edtWindowedModePositionX->setConstraint(TEC_NUMERIC);
 
-	_edtWindowPositionNewY->setText(static_cast<std::wostringstream*>( &(std::wostringstream() << Options::newBorderlessModePositionY) )->str());
-	_edtWindowPositionNewY->setSignedNumerical(true);
+	_edtWindowedModePositionY->setText(static_cast<std::wostringstream*>( &(std::wostringstream() << Options::newWindowedModePositionY) )->str());
+	_edtWindowedModePositionY->setConstraint(TEC_NUMERIC);
 
 	centerAllSurfaces();
 
@@ -87,12 +87,12 @@ SetBorderlessRootState::SetBorderlessRootState(OptionsOrigin origin, OptionsVide
 	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&SetBorderlessRootState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&SetBorderlessRootState::btnOkClick, Options::keyOk);
+	_btnOk->onMouseClick((ActionHandler)&SetWindowedRootState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&SetWindowedRootState::btnOkClick, Options::keyOk);
 
 	_btnCancel->setText(tr("STR_CANCEL"));
-	_btnCancel->onMouseClick((ActionHandler)&SetBorderlessRootState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&SetBorderlessRootState::btnCancelClick, Options::keyCancel);
+	_btnCancel->onMouseClick((ActionHandler)&SetWindowedRootState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&SetWindowedRootState::btnCancelClick, Options::keyCancel);
 
 	if (_origin == OPT_BATTLESCAPE)
 	{
@@ -103,7 +103,7 @@ SetBorderlessRootState::SetBorderlessRootState(OptionsOrigin origin, OptionsVide
 /**
  *
  */
-SetBorderlessRootState::~SetBorderlessRootState()
+SetWindowedRootState::~SetWindowedRootState()
 {
 }
 
@@ -111,20 +111,20 @@ SetBorderlessRootState::~SetBorderlessRootState()
  * Roots borderless window
  * @param action Pointer to an action.
  */
-void SetBorderlessRootState::btnOkClick(Action *)
+void SetWindowedRootState::btnOkClick(Action *)
 {
 	std::wstringstream convStreamX, convStreamY;
-	int newBorderlessModePositionX = 0, newBorderlessModePositionY = 0;
+	int newWindowedModePositionX = 0, newWindowedModePositionY = 0;
 
-	convStreamX << _edtWindowPositionNewX->getText();
-	convStreamY << _edtWindowPositionNewY->getText();
+	convStreamX << _edtWindowedModePositionX->getText();
+	convStreamY << _edtWindowedModePositionY->getText();
 
-	convStreamX >> newBorderlessModePositionX;
-	convStreamY >> newBorderlessModePositionY;
+	convStreamX >> newWindowedModePositionX;
+	convStreamY >> newWindowedModePositionY;
 
-	Options::newBorderlessRootMode = true;
-	Options::newBorderlessModePositionX = newBorderlessModePositionX;
-	Options::newBorderlessModePositionY = newBorderlessModePositionY;
+	Options::newRootWindowedMode = true;
+	Options::newWindowedModePositionX = newWindowedModePositionX;
+	Options::newWindowedModePositionY = newWindowedModePositionY;
 
 	_game->popState();
 }
@@ -133,9 +133,9 @@ void SetBorderlessRootState::btnOkClick(Action *)
  * Cancels borderless window rooting
  * @param action Pointer to an action.
  */
-void SetBorderlessRootState::btnCancelClick(Action *)
+void SetWindowedRootState::btnCancelClick(Action *)
 {
-	_optionsVideoState->unpressFixedBorderlessPos();
+	_optionsVideoState->unpressRootWindowedMode();
 
 	_game->popState();
 }
