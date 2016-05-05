@@ -65,15 +65,15 @@ SetWindowedRootState::SetWindowedRootState(OptionsOrigin origin, OptionsVideoSta
 
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setWordWrap(true);
-	_txtTitle->setText(tr("STR_DISPLAY_SET_BORDERLESS_WINDOW_POSITION"));
+	_txtTitle->setText(tr("STR_DISPLAY_SET_WINDOW_POSITION"));
 
 	_txtWindowedModePositionX->setAlign(ALIGN_RIGHT);
 	_txtWindowedModePositionX->setWordWrap(true);
-	_txtWindowedModePositionX->setText(tr("STR_DISPLAY_BORDERLESS_WINDOW_POSITION_NEW_X"));
+	_txtWindowedModePositionX->setText(tr("STR_DISPLAY_WINDOW_POSITION_NEW_X"));
 
 	_txtWindowedModePositionY->setAlign(ALIGN_RIGHT);
 	_txtWindowedModePositionY->setWordWrap(true);
-	_txtWindowedModePositionY->setText(tr("STR_DISPLAY_BORDERLESS_WINDOW_POSITION_NEW_Y"));
+	_txtWindowedModePositionY->setText(tr("STR_DISPLAY_WINDOW_POSITION_NEW_Y"));
 
 	_edtWindowedModePositionX->setText(static_cast<std::wostringstream*>( &(std::wostringstream() << Options::newWindowedModePositionX) )->str());
 	_edtWindowedModePositionX->setConstraint(TEC_NUMERIC);
