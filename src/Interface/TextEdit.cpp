@@ -376,29 +376,19 @@ bool TextEdit::exceedsMaxWidth(wchar_t c)
 /**
  * Checks if input key character is valid to
  * be inserted at caret position in the text edit
- * without breaking the constraint and wi
+ * without breaking the text edit constraint.
  * @param key Key code.
  * @return True if character can be inserted, False if it cannot.
  */
 bool TextEdit::isValidChar(Uint16 key)
 {
-			// If constraint is "signed numeric", need to check:
-			// - user does not input a character before '-' or '+'
-			// - user enter either figure anywhere, or a sign at first position
-			//if (((_textEditConstraint == TEC_NUMERIC && key >= L'0' && key <= L'9') ||
-			//	(_textEditConstraint == TEC_SIGNED_NUMERIC && 
-			//	    (_caretPos > 0 || (_value[0] != L'+' && _value[0] != L'-')) &&
-			//		((key >= L'0' && key <= L'9') || (_caretPos == 0 && (key == L'+' || key == L'-')))) ||
-			//	(_textEditConstraint == TEC_NONE && ((key >= L' ' && key <= L'~') || key >= 160))) &&
-			//	!exceedsMaxWidth((wchar_t)key))
-
 	switch (_textEditConstraint)
 	{
 	case TEC_NUMERIC_POSITIVE:
 		return key >= L'0' && key <= L'9';
 		break;
 
-	// If constraint is "signed numeric", need to check:
+	// If constraint is "(signed) numeric", need to check:
 	// - user does not input a character before '-' or '+'
 	// - user enter either figure anywhere, or a sign at first position
 	case TEC_NUMERIC:
