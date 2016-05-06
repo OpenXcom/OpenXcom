@@ -239,10 +239,10 @@ void MeleeAttackBState::resolveHit()
 			_target->setSpawnUnit(_ammo->getRules()->getZombieUnit());
 		}
 
+		// assume rifle butt to begin with.
 		ItemDamageType type = DT_STUN;
 		int power = _weapon->getRules()->getMeleePower();
-
-		// special code for attacking with a rifle butt.
+		// override it as needed.
 		if (_weapon->getRules()->getBattleType() == BT_MELEE && _ammo)
 		{
 			type = _ammo->getRules()->getDamageType();;
