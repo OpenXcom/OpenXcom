@@ -55,9 +55,7 @@
 	Var XBrowseTFTD
 	
 	Var StartMenuFolder
-	Var STEAM_UFO_DIR
 	Var UFO_DIR
-	Var STEAM_TFTD_DIR
 	Var TFTD_DIR
 
 ;--------------------------------
@@ -338,14 +336,6 @@ Section /o "$(SETUP_PORTABLE)" SecPortable
 
 SectionEnd
 
-Section /o "$(SETUP_STEAM)" SecSteam
-
-	SectionIn RO
-	
-	Rename "$INSTDIR\OpenXcom.exe" "$INSTDIR\dosbox.exe"
-
-SectionEnd
-
 Section /o "$(SETUP_DESKTOP)" SecDesktop
 
 	SetOutPath "$INSTDIR"
@@ -362,7 +352,6 @@ SectionEnd
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecMain} $(SETUP_GAME_DESC)
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecPatch} $(SETUP_PATCH_DESC)
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecPortable} $(SETUP_PORTABLE_DESC)
-		!insertmacro MUI_DESCRIPTION_TEXT ${SecSteam} $(SETUP_STEAM_DESC)
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecDesktop} $(SETUP_DESKTOP_DESC)
 	!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
@@ -379,9 +368,7 @@ ${EndIf}
 	StrCpy $StartMenuFolder "${GAME_NAME}"
 	
 	; Check for existing X-COM installs
-	StrCpy $STEAM_UFO_DIR ""
 	StrCpy $UFO_DIR ""
-	StrCpy $STEAM_TFTD_DIR ""
 	StrCpy $TFTD_DIR ""
 	
 	Call ScanSteam
@@ -431,17 +418,13 @@ Function ScanSteamLibrary
 	StrCpy $R0 "$R1\steamapps\common\XCom UFO Defense\XCOM"
 	IfFileExists "$R0\*.*" steam_ufo_yes steam_ufo_no
 	steam_ufo_yes:
-	StrCpy $STEAM_UFO_DIR "$R1\steamapps\common\XCom UFO Defense"
 	StrCpy $UFO_DIR $R0
-	SectionSetFlags ${SecSteam} 0
 	steam_ufo_no:
 	
 	StrCpy $R0 "$R1\steamapps\common\X-COM Terror from the Deep\TFD"
 	IfFileExists "$R0\*.*" steam_tftd_yes steam_tftd_no
 	steam_tftd_yes:
-	StrCpy $STEAM_TFTD_DIR "$R1\steamapps\common\X-COM Terror from the Deep"
 	StrCpy $TFTD_DIR $R0
-	SectionSetFlags ${SecSteam} 0
 	steam_tftd_no:
 
 FunctionEnd

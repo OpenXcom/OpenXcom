@@ -20,8 +20,6 @@ ${LangFileString} SETUP_PATCH "Data Patch"
 ${LangFileString} SETUP_PATCH_DESC "Fixes errors in the X-COM 1 data. Recommended for first installations. (requires an internet connection)"
 ${LangFileString} SETUP_PORTABLE "Portable Installation"
 ${LangFileString} SETUP_PORTABLE_DESC "Puts all ${GAME_NAME} files in the same folder, making a portable installation."
-${LangFileString} SETUP_STEAM "Launch from Steam"
-${LangFileString} SETUP_STEAM_DESC "Launches ${GAME_NAME} from Steam in place of your X-COM games."
 ${LangFileString} SETUP_DESKTOP "Desktop Shortcut"
 ${LangFileString} SETUP_DESKTOP_DESC "Creates a shortcut in the desktop to play ${GAME_NAME}."
 
