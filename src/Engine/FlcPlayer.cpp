@@ -20,7 +20,9 @@
 /*
  * Based on http://www.libsdl.org/projects/flxplay/
  */
-
+#ifdef _MSC_VER
+#define _SCL_SECURE_NO_WARNINGS
+#endif
 #include "FlcPlayer.h"
 #include <algorithm>
 #include <cassert>
@@ -28,7 +30,6 @@
 #include <cmath>
 #include <SDL_mixer.h>
 #include <fstream>
-
 #include "Logger.h"
 #include "Screen.h"
 #include "Surface.h"

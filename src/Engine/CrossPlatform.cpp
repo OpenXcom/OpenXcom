@@ -16,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
 #include "CrossPlatform.h"
 #include <exception>
 #include <algorithm>
@@ -31,9 +34,6 @@
 #include "Options.h"
 #include "Language.h"
 #ifdef _WIN32
-#ifdef _MSC_VER
-#define _CRT_SECURE_NO_WARNINGS
-#endif
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -959,7 +959,8 @@ void stackTrace(void *ctx)
 	frame.AddrStack.Offset = context.IntSp;
 	frame.AddrStack.Mode = AddrModeFlat;
 #else
-	#warning Stack trace not supported on this architecture
+	// TODO: Stack trace not supported on this architecture
+	Log(LOG_FATAL) << "Unfortunately, no stack trace information is available";
 	return;
 #endif
 	SYMBOL_INFO *symbol = (SYMBOL_INFO *)malloc(sizeof(SYMBOL_INFO) + (MAX_SYMBOL_LENGTH - 1) * sizeof(TCHAR));
