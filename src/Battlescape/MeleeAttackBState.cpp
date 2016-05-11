@@ -23,7 +23,7 @@
 #include "TileEngine.h"
 #include "Map.h"
 #include "Camera.h"
-#include "AlienBAIState.h"
+#include "AIModule.h"
 #include "../Savegame/Tile.h"
 #include "../Engine/RNG.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -107,7 +107,7 @@ void MeleeAttackBState::init()
 	}
 
 	
-	AlienBAIState *ai = dynamic_cast<AlienBAIState*>(_unit->getCurrentAIState());
+	AIModule *ai = _unit->getAIModule();
 
 	if (_unit->getFaction() == _parent->getSave()->getSide() &&
 		_unit->getFaction() != FACTION_PLAYER &&

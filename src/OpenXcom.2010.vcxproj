@@ -254,7 +254,7 @@
     <ClCompile Include="Battlescape\ActionMenuState.cpp" />
     <ClCompile Include="Battlescape\AlienBAIState.cpp" />
     <ClCompile Include="Battlescape\AliensCrashState.cpp" />
-    <ClCompile Include="Battlescape\BattleAIState.cpp" />
+    <ClCompile Include="Battlescape\AIModule.cpp" />
     <ClCompile Include="Battlescape\BattlescapeGame.cpp" />
     <ClCompile Include="Battlescape\BattlescapeGenerator.cpp" />
     <ClCompile Include="Battlescape\BattlescapeMessage.cpp" />
@@ -575,7 +575,7 @@
     <ClInclude Include="Battlescape\ActionMenuState.h" />
     <ClInclude Include="Battlescape\AlienBAIState.h" />
     <ClInclude Include="Battlescape\AliensCrashState.h" />
-    <ClInclude Include="Battlescape\BattleAIState.h" />
+    <ClInclude Include="Battlescape\AIModule.h" />
     <ClInclude Include="Battlescape\BattlescapeGame.h" />
     <ClInclude Include="Battlescape\BattlescapeGenerator.h" />
     <ClInclude Include="Battlescape\BattlescapeMessage.h" />

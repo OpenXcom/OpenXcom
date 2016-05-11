@@ -24,7 +24,7 @@
 #include "../Engine/Options.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/BattlescapeGame.h"
-#include "../Battlescape/BattleAIState.h"
+#include "../Battlescape/AIModule.h"
 #include "Soldier.h"
 #include "../Mod/Armor.h"
 #include "../Mod/Unit.h"
@@ -411,9 +411,9 @@ YAML::Node BattleUnit::save() const
 	node["turnsSinceSpotted"] = _turnsSinceSpotted;
 	node["rankInt"] = _rankInt;
 	node["moraleRestored"] = _moraleRestored;
-	if (getCurrentAIState())
+	if (getAIModule())
 	{
-		node["AI"] = getCurrentAIState()->save();
+		node["AI"] = getAIModule()->save();
 	}
 	node["killedBy"] = (int)_killedBy;
 	if (_originalFaction != _faction)
@@ -1784,14 +1784,14 @@ void BattleUnit::think(BattleAction *action)
  * Changes the current AI state.
  * @param aiState Pointer to AI state.
  */
-void BattleUnit::setAIState(BattleAIState *aiState)
+void BattleUnit::setAIModule(AIModule *ai)
 {
 	if (_currentAIState)
 	{
 		_currentAIState->exit();
 		delete _currentAIState;
 	}
-	_currentAIState = aiState;
+	_currentAIState = ai;
 	_currentAIState->enter();
 }
 
@@ -1799,7 +1799,7 @@ void BattleUnit::setAIState(BattleAIState *aiState)
  * Returns the current AI state.
  * @return Pointer to AI state.
  */
-BattleAIState *BattleUnit::getCurrentAIState() const
+AIModule *BattleUnit::getAIModule() const
 {
 	return _currentAIState;
 }
