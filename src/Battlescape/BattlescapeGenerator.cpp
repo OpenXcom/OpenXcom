@@ -22,6 +22,7 @@
 #include "BattlescapeGenerator.h"
 #include "TileEngine.h"
 #include "Inventory.h"
+#include "AIModule.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
@@ -34,12 +35,17 @@
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/Node.h"
+#include "../Savegame/Vehicle.h"
+#include "../Savegame/MissionSite.h"
+#include "../Savegame/AlienBase.h"
+#include "../Savegame/EquipmentLayoutItem.h"
 #include "../Engine/Game.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/FileMap.h"
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Exception.h"
+#include "../Engine/Logger.h"
 #include "../Mod/MapBlock.h"
 #include "../Mod/MapDataSet.h"
 #include "../Mod/RuleUfo.h"
@@ -54,13 +60,6 @@
 #include "../Mod/AlienDeployment.h"
 #include "../Mod/RuleBaseFacility.h"
 #include "../Mod/Texture.h"
-#include "../Savegame/Vehicle.h"
-#include "../Savegame/MissionSite.h"
-#include "../Savegame/AlienBase.h"
-#include "../Savegame/EquipmentLayoutItem.h"
-#include "CivilianBAIState.h"
-#include "AlienBAIState.h"
-#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -838,7 +837,8 @@ BattleUnit *BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 
 		if (!rule->getBuiltInWeapons().empty())
 		{
-			for (std::vector<std::string>::const_iterator i = rule->getBuiltInWeapons().begin(); i != rule->getBuiltInWeapons().end(); ++i)
+			// not gonna randomize what weapon set tanks use, don't want to confuse players.
+			for (std::vector<std::string>::const_iterator i = rule->getBuiltInWeapons().front().begin(); i != rule->getBuiltInWeapons().front().end(); ++i)
 			{
 				RuleItem *ruleItem = _game->getMod()->getItem(*i);
 				if (ruleItem)
@@ -1024,7 +1024,11 @@ void BattlescapeGenerator::deployAliens(AlienDeployment *deployment)
 				// Built in weapons: the unit has this weapon regardless of loadout or what have you.
 				if (!rule->getBuiltInWeapons().empty())
 				{
-					for (std::vector<std::string>::const_iterator j = rule->getBuiltInWeapons().begin(); j != rule->getBuiltInWeapons().end(); ++j)
+					if (itemLevel >= rule->getBuiltInWeapons().size())
+					{
+						itemLevel = rule->getBuiltInWeapons().size() -1;
+					}
+					for (std::vector<std::string>::const_iterator j = rule->getBuiltInWeapons().at(itemLevel).begin(); j != rule->getBuiltInWeapons().at(itemLevel).end(); ++j)
 					{
 						RuleItem *ruleItem = _game->getMod()->getItem(*j);
 						if (ruleItem)
@@ -1117,7 +1121,7 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 
 	if (node && _save->setUnitPosition(unit, node->getPosition()))
 	{
-		unit->setAIState(new AlienBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
+		unit->setAIModule(new AIModule(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setRankInt(alienRank);
 		unit->setSpecialWeapon(_save, _game->getMod());
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
@@ -1139,7 +1143,7 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 		// doesn't mean we can't ruin Tornis's day: spawn as many aliens as possible.
 		if (_game->getSavedGame()->getDifficulty() >= DIFF_SUPERHUMAN && placeUnitNearFriend(unit))
 		{
-			unit->setAIState(new AlienBAIState(_game->getSavedGame()->getSavedBattle(), unit, 0));
+			unit->setAIModule(new AIModule(_game->getSavedGame()->getSavedBattle(), unit, 0));
 			unit->setRankInt(alienRank);
 			unit->setSpecialWeapon(_save, _game->getMod());
 			int dir = _save->getTileEngine()->faceWindow(unit->getPosition());
@@ -1176,7 +1180,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 	if (node)
 	{
 		_save->setUnitPosition(unit, node->getPosition());
-		unit->setAIState(new CivilianBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
+		unit->setAIModule(new AIModule(_save, unit, node));
 		unit->setDirection(RNG::generate(0,7));
 
 		// we only add a unit if it has a node to spawn on.
@@ -1185,7 +1189,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 	}
 	else if (placeUnitNearFriend(unit))
 	{
-		unit->setAIState(new CivilianBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
+		unit->setAIModule(new AIModule(_save, unit, node));
 		unit->setDirection(RNG::generate(0,7));
 		_save->getUnits()->push_back(unit);
 	}
@@ -1194,7 +1198,6 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 		delete unit;
 		unit = 0;
 	}
-
 	return unit;
 }
 
@@ -1752,17 +1755,55 @@ void BattlescapeGenerator::deployCivilians(int max)
 	if (max)
 	{
 		// inevitably someone will point out that ufopaedia says 0-16 civilians.
-		// to that person: i looked at the code and it says otherwise.
+		// to that person: this is only partially true;
 		// 0 civilians would only be a possibility if there were already 80 units,
-		// or no spawn nodes for civilians.
+		// or no spawn nodes for civilians, but it would always try to spawn at least 8.
 		int number = RNG::generate(max/2, max);
 
 		if (number > 0)
 		{
+			int month;
+			if (_game->getSavedGame()->getMonthsPassed() != -1)
+			{
+				month =
+				((size_t) _game->getSavedGame()->getMonthsPassed()) > _game->getMod()->getAlienItemLevels().size() - 1 ?  // if
+				_game->getMod()->getAlienItemLevels().size() - 1 : // then
+				_game->getSavedGame()->getMonthsPassed() ;  // else
+			}
+			else
+			{
+				month = _alienItemLevel;
+			}
 			for (int i = 0; i < number; ++i)
 			{
 				size_t pick = RNG::generate(0, _terrain->getCivilianTypes().size() -1);
-				addCivilian(_game->getMod()->getUnit(_terrain->getCivilianTypes().at(pick)));
+				Unit* rule = _game->getMod()->getUnit(_terrain->getCivilianTypes().at(pick));
+				BattleUnit* civ = addCivilian(rule);
+				if (civ)
+				{
+					size_t itemLevel = (size_t)(_game->getMod()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
+					// Built in weapons: civilians may have levelled item lists with randomized distributions
+					// following the same basic rules as the alien item levels.
+					if (!rule->getBuiltInWeapons().empty())
+					{
+						if (itemLevel >= rule->getBuiltInWeapons().size())
+						{
+							itemLevel = rule->getBuiltInWeapons().size() -1;
+						}
+						for (std::vector<std::string>::const_iterator j = rule->getBuiltInWeapons().at(itemLevel).begin(); j != rule->getBuiltInWeapons().at(itemLevel).end(); ++j)
+						{
+							RuleItem *ruleItem = _game->getMod()->getItem(*j);
+							if (ruleItem)
+							{
+								BattleItem *item = new BattleItem(ruleItem, _save->getCurrentItemId());
+								if (!addItem(item, civ))
+								{
+									delete item;
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}
