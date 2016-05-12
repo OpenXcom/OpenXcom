@@ -101,8 +101,7 @@ set ( battlescape_src
   Battlescape/AlienBAIState.h
   Battlescape/AliensCrashState.cpp
   Battlescape/AliensCrashState.h
-  Battlescape/BattleAIState.cpp
-  Battlescape/BattleAIState.h
+  Battlescape/AIModule.cpp
   Battlescape/BattleState.cpp
   Battlescape/BattleState.h
   Battlescape/BattlescapeGame.cpp
