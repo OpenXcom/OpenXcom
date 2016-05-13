@@ -943,6 +943,9 @@
     <ClCompile Include="Battlescape\AIModule.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\SetWindowedRootState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1925,6 +1928,9 @@
     </ClInclude>
     <ClInclude Include="Battlescape\AIModule.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\SetWindowedRootState.h">
+      <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
