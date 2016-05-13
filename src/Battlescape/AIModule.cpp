@@ -167,7 +167,14 @@ void AIModule::think(BattleAction *action)
 
 	if (_traceAI)
 	{
-		Log(LOG_INFO) << "Unit has " << _visibleEnemies << "/" << _knownEnemies << " known enemies visible, " << _spottingEnemies << " of whom are spotting him. ";
+		if (_unit->getFaction() == FACTION_HOSTILE)
+		{
+			Log(LOG_INFO) << "Unit has " << _visibleEnemies << "/" << _knownEnemies << " known enemies visible, " << _spottingEnemies << " of whom are spotting him. ";
+		}
+		else
+		{
+			Log(LOG_INFO) << "Civilian Unit has " << _visibleEnemies << " enemies visible, " << _spottingEnemies << " of whom are spotting him. ";
+		}
 		std::string AIMode;
 		switch (_AIMode)
 		{
@@ -990,11 +997,15 @@ void AIModule::setupEscape()
 int AIModule::countKnownTargets() const
 {
 	int knownEnemies = 0;
-	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+
+	if (_unit->getFaction() == FACTION_HOSTILE)
 	{
-		if (validTarget(*i, true, _unit->getFaction() == FACTION_HOSTILE))
+		for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
-			++knownEnemies;
+			if (validTarget(*i, true, true))
+			{
+				++knownEnemies;
+			}
 		}
 	}
 	return knownEnemies;
@@ -1201,7 +1212,7 @@ void AIModule::evaluateAIMode()
 	{
 		escapeOdds = 12;
 	}
-	if (_unit->getTimeUnits() > _unit->getBaseStats()->tu / 2 || _unit->getCharging())
+	if (_unit->getFaction() == FACTION_HOSTILE && (_unit->getTimeUnits() > _unit->getBaseStats()->tu / 2 || _unit->getCharging()))
 	{
 		escapeOdds = 5;
 	}
@@ -1250,7 +1261,7 @@ void AIModule::evaluateAIMode()
 			}
 		}
 	}
-	else
+	else if (_unit->getFaction() == FACTION_HOSTILE)
 	{
 		combatOdds = 0;
 		escapeOdds = 0;
@@ -1353,6 +1364,12 @@ void AIModule::evaluateAIMode()
 		ambushOdds *= 0.6;
 	}
 
+	// no weapons? don't pick combat or ambush
+	if (!_melee && !_rifle && !_blaster)
+	{
+		combatOdds = 0;
+		ambushOdds = 0;
+	}
 	// generate a random number to represent our decision.
 	int decision = RNG::generate(1, std::max(1, patrolOdds + ambushOdds + escapeOdds + combatOdds));
 
@@ -1380,7 +1397,7 @@ void AIModule::evaluateAIMode()
 	}
 
 	// if the aliens are cheating, or the unit is charging, enforce combat as a priority.
-	if (_save->isCheating() || _unit->getCharging() != 0)
+	if ((_unit->getFaction() == FACTION_HOSTILE && _save->isCheating()) || _unit->getCharging() != 0)
 	{
 		_AIMode = AI_COMBAT;
 	}
@@ -1993,7 +2010,7 @@ bool AIModule::validTarget(BattleUnit *unit, bool assessDanger, bool includeCivs
 		// ignore units that are dead/unconscious
 	if (unit->isOut() ||
 		// they must be units that we "know" about
-		_intelligence < unit->getTurnsSinceSpotted() ||
+		(_unit->getFaction() == FACTION_HOSTILE && _intelligence < unit->getTurnsSinceSpotted()) ||
 		// they haven't been grenaded
 		(assessDanger && unit->getTile()->getDangerous()) ||
 		// and they mustn't be on our side
