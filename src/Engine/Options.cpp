@@ -515,12 +515,15 @@ bool init(int argc, char *argv[])
 	s += "openxcom.log";
 	Logger::logFile() = s;
 	FILE *file = fopen(Logger::logFile().c_str(), "w");
-	if (!file)
+	if (file)
 	{
-		throw Exception(s + " not found");
+		fflush(file);
+		fclose(file);
 	}
-	fflush(file);
-	fclose(file);
+	else
+	{
+		Log(LOG_WARNING) << "Couldn't create log file, switching to stderr";
+	}
 	Log(LOG_INFO) << "Data folder is: " << _dataFolder;
 	Log(LOG_INFO) << "Data search is: ";
 	for (std::vector<std::string>::iterator i = _dataList.begin(); i != _dataList.end(); ++i)
@@ -531,14 +534,14 @@ bool init(int argc, char *argv[])
 	Log(LOG_INFO) << "Config folder is: " << _configFolder;
 	Log(LOG_INFO) << "Options loaded successfully.";
 
-	// pick up stuff in common
-	FileMap::load("common", CrossPlatform::searchDataFolder("common"), true);
-
 	return true;
 }
 
 void updateMods()
 {
+	// pick up stuff in common before-hand
+	FileMap::load("common", CrossPlatform::searchDataFolder("common"), true);
+
 	std::string modPath = CrossPlatform::searchDataFolder("standard");
 	Log(LOG_INFO) << "Scanning standard mods in '" << modPath << "'...";
 	_scanMods(modPath);
@@ -736,7 +739,7 @@ void mapResources()
 		std::set<std::string> circDepCheck;
 		_loadMod(modInfo, circDepCheck);
 	}
-	// pick up stuff in common
+	// TODO: Figure out why we still need to check common here
 	FileMap::load("common", CrossPlatform::searchDataFolder("common"), true);
 	Log(LOG_INFO) << "Resources files mapped successfully.";
 }

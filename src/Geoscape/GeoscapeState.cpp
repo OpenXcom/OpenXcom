@@ -524,6 +524,10 @@ void GeoscapeState::init()
 			_game->getMod()->playMusic("GMGEO");
 		}
 	}
+	else
+	{
+		_game->getMod()->playMusic("GMINTER");
+	}
 	_globe->unsetNewBaseHover();
 
 		// run once

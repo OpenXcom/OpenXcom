@@ -1752,14 +1752,14 @@ void BattlescapeState::saveVoxelView()
 
 	double ang_x,ang_y;
 	bool black;
-	Tile *tile;
+	Tile *tile = 0;
 	std::ostringstream ss;
 	std::vector<unsigned char> image;
 	int test;
 	Position originVoxel = getBattleGame()->getTileEngine()->getSightOriginVoxel(bu);
 
 	Position targetVoxel,hitPos;
-	double dist;
+	double dist = 0;
 	bool _debug = _save->getDebugMode();
 	double dir = ((float)bu->getDirection()+4)/4*M_PI;
 	image.clear();

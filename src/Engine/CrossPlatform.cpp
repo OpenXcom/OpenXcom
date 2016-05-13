@@ -16,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
 #include "CrossPlatform.h"
 #include <exception>
 #include <algorithm>
@@ -23,6 +26,7 @@
 #include <string>
 #include <locale>
 #include <stdint.h>
+#include <time.h>
 #include <sys/stat.h>
 #include "../dirent.h"
 #include "Logger.h"
@@ -914,13 +918,14 @@ void stackTrace(void *ctx)
 	}
 	else
 	{
-		// TODO: Doesn't work on MinGW
-#if 0
+#ifdef _MSC_VER
 		memset(&context, 0, sizeof(CONTEXT));
 		context.ContextFlags = CONTEXT_FULL;
 		RtlCaptureContext(&context);
-#endif
+#else
+		// TODO: Doesn't work on MinGW
 		return;
+#endif
 	}
 	HANDLE thread = GetCurrentThread();
 	HANDLE process = GetCurrentProcess();
@@ -954,7 +959,8 @@ void stackTrace(void *ctx)
 	frame.AddrStack.Offset = context.IntSp;
 	frame.AddrStack.Mode = AddrModeFlat;
 #else
-	#warning Stack trace not supported on this architecture
+	// TODO: Stack trace not supported on this architecture
+	Log(LOG_FATAL) << "Unfortunately, no stack trace information is available";
 	return;
 #endif
 	SYMBOL_INFO *symbol = (SYMBOL_INFO *)malloc(sizeof(SYMBOL_INFO) + (MAX_SYMBOL_LENGTH - 1) * sizeof(TCHAR));
@@ -1010,22 +1016,19 @@ void stackTrace(void *ctx)
 }
 
 /**
- * Generates a quick timestamp.
- * @return String in D-M-Y_H_M_S format.
+ * Generates a timestamp of the current time.
+ * @return String in D-M-Y_H-M-S format.
  */
-std::string timestamp()
+std::string now()
 {
 	const int MAX_LEN = 25, MAX_RESULT = 80;
+	char result[MAX_RESULT] = { 0 };
 #ifdef _WIN32
 	char date[MAX_LEN], time[MAX_LEN];
-	if (GetDateFormatA(LOCALE_INVARIANT, 0, 0,
-		"dd'-'MM'-'yyyy", date, MAX_LEN) == 0)
-		return "Error in Now()";
-	if (GetTimeFormatA(LOCALE_INVARIANT, TIME_FORCE24HOURFORMAT, 0,
-		"HH'-'mm'-'ss", time, MAX_LEN) == 0)
-		return "Error in Now()";
-
-	char result[MAX_RESULT] = { 0 };
+	if (GetDateFormatA(LOCALE_INVARIANT, 0, 0, "dd'-'MM'-'yyyy", date, MAX_LEN) == 0)
+		return "00-00-0000";
+	if (GetTimeFormatA(LOCALE_INVARIANT, TIME_FORCE24HOURFORMAT, 0, "HH'-'mm'-'ss", time, MAX_LEN) == 0)
+		return "00-00-00";
 	sprintf(result, "%s_%s", date, time);
 #else
 	char buffer[MAX_LEN];
@@ -1034,7 +1037,6 @@ std::string timestamp()
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
 	strftime(buffer, MAX_LEN, "%d-%m-%Y_%H-%M-%S", timeinfo);
-	char result[MAX_RESULT] = { 0 };
 	sprintf(result, "%s", buffer);
 #endif
 	return result;
@@ -1062,7 +1064,7 @@ void crashDump(void *ex, const std::string &err)
 	Log(LOG_FATAL) << "A fatal error has occurred: " << error.str();
 	stackTrace(exception->ContextRecord);
 	std::string dumpName = Options::getUserFolder();
-	dumpName += timestamp() + ".dmp";
+	dumpName += now() + ".dmp";
 	HANDLE dumpFile = CreateFileA(dumpName.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	MINIDUMP_EXCEPTION_INFORMATION exceptionInformation;
 	exceptionInformation.ThreadId = GetCurrentThreadId();
@@ -1092,7 +1094,7 @@ void crashDump(void *ex, const std::string &err)
 	std::ostringstream msg;
 	msg << "OpenXcom has crashed: " << error.str() << std::endl;
 	msg << "Extra information has been saved to openxcom.log." << std::endl;
-	msg << "If this was unexpected, please report this to the developers.";
+	msg << "If this error was unexpected, please report it to the developers.";
 	showError(msg.str());
 }
 

@@ -31,7 +31,7 @@
 #include "../Engine/Sound.h"
 #include "../Mod/RuleItem.h"
 #include "../Engine/Options.h"
-#include "AlienBAIState.h"
+#include "AIModule.h"
 #include "Camera.h"
 #include "Explosion.h"
 #include "BattlescapeState.h"
@@ -606,10 +606,10 @@ void ProjectileFlyBState::think()
 							}
 							if (victim->getFaction() == FACTION_HOSTILE)
 							{
-								AlienBAIState *aggro = dynamic_cast<AlienBAIState*>(victim->getCurrentAIState());
-								if (aggro != 0)
+								AIModule *ai = victim->getAIModule();
+								if (ai != 0)
 								{
-									aggro->setWasHitBy(_unit);
+									ai->setWasHitBy(_unit);
 									_unit->setTurnsSinceSpotted(0);
 								}
 							}

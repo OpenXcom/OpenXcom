@@ -1,671 +1,344 @@
 set ( root_src
-  dirent.h
-  fmath.h
   lodepng.cpp
-  lodepng.h
   main.cpp
-  version.h
 )
 
 set ( basescape_src
   Basescape/BaseInfoState.cpp
-  Basescape/BaseInfoState.h
   Basescape/BaseView.cpp
-  Basescape/BaseView.h
   Basescape/BasescapeState.cpp
-  Basescape/BasescapeState.h
   Basescape/BuildFacilitiesState.cpp
-  Basescape/BuildFacilitiesState.h
   Basescape/CraftArmorState.cpp
-  Basescape/CraftArmorState.h
   Basescape/CraftEquipmentState.cpp
-  Basescape/CraftEquipmentState.h
   Basescape/CraftInfoState.cpp
-  Basescape/CraftInfoState.h
   Basescape/CraftSoldiersState.cpp
-  Basescape/CraftSoldiersState.h
   Basescape/CraftWeaponsState.cpp
-  Basescape/CraftWeaponsState.h
   Basescape/CraftsState.cpp
-  Basescape/CraftsState.h
   Basescape/DismantleFacilityState.cpp
-  Basescape/DismantleFacilityState.h
   Basescape/ManageAlienContainmentState.cpp
-  Basescape/ManageAlienContainmentState.h
   Basescape/ManufactureInfoState.cpp
-  Basescape/ManufactureInfoState.h
   Basescape/ManufactureStartState.cpp
-  Basescape/ManufactureStartState.h
   Basescape/ManufactureState.cpp
-  Basescape/ManufactureState.h
   Basescape/MiniBaseView.cpp
-  Basescape/MiniBaseView.h
   Basescape/MonthlyCostsState.cpp
-  Basescape/MonthlyCostsState.h
   Basescape/NewManufactureListState.cpp
-  Basescape/NewManufactureListState.h
   Basescape/NewResearchListState.cpp
-  Basescape/NewResearchListState.h
   Basescape/PlaceFacilityState.cpp
-  Basescape/PlaceFacilityState.h
   Basescape/PlaceLiftState.cpp
-  Basescape/PlaceLiftState.h
   Basescape/PlaceStartFacilityState.cpp
-  Basescape/PlaceStartFacilityState.h
   Basescape/PurchaseState.cpp
-  Basescape/PurchaseState.h
   Basescape/ResearchInfoState.cpp
-  Basescape/ResearchInfoState.h
   Basescape/ResearchState.cpp
-  Basescape/ResearchState.h
   Basescape/SackSoldierState.cpp
-  Basescape/SackSoldierState.h
   Basescape/SelectStartFacilityState.cpp
-  Basescape/SelectStartFacilityState.h
   Basescape/SellState.cpp
-  Basescape/SellState.h
   Basescape/SoldierArmorState.cpp
-  Basescape/SoldierArmorState.h
   Basescape/SoldierDiaryMissionState.cpp
-  Basescape/SoldierDiaryMissionState.h
   Basescape/SoldierDiaryOverviewState.cpp
-  Basescape/SoldierDiaryOverviewState.h
   Basescape/SoldierDiaryPerformanceState.cpp
-  Basescape/SoldierDiaryPerformanceState.h
   Basescape/SoldierInfoState.cpp
-  Basescape/SoldierInfoState.h
   Basescape/SoldierMemorialState.cpp
-  Basescape/SoldierMemorialState.h
   Basescape/SoldiersState.cpp
-  Basescape/SoldiersState.h
   Basescape/StoresState.cpp
-  Basescape/StoresState.h
   Basescape/TransferBaseState.cpp
-  Basescape/TransferBaseState.h
   Basescape/TransferConfirmState.cpp
-  Basescape/TransferConfirmState.h
   Basescape/TransferItemsState.cpp
-  Basescape/TransferItemsState.h
   Basescape/TransfersState.cpp
-  Basescape/TransfersState.h
 )
 
 set ( battlescape_src
   Battlescape/AbortMissionState.cpp
-  Battlescape/AbortMissionState.h
   Battlescape/ActionMenuItem.cpp
-  Battlescape/ActionMenuItem.h
   Battlescape/ActionMenuState.cpp
-  Battlescape/ActionMenuState.h
   Battlescape/AlienBAIState.cpp
-  Battlescape/AlienBAIState.h
   Battlescape/AliensCrashState.cpp
-  Battlescape/AliensCrashState.h
-  Battlescape/BattleAIState.cpp
-  Battlescape/BattleAIState.h
+  Battlescape/AIModule.cpp
   Battlescape/BattleState.cpp
-  Battlescape/BattleState.h
   Battlescape/BattlescapeGame.cpp
-  Battlescape/BattlescapeGame.h
   Battlescape/BattlescapeGenerator.cpp
-  Battlescape/BattlescapeGenerator.h
   Battlescape/BattlescapeMessage.cpp
-  Battlescape/BattlescapeMessage.h
   Battlescape/BattlescapeState.cpp
-  Battlescape/BattlescapeState.h
   Battlescape/BriefingState.cpp
-  Battlescape/BriefingState.h
   Battlescape/Camera.cpp
-  Battlescape/Camera.h
   Battlescape/CannotReequipState.cpp
-  Battlescape/CannotReequipState.h
   Battlescape/CivilianBAIState.cpp
-  Battlescape/CivilianBAIState.h
   Battlescape/CommendationLateState.cpp
-  Battlescape/CommendationLateState.h
   Battlescape/CommendationState.cpp
-  Battlescape/CommendationState.h
   Battlescape/DebriefingState.cpp
-  Battlescape/DebriefingState.h
   Battlescape/Explosion.cpp
-  Battlescape/Explosion.h
   Battlescape/ExplosionBState.cpp
-  Battlescape/ExplosionBState.h
   Battlescape/InfoboxOKState.cpp
-  Battlescape/InfoboxOKState.h
   Battlescape/InfoboxState.cpp
-  Battlescape/InfoboxState.h
   Battlescape/Inventory.cpp
-  Battlescape/Inventory.h
   Battlescape/InventoryState.cpp
-  Battlescape/InventoryState.h
   Battlescape/Map.cpp
-  Battlescape/Map.h
   Battlescape/MedikitState.cpp
-  Battlescape/MedikitState.h
   Battlescape/MedikitView.cpp
-  Battlescape/MedikitView.h
   Battlescape/MeleeAttackBState.cpp
-  Battlescape/MeleeAttackBState.h
   Battlescape/MiniMapState.cpp
-  Battlescape/MiniMapState.h
   Battlescape/MiniMapView.cpp
-  Battlescape/MiniMapView.h
   Battlescape/NextTurnState.cpp
-  Battlescape/NextTurnState.h
   Battlescape/Particle.cpp
-  Battlescape/Particle.h
   Battlescape/Pathfinding.cpp
-  Battlescape/Pathfinding.h
   Battlescape/PathfindingNode.cpp
-  Battlescape/PathfindingNode.h
   Battlescape/PathfindingOpenSet.cpp
-  Battlescape/PathfindingOpenSet.h
-  Battlescape/Position.h
   Battlescape/PrimeGrenadeState.cpp
-  Battlescape/PrimeGrenadeState.h
   Battlescape/Projectile.cpp
-  Battlescape/Projectile.h
   Battlescape/ProjectileFlyBState.cpp
-  Battlescape/ProjectileFlyBState.h
   Battlescape/PromotionsState.cpp
-  Battlescape/PromotionsState.h
   Battlescape/PsiAttackBState.cpp
-  Battlescape/PsiAttackBState.h
   Battlescape/ScannerState.cpp
-  Battlescape/ScannerState.h
   Battlescape/ScannerView.cpp
-  Battlescape/ScannerView.h
   Battlescape/TileEngine.cpp
-  Battlescape/TileEngine.h
   Battlescape/UnitDieBState.cpp
-  Battlescape/UnitDieBState.h
   Battlescape/UnitFallBState.cpp
-  Battlescape/UnitFallBState.h
   Battlescape/UnitInfoState.cpp
-  Battlescape/UnitInfoState.h
   Battlescape/UnitPanicBState.cpp
-  Battlescape/UnitPanicBState.h
   Battlescape/UnitSprite.cpp
-  Battlescape/UnitSprite.h
   Battlescape/UnitTurnBState.cpp
-  Battlescape/UnitTurnBState.h
   Battlescape/UnitWalkBState.cpp
-  Battlescape/UnitWalkBState.h
   Battlescape/WarningMessage.cpp
-  Battlescape/WarningMessage.h
 )
 
 set ( engine_src
   Engine/Action.cpp
-  Engine/Action.h
   Engine/Adlib/adlplayer.cpp
-  Engine/Adlib/adlplayer.h
   Engine/Adlib/fmopl.cpp
-  Engine/Adlib/fmopl.h
   Engine/AdlibMusic.cpp
-  Engine/AdlibMusic.h
   Engine/CatFile.cpp
-  Engine/CatFile.h
   Engine/CrossPlatform.cpp
-  Engine/CrossPlatform.h
-  Engine/DosFont.h
-  Engine/Exception.h
   Engine/FastLineClip.cpp
-  Engine/FastLineClip.h
   Engine/FileMap.cpp
-  Engine/FileMap.h
   Engine/FlcPlayer.cpp
-  Engine/FlcPlayer.h
   Engine/Font.cpp
-  Engine/Font.h
   Engine/GMCat.cpp
-  Engine/GMCat.h
   Engine/Game.cpp
-  Engine/Game.h
   Engine/InteractiveSurface.cpp
-  Engine/InteractiveSurface.h
   Engine/Language.cpp
-  Engine/Language.h
   Engine/LanguagePlurality.cpp
-  Engine/LanguagePlurality.h
   Engine/LocalizedText.cpp
-  Engine/LocalizedText.h
-  Engine/Logger.h
   Engine/ModInfo.cpp
-  Engine/ModInfo.h
   Engine/Music.cpp
-  Engine/Music.h
   Engine/OpenGL.cpp
-  Engine/OpenGL.h
   Engine/OptionInfo.cpp
-  Engine/OptionInfo.h
   Engine/Options.cpp
-  Engine/Options.h
   Engine/Palette.cpp
-  Engine/Palette.h
   Engine/RNG.cpp
-  Engine/RNG.h
-  Engine/Scalers/common.h
-  Engine/Scalers/config.h
   Engine/Scalers/hq2x.cpp
   Engine/Scalers/hq3x.cpp
   Engine/Scalers/hq4x.cpp
-  Engine/Scalers/hqx.h
   Engine/Scalers/init.cpp
   Engine/Scalers/scale2x.cpp
-  Engine/Scalers/scale2x.h
   Engine/Scalers/scale3x.cpp
-  Engine/Scalers/scale3x.h
   Engine/Scalers/scalebit.cpp
-  Engine/Scalers/scalebit.h
   Engine/Scalers/xbrz.cpp
-  Engine/Scalers/xbrz.h  
   Engine/Screen.cpp
-  Engine/Screen.h
-  Engine/ShaderDraw.h
-  Engine/ShaderDrawHelper.h
-  Engine/ShaderMove.h
-  Engine/ShaderRepeat.h
   Engine/Sound.cpp
-  Engine/Sound.h
   Engine/SoundSet.cpp
-  Engine/SoundSet.h
   Engine/State.cpp
-  Engine/State.h
   Engine/Surface.cpp
-  Engine/Surface.h
   Engine/SurfaceSet.cpp
-  Engine/SurfaceSet.h
   Engine/Timer.cpp
-  Engine/Timer.h
   Engine/Zoom.cpp
-  Engine/Zoom.h
 )
 
 set ( geoscape_src
   Geoscape/AlienBaseState.cpp
-  Geoscape/AlienBaseState.h
   Geoscape/AllocatePsiTrainingState.cpp
-  Geoscape/AllocatePsiTrainingState.h
   Geoscape/BaseDefenseState.cpp
-  Geoscape/BaseDefenseState.h
   Geoscape/BaseDestroyedState.cpp
-  Geoscape/BaseDestroyedState.h
   Geoscape/BaseNameState.cpp
-  Geoscape/BaseNameState.h
   Geoscape/BuildNewBaseState.cpp
-  Geoscape/BuildNewBaseState.h
   Geoscape/ConfirmCydoniaState.cpp
-  Geoscape/ConfirmCydoniaState.h
   Geoscape/ConfirmDestinationState.cpp
-  Geoscape/ConfirmDestinationState.h
   Geoscape/ConfirmLandingState.cpp
-  Geoscape/ConfirmLandingState.h
   Geoscape/ConfirmNewBaseState.cpp
-  Geoscape/ConfirmNewBaseState.h
-  Geoscape/Cord.h
   Geoscape/CraftErrorState.cpp
-  Geoscape/CraftErrorState.h
   Geoscape/CraftPatrolState.cpp
-  Geoscape/CraftPatrolState.h
   Geoscape/DogfightErrorState.cpp
-  Geoscape/DogfightErrorState.h
   Geoscape/DogfightState.cpp
-  Geoscape/DogfightState.h
   Geoscape/FundingState.cpp
-  Geoscape/FundingState.h
   Geoscape/GeoscapeCraftState.cpp
-  Geoscape/GeoscapeCraftState.h
   Geoscape/GeoscapeState.cpp
-  Geoscape/GeoscapeState.h
   Geoscape/Globe.cpp
-  Geoscape/Globe.h
   Geoscape/GraphsState.cpp
-  Geoscape/GraphsState.h
   Geoscape/InterceptState.cpp
-  Geoscape/InterceptState.h
   Geoscape/ItemsArrivingState.cpp
-  Geoscape/ItemsArrivingState.h
   Geoscape/LowFuelState.cpp
-  Geoscape/LowFuelState.h
   Geoscape/MissionDetectedState.cpp
-  Geoscape/MissionDetectedState.h
   Geoscape/MonthlyReportState.cpp
-  Geoscape/MonthlyReportState.h
   Geoscape/MultipleTargetsState.cpp
-  Geoscape/MultipleTargetsState.h
   Geoscape/NewPossibleManufactureState.cpp
-  Geoscape/NewPossibleManufactureState.h
   Geoscape/NewPossibleResearchState.cpp
-  Geoscape/NewPossibleResearchState.h
   Geoscape/ProductionCompleteState.cpp
-  Geoscape/ProductionCompleteState.h
   Geoscape/PsiTrainingState.cpp
-  Geoscape/PsiTrainingState.h
   Geoscape/ResearchCompleteState.cpp
-  Geoscape/ResearchCompleteState.h
   Geoscape/ResearchRequiredState.cpp
-  Geoscape/ResearchRequiredState.h
   Geoscape/SelectDestinationState.cpp
-  Geoscape/SelectDestinationState.h
   Geoscape/TargetInfoState.cpp
-  Geoscape/TargetInfoState.h
   Geoscape/UfoDetectedState.cpp
-  Geoscape/UfoDetectedState.h
   Geoscape/UfoLostState.cpp
-  Geoscape/UfoLostState.h
 )
 
 set ( interface_src
   Interface/ArrowButton.cpp
-  Interface/ArrowButton.h
   Interface/Bar.cpp
-  Interface/Bar.h
   Interface/BattlescapeButton.cpp
-  Interface/BattlescapeButton.h
   Interface/ComboBox.cpp
-  Interface/ComboBox.h
   Interface/Cursor.cpp
-  Interface/Cursor.h
   Interface/FpsCounter.cpp
-  Interface/FpsCounter.h
   Interface/Frame.cpp
-  Interface/Frame.h
   Interface/ImageButton.cpp
-  Interface/ImageButton.h
   Interface/NumberText.cpp
-  Interface/NumberText.h
   Interface/ScrollBar.cpp
-  Interface/ScrollBar.h
   Interface/Slider.cpp
-  Interface/Slider.h
   Interface/Text.cpp
-  Interface/Text.h
   Interface/TextButton.cpp
-  Interface/TextButton.h
   Interface/TextEdit.cpp
-  Interface/TextEdit.h
   Interface/TextList.cpp
-  Interface/TextList.h
   Interface/ToggleTextButton.cpp
-  Interface/ToggleTextButton.h
   Interface/Window.cpp
-  Interface/Window.h
 )
 
 set ( menu_src
   Menu/AbandonGameState.cpp
-  Menu/AbandonGameState.h
   Menu/ConfirmLoadState.cpp
-  Menu/ConfirmLoadState.h
   Menu/CutsceneState.cpp
-  Menu/CutsceneState.h
   Menu/DeleteGameState.cpp
-  Menu/DeleteGameState.h
   Menu/ErrorMessageState.cpp
-  Menu/ErrorMessageState.h
   Menu/ListGamesState.cpp
-  Menu/ListGamesState.h
   Menu/ListLoadOriginalState.cpp
-  Menu/ListLoadOriginalState.h
   Menu/ListLoadState.cpp
-  Menu/ListLoadState.h
   Menu/ListSaveState.cpp
-  Menu/ListSaveState.h
   Menu/LoadGameState.cpp
-  Menu/LoadGameState.h
   Menu/MainMenuState.cpp
-  Menu/MainMenuState.h
   Menu/NewBattleState.cpp
-  Menu/NewBattleState.h
   Menu/NewGameState.cpp
-  Menu/NewGameState.h
   Menu/OptionsAdvancedState.cpp
-  Menu/OptionsAdvancedState.h
   Menu/OptionsAudioState.cpp
-  Menu/OptionsAudioState.h
   Menu/OptionsBaseState.cpp
-  Menu/OptionsBaseState.h
   Menu/OptionsBattlescapeState.cpp
-  Menu/OptionsBattlescapeState.h
   Menu/OptionsConfirmState.cpp
-  Menu/OptionsConfirmState.h
   Menu/OptionsControlsState.cpp
-  Menu/OptionsControlsState.h
   Menu/OptionsDefaultsState.cpp
-  Menu/OptionsDefaultsState.h
   Menu/OptionsGeoscapeState.cpp
-  Menu/OptionsGeoscapeState.h
   Menu/OptionsModsState.cpp
-  Menu/OptionsModsState.h
   Menu/OptionsNoAudioState.cpp
-  Menu/OptionsNoAudioState.h
   Menu/OptionsVideoState.cpp
-  Menu/OptionsVideoState.h
   Menu/PauseState.cpp
-  Menu/PauseState.h
   Menu/SaveGameState.cpp
-  Menu/SaveGameState.h
-  Menu/SetWindowedRootState.cpp
-  Menu/SetWindowedRootState.h
   Menu/SlideshowState.cpp
-  Menu/SlideshowState.h
   Menu/StartState.cpp
-  Menu/StartState.h
   Menu/StatisticsState.cpp
-  Menu/StatisticsState.h
   Menu/TestState.cpp
-  Menu/TestState.h
   Menu/VideoState.cpp
-  Menu/VideoState.h
 )
 
 set ( mod_src
   Mod/AlienDeployment.cpp
-  Mod/AlienDeployment.h
   Mod/AlienRace.cpp
-  Mod/AlienRace.h
   Mod/Armor.cpp
-  Mod/Armor.h
   Mod/ArticleDefinition.cpp
-  Mod/ArticleDefinition.h
   Mod/City.cpp
-  Mod/City.h
   Mod/ExtraSounds.cpp
-  Mod/ExtraSounds.h
   Mod/ExtraSprites.cpp
-  Mod/ExtraSprites.h
   Mod/ExtraStrings.cpp
-  Mod/ExtraStrings.h
   Mod/MCDPatch.cpp
-  Mod/MCDPatch.h
   Mod/MapBlock.cpp
-  Mod/MapBlock.h
   Mod/MapData.cpp
-  Mod/MapData.h
   Mod/MapDataSet.cpp
-  Mod/MapDataSet.h
   Mod/MapScript.cpp
-  Mod/MapScript.h
   Mod/Mod.cpp
-  Mod/Mod.h
   Mod/Polygon.cpp
-  Mod/Polygon.h
   Mod/Polyline.cpp
-  Mod/Polyline.h
   Mod/RuleAlienMission.cpp
-  Mod/RuleAlienMission.h
   Mod/RuleBaseFacility.cpp
-  Mod/RuleBaseFacility.h
   Mod/RuleCommendations.cpp
-  Mod/RuleCommendations.h
   Mod/RuleConverter.cpp
-  Mod/RuleConverter.h
   Mod/RuleCountry.cpp
-  Mod/RuleCountry.h
   Mod/RuleCraft.cpp
-  Mod/RuleCraft.h
   Mod/RuleCraftWeapon.cpp
-  Mod/RuleCraftWeapon.h
   Mod/RuleGlobe.cpp
-  Mod/RuleGlobe.h
   Mod/RuleInterface.cpp
-  Mod/RuleInterface.h
   Mod/RuleInventory.cpp
-  Mod/RuleInventory.h
   Mod/RuleItem.cpp
-  Mod/RuleItem.h
   Mod/RuleManufacture.cpp
-  Mod/RuleManufacture.h
   Mod/RuleMissionScript.cpp
-  Mod/RuleMissionScript.h
   Mod/RuleMusic.cpp
-  Mod/RuleMusic.h
   Mod/RuleRegion.cpp
-  Mod/RuleRegion.h
   Mod/RuleResearch.cpp
-  Mod/RuleResearch.h
   Mod/RuleSoldier.cpp
-  Mod/RuleSoldier.h
   Mod/RuleTerrain.cpp
-  Mod/RuleTerrain.h
   Mod/RuleUfo.cpp
-  Mod/RuleUfo.h
   Mod/RuleVideo.cpp
-  Mod/RuleVideo.h
   Mod/SoldierNamePool.cpp
-  Mod/SoldierNamePool.h
   Mod/SoundDefinition.cpp
-  Mod/SoundDefinition.h
   Mod/StatString.cpp
-  Mod/StatString.h
   Mod/StatStringCondition.cpp
-  Mod/StatStringCondition.h
   Mod/Texture.cpp
-  Mod/Texture.h
   Mod/UfoTrajectory.cpp
-  Mod/UfoTrajectory.h
   Mod/Unit.cpp
-  Mod/Unit.h
 )
 
 set ( savegame_src
   Savegame/AlienBase.cpp
-  Savegame/AlienBase.h
   Savegame/AlienMission.cpp
-  Savegame/AlienMission.h
   Savegame/AlienStrategy.cpp
-  Savegame/AlienStrategy.h
   Savegame/Base.cpp
-  Savegame/Base.h
   Savegame/BaseFacility.cpp
-  Savegame/BaseFacility.h
   Savegame/BattleItem.cpp
-  Savegame/BattleItem.h
   Savegame/BattleUnit.cpp
-  Savegame/BattleUnit.h
-  Savegame/BattleUnitStatistics.h
   Savegame/Country.cpp
-  Savegame/Country.h
   Savegame/Craft.cpp
-  Savegame/Craft.h
   Savegame/CraftWeapon.cpp
-  Savegame/CraftWeapon.h
   Savegame/CraftWeaponProjectile.cpp
-  Savegame/CraftWeaponProjectile.h
   Savegame/EquipmentLayoutItem.cpp
-  Savegame/EquipmentLayoutItem.h
   Savegame/GameTime.cpp
-  Savegame/GameTime.h
   Savegame/ItemContainer.cpp
-  Savegame/ItemContainer.h
   Savegame/MissionSite.cpp
-  Savegame/MissionSite.h
-  Savegame/MissionStatistics.h
   Savegame/MovingTarget.cpp
-  Savegame/MovingTarget.h
   Savegame/Node.cpp
-  Savegame/Node.h
   Savegame/Production.cpp
-  Savegame/Production.h
   Savegame/Region.cpp
-  Savegame/Region.h
   Savegame/ResearchProject.cpp
-  Savegame/ResearchProject.h
   Savegame/SaveConverter.cpp
-  Savegame/SaveConverter.h
   Savegame/SavedBattleGame.cpp
-  Savegame/SavedBattleGame.h
   Savegame/SavedGame.cpp
-  Savegame/SavedGame.h
   Savegame/SerializationHelper.cpp
-  Savegame/SerializationHelper.h
   Savegame/Soldier.cpp
-  Savegame/Soldier.h
   Savegame/SoldierDeath.cpp
-  Savegame/SoldierDeath.h
   Savegame/SoldierDiary.cpp
-  Savegame/SoldierDiary.h
   Savegame/Target.cpp
-  Savegame/Target.h
   Savegame/Tile.cpp
-  Savegame/Tile.h
   Savegame/Transfer.cpp
-  Savegame/Transfer.h
   Savegame/Ufo.cpp
-  Savegame/Ufo.h
   Savegame/Vehicle.cpp
-  Savegame/Vehicle.h
   Savegame/Waypoint.cpp
-  Savegame/Waypoint.h
   Savegame/WeightedOptions.cpp
-  Savegame/WeightedOptions.h
 )
 
 set ( ufopedia_src
   Ufopaedia/ArticleState.cpp
-  Ufopaedia/ArticleState.h
   Ufopaedia/ArticleStateArmor.cpp
-  Ufopaedia/ArticleStateArmor.h
   Ufopaedia/ArticleStateBaseFacility.cpp
-  Ufopaedia/ArticleStateBaseFacility.h
   Ufopaedia/ArticleStateCraft.cpp
-  Ufopaedia/ArticleStateCraft.h
   Ufopaedia/ArticleStateCraftWeapon.cpp
-  Ufopaedia/ArticleStateCraftWeapon.h
   Ufopaedia/ArticleStateItem.cpp
-  Ufopaedia/ArticleStateItem.h
   Ufopaedia/ArticleStateTFTD.cpp
-  Ufopaedia/ArticleStateTFTD.h
   Ufopaedia/ArticleStateTFTDArmor.cpp
-  Ufopaedia/ArticleStateTFTDArmor.h
   Ufopaedia/ArticleStateTFTDCraft.cpp
-  Ufopaedia/ArticleStateTFTDCraft.h
   Ufopaedia/ArticleStateTFTDCraftWeapon.cpp
-  Ufopaedia/ArticleStateTFTDCraftWeapon.h
   Ufopaedia/ArticleStateTFTDFacility.cpp
-  Ufopaedia/ArticleStateTFTDFacility.h
   Ufopaedia/ArticleStateTFTDItem.cpp
-  Ufopaedia/ArticleStateTFTDItem.h
   Ufopaedia/ArticleStateTFTDUso.cpp
-  Ufopaedia/ArticleStateTFTDUso.h
   Ufopaedia/ArticleStateTFTDVehicle.cpp
-  Ufopaedia/ArticleStateTFTDVehicle.h
   Ufopaedia/ArticleStateText.cpp
-  Ufopaedia/ArticleStateText.h
   Ufopaedia/ArticleStateTextImage.cpp
-  Ufopaedia/ArticleStateTextImage.h
   Ufopaedia/ArticleStateUfo.cpp
-  Ufopaedia/ArticleStateUfo.h
   Ufopaedia/ArticleStateVehicle.cpp
-  Ufopaedia/ArticleStateVehicle.h
   Ufopaedia/Ufopaedia.cpp
-  Ufopaedia/Ufopaedia.h
   Ufopaedia/UfopaediaSelectState.cpp
-  Ufopaedia/UfopaediaSelectState.h
   Ufopaedia/UfopaediaStartState.cpp
-  Ufopaedia/UfopaediaStartState.h
 )
 
 set ( data_install_dir bin )

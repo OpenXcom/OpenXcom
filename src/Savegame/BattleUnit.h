@@ -43,8 +43,7 @@ class Soldier;
 class Armor;
 class SavedGame;
 class Language;
-class AlienBAIState;
-class CivilianBAIState;
+class AIModule;
 struct BattleUnitStatistics;
 struct StatAdjustment;
 
@@ -83,7 +82,7 @@ private:
 	int _fire;
 	std::vector<BattleItem*> _inventory;
 	BattleItem* _specWeapon[SPEC_WEAPON_MAX];
-	BattleAIState *_currentAIState;
+	AIModule *_currentAIState;
 	bool _visible;
 	Surface *_cache[5];
 	bool _cacheInvalid;
@@ -285,10 +284,10 @@ public:
 	std::vector<BattleItem*> *getInventory();
 	/// Let AI do their thing.
 	void think(BattleAction *action);
-	/// Get current AI state.
-	BattleAIState *getCurrentAIState() const;
-	/// Set next AI State
-	void setAIState(BattleAIState *aiState);
+	/// Get AI Module.
+	AIModule *getAIModule() const;
+	/// Set AI Module.
+	void setAIModule(AIModule *ai);
 	/// Set whether this unit is visible
 	void setVisible(bool flag);
 	/// Get whether this unit is visible

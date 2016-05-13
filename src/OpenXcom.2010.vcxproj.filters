@@ -416,9 +416,6 @@
     <ClCompile Include="Battlescape\Inventory.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
-    <ClCompile Include="Battlescape\BattleAIState.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
     <ClCompile Include="Battlescape\WarningMessage.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
@@ -943,6 +940,9 @@
     <ClCompile Include="Menu\StatisticsState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\AIModule.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1371,9 +1371,6 @@
       <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\Inventory.h">
-      <Filter>Battlescape</Filter>
-    </ClInclude>
-    <ClInclude Include="Battlescape\BattleAIState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\WarningMessage.h">
@@ -1925,6 +1922,9 @@
     </ClInclude>
     <ClInclude Include="Menu\StatisticsState.h">
       <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\AIModule.h">
+      <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
