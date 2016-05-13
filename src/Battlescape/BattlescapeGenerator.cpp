@@ -1800,6 +1800,10 @@ void BattlescapeGenerator::deployCivilians(int max)
 								{
 									delete item;
 								}
+								else if (ruleItem->getTurretType() != -1)
+								{
+									civ->setTurretType(ruleItem->getTurretType());
+								}
 							}
 						}
 					}
