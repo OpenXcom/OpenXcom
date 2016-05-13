@@ -337,22 +337,6 @@ void Screen::resetDisplay(bool resetVideo)
 		}
 #endif
 		Log(LOG_INFO) << "Attempting to set display to " << width << "x" << height << "x" << _bpp << "...";
-
-		// Workaround for window not moving when keeping same size
-		// This completely breaks the resizable window mode, so checking it is not set
-		if (_screen != 0 && _screen->w == width && _screen->h == height &&
-			!Options::fullscreen && !Options::allowResize)
-		{
-			if (width != Screen::ORIGINAL_WIDTH)
-			{
-				_screen = SDL_SetVideoMode(Screen::ORIGINAL_WIDTH, Screen::ORIGINAL_HEIGHT, _bpp, _flags);
-			}
-			else
-			{
-				_screen = SDL_SetVideoMode(Screen::ORIGINAL_WIDTH * 2, Screen::ORIGINAL_HEIGHT * 2, _bpp, _flags);
-			}
-		}
-		
 		_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
 		if (_screen == 0)
 		{
