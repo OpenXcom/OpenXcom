@@ -227,6 +227,7 @@ set ( menu_src
   Menu/OptionsVideoState.cpp
   Menu/PauseState.cpp
   Menu/SaveGameState.cpp
+  Menu/SetWindowedRootState.cpp
   Menu/SlideshowState.cpp
   Menu/StartState.cpp
   Menu/StatisticsState.cpp
