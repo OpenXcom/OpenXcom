@@ -419,6 +419,7 @@
     <ClCompile Include="Menu\OptionsVideoState.cpp" />
     <ClCompile Include="Menu\PauseState.cpp" />
     <ClCompile Include="Menu\SaveGameState.cpp" />
+    <ClCompile Include="Menu\SetWindowedRootState.cpp" />
     <ClCompile Include="Menu\SlideshowState.cpp" />
     <ClCompile Include="Menu\StartState.cpp" />
     <ClCompile Include="Menu\StatisticsState.cpp" />
@@ -751,6 +752,7 @@
     <ClInclude Include="Menu\OptionsVideoState.h" />
     <ClInclude Include="Menu\PauseState.h" />
     <ClInclude Include="Menu\SaveGameState.h" />
+    <ClInclude Include="Menu\SetWindowedRootState.h" />
     <ClInclude Include="Menu\SlideshowState.h" />
     <ClInclude Include="Menu\StartState.h" />
     <ClInclude Include="Menu\StatisticsState.h" />

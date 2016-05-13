@@ -34,7 +34,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextEdit::TextEdit(State *state, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _blink(true), _modal(true), _ascii(L'A'), _caretPos(0), _numerical(false), _change(0), _state(state)
+TextEdit::TextEdit(State *state, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _blink(true), _modal(true), _ascii(L'A'), _caretPos(0), _textEditConstraint(TEC_NONE), _change(0), _state(state)
 {
 	_isFocused = false;
 	_text = new Text(width, height, 0, 0);
@@ -212,12 +212,12 @@ void TextEdit::setVerticalAlign(TextVAlign valign)
 }
 
 /**
- * Restricts the text to only numerical input.
- * @param numerical Numerical restriction.
+ * Restricts the text to only numerical input or signed numerical input.
+ * @param constraint TextEditConstraint to be applied.
  */
-void TextEdit::setNumerical(bool numerical)
+void TextEdit::setConstraint(TextEditConstraint constraint)
 {
-	_numerical = numerical;
+	_textEditConstraint = constraint;
 }
 
 /**
@@ -374,6 +374,46 @@ bool TextEdit::exceedsMaxWidth(wchar_t c)
 }
 
 /**
+ * Checks if input key character is valid to
+ * be inserted at caret position in the text edit
+ * without breaking the text edit constraint.
+ * @param key Key code.
+ * @return True if character can be inserted, False if it cannot.
+ */
+bool TextEdit::isValidChar(Uint16 key)
+{
+	switch (_textEditConstraint)
+	{
+	case TEC_NUMERIC_POSITIVE:
+		return key >= L'0' && key <= L'9';
+		break;
+
+	// If constraint is "(signed) numeric", need to check:
+	// - user does not input a character before '-' or '+'
+	// - user enter either figure anywhere, or a sign at first position
+	case TEC_NUMERIC:
+		if (_caretPos > 0)
+		{
+			return key >= L'0' && key <= L'9';
+		}
+		else
+		{
+			return ((key >= L'0' && key <= L'9') || key == L'+' || key == L'-') &&
+				(_value.size() == 0 || (_value[0] != L'+' && _value[0] != L'-'));
+		}
+		break;
+
+	case TEC_NONE:
+		return (key >= L' ' && key <= L'~') || key >= 160;
+		break;
+
+	default:
+		return false;
+		break;
+	}
+}
+
+/**
  * Focuses the text edit when it's pressed on.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
@@ -496,10 +536,8 @@ void TextEdit::keyboardPress(Action *action, State *state)
 			}
 			break;
 		default:
-			Uint16 key = action->getDetails()->key.keysym.unicode;
-			if (((_numerical && key >= L'0' && key <= L'9') ||
-				(!_numerical && ((key >= L' ' && key <= L'~') || key >= 160))) &&
-				!exceedsMaxWidth((wchar_t)key))
+			Uint16 key = action->getDetails()->key.keysym.unicode;			
+			if (isValidChar(key) && !exceedsMaxWidth((wchar_t)key))
 			{
 				_value.insert(_caretPos, 1, (wchar_t)action->getDetails()->key.keysym.unicode);
 				_caretPos++;

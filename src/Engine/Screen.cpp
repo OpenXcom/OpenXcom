@@ -66,7 +66,7 @@ void Screen::makeVideoFlags()
 	}
 	
 	// Handle window positioning
-	if (Options::windowedModePositionX != -1 || Options::windowedModePositionY != -1)
+	if (!Options::fullscreen && Options::rootWindowedMode)
 	{
 		std::ostringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << std::dec << Options::windowedModePositionX << "," << Options::windowedModePositionY;
@@ -92,11 +92,6 @@ void Screen::makeVideoFlags()
 	if (Options::borderless)
 	{
 		_flags |= SDL_NOFRAME;
-		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED=center"));
-	}
-	else
-	{
-		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED="));
 	}
 
 	_bpp = (is32bitEnabled() || isOpenGLEnabled()) ? 32 : 8;
@@ -342,6 +337,22 @@ void Screen::resetDisplay(bool resetVideo)
 		}
 #endif
 		Log(LOG_INFO) << "Attempting to set display to " << width << "x" << height << "x" << _bpp << "...";
+
+		// Workaround for window not moving when keeping same size
+		// This completely breaks the resizable window mode, so checking it is not set
+		if (_screen != 0 && _screen->w == width && _screen->h == height &&
+			!Options::fullscreen && !Options::allowResize)
+		{
+			if (width != Screen::ORIGINAL_WIDTH)
+			{
+				_screen = SDL_SetVideoMode(Screen::ORIGINAL_WIDTH, Screen::ORIGINAL_HEIGHT, _bpp, _flags);
+			}
+			else
+			{
+				_screen = SDL_SetVideoMode(Screen::ORIGINAL_WIDTH * 2, Screen::ORIGINAL_HEIGHT * 2, _bpp, _flags);
+			}
+		}
+		
 		_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
 		if (_screen == 0)
 		{
