@@ -34,7 +34,7 @@ class TextList;
 class SoldierMemorialState : public State
 {
 private:
-	TextButton *_btnOk;
+	TextButton *_btnOk, *_btnStatistics;
 	Window *_window;
 	Text *_txtTitle, *_txtName, *_txtRank, *_txtDate, *_txtRecruited, *_txtLost;
 	TextList *_lstSoldiers;
@@ -45,6 +45,8 @@ public:
 	~SoldierMemorialState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	/// Handler for clicking the Statistics button.
+	void btnStatisticsClick(Action *action);
 	/// Handler for clicking the Soldiers list.
 	void lstSoldiersClick(Action *action);
 };

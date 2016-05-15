@@ -37,12 +37,12 @@ public:
 	inline ShaderRepeat(const Surface* s):
 		_base(s)
 	{
-        setOffset(0, 0);
+		setOffset(0, 0);
 	}
 	inline ShaderRepeat(const std::vector<Pixel>& f, int max_x, int max_y):
 		_base(f, max_x, max_y)
 	{
-        setOffset(0, 0);
+		setOffset(0, 0);
 	}
 	
 	inline void setOffset(int x, int y)
@@ -117,7 +117,7 @@ struct controler<ShaderRepeat<Pixel> >
 	
 	inline void mod_y(int&, int&)
 	{
-		_curr_y = ( _range_image.beg_y - _off_y)%_size_y; 
+		_curr_y = ( _range_image.beg_y - _off_y)%_size_y;
 		if (_curr_y <0)
 			_curr_y += _size_y;
 		_ptr_curr_y = _base;
@@ -141,7 +141,7 @@ struct controler<ShaderRepeat<Pixel> >
 	
 	inline void mod_x(int&, int&)
 	{
-		_curr_x = ( _range_image.beg_x - _off_x)%_size_x; 
+		_curr_x = ( _range_image.beg_x - _off_x)%_size_x;
 		if (_curr_x <0)
 			_curr_x += _size_x;
 		_ptr_curr_x = _ptr_curr_y;

@@ -50,7 +50,7 @@ namespace
 
 /**
  * Helper function counting pitch in bytes with 16byte padding
- * @param bpp bytes per pixel
+ * @param bpp bits per pixel
  * @param width number of pixel in row
  * @return pitch in bytes
  */
@@ -61,7 +61,7 @@ inline int GetPitch(int bpp, int width)
 
 /**
  * Helper function creating aligned buffer
- * @param bpp bytes per pixel
+ * @param bpp bits per pixel
  * @param width number of pixel in row
  * @param height number of rows
  * @return pointer to memory
@@ -493,6 +493,58 @@ void Surface::offset(int off, int min, int max, int mul)
 }
 
 /**
+ * Shifts all the colors in the surface by a set amount, but
+ * keeping them inside a fixed-size color block chunk.
+ * @param off Amount to shift.
+ * @param blk Color block size.
+ * @param mul Shift multiplier.
+ */
+void Surface::offsetBlock(int off, int blk, int mul)
+{
+	if (off == 0)
+		return;
+
+	// Lock the surface
+	lock();
+
+	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
+	{
+		Uint8 pixel = getPixel(x, y);
+		int min = pixel / blk * blk;
+		int max = min + blk;
+		int p;
+		if (off > 0)
+		{
+			p = pixel * mul + off;
+		}
+		else
+		{
+			p = (pixel + off) / mul;
+		}
+		if (min != -1 && p < min)
+		{
+			p = min;
+		}
+		else if (max != -1 && p > max)
+		{
+			p = max;
+		}
+
+		if (pixel > 0)
+		{
+			setPixelIterative(&x, &y, p);
+		}
+		else
+		{
+			setPixelIterative(&x, &y, 0);
+		}
+	}
+
+	// Unlock the surface
+	unlock();
+}
+
+/**
  * Inverts all the colors in the surface according to a middle point.
  * Used for effects like shifting a button between pressed and unpressed.
  * @param mid Middle point.
@@ -583,7 +635,7 @@ void Surface::copy(Surface *surface)
 	SDL_BlitSurface uses colour matching,
 	and is therefor unreliable as a means
 	to copy the contents of one surface to another
-	instead we have to do this manually 
+	instead we have to do this manually
 
 	SDL_Rect from;
 	from.x = getX() - surface->getX();
@@ -991,8 +1043,9 @@ void Surface::setTFTDMode(bool mode)
  * checks TFTD mode.
  * @return TFTD mode.
  */
-bool Surface::isTFTDMode()
+bool Surface::isTFTDMode() const
 {
 	return _tftdMode;
 }
+
 }

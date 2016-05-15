@@ -291,14 +291,14 @@ void UnitWalkBState::think()
 				tu = 0;
 			}
 			int energy = tu;
-			if (_action.run)
-			{
-				tu *= 0.75;
-				energy *= 1.5;
-			}
 			if (dir >= Pathfinding::DIR_UP)
 			{
 				energy = 0;
+			}
+			else if (_action.run)
+			{
+				tu *= 0.75;
+				energy *= 1.5;
 			}
 			if (tu > _unit->getTimeUnits())
 			{
@@ -413,9 +413,13 @@ void UnitWalkBState::think()
 					// This is where we fake out the strafe movement direction so the unit "moonwalks"
 					int dirTemp = _unit->getDirection();
 					_unit->setDirection(_unit->getFaceDirection());
+					_parent->getMap()->cacheUnit(_unit);
 					_unit->setDirection(dirTemp);
 				}
-				_parent->getMap()->cacheUnit(_unit);
+				else
+				{
+					_parent->getMap()->cacheUnit(_unit);
+				}
 			}
 		}
 		else

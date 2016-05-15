@@ -166,7 +166,7 @@ void AdlibMusic::player(void *udata, Uint8 *stream, int len)
 			return;
 		func_play_tick();
 
-		delay = delayRates[rate]; 
+		delay = delayRates[rate];
 	}
 #endif
 }
@@ -181,4 +181,5 @@ bool AdlibMusic::isPlaying()
 #endif
 	return false;
 }
+
 }

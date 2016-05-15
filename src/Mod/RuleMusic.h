@@ -33,8 +33,8 @@ public:
 	RuleMusic(const std::string &type);
 	~RuleMusic();
 	void load(const YAML::Node& node);
-	int getCatPos();
-	float getNormalization();
+	int getCatPos() const;
+	float getNormalization() const;
 };
 
 }

@@ -16,9 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "GeoscapeState.h"
-#include <cmath>
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
@@ -105,6 +103,7 @@
 #include "../Engine/Exception.h"
 #include "../Mod/AlienDeployment.h"
 #include "../Mod/RuleInterface.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {
@@ -452,7 +451,7 @@ void GeoscapeState::handle(Action *action)
 			if (_game->getSavedGame()->getDebugMode())
 			{
 				_txtDebug->setText(L"SOLDIER COMMENDATIONS DELETED");
-                for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+				for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 				{
 					for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
 					{
@@ -524,6 +523,10 @@ void GeoscapeState::init()
 		{
 			_game->getMod()->playMusic("GMGEO");
 		}
+	}
+	else
+	{
+		_game->getMod()->playMusic("GMINTER");
 	}
 	_globe->unsetNewBaseHover();
 
@@ -830,11 +833,10 @@ void GeoscapeState::time5Seconds()
 						}
 						else
 						{
-							(*j)->setDestination(0);
 							Waypoint *w = new Waypoint();
-							w->setLongitude(u->getMeetLongitude());
-							w->setLatitude(u->getMeetLatitude());
-							w->setId(u->getId());
+							w->setLongitude((*j)->getMeetLongitude());
+							w->setLatitude((*j)->getMeetLatitude());
+							(*j)->setDestination(0);
 							popup(new GeoscapeCraftState((*j), _globe, w));
 						}
 					}
@@ -1566,7 +1568,7 @@ void GeoscapeState::time1Day()
 				for (std::vector<std::string>::const_iterator f = (*iter)->getRules()->getGetOneFree().begin(); f != (*iter)->getRules()->getGetOneFree().end(); ++f)
 				{
 					bool newFound = true;
-					for (std::vector<const RuleResearch*>::const_iterator discovered = _game->getSavedGame()->getDiscoveredResearch().begin(); discovered != _game->getSavedGame()->getDiscoveredResearch().end(); ++discovered)
+					for (std::vector<const RuleResearch*>::const_iterator discovered = _game->getSavedGame()->getDiscoveredResearch().begin(); discovered != _game->getSavedGame()->getDiscoveredResearch().end() && newFound; ++discovered)
 					{
 						if (*f == (*discovered)->getName())
 						{
@@ -1609,7 +1611,7 @@ void GeoscapeState::time1Day()
 			{
 				popup(new CutsceneState(bonus->getCutscene()));
 			}
-			popup(new ResearchCompleteState(newResearch, bonus));
+			popup(new ResearchCompleteState(newResearch, bonus, research));
 			std::vector<RuleResearch *> newPossibleResearch;
 			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRules(), _game->getMod(), *i);
 			std::vector<RuleManufacture *> newPossibleManufacture;

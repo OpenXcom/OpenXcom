@@ -80,7 +80,7 @@ void RuleBaseFacility::load(const YAML::Node &node, Mod *mod, int listOrder)
 		_fireSound = mod->getSoundOffset(node["fireSound"].as<int>(_fireSound), "GEO.CAT");
 	}
 	if (node["hitSound"])
-	{		
+	{
 		_hitSound = mod->getSoundOffset(node["hitSound"].as<int>(_hitSound), "GEO.CAT");
 	}
 	_mapName = node["mapName"].as<std::string>(_mapName);
@@ -357,4 +357,5 @@ int RuleBaseFacility::getListOrder() const
 {
 	return _listOrder;
 }
+
 }

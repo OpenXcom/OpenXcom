@@ -16,14 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include <assert.h>
-#include <cmath>
 #include <climits>
 #include <set>
 #include "TileEngine.h"
 #include <SDL.h>
-#include "AlienBAIState.h"
+#include "AIModule.h"
 #include "Map.h"
 #include "Camera.h"
 #include "../Savegame/SavedGame.h"
@@ -849,8 +847,8 @@ std::vector<std::pair<BattleUnit *, int> > TileEngine::getSpottingUnits(BattleUn
 			Position originVoxel = _save->getTileEngine()->getSightOriginVoxel(*i);
 			originVoxel.z -= 2;
 			Position targetVoxel;
-			AlienBAIState *aggro = dynamic_cast<AlienBAIState*>((*i)->getCurrentAIState());
-			bool gotHit = (aggro != 0 && aggro->getWasHitBy(unit->getId()));
+			AIModule *ai = (*i)->getAIModule();
+			bool gotHit = (ai != 0 && ai->getWasHitBy(unit->getId()));
 				// can actually see the target Tile, or we got hit
 			if (((*i)->checkViewSector(unit->getPosition()) || gotHit) &&
 				// can actually target the unit
@@ -992,16 +990,16 @@ bool TileEngine::tryReaction(BattleUnit *unit, BattleUnit *target, int attackTyp
 		// hostile units will go into an "aggro" state when they react.
 		if (unit->getFaction() == FACTION_HOSTILE)
 		{
-			AlienBAIState *aggro = dynamic_cast<AlienBAIState*>(unit->getCurrentAIState());
-			if (aggro == 0)
+			AIModule *ai = unit->getAIModule();
+			if (ai == 0)
 			{
 				// should not happen, but just in case...
-				aggro = new AlienBAIState(_save, unit, 0);
-				unit->setAIState(aggro);
+				ai = new AIModule(_save, unit, 0);
+				unit->setAIModule(ai);
 			}
 
 			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius() &&
-				aggro->explosiveEfficacy(action.target, unit, action.weapon->getAmmoItem()->getRules()->getExplosionRadius(), -1) == false)
+				ai->explosiveEfficacy(action.target, unit, action.weapon->getAmmoItem()->getRules()->getExplosionRadius(), -1) == false)
 			{
 				action.targeting = false;
 			}
@@ -1703,15 +1701,15 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 	}
 	else
 	{
-        if ( block <= 127 )
-        {
-            direction += 4;
-            if (direction > 7)
-                direction -= 8;
-            if (blockage(endTile,O_OBJECT, type, direction, true) > 127){
-                return -1; //hit bigwall, reveal bigwall tile
-            }
-        }
+		if ( block <= 127 )
+		{
+			direction += 4;
+			if (direction > 7)
+				direction -= 8;
+			if (blockage(endTile,O_OBJECT, type, direction, true) > 127){
+				return -1; //hit bigwall, reveal bigwall tile
+			}
+		}
 	}
 
 	return block;
@@ -2171,19 +2169,19 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 		}
 		else
 		{
-            int temp_res = verticalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE);
+			int temp_res = verticalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE);
 			result = horizontalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE, steps<2);
 			steps++;
-            if (result == -1)
-            {
-                if (temp_res > 127)
-                {
-                    result = 0;
-                } else {
-                return result; // We hit a big wall
-                }
-            }
-            result += temp_res;
+			if (result == -1)
+			{
+				if (temp_res > 127)
+				{
+					result = 0;
+				} else {
+				return result; // We hit a big wall
+				}
+			}
+			result += temp_res;
 			if (result > 127)
 			{
 				return result;
@@ -2337,7 +2335,7 @@ int TileEngine::castedShade(const Position& voxel)
 		tmpVoxel.z = z;
 		if (voxelCheck(tmpVoxel, 0) != V_EMPTY) break;
 	}
-    return z;
+	return z;
 }
 
 /**
@@ -2363,7 +2361,7 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
 		++tmpVoxel.y;
 		if (voxelCheck(tmpVoxel, 0) == V_OBJECT) return false;
 	}
-    return true;
+	return true;
 }
 
 /**
@@ -2377,6 +2375,10 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
  */
 int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit *excludeAllBut)
 {
+	if (_save->isBeforeGame())
+	{
+		excludeAllUnits = true; // don't start unit spotting before pre-game inventory stuff (large units on the craftInventory tile will cause a crash if they're "spotted")
+	}
 	Tile *tile = _save->getTile(voxel / Position(16, 16, 24));
 	// check if we are not out of the map
 	if (tile == 0 || voxel.x < 0 || voxel.y < 0 || voxel.z < 0)

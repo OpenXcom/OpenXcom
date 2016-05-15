@@ -165,7 +165,7 @@ void MultipleTargetsState::btnTargetClick(Action *action)
 			popupTarget(_targets[i]);
 			break;
 		}
-	}	
+	}
 }
 
 }

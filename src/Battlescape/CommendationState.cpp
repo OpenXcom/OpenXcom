@@ -83,11 +83,11 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 	{
 		modularCommendation = false;
 		noun = "noNoun";
-        if (titleChosen)
-        {
-            _lstSoldiers->addRow(2, L"", L""); // Blank row, will be filled in later
+		if (titleChosen)
+		{
+			_lstSoldiers->addRow(2, L"", L""); // Blank row, will be filled in later
 			row++;
-        }
+		}
 		titleChosen = false;
 		titleRow = row - 1;
 
@@ -139,7 +139,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 				}
 			}
 		}
-        if (titleRow != row - 1)
+		if (titleRow != row - 1)
 		{
 			// Medal name
 			if (modularCommendation)
@@ -157,7 +157,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 		{
 			++commList;
 		}
-	}	
+	}
 }
 
 /**

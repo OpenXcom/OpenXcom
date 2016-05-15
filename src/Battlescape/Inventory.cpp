@@ -40,6 +40,7 @@
 #include "WarningMessage.h"
 #include "../Savegame/Tile.h"
 #include "PrimeGrenadeState.h"
+#include "../Engine/Screen.h"
 
 namespace OpenXcom
 {
@@ -53,7 +54,7 @@ namespace OpenXcom
  * @param y Y position in pixels.
  * @param base Is the inventory being called from the basescape?
  */
-Inventory::Inventory(Game *game, int width, int height, int x, int y, bool base) : InteractiveSurface(width, height, x, y), _game(game), _selUnit(0), _selItem(0), _tu(true), _base(base), _groundOffset(0), _animFrame(0)
+Inventory::Inventory(Game *game, int width, int height, int x, int y, bool base) : InteractiveSurface(width, height, x, y), _game(game), _selUnit(0), _selItem(0), _tu(true), _base(base), _mouseOverItem(0), _groundOffset(0), _animFrame(0)
 {
 	_depth = _game->getSavedGame()->getSavedBattle()->getDepth();
 	_grid = new Surface(width, height, x, y);
@@ -857,8 +858,8 @@ void Inventory::arrangeGround(bool alterOffset)
 {
 	RuleInventory *ground = _game->getMod()->getInventory("STR_GROUND");
 
-	int slotsX = (320 - ground->getX()) / RuleInventory::SLOT_W;
-	int slotsY = (200 - ground->getY()) / RuleInventory::SLOT_H;
+	int slotsX = (Screen::ORIGINAL_WIDTH - ground->getX()) / RuleInventory::SLOT_W;
+	int slotsY = (Screen::ORIGINAL_HEIGHT - ground->getY()) / RuleInventory::SLOT_H;
 	int x = 0;
 	int y = 0;
 	bool ok = false;
@@ -928,9 +929,9 @@ void Inventory::arrangeGround(bool alterOffset)
 	}
 	if (alterOffset)
 	{
-		if (xMax >= _groundOffset + slotsX - 1)
+		if (xMax >= _groundOffset + slotsX)
 		{
-			_groundOffset += slotsX - 1;
+			_groundOffset += slotsX;
 		}
 		else
 		{

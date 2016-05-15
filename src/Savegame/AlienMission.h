@@ -107,7 +107,7 @@ public:
 	/// Handle UFO shot down.
 	void ufoShotDown(Ufo &ufo);
 	/// Handle Points for mission successes.
-	void addScore(const double lon, const double lat, SavedGame &game);
+	void addScore(double lon, double lat, SavedGame &game) const;
 	/// Keep track of the city/whatever that we're going to target.
 	void setMissionSiteZone(int zone);
 private:

@@ -23,9 +23,11 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
+#include "../Interface/TextEdit.h"
 #include "../Savegame/Target.h"
 #include "../Engine/Options.h"
 #include "InterceptState.h"
+#include "../Engine/Action.h"
 
 namespace OpenXcom
 {
@@ -44,7 +46,7 @@ TargetInfoState::TargetInfoState(Target *target, Globe *globe) : _target(target)
 	_window = new Window(this, 192, 120, 32, 40, POPUP_BOTH);
 	_btnIntercept = new TextButton(160, 12, 48, 124);
 	_btnOk = new TextButton(160, 12, 48, 140);
-	_txtTitle = new Text(182, 32, 37, 46);
+	_edtTitle = new TextEdit(this, 182, 32, 37, 46);
 	_txtTargetted = new Text(182, 9, 37, 78);
 	_txtFollowers = new Text(182, 40, 37, 88);
 
@@ -54,9 +56,9 @@ TargetInfoState::TargetInfoState(Target *target, Globe *globe) : _target(target)
 	add(_window, "window", "targetInfo");
 	add(_btnIntercept, "button", "targetInfo");
 	add(_btnOk, "button", "targetInfo");
-	add(_txtTitle, "text", "targetInfo");
-	add(_txtTargetted, "text", "targetInfo");
-	add(_txtFollowers, "text", "targetInfo");
+	add(_edtTitle, "text2", "targetInfo");
+	add(_txtTargetted, "text1", "targetInfo");
+	add(_txtFollowers, "text1", "targetInfo");
 
 	centerAllSurfaces();
 
@@ -70,19 +72,17 @@ TargetInfoState::TargetInfoState(Target *target, Globe *globe) : _target(target)
 	_btnOk->onMouseClick((ActionHandler)&TargetInfoState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&TargetInfoState::btnOkClick, Options::keyCancel);
 
-	std::wostringstream ss;
-
-	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
-	_txtTitle->setWordWrap(true);
-	ss << L'\x01' << _target->getName(_game->getLanguage());
-	_txtTitle->setText(ss.str());
+	_edtTitle->setBig();
+	_edtTitle->setAlign(ALIGN_CENTER);
+	_edtTitle->setVerticalAlign(ALIGN_MIDDLE);
+	_edtTitle->setWordWrap(true);
+	_edtTitle->setText(_target->getName(_game->getLanguage()));
+	_edtTitle->onChange((ActionHandler)&TargetInfoState::edtTitleChange);
 
 	_txtTargetted->setAlign(ALIGN_CENTER);
 	_txtTargetted->setText(tr("STR_TARGETTED_BY"));
-	ss.str(L"");
 	_txtFollowers->setAlign(ALIGN_CENTER);
+	std::wostringstream ss;
 	for (std::vector<Target*>::iterator i = _target->getFollowers()->begin(); i != _target->getFollowers()->end(); ++i)
 	{
 		ss << (*i)->getName(_game->getLanguage()) << L'\n';
@@ -114,6 +114,27 @@ void TargetInfoState::btnInterceptClick(Action *)
 void TargetInfoState::btnOkClick(Action *)
 {
 	_game->popState();
+}
+
+/**
+ * Changes the target name.
+ * @param action Pointer to an action.
+ */
+void TargetInfoState::edtTitleChange(Action *action)
+{
+	if (_edtTitle->getText() == _target->getDefaultName(_game->getLanguage()))
+	{
+		_target->setName(L"");
+	}
+	else
+	{
+		_target->setName(_edtTitle->getText());
+	}
+	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
+		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
+	{
+		_edtTitle->setText(_target->getName(_game->getLanguage()));
+	}
 }
 
 }

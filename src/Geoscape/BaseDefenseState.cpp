@@ -231,4 +231,5 @@ void BaseDefenseState::btnOkClick(Action *)
 		_base->cleanupDefenses(true);
 	}
 }
+
 }

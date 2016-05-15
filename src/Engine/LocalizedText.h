@@ -154,4 +154,5 @@ inline std::wostream &operator<<(std::wostream &os, const LocalizedText &txt)
 	os << static_cast<std::wstring const &>(txt);
 	return os;
 }
+
 }

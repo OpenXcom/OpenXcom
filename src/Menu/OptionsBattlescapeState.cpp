@@ -93,7 +93,7 @@ OptionsBattlescapeState::OptionsBattlescapeState(OptionsOrigin origin) : Options
 
 	centerAllSurfaces();
 
-	// Set up objects	
+	// Set up objects
 	_txtEdgeScroll->setText(tr("STR_EDGE_SCROLL"));
 
 	std::vector<std::string> edgeScrolls;

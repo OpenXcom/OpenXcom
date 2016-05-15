@@ -187,4 +187,5 @@ void load(const std::string &modId, const std::string &path, bool ignoreMods)
 }
 
 }
+
 }

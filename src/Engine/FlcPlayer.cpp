@@ -20,15 +20,16 @@
 /*
  * Based on http://www.libsdl.org/projects/flxplay/
  */
-
+#ifdef _MSC_VER
+#define _SCL_SECURE_NO_WARNINGS
+#endif
 #include "FlcPlayer.h"
 #include <algorithm>
 #include <cassert>
 #include <string.h>
-#include <math.h>
+#include <cmath>
 #include <SDL_mixer.h>
 #include <fstream>
-
 #include "Logger.h"
 #include "Screen.h"
 #include "Surface.h"
@@ -162,7 +163,7 @@ bool FlcPlayer::init(const char *filename, void(*frameCallBack)(), Game *game, i
 	else // Otherwise create a new one
 	{
 		_mainScreen = SDL_AllocSurface(SDL_SWSURFACE, _realScreen->getSurface()->getWidth(), _realScreen->getSurface()->getHeight(), 8, 0, 0, 0, 0);
-	}	
+	}
 
 	return true;
 }
@@ -280,7 +281,7 @@ bool FlcPlayer::isValidFrame(Uint8 *frameHeader, Uint32 &frameSize, Uint16 &fram
 	readU16(frameType, frameHeader + 4);
 
 	return (frameType == FRAME_TYPE || frameType == AUDIO_CHUNK || frameType == PREFIX_CHUNK);
-} 
+}
 
 void FlcPlayer::decodeAudio(int frames)
 {
@@ -314,7 +315,7 @@ void FlcPlayer::decodeAudio(int frames)
 				++audioFramesFound;
 
 				break;
-		}	
+		}
 	}
 }
 
@@ -534,14 +535,14 @@ void FlcPlayer::fliSS2()
 		pSrc += 2;
 
 		if ((count & MASK) == SKIP_LINES) 
-		{  
+		{
 			pDst += (-count)*_mainScreen->pitch;
 			++lines;
 			continue;
 		}
 			
 		else if ((count & MASK) == LAST_PIXEL)
-		{  
+		{
 			setLastByte = true;
 			lastByte = (count & 0x00FF);
 			readS16(count, (Sint8 *)pSrc);
@@ -549,7 +550,7 @@ void FlcPlayer::fliSS2()
 		}
 
 		if ((count & MASK) == PACKETS_COUNT)
-		{      
+		{
 			pTmpDst = pDst;
 			while (count--) 
 			{
@@ -564,7 +565,7 @@ void FlcPlayer::fliSS2()
 					pSrc += (2 * countData);
 
 				}
-				else 
+				else
 				{
 					if (countData < 0) 
 					{
@@ -618,7 +619,7 @@ void FlcPlayer::fliBRun()
 				pTmpDst += countData;
 				pixels += countData;
 			}
-			else 
+			else
 			{
 				if (countData < 0) 
 				{
@@ -671,7 +672,7 @@ void FlcPlayer::fliLC()
 					*(pTmpDst++) = *(pSrc++);
 				}
 			}
-			else 
+			else
 			{
 				if (countData < 0) 
 				{
@@ -906,7 +907,7 @@ void FlcPlayer::waitForNextFrame(Uint32 delay)
 		}
 	}
 	oldTick = SDL_GetTicks();
-} 
+}
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 inline void FlcPlayer::readU16(Uint16 &dst, const Uint8 * const src)

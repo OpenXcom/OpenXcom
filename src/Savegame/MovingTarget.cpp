@@ -16,9 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "MovingTarget.h"
-#include <cmath>
 #include "../fmath.h"
 #include "SerializationHelper.h"
 #include "../Engine/Options.h"
@@ -158,12 +156,9 @@ void MovingTarget::setSpeed(int speed)
  */
 void MovingTarget::calculateSpeed()
 {
+	calculateMeetPoint();
 	if (_dest != 0)
 	{
-		// Find the meet point
-		if (Options::meetingPoint) calculateMeetPoint();
-		else {_meetPointLat = _dest->getLatitude(); _meetPointLon = _dest->getLongitude();}
-
 		double dLon, dLat, length;
 		dLon = sin(_meetPointLon - _lon) * cos(_meetPointLat);
 		dLat = cos(_lat) * sin(_meetPointLat) - sin(_lat) * cos(_meetPointLat) * cos(_meetPointLon - _lon);
@@ -225,8 +220,18 @@ void MovingTarget::move()
 void MovingTarget::calculateMeetPoint()
 {
 	// Initialize
-	_meetPointLat = _dest->getLatitude();
-	_meetPointLon = _dest->getLongitude();
+	if (_dest != 0)
+	{
+		_meetPointLat = _dest->getLatitude();
+		_meetPointLon = _dest->getLongitude();
+	}
+	else
+	{
+		_meetPointLat = _lat;
+		_meetPointLon = _lon;
+	}
+
+	if (!_dest || !Options::meetingPoint) return;
 
 	MovingTarget *u = dynamic_cast<MovingTarget*>(_dest);
 	if (!u || !u->getDestination()) return;

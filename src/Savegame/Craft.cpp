@@ -16,9 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "Craft.h"
-#include <cmath>
+#include "../fmath.h"
 #include "../Engine/Language.h"
 #include "../Engine/RNG.h"
 #include "../Mod/RuleCraft.h"
@@ -143,17 +142,13 @@ void Craft::load(const YAML::Node &node, const Mod *mod, SavedGame *save)
 		}
 		else
 		{
-			Log(LOG_ERROR) << "Failed to load item " << type;			
+			Log(LOG_ERROR) << "Failed to load item " << type;
 		}
 	}
 	_status = node["status"].as<std::string>(_status);
 	_lowFuel = node["lowFuel"].as<bool>(_lowFuel);
 	_mission = node["mission"].as<bool>(_mission);
 	_interceptionOrder = node["interceptionOrder"].as<int>(_interceptionOrder);
-	if (const YAML::Node &name = node["name"])
-	{
-		_name = Language::utf8ToWstr(name.as<std::string>());
-	}
 	if (const YAML::Node &dest = node["dest"])
 	{
 		std::string type = dest["type"].as<std::string>();
@@ -256,8 +251,6 @@ YAML::Node Craft::save() const
 		node["interceptionOrder"] = _interceptionOrder;
 	if (_takeoff != 0)
 		node["takeoff"] = _takeoff;
-	if (!_name.empty())
-		node["name"] = Language::wstrToUtf8(_name);
 	return node;
 }
 
@@ -319,25 +312,13 @@ int Craft::getId() const
 }
 
 /**
- * Returns the craft's unique identifying name.
- * If there's no custom name, the language default is used.
+ * Returns the craft's unique default name.
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::wstring Craft::getName(Language *lang) const
+std::wstring Craft::getDefaultName(Language *lang) const
 {
-	if (_name.empty())
-		return lang->getString("STR_CRAFTNAME").arg(lang->getString(_rules->getType())).arg(_id);
-	return _name;
-}
-
-/**
- * Changes the craft's custom name.
- * @param newName New custom name. If set to blank, the language default is used.
- */
-void Craft::setName(const std::wstring &newName)
-{
-	_name = newName;
+	return lang->getString("STR_CRAFTNAME").arg(lang->getString(_rules->getType())).arg(_id);
 }
 
 /**

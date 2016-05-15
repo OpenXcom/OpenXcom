@@ -21,7 +21,7 @@
 #include <sstream>
 #include <cmath>
 #include <iomanip>
-#include <limits.h>
+#include <climits>
 #include "../lodepng.h"
 #include "Exception.h"
 #include "Surface.h"
@@ -66,7 +66,7 @@ void Screen::makeVideoFlags()
 	}
 	
 	// Handle window positioning
-	if (Options::windowedModePositionX != -1 || Options::windowedModePositionY != -1)
+	if (!Options::fullscreen && Options::rootWindowedMode)
 	{
 		std::ostringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << std::dec << Options::windowedModePositionX << "," << Options::windowedModePositionY;
@@ -92,11 +92,6 @@ void Screen::makeVideoFlags()
 	if (Options::borderless)
 	{
 		_flags |= SDL_NOFRAME;
-		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED=center"));
-	}
-	else
-	{
-		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED="));
 	}
 
 	_bpp = (is32bitEnabled() || isOpenGLEnabled()) ? 32 : 8;
@@ -111,7 +106,7 @@ void Screen::makeVideoFlags()
  */
 Screen::Screen() : _baseWidth(ORIGINAL_WIDTH), _baseHeight(ORIGINAL_HEIGHT), _scaleX(1.0), _scaleY(1.0), _flags(0), _numColors(0), _firstColor(0), _pushPalette(false), _surface(0)
 {
-	resetDisplay();	
+	resetDisplay();
 	memset(deferredPalette, 0, 256*sizeof(SDL_Color));
 }
 
@@ -150,7 +145,7 @@ void Screen::handle(Action *action)
 				case 1: Timer::gameSlowSpeed = 5; break;
 				case 5: Timer::gameSlowSpeed = 15; break;
 				default: Timer::gameSlowSpeed = 1; break;
-			}				
+			}
 		}
 	}
 	
@@ -313,7 +308,7 @@ void Screen::resetDisplay(bool resetVideo)
 #endif
 	makeVideoFlags();
 
-	if (!_surface || (_surface->getSurface()->format->BitsPerPixel != _bpp || 
+	if (!_surface || (_surface->getSurface()->format->BitsPerPixel != _bpp ||
 		_surface->getSurface()->w != _baseWidth ||
 		_surface->getSurface()->h != _baseHeight)) // don't reallocate _surface if not necessary, it's a waste of CPU cycles
 	{
@@ -412,7 +407,7 @@ void Screen::resetDisplay(bool resetVideo)
 		else
 		{
 			_cursorLeftBlackBand = 0;
-		}		
+		}
 	}
 	else if (_scaleY > _scaleX && Options::keepAspectRatio)
 	{
@@ -422,7 +417,7 @@ void Screen::resetDisplay(bool resetVideo)
 		{
 			_topBlackBand = 0;
 		}
-        _bottomBlackBand = getHeight() - targetHeight - _topBlackBand;
+		_bottomBlackBand = getHeight() - targetHeight - _topBlackBand;
 		if (_bottomBlackBand < 0)
 		{
 			_bottomBlackBand = 0;
@@ -438,7 +433,7 @@ void Screen::resetDisplay(bool resetVideo)
 		else
 		{
 			_cursorTopBlackBand = 0;
-		}		
+		}
 	}
 	else
 	{
@@ -533,7 +528,7 @@ void Screen::screenshot(const std::string &filename) const
 }
 
 
-/** 
+/**
  * Check whether a 32bpp scaler has been selected.
  * @return if it is enabled with a compatible resolution.
  */
@@ -568,7 +563,7 @@ bool Screen::isOpenGLEnabled()
  * Gets the Horizontal offset from the mid-point of the screen, in pixels.
  * @return the horizontal offset.
  */
-int Screen::getDX()
+int Screen::getDX() const
 {
 	return (_baseWidth - ORIGINAL_WIDTH) / 2;
 }
@@ -577,7 +572,7 @@ int Screen::getDX()
  * Gets the Vertical offset from the mid-point of the screen, in pixels.
  * @return the vertical offset.
  */
-int Screen::getDY()
+int Screen::getDY() const
 {
 	return (_baseHeight - ORIGINAL_HEIGHT) / 2;
 }

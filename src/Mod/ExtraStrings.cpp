@@ -69,4 +69,5 @@ std::map<std::string, std::string> *ExtraStrings::getStrings()
 {
 	return &_strings;
 }
+
 }

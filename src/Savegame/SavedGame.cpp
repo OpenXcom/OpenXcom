@@ -58,7 +58,7 @@ namespace OpenXcom
 {
 
 const std::string SavedGame::AUTOSAVE_GEOSCAPE = "_autogeo_.asav",
-   				  SavedGame::AUTOSAVE_BATTLESCAPE = "_autobattle_.asav",
+				  SavedGame::AUTOSAVE_BATTLESCAPE = "_autobattle_.asav",
 				  SavedGame::QUICKSAVE = "_quick_.asav";
 
 struct findRuleResearch : public std::unary_function<ResearchProject *,
@@ -141,7 +141,7 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 	for (std::vector<AlienBase*>::iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
- 	{
+	{
 		delete *i;
 	}
 	delete _alienStrategy;
@@ -153,11 +153,11 @@ SavedGame::~SavedGame()
 	{
 		delete *i;
 	}
-    for (std::vector<MissionStatistics*>::iterator i = _missionStatistics.begin(); i != _missionStatistics.end(); ++i)
+	for (std::vector<MissionStatistics*>::iterator i = _missionStatistics.begin(); i != _missionStatistics.end(); ++i)
 	{
 		delete *i;
 	}
-    
+	
 	delete _battleGame;
 }
 
@@ -515,7 +515,7 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 		}
 	}
 
-    for (YAML::const_iterator i = doc["missionStatistics"].begin(); i != doc["missionStatistics"].end(); ++i)
+	for (YAML::const_iterator i = doc["missionStatistics"].begin(); i != doc["missionStatistics"].end(); ++i)
 	{
 		MissionStatistics *ms = new MissionStatistics();
 		ms->load(*i);
@@ -573,7 +573,7 @@ void SavedGame::save(const std::string &filename) const
 			{
 				curMasterId = i->first;
 			}
-			if (!modInfo.getMaster().empty() && modInfo.getMaster() != curMasterId)
+			else if (!modInfo.getMaster().empty() && modInfo.getMaster() != curMasterId)
 			{
 				continue;
 			}
@@ -906,10 +906,19 @@ int SavedGame::getId(const std::string &name)
 }
 
 /**
+* Resets the list of unique object IDs.
+* @param ids New ID list.
+*/
+const std::map<std::string, int> &SavedGame::getAllIds() const
+{
+	return _ids;
+}
+
+/**
  * Resets the list of unique object IDs.
  * @param ids New ID list.
  */
-void SavedGame::setIds(const std::map<std::string, int> &ids)
+void SavedGame::setAllIds(const std::map<std::string, int> &ids)
 {
 	_ids = ids;
 }
@@ -1225,7 +1234,7 @@ void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & produc
 		RuleManufacture *m = mod->getManufacture(*iter);
 		if (!isResearched(m->getRequirements()))
 		{
-		 	continue;
+			continue;
 		}
 		if (std::find_if (baseProductions.begin(), baseProductions.end(), equalProduction(m)) != baseProductions.end())
 		{

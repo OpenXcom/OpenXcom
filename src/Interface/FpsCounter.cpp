@@ -120,4 +120,5 @@ void FpsCounter::addFrame()
 {
 	_frames++;
 }
+
 }

@@ -161,7 +161,7 @@ NewBattleState::NewBattleState() : _craft(0)
 
 	_txtTerrain->setText(tr("STR_MAP_TERRAIN"));
 
-	_txtDifficulty->setText(tr("STR_ALIEN_DIFFICULTY"));
+	_txtDifficulty->setText(tr("STR_DIFFICULTY"));
 
 	_txtAlienRace->setText(tr("STR_ALIEN_RACE"));
 

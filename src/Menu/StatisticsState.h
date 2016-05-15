@@ -25,23 +25,31 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
+class TextList;
 
 /**
- * Screen shown when there's not enough containment
- * to capture a live alien after a mission.
+ * Statistics window that shows up
+ * at the end of the game.
  */
-class NoContainmentState : public State
+class StatisticsState : public State
 {
 private:
 	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtTitle;
+	TextList *_lstStats;
+
+	// Sums a list of numbers.
+	template <typename T>
+	T sumVector(const std::vector<T> &vec) const;
 public:
-	/// Creates the No Containment state.
-	NoContainmentState();
-	/// Cleans up the No Containment state.
-	~NoContainmentState();
-	/// Handler for clicking the OK button.
+	/// Creates the New Game state.
+	StatisticsState();
+	/// Cleans up the New Game state.
+	~StatisticsState();
+	/// Gets the save stats.
+	void listStats();
+	/// Handler for clicking the Ok button.
 	void btnOkClick(Action *action);
 };
 

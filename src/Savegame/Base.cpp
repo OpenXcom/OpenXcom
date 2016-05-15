@@ -16,10 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "Base.h"
 #include "../fmath.h"
-#include <cmath>
 #include <stack>
 #include <algorithm>
 #include "BaseFacility.h"
@@ -108,7 +106,6 @@ Base::~Base()
 void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newBattleGame)
 {
 	Target::load(node);
-	_name = Language::utf8ToWstr(node["name"].as<std::string>(""));
 
 	if (!newGame || !Options::customInitialBase || newBattleGame)
 	{
@@ -242,7 +239,6 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 YAML::Node Base::save() const
 {
 	YAML::Node node = Target::save();
-	node["name"] = Language::wstrToUtf8(_name);
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		node["facilities"].push_back((*i)->save());
@@ -297,15 +293,6 @@ YAML::Node Base::saveId() const
 std::wstring Base::getName(Language *) const
 {
 	return _name;
-}
-
-/**
- * Changes the custom name for the base.
- * @param name Name.
- */
-void Base::setName(const std::wstring &name)
-{
-	_name = name;
 }
 
 /**

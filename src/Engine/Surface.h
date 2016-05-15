@@ -63,6 +63,8 @@ public:
 	void clear(Uint32 color = 0);
 	/// Offsets the surface's colors by a set amount.
 	void offset(int off, int min = -1, int max = -1, int mul = 1);
+	/// Offsets the surface's colors in a color block.
+	void offsetBlock(int off, int blk = 16, int mul = 1);
 	/// Inverts the surface's colors.
 	void invert(Uint8 mid);
 	/// Runs surface functionality every cycle
@@ -75,20 +77,20 @@ public:
 	virtual void initText(Font *, Font *, Language *) {};
 	/// Copies a portion of another surface into this one.
 	void copy(Surface *surface);
-    /// Draws a filled rectangle on the surface.
-    void drawRect(SDL_Rect *rect, Uint8 color);
+	/// Draws a filled rectangle on the surface.
+	void drawRect(SDL_Rect *rect, Uint8 color);
 	/// Draws a filled rectangle on the surface.
 	void drawRect(Sint16 x, Sint16 y, Sint16 w, Sint16 h, Uint8 color);
-    /// Draws a line on the surface.
-    void drawLine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color);
-    /// Draws a filled circle on the surface.
-    void drawCircle(Sint16 x, Sint16 y, Sint16 r, Uint8 color);
-    /// Draws a filled polygon on the surface.
-    void drawPolygon(Sint16 *x, Sint16 *y, int n, Uint8 color);
-    /// Draws a textured polygon on the surface.
-    void drawTexturedPolygon(Sint16 *x, Sint16 *y, int n, Surface *texture, int dx, int dy);
-    /// Draws a string on the surface.
-    void drawString(Sint16 x, Sint16 y, const char *s, Uint8 color);
+	/// Draws a line on the surface.
+	void drawLine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color);
+	/// Draws a filled circle on the surface.
+	void drawCircle(Sint16 x, Sint16 y, Sint16 r, Uint8 color);
+	/// Draws a filled polygon on the surface.
+	void drawPolygon(Sint16 *x, Sint16 *y, int n, Uint8 color);
+	/// Draws a textured polygon on the surface.
+	void drawTexturedPolygon(Sint16 *x, Sint16 *y, int n, Surface *texture, int dx, int dy);
+	/// Draws a string on the surface.
+	void drawString(Sint16 x, Sint16 y, const char *s, Uint8 color);
 	/// Sets the surface's palette.
 	virtual void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/**
@@ -216,16 +218,19 @@ public:
 	std::string getTooltip() const;
 	/// Sets the tooltip of the surface.
 	void setTooltip(const std::string &tooltip);
+
 	/// Sets the color of the surface.
 	virtual void setColor(Uint8 /*color*/) { /* empty by design */ };
 	/// Sets the secondary color of the surface.
 	virtual void setSecondaryColor(Uint8 /*color*/) { /* empty by design */ };
 	/// Sets the border colour of the surface.
 	virtual void setBorderColor(Uint8 /*color*/) { /* empty by design */ };
+	/// Sets the high contrast color setting of the surface.
+	virtual void setHighContrast(bool /*contrast*/) { /* empty by design */ };
 	/// Sets this button to use a colour lookup table instead of inversion for its alternate form.
-	virtual void setTFTDMode(bool mode);
+	void setTFTDMode(bool mode);
 	/// checks if this is a TFTD mode surface.
-	bool isTFTDMode();
+	bool isTFTDMode() const;
 
 };
 

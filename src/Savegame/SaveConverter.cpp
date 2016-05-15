@@ -16,11 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "SaveConverter.h"
 #include <yaml-cpp/yaml.h>
 #include <SDL_endian.h>
-#include <cmath>
 #include <fstream>
 #include <sstream>
 #include <iomanip>
@@ -58,6 +56,7 @@
 #include "../Engine/RNG.h"
 #include "../Mod/RuleConverter.h"
 #include "../Ufopaedia/Ufopaedia.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {
@@ -343,7 +342,7 @@ void SaveConverter::loadDatUIGlob()
 		ids[_rules->getMarkers()[i]] = load<Uint16>(data + i * sizeof(Uint16));
 	}
 	ids["STR_CRASH_SITE"] = ids["STR_LANDING_SITE"] = ids["STR_UFO"];
-	_save->setIds(ids);
+	_save->setAllIds(ids);
 
 	_year = load<Uint16>(data + 0x16);
 
@@ -568,7 +567,7 @@ void SaveConverter::loadDatMissions()
 				if (_mod->getRegion(_rules->getRegions()[region])->getMissionZones().size() >= 3)
 				{
 					// pick a city for terror missions
-					node["missionSiteZone"] = RNG::generate(0, _mod->getRegion(_rules->getRegions()[region])->getMissionZones().at(3).areas.size() - 1); 
+					node["missionSiteZone"] = RNG::generate(0, _mod->getRegion(_rules->getRegions()[region])->getMissionZones().at(3).areas.size() - 1);
 				}
 				else
 				{

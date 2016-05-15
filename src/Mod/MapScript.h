@@ -72,7 +72,7 @@ public:
 	/// Initializes all the variables and junk for a mapscript command.
 	void init();
 	/// Gets what type of command this is.
-	MapScriptCommand getType() {return _type;};
+	MapScriptCommand getType() const {return _type;};
 	/// Gets the rects, describing the areas this command applies to.
 	const std::vector<SDL_Rect*> *getRects() const {return &_rects;};
 	/// Gets the X size for this command.
@@ -100,7 +100,7 @@ public:
 	/// Randomly generate a block from within either the array of groups or blocks.
 	MapBlock *getNextBlock(RuleTerrain *terrain);
 	/// Gets the UFO's name (for setUFO)
-	std::string getUFOName();
+	std::string getUFOName() const;
 };
 
 }

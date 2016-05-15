@@ -159,7 +159,6 @@ void MiniBaseView::mouseOver(Action *action, State *state)
 	InteractiveSurface::mouseOver(action, state);
 }
 
-
 void MiniBaseView::setColor(Uint8 color)
 {
 	_green = color;
@@ -168,4 +167,5 @@ void MiniBaseView::setSecondaryColor(Uint8 color)
 {
 	_red = color;
 }
+
 }

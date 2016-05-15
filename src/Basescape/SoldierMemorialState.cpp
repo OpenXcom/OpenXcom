@@ -32,6 +32,7 @@
 #include "../Savegame/SoldierDeath.h"
 #include "../Savegame/GameTime.h"
 #include "SoldierInfoState.h"
+#include "../Menu/StatisticsState.h"
 
 namespace OpenXcom
 {
@@ -44,7 +45,8 @@ SoldierMemorialState::SoldierMemorialState()
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(288, 16, 16, 176);
+	_btnOk = new TextButton(148, 16, 164, 176);
+	_btnStatistics = new TextButton(148, 16, 8, 176);
 	_txtTitle = new Text(310, 17, 5, 8);
 	_txtName = new Text(114, 9, 16, 36);
 	_txtRank = new Text(102, 9, 130, 36);
@@ -58,6 +60,7 @@ SoldierMemorialState::SoldierMemorialState()
 
 	add(_window, "window", "soldierMemorial");
 	add(_btnOk, "button", "soldierMemorial");
+	add(_btnStatistics, "button", "soldierMemorial");
 	add(_txtTitle, "text", "soldierMemorial");
 	add(_txtName, "text", "soldierMemorial");
 	add(_txtRank, "text", "soldierMemorial");
@@ -74,6 +77,9 @@ SoldierMemorialState::SoldierMemorialState()
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldierMemorialState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SoldierMemorialState::btnOkClick, Options::keyCancel);
+
+	_btnStatistics->setText(tr("STR_STATISTICS"));
+	_btnStatistics->onMouseClick((ActionHandler)&SoldierMemorialState::btnStatisticsClick);
 
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -92,9 +98,9 @@ SoldierMemorialState::SoldierMemorialState()
 		recruited += (*i)->getTotalSoldiers();
 	}
 
-	_txtRecruited->setText(tr("STR_SOLDIERS_RECRUITED").arg(recruited));
+	_txtRecruited->setText(tr("STR_SOLDIERS_RECRUITED_UC").arg(recruited));
 
-	_txtLost->setText(tr("STR_SOLDIERS_LOST").arg(lost));
+	_txtLost->setText(tr("STR_SOLDIERS_LOST_UC").arg(lost));
 
 	_lstSoldiers->setColumns(5, 114, 88, 30, 25, 35);
 	_lstSoldiers->setSelectable(true);
@@ -130,6 +136,15 @@ void SoldierMemorialState::btnOkClick(Action *)
 {
 	_game->popState();
 	_game->getMod()->playMusic("GMGEO");
+}
+
+/**
+* Shows the Statistics screen.
+* @param action Pointer to an action.
+*/
+void SoldierMemorialState::btnStatisticsClick(Action *)
+{
+	_game->pushState(new StatisticsState);
 }
 
 /**

@@ -239,4 +239,5 @@ int RuleInventory::getListOrder() const
 {
 	return _listOrder;
 }
+
 }

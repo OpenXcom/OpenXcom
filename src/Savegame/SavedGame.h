@@ -129,7 +129,7 @@ private:
 	std::vector<Soldier*> _deadSoldiers;
 	size_t _selectedBase;
 	std::string _lastselectedArmor; //contains the last selected armour
-    std::vector<MissionStatistics*> _missionStatistics;
+	std::vector<MissionStatistics*> _missionStatistics;
 
 	void getDependableResearchBasic (std::vector<RuleResearch*> & dependables, const RuleResearch *research, const Mod *mod, Base *base) const;
 	static SaveInfo getSaveInfo(const std::string &file, Language *lang);
@@ -190,7 +190,9 @@ public:
 	/// Gets the current ID for an object.
 	int getId(const std::string &name);
 	/// Resets the list of object IDs.
-	void setIds(const std::map<std::string, int> &ids);
+	const std::map<std::string, int> &getAllIds() const;
+	/// Resets the list of object IDs.
+	void setAllIds(const std::map<std::string, int> &ids);
 	/// Gets the list of countries.
 	std::vector<Country*> *getCountries();
 	/// Gets the total country funding.
@@ -297,7 +299,7 @@ public:
 	void removePoppedResearch(const RuleResearch* research);
 	/// Gets the list of dead soldiers.
 	std::vector<Soldier*> *getDeadSoldiers();
-    /// Gets the last selected player base.
+	/// Gets the last selected player base.
 	Base *getSelectedBase();
 	/// Set the last selected player base.
 	void setSelectedBase(size_t base);
@@ -309,7 +311,7 @@ public:
 	std::string getLastSelectedArmor() const;
 	/// Returns the craft corresponding to the specified unique id.
 	Craft *findCraftByUniqueId(const CraftId& craftId) const;
-    /// Gets the list of missions statistics
+	/// Gets the list of missions statistics
 	std::vector<MissionStatistics*> *getMissionStatistics();
 	/// Handles a soldier's death.
 	std::vector<Soldier*>::iterator killSoldier(Soldier *soldier, BattleUnitKills *cause = 0);

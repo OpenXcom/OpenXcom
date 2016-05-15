@@ -242,4 +242,5 @@ bool AlienStrategy::validMissionRegion(const std::string &region)
 	std::map<std::string, WeightedOptions*>::iterator i = _regionMissions.find(region);
 	return (i != _regionMissions.end());
 }
+
 }

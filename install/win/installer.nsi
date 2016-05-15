@@ -1,20 +1,31 @@
 ;NSIS OpenXcom Windows Installer
 
 ;--------------------------------
+;Special
+
+	;Enable support for Unicode
+	Unicode true
+	
+	;Compress the hell out of it
+	SetCompressor /SOLID lzma
+
+;--------------------------------
 ;Includes
 
 	!include "MUI2.nsh"
 	!include "nsDialogs.nsh"
 	!include "x64.nsh"
 	!include "Sections.nsh"
+	!include "LangFile.nsh"
+	!include "StrFunc.nsh"
 
 ;--------------------------------
 ;Defines
 
 	!define GAME_NAME "OpenXcom"
 	!define GAME_VERSION "1.0"
-	!define GAME_AUTHOR "OpenXcom Developers"	
-	
+	!define GAME_AUTHOR "OpenXcom Developers"
+
 ;--------------------------------
 ;General
 
@@ -30,7 +41,7 @@
 
 	;Request application privileges for Windows Vista
 	RequestExecutionLevel admin
-	
+
 ;--------------------------------
 ;Variables
 
@@ -44,9 +55,7 @@
 	Var XBrowseTFTD
 	
 	Var StartMenuFolder
-	Var STEAM_UFO_DIR
 	Var UFO_DIR
-	Var STEAM_TFTD_DIR
 	Var TFTD_DIR
 
 ;--------------------------------
@@ -60,13 +69,13 @@
 ;Language Selection Dialog Settings
 
 	;Remember the installer language
-	!define MUI_LANGDLL_REGISTRY_ROOT "HKLM" 
-	!define MUI_LANGDLL_REGISTRY_KEY "Software\${GAME_NAME}" 
+	!define MUI_LANGDLL_REGISTRY_ROOT "HKLM"
+	!define MUI_LANGDLL_REGISTRY_KEY "Software\${GAME_NAME}"
 	!define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
 
 ;--------------------------------
 ;Pages
-	
+
 	!insertmacro MUI_PAGE_WELCOME
 	!insertmacro MUI_PAGE_COMPONENTS
 	!insertmacro MUI_PAGE_DIRECTORY
@@ -74,10 +83,10 @@
 	Page custom XcomFolder ValidateXcom
 	
 	;Start Menu Folder Page Configuration
-	!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM" 
-	!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${GAME_NAME}" 
+	!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
+	!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${GAME_NAME}"
 	!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
-
+	
 	!insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
 	
 	!insertmacro MUI_PAGE_INSTFILES
@@ -87,15 +96,15 @@
 	!define MUI_FINISHPAGE_NOREBOOTSUPPORT
 	
 	!insertmacro MUI_PAGE_FINISH
-
+	
 	!insertmacro MUI_UNPAGE_COMPONENTS
 	!insertmacro MUI_UNPAGE_CONFIRM
 	!insertmacro MUI_UNPAGE_INSTFILES
 
 Function XcomFolder
-	
-	!insertmacro MUI_HEADER_TEXT $(SETUP_XCOM_FOLDER_TITLE) $(SETUP_XCOM_FOLDER_SUBTITLE)
 
+	!insertmacro MUI_HEADER_TEXT $(SETUP_XCOM_FOLDER_TITLE) $(SETUP_XCOM_FOLDER_SUBTITLE)
+	
 	nsDialogs::Create 1018
 	Pop $XDialog
 
@@ -105,14 +114,14 @@ Function XcomFolder
 	
 	${NSD_CreateLabel} 0 0 100% 50% $(SETUP_XCOM_FOLDER)
 	Pop $XLabelHeader
-
+	
 	${NSD_CreateLabel} 0 -67u 100% 10u $(SETUP_UFO_FOLDER)
 	Pop $XLabelDirUFO
 	
 	${NSD_CreateDirRequest} 0 -56u 95% 12u $UFO_DIR
 	Pop $XDirUFO
 	${NSD_OnChange} $XDirUFO XcomFolderOnChange
-
+	
 	${NSD_CreateBrowseButton} -14u -56u 14u 12u "..."
 	Pop $XBrowseUFO
 	${NSD_OnClick} $XBrowseUFO XcomFolderOnBrowse
@@ -123,11 +132,11 @@ Function XcomFolder
 	${NSD_CreateDirRequest} 0 -20u 95% 12u $TFTD_DIR
 	Pop $XDirTFTD
 	${NSD_OnChange} $XDirTFTD XcomFolderOnChange
-
+	
 	${NSD_CreateBrowseButton} -14u -20u 14u 12u "..."
 	Pop $XBrowseTFTD
 	${NSD_OnClick} $XBrowseTFTD XcomFolderOnBrowse
-
+	
 	nsDialogs::Show
 
 FunctionEnd
@@ -169,31 +178,22 @@ Function XcomFolderOnBrowse
 		StrCpy $TFTD_DIR $1
 		${NSD_SetText} $XDirTFTD $TFTD_DIR
 	${EndIf}
-	
+
 FunctionEnd
 
 ;--------------------------------
 ;Languages
 
-!macro LANG_LOAD LANGLOAD
-	!insertmacro MUI_LANGUAGE "${LANGLOAD}"
-	!include "${LANGLOAD}.nsh"
-	!undef LANG
-!macroend
- 
-!macro LANG_STRING NAME VALUE
-	LangString "${NAME}" "${LANG_${LANG}}" "${VALUE}"
-!macroend
-
-	!insertmacro LANG_LOAD "English" ;first language is the default language
+	!insertmacro MUI_LANGUAGE "English" ;first language is the default language
+	!insertmacro LANGFILE_INCLUDE "English.nsh"
 
 ;--------------------------------
 ;Reserve Files
-  
+
 	;If you are using solid compression, files that are required before
 	;the actual installation should be stored first in the data block,
 	;because this will make your installer start faster.
-
+	
 	!insertmacro MUI_RESERVEFILE_LANGDLL
 
 ;--------------------------------
@@ -202,7 +202,7 @@ FunctionEnd
 Section "$(SETUP_GAME)" SecMain
 
 	SectionIn RO
-
+	
 	SetOutPath "$INSTDIR"
 	
 ${If} ${RunningX64}
@@ -272,7 +272,7 @@ ${EndIf}
 	File "..\..\bin\UFO\README.txt"
 	File /r "..\..\bin\common"
 	File /r "..\..\bin\standard"
-
+	
 	;Store installation folder
 	WriteRegStr HKLM "Software\${GAME_NAME}" "" $INSTDIR
 	
@@ -286,7 +286,7 @@ ${EndIf}
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "URLInfoAbout" "http://openxcom.org"
 	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "NoModify" 1
 	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "NoRepair" 1
-
+	
 	;Create uninstaller
 	WriteUninstaller "$INSTDIR\Uninstall.exe"
 	
@@ -301,13 +301,13 @@ ${EndIf}
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(SETUP_SHORTCUT_README).lnk" "$INSTDIR\README.md"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(SETUP_SHORTCUT_USER).lnk" "$DOCUMENTS\OpenXcom"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(SETUP_SHORTCUT_UNINSTALL).lnk" "$INSTDIR\Uninstall.exe"
-  
+	
 	!insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
 
 Section "$(SETUP_PATCH)" SecPatch
-	
+
 	;(uses NSISdl.dll)
 	NSISdl::download "http://openxcom.org/download/extras/universal-patch.zip" "$TEMP\universal-patch.zip"
 	Pop $0
@@ -316,7 +316,7 @@ Section "$(SETUP_PATCH)" SecPatch
 		DetailPrint "download failed: $0"
 		Abort
 	success1:
-
+	
 	;(uses nsisunz.dll)
 	nsisunz::UnzipToLog "$TEMP\universal-patch.zip" "$INSTDIR\UFO"
 	Pop $0
@@ -325,7 +325,7 @@ Section "$(SETUP_PATCH)" SecPatch
 		DetailPrint "unzipping failed: $0"
 		Abort
 	success2:
-
+	
 	Delete "$TEMP\universal-patch.zip"
 
 SectionEnd
@@ -333,15 +333,7 @@ SectionEnd
 Section /o "$(SETUP_PORTABLE)" SecPortable
 
 	CreateDirectory "$INSTDIR\user"
-	
-SectionEnd
 
-Section /o "$(SETUP_STEAM)" SecSteam
-
-	SectionIn RO
-	
-	Rename "$INSTDIR\OpenXcom.exe" "$INSTDIR\dosbox.exe"
-	
 SectionEnd
 
 Section /o "$(SETUP_DESKTOP)" SecDesktop
@@ -360,7 +352,6 @@ SectionEnd
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecMain} $(SETUP_GAME_DESC)
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecPatch} $(SETUP_PATCH_DESC)
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecPortable} $(SETUP_PORTABLE_DESC)
-		!insertmacro MUI_DESCRIPTION_TEXT ${SecSteam} $(SETUP_STEAM_DESC)
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecDesktop} $(SETUP_DESKTOP_DESC)
 	!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
@@ -376,32 +367,86 @@ ${Else}
 ${EndIf}
 	StrCpy $StartMenuFolder "${GAME_NAME}"
 	
-	; Get X-COM folders from Steam
-	StrCpy $STEAM_UFO_DIR ""
+	; Check for existing X-COM installs
 	StrCpy $UFO_DIR ""
-	StrCpy $STEAM_TFTD_DIR ""
-	StrCpy $TFTD_DIR ""	
-	ReadRegStr $R1 HKLM "Software\Valve\Steam" "InstallPath"
-	IfErrors xcom_no
+	StrCpy $TFTD_DIR ""
 	
+	Call ScanSteam
+	Call ScanGOG
+	
+	!insertmacro MUI_LANGDLL_DISPLAY
+
+FunctionEnd
+
+;--------------------------------
+;Scan Steam for X-COM installations
+${StrLoc}
+${StrTok}
+${StrRep}
+
+Function ScanSteam
+
+	ReadRegStr $R1 HKLM "Software\Valve\Steam" "InstallPath"
+	IfErrors steam_done
+	Call ScanSteamLibrary
+	
+	ClearErrors
+	FileOpen $0 "$R1\config\config.vdf" r
+	IfErrors steam_read_done
+	steam_read_loop:
+	FileRead $0 $1
+	IfErrors steam_read_done
+	${StrLoc} $2 $1 "BaseInstallFolder_" ">"
+	StrCmp $2 "" steam_read_next 0
+	${StrTok} $R1 $1 '"' "3" "1"
+	${StrRep} $R1 $R1 "\\" "\"
+	Call ScanSteamLibrary
+	steam_read_next:
+	Goto steam_read_loop
+	steam_read_done:
+	FileClose $0
+	
+	steam_done:
+
+FunctionEnd
+
+;--------------------------------
+;Scan a specific Steam Library
+
+Function ScanSteamLibrary
+
 	StrCpy $R0 "$R1\steamapps\common\XCom UFO Defense\XCOM"
-	IfFileExists "$R0\*.*" ufo_yes ufo_no
-	ufo_yes:
-	StrCpy $STEAM_UFO_DIR "$R1\steamapps\common\XCom UFO Defense"
+	IfFileExists "$R0\*.*" steam_ufo_yes steam_ufo_no
+	steam_ufo_yes:
 	StrCpy $UFO_DIR $R0
-	SectionSetFlags ${SecSteam} 0
-	ufo_no:
+	steam_ufo_no:
 	
 	StrCpy $R0 "$R1\steamapps\common\X-COM Terror from the Deep\TFD"
-	IfFileExists "$R0\*.*" tftd_yes tftd_no
-	tftd_yes:
-	StrCpy $STEAM_TFTD_DIR "$R1\steamapps\common\X-COM Terror from the Deep"
+	IfFileExists "$R0\*.*" steam_tftd_yes steam_tftd_no
+	steam_tftd_yes:
 	StrCpy $TFTD_DIR $R0
-	SectionSetFlags ${SecSteam} 0
-	tftd_no:
+	steam_tftd_no:
+
+FunctionEnd
+
+;--------------------------------
+;Scan GOG for X-COM installations
+
+Function ScanGOG
+
+	ReadRegStr $R0 HKLM "Software\GOG.com\Games\1445250340" "PATH"
+	IfErrors gog_ufo_no
+	IfFileExists "$R0\*.*" gog_ufo_yes gog_ufo_no
+	gog_ufo_yes:
+	StrCpy $UFO_DIR $R0
+	gog_ufo_no:
 	
-	xcom_no:	
-	!insertmacro MUI_LANGDLL_DISPLAY
+	ReadRegStr $R0 HKLM "Software\GOG.com\Games\1445249983" "PATH"
+	IfErrors gog_tftd_no
+	IfFileExists "$R0\*.*" gog_tftd_yes gog_tftd_no
+	gog_tftd_yes:
+	StrCpy $TFTD_DIR $R0
+	gog_tftd_no:
 
 FunctionEnd
 
@@ -428,7 +473,7 @@ Function ValidateXcom
 	confirm_ufo_xcu:
 	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(SETUP_WARNING_XCU) /SD IDYES IDYES validate_ufo_yes IDNO validate_ufo_no
 	validate_ufo_no:
-	Abort	
+	Abort
 	validate_ufo_yes:
 	
 	; TFTD
@@ -449,9 +494,9 @@ Function ValidateXcom
 	confirm_tftd_xcu:
 	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(SETUP_WARNING_XCU) /SD IDYES IDYES validate_tftd_yes IDNO validate_tftd_no
 	validate_tftd_no:
-	Abort	
+	Abort
 	validate_tftd_yes:
-	
+
 FunctionEnd
 
 ;--------------------------------
@@ -460,7 +505,7 @@ FunctionEnd
 Function un.onInit
 
 	!insertmacro MUI_UNGETLANGUAGE
-  
+
 FunctionEnd
 
 ;--------------------------------
@@ -477,7 +522,7 @@ Section /o "un.$(SETUP_UNUSER)" UnUser
 SectionEnd
 
 Section "-un.Main"
-	
+
 	SetOutPath "$TEMP"
 	
 	Delete "$INSTDIR\OpenXcom.exe"
@@ -510,7 +555,7 @@ SectionEnd
 	;Assign language strings to sections
 	!insertmacro MUI_UNFUNCTION_DESCRIPTION_BEGIN
 		!insertmacro MUI_DESCRIPTION_TEXT ${UnData} $(SETUP_UNDATA_DESC)
-		!insertmacro MUI_DESCRIPTION_TEXT ${UnUser} $(SERUP_UNUSER_DESC)
+		!insertmacro MUI_DESCRIPTION_TEXT ${UnUser} $(SETUP_UNUSER_DESC)
 	!insertmacro MUI_UNFUNCTION_DESCRIPTION_END
 
 ;--------------------------------

@@ -72,9 +72,9 @@ public:
 	/// Skips the bullet flight.
 	void skipTrajectory();
 	/// Gets the Position of origin for the projectile.
-	Position getOrigin();
+	Position getOrigin() const;
 	/// Gets the targetted tile for the projectile.
-	Position getTarget();
+	Position getTarget() const;
 	/// Is this projectile being drawn back-to-front or front-to-back?
 	bool isReversed() const;
 	/// adds a cloud of particles at the projectile's location

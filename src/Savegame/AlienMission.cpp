@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "AlienMission.h"
 #include "AlienBase.h"
 #include "Base.h"
@@ -43,7 +42,6 @@
 #include "Waypoint.h"
 #include <assert.h>
 #include <algorithm>
-#include <math.h>
 #include "../Mod/AlienDeployment.h"
 
 namespace OpenXcom
@@ -602,7 +600,7 @@ const AlienBase *AlienMission::getAlienBase() const
  * @param lat Latitudinal coordinates to check.
  * @param game The saved game information.
  */
-void AlienMission::addScore(const double lon, const double lat, SavedGame &game)
+void AlienMission::addScore(double lon, double lat, SavedGame &game) const
 {
 	for (std::vector<Region *>::iterator region = game.getRegions()->begin(); region != game.getRegions()->end(); ++region)
 	{
@@ -753,4 +751,5 @@ void AlienMission::setMissionSiteZone(int zone)
 {
 	_missionSiteZone = zone;
 }
+
 }

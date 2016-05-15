@@ -20,16 +20,15 @@
 #include "DosFont.h"
 #include "Surface.h"
 #include "FileMap.h"
+#include "Language.h"
 
 namespace OpenXcom
 {
 
-std::wstring Font::_index;
-
 /**
  * Initializes the font with a blank surface.
  */
-Font::Font() : _surface(0), _width(0), _height(0), _spacing(0), _monospace(false)
+Font::Font() : _width(0), _height(0), _spacing(0), _monospace(false)
 {
 }
 
@@ -38,17 +37,10 @@ Font::Font() : _surface(0), _width(0), _height(0), _spacing(0), _monospace(false
  */
 Font::~Font()
 {
-	delete _surface;
-}
-
-/**
- * Loads the characters contained in each font
- * from a UTF-8 string to use as the index.
- * @param index String of characters.
- */
-void Font::setIndex(const std::wstring &index)
-{
-	_index = index;
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		delete (*i);
+	}
 }
 
 /**
@@ -61,10 +53,15 @@ void Font::load(const YAML::Node &node)
 	_height = node["height"].as<int>(_height);
 	_spacing = node["spacing"].as<int>(_spacing);
 	_monospace = node["monospace"].as<bool>(_monospace);
-	std::string image = "Language/" + node["image"].as<std::string>();
-	_surface = new Surface(_width, _height);
-	_surface->loadImage(FileMap::getFilePath(image));
-	init();
+	for (YAML::const_iterator i = node["images"].begin(); i != node["images"].end(); ++i)
+	{
+		std::string image = "Language/" + (*i)["file"].as<std::string>();
+		std::wstring chars = Language::utf8ToWstr((*i)["chars"].as<std::string>());
+		Surface *surface = new Surface(_width, _height);
+		surface->loadImage(FileMap::getFilePath(image));
+		_surfaces.push_back(surface);
+		init(_surfaces.size() - 1, chars);
+	}
 }
 
 /**
@@ -80,16 +77,14 @@ void Font::loadTerminal()
 	SDL_RWops *rw = SDL_RWFromConstMem(dosFont, DOSFONT_SIZE);
 	SDL_Surface *s = SDL_LoadBMP_RW(rw, 0);
 	SDL_FreeRW(rw);
-	_surface = new Surface(s->w, s->h);
+	Surface *surface = new Surface(s->w, s->h);
 	SDL_Color terminal[2] = {{0, 0, 0, 0}, {185, 185, 185, 255}};
-	_surface->setPalette(terminal, 0, 2);
-	SDL_BlitSurface(s, 0, _surface->getSurface(), 0);
+	surface->setPalette(terminal, 0, 2);
+	SDL_BlitSurface(s, 0, surface->getSurface(), 0);
 	SDL_FreeSurface(s);
+	_surfaces.push_back(surface);
 
-	std::wstring temp = _index;
-	_index = L" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-	init();
-	_index = temp;
+	init(0, L" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
 }
 
 
@@ -97,14 +92,17 @@ void Font::loadTerminal()
  * Calculates the real size and position of each character in
  * the surface and stores them in SDL_Rect's for future use
  * by other classes.
+ * @param index The index of the surface to use.
+ * @param str A string of characters to map to the surface.
  */
-void Font::init()
+void Font::init(size_t index, const std::wstring &str)
 {
-	_surface->lock();
-	int length = (_surface->getWidth() / _width);
+	Surface *surface = _surfaces[index];
+	surface->lock();
+	int length = (surface->getWidth() / _width);
 	if (_monospace)
 	{
-		for (size_t i = 0; i < _index.length(); ++i)
+		for (size_t i = 0; i < str.length(); ++i)
 		{
 			SDL_Rect rect;
 			int startX = i % length * _width;
@@ -113,12 +111,12 @@ void Font::init()
 			rect.y = startY;
 			rect.w = _width;
 			rect.h = _height;
-			_chars[_index[i]] = rect;
+			_chars[str[i]] = std::make_pair(index, rect);
 		}
 	}
 	else
 	{
-		for (size_t i = 0; i < _index.length(); ++i)
+		for (size_t i = 0; i < str.length(); ++i)
 		{
 			SDL_Rect rect;
 			int left = -1, right = -1;
@@ -128,7 +126,7 @@ void Font::init()
 			{
 				for (int y = startY; y < startY + _height && left == -1; ++y)
 				{
-					Uint8 pixel = _surface->getPixel(x, y);
+					Uint8 pixel = surface->getPixel(x, y);
 					if (pixel != 0)
 					{
 						left = x;
@@ -139,7 +137,7 @@ void Font::init()
 			{
 				for (int y = startY + _height; y-- != startY && right == -1;)
 				{
-					Uint8 pixel = _surface->getPixel(x, y);
+					Uint8 pixel = surface->getPixel(x, y);
 					if (pixel != 0)
 					{
 						right = x;
@@ -151,10 +149,10 @@ void Font::init()
 			rect.w = right - left + 1;
 			rect.h = _height;
 
-			_chars[_index[i]] = rect;
+			_chars[str[i]] = std::make_pair(index, rect);
 		}
 	}
-	_surface->unlock();
+	surface->unlock();
 }
 
 /**
@@ -169,11 +167,9 @@ Surface *Font::getChar(wchar_t c)
 	{
 		return 0;
 	}
-	_surface->getCrop()->x = _chars[c].x;
-	_surface->getCrop()->y = _chars[c].y;
-	_surface->getCrop()->w = _chars[c].w;
-	_surface->getCrop()->h = _chars[c].h;
-	return _surface;
+	Surface *surface = _surfaces[_chars[c].first];
+	*surface->getCrop() = _chars[c].second;
+	return surface;
 }
 
 /**
@@ -215,8 +211,8 @@ SDL_Rect Font::getCharSize(wchar_t c)
 	SDL_Rect size = { 0, 0, 0, 0 };
 	if (c != 1 && !isLinebreak(c) && !isSpace(c))
 	{
-		size.w = _chars[c].w + _spacing;
-		size.h = _chars[c].h + _spacing;
+		size.w = _chars[c].second.w + _spacing;
+		size.h = _chars[c].second.h + _spacing;
 	}
 	else
 	{
@@ -235,13 +231,26 @@ SDL_Rect Font::getCharSize(wchar_t c)
 }
 
 /**
- * Returns the surface stored within the font. Used for loading the
- * actual graphic into the font.
- * @return Pointer to the internal surface.
+ * Returns the font's 8bpp palette.
+ * @return Pointer to the palette's colors.
  */
-Surface *Font::getSurface() const
+SDL_Color *Font::getPalette() const
 {
-	return _surface;
+	return _surfaces[0]->getPalette();
+}
+
+/**
+ * Replaces a certain amount of colors in the font's palette.
+ * @param colors Pointer to the set of colors.
+ * @param firstcolor Offset of the first color to replace.
+ * @param ncolors Amount of colors to replace.
+ */
+void Font::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+{
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		(*i)->setPalette(colors, firstcolor, ncolors);
+	}
 }
 
 }

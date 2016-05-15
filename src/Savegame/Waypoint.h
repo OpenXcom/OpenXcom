@@ -46,8 +46,8 @@ public:
 	int getId() const;
 	/// Sets the waypoint's ID.
 	void setId(int id);
-	/// Gets the waypoint's name.
-	std::wstring getName(Language *lang) const;
+	/// Gets the waypoint's default name.
+	std::wstring getDefaultName(Language *lang) const;
 	/// Gets the waypoint's marker.
 	int getMarker() const;
 };

@@ -58,8 +58,8 @@ public:
 	int getId() const;
 	/// Sets the mission site's ID.
 	void setId(int id);
-	/// Gets the mission site's name.
-	std::wstring getName(Language *lang) const;
+	/// Gets the mission site's default name.
+	std::wstring getDefaultName(Language *lang) const;
 	/// Gets the mission site's marker.
 	int getMarker() const;
 	/// Gets the seconds until this mission site expires.
@@ -83,7 +83,7 @@ public:
 	/// Sets the mission site's city.
 	void setCity(const std::string &city);
 	/// Gets the mission site's detection state.
-	bool getDetected();
+	bool getDetected() const;
 	/// Sets the mission site's detection state.
 	void setDetected(bool detected);
 };

@@ -25,6 +25,7 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
+class TextEdit;
 class Target;
 class Globe;
 
@@ -40,7 +41,8 @@ private:
 
 	TextButton *_btnIntercept, *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtTargetted, *_txtFollowers;
+	TextEdit *_edtTitle;
+	Text *_txtTargetted, *_txtFollowers;
 public:
 	/// Creates the Target Info state.
 	TargetInfoState(Target *target, Globe *globe);
@@ -50,6 +52,8 @@ public:
 	void btnInterceptClick(Action *action);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	/// Handler for changing the text on the Name edit.
+	void edtTitleChange(Action *action);
 };
 
 }

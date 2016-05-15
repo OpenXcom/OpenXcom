@@ -197,4 +197,5 @@ void NextTurnState::resize(int &dX, int &dY)
 	_bg->setX(0);
 	_bg->setY(0);
 }
+
 }

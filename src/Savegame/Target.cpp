@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "Target.h"
-#include <cmath>
 #include "Craft.h"
 #include "SerializationHelper.h"
+#include "../fmath.h"
+#include "../Engine/Language.h"
 
 namespace OpenXcom
 {
@@ -55,6 +55,10 @@ void Target::load(const YAML::Node &node)
 {
 	_lon = node["lon"].as<double>(_lon);
 	_lat = node["lat"].as<double>(_lat);
+	if (const YAML::Node &name = node["name"])
+	{
+		_name = Language::utf8ToWstr(name.as<std::string>());
+	}
 	_depth = node["depth"].as<int>(_depth);
 }
 
@@ -67,6 +71,8 @@ YAML::Node Target::save() const
 	YAML::Node node;
 	node["lon"] = serializeDouble(_lon);
 	node["lat"] = serializeDouble(_lat);
+	if (!_name.empty())
+		node["name"] = Language::wstrToUtf8(_name);
 	if (_depth)
 		node["depth"] = _depth;
 	return node;
@@ -138,6 +144,28 @@ void Target::setLatitude(double lat)
 }
 
 /**
+ * Returns the target's unique identifying name.
+ * If there's no custom name, the language default is used.
+ * @param lang Language to get strings from.
+ * @return Full name.
+ */
+std::wstring Target::getName(Language *lang) const
+{
+	if (_name.empty())
+		return getDefaultName(lang);
+	return _name;
+}
+
+/**
+ * Changes the target's custom name.
+ * @param newName New custom name. If set to blank, the language default is used.
+ */
+void Target::setName(const std::wstring &newName)
+{
+	_name = newName;
+}
+
+/**
  * Returns the list of crafts currently
  * following this target.
  * @return Pointer to list of crafts.
@@ -162,7 +190,7 @@ double Target::getDistance(const Target *target) const
  * Gets the mission site's depth.
  * @return the depth of the site.
  */
-int Target::getSiteDepth()
+int Target::getSiteDepth() const
 {
 	return _depth;
 }
@@ -175,4 +203,5 @@ void Target::setSiteDepth(int depth)
 {
 	_depth = depth;
 }
+
 }

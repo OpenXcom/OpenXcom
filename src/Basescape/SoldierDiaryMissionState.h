@@ -29,7 +29,7 @@ class TextList;
 class Soldier;
 
 /**
- * Diary window that shows 
+ * Diary window that shows
  * mission details for a soldier.
  */
 class SoldierDiaryMissionState : public State
@@ -37,7 +37,7 @@ class SoldierDiaryMissionState : public State
 private:
 	Soldier *_soldier;
 
-	TextButton *_btnOk;
+	TextButton *_btnOk, *_btnPrev, *_btnNext;
 	Window *_window;
 	Text *_txtTitle, *_txtUFO, *_txtScore, *_txtKills, *_txtLocation, *_txtRace, *_txtDaylight, *_txtDaysWounded;
 	Text *_txtNoRecord;
@@ -51,6 +51,12 @@ public:
 	~SoldierDiaryMissionState();
 	/// Handler for clicking the Cancel button.
 	void btnOkClick(Action *action);
+	/// Updates the mission info.
+	void init();
+	/// Handler for clicking the Previous button.
+	void btnPrevClick(Action *action);
+	/// Handler for clicking the Next button.
+	void btnNextClick(Action *action);
 };
 
 }

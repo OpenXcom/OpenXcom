@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CraftInfoState.h"
+#include <cmath>
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Mod/Mod.h"
@@ -292,13 +293,12 @@ void CraftInfoState::init()
 		_txtW2Name->setVisible(false);
 		_txtW2Ammo->setVisible(false);
 	}
-	_defaultName = tr("STR_CRAFTNAME").arg(tr(_craft->getRules()->getType())).arg(_craft->getId());
 }
 
 /**
  * Turns an amount of time into a
  * day/hour string.
- * @param total
+ * @param total Amount in hours.
  */
 std::wstring CraftInfoState::formatTime(int total)
 {
@@ -380,10 +380,13 @@ void CraftInfoState::btnArmorClick(Action *)
  */
 void CraftInfoState::edtCraftChange(Action *action)
 {
-	_craft->setName(_edtCraft->getText());
-	if (_craft->getName(_game->getLanguage()) == _defaultName)
+	if (_edtCraft->getText() == _craft->getDefaultName(_game->getLanguage()))
 	{
 		_craft->setName(L"");
+	}
+	else
+	{
+		_craft->setName(_edtCraft->getText());
 	}
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
 		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)

@@ -22,7 +22,7 @@
 namespace OpenXcom
 {
 
-class StatStringCondition 
+class StatStringCondition
 {
 private:
 	std::string _conditionName;

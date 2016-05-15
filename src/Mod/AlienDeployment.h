@@ -86,7 +86,7 @@ public:
 	/// Gets a pointer to the data.
 	std::vector<DeploymentData>* getDeploymentData();
 	/// Gets dimensions.
-	void getDimensions(int *width, int *length, int *height);
+	void getDimensions(int *width, int *length, int *height) const;
 	/// Gets civilians.
 	int getCivilians() const;
 	/// Gets the terrain for battlescape generation.

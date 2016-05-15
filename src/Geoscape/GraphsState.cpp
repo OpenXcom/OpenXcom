@@ -288,7 +288,7 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 
 	_txtTitle->setAlign(ALIGN_CENTER);
 
-	_txtFactor->setText(L"$1000's");
+	_txtFactor->setText(tr("STR_FINANCE_THOUSANDS"));
 
 	// Set up buttons
 	_btnUfoRegion->onMousePress((ActionHandler)&GraphsState::btnUfoRegionClick);
@@ -977,10 +977,10 @@ void GraphsState::drawFinanceLines()
 	//set up arrays
 	int upperLimit = 0;
 	int lowerLimit = 0;
-	int incomeTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	int balanceTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	int expendTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	int maintTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	int64_t incomeTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	int64_t balanceTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	int64_t expendTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	int64_t maintTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	int scoreTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	maintTotals[0] = _game->getSavedGame()->getBaseMaintenance() / 1000;
 
@@ -1145,6 +1145,7 @@ void GraphsState::shiftButtons(Action *action)
 			scrollButtons(_regionToggles, _btnRegions, _butRegionsOffset, 1);
 	}
 }
+
 void GraphsState::scrollButtons(std::vector<GraphButInfo *> &toggles, std::vector<ToggleTextButton *> &buttons, size_t &offset, int step)
 {
 	// minus one, 'cause we'll already added the TOTAL button to toggles
@@ -1159,10 +1160,12 @@ void GraphsState::scrollButtons(std::vector<GraphButInfo *> &toggles, std::vecto
 		updateButton(*itert, *iterb);
 	}
 }
+
 void GraphsState::updateButton(GraphButInfo *from,ToggleTextButton *to)
 {
 	to->setText(from->_name);
 	to->setInvertColor(from->_color);
 	to->setPressed(from->_pushed);
 }
+
 }

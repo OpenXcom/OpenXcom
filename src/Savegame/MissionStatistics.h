@@ -110,11 +110,11 @@ struct MissionStatistics
 		std::wostringstream ss;
 		if (success)
 		{
-			ss << lang->getString("STR_MISSION_WIN");
+			ss << lang->getString("STR_VICTORY");
 		}
 		else
 		{
-			ss << lang->getString("STR_MISSION_LOSS");
+			ss << lang->getString("STR_DEFEAT");
 		}
 		ss << L" - " << lang->getString(rating);
 		return ss.str();
@@ -142,6 +142,33 @@ struct MissionStatistics
 		{
 			return "STR_NIGHT";
 		}
+	}
+
+	bool isAlienBase() const
+	{
+		if (type.find("STR_ALIEN_BASE") != std::string::npos || type.find("STR_ALIEN_COLONY") != std::string::npos)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool isBaseDefense() const
+	{
+		if (type == "STR_BASE_DEFENSE")
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool isUfoMission() const
+	{
+		if(ufo != "NO_UFO")
+		{
+			return true;
+		}
+		return false;
 	}
 
 	MissionStatistics(const YAML::Node& node) : time(0, 0, 0, 0, 0, 0, 0) { load(node); }

@@ -16,9 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "Globe.h"
-#include <cmath>
 #include <algorithm>
 #include "../fmath.h"
 #include "../Engine/Action.h"
@@ -88,7 +86,7 @@ struct GlobeStaticData
 	 * @param y cord of point where we getting this vector
 	 * @return normal vector of sphere surface
 	 */
-	inline Cord circle_norm(double ox, double oy, double r, double x, double y)
+	static inline Cord circle_norm(double ox, double oy, double r, double x, double y)
 	{
 		const double limit = r*r;
 		const double norm = 1./r;
@@ -399,8 +397,8 @@ double Globe::lastVisibleLat(double lon) const
 Polygon* Globe::getPolygonFromLonLat(double lon, double lat) const
 {
 	const double zDiscard=0.75f;
-    double coslat = cos(lat);
-    double sinlat = sin(lat);
+	double coslat = cos(lat);
+	double sinlat = sin(lat);
 
 	for (std::list<Polygon*>::iterator i = _rules->getPolygons()->begin(); i != _rules->getPolygons()->end(); ++i)
 	{
@@ -747,7 +745,7 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 		}
 	}
 	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin(); i != _game->getSavedGame()->getAlienBases()->end(); ++i)
- 	{
+	{
 		if (!(*i)->isDiscovered())
 		{
 			continue;
@@ -1167,25 +1165,26 @@ void Globe::drawGlobeCircle(double lat, double lon, double radius, int segments)
 	}
 }
 
-
 void Globe::setNewBaseHover(void)
 {
 	_hover=true;
 }
+
 void Globe::unsetNewBaseHover(void)
 {
 	_hover=false;
 }
-bool Globe::getNewBaseHover(void)
+
+bool Globe::getNewBaseHover(void) const
 {
 	return _hover;
 }
+
 void Globe::setNewBaseHoverPos(double lon, double lat)
 {
 	_hoverLon=lon;
 	_hoverLat=lat;
 }
-
 
 void Globe::drawVHLine(Surface *surface, double lon1, double lat1, double lon2, double lat2, Uint8 color)
 {
@@ -1896,4 +1895,5 @@ void Globe::stopScrolling(Action *action)
 	SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
 	action->setMouseAction(_xBeforeMouseScrolling, _yBeforeMouseScrolling, getX(), getY());
 }
+
 }

@@ -219,7 +219,12 @@ void OptionsBaseState::btnOkClick(Action *)
 			Options::useOpenGL != Options::newOpenGL ||
 			Options::useScaleFilter != Options::newScaleFilter ||
 			Options::useHQXFilter != Options::newHQXFilter ||
-			Options::useOpenGLShader != Options::newOpenGLShader)
+			Options::useOpenGLShader != Options::newOpenGLShader ||
+			(!Options::fullscreen && !Options::allowResize && Options::rootWindowedMode
+				&& (Options::newFullscreen || Options::newAllowResize ||
+					!Options::newRootWindowedMode ||
+					Options::windowedModePositionX != Options::newWindowedModePositionX ||
+					Options::windowedModePositionY != Options::newWindowedModePositionY)))
 		{
 			_game->pushState(new OptionsConfirmState(_origin));
 		}
@@ -330,6 +335,6 @@ void OptionsBaseState::resize(int &dX, int &dY)
 	Options::newDisplayWidth = Options::displayWidth;
 	Options::newDisplayHeight = Options::displayHeight;
 	State::resize(dX, dY);
-
 }
+
 }

@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "StatString.h"
 #include <vector>
 #include "../Engine/Language.h"
@@ -44,15 +43,15 @@ StatString::~StatString()
  */
 void StatString::load(const YAML::Node &node)
 {
-    std::string conditionNames[] = {"psiStrength", "psiSkill", "bravery", "strength", "firing", "reactions", "stamina", "tu", "health", "throwing", "melee", "psiTraining"};
+	std::string conditionNames[] = {"psiStrength", "psiSkill", "bravery", "strength", "firing", "reactions", "stamina", "tu", "health", "throwing", "melee", "psiTraining"};
 	_stringToBeAddedIfAllConditionsAreMet = node["string"].as<std::string>(_stringToBeAddedIfAllConditionsAreMet);
-    for (size_t i = 0; i < sizeof(conditionNames)/sizeof(conditionNames[0]); i++)
+	for (size_t i = 0; i < sizeof(conditionNames)/sizeof(conditionNames[0]); i++)
 	{
-        if (node[conditionNames[i]])
+		if (node[conditionNames[i]])
 		{
-            _conditions.push_back(getCondition(conditionNames[i], node));
-        }
-    }
+			_conditions.push_back(getCondition(conditionNames[i], node));
+		}
+	}
 }
 
 /**

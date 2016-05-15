@@ -48,8 +48,8 @@ public:
 	int getId() const;
 	/// Sets the alien base's ID.
 	void setId(int id);
-	/// Gets the alien base's name.
-	std::wstring getName(Language *lang) const;
+	/// Gets the alien base's default name.
+	std::wstring getDefaultName(Language *lang) const;
 	/// Gets the alien base's marker.
 	int getMarker() const;
 	/// Gets the alien base's amount of active hours..
