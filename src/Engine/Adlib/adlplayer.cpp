@@ -730,7 +730,7 @@ void init_music_data(unsigned char* music_ptr,int length)
 		if (adl_gv_FORMAT==1) 
 		{
 			j = *(music_ptr+4);
-			if (j>16) j=16;
+			if (j>15) j=15;
 			instruments[j].start_address = music_ptr+5;
 		}
 		else
