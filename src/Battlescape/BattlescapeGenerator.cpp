@@ -208,6 +208,10 @@ void BattlescapeGenerator::nextStage()
 				aliensAlive++;
 			}
 			(*i)->goToTimeOut();
+			if ((*i)->getAIModule())
+			{
+				(*i)->setAIModule(0);
+			}
 		}
 		if ((*i)->getTile())
 		{

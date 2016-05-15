@@ -1671,7 +1671,6 @@ void BattleUnit::prepareNewTurn(bool fullProcess)
 	// if unit is dead, AI state should be gone
 	if (_health == 0 && _currentAIState)
 	{
-		_currentAIState->exit();
 		delete _currentAIState;
 		_currentAIState = 0;
 	}
@@ -1788,11 +1787,9 @@ void BattleUnit::setAIModule(AIModule *ai)
 {
 	if (_currentAIState)
 	{
-		_currentAIState->exit();
 		delete _currentAIState;
 	}
 	_currentAIState = ai;
-	_currentAIState->enter();
 }
 
 /**

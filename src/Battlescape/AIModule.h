@@ -62,10 +62,6 @@ public:
 	void load(const YAML::Node& node);
 	/// Saves the AI Module to YAML.
 	YAML::Node save() const;
-	/// Enters the Module.
-	void enter();
-	/// Exits the Module.
-	void exit();
 	/// Runs Module functionality every AI cycle.
 	void think(BattleAction *action);
 	/// Sets the "unit was hit" flag true.

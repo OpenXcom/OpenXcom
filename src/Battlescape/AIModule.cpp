@@ -120,24 +120,6 @@ YAML::Node AIModule::save() const
 }
 
 /**
- * Enters the current AI state.
- */
-void AIModule::enter()
-{
-	// ROOOAARR !
-
-}
-
-
-/**
- * Exits the current AI state.
- */
-void AIModule::exit()
-{
-
-}
-
-/**
  * Runs any code the state needs to keep updating every AI cycle.
  * @param action (possible) AI action to execute after thinking is done.
  */
