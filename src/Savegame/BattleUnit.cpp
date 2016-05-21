@@ -370,7 +370,7 @@ void BattleUnit::load(const YAML::Node &node)
 			_recolor.push_back(std::make_pair(p[i][0].as<int>(), p[i][1].as<int>()));
 		}
 	}
-	_mindControllerID = node["mincControllerID"].as<int>(_mindControllerID);
+	_mindControllerID = node["mindControllerID"].as<int>(_mindControllerID);
 }
 
 /**
