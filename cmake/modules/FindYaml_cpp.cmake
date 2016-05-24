@@ -23,6 +23,11 @@
 FIND_PACKAGE(PkgConfig)
 PKG_CHECK_MODULES(PC_YAMLCPP QUIET yaml-cpp)
 
+# yaml-cpp 0.5.2 has issues that cause openxcom to fail to load any rules:
+# See: https://github.com/jbeder/yaml-cpp/pull/316
+if (PC_YAMLCPP_VERSION STREQUAL 0.5.2)
+		message(FATAL_ERROR "YAML-CPP 0.5.2 is known broken - please use either 0.5.1 or 0.5.3+")
+endif()
 
 FIND_PATH(YAMLCPP_INCLUDE_DIR yaml.h
   HINTS
