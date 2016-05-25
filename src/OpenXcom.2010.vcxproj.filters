@@ -634,12 +634,6 @@
     <ClCompile Include="Engine\LanguagePlurality.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Battlescape\AlienBAIState.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
-    <ClCompile Include="Battlescape\CivilianBAIState.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
     <ClCompile Include="Menu\PauseState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
@@ -1600,12 +1594,6 @@
     </ClInclude>
     <ClInclude Include="Engine\LanguagePlurality.h">
       <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Battlescape\AlienBAIState.h">
-      <Filter>Battlescape</Filter>
-    </ClInclude>
-    <ClInclude Include="Battlescape\CivilianBAIState.h">
-      <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Menu\PauseState.h">
       <Filter>Menu</Filter>

@@ -1346,8 +1346,8 @@ void AIModule::evaluateAIMode()
 		ambushOdds *= 0.6;
 	}
 
-	// no weapons? don't pick combat or ambush
-	if (!_melee && !_rifle && !_blaster)
+	// no weapons, not psychic? don't pick combat or ambush
+	if (!_melee && !_rifle && !_blaster && _unit->getBaseStats()->psiSkill == 0)
 	{
 		combatOdds = 0;
 		ambushOdds = 0;
