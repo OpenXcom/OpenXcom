@@ -1876,7 +1876,7 @@ bool AIModule::psiAction()
 
 	_aggroTarget = 0;
 		// don't let mind controlled soldiers mind control other soldiers.
-	if (_unit->getOriginalFaction() != _unit->getFaction()
+	if (_unit->getOriginalFaction() == _unit->getFaction()
 		// and we have the required 25 TUs and can still make it to cover
 		&& _unit->getTimeUnits() > _escapeTUs + cost
 		// and we didn't already do a psi action this round
