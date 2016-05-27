@@ -1551,21 +1551,14 @@ void GeoscapeState::time1Day()
 			(*i)->removeResearch(*iter);
 			RuleResearch * bonus = 0;
 			const RuleResearch * research = (*iter)->getRules();
-			// If "researched" the live alien, his body sent to the stores.
-			if (Options::spendResearchedItems && research->needItem() && _game->getMod()->getUnit(research->getName()))
+			if (Options::retainCorpses && _game->getMod()->getUnit(research->getName()))
 			{
-				(*i)->getStorageItems()->addItem(
-					_game->getMod()->getArmor(
-						_game->getMod()->getUnit(
-							research->getName()
-						)->getArmor()
-					)->getCorpseGeoscape()
-				);
+				(*i)->getStorageItems()->addItem(_game->getMod()->getArmor(_game->getMod()->getUnit(research->getName())->getArmor())->getCorpseGeoscape());
 			}
 			if (!(*iter)->getRules()->getGetOneFree().empty())
 			{
 				std::vector<std::string> possibilities;
-				for (std::vector<std::string>::const_iterator f = (*iter)->getRules()->getGetOneFree().begin(); f != (*iter)->getRules()->getGetOneFree().end(); ++f)
+				for (std::vector<std::string>::const_iterator f = research->getGetOneFree().begin(); f != research->getGetOneFree().end(); ++f)
 				{
 					bool newFound = true;
 					for (std::vector<const RuleResearch*>::const_iterator discovered = _game->getSavedGame()->getDiscoveredResearch().begin(); discovered != _game->getSavedGame()->getDiscoveredResearch().end() && newFound; ++discovered)
@@ -1613,9 +1606,9 @@ void GeoscapeState::time1Day()
 			}
 			popup(new ResearchCompleteState(newResearch, bonus, research));
 			std::vector<RuleResearch *> newPossibleResearch;
-			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRules(), _game->getMod(), *i);
+			_game->getSavedGame()->getDependableResearch (newPossibleResearch, research, _game->getMod(), *i);
 			std::vector<RuleManufacture *> newPossibleManufacture;
-			_game->getSavedGame()->getDependableManufacture (newPossibleManufacture, (*iter)->getRules(), _game->getMod(), *i);
+			_game->getSavedGame()->getDependableManufacture (newPossibleManufacture, research, _game->getMod(), *i);
 			timerReset();
 			// check for possible researching weapon before clip
 			if (newResearch)
@@ -1646,7 +1639,7 @@ void GeoscapeState::time1Day()
 			{
 				for (std::vector<ResearchProject*>::const_iterator iter2 = (*j)->getResearch().begin(); iter2 != (*j)->getResearch().end(); ++iter2)
 				{
-					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName() &&
+					if (research->getName() == (*iter2)->getRules()->getName() &&
 						_game->getMod()->getUnit((*iter2)->getRules()->getName()) == 0)
 					{
 						(*j)->removeResearch(*iter2);
