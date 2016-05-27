@@ -343,6 +343,7 @@ research:
     cost: 190
     points: 50
     needItem: true
+    destroyItem: true
     lookup: STR_SECTOID
     unlocks:
       - STR_LEADER_PLUS
@@ -353,6 +354,7 @@ research:
     cost: 192
     points: 50
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_LEADER_PLUS
       - STR_PSI_LAB
@@ -362,6 +364,7 @@ research:
     cost: 192
     points: 50
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
     lookup: STR_SECTOID
@@ -378,6 +381,7 @@ research:
     cost: 192
     points: 50
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
     lookup: STR_SECTOID
@@ -408,6 +412,7 @@ research:
     points: 50
     lookup: STR_SECTOID
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_HYPER_WAVE_DECODER
@@ -427,11 +432,13 @@ research:
     unlocks:
       - STR_ALIEN_ORIGINS
     needItem: true
+    destroyItem: true
   - name: STR_SNAKEMAN_COMMANDER
     cost: 192
     points: 50
     lookup: STR_SNAKEMAN
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_LEADER_PLUS
       - STR_COMMANDER_PLUS
@@ -441,6 +448,7 @@ research:
     points: 50
     lookup: STR_SNAKEMAN
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_LEADER_PLUS
       - STR_ALIEN_ORIGINS
@@ -449,6 +457,7 @@ research:
     points: 50
     lookup: STR_SNAKEMAN
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
     getOneFree:
@@ -462,11 +471,13 @@ research:
       - STR_SUPPLY_SHIP
   - name: STR_SNAKEMAN_MEDIC
     needItem: true
+    destroyItem: true
   - name: STR_SNAKEMAN_NAVIGATOR
     cost: 192
     points: 50
     lookup: STR_SNAKEMAN
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_HYPER_WAVE_DECODER
@@ -484,6 +495,7 @@ research:
     points: 50
     lookup: STR_SNAKEMAN
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_ETHEREAL_COMMANDER
@@ -491,6 +503,7 @@ research:
     points: 50
     lookup: STR_ETHEREAL
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_LEADER_PLUS
       - STR_COMMANDER_PLUS
@@ -501,33 +514,41 @@ research:
     points: 50
     lookup: STR_ETHEREAL
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_LEADER_PLUS
       - STR_ALIEN_ORIGINS
       - STR_PSI_LAB
   - name: STR_ETHEREAL_ENGINEER
     needItem: true
+    destroyItem: true
   - name: STR_ETHEREAL_MEDIC
     needItem: true
+    destroyItem: true
   - name: STR_ETHEREAL_NAVIGATOR
     needItem: true
+    destroyItem: true
   - name: STR_ETHEREAL_SOLDIER
     cost: 192
     points: 50
     lookup: STR_ETHEREAL
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_PSI_LAB
   - name: STR_MUTON_COMMANDER
     needItem: true
+    destroyItem: true
   - name: STR_MUTON_LEADER
     needItem: true
+    destroyItem: true
   - name: STR_MUTON_ENGINEER
     cost: 192
     points: 50
     lookup: STR_MUTON
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
     getOneFree:
@@ -541,11 +562,13 @@ research:
       - STR_SUPPLY_SHIP
   - name: STR_MUTON_MEDIC
     needItem: true
+    destroyItem: true
   - name: STR_MUTON_NAVIGATOR
     cost: 192
     points: 50
     lookup: STR_MUTON
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_HYPER_WAVE_DECODER
@@ -563,6 +586,7 @@ research:
     points: 50
     lookup: STR_MUTON
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_FLOATER_COMMANDER
@@ -570,6 +594,7 @@ research:
     points: 50
     lookup: STR_FLOATER
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_LEADER_PLUS
       - STR_COMMANDER_PLUS
@@ -582,11 +607,13 @@ research:
       - STR_LEADER_PLUS
       - STR_ALIEN_ORIGINS
     needItem: true
+    destroyItem: true
   - name: STR_FLOATER_ENGINEER
     cost: 192
     points: 50
     lookup: STR_FLOATER
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
     getOneFree:
@@ -603,6 +630,7 @@ research:
     points: 50
     lookup: STR_FLOATER
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
     getOneFree:
@@ -632,6 +660,7 @@ research:
     points: 50
     lookup: STR_FLOATER
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_HYPER_WAVE_DECODER
@@ -649,6 +678,7 @@ research:
     points: 50
     lookup: STR_FLOATER
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_CELATID_TERRORIST
@@ -656,6 +686,7 @@ research:
     points: 50
     lookup: STR_CELATID
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_SILACOID_TERRORIST
@@ -663,6 +694,7 @@ research:
     points: 50
     lookup: STR_SILACOID
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_CHRYSSALID_TERRORIST
@@ -670,6 +702,7 @@ research:
     points: 50
     lookup: STR_CHRYSSALID
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_REAPER_TERRORIST
@@ -677,6 +710,7 @@ research:
     points: 50
     lookup: STR_REAPER
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_SECTOPOD_TERRORIST
@@ -684,6 +718,7 @@ research:
     points: 50
     lookup: STR_SECTOPOD
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_CYBERDISC_TERRORIST
@@ -691,6 +726,7 @@ research:
     points: 50
     lookup: STR_CYBERDISC
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_PLASMA_CANNON_DEP1

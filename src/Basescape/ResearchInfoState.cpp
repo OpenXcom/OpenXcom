@@ -119,9 +119,7 @@ void ResearchInfoState::buildUi()
 	if (_rule)
 	{
 		_base->addResearch(_project);
-		if (_rule->needItem() &&
-				(_game->getMod()->getUnit(_rule->getName()) ||
-				 Options::spendResearchedItems))
+		if (_rule->needItem() && _rule->destroyItem())
 		{
 			_base->getStorageItems()->removeItem(_rule->getName(), 1);
 		}
@@ -182,9 +180,7 @@ void ResearchInfoState::btnOkClick(Action *)
 void ResearchInfoState::btnCancelClick(Action *)
 {
 	const RuleResearch *ruleResearch = _rule ? _rule : _project->getRules();
-	if (ruleResearch->needItem() &&
-			(_game->getMod()->getUnit(ruleResearch->getName()) ||
-			 Options::spendResearchedItems))
+	if (ruleResearch->needItem() && _rule->destroyItem())
 	{
 		_base->getStorageItems()->addItem(ruleResearch->getName(), 1);
 	}

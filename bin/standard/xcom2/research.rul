@@ -398,6 +398,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_AQUATOID
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_AQUATOID_SQUAD_LEADER
@@ -405,6 +406,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_AQUATOID
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
     getOneFree:
@@ -421,6 +423,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_AQUATOID
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
     getOneFree:
@@ -449,6 +452,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_AQUATOID
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
     getOneFree:
@@ -467,11 +471,13 @@ research: #done: double check scores and times.
     unlocks:
       - STR_ALIEN_ORIGINS
     needItem: true
+    destroyItem: true
   - name: STR_AQUATOID_COMMANDER
     cost: 192
     points: 50
     lookup: STR_AQUATOID
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_GILLMAN_SOLDIER
@@ -479,6 +485,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_GILLMAN
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_GILLMAN_SQUAD_LEADER
@@ -486,6 +493,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_GILLMAN
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
     getOneFree:
@@ -502,6 +510,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_GILLMAN
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
     getOneFree:
@@ -518,6 +527,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_GILLMAN
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_LEADER_PLUS
       - STR_ALIEN_ORIGINS
@@ -526,6 +536,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_LOBSTERMAN
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_LOBSTERMAN_SQUAD_LEADER
@@ -533,6 +544,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_LOBSTERMAN
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
     getOneFree:
@@ -549,6 +561,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_LOBSTERMAN
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
     getOneFree:
@@ -568,11 +581,13 @@ research: #done: double check scores and times.
       - STR_LEADER_PLUS
       - STR_ALIEN_ORIGINS
     needItem: true
+    destroyItem: true
   - name: STR_LOBSTERMAN_COMMANDER
     cost: 192
     points: 50
     lookup: STR_LOBSTERMAN
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_LEADER_PLUS
       - STR_COMMANDER_PLUS
@@ -585,11 +600,13 @@ research: #done: double check scores and times.
       - STR_ALIEN_ORIGINS
       - STR_MC_DISRUPTOR_DEP
     needItem: true
+    destroyItem: true
   - name: STR_TASOTH_SQUAD_LEADER
     cost: 192
     points: 50
     lookup: STR_TASOTH
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_MC_DISRUPTOR_DEP
@@ -653,6 +670,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_BIODRONE
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_MC_LAB
@@ -661,6 +679,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_CALCINITE
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_MC_LAB
@@ -669,6 +688,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_DEEP_ONE
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_MC_LAB
@@ -677,6 +697,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_HALLUCINOID
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_MC_LAB
@@ -685,6 +706,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_TENTACULAT
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_MC_LAB
@@ -693,6 +715,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_TRISCENE
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_MC_LAB
@@ -701,6 +724,7 @@ research: #done: double check scores and times.
     points: 50
     lookup: STR_XARQUID
     needItem: true
+    destroyItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_MC_LAB
