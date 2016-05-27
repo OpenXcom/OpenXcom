@@ -2956,7 +2956,7 @@ void BattleUnit::breathe()
 	{
 		// deviation from original: TFTD used a static 10% chance for every animation frame,
 		// instead let's use 5%, but allow morale to affect it.
-		_breathing = (_status != STATUS_WALKING && RNG::percent(105 - _morale));
+		_breathing = (_status != STATUS_WALKING && RNG::seedless(0, 99) < (105 - _morale));
 		_breathFrame = 0;
 	}
 
