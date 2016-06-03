@@ -334,7 +334,7 @@ void SellState::updateList()
 			}
 		}
 		std::wostringstream ssQty, ssAmount;
-		ssQty << _items[i].qtySrc;
+		ssQty << _items[i].qtySrc - _items[i].amount;
 		ssAmount << _items[i].amount;
 		_lstItems->addRow(4, name.c_str(), ssQty.str().c_str(), ssAmount.str().c_str(), Text::formatFunding(_items[i].cost).c_str());
 		_rows.push_back(i);
