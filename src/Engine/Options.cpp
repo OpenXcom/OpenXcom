@@ -759,7 +759,11 @@ void setFolders()
 	if (_userFolder.empty())
 	{
 		std::vector<std::string> user = CrossPlatform::findUserFolders();
-		_configFolder = CrossPlatform::findConfigFolder();
+
+		if (_configFolder.empty())
+		{
+			_configFolder = CrossPlatform::findConfigFolder();
+		}
 
 		// Look for an existing user folder
 		for (std::vector<std::string>::reverse_iterator i = user.rbegin(); i != user.rend(); ++i)
