@@ -637,13 +637,13 @@ void AlienMission::spawnAlienBase(const Globe &globe, Game &engine, const Missio
 	// Once the last UFO is spawned, the aliens build their base.
 	const RuleRegion &regionRules = *ruleset.getRegion(_region);
 	AlienDeployment *deployment;
-	if (ruleset.getGlobe()->getTexture(area.texture) && !ruleset.getGlobe()->getTexture(area.texture)->getDeployments().empty())
-	{
-		deployment = ruleset.getDeployment(ruleset.getGlobe()->getTexture(area.texture)->getRandomDeployment());
-	}
-	else if (ruleset.getDeployment(_rule.getSiteType()))
+	if (ruleset.getDeployment(_rule.getSiteType()))
 	{
 		deployment = ruleset.getDeployment(_rule.getSiteType());
+	}
+	else if (ruleset.getGlobe()->getTexture(area.texture) && !ruleset.getGlobe()->getTexture(area.texture)->getDeployments().empty())
+	{
+		deployment = ruleset.getDeployment(ruleset.getGlobe()->getTexture(area.texture)->getRandomDeployment());
 	}
 	else
 	{
