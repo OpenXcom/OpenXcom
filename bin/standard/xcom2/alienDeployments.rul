@@ -1963,7 +1963,7 @@ alienDeployments: #done
     objectiveComplete: [STR_ALIEN_SYNOMIUM_DEVICE_DESTROYED, 750]
     objectiveFailed: [STR_ALIEN_SYNOMIUM_DEVICE_FAILED, -750]
     objectivePopup: STR_CONTROL_CENTER_DESTROYED
-  - type: STR_ALIEN_BASE_ASSAULT # use of this name is hard coded, as is STR_BASE_DEFENSE. this is because of REASONS.
+  - type: STR_ALIEN_BASE_ASSAULT
     data:
       - alienRank: 6
         lowQty: 2
@@ -2124,7 +2124,10 @@ alienDeployments: #done
     shade: 15
     depth: [3, 3]
     race: STR_MIXED_CREW
+    markerName: STR_ALIEN_BASE
+    markerIcon: 7
     script: ALIEN_COLONY_P1
+    alienBase: true    # this is only to tell new battle mode what to do with this deployment
     nextStage: STR_ALIEN_COLONY_P2
     briefing:
       title: STR_ALIEN_COLONY_ATTACK_MISSION
@@ -2300,9 +2303,10 @@ alienDeployments: #done
       music: GMATTBAS
       background: BACK01.SCR
     objectiveType: 3
+    alienBase: true    # this is only to tell new battle mode what to do with this deployment
     objectiveComplete: [STR_ALIEN_BASE_CONTROL_DESTROYED, 500]
     objectivePopup: STR_CONTROL_CENTER_DESTROYED
-  - type: STR_BASE_DEFENSE
+  - type: STR_BASE_DEFENSE # use of this name is hard coded. this is because of REASONS.
     data:
       - alienRank: 5
         lowQty: 4

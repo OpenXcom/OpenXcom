@@ -638,7 +638,7 @@ void SaveConverter::loadDatLoc()
 			target = xbase;
 			break;
 		case TARGET_ABASE:
-			abase = new AlienBase();
+			abase = new AlienBase(_mod->getDeployment("STR_ALIEN_BASE_ASSAULT"));
 			abase->setId(id);
 			abase->setAlienRace(_rules->getCrews()[dat]);
 			abase->setDiscovered(!visibility.test(0));

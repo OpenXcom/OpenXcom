@@ -674,7 +674,7 @@ void DebriefingState::prepareDebriefing()
 				else if (AlienBase *b = dynamic_cast<AlienBase*>(craft->getDestination()))
 				{
 					target = "STR_ALIEN_BASE";
-					_missionStatistics->markerName = "STR_ALIEN_BASE_";
+					_missionStatistics->markerName = deployment->getMarkerName();
 					_missionStatistics->markerId = b->getId();
 				}
 				else if (MissionSite *ms = dynamic_cast<MissionSite*>(craft->getDestination()))

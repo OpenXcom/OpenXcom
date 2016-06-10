@@ -386,9 +386,17 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 	// Alien bases must be loaded before alien missions
 	for (YAML::const_iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
 	{
-		AlienBase *b = new AlienBase();
-		b->load(*i);
-		_alienBases.push_back(b);
+		std::string deployment = (*i)["deployment"].as<std::string>("STR_ALIEN_BASE_ASSAULT");
+		if (mod->getDeployment(deployment))
+		{
+			AlienBase *b = new AlienBase(mod->getDeployment(deployment));
+			b->load(*i);
+			_alienBases.push_back(b);
+		}
+		else
+		{
+			Log(LOG_ERROR) << "Failed to load deployment for alien base " << deployment;
+		}
 	}
 
 	// Missions must be loaded before UFOs.

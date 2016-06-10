@@ -192,7 +192,9 @@ void AlienMission::think(Game &engine, const Globe &globe)
 			if (!(*c)->getPact() && !(*c)->getNewPact() && mod.getRegion(_region)->insideRegion((*c)->getRules()->getLabelLongitude(), (*c)->getRules()->getLabelLatitude()))
 			{
 				(*c)->setNewPact();
-				spawnAlienBase(globe, engine, _rule.getSpawnZone());
+				std::vector<MissionArea> areas = mod.getRegion(_region)->getMissionZones().at(_rule.getSpawnZone()).areas;
+				MissionArea area = areas.at(RNG::generate(0, areas.size()-1));
+				spawnAlienBase(globe, engine, area);
 				break;
 			}
 		}
@@ -201,7 +203,9 @@ void AlienMission::think(Game &engine, const Globe &globe)
 	}
 	if (_rule.getObjective() == OBJECTIVE_BASE && _nextWave == _rule.getWaveCount())
 	{
-		spawnAlienBase(globe, engine, _rule.getSpawnZone());
+		std::vector<MissionArea> areas = mod.getRegion(_region)->getMissionZones().at(_rule.getSpawnZone()).areas;
+		MissionArea area = areas.at(RNG::generate(0, areas.size()-1));
+		spawnAlienBase(globe, engine, area);
 	}
 
 	if (_nextWave != _rule.getWaveCount())
@@ -626,20 +630,36 @@ void AlienMission::addScore(double lon, double lat, SavedGame &game) const
  * @param engine The game engine, required to get access to game data and game rules.
  * @param zone The mission zone, required for determining the base coordinates.
  */
-void AlienMission::spawnAlienBase(const Globe &globe, Game &engine, int zone)
+void AlienMission::spawnAlienBase(const Globe &globe, Game &engine, const MissionArea &area)
 {
 	SavedGame &game = *engine.getSavedGame();
 	const Mod &ruleset = *engine.getMod();
 	// Once the last UFO is spawned, the aliens build their base.
 	const RuleRegion &regionRules = *ruleset.getRegion(_region);
-	std::pair<double, double> pos = getLandPoint(globe, regionRules, zone);
-	AlienBase *ab = new AlienBase();
+	AlienDeployment *deployment;
+	if (ruleset.getGlobe()->getTexture(area.texture) && !ruleset.getGlobe()->getTexture(area.texture)->getDeployments().empty())
+	{
+		deployment = ruleset.getDeployment(ruleset.getGlobe()->getTexture(area.texture)->getRandomDeployment());
+	}
+	else if (ruleset.getDeployment(_rule.getSiteType()))
+	{
+		deployment = ruleset.getDeployment(_rule.getSiteType());
+	}
+	else
+	{
+		deployment = ruleset.getDeployment("STR_ALIEN_BASE_ASSAULT");
+	}
+	if (deployment == 0)
+	{
+		throw Exception("No deployment defined for alien base, please define one in either the mission zone's texture, the mission's siteType, or alternatively, define a deployment called STR_ALIEN_BASE_ASSAULT as a fallback");
+	}
+	AlienBase *ab = new AlienBase(deployment);
 	ab->setAlienRace(_race);
-	ab->setId(game.getId("STR_ALIEN_BASE"));
-	ab->setLongitude(pos.first);
-	ab->setLatitude(pos.second);
+	ab->setId(game.getId(deployment->getMarkerName()));
+	ab->setLongitude(RNG::generate(area.lonMin, area.lonMax));
+	ab->setLatitude(RNG::generate(area.latMin, area.latMax));
 	game.getAlienBases()->push_back(ab);
-	addScore(pos.first, pos.second, game);
+	addScore(ab->getLongitude(), ab->getLatitude(), game);
 }
 
 /*

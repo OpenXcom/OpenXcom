@@ -480,10 +480,9 @@ void NewBattleState::btnOkClick(Action *)
 		_craft = 0;
 	}
 	// alien base
-	else if (_missionTypes[_cbxMission->getSelected()].find("STR_ALIEN_BASE") != std::string::npos ||
-			 _missionTypes[_cbxMission->getSelected()].find("STR_ALIEN_COLONY") != std::string::npos)
+	else if (_game->getMod()->getDeployment(bgame->getMissionType())->isAlienBase())
 	{
-		AlienBase *b = new AlienBase();
+		AlienBase *b = new AlienBase(_game->getMod()->getDeployment(bgame->getMissionType()));
 		b->setId(1);
 		b->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
 		_craft->setDestination(b);

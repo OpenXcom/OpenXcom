@@ -66,7 +66,7 @@ private:
 	std::vector<std::string> _terrains, _music;
 	int _shade;
 	std::string _nextStage, _race, _script;
-	bool _finalDestination;
+	bool _finalDestination, _isAlienBase;
 	std::string _winCutscene, _loseCutscene;
 	std::string _alert, _alertBackground;
 	BriefingData _briefingData;
@@ -149,6 +149,9 @@ public:
 	ChronoTrigger getChronoTrigger() const;
 	/// Gets which turn the aliens start cheating on.
 	int getCheatTurn() const;
+	/// Gets whether or not this is an alien base (purely for new battle mode)
+	bool isAlienBase() const;
+
 };
 
 }
