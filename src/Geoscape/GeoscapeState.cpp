@@ -1503,17 +1503,24 @@ private:
  */
 void GenerateSupplyMission::operator()(const AlienBase *base) const
 {
-	if (RNG::percent(6))
+	if (_mod.getAlienMission(base->getDeployment()->getGenMissionType()))
 	{
-		//Spawn supply mission for this base.
-		const RuleAlienMission &rule = *_mod.getAlienMission("STR_ALIEN_SUPPLY");
-		AlienMission *mission = new AlienMission(rule);
-		mission->setRegion(_save.locateRegion(*base)->getRules()->getType(), _mod);
-		mission->setId(_save.getId("ALIEN_MISSIONS"));
-		mission->setRace(base->getAlienRace());
-		mission->setAlienBase(base);
-		mission->start();
-		_save.getAlienMissions().push_back(mission);
+		if (RNG::percent(base->getDeployment()->getGenMissionFrequency()))
+		{
+			//Spawn supply mission for this base.
+			const RuleAlienMission &rule = *_mod.getAlienMission(base->getDeployment()->getGenMissionType());
+			AlienMission *mission = new AlienMission(rule);
+			mission->setRegion(_save.locateRegion(*base)->getRules()->getType(), _mod);
+			mission->setId(_save.getId("ALIEN_MISSIONS"));
+			mission->setRace(base->getAlienRace());
+			mission->setAlienBase(base);
+			mission->start();
+			_save.getAlienMissions().push_back(mission);
+		}
+	}
+	else if (base->getDeployment()->getGenMissionType() != "")
+	{
+		throw Exception("Alien Base tried to generate undefined mission: " + base->getDeployment()->getGenMissionType());
 	}
 }
 

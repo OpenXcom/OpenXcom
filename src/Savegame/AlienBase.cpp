@@ -171,8 +171,9 @@ void AlienBase::setDiscovered(bool discovered)
 	_discovered = discovered;
 }
 
-AlienDeployment *AlienBase::getDeployment()
+AlienDeployment *AlienBase::getDeployment() const
 {
 	return _deployment;
 }
+
 }

@@ -66,7 +66,9 @@ public:
 	bool isDiscovered() const;
 	/// Sets the alien base's discovered status.
 	void setDiscovered(bool discovered);
-	AlienDeployment *getDeployment();
+
+	AlienDeployment *getDeployment() const;
+ 
 };
 
 }

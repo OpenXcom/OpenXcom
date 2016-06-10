@@ -70,8 +70,8 @@ private:
 	std::string _winCutscene, _loseCutscene;
 	std::string _alert, _alertBackground;
 	BriefingData _briefingData;
-	std::string _markerName, _objectivePopup, _objectiveCompleteText, _objectiveFailedText;
-	int _markerIcon, _durationMin, _durationMax, _minDepth, _maxDepth, _minSiteDepth, _maxSiteDepth;
+	std::string _markerName, _objectivePopup, _objectiveCompleteText, _objectiveFailedText, _genMissionType;
+	int _markerIcon, _durationMin, _durationMax, _minDepth, _maxDepth, _minSiteDepth, _maxSiteDepth, _genMissionFrequency;
 	int _objectiveType, _objectivesRequired, _objectiveCompleteScore, _objectiveFailedScore, _despawnPenalty, _points, _turnLimit, _cheatTurn;
 	ChronoTrigger _chronoTrigger;
 public:
@@ -151,6 +151,10 @@ public:
 	int getCheatTurn() const;
 	/// Gets whether or not this is an alien base (purely for new battle mode)
 	bool isAlienBase() const;
+
+	std::string getGenMissionType() const;
+
+	int getGenMissionFrequency() const;
 
 };
 
