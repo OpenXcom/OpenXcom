@@ -11,7 +11,7 @@ If you want to save yourself the trouble - don’t do it manually, use Homebrew 
 
 This guide assumes you listened to the previous recommendation and had your dependencies installed with brew terminal command (for Homebrew), like this:
 ```
-$ brew install cmake yaml-cpp —-with-static-lib sdl sdl_gfx sdl_image sdl_mixer --with-flac --with-libmikmod --with-libvorbis --with-static-lib
+$ brew install cmake yaml-cpp --with-static-lib sdl sdl_gfx sdl_image sdl_mixer --with-flac --with-libmikmod --with-libvorbis --with-static-lib
 ```
 or port terminal command (for MacPorts), like this:
 ```
