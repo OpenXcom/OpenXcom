@@ -606,6 +606,8 @@ const AlienBase *AlienMission::getAlienBase() const
  */
 void AlienMission::addScore(double lon, double lat, SavedGame &game) const
 {
+	if (_rule.getObjective() == OBJECTIVE_INFILTRATION)
+		return; // pact score is a special case
 	for (std::vector<Region *>::iterator region = game.getRegions()->begin(); region != game.getRegions()->end(); ++region)
 	{
 		if ((*region)->getRules()->insideRegion(lon, lat))

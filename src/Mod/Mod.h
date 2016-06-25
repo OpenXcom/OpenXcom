@@ -134,7 +134,7 @@ private:
 	std::map<std::string, RuleMusic *> _musicDefs;
 	RuleGlobe *_globe;
 	RuleConverter *_converter;
-	int _costEngineer, _costScientist, _timePersonnel, _initialFunding, _turnAIUseGrenade, _turnAIUseBlaster;
+	int _costEngineer, _costScientist, _timePersonnel, _initialFunding, _turnAIUseGrenade, _turnAIUseBlaster, _defeatScore, _defeatFunds;
 	std::pair<std::string, int> _alienFuel;
 	std::string _fontName, _finalResearch;
 	YAML::Node _startingBase;
@@ -332,7 +332,7 @@ public:
 	/// Gets the list of all manufacture projects.
 	const std::vector<std::string> &getManufactureList() const;
 	/// Gets facilities for custom bases.
-	std::vector<OpenXcom::RuleBaseFacility*> getCustomBaseFacilities() const;
+	std::vector<RuleBaseFacility*> getCustomBaseFacilities() const;
 	/// Gets a specific UfoTrajectory.
 	const UfoTrajectory *getUfoTrajectory(const std::string &id) const;
 	/// Gets the ruleset for a specific alien mission.
@@ -393,6 +393,8 @@ public:
 	RuleMissionScript *getMissionScript(const std::string &name) const;
 	std::string getFinalResearch() const;
 	StatAdjustment *getStatAdjustment(int difficulty);
+	int getDefeatScore() const;
+	int getDefeatFunds() const;
 };
 
 }

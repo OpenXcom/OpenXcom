@@ -475,7 +475,8 @@ int AlienDeployment::getDespawnPenalty() const
 }
 
 /**
- * Gets the (half hourly) score penalty against XCom for this site existing.
+ * Gets the score penalty against XCom for this site existing.
+ * This penalty is applied half-hourly for sites and daily for bases.
  * @return the number of points the aliens get per half hour.
  */
 int AlienDeployment::getPoints() const

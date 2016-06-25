@@ -126,40 +126,40 @@ int Mod::DIFFICULTY_COEFFICIENT[5];
 
 void Mod::resetGlobalStatics()
 {
-	Mod::DOOR_OPEN = 3;
-	Mod::SLIDING_DOOR_OPEN = 20;
-	Mod::SLIDING_DOOR_CLOSE = 21;
-	Mod::SMALL_EXPLOSION = 2;
-	Mod::LARGE_EXPLOSION = 5;
-	Mod::EXPLOSION_OFFSET = 0;
-	Mod::SMOKE_OFFSET = 8;
-	Mod::UNDERWATER_SMOKE_OFFSET = 0;
-	Mod::ITEM_DROP = 38;
-	Mod::ITEM_THROW = 39;
-	Mod::ITEM_RELOAD = 17;
-	Mod::WALK_OFFSET = 22;
-	Mod::FLYING_SOUND = 15;
-	Mod::BUTTON_PRESS = 0;
-	Mod::WINDOW_POPUP[0] = 1;
-	Mod::WINDOW_POPUP[1] = 2;
-	Mod::WINDOW_POPUP[2] = 3;
-	Mod::UFO_FIRE = 8;
-	Mod::UFO_HIT = 12;
-	Mod::UFO_CRASH = 10;
-	Mod::UFO_EXPLODE = 11;
-	Mod::INTERCEPTOR_HIT = 10;
-	Mod::INTERCEPTOR_EXPLODE = 13;
-	Mod::GEOSCAPE_CURSOR = 252;
-	Mod::BASESCAPE_CURSOR = 252;
-	Mod::BATTLESCAPE_CURSOR = 144;
-	Mod::UFOPAEDIA_CURSOR = 252;
-	Mod::GRAPHS_CURSOR = 252;
-	Mod::DAMAGE_RANGE = 100;
-	Mod::EXPLOSIVE_DAMAGE_RANGE = 50;
-	Mod::FIRE_DAMAGE_RANGE[0] = 5;
-	Mod::FIRE_DAMAGE_RANGE[1] = 10;
-	Mod::DEBRIEF_MUSIC_GOOD = "GMMARS";
-	Mod::DEBRIEF_MUSIC_BAD = "GMMARS";
+	DOOR_OPEN = 3;
+	SLIDING_DOOR_OPEN = 20;
+	SLIDING_DOOR_CLOSE = 21;
+	SMALL_EXPLOSION = 2;
+	LARGE_EXPLOSION = 5;
+	EXPLOSION_OFFSET = 0;
+	SMOKE_OFFSET = 8;
+	UNDERWATER_SMOKE_OFFSET = 0;
+	ITEM_DROP = 38;
+	ITEM_THROW = 39;
+	ITEM_RELOAD = 17;
+	WALK_OFFSET = 22;
+	FLYING_SOUND = 15;
+	BUTTON_PRESS = 0;
+	WINDOW_POPUP[0] = 1;
+	WINDOW_POPUP[1] = 2;
+	WINDOW_POPUP[2] = 3;
+	UFO_FIRE = 8;
+	UFO_HIT = 12;
+	UFO_CRASH = 10;
+	UFO_EXPLODE = 11;
+	INTERCEPTOR_HIT = 10;
+	INTERCEPTOR_EXPLODE = 13;
+	GEOSCAPE_CURSOR = 252;
+	BASESCAPE_CURSOR = 252;
+	BATTLESCAPE_CURSOR = 144;
+	UFOPAEDIA_CURSOR = 252;
+	GRAPHS_CURSOR = 252;
+	DAMAGE_RANGE = 100;
+	EXPLOSIVE_DAMAGE_RANGE = 50;
+	FIRE_DAMAGE_RANGE[0] = 5;
+	FIRE_DAMAGE_RANGE[1] = 10;
+	DEBRIEF_MUSIC_GOOD = "GMMARS";
+	DEBRIEF_MUSIC_BAD = "GMMARS";
 
 	Globe::OCEAN_COLOR = Palette::blockOffset(12);
 	Globe::COUNTRY_LABEL_COLOR = 239;
@@ -187,7 +187,8 @@ void Mod::resetGlobalStatics()
 /**
  * Creates an empty mod.
  */
-Mod::Mod() : _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _turnAIUseGrenade(3), _turnAIUseBlaster(3), _startingTime(6, 1, 1, 1999, 12, 0, 0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0), _modOffset(0)
+Mod::Mod() : _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _turnAIUseGrenade(3), _turnAIUseBlaster(3), _defeatScore(0), _defeatFunds(0), _startingTime(6, 1, 1, 1999, 12, 0, 0),
+			 _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0), _modOffset(0)
 {
 	_muteMusic = new Music();
 	_muteSound = new Sound();
@@ -1010,6 +1011,8 @@ void Mod::loadFile(const std::string &filename)
 	_fontName = doc["fontName"].as<std::string>(_fontName);
 	_turnAIUseGrenade = doc["turnAIUseGrenade"].as<int>(_turnAIUseGrenade);
 	_turnAIUseBlaster = doc["turnAIUseBlaster"].as<int>(_turnAIUseBlaster);
+	_defeatScore = doc["defeatScore"].as<int>(_defeatScore);
+	_defeatFunds = doc["defeatFunds"].as<int>(_defeatFunds);
 	if (doc["difficultyCoefficient"])
 	{
 		size_t num = 0;
@@ -1121,49 +1124,49 @@ void Mod::loadFile(const std::string &filename)
 	}
 	for (YAML::const_iterator i = doc["constants"].begin(); i != doc["constants"].end(); ++i)
 	{
-		Mod::DOOR_OPEN = (*i)["doorSound"].as<int>(Mod::DOOR_OPEN);
-		Mod::SLIDING_DOOR_OPEN = (*i)["slidingDoorSound"].as<int>(Mod::SLIDING_DOOR_OPEN);
-		Mod::SLIDING_DOOR_CLOSE = (*i)["slidingDoorClose"].as<int>(Mod::SLIDING_DOOR_CLOSE);
-		Mod::SMALL_EXPLOSION = (*i)["smallExplosion"].as<int>(Mod::SMALL_EXPLOSION);
-		Mod::LARGE_EXPLOSION = (*i)["largeExplosion"].as<int>(Mod::LARGE_EXPLOSION);
-		Mod::EXPLOSION_OFFSET = (*i)["explosionOffset"].as<int>(Mod::EXPLOSION_OFFSET);
-		Mod::SMOKE_OFFSET = (*i)["smokeOffset"].as<int>(Mod::SMOKE_OFFSET);
-		Mod::UNDERWATER_SMOKE_OFFSET = (*i)["underwaterSmokeOffset"].as<int>(Mod::UNDERWATER_SMOKE_OFFSET);
-		Mod::ITEM_DROP = (*i)["itemDrop"].as<int>(Mod::ITEM_DROP);
-		Mod::ITEM_THROW = (*i)["itemThrow"].as<int>(Mod::ITEM_THROW);
-		Mod::ITEM_RELOAD = (*i)["itemReload"].as<int>(Mod::ITEM_RELOAD);
-		Mod::WALK_OFFSET = (*i)["walkOffset"].as<int>(Mod::WALK_OFFSET);
-		Mod::FLYING_SOUND = (*i)["flyingSound"].as<int>(Mod::FLYING_SOUND);
-		Mod::BUTTON_PRESS = (*i)["buttonPress"].as<int>(Mod::BUTTON_PRESS);
+		DOOR_OPEN = (*i)["doorSound"].as<int>(DOOR_OPEN);
+		SLIDING_DOOR_OPEN = (*i)["slidingDoorSound"].as<int>(SLIDING_DOOR_OPEN);
+		SLIDING_DOOR_CLOSE = (*i)["slidingDoorClose"].as<int>(SLIDING_DOOR_CLOSE);
+		SMALL_EXPLOSION = (*i)["smallExplosion"].as<int>(SMALL_EXPLOSION);
+		LARGE_EXPLOSION = (*i)["largeExplosion"].as<int>(LARGE_EXPLOSION);
+		EXPLOSION_OFFSET = (*i)["explosionOffset"].as<int>(EXPLOSION_OFFSET);
+		SMOKE_OFFSET = (*i)["smokeOffset"].as<int>(SMOKE_OFFSET);
+		UNDERWATER_SMOKE_OFFSET = (*i)["underwaterSmokeOffset"].as<int>(UNDERWATER_SMOKE_OFFSET);
+		ITEM_DROP = (*i)["itemDrop"].as<int>(ITEM_DROP);
+		ITEM_THROW = (*i)["itemThrow"].as<int>(ITEM_THROW);
+		ITEM_RELOAD = (*i)["itemReload"].as<int>(ITEM_RELOAD);
+		WALK_OFFSET = (*i)["walkOffset"].as<int>(WALK_OFFSET);
+		FLYING_SOUND = (*i)["flyingSound"].as<int>(FLYING_SOUND);
+		BUTTON_PRESS = (*i)["buttonPress"].as<int>(BUTTON_PRESS);
 		if ((*i)["windowPopup"])
 		{
 			int k = 0;
 			for (YAML::const_iterator j = (*i)["windowPopup"].begin(); j != (*i)["windowPopup"].end() && k < 3; ++j, ++k)
 			{
-				Mod::WINDOW_POPUP[k] = (*j).as<int>(Mod::WINDOW_POPUP[k]);
+				WINDOW_POPUP[k] = (*j).as<int>(WINDOW_POPUP[k]);
 			}
 		}
-		Mod::UFO_FIRE = (*i)["ufoFire"].as<int>(Mod::UFO_FIRE);
-		Mod::UFO_HIT = (*i)["ufoHit"].as<int>(Mod::UFO_HIT);
-		Mod::UFO_CRASH = (*i)["ufoCrash"].as<int>(Mod::UFO_CRASH);
-		Mod::UFO_EXPLODE = (*i)["ufoExplode"].as<int>(Mod::UFO_EXPLODE);
-		Mod::INTERCEPTOR_HIT = (*i)["interceptorHit"].as<int>(Mod::INTERCEPTOR_HIT);
-		Mod::INTERCEPTOR_EXPLODE = (*i)["interceptorExplode"].as<int>(Mod::INTERCEPTOR_EXPLODE);
-		Mod::GEOSCAPE_CURSOR = (*i)["geoscapeCursor"].as<int>(Mod::GEOSCAPE_CURSOR);
-		Mod::BASESCAPE_CURSOR = (*i)["basescapeCursor"].as<int>(Mod::BASESCAPE_CURSOR);
-		Mod::BATTLESCAPE_CURSOR = (*i)["battlescapeCursor"].as<int>(Mod::BATTLESCAPE_CURSOR);
-		Mod::UFOPAEDIA_CURSOR = (*i)["ufopaediaCursor"].as<int>(Mod::UFOPAEDIA_CURSOR);
-		Mod::GRAPHS_CURSOR = (*i)["graphsCursor"].as<int>(Mod::GRAPHS_CURSOR);
-		Mod::DAMAGE_RANGE = (*i)["damageRange"].as<int>(Mod::DAMAGE_RANGE);
-		Mod::EXPLOSIVE_DAMAGE_RANGE = (*i)["explosiveDamageRange"].as<int>(Mod::EXPLOSIVE_DAMAGE_RANGE);
+		UFO_FIRE = (*i)["ufoFire"].as<int>(UFO_FIRE);
+		UFO_HIT = (*i)["ufoHit"].as<int>(UFO_HIT);
+		UFO_CRASH = (*i)["ufoCrash"].as<int>(UFO_CRASH);
+		UFO_EXPLODE = (*i)["ufoExplode"].as<int>(UFO_EXPLODE);
+		INTERCEPTOR_HIT = (*i)["interceptorHit"].as<int>(INTERCEPTOR_HIT);
+		INTERCEPTOR_EXPLODE = (*i)["interceptorExplode"].as<int>(INTERCEPTOR_EXPLODE);
+		GEOSCAPE_CURSOR = (*i)["geoscapeCursor"].as<int>(GEOSCAPE_CURSOR);
+		BASESCAPE_CURSOR = (*i)["basescapeCursor"].as<int>(BASESCAPE_CURSOR);
+		BATTLESCAPE_CURSOR = (*i)["battlescapeCursor"].as<int>(BATTLESCAPE_CURSOR);
+		UFOPAEDIA_CURSOR = (*i)["ufopaediaCursor"].as<int>(UFOPAEDIA_CURSOR);
+		GRAPHS_CURSOR = (*i)["graphsCursor"].as<int>(GRAPHS_CURSOR);
+		DAMAGE_RANGE = (*i)["damageRange"].as<int>(DAMAGE_RANGE);
+		EXPLOSIVE_DAMAGE_RANGE = (*i)["explosiveDamageRange"].as<int>(EXPLOSIVE_DAMAGE_RANGE);
 		size_t num = 0;
 		for (YAML::const_iterator j = (*i)["fireDamageRange"].begin(); j != (*i)["fireDamageRange"].end() && num < 2; ++j)
 		{
 			FIRE_DAMAGE_RANGE[num] = (*j).as<int>(FIRE_DAMAGE_RANGE[num]);
 			++num;
 		}
-		Mod::DEBRIEF_MUSIC_GOOD = (*i)["goodDebriefingMusic"].as<std::string>(Mod::DEBRIEF_MUSIC_GOOD);
-		Mod::DEBRIEF_MUSIC_BAD = (*i)["badDebriefingMusic"].as<std::string>(Mod::DEBRIEF_MUSIC_BAD);
+		DEBRIEF_MUSIC_GOOD = (*i)["goodDebriefingMusic"].as<std::string>(DEBRIEF_MUSIC_GOOD);
+		DEBRIEF_MUSIC_BAD = (*i)["badDebriefingMusic"].as<std::string>(DEBRIEF_MUSIC_BAD);
 	}
 	for (YAML::const_iterator i = doc["transparencyLUTs"].begin(); i != doc["transparencyLUTs"].end(); ++i)
 	{
@@ -3446,6 +3449,26 @@ StatAdjustment *Mod::getStatAdjustment(int difficulty)
 		return &_statAdjustment[4];
 	}
 	return &_statAdjustment[difficulty];
+}
+
+/**
+ * Returns the minimum amount of score the player can have,
+ * otherwise they are defeated. Changes based on difficulty.
+ * @return Score.
+ */
+int Mod::getDefeatScore() const
+{
+	return _defeatScore;
+}
+
+/**
+ * Returns the minimum amount of funds the player can have,
+ * otherwise they are defeated.
+ * @return Funds.
+ */
+int Mod::getDefeatFunds() const
+{
+	return _defeatFunds;
 }
 
 }

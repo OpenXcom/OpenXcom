@@ -2137,6 +2137,7 @@ alienDeployments: #done
       palette: 4
       music: GMATTBAS
       background: BACK01.SCR
+    points: 5
   - type: STR_ALIEN_COLONY_P2
     data:
       - alienRank: 6

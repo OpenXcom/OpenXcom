@@ -1287,19 +1287,17 @@ void GeoscapeState::time30Minutes()
 	// Handle UFO detection and give aliens points
 	for (std::vector<Ufo*>::iterator u = _game->getSavedGame()->getUfos()->begin(); u != _game->getSavedGame()->getUfos()->end(); ++u)
 	{
-		int points = 0;
+		int points = (*u)->getRules()->getMissionScore(); //one point per UFO in-flight per half hour
 		switch ((*u)->getStatus())
 		{
 		case Ufo::LANDED:
-			points++;
+			points *= 2;
 		case Ufo::FLYING:
-			points++;
 			// Get area
 			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 			{
 				if ((*k)->getRules()->insideRegion((*u)->getLongitude(), (*u)->getLatitude()))
 				{
-					//one point per UFO in-flight per half hour
 					(*k)->addActivityAlien(points);
 					break;
 				}
@@ -1309,7 +1307,6 @@ void GeoscapeState::time30Minutes()
 			{
 				if ((*k)->getRules()->insideCountry((*u)->getLongitude(), (*u)->getLatitude()))
 				{
-					//one point per UFO in-flight per half hour
 					(*k)->addActivityAlien(points);
 					break;
 				}
@@ -1674,7 +1671,6 @@ void GeoscapeState::time1Day()
 			}
 		}
 	}
-	const RuleAlienMission *baseMission = _game->getMod()->getRandomMission(OBJECTIVE_BASE, _game->getSavedGame()->getMonthsPassed());
 	// handle regional and country points for alien bases
 	for (std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 	{
@@ -1682,7 +1678,7 @@ void GeoscapeState::time1Day()
 		{
 			if ((*k)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
 			{
-				(*k)->addActivityAlien(baseMission->getPoints() / 10);
+				(*k)->addActivityAlien((*b)->getDeployment()->getPoints());
 				break;
 			}
 		}
@@ -1690,7 +1686,7 @@ void GeoscapeState::time1Day()
 		{
 			if ((*k)->getRules()->insideCountry((*b)->getLongitude(), (*b)->getLatitude()))
 			{
-				(*k)->addActivityAlien(baseMission->getPoints() / 10);
+				(*k)->addActivityAlien((*b)->getDeployment()->getPoints());
 				break;
 			}
 		}

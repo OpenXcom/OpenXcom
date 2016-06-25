@@ -63,7 +63,7 @@ public:
 	/// get xcom activity to this country
 	std::vector<int> &getActivityAlien();
 	/// store last month's counters, start new counters, set this month's change.
-	void newMonth(int xcomTotal, int alienTotal);
+	void newMonth(int xcomTotal, int alienTotal, int pactScore);
 	/// are we signing a new pact?
 	bool getNewPact() const;
 	/// sign a pact at the end of this month.
