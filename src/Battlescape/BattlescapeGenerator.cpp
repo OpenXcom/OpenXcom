@@ -199,7 +199,7 @@ void BattlescapeGenerator::nextStage()
 	{
 		if ((*i)->getStatus() != STATUS_DEAD                              // if they're not dead
 			&& (((*i)->getOriginalFaction() == FACTION_PLAYER               // and they're a soldier
-			&& _save->isAborted()           // and you aborted
+			&& _save->isAborted()											  // and you aborted
 			&& !(*i)->isInExitArea(END_POINT))                                // and they're not on the exit
 			|| (*i)->getOriginalFaction() != FACTION_PLAYER))               // or they're not a soldier
 		{
@@ -247,7 +247,7 @@ void BattlescapeGenerator::nextStage()
 		{
 			std::vector<BattleItem*> *toContainer = &removeFromGame;
 			// if it's recoverable, and it's not owned by someone
-			if ((*i)->getRules()->isRecoverable() && !(*i)->getOwner())
+			if ((((*i)->getUnit() && (*i)->getUnit()->getGeoscapeSoldier()) || (*i)->getRules()->isRecoverable()) && !(*i)->getOwner())
 			{
 				// first off: don't count primed grenades on the floor
 				if ((*i)->getFuseTimer() == -1)
@@ -256,7 +256,10 @@ void BattlescapeGenerator::nextStage()
 					if (aliensAlive == 0)
 					{
 						// any corpses or unconscious units get put in the skyranger, as well as any unresearched items
-						if ((*i)->getUnit() || !_game->getSavedGame()->isResearched((*i)->getRules()->getRequirements()))
+						if (((*i)->getUnit() &&
+							((*i)->getUnit()->getOriginalFaction() != FACTION_PLAYER ||
+							(*i)->getUnit()->getStatus() == STATUS_DEAD))
+							|| !_game->getSavedGame()->isResearched((*i)->getRules()->getRequirements()))
 						{
 							toContainer = takeHomeGuaranteed;
 						}
@@ -419,6 +422,11 @@ void BattlescapeGenerator::nextStage()
 	{
 		_save->getItems()->push_back(*i);
 		_craftInventoryTile->addItem(*i, ground);
+		if ((*i)->getUnit())
+		{
+			_craftInventoryTile->setUnit((*i)->getUnit());
+			(*i)->getUnit()->setPosition(_craftInventoryTile->getPosition());
+		}
 	}
 
 	_unitSequence = _save->getUnits()->back()->getId() + 1;
