@@ -1045,22 +1045,9 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
-
 	if (craft != 0 && ((playerInExitArea == 0 && aborted) || (playersSurvived == 0)))
 	{
 		addStat("STR_XCOM_CRAFT_LOST", 1, -craft->getRules()->getScore());
-		for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end();)
-		{
-			if ((*i)->getCraft() == craft)
-			{
-				delete (*i);
-				i = base->getSoldiers()->erase(i);
-			}
-			else
-			{
-				++i;
-			}
-		}
 		// Since this is not a base defense mission, we can safely erase the craft,
 		// without worrying it's vehicles' destructor calling double (on base defense missions
 		// all vehicle object in the craft is also referenced by base->getVehicles() !!)
@@ -1068,14 +1055,15 @@ void DebriefingState::prepareDebriefing()
 		craft = 0; // To avoid a crash down there!!
 		base->getCrafts()->erase(craftIterator);
 		_txtTitle->setText(tr("STR_CRAFT_IS_LOST"));
-		return;
+		playersSurvived = 0; // assuming you aborted and left everyone behind
 	}
-	if (aborted && target == "STR_BASE" && !base->getCrafts()->empty())
+	if ((aborted || playersSurvived == 0) && target == "STR_BASE")
 	{
 		for (std::vector<Craft*>::iterator i = base->getCrafts()->begin(); i != base->getCrafts()->end(); ++i)
 		{
 			addStat("STR_XCOM_CRAFT_LOST", 1, -(*i)->getRules()->getScore());
 		}
+		playersSurvived = 0; // assuming you aborted and left everyone behind
 	}
 	if ((!aborted || success) && playersSurvived > 0) 	// RECOVER UFO : run through all tiles to recover UFO components and items
 	{
