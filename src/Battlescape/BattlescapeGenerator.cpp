@@ -194,7 +194,7 @@ void BattlescapeGenerator::setMissionSite(MissionSite *mission)
 void BattlescapeGenerator::nextStage()
 {
 	int aliensAlive = 0;
-	// kill all enemy units, or those not in endpoint area (if aborted)
+	// send all enemy units, or those not in endpoint area (if aborted) to time out
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		if ((*i)->getStatus() != STATUS_DEAD                              // if they're not dead
@@ -246,9 +246,7 @@ void BattlescapeGenerator::nextStage()
 		(*i)->setTile(0);
 		(*i)->setPosition(Position(-1,-1,-1), false);
 	}
-
-	_save->resetTurnCounter();
-
+	
 	// remove all items not belonging to our soldiers from the map.
 	// sort items into two categories:
 	// the ones that we are guaranteed to be able to take home, barring complete failure (ie: stuff on the ship)
@@ -257,6 +255,8 @@ void BattlescapeGenerator::nextStage()
 	std::vector<BattleItem*> *takeHomeGuaranteed = _save->getGuaranteedRecoveredItems();
 	std::vector<BattleItem*> *takeHomeConditional = _save->getConditionalRecoveredItems();
 	std::vector<BattleItem*> takeToNextStage, carryToNextStage, removeFromGame;
+
+	_save->resetTurnCounter();
 
 	for (std::vector<BattleItem*>::iterator i = _save->getItems()->begin(); i != _save->getItems()->end(); ++i)
 	{
