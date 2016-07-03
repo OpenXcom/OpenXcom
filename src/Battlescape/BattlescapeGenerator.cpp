@@ -205,7 +205,25 @@ void BattlescapeGenerator::nextStage()
 		{
 			if ((*i)->getOriginalFaction() == FACTION_HOSTILE && !(*i)->isOut())
 			{
-				aliensAlive++;
+				if ((*i)->getOriginalFaction() == (*i)->getFaction())
+				{
+					aliensAlive++;
+				}
+				else if ((*i)->getTile())
+				{
+					for (std::vector<BattleItem*>::iterator j = (*i)->getInventory()->begin(); j != (*i)->getInventory()->end();)
+					{
+						if (!(*j)->getRules()->isFixed())
+						{
+							(*i)->getTile()->addItem(*j, _game->getMod()->getInventory("STR_GROUND"));
+							j = (*i)->getInventory()->erase(j);
+						}
+						else
+						{
+							++j;
+						}
+					}
+				}
 			}
 			(*i)->goToTimeOut();
 			if ((*i)->getAIModule())
