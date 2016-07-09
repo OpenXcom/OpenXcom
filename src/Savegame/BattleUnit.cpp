@@ -1633,20 +1633,22 @@ void BattleUnit::prepareNewTurn(bool fullProcess)
 		return;
 	}
 
+
+	_unitsSpottedThisTurn.clear();
+
 	// revert to original faction
 	// don't give it back its TUs or anything this round
 	// because it's no longer a unit of the team getting TUs back
 	if (_faction != _originalFaction)
 	{
 		_faction = _originalFaction;
-		return;
 	}
-
-	_unitsSpottedThisTurn.clear();
-
-	recoverTimeUnits();
-
+	else
+	{
+		recoverTimeUnits();
+	}
 	_dontReselect = false;
+
 	_motionPoints = 0;
 
 	// transition between stages, don't do damage or panic
