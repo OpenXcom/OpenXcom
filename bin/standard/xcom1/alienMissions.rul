@@ -198,6 +198,7 @@ alienMissions:
   - type: STR_ALIEN_BASE
     points: 50
     objective: 2
+    siteType: STR_ALIEN_BASE_ASSAULT
     spawnZone: 4 #Mission zone for alien bases
     raceWeights:
       0:
