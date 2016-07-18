@@ -434,7 +434,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			}
 			cost += wallcost;
 			if (_unit->getFaction() != FACTION_PLAYER &&
-				_unit->getSpecab() < SPECAB_BURNFLOOR &&
+				_unit->getSpecialAbility() < SPECAB_BURNFLOOR &&
 				destinationTile->getFire() > 0)
 				cost += 32; // try to find a better path, but don't exclude this path entirely.
 
