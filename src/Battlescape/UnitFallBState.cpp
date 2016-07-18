@@ -265,8 +265,13 @@ void UnitFallBState::think()
 				if ((*unit)->getSpecialAbility() == SPECAB_BURNFLOOR || (*unit)->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 				{
 					(*unit)->getTile()->ignite(1);
-					Position here = ((*unit)->getPosition() * Position(16,16,24)) + Position(8,8,-((*unit)->getTile()->getTerrainLevel()));
-					_parent->getTileEngine()->hit(here, (*unit)->getBaseStats()->strength, DT_IN, (*unit));
+					Position groundVoxel = ((*unit)->getPosition() * Position(16,16,24)) + Position(8,8,-((*unit)->getTile()->getTerrainLevel()));
+					_parent->getTileEngine()->hit(groundVoxel, (*unit)->getBaseStats()->strength, DT_IN, (*unit));
+
+					if ((*unit)->getStatus() != STATUS_STANDING) // ie: we burned a hole in the floor and fell through it
+					{
+						_parent->getPathfinding()->abortPath();
+					}
 				}
 				// move our personal lighting with us
 				_terrain->calculateUnitLighting();
@@ -274,9 +279,12 @@ void UnitFallBState::think()
 				(*unit)->setCache(0);
 				_terrain->calculateFOV(*unit);
 				_parent->checkForProximityGrenades(*unit);
-				if (_parent->getTileEngine()->checkReactionFire(*unit))
-					_parent->getPathfinding()->abortPath();
-				unit = _parent->getSave()->getFallingUnits()->erase(unit);
+				if ((*unit)->getStatus() == STATUS_STANDING)
+				{
+					if (_parent->getTileEngine()->checkReactionFire(*unit))
+						_parent->getPathfinding()->abortPath();
+					unit = _parent->getSave()->getFallingUnits()->erase(unit);
+				}
 			}
 		}
 		else
