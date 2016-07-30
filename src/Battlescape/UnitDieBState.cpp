@@ -180,16 +180,13 @@ void UnitDieBState::think()
 			Game *game = _parent->getSave()->getBattleState()->getGame();
 			if (_unit->getStatus() == STATUS_DEAD)
 			{
-				if (_unit->getArmor()->getSize() == 1)
+				if (_damageType == DT_NONE && _unit->getSpawnUnit().empty())
 				{
-					if (_damageType == DT_NONE && _unit->getSpawnUnit().empty())
-					{
-						game->pushState(new InfoboxOKState(game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
-					}
-					else if (Options::battleNotifyDeath)
-					{
-						game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
-					}
+					game->pushState(new InfoboxOKState(game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
+				}
+				else if (Options::battleNotifyDeath && _unit->getGeoscapeSoldier() != 0)
+				{
+					game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 				}
 			}
 			else
