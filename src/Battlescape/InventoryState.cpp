@@ -762,7 +762,7 @@ void InventoryState::onClearInventory(Action *)
 	_game->getMod()->getSoundByDepth(_battleGame->getDepth(), Mod::ITEM_DROP)->play();
 }
 
-void InventoryState::onAutoequip(Action *action)
+void InventoryState::onAutoequip(Action *)
 {
 	// don't act when moving items
 	if (_inv->getSelectedItem() != 0)

@@ -194,7 +194,7 @@ void AlienMission::think(Game &engine, const Globe &globe)
 				(*c)->setNewPact();
 				std::vector<MissionArea> areas = mod.getRegion(_region)->getMissionZones().at(_rule.getSpawnZone()).areas;
 				MissionArea area = areas.at(RNG::generate(0, areas.size()-1));
-				spawnAlienBase(globe, engine, area);
+				spawnAlienBase(engine, area);
 				break;
 			}
 		}
@@ -205,7 +205,7 @@ void AlienMission::think(Game &engine, const Globe &globe)
 	{
 		std::vector<MissionArea> areas = mod.getRegion(_region)->getMissionZones().at(_rule.getSpawnZone()).areas;
 		MissionArea area = areas.at(RNG::generate(0, areas.size()-1));
-		spawnAlienBase(globe, engine, area);
+		spawnAlienBase(engine, area);
 	}
 
 	if (_nextWave != _rule.getWaveCount())
@@ -628,11 +628,10 @@ void AlienMission::addScore(double lon, double lat, SavedGame &game) const
 
 /**
  * Spawn an alien base.
- * @param globe The earth globe, required to get access to land checks.
  * @param engine The game engine, required to get access to game data and game rules.
  * @param zone The mission zone, required for determining the base coordinates.
  */
-void AlienMission::spawnAlienBase(const Globe &globe, Game &engine, const MissionArea &area)
+void AlienMission::spawnAlienBase(Game &engine, const MissionArea &area)
 {
 	SavedGame &game = *engine.getSavedGame();
 	const Mod &ruleset = *engine.getMod();

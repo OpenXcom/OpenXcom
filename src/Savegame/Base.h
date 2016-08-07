@@ -76,7 +76,7 @@ public:
 	/// Saves the base's ID to YAML.
 	YAML::Node saveId() const;
 	/// Gets the base's name.
-	std::wstring getName(Language* lang = 0) const;
+	std::wstring getName(Language *lang = 0) const;
 	/// Gets the base's marker.
 	int getMarker() const;
 	/// Gets the base's facilities.
