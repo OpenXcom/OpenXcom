@@ -20,6 +20,7 @@
 #include <vector>
 #include <string>
 #include <yaml-cpp/yaml.h>
+#include "Mod.h"
 
 namespace OpenXcom
 {
@@ -80,7 +81,7 @@ public:
 	/// Cleans up the Alien Deployment ruleset.
 	~AlienDeployment();
 	/// Loads Alien Deployment data from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, Mod *mod);
 	/// Gets the Alien Deployment's type.
 	std::string getType() const;
 	/// Gets a pointer to the data.

@@ -903,7 +903,7 @@ void Mod::loadFile(const std::string &filename)
 		AlienDeployment *rule = loadRule(*i, &_alienDeployments, &_deploymentsIndex);
 		if (rule != 0)
 		{
-			rule->load(*i);
+			rule->load(*i, this);
 		}
 	}
 	for (YAML::const_iterator i = doc["research"].begin(); i != doc["research"].end(); ++i)
