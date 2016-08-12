@@ -2126,7 +2126,8 @@ alienDeployments: #done
     race: STR_MIXED_CREW
     markerName: STR_ALIEN_BASE
     markerIcon: 7
-    genMissionType: STR_ALIEN_SUPPLY
+    genMission:
+      STR_ALIEN_SUPPLY: 100
     genMissionFreq: 6
     script: ALIEN_COLONY_P1
     alienBase: true    # this is only to tell new battle mode what to do with this deployment

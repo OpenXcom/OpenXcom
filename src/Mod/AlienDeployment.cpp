@@ -192,7 +192,10 @@ void AlienDeployment::load(const YAML::Node &node, Mod *mod)
 	_turnLimit = node["turnLimit"].as<int>(_turnLimit);
 	_chronoTrigger = ChronoTrigger(node["chronoTrigger"].as<int>(_chronoTrigger));
 	_isAlienBase = node["alienBase"].as<bool>(_isAlienBase);
-	_genMissionType = node["genMissionType"].as<std::string>(_genMissionType);
+	if (node["genMission"])
+	{
+		_genMission.load(node["genMission"]);
+	}
 	_genMissionFrequency = node["genMissionFreq"].as<int>(_genMissionFrequency);
 }
 
@@ -523,7 +526,7 @@ bool AlienDeployment::isAlienBase() const
 
 std::string AlienDeployment::getGenMissionType() const
 {
-	return _genMissionType;
+	return _genMission.choose();
 }
 
 int AlienDeployment::getGenMissionFrequency() const

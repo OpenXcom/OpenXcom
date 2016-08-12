@@ -999,7 +999,8 @@ alienDeployments:
     objectiveType: 3
     markerName: STR_ALIEN_BASE
     markerIcon: 7
-    genMissionType: STR_ALIEN_SUPPLY
+    genMission:
+      STR_ALIEN_SUPPLY: 100
     genMissionFreq: 6
     alienBase: true    # this is only to tell new battle mode what to do with this deployment
     objectiveComplete: [STR_ALIEN_BASE_CONTROL_DESTROYED, 500]
