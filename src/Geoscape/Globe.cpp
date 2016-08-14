@@ -849,10 +849,10 @@ void Globe::blink()
 {
 	_blink = -_blink;
 
-	for (size_t i = 0; i < _markerSet->getTotalFrames(); ++i)
+	for (std::map<int, Surface*>::iterator i = _markerSet->getFrames()->begin(); i != _markerSet->getFrames()->end(); ++i)
 	{
-		if (i != CITY_MARKER)
-			_markerSet->getFrame(i)->offset(_blink);
+		if (i->first != CITY_MARKER)
+			i->second->offset(_blink);
 	}
 
 	drawMarkers();
