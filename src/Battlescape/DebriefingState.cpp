@@ -1096,7 +1096,11 @@ void DebriefingState::prepareDebriefing()
 			// if this was a 2-stage mission, and we didn't abort (ie: we have time to clean up)
 			// we can recover items from the earlier stages as well
 			recoverItems(battle->getConditionalRecoveredItems(), base);
-
+			int nonRecoverType = 0;
+			if (deployment && deployment->getObjectiveType())
+			{
+				nonRecoverType = deployment->getObjectiveType();
+			}
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
 				// get recoverable map data objects from the battlescape map
@@ -1105,7 +1109,7 @@ void DebriefingState::prepareDebriefing()
 					if (battle->getTiles()[i]->getMapData(part))
 					{
 						size_t specialType = battle->getTiles()[i]->getMapData(part)->getSpecialType();
-						if (_recoveryStats.find(specialType) != _recoveryStats.end())
+						if (specialType != nonRecoverType && _recoveryStats.find(specialType) != _recoveryStats.end())
 						{
 							addStat(_recoveryStats[specialType]->name, 1, _recoveryStats[specialType]->value);
 						}
