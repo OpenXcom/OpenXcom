@@ -636,7 +636,6 @@ void AlienMission::spawnAlienBase(Game &engine, const MissionArea &area)
 	SavedGame &game = *engine.getSavedGame();
 	const Mod &ruleset = *engine.getMod();
 	// Once the last UFO is spawned, the aliens build their base.
-	const RuleRegion &regionRules = *ruleset.getRegion(_region);
 	AlienDeployment *deployment;
 	if (ruleset.getDeployment(_rule.getSiteType()))
 	{
