@@ -734,7 +734,7 @@ void GeoscapeState::time5Seconds()
 						return;
 					if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
 					{
-						mission->setWaveCountdown(30 * (RNG::generate(0, 48) + 400));
+						mission->setWaveCountdown(30 * (RNG::generate(0, 400) + 48));
 						(*i)->setDestination(0);
 						base->setupDefenses();
 						timerReset();
