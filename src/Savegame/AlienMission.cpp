@@ -502,7 +502,7 @@ void AlienMission::ufoShotDown(Ufo &ufo)
 		if (_nextWave != _rule.getWaveCount())
 		{
 			// Delay next wave
-			_spawnCountdown += 30 * (RNG::generate(0, 48) + 400);
+			_spawnCountdown += 30 * (RNG::generate(0, 400) + 48);
 		}
 		break;
 	}
