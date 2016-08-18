@@ -1050,16 +1050,21 @@ std::string now()
 void crashDump(void *ex, const std::string &err)
 {
 	std::ostringstream error;
-#ifdef _WIN32
+#ifdef _MSC_VER
 	PEXCEPTION_POINTERS exception = (PEXCEPTION_POINTERS)ex;
-	if (exception->ExceptionRecord->ExceptionCode == EXCEPTION_CODE_CXX)
+	std::exception *cppException = 0;
+	switch (exception->ExceptionRecord->ExceptionCode)
 	{
-		std::exception *cppException = (std::exception *)exception->ExceptionRecord->ExceptionInformation[1];
+	case EXCEPTION_CODE_CXX:
+		cppException = (std::exception *)exception->ExceptionRecord->ExceptionInformation[1];
 		error << cppException->what();
-	}
-	else
-	{
+		break;
+	case EXCEPTION_ACCESS_VIOLATION:
+		error << "Memory access violation. This usually indicates something missing in a mod.";
+		break;
+	default:
 		error << "code 0x" << std::hex << exception->ExceptionRecord->ExceptionCode;
+		break;
 	}
 	Log(LOG_FATAL) << "A fatal error has occurred: " << error.str();
 	stackTrace(exception->ContextRecord);
@@ -1086,7 +1091,7 @@ void crashDump(void *ex, const std::string &err)
 	else
 	{
 		int signal = *((int*)ex);
-		error << "signal " << signal;
+		error << "signal " << strsignal(signal);
 	}
 	Log(LOG_FATAL) << "A fatal error has occurred: " << error.str();
 	stackTrace(0);
