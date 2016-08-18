@@ -56,14 +56,15 @@
 #include <iostream>
 #include <fstream>
 #include <SDL_image.h>
-#include <cstring>
-#include <cstdio>
-#include <cstdlib>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <sys/param.h>
 #include <sys/types.h>
 #include <pwd.h>
 #include <execinfo.h>
+#include <signal.h>
 #endif
 #include <SDL.h>
 #include <SDL_syswm.h>
