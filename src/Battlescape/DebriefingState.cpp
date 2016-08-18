@@ -1059,6 +1059,7 @@ void DebriefingState::prepareDebriefing()
 		base->getCrafts()->erase(craftIterator);
 		_txtTitle->setText(tr("STR_CRAFT_IS_LOST"));
 		playersSurvived = 0; // assuming you aborted and left everyone behind
+		success = false;
 	}
 	if ((aborted || playersSurvived == 0) && target == "STR_BASE")
 	{
@@ -1067,6 +1068,7 @@ void DebriefingState::prepareDebriefing()
 			addStat("STR_XCOM_CRAFT_LOST", 1, -(*i)->getRules()->getScore());
 		}
 		playersSurvived = 0; // assuming you aborted and left everyone behind
+		success = false;
 	}
 	if ((!aborted || success) && playersSurvived > 0) 	// RECOVER UFO : run through all tiles to recover UFO components and items
 	{
