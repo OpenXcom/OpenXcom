@@ -1317,7 +1317,14 @@ bool isCompleted::operator()(const BaseFacility *facility) const
 size_t Base::getDetectionChance() const
 {
 	size_t mindShields = std::count_if (_facilities.begin(), _facilities.end(), isMindShield());
-	size_t completedFacilities = std::count_if (_facilities.begin(), _facilities.end(), isCompleted());
+	size_t completedFacilities = 0;
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	{
+		if ((*i)->getBuildTime() == 0)
+		{
+			completedFacilities += (*i)->getRules()->getSize() * (*i)->getRules()->getSize();
+		}
+	}
 	return ((completedFacilities / 6 + 15) / (mindShields + 1));
 }
 
