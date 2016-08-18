@@ -56,9 +56,9 @@
 #include <iostream>
 #include <fstream>
 #include <SDL_image.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
 #include <sys/param.h>
 #include <sys/types.h>
@@ -1092,7 +1092,7 @@ void crashDump(void *ex, const std::string &err)
 	else
 	{
 		int signal = *((int*)ex);
-		error << "signal " << strsignal(signal);
+		error << "signal " << signal;
 	}
 	Log(LOG_FATAL) << "A fatal error has occurred: " << error.str();
 	stackTrace(0);
