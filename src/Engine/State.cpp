@@ -257,7 +257,7 @@ void State::init()
 		Window* window = dynamic_cast<Window*>(*i);
 		if (window)
 		{
-			window->invalidate(true);
+			window->invalidate();
 		}
 	}
 	if (_ruleInterface != 0 && !_ruleInterface->getMusic().empty())
@@ -542,7 +542,7 @@ void State::recenter(int dX, int dY)
 
 void State::setGamePtr(Game* game)
 {
-    _game = game;
+	_game = game;
 }
 
 }

@@ -16,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
 #include "CrossPlatform.h"
 #include <exception>
 #include <algorithm>
@@ -23,11 +26,13 @@
 #include <string>
 #include <locale>
 #include <stdint.h>
+#include <time.h>
 #include <sys/stat.h>
 #include "../dirent.h"
 #include "Logger.h"
 #include "Exception.h"
 #include "Options.h"
+#include "Language.h"
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -48,7 +53,6 @@
 #pragma comment(lib, "dbghelp.lib")
 #endif
 #else
-#include "Language.h"
 #include <iostream>
 #include <fstream>
 #include <SDL_image.h>
@@ -60,6 +64,7 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <execinfo.h>
+#include <signal.h>
 #endif
 #include <SDL.h>
 #include <SDL_syswm.h>
@@ -87,12 +92,14 @@ void getErrorDialog()
 #ifndef _WIN32
 	if (system(NULL))
 	{
-		if (system("which kdialog") == 0)
-			errorDlg = "kdialog";
-		else if (system("which xdialog") == 0)
-			errorDlg = "xdialog";
-		else if (system("which gdialog") == 0)
-			errorDlg = "gdialog";
+		if (system("which zenity 2>&1 > /dev/null") == 0)
+			errorDlg = "zenity --error --text=";
+		else if (system("which kdialog 2>&1 > /dev/null") == 0)
+			errorDlg = "kdialog --error ";
+		else if (system("which gdialog 2>&1 > /dev/null") == 0)
+			errorDlg = "gdialog --msgbox ";
+		else if (system("which xdialog 2>&1 > /dev/null") == 0)
+			errorDlg = "xdialog --msgbox ";
 	}
 #endif
 }
@@ -112,8 +119,9 @@ void showError(const std::string &error)
 	}
 	else
 	{
-		std::string cmd = errorDlg;
-		cmd += " --title \"OpenXcom Error\" --error \"" + error + "\"";
+		std::string nError = '"' + error + '"';
+		Language::replace(nError, "\n", "\\n");
+		std::string cmd = errorDlg + nError;
 		if (system(cmd.c_str()) != 0)
 			std::cerr << error << std::endl;
 	}
@@ -535,7 +543,7 @@ bool fileExists(const std::string &path)
 		return 1;
 	}
 	return 0;
-#else 
+#else
 	struct stat info;
 	return (stat(path.c_str(), &info) == 0 && S_ISREG(info.st_mode));
 #endif
@@ -593,7 +601,7 @@ std::string sanitizeFilename(const std::string &filename)
 		if ((*i) == '<' ||
 			(*i) == '>' ||
 			(*i) == ':' ||
-			(*i) == '"' || 
+			(*i) == '"' ||
 			(*i) == '/' ||
 			(*i) == '?' ||
 			(*i) == '\\')
@@ -911,13 +919,14 @@ void stackTrace(void *ctx)
 	}
 	else
 	{
-		// TODO: Doesn't work on MinGW
-#if 0
+#ifdef _MSC_VER
 		memset(&context, 0, sizeof(CONTEXT));
 		context.ContextFlags = CONTEXT_FULL;
 		RtlCaptureContext(&context);
-#endif
+#else
+		// TODO: Doesn't work on MinGW
 		return;
+#endif
 	}
 	HANDLE thread = GetCurrentThread();
 	HANDLE process = GetCurrentProcess();
@@ -951,7 +960,8 @@ void stackTrace(void *ctx)
 	frame.AddrStack.Offset = context.IntSp;
 	frame.AddrStack.Mode = AddrModeFlat;
 #else
-	#warning Stack trace not supported on this architecture
+	// TODO: Stack trace not supported on this architecture
+	Log(LOG_FATAL) << "Unfortunately, no stack trace information is available";
 	return;
 #endif
 	SYMBOL_INFO *symbol = (SYMBOL_INFO *)malloc(sizeof(SYMBOL_INFO) + (MAX_SYMBOL_LENGTH - 1) * sizeof(TCHAR));
@@ -1007,22 +1017,19 @@ void stackTrace(void *ctx)
 }
 
 /**
- * Generates a quick timestamp.
- * @return String in D-M-Y_H_M_S format.
+ * Generates a timestamp of the current time.
+ * @return String in D-M-Y_H-M-S format.
  */
-std::string timestamp()
+std::string now()
 {
 	const int MAX_LEN = 25, MAX_RESULT = 80;
+	char result[MAX_RESULT] = { 0 };
 #ifdef _WIN32
 	char date[MAX_LEN], time[MAX_LEN];
-	if (GetDateFormatA(LOCALE_INVARIANT, 0, 0,
-		"dd'-'MM'-'yyyy", date, MAX_LEN) == 0)
-		return "Error in Now()";
-	if (GetTimeFormatA(LOCALE_INVARIANT, TIME_FORCE24HOURFORMAT, 0,
-		"HH'-'mm'-'ss", time, MAX_LEN) == 0)
-		return "Error in Now()";
-
-	char result[MAX_RESULT] = { 0 };
+	if (GetDateFormatA(LOCALE_INVARIANT, 0, 0, "dd'-'MM'-'yyyy", date, MAX_LEN) == 0)
+		return "00-00-0000";
+	if (GetTimeFormatA(LOCALE_INVARIANT, TIME_FORCE24HOURFORMAT, 0, "HH'-'mm'-'ss", time, MAX_LEN) == 0)
+		return "00-00-00";
 	sprintf(result, "%s_%s", date, time);
 #else
 	char buffer[MAX_LEN];
@@ -1031,7 +1038,6 @@ std::string timestamp()
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
 	strftime(buffer, MAX_LEN, "%d-%m-%Y_%H-%M-%S", timeinfo);
-	char result[MAX_RESULT] = { 0 };
 	sprintf(result, "%s", buffer);
 #endif
 	return result;
@@ -1045,21 +1051,26 @@ std::string timestamp()
 void crashDump(void *ex, const std::string &err)
 {
 	std::ostringstream error;
-#ifdef _WIN32
+#ifdef _MSC_VER
 	PEXCEPTION_POINTERS exception = (PEXCEPTION_POINTERS)ex;
-	if (exception->ExceptionRecord->ExceptionCode == EXCEPTION_CODE_CXX)
+	std::exception *cppException = 0;
+	switch (exception->ExceptionRecord->ExceptionCode)
 	{
-		std::exception *cppException = (std::exception *)exception->ExceptionRecord->ExceptionInformation[1];
+	case EXCEPTION_CODE_CXX:
+		cppException = (std::exception *)exception->ExceptionRecord->ExceptionInformation[1];
 		error << cppException->what();
-	}
-	else
-	{
+		break;
+	case EXCEPTION_ACCESS_VIOLATION:
+		error << "Memory access violation. This usually indicates something missing in a mod.";
+		break;
+	default:
 		error << "code 0x" << std::hex << exception->ExceptionRecord->ExceptionCode;
+		break;
 	}
 	Log(LOG_FATAL) << "A fatal error has occurred: " << error.str();
 	stackTrace(exception->ContextRecord);
 	std::string dumpName = Options::getUserFolder();
-	dumpName += timestamp() + ".dmp";
+	dumpName += now() + ".dmp";
 	HANDLE dumpFile = CreateFileA(dumpName.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	MINIDUMP_EXCEPTION_INFORMATION exceptionInformation;
 	exceptionInformation.ThreadId = GetCurrentThreadId();
@@ -1089,9 +1100,10 @@ void crashDump(void *ex, const std::string &err)
 	std::ostringstream msg;
 	msg << "OpenXcom has crashed: " << error.str() << std::endl;
 	msg << "Extra information has been saved to openxcom.log." << std::endl;
-	msg << "If this was unexpected, please report this to the developers.";
+	msg << "If this error was unexpected, please report it to the developers.";
 	showError(msg.str());
 }
 
 }
+
 }

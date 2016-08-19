@@ -17,8 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
-#include <math.h>
+#include "../fmath.h"
 #include <string>
 #include <vector>
 #include <yaml-cpp/yaml.h>
@@ -58,7 +57,7 @@ public:
 	/// Gets a random texture terrain for a given target.
 	std::string getRandomTerrain(Target *target) const;
 	/// Gets the alien deployment for this texture.
-	const std::map<std::string, int> &getDeployments();
+	const std::map<std::string, int> &getDeployments() const;
 	/// Gets a random deployment.
 	std::string getRandomDeployment() const;
 };

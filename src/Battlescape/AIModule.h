@@ -17,25 +17,31 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "BattleAIState.h"
+#include <yaml-cpp/yaml.h>
 #include "BattlescapeGame.h"
 #include "Position.h"
+#include "../Savegame/BattleUnit.h"
 #include <vector>
+
 
 namespace OpenXcom
 {
 
 class SavedBattleGame;
 class BattleUnit;
+struct BattleAction;
 class BattlescapeState;
 class Node;
 
+enum AIMode { AI_PATROL, AI_AMBUSH, AI_COMBAT, AI_ESCAPE };
 /**
  * This class is used by the BattleUnit AI.
  */
-class AlienBAIState : public BattleAIState
+class AIModule
 {
-protected:
+private:
+	SavedBattleGame *_save;
+	BattleUnit *_unit;
 	BattleUnit *_aggroTarget;
 	int _knownEnemies, _visibleEnemies, _spottingEnemies;
 	int _escapeTUs, _ambushTUs, _reserveTUs;
@@ -46,20 +52,17 @@ protected:
 	Node *_fromNode, *_toNode;
 	std::vector<int> _reachable, _reachableWithAttack, _wasHitBy;
 	BattleActionType _reserve;
+	UnitFaction _targetFaction;
 public:
-	/// Creates a new AlienBAIState linked to the game and a certain unit.
-	AlienBAIState(SavedBattleGame *save, BattleUnit *unit, Node *node);
-	/// Cleans up the AlienBAIState.
-	~AlienBAIState();
-	/// Loads the AI state from YAML.
+	/// Creates a new AIModule linked to the game and a certain unit.
+	AIModule(SavedBattleGame *save, BattleUnit *unit, Node *node);
+	/// Cleans up the AIModule.
+	~AIModule();
+	/// Loads the AI Module from YAML.
 	void load(const YAML::Node& node);
-	/// Saves the AI state to YAML.
+	/// Saves the AI Module to YAML.
 	YAML::Node save() const;
-	/// Enters the state.
-	void enter();
-	/// Exits the state.
-	void exit();
-	/// Runs state functionality every AI cycle.
+	/// Runs Module functionality every AI cycle.
 	void think(BattleAction *action);
 	/// Sets the "unit was hit" flag true.
 	void setWasHitBy(BattleUnit *attacker);
@@ -112,6 +115,7 @@ public:
 	BattleActionType getReserveMode();
 	/// Assuming we have both a ranged and a melee weapon, we have to select one.
 	void selectMeleeOrRanged();
+	/// Gets the current targetted unit.
 	BattleUnit* getTarget();
 };
 

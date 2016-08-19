@@ -40,7 +40,7 @@ public:
 	/// Gets the list of sounds defined by this mod
 	std::map<int, std::string> *getSounds();
 	/// get the mod index for this external sound set.
-	int getModIndex();
+	int getModIndex() const;
 };
 
 }

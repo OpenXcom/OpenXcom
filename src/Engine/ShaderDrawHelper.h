@@ -156,7 +156,7 @@ public:
 			
 	}
 	
-	///copy constructor	
+	///copy constructor
 	inline ShaderBase(const ShaderBase<Pixel>& s):
 		_orgin(s.ptr()),
 		_range_base(s.getBaseDomain()),
@@ -336,7 +336,7 @@ public:
 			
 	}
 	
-	///copy constructor	
+	///copy constructor
 	inline ShaderBase(const ShaderBase<Uint8>& s):
 		_orgin(s.ptr()),
 		_range_base(s.getBaseDomain()),
@@ -421,18 +421,18 @@ struct controler
 	/**
 	 * function used only when `SurfaceType` can be used as destination surface
 	 * if that type should not be used as `dest` dont implements this.
-	 * @return start drawing range 
+	 * @return start drawing range
 	 */
 	inline const GraphSubset& get_range();
 	/**
 	 * function used only when `SurfaceType` is used as source surface.
 	 * function reduce drawing range.
-	 * @param g modify drawing range 
+	 * @param g modify drawing range
 	 */
 	inline void mod_range(GraphSubset& g);
 	/**
 	 * set final drawing range.
-	 * @param g drawing range 
+	 * @param g drawing range
 	 */
 	inline void set_range(const GraphSubset& g);
 
@@ -606,11 +606,11 @@ struct controler_base
 	}
 	inline void set_y(const int& begin, const int&)
 	{
-		ptr_pos_y += step.second*begin;		
+		ptr_pos_y += step.second*begin;
 	}
 	inline void inc_y()
 	{
-		ptr_pos_y += step.second;		
+		ptr_pos_y += step.second;
 	}
 	
 	

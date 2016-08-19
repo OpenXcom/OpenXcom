@@ -997,8 +997,15 @@ alienDeployments:
       background: BACK01.SCR
       showTarget: false
     objectiveType: 3
+    markerName: STR_ALIEN_BASE
+    markerIcon: 7
+    genMission:
+      STR_ALIEN_SUPPLY: 100
+    genMissionFreq: 6
+    alienBase: true    # this is only to tell new battle mode what to do with this deployment
     objectiveComplete: [STR_ALIEN_BASE_CONTROL_DESTROYED, 500]
     objectivePopup: STR_CONTROL_CENTER_DESTROYED
+    points: 5
   - type: STR_BASE_DEFENSE
     data:
       - alienRank: 5

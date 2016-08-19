@@ -214,4 +214,5 @@ void Bar::setBorderColor(Uint8 bc)
 {
 	_borderColor = bc;
 }
+
 }

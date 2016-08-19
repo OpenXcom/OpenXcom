@@ -119,4 +119,5 @@ void Region::newMonth()
 	if (_activityXcom.size() > 12)
 		_activityXcom.erase(_activityXcom.begin());
 }
+
 }

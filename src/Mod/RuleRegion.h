@@ -17,12 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include <string>
 #include <vector>
 #include <yaml-cpp/yaml.h>
 #include "../fmath.h"
-#include <math.h>
 #include "../Savegame/WeightedOptions.h"
 
 namespace OpenXcom
@@ -38,7 +36,7 @@ struct MissionArea
 	int texture;
 	std::string name;
 
-    bool operator== (const MissionArea& ma) const
+	bool operator== (const MissionArea& ma) const
 	{
 		return AreSame(lonMax, ma.lonMax) && AreSame(lonMin, ma.lonMin) && AreSame(latMax, ma.latMax) && AreSame(latMin, ma.latMin);
 	}

@@ -135,7 +135,7 @@ void Tile::loadBinary(Uint8 *buffer, Tile::SerializationKey& serKey)
 	_smoke = unserializeInt(&buffer, serKey._smoke);
 	_fire = unserializeInt(&buffer, serKey._fire);
 
-    Uint8 boolFields = unserializeInt(&buffer, serKey.boolFields);
+	Uint8 boolFields = unserializeInt(&buffer, serKey.boolFields);
 	_discovered[0] = (boolFields & 1) ? true : false;
 	_discovered[1] = (boolFields & 2) ? true : false;
 	_discovered[2] = (boolFields & 4) ? true : false;
@@ -878,7 +878,7 @@ void Tile::setMarkerColor(int color)
  * Get the marker color on this tile.
  * @return color
  */
-int Tile::getMarkerColor()
+int Tile::getMarkerColor() const
 {
 	return _markerColor;
 }
@@ -896,7 +896,7 @@ void Tile::setVisible(int visibility)
  * Get the tile visible flag.
  * @return visibility
  */
-int Tile::getVisible()
+int Tile::getVisible() const
 {
 	return _visible;
 }
@@ -966,7 +966,7 @@ void Tile::setDangerous()
  * get the danger flag on this tile.
  * @return the danger flag for this tile.
  */
-bool Tile::getDangerous()
+bool Tile::getDangerous() const
 {
 	return _danger;
 }

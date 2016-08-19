@@ -54,7 +54,7 @@ Node::~Node()
 
 /* following data is the order in which certain alien ranks spawn on certain node ranks */
 /* note that they all can fall back to rank 0 nodes - which is scout (outside ufo) */
-const int Node::nodeRank[8][7] = { 
+const int Node::nodeRank[8][7] = {
 	{ 4, 3, 5, 8, 7, 2, 0 }, //commander
 	{ 4, 3, 5, 8, 7, 2, 0 }, //leader
 	{ 5, 4, 3, 2, 7, 8, 0 }, //engineer
@@ -188,7 +188,7 @@ bool Node::isTarget() const
 
 void Node::setType(int type)
 {
-    _type = type;
+	_type = type;
 }
 
 void Node::setDummy(bool dummy)

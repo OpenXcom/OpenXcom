@@ -36,15 +36,15 @@ public:
 	/// Animate a particle.
 	bool animate();
 	/// Get the size value.
-	int getSize() { return _size; }
+	int getSize() const { return _size; }
 	/// Get the color.
-	Uint8 getColor() { return _color; }
+	Uint8 getColor() const { return _color; }
 	/// Get the opacity.
-	Uint8 getOpacity() {return std::min((_opacity + 7) / 10, 3); }
+	Uint8 getOpacity() const { return std::min((_opacity + 7) / 10, 3); }
 	/// Get the horizontal shift.
-	float getX() { return _xOffset; }
+	float getX() const { return _xOffset; }
 	/// Get the vertical shift.
-	float getY() { return _yOffset; }
+	float getY() const { return _yOffset; }
 };
 
 }

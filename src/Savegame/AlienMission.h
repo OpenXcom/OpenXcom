@@ -107,14 +107,14 @@ public:
 	/// Handle UFO shot down.
 	void ufoShotDown(Ufo &ufo);
 	/// Handle Points for mission successes.
-	void addScore(const double lon, const double lat, SavedGame &game);
+	void addScore(double lon, double lat, SavedGame &game) const;
 	/// Keep track of the city/whatever that we're going to target.
 	void setMissionSiteZone(int zone);
 private:
 	/// Spawns a UFO, based on mission rules.
 	Ufo *spawnUfo(const SavedGame &game, const Mod &mod, const Globe &globe, const MissionWave &wave, const UfoTrajectory &trajectory);
 	/// Spawn an alien base
-	void spawnAlienBase(const Globe &globe, Game &engine, int zone);
+	void spawnAlienBase(Game &engine, const MissionArea &area);
 	/// Select a destination (lon/lat) based on the criteria of our trajectory and desired waypoint.
 	std::pair<double, double> getWaypoint(const UfoTrajectory &trajectory, const size_t nextWaypoint, const Globe &globe, const RuleRegion &region);
 	/// Get a random landing point inside the given region zone.

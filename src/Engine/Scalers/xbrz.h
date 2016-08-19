@@ -18,7 +18,7 @@
 
 #include <cstddef> //size_t
 #include <stdint.h> //uint32_t
-#include <limits>
+#include <climits>
 #include "config.h"
 
 namespace xbrz
@@ -52,7 +52,7 @@ THREAD-SAFETY: - parts of the same image may be scaled by multiple threads as lo
 void scale(size_t factor, //valid range: 2 - 5
            const uint32_t* src, uint32_t* trg, int srcWidth, int srcHeight,
            const ScalerCfg& cfg = ScalerCfg(),
-           int yFirst = 0, int yLast = std::numeric_limits<int>::max()); //slice of source image
+           int yFirst = 0, int yLast = INT_MAX); //slice of source image
 
 void nearestNeighborScale(const uint32_t* src, int srcWidth, int srcHeight,
                           uint32_t* trg, int trgWidth, int trgHeight);

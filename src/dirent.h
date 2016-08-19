@@ -1,28 +1,11 @@
 /*
- * dirent.h - dirent API for Microsoft Visual Studio
+ * Dirent interface for Microsoft Visual Studio
+ * Version 1.21
  *
  * Copyright (C) 2006-2012 Toni Ronkko
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * ``Software''), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND, EXPRESS
- * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * IN NO EVENT SHALL TONI RONKKO BE LIABLE FOR ANY CLAIM, DAMAGES OR
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- *
- * $Id: dirent.h,v 1.20 2014/03/19 17:52:23 tronkko Exp $
+ * This file is part of dirent.  Dirent may be freely distributed
+ * under the MIT license.  For all details and documentation, see
+ * https://github.com/tronkko/dirent
  */
 #ifndef DIRENT_H
 #define DIRENT_H
@@ -30,21 +13,19 @@
 #if defined(_MSC_VER)
 
 /*
- * Define architecture flags so we don't need to include windows.h.
- * Avoiding windows.h makes it simpler to use windows sockets in conjunction
- * with dirent.h.
+ * Include windows.h without Windows Sockets 1.1 to prevent conflicts with
+ * Windows Sockets 2.0.
  */
-#if !defined(_68K_) && !defined(_MPPC_) && !defined(_X86_) && !defined(_IA64_) && !defined(_AMD64_) && defined(_M_IX86)
-#   define _X86_
+#ifndef WIN32_LEAN_AND_MEAN
+#   define WIN32_LEAN_AND_MEAN
 #endif
-#if !defined(_68K_) && !defined(_MPPC_) && !defined(_X86_) && !defined(_IA64_) && !defined(_AMD64_) && defined(_M_AMD64)
-#define _AMD64_
+#ifndef NOMINMAX
+#	define NOMINMAX
 #endif
+#include <windows.h>
 
 #include <stdio.h>
 #include <stdarg.h>
-#include <windef.h>
-#include <winbase.h>
 #include <wchar.h>
 #include <string.h>
 #include <stdlib.h>
@@ -64,54 +45,109 @@
 #   define FILE_ATTRIBUTE_DEVICE 0x40
 #endif
 
-/* File type and permission flags for stat() */
+/* File type and permission flags for stat(), general mask */
 #if !defined(S_IFMT)
-#   define S_IFMT   _S_IFMT                     /* File type mask */
-#endif
-#if !defined(S_IFDIR)
-#   define S_IFDIR  _S_IFDIR                    /* Directory */
-#endif
-#if !defined(S_IFCHR)
-#   define S_IFCHR  _S_IFCHR                    /* Character device */
-#endif
-#if !defined(S_IFFIFO)
-#   define S_IFFIFO _S_IFFIFO                   /* Pipe */
-#endif
-#if !defined(S_IFREG)
-#   define S_IFREG  _S_IFREG                    /* Regular file */
-#endif
-#if !defined(S_IREAD)
-#   define S_IREAD  _S_IREAD                    /* Read permission */
-#endif
-#if !defined(S_IWRITE)
-#   define S_IWRITE _S_IWRITE                   /* Write permission */
-#endif
-#if !defined(S_IEXEC)
-#   define S_IEXEC  _S_IEXEC                    /* Execute permission */
-#endif
-#if !defined(S_IFIFO)
-#   define S_IFIFO _S_IFIFO                     /* Pipe */
-#endif
-#if !defined(S_IFBLK)
-#   define S_IFBLK   0                          /* Block device */
-#endif
-#if !defined(S_IFLNK)
-#   define S_IFLNK   0                          /* Link */
-#endif
-#if !defined(S_IFSOCK)
-#   define S_IFSOCK  0                          /* Socket */
+#   define S_IFMT _S_IFMT
 #endif
 
-#if defined(_MSC_VER)
-#   define S_IRUSR  S_IREAD                     /* Read user */
-#   define S_IWUSR  S_IWRITE                    /* Write user */
-#   define S_IXUSR  0                           /* Execute user */
-#   define S_IRGRP  0                           /* Read group */
-#   define S_IWGRP  0                           /* Write group */
-#   define S_IXGRP  0                           /* Execute group */
-#   define S_IROTH  0                           /* Read others */
-#   define S_IWOTH  0                           /* Write others */
-#   define S_IXOTH  0                           /* Execute others */
+/* Directory bit */
+#if !defined(S_IFDIR)
+#   define S_IFDIR _S_IFDIR
+#endif
+
+/* Character device bit */
+#if !defined(S_IFCHR)
+#   define S_IFCHR _S_IFCHR
+#endif
+
+/* Pipe bit */
+#if !defined(S_IFFIFO)
+#   define S_IFFIFO _S_IFFIFO
+#endif
+
+/* Regular file bit */
+#if !defined(S_IFREG)
+#   define S_IFREG _S_IFREG
+#endif
+
+/* Read permission */
+#if !defined(S_IREAD)
+#   define S_IREAD _S_IREAD
+#endif
+
+/* Write permission */
+#if !defined(S_IWRITE)
+#   define S_IWRITE _S_IWRITE
+#endif
+
+/* Execute permission */
+#if !defined(S_IEXEC)
+#   define S_IEXEC _S_IEXEC
+#endif
+
+/* Pipe */
+#if !defined(S_IFIFO)
+#   define S_IFIFO _S_IFIFO
+#endif
+
+/* Block device */
+#if !defined(S_IFBLK)
+#   define S_IFBLK 0
+#endif
+
+/* Link */
+#if !defined(S_IFLNK)
+#   define S_IFLNK 0
+#endif
+
+/* Socket */
+#if !defined(S_IFSOCK)
+#   define S_IFSOCK 0
+#endif
+
+/* Read user permission */
+#if !defined(S_IRUSR)
+#   define S_IRUSR S_IREAD
+#endif
+
+/* Write user permission */
+#if !defined(S_IWUSR)
+#   define S_IWUSR S_IWRITE
+#endif
+
+/* Execute user permission */
+#if !defined(S_IXUSR)
+#   define S_IXUSR 0
+#endif
+
+/* Read group permission */
+#if !defined(S_IRGRP)
+#   define S_IRGRP 0
+#endif
+
+/* Write group permission */
+#if !defined(S_IWGRP)
+#   define S_IWGRP 0
+#endif
+
+/* Execute group permission */
+#if !defined(S_IXGRP)
+#   define S_IXGRP 0
+#endif
+
+/* Read others permission */
+#if !defined(S_IROTH)
+#   define S_IROTH 0
+#endif
+
+/* Write others permission */
+#if !defined(S_IWOTH)
+#   define S_IWOTH 0
+#endif
+
+/* Execute others permission */
+#if !defined(S_IXOTH)
+#   define S_IXOTH 0
 #endif
 
 /* Maximum length of file name */
@@ -126,14 +162,14 @@
 #endif
 
 /* File type flags for d_type */
-#define DT_UNKNOWN  0
-#define DT_REG      S_IFREG
-#define DT_DIR      S_IFDIR
-#define DT_FIFO     S_IFIFO
-#define DT_SOCK     S_IFSOCK
-#define DT_CHR      S_IFCHR
-#define DT_BLK      S_IFBLK
-#define DT_LNK      S_IFLNK
+#define DT_UNKNOWN 0
+#define DT_REG S_IFREG
+#define DT_DIR S_IFDIR
+#define DT_FIFO S_IFIFO
+#define DT_SOCK S_IFSOCK
+#define DT_CHR S_IFCHR
+#define DT_BLK S_IFBLK
+#define DT_LNK S_IFLNK
 
 /* Macros for converting between st_mode and d_type */
 #define IFTODT(mode) ((mode) & S_IFMT)
@@ -145,13 +181,27 @@
  * only defined for compatibility.  These macros should always return false
  * on Windows.
  */
-#define	S_ISFIFO(mode) (((mode) & S_IFMT) == S_IFIFO)
-#define	S_ISDIR(mode)  (((mode) & S_IFMT) == S_IFDIR)
-#define	S_ISREG(mode)  (((mode) & S_IFMT) == S_IFREG)
-#define	S_ISLNK(mode)  (((mode) & S_IFMT) == S_IFLNK)
-#define	S_ISSOCK(mode) (((mode) & S_IFMT) == S_IFSOCK)
-#define	S_ISCHR(mode)  (((mode) & S_IFMT) == S_IFCHR)
-#define	S_ISBLK(mode)  (((mode) & S_IFMT) == S_IFBLK)
+#if !defined(S_ISFIFO)
+#   define S_ISFIFO(mode) (((mode) & S_IFMT) == S_IFIFO)
+#endif
+#if !defined(S_ISDIR)
+#   define S_ISDIR(mode) (((mode) & S_IFMT) == S_IFDIR)
+#endif
+#if !defined(S_ISREG)
+#   define S_ISREG(mode) (((mode) & S_IFMT) == S_IFREG)
+#endif
+#if !defined(S_ISLNK)
+#   define S_ISLNK(mode) (((mode) & S_IFMT) == S_IFLNK)
+#endif
+#if !defined(S_ISSOCK)
+#   define S_ISSOCK(mode) (((mode) & S_IFMT) == S_IFSOCK)
+#endif
+#if !defined(S_ISCHR)
+#   define S_ISCHR(mode) (((mode) & S_IFMT) == S_IFCHR)
+#endif
+#if !defined(S_ISBLK)
+#   define S_ISBLK(mode) (((mode) & S_IFMT) == S_IFBLK)
+#endif
 
 /* Return the exact length of d_namlen without zero terminator */
 #define _D_EXACT_NAMLEN(p) ((p)->d_namlen)
@@ -167,20 +217,38 @@ extern "C" {
 
 /* Wide-character version */
 struct _wdirent {
-    long d_ino;                                 /* Always zero */
-    unsigned short d_reclen;                    /* Structure size */
-    size_t d_namlen;                            /* Length of name without \0 */
-    int d_type;                                 /* File type */
-    wchar_t d_name[PATH_MAX];                   /* File name */
+    /* Always zero */
+    long d_ino;
+
+    /* Structure size */
+    unsigned short d_reclen;
+
+    /* Length of name without \0 */
+    size_t d_namlen;
+
+    /* File type */
+    int d_type;
+
+    /* File name */
+    wchar_t d_name[PATH_MAX];
 };
 typedef struct _wdirent _wdirent;
 
 struct _WDIR {
-    struct _wdirent ent;                        /* Current directory entry */
-    WIN32_FIND_DATAW data;                      /* Private file data */
-    int cached;                                 /* True if data is valid */
-    HANDLE handle;                              /* Win32 search handle */
-    wchar_t *patt;                              /* Initial directory name */
+    /* Current directory entry */
+    struct _wdirent ent;
+
+    /* Private file data */
+    WIN32_FIND_DATAW data;
+
+    /* True if data is valid */
+    int cached;
+
+    /* Win32 search handle */
+    HANDLE handle;
+
+    /* Initial directory name */
+    wchar_t *patt;
 };
 typedef struct _WDIR _WDIR;
 
@@ -201,11 +269,20 @@ static void _wrewinddir (_WDIR* dirp);
 
 /* Multi-byte character versions */
 struct dirent {
-    long d_ino;                                 /* Always zero */
-    unsigned short d_reclen;                    /* Structure size */
-    size_t d_namlen;                            /* Length of name without \0 */
-    int d_type;                                 /* File type */
-    char d_name[PATH_MAX];                      /* File name */
+    /* Always zero */
+    long d_ino;
+
+    /* Structure size */
+    unsigned short d_reclen;
+
+    /* Length of name without \0 */
+    size_t d_namlen;
+
+    /* File type */
+    int d_type;
+
+    /* File name */
+    char d_name[PATH_MAX];
 };
 typedef struct dirent dirent;
 
@@ -269,8 +346,16 @@ _wopendir(
         dirp->patt = NULL;
         dirp->cached = 0;
 
-        /* Compute the length of full path plus zero terminator */
-        n = GetFullPathNameW (dirname, 0, NULL, NULL);
+        /* Compute the length of full path plus zero terminator
+         * 
+         * Note that on WinRT there's no way to convert relative paths
+         * into absolute paths, so just assume its an absolute path.
+         */
+#       if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
+            n = wcslen(dirname);
+#       else
+            n = GetFullPathNameW (dirname, 0, NULL, NULL);
+#       endif
 
         /* Allocate room for absolute directory name and search pattern */
         dirp->patt = (wchar_t*) malloc (sizeof (wchar_t) * n + 16);
@@ -280,8 +365,15 @@ _wopendir(
              * Convert relative directory name to an absolute one.  This
              * allows rewinddir() to function correctly even when current
              * working directory is changed between opendir() and rewinddir().
+             * 
+             * Note that on WinRT there's no way to convert relative paths
+             * into absolute paths, so just assume its an absolute path.
              */
-            n = GetFullPathNameW (dirname, n, dirp->patt, NULL);
+#           if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
+                wcsncpy_s(dirp->patt, n+1, dirname, n);
+#           else
+                n = GetFullPathNameW (dirname, n, dirp->patt, NULL);
+#           endif
             if (n > 0) {
                 wchar_t *p;
 
@@ -463,7 +555,9 @@ dirent_first(
     WIN32_FIND_DATAW *datap;
 
     /* Open directory and retrieve the first entry */
-    dirp->handle = FindFirstFileW (dirp->patt, &dirp->data);
+    dirp->handle = FindFirstFileExW(
+        dirp->patt, FindExInfoStandard, &dirp->data,
+        FindExSearchNameMatch, NULL, 0);
     if (dirp->handle != INVALID_HANDLE_VALUE) {
 
         /* a directory entry is now waiting in memory */
@@ -758,7 +852,7 @@ dirent_mbstowcs_s(
     }
 
 #endif
-
+	
 	setlocale(LC_ALL, "C");
     return error;
 }
@@ -847,4 +941,3 @@ dirent_set_errno(
 #endif
 
 #endif /*DIRENT_H*/
-

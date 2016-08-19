@@ -53,13 +53,13 @@ public:
 	/// Get commendation noun.
 	std::string getNoun() const;
 	/// Get the commendation's decoration level's name.
-	std::string getDecorationLevelName(int skipCounter);
+	std::string getDecorationLevelName(int skipCounter) const;
 	/// Get the commendation's decoration description.
-	std::string getDecorationDescription();
+	std::string getDecorationDescription() const;
 	/// Get the commendation's decoration level's int.
-	int getDecorationLevelInt();
+	int getDecorationLevelInt() const;
 	/// Get the newness of the commendation.
-	bool isNew();
+	bool isNew() const;
 	/// Set the commendation newness to false.
 	void makeOld();
 	/// Increment decoration level.
@@ -72,15 +72,13 @@ class SoldierDiary
 private:
 	std::vector<SoldierCommendations*> _commendations;
 	std::vector<BattleUnitKills*> _killList;
-    std::vector<int> _missionIdList;
-	std::map<std::string, int> _regionTotal, _countryTotal, _typeTotal, _UFOTotal;
-	int _scoreTotal, _killTotal, _winTotal, _stunTotal, _daysWoundedTotal, _baseDefenseMissionTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal,
-		_terrorMissionTotal, _nightMissionTotal, _nightTerrorMissionTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal, _hitCounterTotal, _ironManTotal,
-		_importantMissionTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal, _shotAtCounter10in1Mission,
-		_hitCounter5in1Mission, _reactionFireTotal, _timesWoundedTotal, _valiantCruxTotal, _KIA, _trapKillTotal, _alienBaseAssaultTotal, _allAliensKilledTotal, _allAliensStunnedTotal,
-        _woundsHealedTotal, _allUFOs, _allMissionTypes, _statGainTotal, _revivedUnitTotal, _wholeMedikitTotal, _braveryGainTotal, _bestOfRank, _MIA, _martyrKillsTotal, _postMortemKills,
-        _slaveKillsTotal, _panickTotal, _controlTotal, _lootValueTotal;
-    bool _bestSoldier, _globeTrotter;
+	std::vector<int> _missionIdList;
+	int _daysWoundedTotal, _totalShotByFriendlyCounter, _totalShotFriendlyCounter, _loneSurvivorTotal, _monthsService, _unconciousTotal, _shotAtCounterTotal,
+		_hitCounterTotal, _ironManTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal,
+		_shotAtCounter10in1Mission,	_hitCounter5in1Mission, _timesWoundedTotal, _KIA, _allAliensKilledTotal, _allAliensStunnedTotal,
+		_woundsHealedTotal, _allUFOs, _allMissionTypes, _statGainTotal, _revivedUnitTotal, _wholeMedikitTotal, _braveryGainTotal, _bestOfRank, _MIA,
+		_martyrKillsTotal, _postMortemKills, _slaveKillsTotal;
+	bool _bestSoldier, _globeTrotter;
 	void manageModularCommendations(std::map<std::string, int> &nextCommendationLevel, std::map<std::string, int> &modularCommendations, std::pair<std::string, int> statTotal, int criteria);
 	void awardCommendation(std::string type, std::string noun = "noNoun");
 public:
@@ -95,7 +93,7 @@ public:
 	/// Save a diary.
 	YAML::Node save() const;
 	/// Update the diary statistics.
-	void updateDiary(BattleUnitStatistics *unitStatistics, MissionStatistics *missionStatistics, Mod *rules);
+	void updateDiary(BattleUnitStatistics*, std::vector<MissionStatistics*>*, Mod*);
 	/// Get the list of kills, mapped by rank.
 	std::map<std::string, int> getAlienRankTotal();
 	/// Get the list of kills, mapped by race.
@@ -105,55 +103,75 @@ public:
 	/// Get the list of kills, mapped by weapon ammo used.
 	std::map<std::string, int> getWeaponAmmoTotal();
 	/// Get the list of missions, mapped by region.
-	std::map<std::string, int> &getRegionTotal();
+	std::map<std::string, int> getRegionTotal(std::vector<MissionStatistics*>*) const;
 	/// Get the list of missions, mapped by country.
-	std::map<std::string, int> &getCountryTotal();
+	std::map<std::string, int> getCountryTotal(std::vector<MissionStatistics*>*) const;
 	/// Get the list of missions, mapped by type.
-	std::map<std::string, int> &getTypeTotal();
+	std::map<std::string, int> getTypeTotal(std::vector<MissionStatistics*>*) const;
 	/// Get the list of missions, mapped by UFO.
-	std::map<std::string, int> &getUFOTotal();
-	/// Get the total score.
-	int getScoreTotal() const;
+	std::map<std::string, int> getUFOTotal(std::vector<MissionStatistics*>*) const;
 	/// Get the total number of kills.
 	int getKillTotal() const;
 	/// Get the total number of missions.
 	int getMissionTotal() const;
 	/// Get the total number of wins.
-	int getWinTotal() const;
+	int getWinTotal(std::vector<MissionStatistics*>*) const;
 	/// Get the total number of stuns.
 	int getStunTotal() const;
-    /// Get the total number of psi panicks.
-    int getPanickTotal() const;
-    /// Get the total number of psi mind controls.
-    int getControlTotal() const;
+	/// Get the total number of psi panicks.
+	int getPanickTotal() const;
+	/// Get the total number of psi mind controls.
+	int getControlTotal() const;
 	/// Get the total number of days wounded.
 	int getDaysWoundedTotal() const;
 	/// Get the solder's commendations.
 	std::vector<SoldierCommendations*> *getSoldierCommendations();
 	/// Manage commendations, return true if a medal is awarded.
-	bool manageCommendations(Mod *rules);
+	bool manageCommendations(Mod*, std::vector<MissionStatistics*>*);
 	/// Increment the soldier's service time.
 	void addMonthlyService();
 	/// Get the total months in service.
 	int getMonthsService() const;
-    /// Get the mission id list.
-    std::vector<int> &getMissionIdList();
-    /// Get the kill list.
-    std::vector<BattleUnitKills*> &getKills();
-    /// Award special commendation to the original 8 soldiers.
-    void awardOriginalEightCommendation();
-    /// Award post-humous best-of rank commendation.
-    void awardBestOfRank(SoldierRank rank);
-    /// Award post-humous best overall commendation.
-    void awardBestOverall();
-    /// Award post-humous kills commendation.
-    void awardPostMortemKill(int kills);
+	/// Get the mission id list.
+	std::vector<int> &getMissionIdList();
+	/// Get the kill list.
+	std::vector<BattleUnitKills*> &getKills();
+	/// Award special commendation to the original 8 soldiers.
+	void awardOriginalEightCommendation();
+	/// Award post-humous best-of rank commendation.
+	void awardBestOfRank(SoldierRank rank);
+	/// Award post-humous best overall commendation.
+	void awardBestOverall();
+	/// Award post-humous kills commendation.
+	void awardPostMortemKill(int kills);
 	/// Get the total number of shots fired.
 	int getShotsFiredTotal() const;
 	/// Get the total number of shots landed on target.
 	int getShotsLandedTotal() const;
-    /// Get the soldier's accuracy.
-    int getAccuracy() const;
+	/// Get the soldier's accuracy.
+	int getAccuracy() const;
+	/// Get the total number of trap kills.
+	int getTrapKillTotal(Mod*) const;
+	/// Get the total number of reaction fire kills.
+	int getReactionFireKillTotal(Mod*) const;
+	/// Get the total number of terror missions.
+	int getTerrorMissionTotal(std::vector<MissionStatistics*>*) const;
+	/// Get the total number of night missions.
+	int getNightMissionTotal(std::vector<MissionStatistics*>*) const;
+	/// Get the total number of night terror missions.
+	int getNightTerrorMissionTotal(std::vector<MissionStatistics*>*) const;
+	/// Get the total number of base defense missions.
+	int getBaseDefenseMissionTotal(std::vector<MissionStatistics*>*) const;
+	/// Get the total number of alien base assaults.
+	int getAlienBaseAssaultTotal(std::vector<MissionStatistics*>*) const;
+	/// Get the total number of important missions.
+	int getImportantMissionTotal(std::vector<MissionStatistics*>*) const;
+	/// Get the total score.
+	int getScoreTotal(std::vector<MissionStatistics*>*) const;
+	/// Get the Valiant Crux total.
+	int getValiantCruxTotal(std::vector<MissionStatistics*>*) const;
+	/// Get the loot value total.
+	int getLootValueTotal(std::vector<MissionStatistics*>*) const;
 };
 
 }

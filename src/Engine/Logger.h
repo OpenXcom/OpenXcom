@@ -17,26 +17,16 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
 #include <sstream>
 #include <string>
 #include <stdio.h>
-#ifdef _WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#ifndef LOCALE_INVARIANT
-#define LOCALE_INVARIANT 0x007f
-#endif
-#else
-#include <time.h>
-#endif
+#include "CrossPlatform.h"
 
 namespace OpenXcom
 {
-
-inline std::string now();
 
 /**
  * Defines the various severity levels of
@@ -61,18 +51,18 @@ enum SeverityLevel
 class Logger
 {
 public:
-    Logger();
-    virtual ~Logger();
-    std::ostringstream& get(SeverityLevel level = LOG_INFO);
+	Logger();
+	virtual ~Logger();
+	std::ostringstream& get(SeverityLevel level = LOG_INFO);
 	
-    static SeverityLevel& reportingLevel();
+	static SeverityLevel& reportingLevel();
 	static std::string& logFile();
-    static std::string toString(SeverityLevel level);
+	static std::string toString(SeverityLevel level);
 protected:
-    std::ostringstream os;
+	std::ostringstream os;
 private:
-    Logger(const Logger&);
-    Logger& operator =(const Logger&);
+	Logger(const Logger&);
+	Logger& operator =(const Logger&);
 };
 
 inline Logger::Logger()
@@ -82,72 +72,48 @@ inline Logger::Logger()
 inline std::ostringstream& Logger::get(SeverityLevel level)
 {
 	os << "[" << toString(level) << "]" << "\t";
-    return os;
+	return os;
 }
 
 inline Logger::~Logger()
 {
-    os << std::endl;
-	if (reportingLevel() == LOG_DEBUG || reportingLevel() == LOG_VERBOSE)
+	os << std::endl;
+	std::ostringstream ss;
+	ss << "[" << CrossPlatform::now() << "]" << "\t" << os.str();
+	FILE *file = fopen(logFile().c_str(), "a");
+	if (file)
+	{
+		fprintf(file, "%s", ss.str().c_str());
+		fflush(file);
+		fclose(file);
+	}
+	if (!file || reportingLevel() == LOG_DEBUG || reportingLevel() == LOG_VERBOSE)
 	{
 		fprintf(stderr, "%s", os.str().c_str());
 		fflush(stderr);
 	}
-	std::ostringstream ss;
-	ss << "[" << now() << "]" << "\t" << os.str();
-	FILE *file = fopen(logFile().c_str(), "a");
-	fprintf(file, "%s", ss.str().c_str());
-    fflush(file);
-	fclose(file);
 }
 
 inline SeverityLevel& Logger::reportingLevel()
 {
-    static SeverityLevel reportingLevel = LOG_DEBUG;
-    return reportingLevel;
+	static SeverityLevel reportingLevel = LOG_DEBUG;
+	return reportingLevel;
 }
 
 inline std::string& Logger::logFile()
 {
-    static std::string logFile = "openxcom.log";
-    return logFile;
+	static std::string logFile = "openxcom.log";
+	return logFile;
 }
 
 inline std::string Logger::toString(SeverityLevel level)
 {
-    static const char* const buffer[] = {"FATAL", "ERROR", "WARN", "INFO", "DEBUG", "VERB"};
-    return buffer[level];
+	static const char* const buffer[] = {"FATAL", "ERROR", "WARN", "INFO", "DEBUG", "VERB"};
+	return buffer[level];
 }
 
 #define Log(level) \
-    if (level > Logger::reportingLevel()) ; \
-    else Logger().get(level)
-
-inline std::string now()
-{
-    const int MAX_LEN = 25, MAX_RESULT = 80;
-#ifdef _WIN32
-    char date[MAX_LEN], time[MAX_LEN];
-	if (GetDateFormatA(LOCALE_INVARIANT, 0, 0, 
-            "dd'-'MM'-'yyyy", date, MAX_LEN) == 0)
-        return "Error in Now()";
-    if (GetTimeFormatA(LOCALE_INVARIANT, TIME_FORCE24HOURFORMAT, 0, 
-            "HH':'mm':'ss", time, MAX_LEN) == 0)
-        return "Error in Now()";
-
-    char result[MAX_RESULT] = {0};
-    sprintf(result, "%s %s", date, time);
-#else
-	char buffer[MAX_LEN];
-    time_t rawtime;
-	struct tm *timeinfo;
-	time(&rawtime);
-	timeinfo = localtime(&rawtime);
-    strftime(buffer, MAX_LEN, "%d-%m-%Y %H:%M:%S", timeinfo);
-    char result[MAX_RESULT] = {0};
-    sprintf(result, "%s", buffer); 
-#endif
-    return result;
-}
+	if (level > Logger::reportingLevel()) ; \
+	else Logger().get(level)
 
 }

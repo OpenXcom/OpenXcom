@@ -23,8 +23,8 @@ alienDeployments: #done
             - STR_BLASTA_POWER_CLIP
             - STR_SONIC_PULSER
             - STR_SONIC_PULSER
-    width: 40
-    length: 40
+    width: 50
+    length: 50
     height: 4
     briefing:
       palette: 4
@@ -75,8 +75,8 @@ alienDeployments: #done
             - STR_BLASTA_POWER_CLIP
             - STR_SONIC_PULSER
             - STR_SONIC_PULSER
-    width: 40
-    length: 40
+    width: 50
+    length: 50
     height: 4
     briefing:
       palette: 4
@@ -148,8 +148,8 @@ alienDeployments: #done
             - STR_SONIC_PULSER
             - STR_SONIC_PULSER
             - STR_SONIC_PULSER
-    width: 50
-    length: 50
+    width: 60
+    length: 60
     height: 4
     briefing:
       palette: 4
@@ -269,8 +269,8 @@ alienDeployments: #done
             - STR_DISRUPTOR_AMMO
             - STR_DISRUPTOR_AMMO
             - STR_SONIC_PULSER
-    width: 50
-    length: 50
+    width: 60
+    length: 60
     height: 4
     briefing:
       palette: 4
@@ -393,8 +393,8 @@ alienDeployments: #done
             - STR_DISRUPTOR_AMMO
             - STR_DISRUPTOR_AMMO
             - STR_DISRUPTOR_AMMO
-    width: 50
-    length: 50
+    width: 60
+    length: 60
     height: 4
     briefing:
       palette: 4
@@ -525,8 +525,8 @@ alienDeployments: #done
             []
           -
             []
-    width: 50
-    length: 50
+    width: 60
+    length: 60
     height: 4
     briefing:
       palette: 4
@@ -692,8 +692,8 @@ alienDeployments: #done
             []
           -
             []
-    width: 50
-    length: 50
+    width: 60
+    length: 60
     height: 4
     briefing:
       palette: 4
@@ -802,8 +802,8 @@ alienDeployments: #done
             - STR_SONIC_PULSER
             - STR_SONIC_PULSER
             - STR_SONIC_PULSER
-    width: 50
-    length: 50
+    width: 60
+    length: 60
     height: 4
     briefing:
       palette: 4
@@ -1963,7 +1963,7 @@ alienDeployments: #done
     objectiveComplete: [STR_ALIEN_SYNOMIUM_DEVICE_DESTROYED, 750]
     objectiveFailed: [STR_ALIEN_SYNOMIUM_DEVICE_FAILED, -750]
     objectivePopup: STR_CONTROL_CENTER_DESTROYED
-  - type: STR_ALIEN_BASE_ASSAULT # use of this name is hard coded, as is STR_BASE_DEFENSE. this is because of REASONS.
+  - type: STR_ALIEN_BASE_ASSAULT
     data:
       - alienRank: 6
         lowQty: 2
@@ -2124,7 +2124,13 @@ alienDeployments: #done
     shade: 15
     depth: [3, 3]
     race: STR_MIXED_CREW
+    markerName: STR_ALIEN_BASE
+    markerIcon: 7
+    genMission:
+      STR_ALIEN_SUPPLY: 100
+    genMissionFreq: 6
     script: ALIEN_COLONY_P1
+    alienBase: true    # this is only to tell new battle mode what to do with this deployment
     nextStage: STR_ALIEN_COLONY_P2
     briefing:
       title: STR_ALIEN_COLONY_ATTACK_MISSION
@@ -2132,6 +2138,7 @@ alienDeployments: #done
       palette: 4
       music: GMATTBAS
       background: BACK01.SCR
+    points: 5
   - type: STR_ALIEN_COLONY_P2
     data:
       - alienRank: 6
@@ -2300,9 +2307,10 @@ alienDeployments: #done
       music: GMATTBAS
       background: BACK01.SCR
     objectiveType: 3
+    alienBase: true    # this is only to tell new battle mode what to do with this deployment
     objectiveComplete: [STR_ALIEN_BASE_CONTROL_DESTROYED, 500]
     objectivePopup: STR_CONTROL_CENTER_DESTROYED
-  - type: STR_BASE_DEFENSE
+  - type: STR_BASE_DEFENSE # use of this name is hard coded. this is because of REASONS.
     data:
       - alienRank: 5
         lowQty: 4

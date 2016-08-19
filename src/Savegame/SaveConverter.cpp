@@ -16,11 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "SaveConverter.h"
 #include <yaml-cpp/yaml.h>
 #include <SDL_endian.h>
-#include <cmath>
 #include <fstream>
 #include <sstream>
 #include <iomanip>
@@ -58,6 +56,7 @@
 #include "../Engine/RNG.h"
 #include "../Mod/RuleConverter.h"
 #include "../Ufopaedia/Ufopaedia.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {
@@ -568,7 +567,7 @@ void SaveConverter::loadDatMissions()
 				if (_mod->getRegion(_rules->getRegions()[region])->getMissionZones().size() >= 3)
 				{
 					// pick a city for terror missions
-					node["missionSiteZone"] = RNG::generate(0, _mod->getRegion(_rules->getRegions()[region])->getMissionZones().at(3).areas.size() - 1); 
+					node["missionSiteZone"] = RNG::generate(0, _mod->getRegion(_rules->getRegions()[region])->getMissionZones().at(3).areas.size() - 1);
 				}
 				else
 				{
@@ -639,7 +638,7 @@ void SaveConverter::loadDatLoc()
 			target = xbase;
 			break;
 		case TARGET_ABASE:
-			abase = new AlienBase();
+			abase = new AlienBase(_mod->getDeployment("STR_ALIEN_BASE_ASSAULT"));
 			abase->setId(id);
 			abase->setAlienRace(_rules->getCrews()[dat]);
 			abase->setDiscovered(!visibility.test(0));

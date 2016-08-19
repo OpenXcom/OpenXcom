@@ -30,7 +30,7 @@
 #include "../Interface/Text.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
-#include <limits>
+#include <climits>
 
 namespace OpenXcom
 {
@@ -260,7 +260,7 @@ void BaseView::reCalcQueuedBuildings()
 		if ((*i)->getBuildTime() > 0)
 		{
 			// Set all queued buildings to infinite.
-			if ((*i)->getBuildTime() > (*i)->getRules()->getBuildTime()) (*i)->setBuildTime(std::numeric_limits<int>::max());
+			if ((*i)->getBuildTime() > (*i)->getRules()->getBuildTime()) (*i)->setBuildTime(INT_MAX);
 			facilities.push_back(*i);
 		}
 
@@ -565,4 +565,5 @@ void BaseView::setSecondaryColor(Uint8 color)
 {
 	_selectorColor = color;
 }
+
 }

@@ -20,7 +20,8 @@
 #include <fstream>
 #include <cassert>
 #include <set>
-#include <limits.h>
+#include <climits>
+#include <algorithm>
 #include "CrossPlatform.h"
 #include "Logger.h"
 #include "Options.h"
@@ -53,18 +54,23 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 		_names["en-GB"] = utf8ToWstr("English (UK)");
 		_names["bg"] = utf8ToWstr("Български");
 		_names["cs"] = utf8ToWstr("Česky");
+		_names["cy"] = utf8ToWstr("Cymraeg");
 		_names["da"] = utf8ToWstr("Dansk");
 		_names["de"] = utf8ToWstr("Deutsch");
 		_names["el"] = utf8ToWstr("Ελληνικά");
+		_names["et"] = utf8ToWstr("Eesti");
 		_names["es-ES"] = utf8ToWstr("Español (ES)");
 		_names["es-419"] = utf8ToWstr("Español (AL)");
-		_names["fr"] = utf8ToWstr("Français");
+		_names["fr"] = utf8ToWstr("Français (FR)");
+		_names["fr-CA"] = utf8ToWstr("Français (CA)");
 		_names["fi"] = utf8ToWstr("Suomi");
 		_names["hr"] = utf8ToWstr("Hrvatski");
 		_names["hu"] = utf8ToWstr("Magyar");
 		_names["it"] = utf8ToWstr("Italiano");
 		_names["ja"] = utf8ToWstr("日本語");
 		_names["ko"] = utf8ToWstr("한국어");
+		_names["lb"] = utf8ToWstr("Lëtzebuergesch");
+		_names["lv"] = utf8ToWstr("Latviešu");
 		_names["nl"] = utf8ToWstr("Nederlands");
 		_names["no"] = utf8ToWstr("Norsk");
 		_names["pl"] = utf8ToWstr("Polski");
@@ -73,6 +79,7 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 		_names["ro"] = utf8ToWstr("Română");
 		_names["ru"] = utf8ToWstr("Русский");
 		_names["sk"] = utf8ToWstr("Slovenčina");
+		_names["sl"] = utf8ToWstr("Slovenščina");
 		_names["sv"] = utf8ToWstr("Svenska");
 		_names["th"] = utf8ToWstr("ไทย");
 		_names["tr"] = utf8ToWstr("Türkçe");
@@ -114,48 +121,48 @@ std::string Language::wstrToUtf8(const std::wstring& src)
 		return "";
 #ifdef _WIN32
 	int size = WideCharToMultiByte(CP_UTF8, 0, &src[0], (int)src.size(), NULL, 0, NULL, NULL);
-    std::string str(size, 0);
+	std::string str(size, 0);
 	WideCharToMultiByte(CP_UTF8, 0, &src[0], (int)src.size(), &str[0], size, NULL, NULL);
 	return str;
 #else
 	std::string out;
-    unsigned int codepoint = 0;
-    for (std::wstring::const_iterator i = src.begin(); i != src.end(); ++i)
-    {
+	unsigned int codepoint = 0;
+	for (std::wstring::const_iterator i = src.begin(); i != src.end(); ++i)
+	{
 		wchar_t ch = *i;
-        if (ch >= 0xd800 && ch <= 0xdbff)
-            codepoint = ((ch - 0xd800) << 10) + 0x10000;
-        else
-        {
-            if (ch >= 0xdc00 && ch <= 0xdfff)
-                codepoint |= ch - 0xdc00;
-            else
-                codepoint = ch;
+		if (ch >= 0xd800 && ch <= 0xdbff)
+			codepoint = ((ch - 0xd800) << 10) + 0x10000;
+		else
+		{
+			if (ch >= 0xdc00 && ch <= 0xdfff)
+				codepoint |= ch - 0xdc00;
+			else
+				codepoint = ch;
 
-            if (codepoint <= 0x7f)
-                out.append(1, static_cast<char>(codepoint));
-            else if (codepoint <= 0x7ff)
-            {
-                out.append(1, static_cast<char>(0xc0 | ((codepoint >> 6) & 0x1f)));
-                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
-            }
-            else if (codepoint <= 0xffff)
-            {
-                out.append(1, static_cast<char>(0xe0 | ((codepoint >> 12) & 0x0f)));
-                out.append(1, static_cast<char>(0x80 | ((codepoint >> 6) & 0x3f)));
-                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
-            }
-            else
-            {
-                out.append(1, static_cast<char>(0xf0 | ((codepoint >> 18) & 0x07)));
-                out.append(1, static_cast<char>(0x80 | ((codepoint >> 12) & 0x3f)));
-                out.append(1, static_cast<char>(0x80 | ((codepoint >> 6) & 0x3f)));
-                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
-            }
-            codepoint = 0;
-        }
-    }
-    return out;
+			if (codepoint <= 0x7f)
+				out.append(1, static_cast<char>(codepoint));
+			else if (codepoint <= 0x7ff)
+			{
+				out.append(1, static_cast<char>(0xc0 | ((codepoint >> 6) & 0x1f)));
+				out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
+			}
+			else if (codepoint <= 0xffff)
+			{
+				out.append(1, static_cast<char>(0xe0 | ((codepoint >> 12) & 0x0f)));
+				out.append(1, static_cast<char>(0x80 | ((codepoint >> 6) & 0x3f)));
+				out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
+			}
+			else
+			{
+				out.append(1, static_cast<char>(0xf0 | ((codepoint >> 18) & 0x07)));
+				out.append(1, static_cast<char>(0x80 | ((codepoint >> 12) & 0x3f)));
+				out.append(1, static_cast<char>(0x80 | ((codepoint >> 6) & 0x3f)));
+				out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
+			}
+			codepoint = 0;
+		}
+	}
+	return out;
 #endif
 }
 
@@ -213,57 +220,57 @@ std::wstring Language::utf8ToWstr(const std::string& src)
 		return L"";
 #ifdef _WIN32
 	int size = MultiByteToWideChar(CP_UTF8, 0, &src[0], (int)src.size(), NULL, 0);
-    std::wstring wstr(size, 0);
-    MultiByteToWideChar(CP_UTF8, 0, &src[0], (int)src.size(), &wstr[0], size);
+	std::wstring wstr(size, 0);
+	MultiByteToWideChar(CP_UTF8, 0, &src[0], (int)src.size(), &wstr[0], size);
 	return wstr;
 #else
 	std::wstring out;
-    unsigned int codepoint = 0;
-    int following = 0;
-    for (std::string::const_iterator i = src.begin(); i != src.end(); ++i)
-    {
-        unsigned char ch = *i;
-        if (ch <= 0x7f)
-        {
-            codepoint = ch;
-            following = 0;
-        }
-        else if (ch <= 0xbf)
-        {
-            if (following > 0)
-            {
-                codepoint = (codepoint << 6) | (ch & 0x3f);
-                --following;
-            }
-        }
-        else if (ch <= 0xdf)
-        {
-            codepoint = ch & 0x1f;
-            following = 1;
-        }
-        else if (ch <= 0xef)
-        {
-            codepoint = ch & 0x0f;
-            following = 2;
-        }
-        else
-        {
-            codepoint = ch & 0x07;
-            following = 3;
-        }
-        if (following == 0)
-        {
-            if (codepoint > 0xffff)
-            {
-                out.append(1, static_cast<wchar_t>(0xd800 + (codepoint >> 10)));
-                out.append(1, static_cast<wchar_t>(0xdc00 + (codepoint & 0x03ff)));
-            }
-            else
-                out.append(1, static_cast<wchar_t>(codepoint));
-            codepoint = 0;
-        }
-    }
-    return out;
+	unsigned int codepoint = 0;
+	int following = 0;
+	for (std::string::const_iterator i = src.begin(); i != src.end(); ++i)
+	{
+		unsigned char ch = *i;
+		if (ch <= 0x7f)
+		{
+			codepoint = ch;
+			following = 0;
+		}
+		else if (ch <= 0xbf)
+		{
+			if (following > 0)
+			{
+				codepoint = (codepoint << 6) | (ch & 0x3f);
+				--following;
+			}
+		}
+		else if (ch <= 0xdf)
+		{
+			codepoint = ch & 0x1f;
+			following = 1;
+		}
+		else if (ch <= 0xef)
+		{
+			codepoint = ch & 0x0f;
+			following = 2;
+		}
+		else
+		{
+			codepoint = ch & 0x07;
+			following = 3;
+		}
+		if (following == 0)
+		{
+			if (codepoint > 0xffff)
+			{
+				out.append(1, static_cast<wchar_t>(0xd800 + (codepoint >> 10)));
+				out.append(1, static_cast<wchar_t>(0xdc00 + (codepoint & 0x03ff)));
+			}
+			else
+				out.append(1, static_cast<wchar_t>(codepoint));
+			codepoint = 0;
+		}
+	}
+	return out;
 #endif
 }
 
@@ -279,8 +286,8 @@ std::wstring Language::cpToWstr(const std::string& src)
 		return L"";
 #ifdef _WIN32
 	int size = MultiByteToWideChar(CP_ACP, 0, &src[0], (int)src.size(), NULL, 0);
-    std::wstring wstr(size, 0);
-    MultiByteToWideChar(CP_ACP, 0, &src[0], (int)src.size(), &wstr[0], size);
+	std::wstring wstr(size, 0);
+	MultiByteToWideChar(CP_ACP, 0, &src[0], (int)src.size(), &wstr[0], size);
 	return wstr;
 #else
 	const int MAX = 500;

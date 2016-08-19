@@ -58,7 +58,7 @@ namespace OpenXcom
 {
 
 const std::string SavedGame::AUTOSAVE_GEOSCAPE = "_autogeo_.asav",
-   				  SavedGame::AUTOSAVE_BATTLESCAPE = "_autobattle_.asav",
+				  SavedGame::AUTOSAVE_BATTLESCAPE = "_autobattle_.asav",
 				  SavedGame::QUICKSAVE = "_quick_.asav";
 
 struct findRuleResearch : public std::unary_function<ResearchProject *,
@@ -141,7 +141,7 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 	for (std::vector<AlienBase*>::iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
- 	{
+	{
 		delete *i;
 	}
 	delete _alienStrategy;
@@ -153,11 +153,11 @@ SavedGame::~SavedGame()
 	{
 		delete *i;
 	}
-    for (std::vector<MissionStatistics*>::iterator i = _missionStatistics.begin(); i != _missionStatistics.end(); ++i)
+	for (std::vector<MissionStatistics*>::iterator i = _missionStatistics.begin(); i != _missionStatistics.end(); ++i)
 	{
 		delete *i;
 	}
-    
+	
 	delete _battleGame;
 }
 
@@ -386,9 +386,17 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 	// Alien bases must be loaded before alien missions
 	for (YAML::const_iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
 	{
-		AlienBase *b = new AlienBase();
-		b->load(*i);
-		_alienBases.push_back(b);
+		std::string deployment = (*i)["deployment"].as<std::string>("STR_ALIEN_BASE_ASSAULT");
+		if (mod->getDeployment(deployment))
+		{
+			AlienBase *b = new AlienBase(mod->getDeployment(deployment));
+			b->load(*i);
+			_alienBases.push_back(b);
+		}
+		else
+		{
+			Log(LOG_ERROR) << "Failed to load deployment for alien base " << deployment;
+		}
 	}
 
 	// Missions must be loaded before UFOs.
@@ -515,7 +523,7 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 		}
 	}
 
-    for (YAML::const_iterator i = doc["missionStatistics"].begin(); i != doc["missionStatistics"].end(); ++i)
+	for (YAML::const_iterator i = doc["missionStatistics"].begin(); i != doc["missionStatistics"].end(); ++i)
 	{
 		MissionStatistics *ms = new MissionStatistics();
 		ms->load(*i);
@@ -573,7 +581,7 @@ void SavedGame::save(const std::string &filename) const
 			{
 				curMasterId = i->first;
 			}
-			if (!modInfo.getMaster().empty() && modInfo.getMaster() != curMasterId)
+			else if (!modInfo.getMaster().empty() && modInfo.getMaster() != curMasterId)
 			{
 				continue;
 			}
@@ -1234,7 +1242,7 @@ void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & produc
 		RuleManufacture *m = mod->getManufacture(*iter);
 		if (!isResearched(m->getRequirements()))
 		{
-		 	continue;
+			continue;
 		}
 		if (std::find_if (baseProductions.begin(), baseProductions.end(), equalProduction(m)) != baseProductions.end())
 		{

@@ -173,9 +173,10 @@ interfaces: #done
         color: 1     # brown
       - id: window
         color: 1   # yellow
-      - id: text
+      - id: text1
         color: 1   # bright green
-        color2: 1  # yellow
+      - id: text2
+        color: 1  # yellow
       - id: button
         color: 1   # minty green
   - type: confirmDestination

@@ -19,6 +19,8 @@ statGrowthMultipliers:
 # aimAndArmorMultipliers are MultiplierB
 turnAIUseGrenade: 3
 turnAIUseBlaster: 3
+defeatScore: -900
+defeatFunds: -1000000
 constants:
   - damageRange: 100
   - explosiveDamageRange: 50

@@ -122,12 +122,10 @@ openxcom_SOURCES = \
 	src/Battlescape/ActionMenuItem.h \
 	src/Battlescape/ActionMenuState.cpp \
 	src/Battlescape/ActionMenuState.h \
-	src/Battlescape/AlienBAIState.cpp \
-	src/Battlescape/AlienBAIState.h \
+	src/Battlescape/AIModule.cpp \
+	src/Battlescape/AIModule.h \
 	src/Battlescape/AliensCrashState.cpp \
 	src/Battlescape/AliensCrashState.h \
-	src/Battlescape/BattleAIState.cpp \
-	src/Battlescape/BattleAIState.h \
 	src/Battlescape/BattleState.cpp \
 	src/Battlescape/BattleState.h \
 	src/Battlescape/BattlescapeGame.cpp \
@@ -144,8 +142,6 @@ openxcom_SOURCES = \
 	src/Battlescape/Camera.h \
 	src/Battlescape/CannotReequipState.cpp \
 	src/Battlescape/CannotReequipState.h \
-	src/Battlescape/CivilianBAIState.cpp \
-	src/Battlescape/CivilianBAIState.h \
 	src/Battlescape/CommendationLateState.cpp \
 	src/Battlescape/CommendationLateState.h \
 	src/Battlescape/CommendationState.cpp \
@@ -178,8 +174,6 @@ openxcom_SOURCES = \
 	src/Battlescape/MiniMapView.h \
 	src/Battlescape/NextTurnState.cpp \
 	src/Battlescape/NextTurnState.h \
-	src/Battlescape/NoContainmentState.cpp \
-	src/Battlescape/NoContainmentState.h \
 	src/Battlescape/Particle.cpp \
 	src/Battlescape/Particle.h \
 	src/Battlescape/Pathfinding.cpp \
@@ -464,6 +458,8 @@ openxcom_SOURCES = \
 	src/Menu/PauseState.h \
 	src/Menu/SaveGameState.cpp \
 	src/Menu/SaveGameState.h \
+	src/Menu/SetWindowedRootState.cpp \
+	src/Menu/SetWindowedRootState.h \
 	src/Menu/SlideshowState.cpp \
 	src/Menu/SlideshowState.h \
 	src/Menu/StartState.cpp \

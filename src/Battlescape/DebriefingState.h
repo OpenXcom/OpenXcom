@@ -61,7 +61,7 @@ private:
 	TextList *_lstStats, *_lstRecovery, *_lstTotal;
 	std::vector<ReequipStat> _missingItems;
 	std::map<RuleItem*, int> _rounds;
-	std::map<int, RecoveryItem*> _recoveryStats;    
+	std::map<int, RecoveryItem*> _recoveryStats;
 	bool _positiveScore, _noContainment, _manageContainment, _destroyBase;
 	int _limitsEnforced;
 	MissionStatistics *_missionStatistics;

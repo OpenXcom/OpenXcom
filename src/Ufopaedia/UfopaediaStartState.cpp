@@ -29,7 +29,7 @@
 #include "../Mod/Mod.h"
 
 namespace OpenXcom
-{	
+{
 	UfopaediaStartState::UfopaediaStartState()
 	{
 		_screen = false;

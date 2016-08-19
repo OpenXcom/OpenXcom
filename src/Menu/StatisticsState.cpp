@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "StatisticsState.h"
+#include <algorithm>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -229,21 +230,21 @@ void StatisticsState::listStats()
 	}
 
 	std::map<std::string, int> ids = save->getAllIds();
-	int ufosDetected = ids["STR_UFO"];
-	int alienBases = ids["STR_ALIEN_BASE"];
-	int terrorSites = ids["STR_TERROR_SITE"];
+	int ufosDetected = std::max(0, ids["STR_UFO"] - 1);
+	int alienBases = std::max(0, ids["STR_ALIEN_BASE"] - 1);
+	int terrorSites = std::max(0, ids["STR_TERROR_SITE"] - 1);
 	int totalCrafts = 0;
 	for (std::vector<std::string>::const_iterator i = _game->getMod()->getCraftsList().begin(); i != _game->getMod()->getCraftsList().end(); ++i)
 	{
-		totalCrafts += ids[*i];
+		totalCrafts += std::max(0, ids[*i] - 1);
 	}
 
 	int currentBases = save->getBases()->size();
 	int currentScientists = 0, currentEngineers = 0;
 	for (std::vector<Base*>::const_iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
 	{
-		currentScientists += (*i)->getScientists();
-		currentEngineers += (*i)->getEngineers();
+		currentScientists += (*i)->getTotalScientists();
+		currentEngineers += (*i)->getTotalEngineers();
 	}
 
 	int countriesLost = 0;
@@ -302,7 +303,7 @@ void StatisticsState::btnOkClick(Action *)
 	else
 	{
 		_game->setSavedGame(0);
-		_game->setState(new MainMenuState);		
+		_game->setState(new MainMenuState);
 	}
 }
 

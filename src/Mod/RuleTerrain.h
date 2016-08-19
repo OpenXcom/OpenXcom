@@ -71,9 +71,9 @@ public:
 	/// Gets the ambient sound effect.
 	int getAmbience() const;
 	/// Gets the generation script name.
-	std::string getScript();
+	std::string getScript() const;
 	/// Gets the list of music to pick from.
-	const std::vector<std::string> &getMusic();
+	const std::vector<std::string> &getMusic() const;
 	double getAmbientVolume() const;
 };
 

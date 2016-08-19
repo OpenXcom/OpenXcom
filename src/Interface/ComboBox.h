@@ -91,7 +91,7 @@ public:
 	/// Sets the list of options.
 	void setOptions(const std::vector<std::wstring> &options);
 	/// Blits the combo box onto another surface.
-	void blit(Surface *surface);	
+	void blit(Surface *surface);
 	/// Thinks arrow buttons.
 	void think();
 	/// Handle arrow buttons.

@@ -163,7 +163,7 @@ void Palette::setColors(SDL_Color* pal, int ncolors)
 			_colors[i].b++;
 		}
 	}
-	_colors[0].unused = 0;
-	
+	_colors[0].unused = 0;	
 }
+
 }

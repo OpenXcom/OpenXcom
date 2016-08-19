@@ -140,7 +140,7 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 			}
 			_lstSalaries->addRow(4, tr(name).c_str(), Text::formatFunding(soldier->getSalaryCost()).c_str(), ss4.str().c_str(), Text::formatFunding(_base->getSoldierCount(*i) * soldier->getSalaryCost()).c_str());
 		}
-	}	
+	}
 	std::wostringstream ss5;
 	ss5 << _base->getTotalEngineers();
 	_lstSalaries->addRow(4, tr("STR_ENGINEERS").c_str(), Text::formatFunding(_game->getMod()->getEngineerCost()).c_str(), ss5.str().c_str(), Text::formatFunding(_base->getTotalEngineers() * _game->getMod()->getEngineerCost()).c_str());

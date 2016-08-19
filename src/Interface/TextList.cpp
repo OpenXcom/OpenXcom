@@ -269,16 +269,15 @@ void TextList::addRow(int cols, ...)
 {
 	va_list args;
 	int ncols;
+	va_start(args, cols);
 	if (cols > 0)
 	{
-		va_start(args, cols);
 		ncols = cols;
 	}
 	else
 	{
 		ncols = 1;
 	}
-		
 
 	std::vector<Text*> temp;
 	// Positions are relative to list surface.
@@ -1260,6 +1259,7 @@ int TextList::getScrollbarColor()
 
 void TextList::setFlooding(bool flooding)
 {
-    _flooding = flooding;
+	_flooding = flooding;
 }
+
 }

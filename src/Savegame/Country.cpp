@@ -111,7 +111,7 @@ void Country::setFunding(int funding)
  * Keith Richards would be so proud
  * @return satisfaction level, 0 = alien pact, 1 = unhappy, 2 = satisfied, 3 = happy.
  */
-int Country::getSatisfaction()
+int Country::getSatisfaction() const
 {
 	if (_pact)
 		return 0;
@@ -160,9 +160,10 @@ std::vector<int> &Country::getActivityAlien()
  * set the change value for the month.
  * @param xcomTotal the council's xcom score
  * @param alienTotal the council's alien score
+ * @param pactScore the penalty for signing a pact
  */
 
-void Country::newMonth(int xcomTotal, int alienTotal)
+void Country::newMonth(int xcomTotal, int alienTotal, int pactScore)
 {
 	_satisfaction = 2;
 	int funding = getFunding().back();
@@ -203,10 +204,8 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 	{
 		_newPact = false;
 		_pact = true;
-		addActivityAlien(150);
+		addActivityAlien(pactScore);
 	}
-
-
 
 	// set the new funding and reset the activity meters
 	if (_pact)

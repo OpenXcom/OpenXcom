@@ -195,7 +195,7 @@ items: #done
     turretType: 4
     underwaterOnly: true
   - type: STR_HWP_DISPLACER_PWT
-    size: 6
+    size: 0.6
     costSell: 31500
     transferTime: 48
     power: 140

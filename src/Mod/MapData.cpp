@@ -25,7 +25,7 @@ namespace OpenXcom
  * Creates a new Map Data Object.
  * @param dataset The dataset this object belongs to.
  */
-MapData::MapData(MapDataSet *dataset) : _dataset(dataset), _specialType(TILE), 
+MapData::MapData(MapDataSet *dataset) : _dataset(dataset), _specialType(TILE),
 				_isUfoDoor(false), _stopLOS(false), _isNoFloor(false), _isGravLift(false), _isDoor(false), _blockFire(false), _blockSmoke(false), _baseModule(false),
 				_yOffset(0), _TUWalk(0), _TUFly(0), _TUSlide(0), _terrainLevel(0), _footstepSound(0), _dieMCD(0), _altMCD(0), _objectType(0), _lightSource(0),
 				_armor(0), _flammable(0), _fuel(0), _explosive(0), _explosiveType(0), _bigWall(0), _miniMapIndex(0)
@@ -558,7 +558,7 @@ void MapData::setTUSlide(const int TUSlide)
  * check if this is an xcom base object.
  * @return if it is a base object.
  */
-bool MapData::isBaseModule()
+bool MapData::isBaseModule() const
 {
 	return _baseModule;
 }

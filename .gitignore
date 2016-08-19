@@ -62,6 +62,8 @@ _ReSharper.*/
 *.idc
 *.tmp
 *.dgml
+.vs/
+*.VC.*
 #OpenXcom stuff (no ending slashes for dirs so symlinks can be ignored as well as real dirs)
 bin/UFO/GEODATA
 bin/UFO/GEOGRAPH
@@ -93,3 +95,4 @@ Dependencies/
 #Ignore NetBeans project directory
 nbproject/
 .tx/
+/makefile

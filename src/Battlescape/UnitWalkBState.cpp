@@ -281,7 +281,8 @@ void UnitWalkBState::think()
 
 			Position destination;
 			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
-			if (_unit->getFaction() == FACTION_HOSTILE &&
+			if (_unit->getFaction() != FACTION_PLAYER &&
+				_unit->getSpecialAbility() < SPECAB_BURNFLOOR &&
 				_parent->getSave()->getTile(destination)->getFire() > 0)
 			{
 				tu -= 32; // we artificially inflate the TU cost by 32 points in getTUCost under these conditions, so we have to deflate it here.
@@ -413,9 +414,13 @@ void UnitWalkBState::think()
 					// This is where we fake out the strafe movement direction so the unit "moonwalks"
 					int dirTemp = _unit->getDirection();
 					_unit->setDirection(_unit->getFaceDirection());
+					_parent->getMap()->cacheUnit(_unit);
 					_unit->setDirection(dirTemp);
 				}
-				_parent->getMap()->cacheUnit(_unit);
+				else
+				{
+					_parent->getMap()->cacheUnit(_unit);
+				}
 			}
 		}
 		else

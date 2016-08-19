@@ -15,7 +15,7 @@
 #include <SDL_opengl.h>
 #include <string>
 
-namespace OpenXcom 
+namespace OpenXcom
 {
 
 class Surface;
@@ -81,11 +81,11 @@ public:
   /// same but for fragment shader?
   void set_fragment_shader(const char *source);
   /// and vertex?
-  void set_vertex_shader(const char *source); 
+  void set_vertex_shader(const char *source);
   /// init(), because we're too cool to initialize everything in the constructor
-  void init(int width, int height); 
+  void init(int width, int height);
   /// more like exit, because destructors are for uncool people
-  void term(); 
+  void term();
   /// Try to set VSync!
   void setVSync(bool sync);
   /// constructor -- like we said, we're too cool to actually construct things

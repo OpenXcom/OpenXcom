@@ -144,6 +144,33 @@ struct MissionStatistics
 		}
 	}
 
+	bool isAlienBase() const
+	{
+		if (type.find("STR_ALIEN_BASE") != std::string::npos || type.find("STR_ALIEN_COLONY") != std::string::npos)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool isBaseDefense() const
+	{
+		if (type == "STR_BASE_DEFENSE")
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool isUfoMission() const
+	{
+		if(ufo != "NO_UFO")
+		{
+			return true;
+		}
+		return false;
+	}
+
 	MissionStatistics(const YAML::Node& node) : time(0, 0, 0, 0, 0, 0, 0) { load(node); }
 	MissionStatistics() : id(0), markerId(0), time(0, 0, 0, 0, 0, 0, 0), region("STR_REGION_UNKNOWN"), country("STR_UNKNOWN"), ufo("NO_UFO"), success(false), score(0), alienRace("STR_UNKNOWN"), daylight(0), valiantCrux(false), lootValue(0) { }
 	~MissionStatistics() { }

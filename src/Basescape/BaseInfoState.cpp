@@ -18,6 +18,7 @@
  */
 #include "BaseInfoState.h"
 #include <sstream>
+#include <cmath>
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Mod/Mod.h"

@@ -28,7 +28,7 @@
 #include "../Mod/RuleItem.h"
 #include "../Mod/RuleCraft.h"
 #include "../Mod/RuleCraftWeapon.h"
-#include <limits>
+#include <climits>
 #include "BaseFacility.h"
 
 namespace OpenXcom
@@ -203,14 +203,14 @@ const RuleManufacture * Production::getRules() const
 	return _rules;
 }
 
-void Production::startItem(Base * b, SavedGame * g, const Mod *m)
+void Production::startItem(Base * b, SavedGame * g, const Mod *m) const
 {
 	g->setFunds(g->getFunds() - _rules->getManufactureCost());
 	for (std::map<std::string,int>::const_iterator iter = _rules->getRequiredItems().begin(); iter != _rules->getRequiredItems().end(); ++iter)
 	{
 		if (m->getItem(iter->first) != 0)
 		{
-			b->getStorageItems()->removeItem(iter->first, iter->second);			
+			b->getStorageItems()->removeItem(iter->first, iter->second);
 		}
 		else if (m->getCraft(iter->first) != 0)
 		{
@@ -262,11 +262,12 @@ void Production::load(const YAML::Node &node)
 	setInfiniteAmount(node["infinite"].as<bool>(getInfiniteAmount()));
 	setSellItems(node["sell"].as<bool>(getSellItems()));
 	// backwards compatibility
-	if (getAmountTotal() == std::numeric_limits<int>::max())
+	if (getAmountTotal() == INT_MAX)
 	{
 		setAmountTotal(999);
 		setInfiniteAmount(true);
 		setSellItems(true);
 	}
 }
+
 }

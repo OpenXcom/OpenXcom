@@ -133,7 +133,7 @@ public:
 	/// Sets a flag on the item indicating if this is a clip in a weapon or not.
 	void setIsAmmo(bool ammo);
 	/// Checks a flag on the item to see if it's a clip in a weapon or not.
-	bool isAmmo();
+	bool isAmmo() const;
 };
 
 }

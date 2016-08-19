@@ -47,7 +47,7 @@ protected:
 	bool _isHovered, _isFocused, _listButton;
 
 	/// Is this mouse button pressed?
-	bool isButtonPressed(Uint8 button = 0);
+	bool isButtonPressed(Uint8 button = 0) const;
 	/// Is this mouse button event handled?
 	virtual bool isButtonHandled(Uint8 button = 0);
 	/// Set a mouse button's internal state.

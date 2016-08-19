@@ -94,7 +94,7 @@ public:
 	/// Gets the map size y.
 	int getMapSizeY() const;
 	/// Get the map x/y screen offset.
-	Position getMapOffset();
+	Position getMapOffset() const;
 	/// Sets the map x/y screen offset.
 	void setMapOffset(Position pos);
 	/// Toggles showing all map layers.

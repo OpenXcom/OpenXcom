@@ -287,4 +287,5 @@ void Window::setThinBorder()
 {
 	_thinBorder = true;
 }
+
 }

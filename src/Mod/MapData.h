@@ -160,7 +160,7 @@ public:
 	/// Sets the TUSlide value.
 	void setTUSlide(const int TUSlide);
 	/// Check if this is an xcom base object.
-	bool isBaseModule();
+	bool isBaseModule() const;
 	/// Sets this tile as not a floor (water, etc.)
 	void setNoFloor(bool isNoFloor);
 	/// Sets this tile as not stopping LOS.

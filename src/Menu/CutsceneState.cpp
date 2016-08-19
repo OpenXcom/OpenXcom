@@ -116,4 +116,5 @@ void CutsceneState::resetDisplay(bool wasLetterboxed)
 	Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 	_game->getScreen()->resetDisplay(false);
 }
+
 }

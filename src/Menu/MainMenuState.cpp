@@ -165,4 +165,5 @@ void MainMenuState::resize(int &dX, int &dY)
 	dY = Options::baseYResolution - dY;
 	State::resize(dX, dY);
 }
+
 }

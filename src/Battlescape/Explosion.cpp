@@ -106,4 +106,5 @@ bool Explosion::isHit() const
 {
 	return _hit;
 }
+
 }
