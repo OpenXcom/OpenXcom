@@ -28,6 +28,7 @@
 #include <stdint.h>
 #include <time.h>
 #include <sys/stat.h>
+#include <signal.h>
 #include "../dirent.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -64,7 +65,6 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <execinfo.h>
-#include <signal.h>
 #endif
 #include <SDL.h>
 #include <SDL_syswm.h>
