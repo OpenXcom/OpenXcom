@@ -1092,7 +1092,15 @@ void crashDump(void *ex, const std::string &err)
 	else
 	{
 		int signal = *((int*)ex);
-		error << "signal " << signal;
+		switch (signal)
+		{
+		case SIGSEGV:
+			error << "Segmentation fault. This usually indicates something missing in a mod.";
+			break;
+		default:
+			error << "signal " << signal;
+			break;
+		}
 	}
 	Log(LOG_FATAL) << "A fatal error has occurred: " << error.str();
 	stackTrace(0);
