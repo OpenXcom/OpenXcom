@@ -555,7 +555,7 @@ Section "-un.Main"
 	RMDir "$INSTDIR"
 	
 	!insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
-    
+	
 	Delete "$SMPROGRAMS\$StartMenuFolder\*.*"
 	RMDir "$SMPROGRAMS\$StartMenuFolder"
 	
