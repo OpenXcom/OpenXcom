@@ -874,14 +874,6 @@ void DebriefingState::prepareDebriefing()
 				std::for_each(save->getAlienMissions().begin(), save->getAlienMissions().end(),
 							ClearAlienBase(*i));
 
-				for (std::vector<Target*>::iterator j = (*i)->getFollowers()->begin(); j != (*i)->getFollowers()->end(); ++j)
-				{
-					Craft* c = dynamic_cast<Craft*>(*j);
-					if (c != 0) // not sure what else this could be but safety can't hurt.
-					{
-						c->returnToBase();
-					}
-				}
 				delete *i;
 				save->getAlienBases()->erase(i);
 				break;
