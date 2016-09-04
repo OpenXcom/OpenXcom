@@ -37,9 +37,10 @@ Target::Target() : _lon(0.0), _lat(0.0), _depth(0)
  */
 Target::~Target()
 {
-	for (size_t i = 0; i < _followers.size(); ++i)
+	std::vector<Target*> followers = _followers; // We need to copy this as it's gonna be modified
+	for (std::vector<Target*>::iterator i = followers.begin(); i != followers.end(); ++i)
 	{
-		Craft *craft = dynamic_cast<Craft*>(_followers[i]);
+		Craft *craft = dynamic_cast<Craft*>(*i);
 		if (craft)
 		{
 			craft->returnToBase();
