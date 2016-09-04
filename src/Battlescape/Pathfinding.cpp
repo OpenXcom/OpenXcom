@@ -299,7 +299,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			Position verticalOffset (0, 0, 0);
 
 			// if we are on a stairs try to go up a level
-			if (direction < DIR_UP && startTile->getTerrainLevel() <= -16 && !aboveDestination->hasNoFloor(destinationTile) && !triedStairs)
+			if (direction < DIR_UP && startTile->getTerrainLevel() <= -16 && aboveDestination && !aboveDestination->hasNoFloor(destinationTile) && !triedStairs)
 			{
 					numberOfPartsGoingUp++;
 
