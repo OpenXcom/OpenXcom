@@ -61,11 +61,12 @@ class matchById: public std::unary_function<const AlienBase *, bool>
 {
 public:
 	/// Remember ID.
-	matchById(int id) : _id(id) { /* Empty by design. */ }
+	matchById(int id, std::string type) : _id(id), _type(type) { /* Empty by design. */ }
 	/// Match with stored ID.
-	bool operator()(const AlienBase *ab) const { return ab->getId() == _id; }
+	bool operator()(const AlienBase *ab) const { return ab->getId() == _id && ab->getDeployment()->getMarkerName() == _type; }
 private:
 	int _id;
+	std::string _type;
 };
 
 /**
@@ -84,8 +85,15 @@ void AlienMission::load(const YAML::Node& node, SavedGame &game)
 	_uniqueID = node["uniqueID"].as<int>(_uniqueID);
 	if (const YAML::Node &base = node["alienBase"])
 	{
-		int id = base.as<int>();
-		std::vector<AlienBase*>::const_iterator found = std::find_if (game.getAlienBases()->begin(), game.getAlienBases()->end(), matchById(id));
+		int id = base.as<int>(-1);
+		std::string type = "STR_ALIEN_BASE";
+		// New format
+		if (id == -1)
+		{
+			id = base["id"].as<int>();
+			type = base["type"].as<std::string>();
+		}
+		std::vector<AlienBase*>::const_iterator found = std::find_if(game.getAlienBases()->begin(), game.getAlienBases()->end(), matchById(id, type));
 		if (found == game.getAlienBases()->end())
 		{
 			throw Exception("Corrupted save: Invalid base for mission.");
@@ -112,7 +120,7 @@ YAML::Node AlienMission::save() const
 	node["uniqueID"] = _uniqueID;
 	if (_base)
 	{
-		node["alienBase"] = _base->getId();
+		node["alienBase"] = _base->saveId();
 	}
 	node["missionSiteZone"] = _missionSiteZone;
 	return node;

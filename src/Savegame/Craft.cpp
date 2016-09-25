@@ -179,28 +179,26 @@ void Craft::load(const YAML::Node &node, const Mod *mod, SavedGame *save)
 				}
 			}
 		}
-		else if (type == "STR_ALIEN_BASE")
-		{
-			for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
-			{
-				if ((*i)->getId() == id)
-				{
-					setDestination(*i);
-					break;
-				}
-			}
-		}
 		else
 		{
 			// Backwards compatibility
 			if (type == "STR_ALIEN_TERROR")
 				type = "STR_TERROR_SITE";
-			for (std::vector<MissionSite*>::iterator i = save->getMissionSites()->begin(); i != save->getMissionSites()->end(); ++i)
+			bool found = false;
+			for (std::vector<MissionSite*>::iterator i = save->getMissionSites()->begin(); i != save->getMissionSites()->end() && !found; ++i)
 			{
 				if ((*i)->getId() == id && (*i)->getDeployment()->getMarkerName() == type)
 				{
 					setDestination(*i);
-					break;
+					found = true;
+				}
+			}
+			for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end() && !found; ++i)
+			{
+				if ((*i)->getId() == id && (*i)->getDeployment()->getMarkerName() == type)
+				{
+					setDestination(*i);
+					found = true;
 				}
 			}
 		}
