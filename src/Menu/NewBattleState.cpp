@@ -498,9 +498,15 @@ void NewBattleState::btnOkClick(Action *)
 		bgen.setUfo(u);
 		// either ground assault or ufo crash
 		if (RNG::generate(0,1) == 1)
+		{
+			u->setStatus(Ufo::LANDED);
 			bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
+		}
 		else
+		{
+			u->setStatus(Ufo::CRASHED);
 			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
+		}
 		_game->getSavedGame()->getUfos()->push_back(u);
 	}
 	// mission site
