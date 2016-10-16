@@ -1144,6 +1144,8 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 	double centerZ = center.z / 24 + 0.5;
 	double centerX = center.x / 16 + 0.5;
 	double centerY = center.y / 16 + 0.5;
+	int hitSide = 0;
+	int diagonalWall = 0;
 	int power_;
 	std::set<Tile*> tilesAffected;
 	std::pair<std::set<Tile*>::iterator,bool> ret;
@@ -1169,6 +1171,17 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 		vertdec = 5;
 	}
 
+	Tile *origin = _save->getTile(Position(centerX, centerY, centerZ));
+	Tile *dest;
+	if (origin->isBigWall()) //precalculations for bigwall deflection
+	{
+		diagonalWall = origin->getMapData(O_OBJECT)->getBigWall();
+		if (diagonalWall == Pathfinding::BIGWALLNWSE) //  3 |
+			hitSide = (center.x % 16 - center.y % 16) > 0 ? 1 : -1;
+		if (diagonalWall == Pathfinding::BIGWALLNESW) //  2 --
+			hitSide = (center.x % 16 + center.y % 16 - 15) > 0 ? 1 : -1;
+	}
+
 	for (int fi = -90; fi <= 90; fi += 5)
 	{
 		// raytrace every 3 degrees makes sure we cover all tiles in a circle.
@@ -1179,8 +1192,8 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 			double sin_fi = sin(fi * M_PI / 180.0);
 			double cos_fi = cos(fi * M_PI / 180.0);
 
-			Tile *origin = _save->getTile(Position(centerX, centerY, centerZ));
-			Tile *dest = origin;
+			origin = _save->getTile(Position(centerX, centerY, centerZ));
+			dest = origin;
 			double l = 0;
 			int tileX, tileY, tileZ;
 			power_ = power;
@@ -1342,8 +1355,32 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 					if (dir != -1 && dir %2) power_ -= 5; // diagonal movement costs an extra 50% for fire.
 				}
 				if (l > 0.5) {
-					power_ -= horizontalBlockage(origin, dest, type, l < 1.5) * 2;
-					power_ -= verticalBlockage(origin, dest, type, l < 1.5) * 2;
+					if ( l > 1.5)
+					{
+						power_ -= verticalBlockage(origin, dest, type, false) * 2;
+						power_ -= horizontalBlockage(origin, dest, type, false) * 2;
+					}
+					else //tricky bigwall deflection /Volutar
+					{
+						bool skipObject = false;
+						if (diagonalWall == Pathfinding::BIGWALLNESW) // --
+						{
+							if (hitSide<0 && te >= 135 && te < 315)
+								skipObject = true;
+							if (hitSide>0 && ( te < 135 || te > 315))
+								skipObject = true;
+						}
+						if (diagonalWall == Pathfinding::BIGWALLNWSE) // |
+						{
+							if (hitSide>0 && te >= 45 && te < 225)
+								skipObject = true;
+							if (hitSide<0 && ( te < 45 || te > 225))
+								skipObject = true;
+						}
+						power_ -= verticalBlockage(origin, dest, type, skipObject) * 2;
+						power_ -= horizontalBlockage(origin, dest, type, skipObject) * 2;
+
+					}
 				}
 			}
 		}
