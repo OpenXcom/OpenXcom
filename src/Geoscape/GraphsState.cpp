@@ -277,7 +277,7 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 	btnUfoRegionClick(0);
 
 	// Set up objects
-	if (_game->getMod()->getSurface("GRAPH.BDY"))
+	if (_game->getMod()->getSurface("GRAPH.BDY", false))
 	{
 		_game->getMod()->getSurface("GRAPH.BDY")->blit(_bg);
 	}

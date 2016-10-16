@@ -1138,7 +1138,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 	{
 		for (std::vector<std::string>::const_iterator itUnlocked = (*it)->getUnlocked().begin(); itUnlocked != (*it)->getUnlocked().end(); ++itUnlocked)
 		{
-			unlocked.push_back(mod->getResearch(*itUnlocked));
+			unlocked.push_back(mod->getResearch(*itUnlocked, true));
 		}
 	}
 	for (std::vector<std::string>::const_iterator iter = researchProjects.begin(); iter != researchProjects.end(); ++iter)

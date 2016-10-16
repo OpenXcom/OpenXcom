@@ -112,7 +112,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState *state) : _state(state), _b
 				// Check if we have an automated use for an item
 				if ((*j)->getType() == TRANSFER_ITEM)
 				{
-					RuleItem *item = _game->getMod()->getItem((*j)->getItems());
+					RuleItem *item = _game->getMod()->getItem((*j)->getItems(), true);
 					for (std::vector<Craft*>::iterator c = (*i)->getCrafts()->begin(); c != (*i)->getCrafts()->end(); ++c)
 					{
 						// Check if it's ammo to reload a craft

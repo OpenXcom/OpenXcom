@@ -354,7 +354,7 @@ void CraftEquipmentState::lstEquipmentMousePress(Action *action)
 void CraftEquipmentState::updateQuantity()
 {
 	Craft *c = _base->getCrafts()->at(_craft);
-	RuleItem *item = _game->getMod()->getItem(_items[_sel]);
+	RuleItem *item = _game->getMod()->getItem(_items[_sel], true);
 	int cQty = 0;
 	if (item->isFixed())
 	{
@@ -378,7 +378,7 @@ void CraftEquipmentState::updateQuantity()
 	Uint8 color;
 	if (cQty == 0)
 	{
-		RuleItem *rule = _game->getMod()->getItem(_items[_sel]);
+		RuleItem *rule = _game->getMod()->getItem(_items[_sel], true);
 		if (rule->getBattleType() == BT_AMMO)
 		{
 			color = _ammoColor;
@@ -417,7 +417,7 @@ void CraftEquipmentState::moveLeft()
 void CraftEquipmentState::moveLeftByValue(int change)
 {
 	Craft *c = _base->getCrafts()->at(_craft);
-	RuleItem *item = _game->getMod()->getItem(_items[_sel]);
+	RuleItem *item = _game->getMod()->getItem(_items[_sel], true);
 	int cQty = 0;
 	if (item->isFixed()) cQty = c->getVehicleCount(_items[_sel]);
 	else cQty = c->getItems()->getItem(_items[_sel]);
@@ -429,7 +429,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 		if (!item->getCompatibleAmmo()->empty())
 		{
 			// Calculate how much ammo needs to be added to the base.
-			RuleItem *ammo = _game->getMod()->getItem(item->getCompatibleAmmo()->front());
+			RuleItem *ammo = _game->getMod()->getItem(item->getCompatibleAmmo()->front(), true);
 			int ammoPerVehicle;
 			if (ammo->getClipSize() > 0 && item->getClipSize() > 0)
 			{
@@ -504,7 +504,7 @@ void CraftEquipmentState::moveRight()
 void CraftEquipmentState::moveRightByValue(int change)
 {
 	Craft *c = _base->getCrafts()->at(_craft);
-	RuleItem *item = _game->getMod()->getItem(_items[_sel]);
+	RuleItem *item = _game->getMod()->getItem(_items[_sel], true);
 	int bqty = _base->getStorageItems()->getItem(_items[_sel]);
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
 	{
@@ -522,7 +522,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 		int size = 4;
 		if (_game->getMod()->getUnit(item->getType()))
 		{
-			size = _game->getMod()->getArmor(_game->getMod()->getUnit(item->getType())->getArmor())->getSize();
+			size = _game->getMod()->getArmor(_game->getMod()->getUnit(item->getType())->getArmor(), true)->getSize();
 			size *= size;
 		}
 		// Check if there's enough room
@@ -533,7 +533,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 			if (!item->getCompatibleAmmo()->empty())
 			{
 				// And now let's see if we can add the total number of vehicles.
-				RuleItem *ammo = _game->getMod()->getItem(item->getCompatibleAmmo()->front());
+				RuleItem *ammo = _game->getMod()->getItem(item->getCompatibleAmmo()->front(), true);
 				int ammoPerVehicle, clipSize;
 				if (ammo->getClipSize() > 0 && item->getClipSize() > 0)
 				{

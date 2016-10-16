@@ -38,7 +38,7 @@ namespace OpenXcom
 
 	ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor *defs) : ArticleState(defs->id), _row(0)
 	{
-		Armor *armor = _game->getMod()->getArmor(defs->id);
+		Armor *armor = _game->getMod()->getArmor(defs->id, true);
 
 		// add screen elements
 		_txtTitle = new Text(300, 17, 5, 24);
@@ -65,7 +65,7 @@ namespace OpenXcom
 
 		std::string look = armor->getSpriteInventory();
 		look += "M0.SPK";
-		if (!CrossPlatform::fileExists(FileMap::getFilePath("UFOGRAPH/" + look)) && !_game->getMod()->getSurface(look))
+		if (!CrossPlatform::fileExists(FileMap::getFilePath("UFOGRAPH/" + look)) && !_game->getMod()->getSurface(look, false))
 		{
 			look = armor->getSpriteInventory() + ".SPK";
 		}

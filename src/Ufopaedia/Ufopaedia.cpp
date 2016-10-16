@@ -157,7 +157,6 @@ namespace OpenXcom
 
 	/**
 	 * Checks if selected article_id is available -> if yes, open it.
-	 * Otherwise, open start state!
 	 * @param game Pointer to actual game.
 	 * @param article_id Article id to find.
 	 */

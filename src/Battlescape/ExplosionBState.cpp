@@ -86,7 +86,7 @@ void ExplosionBState::init()
 	}
 	else if (_unit && (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 	{
-		_power = _parent->getMod()->getItem(_unit->getArmor()->getCorpseGeoscape())->getPower();
+		_power = _parent->getMod()->getItem(_unit->getArmor()->getCorpseGeoscape(), true)->getPower();
 		_areaOfEffect = true;
 	}
 	else
@@ -280,7 +280,7 @@ void ExplosionBState::explode()
 		// explosion not caused by terrain or an item, must be by a unit (cyberdisc)
 		if (_unit && (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 		{
-			radius = _parent->getMod()->getItem(_unit->getArmor()->getCorpseGeoscape())->getExplosionRadius();
+			radius = _parent->getMod()->getItem(_unit->getArmor()->getCorpseGeoscape(), true)->getExplosionRadius();
 		}
 		save->getTileEngine()->explode(_center, _power, DT_HE, radius);
 		terrainExplosion = true;

@@ -37,7 +37,7 @@ namespace OpenXcom
 
 	ArticleStateItem::ArticleStateItem(ArticleDefinitionItem *defs) : ArticleState(defs->id)
 	{
-		RuleItem *item = _game->getMod()->getItem(defs->id);
+		RuleItem *item = _game->getMod()->getItem(defs->id, true);
 
 		// add screen elements
 		_txtTitle = new Text(148, 32, 5, 24);
@@ -212,10 +212,10 @@ namespace OpenXcom
 				{
 					for (size_t i = 0; i < std::min(ammo_data->size(), (size_t)3); ++i)
 					{
-						ArticleDefinition *ammo_article = _game->getMod()->getUfopaediaArticle((*ammo_data)[i]);
+						ArticleDefinition *ammo_article = _game->getMod()->getUfopaediaArticle((*ammo_data)[i], true);
 						if (Ufopaedia::isArticleAvailable(_game->getSavedGame(), ammo_article))
 						{
-							RuleItem *ammo_rule = _game->getMod()->getItem((*ammo_data)[i]);
+							RuleItem *ammo_rule = _game->getMod()->getItem((*ammo_data)[i], true);
 							_txtAmmoType[i]->setText(tr(getDamageTypeText(ammo_rule->getDamageType())));
 
 							ss.str(L"");ss.clear();

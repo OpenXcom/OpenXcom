@@ -1557,7 +1557,7 @@ void GeoscapeState::time1Day()
 			const RuleResearch * research = (*iter)->getRules();
 			if (Options::retainCorpses && research->destroyItem() && _game->getMod()->getUnit(research->getName()))
 			{
-				(*i)->getStorageItems()->addItem(_game->getMod()->getArmor(_game->getMod()->getUnit(research->getName())->getArmor())->getCorpseGeoscape());
+				(*i)->getStorageItems()->addItem(_game->getMod()->getArmor(_game->getMod()->getUnit(research->getName())->getArmor(), true)->getCorpseGeoscape());
 			}
 			if (!(*iter)->getRules()->getGetOneFree().empty())
 			{
@@ -1581,11 +1581,11 @@ void GeoscapeState::time1Day()
 				{
 					size_t pick = RNG::generate(0, possibilities.size()-1);
 					std::string sel = possibilities.at(pick);
-					bonus = _game->getMod()->getResearch(sel);
+					bonus = _game->getMod()->getResearch(sel, true);
 					_game->getSavedGame()->addFinishedResearch(bonus, _game->getMod());
 					if (!bonus->getLookup().empty())
 					{
-						_game->getSavedGame()->addFinishedResearch(_game->getMod()->getResearch(bonus->getLookup()), _game->getMod());
+						_game->getSavedGame()->addFinishedResearch(_game->getMod()->getResearch(bonus->getLookup(), true), _game->getMod());
 					}
 				}
 			}
@@ -1598,7 +1598,7 @@ void GeoscapeState::time1Day()
 			_game->getSavedGame()->addFinishedResearch(research, _game->getMod());
 			if (!research->getLookup().empty())
 			{
-				_game->getSavedGame()->addFinishedResearch(_game->getMod()->getResearch(research->getLookup()), _game->getMod());
+				_game->getSavedGame()->addFinishedResearch(_game->getMod()->getResearch(research->getLookup(), true), _game->getMod());
 			}
 			if (!research->getCutscene().empty())
 			{
@@ -2309,7 +2309,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 		{
 			// we'll use the regions listed in the command, if any, otherwise check all the regions in the ruleset looking for matches
 			std::vector<std::string> regions = (command->hasRegionWeights()) ? command->getRegions(month) : mod->getRegionsList();
-			missionRules = mod->getAlienMission(missionType);
+			missionRules = mod->getAlienMission(missionType, true);
 			targetZone = missionRules->getSpawnZone();
 
 			for (std::vector<std::string>::iterator i = regions.begin(); i != regions.end();)
@@ -2331,7 +2331,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 				}
 				// ok, we found a region that doesn't have our mission in it, let's see if it has an appropriate landing zone.
 				// if it does, let's add it to our list of valid areas, taking note of which mission area(s) matched.
-				RuleRegion *region = mod->getRegion(*i);
+				RuleRegion *region = mod->getRegion(*i, true);
 				if ((int)(region->getMissionZones().size()) > targetZone)
 				{
 					std::vector<MissionArea> areas = region->getMissionZones()[targetZone].areas;

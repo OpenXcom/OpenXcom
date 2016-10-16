@@ -370,7 +370,7 @@ static struct AudioSequence
 					int channel = trackPosition % 4; // use at most four channels to play sound effects
 					double ratio = (double)Options::soundVolume / MIX_MAX_VOLUME;
 					Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command;
-					s = mod->getSound(sf->catFile, sf->sound);
+					s = mod->getSound(sf->catFile, sf->sound, false);
 					if (s)
 					{
 						s->play(channel);

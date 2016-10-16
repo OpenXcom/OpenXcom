@@ -154,12 +154,17 @@ void Ufo::load(const YAML::Node &node, const Mod &mod, SavedGame &game)
 		if (found == game.getAlienMissions().end())
 		{
 			// Corrupt save file.
-			throw Exception("Unknown mission, save file is corrupt.");
+			throw Exception("Unknown UFO mission, save file is corrupt.");
 		}
 		_mission = *found;
 
 		std::string tid = node["trajectory"].as<std::string>();
 		_trajectory = mod.getUfoTrajectory(tid);
+		if (_trajectory == 0)
+		{
+			// Corrupt save file.
+			throw Exception("Unknown UFO trajectory, save file is corrupt.");
+		}
 		_trajectoryPoint = node["trajectoryPoint"].as<size_t>(_trajectoryPoint);
 	}
 	_fireCountdown = node["fireCountdown"].as<int>(_fireCountdown);

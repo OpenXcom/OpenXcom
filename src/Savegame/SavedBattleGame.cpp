@@ -251,7 +251,17 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 				item->load(*i);
 				type = (*i)["inventoryslot"].as<std::string>();
 				if (type != "NULL")
-					item->setSlot(mod->getInventory(type));
+				{
+					if (mod->getInventory(type))
+					{
+						item->setSlot(mod->getInventory(type));
+						
+					}
+					else
+					{
+						item->setSlot(mod->getInventory("STR_GROUND"));
+					}
+				}				
 				int owner = (*i)["owner"].as<int>();
 				int prevOwner = (*i)["previousOwner"].as<int>(-1);
 				int unit = (*i)["unit"].as<int>();
@@ -281,7 +291,7 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 				{
 					Position pos = (*i)["position"].as<Position>();
 					if (pos.x != -1)
-						getTile(pos)->addItem(item, mod->getInventory("STR_GROUND"));
+						getTile(pos)->addItem(item, mod->getInventory("STR_GROUND", true));
 				}
 				toContainer[pass]->push_back(item);
 			}

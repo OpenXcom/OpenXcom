@@ -309,7 +309,7 @@ void UnitDieBState::convertUnitToCorpse()
 		{
 			if ((*it)->getUnit() == _unit)
 			{
-				RuleItem *corpseRules = _parent->getMod()->getItem(_unit->getArmor()->getCorpseBattlescape()[0]); // we're in an inventory, so we must be a 1x1 unit
+				RuleItem *corpseRules = _parent->getMod()->getItem(_unit->getArmor()->getCorpseBattlescape()[0], true); // we're in an inventory, so we must be a 1x1 unit
 				(*it)->convertToCorpse(corpseRules);
 				break;
 			}
@@ -323,7 +323,7 @@ void UnitDieBState::convertUnitToCorpse()
 		{
 			for (int x = size - 1; x >= 0; --x)
 			{
-				BattleItem *corpse = new BattleItem(_parent->getMod()->getItem(_unit->getArmor()->getCorpseBattlescape()[i]), _parent->getSave()->getCurrentItemId());
+				BattleItem *corpse = new BattleItem(_parent->getMod()->getItem(_unit->getArmor()->getCorpseBattlescape()[i], true), _parent->getSave()->getCurrentItemId());
 				corpse->setUnit(_unit);
 				if (_parent->getSave()->getTile(lastPosition + Position(x,y,0))->getUnit() == _unit) // check in case unit was displaced by another unit
 				{

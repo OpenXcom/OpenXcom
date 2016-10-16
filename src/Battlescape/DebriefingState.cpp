@@ -574,19 +574,20 @@ void DebriefingState::prepareDebriefing()
 {
 	for (std::vector<std::string>::const_iterator i = _game->getMod()->getItemsList().begin(); i != _game->getMod()->getItemsList().end(); ++i)
 	{
-		if (_game->getMod()->getItem(*i)->getSpecialType() > 1)
+		RuleItem *rule = _game->getMod()->getItem(*i);
+		if (rule->getSpecialType() > 1)
 		{
 			RecoveryItem *item = new RecoveryItem();
 			item->name = *i;
-			item->value = _game->getMod()->getItem(*i)->getRecoveryPoints();
-			_recoveryStats[_game->getMod()->getItem(*i)->getSpecialType()] = item;
+			item->value = rule->getRecoveryPoints();
+			_recoveryStats[rule->getSpecialType()] = item;
 			_missionStatistics->lootValue = item->value;
 		}
 	}
 
 	SavedGame *save = _game->getSavedGame();
 	SavedBattleGame *battle = save->getSavedBattle();
-	AlienDeployment *deployment = _game->getMod()->getDeployment(battle->getMissionType());
+	AlienDeployment *ruleDeploy = _game->getMod()->getDeployment(battle->getMissionType());
 
 	bool aborted = battle->isAborted();
 	bool success = !aborted || battle->allObjectivesDestroyed();
@@ -607,13 +608,13 @@ void DebriefingState::prepareDebriefing()
 
 	std::string objectiveCompleteText, objectiveFailedText;
 	int objectiveCompleteScore = 0, objectiveFailedScore = 0;
-	if (deployment)
+	if (ruleDeploy)
 	{
-		if (deployment->getObjectiveCompleteInfo(objectiveCompleteText, objectiveCompleteScore))
+		if (ruleDeploy->getObjectiveCompleteInfo(objectiveCompleteText, objectiveCompleteScore))
 		{
 			_stats.push_back(new DebriefingStat(objectiveCompleteText, false));
 		}
-		if (deployment->getObjectiveFailedInfo(objectiveFailedText, objectiveFailedScore))
+		if (ruleDeploy->getObjectiveFailedInfo(objectiveFailedText, objectiveFailedScore))
 		{
 			_stats.push_back(new DebriefingStat(objectiveFailedText, false));
 		}
@@ -674,13 +675,13 @@ void DebriefingState::prepareDebriefing()
 				else if (AlienBase *b = dynamic_cast<AlienBase*>(craft->getDestination()))
 				{
 					target = "STR_ALIEN_BASE";
-					_missionStatistics->markerName = deployment->getMarkerName();
+					_missionStatistics->markerName = ruleDeploy->getMarkerName();
 					_missionStatistics->markerId = b->getId();
 				}
 				else if (MissionSite *ms = dynamic_cast<MissionSite*>(craft->getDestination()))
 				{
 					target = "STR_MISSION_SITE";
-					_missionStatistics->markerName = deployment->getMarkerName();
+					_missionStatistics->markerName = ruleDeploy->getMarkerName();
 					_missionStatistics->markerId = ms->getId();
 				}
 				craft->returnToBase();
@@ -857,7 +858,7 @@ void DebriefingState::prepareDebriefing()
 					destroyAlienBase = false;
 			}
 			
-			if (deployment && !deployment->getNextStage().empty())
+			if (ruleDeploy && !ruleDeploy->getNextStage().empty())
 			{
 				_missionStatistics->alienRace = (*i)->getAlienRace();
 				destroyAlienBase = false;
@@ -965,7 +966,7 @@ void DebriefingState::prepareDebriefing()
 					else
 					{ // non soldier player = tank
 						base->getStorageItems()->addItem((*j)->getType());
-						RuleItem *tankRule = _game->getMod()->getItem((*j)->getType());
+						RuleItem *tankRule = _game->getMod()->getItem((*j)->getType(), true);
 						if ((*j)->getItem("STR_RIGHT_HAND"))
 						{
 							BattleItem *ammoItem = (*j)->getItem("STR_RIGHT_HAND")->getAmmoItem();
@@ -1020,7 +1021,7 @@ void DebriefingState::prepareDebriefing()
 					{
 						if (!(*k)->getRules()->isFixed())
 						{
-							(*j)->getTile()->addItem(*k, _game->getMod()->getInventory("STR_GROUND"));
+							(*j)->getTile()->addItem(*k, _game->getMod()->getInventory("STR_GROUND", true));
 						}
 					}
 				}
@@ -1091,9 +1092,9 @@ void DebriefingState::prepareDebriefing()
 			// we can recover items from the earlier stages as well
 			recoverItems(battle->getConditionalRecoveredItems(), base);
 			int nonRecoverType = 0;
-			if (deployment && deployment->getObjectiveType())
+			if (ruleDeploy && ruleDeploy->getObjectiveType())
 			{
-				nonRecoverType = deployment->getObjectiveType();
+				nonRecoverType = ruleDeploy->getObjectiveType();
 			}
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
@@ -1295,11 +1296,11 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 	for (std::map<std::string, int>::iterator i = craftVehicles.getContents()->begin(); i != craftVehicles.getContents()->end(); ++i)
 	{
 		int qty = base->getStorageItems()->getItem(i->first);
-		RuleItem *tankRule = _game->getMod()->getItem(i->first);
+		RuleItem *tankRule = _game->getMod()->getItem(i->first, true);
 		int size = 4;
 		if (_game->getMod()->getUnit(tankRule->getType()))
 		{
-			size = _game->getMod()->getArmor(_game->getMod()->getUnit(tankRule->getType())->getArmor())->getSize();
+			size = _game->getMod()->getArmor(_game->getMod()->getUnit(tankRule->getType())->getArmor(), true)->getSize();
 			size *= size;
 		}
 		int canBeAdded = std::min(qty, i->second);
@@ -1317,7 +1318,7 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 		}
 		else
 		{ // so this tank requires ammo
-			RuleItem *ammo = _game->getMod()->getItem(tankRule->getCompatibleAmmo()->front());
+			RuleItem *ammo = _game->getMod()->getItem(tankRule->getCompatibleAmmo()->front(), true);
 			int ammoPerVehicle, clipSize;
 			if (ammo->getClipSize() > 0 && tankRule->getClipSize() > 0)
 			{

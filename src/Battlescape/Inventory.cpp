@@ -529,7 +529,7 @@ void Inventory::mouseClick(Action *action, State *state)
 				{
 					if ((SDL_GetModState() & KMOD_CTRL))
 					{
-						RuleInventory *newSlot = _game->getMod()->getInventory("STR_GROUND");
+						RuleInventory *newSlot = _game->getMod()->getInventory("STR_GROUND", true);
 						std::string warning = "STR_NOT_ENOUGH_SPACE";
 						bool placed = false;
 
@@ -538,22 +538,22 @@ void Inventory::mouseClick(Action *action, State *state)
 							switch (item->getRules()->getBattleType())
 							{
 							case BT_FIREARM:
-								newSlot = _game->getMod()->getInventory("STR_RIGHT_HAND");
+								newSlot = _game->getMod()->getInventory("STR_RIGHT_HAND", true);
 								break;
 							case BT_MINDPROBE:
 							case BT_PSIAMP:
 							case BT_MELEE:
 							case BT_CORPSE:
-								newSlot = _game->getMod()->getInventory("STR_LEFT_HAND");
+								newSlot = _game->getMod()->getInventory("STR_LEFT_HAND", true);
 								break;
 							default:
 								if (item->getRules()->getInventoryHeight() > 2)
 								{
-									newSlot = _game->getMod()->getInventory("STR_BACK_PACK");
+									newSlot = _game->getMod()->getInventory("STR_BACK_PACK", true);
 								}
 								else
 								{
-									newSlot = _game->getMod()->getInventory("STR_BELT");
+									newSlot = _game->getMod()->getInventory("STR_BELT", true);
 								}
 								break;
 							}
@@ -832,9 +832,9 @@ bool Inventory::unload()
 
 	if (!_tu || _selUnit->spendTimeUnits(8))
 	{
-		moveItem(_selItem->getAmmoItem(), _game->getMod()->getInventory("STR_LEFT_HAND"), 0, 0);
+		moveItem(_selItem->getAmmoItem(), _game->getMod()->getInventory("STR_LEFT_HAND", true), 0, 0);
 		_selItem->getAmmoItem()->moveToOwner(_selUnit);
-		moveItem(_selItem, _game->getMod()->getInventory("STR_RIGHT_HAND"), 0, 0);
+		moveItem(_selItem, _game->getMod()->getInventory("STR_RIGHT_HAND", true), 0, 0);
 		_selItem->moveToOwner(_selUnit);
 		_selItem->setAmmoItem(0);
 		setSelectedItem(0);
@@ -856,7 +856,7 @@ bool Inventory::unload()
  */
 void Inventory::arrangeGround(bool alterOffset)
 {
-	RuleInventory *ground = _game->getMod()->getInventory("STR_GROUND");
+	RuleInventory *ground = _game->getMod()->getInventory("STR_GROUND", true);
 
 	int slotsX = (Screen::ORIGINAL_WIDTH - ground->getX()) / RuleInventory::SLOT_W;
 	int slotsY = (Screen::ORIGINAL_HEIGHT - ground->getY()) / RuleInventory::SLOT_H;
