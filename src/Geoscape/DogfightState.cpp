@@ -999,6 +999,17 @@ void DogfightState::update()
 		{
 			_craft->returnToBase();
 		}
+		if (_ufo->isCrashed())
+		{
+			for (std::vector<Target*>::iterator i = _ufo->getFollowers()->begin(); i != _ufo->getFollowers()->end(); ++i)
+			{
+				Craft* c = dynamic_cast<Craft*>(*i);
+				if (c != 0 && c->getNumSoldiers() == 0 && c->getNumVehicles() == 0)
+				{
+					c->returnToBase();
+				}
+			}
+		}
 		endDogfight();
 	}
 
