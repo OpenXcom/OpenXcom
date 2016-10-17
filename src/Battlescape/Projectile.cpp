@@ -255,7 +255,8 @@ int Projectile::calculateThrow(double accuracy)
 			if (_action.type == BA_THROW
 				&& endTile
 				&& endTile->getMapData(O_OBJECT)
-				&& endTile->getMapData(O_OBJECT)->getTUCost(MT_WALK) == 255)
+				&& endTile->getMapData(O_OBJECT)->getTUCost(MT_WALK) == 255
+				&& !(endTile->isBigWall() && (endTile->getMapData(O_OBJECT)->getBigWall()<1 || endTile->getMapData(O_OBJECT)->getBigWall()>3)))
 			{
 				test = V_OUTOFBOUNDS;
 			}

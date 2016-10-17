@@ -2780,11 +2780,18 @@ bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Posit
 
 	Tile *targetTile = _save->getTile(action.target);
 	// object blocking - can't throw here
-	if ((action.type == BA_THROW
+	if (action.type == BA_THROW
 		&& targetTile
 		&& targetTile->getMapData(O_OBJECT)
-		&& targetTile->getMapData(O_OBJECT)->getTUCost(MT_WALK) == 255)
-		|| ProjectileFlyBState::validThrowRange(&action, originVoxel, targetTile) == false)
+		&& targetTile->getMapData(O_OBJECT)->getTUCost(MT_WALK) == 255
+		&& !(targetTile->isBigWall()
+		&& (targetTile->getMapData(O_OBJECT)->getBigWall()<1
+		|| targetTile->getMapData(O_OBJECT)->getBigWall()>3)))
+	{
+		return false;
+	}
+	// out of range - can't throw here
+	if (ProjectileFlyBState::validThrowRange(&action, originVoxel, targetTile) == false)
 	{
 		return false;
 	}
