@@ -1726,7 +1726,7 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 		break;
 	}
 
-	if (!skipObject)
+	if (!skipObject || (type==DT_NONE && startTile->isBigWall()) )
 		block += blockage(startTile,O_OBJECT, type, direction);
 
 	if (type != DT_NONE)
