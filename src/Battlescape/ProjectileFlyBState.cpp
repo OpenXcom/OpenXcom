@@ -278,9 +278,6 @@ bool ProjectileFlyBState::createNewProjectile()
 {
 	++_action.autoShotCounter;
 
-	if (_action.type != BA_THROW && _action.type != BA_LAUNCH)
-		_unit->getStatistics()->shotsFiredCounter++;
-
 	// create a new projectile
 	Projectile *projectile = new Projectile(_parent->getMod(), _parent->getSave(), _action, _origin, _targetVoxel, _ammo);
 
@@ -417,6 +414,10 @@ bool ProjectileFlyBState::createNewProjectile()
 			return false;
 		}
 	}
+	
+	if (_action.type != BA_THROW && _action.type != BA_LAUNCH)
+		_unit->getStatistics()->shotsFiredCounter++;
+
 	return true;
 }
 
