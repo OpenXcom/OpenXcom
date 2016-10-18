@@ -41,7 +41,7 @@ crafts: #done
     sprite: 3
     fuelMax: 800
     damageMax: 120
-    speedMax: 2100
+    speedMax: 2400
     accel: 3
     weapons: 2
     costRent: 600000
