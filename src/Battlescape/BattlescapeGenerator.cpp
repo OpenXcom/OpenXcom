@@ -870,7 +870,7 @@ BattleUnit *BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 			// not gonna randomize what weapon set tanks use, don't want to confuse players.
 			for (std::vector<std::string>::const_iterator i = rule->getBuiltInWeapons().front().begin(); i != rule->getBuiltInWeapons().front().end(); ++i)
 			{
-				RuleItem *ruleItem = _game->getMod()->getItem(*i, true);
+				RuleItem *ruleItem = _game->getMod()->getItem(*i);
 				if (ruleItem)
 				{
 					BattleItem *item = new BattleItem(ruleItem, _save->getCurrentItemId());

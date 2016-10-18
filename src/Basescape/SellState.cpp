@@ -638,7 +638,7 @@ void SellState::changeByValue(int change, int dir)
 			{
 				weapon = _game->getMod()->getItem((*w)->getRules()->getLauncherItem(), true);
 				total += weapon->getSize();
-				ammo = _game->getMod()->getItem((*w)->getRules()->getClipItem(), true);
+				ammo = _game->getMod()->getItem((*w)->getRules()->getClipItem());
 				if (ammo)
 					total += ammo->getSize() * (*w)->getClipsLoaded(_game->getMod());
 			}

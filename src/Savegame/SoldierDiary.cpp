@@ -919,7 +919,7 @@ int SoldierDiary::getTrapKillTotal(Mod *mod) const
 		
 	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
 	{
-		RuleItem *item = mod->getItem((*i)->weapon, true);
+		RuleItem *item = mod->getItem((*i)->weapon);
 		if ((*i)->hostileTurn() && (item == 0 || item->getBattleType() == BT_GRENADE || item->getBattleType() == BT_PROXIMITYGRENADE))
 		{
 			trapKillTotal++;
@@ -938,7 +938,7 @@ int SoldierDiary::getTrapKillTotal(Mod *mod) const
 		
 	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
 	{
-		RuleItem *item = mod->getItem((*i)->weapon, true);
+		RuleItem *item = mod->getItem((*i)->weapon);
 		if ((*i)->hostileTurn() && item != 0 && item->getBattleType() != BT_GRENADE && item->getBattleType() != BT_PROXIMITYGRENADE)
 		{
 			reactionFireKillTotal++;
