@@ -225,7 +225,10 @@ void ProjectileFlyBState::init()
 			}
 			else
 			{
-				_parent->getTileEngine()->canTargetUnit(&originVoxel, targetTile, &_targetVoxel, _unit);
+				if (!_parent->getTileEngine()->canTargetUnit(&originVoxel, targetTile, &_targetVoxel, _unit))
+				{
+					_targetVoxel = Position(-16,-16,-24); // out of bounds, even after voxel to tile calculation.
+				}
 			}
 		}
 		else if (targetTile->getMapData(O_OBJECT) != 0)
