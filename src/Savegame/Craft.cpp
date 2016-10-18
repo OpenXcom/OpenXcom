@@ -1012,4 +1012,27 @@ void Craft::unload(const Mod *mod)
 	}
 }
 
+/**
+ * Checks if an item can be reused by the craft and
+ * updates its status appropriately.
+ * @param item Item ID.
+ */
+void Craft::reuseItem(const std::string& item)
+{
+	if (_status != "STR_READY")
+		return;
+	// Check if it's ammo to reload the craft
+	for (std::vector<CraftWeapon*>::iterator w = _weapons.begin(); w != _weapons.end(); ++w)
+	{
+		if ((*w) != 0 && item == (*w)->getRules()->getClipItem() && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+		{
+			(*w)->setRearming(true);
+			_status = "STR_REARMING";
+		}
+	}
+	// Check if it's fuel to refuel the craft
+	if (item == _rules->getRefuelItem() && _fuel < _rules->getMaxFuel())
+		_status = "STR_REFUELLING";
+}
+
 }

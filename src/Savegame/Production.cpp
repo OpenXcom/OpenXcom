@@ -138,20 +138,7 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Mod *m)
 					{
 						for (std::vector<Craft*>::iterator c = b->getCrafts()->begin(); c != b->getCrafts()->end(); ++c)
 						{
-							if ((*c)->getStatus() != "STR_READY")
-								continue;
-							// Check if it's ammo to reload a craft
-							for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
-							{
-								if ((*w) != 0 && (*w)->getRules()->getClipItem() == i->first && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
-								{
-									(*w)->setRearming(true);
-									(*c)->setStatus("STR_REARMING");
-								}
-							}
-							// Check if it's fuel to refuel a craft
-							if ((*c)->getRules()->getRefuelItem() == i->first && 100 > (*c)->getFuelPercentage())
-								(*c)->setStatus("STR_REFUELLING");
+							(*c)->reuseItem(i->first);
 						}
 					}
 					if (getSellItems())

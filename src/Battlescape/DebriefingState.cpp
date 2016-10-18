@@ -1428,6 +1428,13 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 					default:
 						base->getStorageItems()->addItem((*it)->getRules()->getType(), 1);
 				}
+				if ((*it)->getRules()->getBattleType() == BT_NONE)
+				{
+					for (std::vector<Craft*>::iterator c = base->getCrafts()->begin(); c != base->getCrafts()->end(); ++c)
+					{
+						(*c)->reuseItem((*it)->getRules()->getType());
+					}
+				}
 			}
 		}
 	}

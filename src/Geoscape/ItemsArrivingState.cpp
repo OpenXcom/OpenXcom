@@ -113,19 +113,11 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState *state) : _state(state), _b
 				if ((*j)->getType() == TRANSFER_ITEM)
 				{
 					RuleItem *item = _game->getMod()->getItem((*j)->getItems(), true);
-					for (std::vector<Craft*>::iterator c = (*i)->getCrafts()->begin(); c != (*i)->getCrafts()->end(); ++c)
+					if (item->getBattleType() == BT_NONE)
 					{
-						// Check if it's ammo to reload a craft
-						if ((*c)->getStatus() == "STR_READY")
+						for (std::vector<Craft*>::iterator c = (*i)->getCrafts()->begin(); c != (*i)->getCrafts()->end(); ++c)
 						{
-							for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
-							{
-								if ((*w) != 0 && (*w)->getRules()->getClipItem() == item->getType() && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
-								{
-									(*w)->setRearming(true);
-									(*c)->setStatus("STR_REARMING");
-								}
-							}
+							(*c)->reuseItem((*j)->getItems());
 						}
 					}
 				}
