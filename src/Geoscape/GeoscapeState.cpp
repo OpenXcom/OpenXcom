@@ -836,6 +836,7 @@ void GeoscapeState::time5Seconds()
 							Waypoint *w = new Waypoint();
 							w->setLongitude((*j)->getMeetLongitude());
 							w->setLatitude((*j)->getMeetLatitude());
+							w->setId(u->getId());
 							(*j)->setDestination(0);
 							popup(new GeoscapeCraftState((*j), _globe, w));
 						}
