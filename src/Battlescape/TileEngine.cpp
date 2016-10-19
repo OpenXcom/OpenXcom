@@ -1362,7 +1362,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 					}
 					else //tricky bigwall deflection /Volutar
 					{
-						bool skipObject = false;
+						bool skipObject = diagonalWall == 0;
 						if (diagonalWall == Pathfinding::BIGWALLNESW) // --
 						{
 							if (hitSide<0 && te >= 135 && te < 315)
@@ -1469,6 +1469,10 @@ bool TileEngine::detonate(Tile* tile)
 			if ( i == 6 && (bigwall == 2 || bigwall == 3)) //diagonals for the current tile
 			{
 				bigwalldestroyed = true;
+			}
+			if ( i == 6 && (bigwall == 6 || bigwall == 7 || bigwall == 8)) //n/w/nw
+			{
+				skipnorthwest = false;
 			}
 			remainingPower -= 2 * tiles[i]->getMapData(currentpart)->getArmor();
 			destroyed = true;
@@ -1731,7 +1735,10 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 
 	if (type != DT_NONE)
 	{
-		if (skipObject) return block;
+		// not too sure about removing this line,
+		// i have a sneaking suspicion we might end up blocking things that we shouldn't
+
+		//if (skipObject) return block;
 
 		direction += 4;
 		if (direction > 7)
