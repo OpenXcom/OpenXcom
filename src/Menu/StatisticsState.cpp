@@ -256,7 +256,7 @@ void StatisticsState::listStats()
 		totalCrafts += std::max(0, ids[*i] - 1);
 	}
 
-	int xcomBases = save->getBases()->size() - xcomBasesLost;
+	int xcomBases = save->getBases()->size() + xcomBasesLost;
 	int currentScientists = 0, currentEngineers = 0;
 	for (std::vector<Base*>::const_iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
 	{
