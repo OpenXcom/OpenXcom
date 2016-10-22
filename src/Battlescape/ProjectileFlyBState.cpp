@@ -217,7 +217,7 @@ void ProjectileFlyBState::init()
 		Position hitPos;
 		Position originVoxel = _parent->getTileEngine()->getOriginVoxel(_action, _parent->getSave()->getTile(_origin));
 		if (targetTile->getUnit() &&
-			!((_unit->getFaction() == FACTION_PLAYER) &&
+			((_unit->getFaction() != FACTION_PLAYER) ||
 			targetTile->getUnit()->getVisible()))
 		{
 			if (_origin == _action.target || targetTile->getUnit() == _unit)
