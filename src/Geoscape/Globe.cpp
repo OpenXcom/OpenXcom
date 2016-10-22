@@ -885,10 +885,10 @@ void Globe::draw()
 	drawOcean();
 	drawLand();
 	drawRadars();
+	drawFlights();
 	drawShadow();
 	drawMarkers();
 	drawDetail();
-	drawFlights();
 }
 
 
@@ -1160,7 +1160,7 @@ void Globe::drawGlobeCircle(double lat, double lon, double radius, int segments)
 			continue;
 		}
 		if (!pointBack(lon1,lat1))
-			XuLine(_radars, this, x, y, x2, y2, 4);
+			XuLine(_radars, this, x, y, x2, y2, 6);
 		x2=x; y2=y;
 	}
 }
