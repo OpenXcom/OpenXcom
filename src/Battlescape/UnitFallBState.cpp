@@ -96,6 +96,14 @@ void UnitFallBState::think()
 			}
 		}
 
+		if ((*unit)->getStatus() == STATUS_WALKING || (*unit)->getStatus() == STATUS_FLYING)
+		{
+			(*unit)->keepWalking(tileBelow, true); 	// advances the phase
+			_parent->getMap()->cacheUnit(*unit);	// make sure the unit sprites are up to date
+			++unit;
+			continue;
+		}
+
 		falling = largeCheck
 			&& (*unit)->getPosition().z != 0
 			&& (*unit)->getTile()->hasNoFloor(tileBelow)
@@ -126,13 +134,7 @@ void UnitFallBState::think()
 				}
 			}
 		}
-
-		if ((*unit)->getStatus() == STATUS_WALKING || (*unit)->getStatus() == STATUS_FLYING)
-		{
-			(*unit)->keepWalking(tileBelow, true); 	// advances the phase
-			_parent->getMap()->cacheUnit(*unit);	// make sure the unit sprites are up to date
-		}
-
+		
 		falling = largeCheck
 			&& (*unit)->getPosition().z != 0
 			&& (*unit)->getTile()->hasNoFloor(tileBelow)
@@ -192,14 +194,15 @@ void UnitFallBState::think()
 						for (std::vector<Position>::iterator bs = bodySections.begin(); bs < bodySections.end(); )
 						{
 							Position originalPosition = (*bs);
+							Position endPosition = originalPosition + offset;
 							Tile *currentTile = _parent->getSave()->getTile(originalPosition);
-							Tile *t = _parent->getSave()->getTile(originalPosition + offset);
-							Tile *bt = _parent->getSave()->getTile(originalPosition + offset + Position(0,0,-1));
+							Tile *t = _parent->getSave()->getTile(endPosition);
+							Tile *bt = _parent->getSave()->getTile(endPosition + Position(0,0,-1));
 
 							bool aboutToBeOccupiedFromAbove = t && std::find(tilesToFallInto.begin(), tilesToFallInto.end(), t) != tilesToFallInto.end();
 							bool alreadyTaken = t && std::find(escapeTiles.begin(), escapeTiles.end(), t) != escapeTiles.end();
 							bool alreadyOccupied = t && t->getUnit() && (t->getUnit() != unitBelow);
-							bool movementBlocked = _parent->getSave()->getPathfinding()->isBlocked(currentTile, t, dir, unitBelow);
+							bool movementBlocked = _parent->getSave()->getPathfinding()->getTUCost(originalPosition, dir, &endPosition, *ub, 0, false) == 255;
 							bool hasFloor = t && !t->hasNoFloor(bt);
 							bool unitCanFly = unitBelow->getMovementType() == MT_FLY;
 
