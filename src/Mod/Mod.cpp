@@ -416,7 +416,7 @@ Font *Mod::getFont(const std::string &name, bool error) const
  */
 Surface *Mod::getSurface(const std::string &name, bool error) const
 {
-	return getRule(name, "Surface", _surfaces, error);
+	return getRule(name, "Sprite", _surfaces, error);
 }
 
 /**
@@ -426,7 +426,7 @@ Surface *Mod::getSurface(const std::string &name, bool error) const
  */
 SurfaceSet *Mod::getSurfaceSet(const std::string &name, bool error) const
 {
-	return getRule(name, "Surface Set", _sets, error);
+	return getRule(name, "Sprite Set", _sets, error);
 }
 
 /**
