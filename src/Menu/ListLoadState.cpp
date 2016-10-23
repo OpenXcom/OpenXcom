@@ -83,7 +83,17 @@ void ListLoadState::lstSavesPress(Action *action)
 		const SaveInfo &saveInfo(_saves[_lstSaves->getSelectedRow()]);
 		for (std::vector<std::string>::const_iterator i = saveInfo.mods.begin(); i != saveInfo.mods.end(); ++i)
 		{
-			if (std::find(Options::mods.begin(), Options::mods.end(), std::make_pair(*i, true)) == Options::mods.end())
+			std::string name;
+			size_t versionInfoBreakPoint = (*i).find(" ver: ");
+			if (versionInfoBreakPoint == std::string::npos)
+			{
+				name = *i;
+			}
+			else
+			{
+				name = (*i).substr(0, versionInfoBreakPoint);
+			}
+			if (std::find(Options::mods.begin(), Options::mods.end(), std::make_pair(name, true)) == Options::mods.end())
 			{
 				confirm = true;
 				break;

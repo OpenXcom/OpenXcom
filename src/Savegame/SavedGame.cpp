@@ -173,6 +173,11 @@ static bool _isCurrentGameType(const SaveInfo &saveInfo, const std::string &curM
 	else
 	{
 		gameMaster = saveInfo.mods[0];
+		size_t pos = gameMaster.find(" ver: ");
+		if (pos != std::string::npos)
+		{
+			gameMaster = gameMaster.substr(0, pos);
+		}
 	}
 
 	if (gameMaster != curMaster)
@@ -585,7 +590,7 @@ void SavedGame::save(const std::string &filename) const
 			{
 				continue;
 			}
-			activeMods.push_back(i->first);
+			activeMods.push_back(i->first + " ver: " + modInfo.getVersion());
 		}
 	}
 	brief["mods"] = activeMods;
