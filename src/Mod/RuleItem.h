@@ -60,7 +60,7 @@ private:
 	int _recoveryPoints;
 	int _armor;
 	int _turretType;
-	bool _recover, _liveAlien;
+	bool _recover, _ignoreInBaseDefense, _liveAlien;
 	int _blastRadius, _attraction;
 	bool _flatRate, _arcingShot;
 	int _listOrder, _maxRange, _aimRange, _snapRange, _autoRange, _minRange, _dropoff, _bulletSpeed, _explosionSpeed, _autoShots, _shotgunPellets;
@@ -166,6 +166,8 @@ public:
 	int getArmor() const;
 	/// Gets the item's recoverability.
 	bool isRecoverable() const;
+	/// Checks if the item can be equipped in base defense mission.
+	bool canBeEquippedBeforeBaseDefense() const;
 	/// Gets the item's turret type.
 	int getTurretType() const;
 	/// Checks if this a live alien.
