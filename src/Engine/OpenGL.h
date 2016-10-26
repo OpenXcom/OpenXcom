@@ -22,13 +22,17 @@ class Surface;
 
 #ifndef __APPLE__
 extern PFNGLCREATEPROGRAMPROC glCreateProgram;
+extern PFNGLDELETEPROGRAMPROC glDeleteProgram;
 extern PFNGLUSEPROGRAMPROC glUseProgram;
+extern PFNGLISPROGRAMPROC glIsProgram;
+extern PFNGLISSHADERPROC glIsShader;
 extern PFNGLCREATESHADERPROC glCreateShader;
 extern PFNGLDELETESHADERPROC glDeleteShader;
 extern PFNGLSHADERSOURCEPROC glShaderSource;
 extern PFNGLCOMPILESHADERPROC glCompileShader;
 extern PFNGLATTACHSHADERPROC glAttachShader;
 extern PFNGLDETACHSHADERPROC glDetachShader;
+extern PFNGLGETATTACHEDSHADERSPROC glGetAttachedShaders;
 extern PFNGLLINKPROGRAMPROC glLinkProgram;
 extern PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation;
 extern PFNGLUNIFORM1IPROC glUniform1i;
