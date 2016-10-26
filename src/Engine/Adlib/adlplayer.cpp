@@ -26,6 +26,15 @@
 #include <memory.h>
 #include "fmopl.h"
 
+/* Reading a 2-byte value from an unaligned address requires byte-copies on some
+ * systems, which the system-memcpy takes care of for us */
+static inline unsigned short peek_u16(const unsigned char *ptr)
+{
+	unsigned short value;
+	memcpy(&value, ptr, sizeof(value));
+	return value;
+}
+
 const int16_t adl_gv_freq_table[] = { // 9 * 12 -- notes frequency
 	0x0B5,0x0C0,0x0CC,0x0D8,0x0E5,0x0F2,0x101,0x110,0x120,0x131,0x143,0x157,
 	0x16B,0x181,0x198,0x1B0,0x1CA,0x1E5,0x202,0x220,0x241,0x263,0x287,0x2AE,
@@ -719,14 +728,14 @@ void init_music_data(unsigned char* music_ptr,int length)
 	adl_gv_subtracks_count = *(music_ptr++);
 	for(i=0; i<adl_gv_subtracks_count; ++i)
 	{
-		to_add = *((unsigned short*)music_ptr); //reading 16bit length
+		to_add = peek_u16(music_ptr); //reading 16bit length
 		adl_gv_subtracks[i] = music_ptr+4; //store subtrack pointers
 		music_ptr += to_add;
 	}
 	adl_gv_instruments_count = *(music_ptr++);
 	for (i=0; i<adl_gv_instruments_count; ++i)
 	{
-		to_add = *((unsigned short*)music_ptr); //reading 16bit length
+		to_add = peek_u16(music_ptr); //reading 16bit length
 		if (adl_gv_FORMAT==1) 
 		{
 			j = *(music_ptr+4);
