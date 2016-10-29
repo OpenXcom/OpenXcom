@@ -33,6 +33,7 @@
 #include "../Engine/Options.h"
 #include "../Savegame/AlienMission.h"
 #include "InterceptState.h"
+#include "../Mod/RuleCraft.h"
 
 namespace OpenXcom
 {
@@ -138,13 +139,27 @@ UfoDetectedState::UfoDetectedState(Ufo *ufo, GeoscapeState *state, bool detected
 
 	_lstInfo->setColumns(2, 77, 140);
 	_lstInfo->setDot(true);
+
 	std::wostringstream ss;
 	ss << L'\x01' << tr(_ufo->getRules()->getSize());
 	_lstInfo->addRow(2, tr("STR_SIZE_UC").c_str(), ss.str().c_str());
 	ss.str(L"");
+
 	std::string altitude = _ufo->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _ufo->getAltitude();
+	// Let's assume if there's any underwater craft, the UFO are underwater too
+	bool underwater = false;
+	const std::vector<std::string> &crafts = _game->getMod()->getCraftsList();
+	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end() && !underwater; ++i)
+	{
+		underwater = _game->getMod()->getCraft(*i)->getMaxDepth() > 0;
+	}
+	if (underwater && !_state->getGlobe()->insideLand(_ufo->getLongitude(), _ufo->getLatitude()))
+	{
+		altitude = "STR_AIRBORNE";
+	}
 	ss << L'\x01' << tr(altitude);
 	_lstInfo->addRow(2, tr("STR_ALTITUDE").c_str(), ss.str().c_str());
+
 	std::string heading = _ufo->getDirection();
 	if (_ufo->getStatus() != Ufo::FLYING)
 	{
@@ -153,21 +168,26 @@ UfoDetectedState::UfoDetectedState(Ufo *ufo, GeoscapeState *state, bool detected
 	ss.str(L"");
 	ss << L'\x01' << tr(heading);
 	_lstInfo->addRow(2, tr("STR_HEADING").c_str(), ss.str().c_str());
+
 	ss.str(L"");
 	ss << L'\x01' << Text::formatNumber(_ufo->getSpeed());
 	_lstInfo->addRow(2, tr("STR_SPEED").c_str(), ss.str().c_str());
 
 	_lstInfo2->setColumns(2, 77, 140);
 	_lstInfo2->setDot(true);
+
 	ss.str(L"");
 	ss << L'\x01' << tr(_ufo->getRules()->getType());
 	_lstInfo2->addRow(2, tr("STR_CRAFT_TYPE").c_str(), ss.str().c_str());
+
 	ss.str(L"");
 	ss << L'\x01' << tr(_ufo->getAlienRace());
 	_lstInfo2->addRow(2, tr("STR_RACE").c_str(), ss.str().c_str());
+
 	ss.str(L"");
 	ss << L'\x01' << tr(_ufo->getMissionType());
 	_lstInfo2->addRow(2, tr("STR_MISSION").c_str(), ss.str().c_str());
+
 	ss.str(L"");
 	ss << L'\x01' << tr(_ufo->getMission()->getRegion());
 	_lstInfo2->addRow(2, tr("STR_ZONE").c_str(), ss.str().c_str());
