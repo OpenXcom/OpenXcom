@@ -637,6 +637,12 @@ void Game::initAudio()
 		format = AUDIO_S8;
 	else
 		format = AUDIO_S16SYS;
+	if (Options::audioSampleRate >= 44100)
+		Options::audioChunkSize = std::max(2048, Options::audioChunkSize);
+	else if (Options::audioSampleRate >= 22050)
+		Options::audioChunkSize = std::max(1028, Options::audioChunkSize);
+	else if (Options::audioSampleRate >= 11025)
+		Options::audioChunkSize = std::max(512, Options::audioChunkSize);
 	if (Mix_OpenAudio(Options::audioSampleRate, format, 2, 1024) != 0)
 	{
 		Log(LOG_ERROR) << Mix_GetError();

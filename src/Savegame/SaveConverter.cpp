@@ -76,7 +76,7 @@ template <> std::wstring load(char* data) { return Language::utf8ToWstr(data); }
 
 char *SaveConverter::binaryBuffer(const std::string &filename, std::vector<char> &buffer) const
 {
-	std::string s = _savePath + "/" + filename;
+	std::string s = _savePath + CrossPlatform::PATH_SEPARATOR + filename;
 	std::ifstream datFile(s.c_str(), std::ios::in | std::ios::binary);
 	if (!datFile)
 	{
@@ -96,7 +96,7 @@ SaveConverter::SaveConverter(int save, Mod *mod) : _save(0), _mod(mod), _rules(m
 {
 	std::ostringstream ssFolder, ssPath;
 	ssFolder << "GAME_" << save;
-	ssPath << Options::getMasterUserFolder() << "/" << ssFolder.str();
+	ssPath << Options::getMasterUserFolder() << ssFolder.str();
 	_saveName = ssFolder.str();
 	_savePath = ssPath.str();
 	ssPath << "/SAVEINFO.DAT";
@@ -124,7 +124,7 @@ void SaveConverter::getList(Language *lang, SaveOriginal info[NUM_SAVES])
 
 		int id = i + 1;
 		std::ostringstream ss;
-		ss << Options::getMasterUserFolder() << "/GAME_" << id << "/SAVEINFO.DAT";
+		ss << Options::getMasterUserFolder() << "GAME_" << id << CrossPlatform::PATH_SEPARATOR << "SAVEINFO.DAT";
 		std::ifstream datFile(ss.str().c_str(), std::ios::in | std::ios::binary);
 		if (datFile)
 		{

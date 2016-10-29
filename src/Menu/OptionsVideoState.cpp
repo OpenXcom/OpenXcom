@@ -222,7 +222,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 		std::string file = (*i);
 		std::string path = GL_FOLDER + file;
 		std::string name = file.substr(0, file.length() - GL_EXT.length() - 1) + GL_STRING;
-		filterNames.push_back(Language::fsToWstr(name));
+		filterNames.push_back(Language::fsToWstr(ucWords(name)));
 		_filters.push_back(path);
 	}
 #endif
@@ -325,6 +325,27 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 OptionsVideoState::~OptionsVideoState()
 {
 
+}
+
+/**
+ * Uppercases all the words in a string.
+ * @param str Source string.
+ * @return Destination string.
+ */
+std::string OptionsVideoState::ucWords(std::string str)
+{
+	for (size_t i = 0; i < str.length(); ++i)
+	{
+		if (i == 0)
+			str[0] = toupper(str[0]);
+		else if (str[i] == ' ' || str[i] == '-' || str[i] == '_')
+		{
+			str[i] = ' ';
+			if (str.length() > i + 1)
+				str[i + 1] = toupper(str[i + 1]);
+		}
+	}
+	return str;
 }
 
 /**

@@ -796,7 +796,8 @@ void FlcPlayer::initAudio(Uint16 format, Uint8 channels)
 
 	if (err)
 	{
-		printf("Failed to open audio (%d)\n", err);
+		Log(LOG_WARNING) << Mix_GetError();
+		Log(LOG_WARNING) << "Failed to init cutscene audio";
 		return;
 	}
 
@@ -826,7 +827,7 @@ void FlcPlayer::deInitAudio()
 		Mix_CloseAudio();
 		_game->initAudio();
 	}
-  else if(_audioData.sharedLock)
+	else if(_audioData.sharedLock)
 		SDL_DestroySemaphore(_audioData.sharedLock);
 
 	if (_audioData.loadingBuffer)

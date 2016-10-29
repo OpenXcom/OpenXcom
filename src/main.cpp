@@ -120,7 +120,6 @@ int main(int argc, char *argv[])
 	game->setState(new StartState);
 	game->run();
 
-	Options::save();
 	// Comment this for faster exit.
 	delete game;
 	return EXIT_SUCCESS;

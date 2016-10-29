@@ -114,6 +114,7 @@ void create()
 	_info.push_back(OptionInfo("globeAllRadarsOnBaseBuild", &globeAllRadarsOnBaseBuild, true));
 	_info.push_back(OptionInfo("audioSampleRate", &audioSampleRate, 22050));
 	_info.push_back(OptionInfo("audioBitDepth", &audioBitDepth, 16));
+	_info.push_back(OptionInfo("audioChunkSize", &audioChunkSize, 1024));
 	_info.push_back(OptionInfo("pauseMode", &pauseMode, 0));
 	_info.push_back(OptionInfo("battleNotifyDeath", &battleNotifyDeath, false));
 	_info.push_back(OptionInfo("showFundsOnGeoscape", &showFundsOnGeoscape, false));
@@ -448,7 +449,7 @@ static void _scanMods(const std::string &modsDir)
 	std::vector<std::string> contents = CrossPlatform::getFolderContents(modsDir);
 	for (std::vector<std::string>::iterator i = contents.begin(); i != contents.end(); ++i)
 	{
-		std::string modPath = modsDir + "/" + *i;
+		std::string modPath = modsDir + CrossPlatform::PATH_SEPARATOR + *i;
 		if (!CrossPlatform::folderExists(modPath))
 		{
 			// skip non-directories (e.g. README.txt)
@@ -846,7 +847,7 @@ void userSplitMasters()
 				std::vector<std::string> mods = doc["mods"].as<std::vector< std::string> >(std::vector<std::string>());
 				if (std::find(mods.begin(), mods.end(), (*i)) != mods.end())
 				{
-					std::string dstFile = masterFolder + "/" + (*j);
+					std::string dstFile = masterFolder + CrossPlatform::PATH_SEPARATOR + (*j);
 					CrossPlatform::moveFile(srcFile, dstFile);
 					j = saves.erase(j);
 				}
@@ -1030,7 +1031,7 @@ std::string getConfigFolder()
  */
 std::string getMasterUserFolder()
 {
-	return _userFolder + getActiveMaster() + "/";
+	return _userFolder + getActiveMaster() + CrossPlatform::PATH_SEPARATOR;
 }
 
 /**
