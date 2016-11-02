@@ -412,9 +412,9 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 		if (mod->getAlienMission(missionType))
 		{
 			const RuleAlienMission &mRule = *mod->getAlienMission(missionType);
-			std::auto_ptr<AlienMission> mission(new AlienMission(mRule));
+			AlienMission *mission = new AlienMission(mRule);
 			mission->load(*it, *this);
-			_activeMissions.push_back(mission.release());
+			_activeMissions.push_back(mission);
 		}
 		else
 		{

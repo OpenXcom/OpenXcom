@@ -83,9 +83,9 @@ void AlienStrategy::load(const YAML::Node &node)
 	{
 		std::string region = (*nn)["region"].as<std::string>();
 		const YAML::Node &missions = (*nn)["missions"];
-		std::auto_ptr<WeightedOptions> options(new WeightedOptions());
+		WeightedOptions *options = new WeightedOptions();
 		options->load(missions);
-		_regionMissions.insert(std::make_pair(region, options.release()));
+		_regionMissions.insert(std::make_pair(region, options));
 	}
 	_missionLocations = node["missionLocations"].as< std::map<std::string, std::vector<std::pair<std::string, int> > > >(_missionLocations);
 	_missionRuns = node["missionsRun"].as< std::map<std::string, int> >(_missionRuns);

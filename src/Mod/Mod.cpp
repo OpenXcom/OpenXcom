@@ -1056,30 +1056,30 @@ void Mod::loadFile(const std::string &filename)
 		}
 		else
 		{
-			std::auto_ptr<MCDPatch> patch(new MCDPatch());
+			MCDPatch *patch = new MCDPatch();
 			patch->load(*i);
-			_MCDPatches[type] = patch.release();
+			_MCDPatches[type] = patch;
 			_MCDPatchesIndex.push_back(type);
 		}
 	}
 	for (YAML::const_iterator i = doc["extraSprites"].begin(); i != doc["extraSprites"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		std::auto_ptr<ExtraSprites> extraSprites(new ExtraSprites());
+		ExtraSprites *extraSprites = new ExtraSprites();
 		// doesn't support modIndex
 		if (type != "TEXTURE.DAT")
 			extraSprites->load(*i, _modOffset);
 		else
 			extraSprites->load(*i, 0);
-		_extraSprites.push_back(std::make_pair(type, extraSprites.release()));
+		_extraSprites.push_back(std::make_pair(type, extraSprites));
 		_extraSpritesIndex.push_back(type);
 	}
 	for (YAML::const_iterator i = doc["extraSounds"].begin(); i != doc["extraSounds"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		std::auto_ptr<ExtraSounds> extraSounds(new ExtraSounds());
+		ExtraSounds *extraSounds = new ExtraSounds();
 		extraSounds->load(*i, _modOffset);
-		_extraSounds.push_back(std::make_pair(type, extraSounds.release()));
+		_extraSounds.push_back(std::make_pair(type, extraSounds));
 		_extraSoundsIndex.push_back(type);
 	}
 	for (YAML::const_iterator i = doc["extraStrings"].begin(); i != doc["extraStrings"].end(); ++i)
@@ -1091,9 +1091,9 @@ void Mod::loadFile(const std::string &filename)
 		}
 		else
 		{
-			std::auto_ptr<ExtraStrings> extraStrings(new ExtraStrings());
+			ExtraStrings *extraStrings = new ExtraStrings();
 			extraStrings->load(*i);
-			_extraStrings[type] = extraStrings.release();
+			_extraStrings[type] = extraStrings;
 			_extraStringsIndex.push_back(type);
 		}
 	}
@@ -1204,9 +1204,9 @@ void Mod::loadFile(const std::string &filename)
 		}
 		for (YAML::const_iterator j = (*i)["commands"].begin(); j != (*i)["commands"].end(); ++j)
 		{
-			std::auto_ptr<MapScript> mapScript(new MapScript());
+			MapScript *mapScript = new MapScript();
 			mapScript->load(*j);
-			_mapScripts[type].push_back(mapScript.release());
+			_mapScripts[type].push_back(mapScript);
 		}
 	}
 	for (YAML::const_iterator i = doc["missionScripts"].begin(); i != doc["missionScripts"].end(); ++i)
@@ -1248,9 +1248,9 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["commendations"].begin(); i != doc["commendations"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		std::auto_ptr<RuleCommendations> commendations(new RuleCommendations());
+		RuleCommendations *commendations = new RuleCommendations();
 		commendations->load(*i);
-		_commendations[type] = commendations.release();
+		_commendations[type] = commendations;
 	}
 	size_t count = 0;
 	for (YAML::const_iterator i = doc["aimAndArmorMultipliers"].begin(); i != doc["aimAndArmorMultipliers"].end() && count < 5; ++i)
