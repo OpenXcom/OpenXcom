@@ -90,6 +90,8 @@ PFNGLCOMPILESHADERPROC glCompileShader = 0;
 PFNGLATTACHSHADERPROC glAttachShader = 0;
 PFNGLDETACHSHADERPROC glDetachShader = 0;
 PFNGLGETATTACHEDSHADERSPROC glGetAttachedShaders = 0;
+PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog = 0;
+PFNGLGETPROGRAMIVPROC glGetProgramiv = 0;
 PFNGLGETSHADERINFOLOGPROC glGetShaderInfoLog = 0;
 PFNGLGETSHADERIVPROC glGetShaderiv = 0;
 PFNGLLINKPROGRAMPROC glLinkProgram = 0;
@@ -303,6 +305,25 @@ void OpenGL::set_shader(const char *source_yaml_filename)
 
 	glLinkProgram(glprogram);
 	glErrorCheck();
+	GLint linkStatus;
+	glGetProgramiv(glprogram, GL_LINK_STATUS, &linkStatus);
+	glErrorCheck();
+	if (linkStatus != GL_TRUE)
+	{
+		GLint infoLogLength;
+		glGetProgramiv(glprogram, GL_INFO_LOG_LENGTH, &infoLogLength);
+		glErrorCheck();
+		GLchar *infoLog = new GLchar[infoLogLength];
+		glGetProgramInfoLog(glprogram, infoLogLength, NULL, infoLog);
+		glErrorCheck();
+
+		Log(LOG_ERROR) << "OpenGL shader link failed \"" << infoLog << "\"\n";
+
+		delete[] infoLog;
+		glDeleteProgram(glprogram);
+		glErrorCheck();
+		glprogram = 0;
+	}
 }
 
 static GLuint createShader(GLenum type, const char *source)
@@ -317,6 +338,7 @@ static GLuint createShader(GLenum type, const char *source)
 	GLint compileSuccess;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &compileSuccess);
 	glErrorCheck();
+	Log(LOG_WARNING) << source;
 	if (compileSuccess != GL_TRUE)
 	{
 		GLint infoLogLength;
@@ -376,6 +398,8 @@ void OpenGL::init(int w, int h)
 	glAttachShader = (PFNGLATTACHSHADERPROC)glGetProcAddress("glAttachShader");
 	glDetachShader = (PFNGLDETACHSHADERPROC)glGetProcAddress("glDetachShader");
 	glGetAttachedShaders = (PFNGLGETATTACHEDSHADERSPROC)glGetProcAddress("glGetAttachedShaders");
+	glGetProgramiv = (PFNGLGETPROGRAMIVPROC)glGetProcAddress("glGetProgramiv");
+	glGetProgramInfoLog = (PFNGLGETPROGRAMINFOLOGPROC)glGetProcAddress("glGetProgramInfoLog");
 	glGetShaderiv = (PFNGLGETSHADERIVPROC)glGetProcAddress("glGetShaderiv");
 	glGetShaderInfoLog = (PFNGLGETSHADERINFOLOGPROC)glGetProcAddress("glGetShaderInfoLog");
 	glLinkProgram = (PFNGLLINKPROGRAMPROC)glGetProcAddress("glLinkProgram");
@@ -396,7 +420,7 @@ void OpenGL::init(int w, int h)
 	&& glDeleteShader && glShaderSource && glCompileShader && glAttachShader
 	&& glDetachShader && glLinkProgram && glGetUniformLocation && glIsProgram && glIsShader
 	&& glUniform1i && glUniform2fv && glUniform4fv && glGetAttachedShaders
-	&& glGetShaderiv && glGetShaderInfoLog;
+	&& glGetShaderiv && glGetShaderInfoLog && glGetProgramiv && glGetProgramInfoLog;
 	
 	if (shader_support)
 	{
