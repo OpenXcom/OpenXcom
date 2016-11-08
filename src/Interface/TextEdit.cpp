@@ -386,7 +386,6 @@ bool TextEdit::isValidChar(Uint16 key)
 	{
 	case TEC_NUMERIC_POSITIVE:
 		return key >= L'0' && key <= L'9';
-		break;
 
 	// If constraint is "(signed) numeric", need to check:
 	// - user does not input a character before '-' or '+'
@@ -401,15 +400,12 @@ bool TextEdit::isValidChar(Uint16 key)
 			return ((key >= L'0' && key <= L'9') || key == L'+' || key == L'-') &&
 				(_value.size() == 0 || (_value[0] != L'+' && _value[0] != L'-'));
 		}
-		break;
 
 	case TEC_NONE:
 		return (key >= L' ' && key <= L'~') || key >= 160;
-		break;
 
 	default:
 		return false;
-		break;
 	}
 }
 
