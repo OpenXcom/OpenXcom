@@ -147,8 +147,6 @@ void OpenGL::clear() {
 	glErrorCheck();
 	glClear(GL_COLOR_BUFFER_BIT);
 	glErrorCheck();
-	glFlush();
-	glErrorCheck();
 }
 
 void OpenGL::refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned outwidth, unsigned outheight, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand)
@@ -220,9 +218,6 @@ void OpenGL::refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned 
 	glEnd();
 	glErrorCheck();
 
-	glFlush();
-	glErrorCheck();
-
     if (shader_support)
 	{
 		glUseProgram(0);
@@ -230,49 +225,44 @@ void OpenGL::refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned 
 	}
 }
 
-void OpenGL::set_shader(const char *source_yaml_filename)
+bool OpenGL::set_shader(const char *source_yaml_filename)
 {
-	if (!shader_support) return;
+	if (!shader_support) return false;
 
-	GLsizei tCount;
-	GLuint tShader[2];
-	if (fragmentshader)
+	if (glprogram)
 	{
-		if (glprogram)
+		GLsizei tCount;
+		GLuint tShader[2];
+		glGetAttachedShaders(glprogram, 2, &tCount, tShader);
+		glErrorCheck();
+		if (fragmentshader)
 		{
-			glGetAttachedShaders(glprogram,  2,  &tCount,  tShader);
-			glErrorCheck();
-			if ((tCount>0 && tShader[0]==fragmentshader) || (tCount>1 && tShader[1]==fragmentshader)) //necessary check
+			if ((tCount > 0 && tShader[0] == fragmentshader) || (tCount > 1 && tShader[1] == fragmentshader)) //necessary check
 			{
 				glDetachShader(glprogram, fragmentshader);
 				glErrorCheck();
 			}
+			if (glIsShader(fragmentshader))
+			{
+				glDeleteShader(fragmentshader);
+				glErrorCheck();
+				fragmentshader = 0;
+			}
 		}
-		if (glIsShader(fragmentshader))
-		{
-			glDeleteShader(fragmentshader);
-			glErrorCheck();
-			fragmentshader = 0;
-		}
-    }
 
-	if (vertexshader)
-	{
-		if (glprogram)
-		{
-			glGetAttachedShaders(glprogram,  2,  &tCount,  tShader);
-			glErrorCheck();
-			if ((tCount>0 && tShader[0]==vertexshader) || (tCount>1 && tShader[1]==vertexshader)) //necessary check
+		if (vertexshader)
+		{			
+			if ((tCount>0 && tShader[0] == vertexshader) || (tCount>1 && tShader[1] == vertexshader)) //necessary check
 			{
 				glDetachShader(glprogram, vertexshader);
 				glErrorCheck();
 			}
-		}
-		if (glIsShader(vertexshader))
-		{
-			glDeleteShader(vertexshader);
-			glErrorCheck();
-			vertexshader = 0;
+			if (glIsShader(vertexshader))
+			{
+				glDeleteShader(vertexshader);
+				glErrorCheck();
+				vertexshader = 0;
+			}
 		}
 	}
 
@@ -324,6 +314,8 @@ void OpenGL::set_shader(const char *source_yaml_filename)
 		glErrorCheck();
 		glprogram = 0;
 	}
+
+	return !(glprogram == 0 || vertexshader == 0 || fragmentshader == 0);
 }
 
 static GLuint createShader(GLenum type, const char *source)
@@ -371,7 +363,7 @@ void OpenGL::set_fragment_shader(const char *source)
 void OpenGL::set_vertex_shader(const char *source)
 {
 	vertexshader = createShader(GL_VERTEX_SHADER, source);
-	if (fragmentshader)
+	if (vertexshader)
 	{
 		glAttachShader(glprogram, vertexshader);
 		glErrorCheck();

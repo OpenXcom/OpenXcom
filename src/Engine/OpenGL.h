@@ -20,30 +20,6 @@ namespace OpenXcom
 
 class Surface;
 
-#ifndef __APPLE__
-extern PFNGLCREATEPROGRAMPROC glCreateProgram;
-extern PFNGLDELETEPROGRAMPROC glDeleteProgram;
-extern PFNGLUSEPROGRAMPROC glUseProgram;
-extern PFNGLISPROGRAMPROC glIsProgram;
-extern PFNGLISSHADERPROC glIsShader;
-extern PFNGLCREATESHADERPROC glCreateShader;
-extern PFNGLDELETESHADERPROC glDeleteShader;
-extern PFNGLSHADERSOURCEPROC glShaderSource;
-extern PFNGLCOMPILESHADERPROC glCompileShader;
-extern PFNGLATTACHSHADERPROC glAttachShader;
-extern PFNGLDETACHSHADERPROC glDetachShader;
-extern PFNGLGETATTACHEDSHADERSPROC glGetAttachedShaders;
-extern PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog;
-extern PFNGLGETPROGRAMIVPROC glGetProgramiv;
-extern PFNGLGETSHADERINFOLOGPROC glGetShaderInfoLog;
-extern PFNGLGETSHADERIVPROC glGetShaderiv;
-extern PFNGLLINKPROGRAMPROC glLinkProgram;
-extern PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation;
-extern PFNGLUNIFORM1IPROC glUniform1i;
-extern PFNGLUNIFORM2FVPROC glUniform2fv;
-extern PFNGLUNIFORM4FVPROC glUniform4fv;
-#endif
-
 std::string strGLError(GLenum glErr);
 
 #define glErrorCheck() {\
@@ -85,7 +61,7 @@ public:
   /// make the buffer show up on screen
   void refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned outwidth, unsigned outheight, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand);
   /// set a shader! but what kind?
-  void set_shader(const char *source);
+  bool set_shader(const char *source);
   /// same but for fragment shader?
   void set_fragment_shader(const char *source);
   /// and vertex?
