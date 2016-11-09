@@ -338,7 +338,6 @@ static GLuint createShader(GLenum type, const char *source)
 	GLint compileSuccess;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &compileSuccess);
 	glErrorCheck();
-	Log(LOG_WARNING) << source;
 	if (compileSuccess != GL_TRUE)
 	{
 		GLint infoLogLength;
