@@ -361,11 +361,21 @@ static GLuint createShader(GLenum type, const char *source)
 void OpenGL::set_fragment_shader(const char *source)
 {
 	fragmentshader = createShader(GL_FRAGMENT_SHADER, source);
+	if (fragmentshader)
+	{
+		glAttachShader(glprogram, fragmentshader);
+		glErrorCheck();
+	}
 }
 
 void OpenGL::set_vertex_shader(const char *source)
 {
 	vertexshader = createShader(GL_VERTEX_SHADER, source);
+	if (fragmentshader)
+	{
+		glAttachShader(glprogram, vertexshader);
+		glErrorCheck();
+	}
 }
 
 void OpenGL::init(int w, int h)
