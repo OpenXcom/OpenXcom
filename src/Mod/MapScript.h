@@ -33,7 +33,7 @@ struct TunnelData
  {
 	std::map<std::string, MCDReplacement> replacements;
 	int level;
-	MCDReplacement *getMCDReplacement(std::string type)
+	MCDReplacement *getMCDReplacement(const std::string& type)
 	{
 		if (replacements.find(type) == replacements.end())
 		{

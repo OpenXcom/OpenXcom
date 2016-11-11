@@ -646,7 +646,7 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
 	int *spiralArray;
 	int spiralCount;
 
-	int minZ, maxZ;
+	int minZ = 0, maxZ = 0;
 	bool minZfound = false, maxZfound = false;
 
 	if (part == O_OBJECT)
@@ -1252,13 +1252,13 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 									if (distance(dest->getPosition(), Position(centerX, centerY, centerZ)) < 2)
 									{
 										// ground zero effect is in effect
-										bu->damage(Position(0, 0, 0), (int)(RNG::generate(min, max)), type);
+										bu->damage(Position(0, 0, 0), (RNG::generate(min, max)), type);
 									}
 									else
 									{
 										// directional damage relative to explosion position.
 										// units above the explosion will be hit in the legs, units lateral to or below will be hit in the torso
-										bu->damage(Position(centerX, centerY, centerZ + 5) - dest->getPosition(), (int)(RNG::generate(min, max)), type);
+										bu->damage(Position(centerX, centerY, centerZ + 5) - dest->getPosition(), (RNG::generate(min, max)), type);
 									}
 								}
 								bool done = false;
@@ -2071,7 +2071,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
  * @param pos The starting position
  * @param part The part to open, defines which direction to check.
  */
-void TileEngine::checkAdjacentDoors(Position pos, int part)
+void TileEngine::checkAdjacentDoors(const Position& pos, int part)
 {
 	Position offset;
 	bool westSide = (part == 1);
@@ -2659,7 +2659,7 @@ bool TileEngine::validMeleeRange(BattleUnit *attacker, BattleUnit *target, int d
  * @param dest Destination position.
  * @return True when the range is valid.
  */
-bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target, Position *dest, bool preferEnemy)
+bool TileEngine::validMeleeRange(const Position& pos, int direction, BattleUnit *attacker, BattleUnit *target, Position *dest, bool preferEnemy)
 {
 	if (direction < 0 || direction > 7)
 	{
@@ -2773,7 +2773,7 @@ int TileEngine::faceWindow(const Position &position)
  * @param voxelType The type of voxel at which this parabola terminates.
  * @return Validity of action.
  */
-bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Position targetVoxel, double *curve, int *voxelType)
+bool TileEngine::validateThrow(BattleAction &action, const Position& originVoxel, const Position& targetVoxel, double *curve, int *voxelType)
 {
 	bool foundCurve = false;
 	double curvature = 0.5;
@@ -2972,7 +2972,7 @@ Position TileEngine::getOriginVoxel(BattleAction &action, Tile *tile)
  * @param radius how far to spread out.
  * @param unit the unit that is triggering this action.
  */
-void TileEngine::setDangerZone(Position pos, int radius, BattleUnit *unit)
+void TileEngine::setDangerZone(const Position& pos, int radius, BattleUnit *unit)
 {
 	Tile *tile = _save->getTile(pos);
 	if (!tile)

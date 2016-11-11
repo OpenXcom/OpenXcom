@@ -225,7 +225,7 @@ public:
 	/// Checks whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit).
 	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
 	/// Attempts to place a unit on or near entryPoint.
-	bool placeUnitNearPosition(BattleUnit *unit, Position entryPoint, bool largeFriend);
+	bool placeUnitNearPosition(BattleUnit *unit, const Position& entryPoint, bool largeFriend);
 	/// Resets the turn counter.
 	void resetTurnCounter();
 	/// Resets the visibility of all tiles on the map.
@@ -269,7 +269,7 @@ public:
 	/// Get the name of the music track.
 	std::string &getMusic();
 	/// Set the name of the music track.
-	void setMusic(std::string track);
+	void setMusic(const std::string& track);
 	/// Sets the objective type for this mission.
 	void setObjectiveType(int type);
 	/// Gets the objective type of this mission.

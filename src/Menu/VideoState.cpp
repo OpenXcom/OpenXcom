@@ -428,7 +428,7 @@ void VideoState::init()
 	FlcPlayer *flcPlayer = NULL;
 	for (std::vector<std::string>::const_iterator it = _videos->begin(); it != _videos->end(); ++it)
 	{
-		std::string videoFileName = FileMap::getFilePath(*it);
+		const std::string& videoFileName = FileMap::getFilePath(*it);
 
 		if (!CrossPlatform::fileExists(videoFileName))
 		{

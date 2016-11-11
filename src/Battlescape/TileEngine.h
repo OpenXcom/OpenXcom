@@ -99,7 +99,7 @@ public:
 	/// Returns melee validity between two units.
 	bool validMeleeRange(BattleUnit *attacker, BattleUnit *target, int dir);
 	/// Returns validity of a melee attack from a given position.
-	bool validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target, Position *dest, bool preferEnemy = true);
+	bool validMeleeRange(const Position& pos, int direction, BattleUnit *attacker, BattleUnit *target, Position *dest, bool preferEnemy = true);
 	/// Gets the AI to look through a window.
 	int faceWindow(const Position &position);
 	/// Checks a unit's % exposure on a tile.
@@ -117,9 +117,9 @@ public:
 	/// Blows this tile up.
 	bool detonate(Tile* tile);
 	/// Validates a throwing action.
-	bool validateThrow(BattleAction &action, Position originVoxel, Position targetVoxel, double *curve = 0, int *voxelType = 0);
+	bool validateThrow(BattleAction &action, const Position& originVoxel, const Position& targetVoxel, double *curve = 0, int *voxelType = 0);
 	/// Opens any doors this door is connected to.
-	void checkAdjacentDoors(Position pos, int part);
+	void checkAdjacentDoors(const Position& pos, int part);
 	/// Creates a vector of units that can spot this unit.
 	std::vector<std::pair<BattleUnit *, int> > getSpottingUnits(BattleUnit* unit);
 	/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.
@@ -135,7 +135,7 @@ public:
 	/// determine the origin voxel of a given action.
 	Position getOriginVoxel(BattleAction &action, Tile *tile);
 	/// mark a region of the map as "dangerous" for a turn.
-	void setDangerZone(Position pos, int radius, BattleUnit *unit);
+	void setDangerZone(const Position& pos, int radius, BattleUnit *unit);
 
 };
 

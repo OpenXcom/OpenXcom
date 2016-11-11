@@ -385,7 +385,7 @@ public:
 	const std::map<std::string, SoundDefinition *> *getSoundDefinitions() const;
 	/// Gets the list of transparency colors,
 	const std::vector<SDL_Color> *getTransparencies() const;
-	const std::vector<MapScript*> *getMapScript(std::string id) const;
+	const std::vector<MapScript*> *getMapScript(const std::string& id) const;
 	/// Gets a video for intro/outro etc.
 	RuleVideo *getVideo(const std::string &id, bool error = false) const;
 	const std::map<std::string, RuleMusic *> *getMusic() const;

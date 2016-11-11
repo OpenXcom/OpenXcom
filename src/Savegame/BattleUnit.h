@@ -485,11 +485,11 @@ public:
 	/// Get the unit murderer's weapon.
 	std::string getMurdererWeapon() const;
 	/// Set the unit murderer's weapon.
-	void setMurdererWeapon(std::string weapon);
+	void setMurdererWeapon(const std::string& weapon);
 	/// Get the unit murderer's weapon's ammo.
 	std::string getMurdererWeaponAmmo() const;
 	/// Set the unit murderer's weapon's ammo.
-	void setMurdererWeaponAmmo(std::string weaponAmmo);
+	void setMurdererWeaponAmmo(const std::string& weaponAmmo);
 	/// Set the unit mind controller's id.
 	void setMindControllerId(int id);
 	/// Get the unit mind controller's id.
