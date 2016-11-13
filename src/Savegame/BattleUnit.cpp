@@ -3198,7 +3198,7 @@ std::string BattleUnit::getMurdererWeapon() const
  * Set the murderer's weapon.
  * @param string murderer's weapon.
  */
-void BattleUnit::setMurdererWeapon(std::string weapon)
+void BattleUnit::setMurdererWeapon(const std::string& weapon)
 {
 	_murdererWeapon = weapon;
 }
@@ -3216,7 +3216,7 @@ std::string BattleUnit::getMurdererWeaponAmmo() const
  * Set the murderer's weapon's ammo.
  * @param string murderer weapon ammo.
  */
-void BattleUnit::setMurdererWeaponAmmo(std::string weaponAmmo)
+void BattleUnit::setMurdererWeaponAmmo(const std::string& weaponAmmo)
 {
 	_murdererWeaponAmmo = weaponAmmo;
 }

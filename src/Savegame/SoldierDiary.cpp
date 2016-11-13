@@ -546,7 +546,7 @@ void SoldierDiary::manageModularCommendations(std::map<std::string, int> &nextCo
  * @param type string
  * @param noun string
  */
-void SoldierDiary::awardCommendation(std::string type, std::string noun)
+void SoldierDiary::awardCommendation(const std::string& type, const std::string& noun)
 {
 	bool newCommendation = true;
 	for (std::vector<SoldierCommendations*>::iterator i = _commendations.begin() ; i != _commendations.end() ; ++i)

@@ -1705,7 +1705,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
  * @param entryPoint The position around which to attempt to place the unit.
  * @return True if the unit was successfully placed.
  */
-bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, Position entryPoint, bool largeFriend)
+bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, const Position& entryPoint, bool largeFriend)
 {
 	if (setUnitPosition(unit, entryPoint))
 	{
@@ -1947,7 +1947,7 @@ std::string &SavedBattleGame::getMusic()
  * Set the music track for this battle.
  * @param track the track name.
  */
-void SavedBattleGame::setMusic(std::string track)
+void SavedBattleGame::setMusic(const std::string& track)
 {
 	_music = track;
 }

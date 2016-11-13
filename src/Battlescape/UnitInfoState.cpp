@@ -505,19 +505,19 @@ void UnitInfoState::init()
 	_barReactions->setValue(_unit->getBaseStats()->reactions);
 
 	ss.str(L"");
-	ss << (int)((_unit->getBaseStats()->firing * _unit->getHealth()) / _unit->getBaseStats()->health);
+	ss << ((_unit->getBaseStats()->firing * _unit->getHealth()) / _unit->getBaseStats()->health);
 	_numFiring->setText(ss.str());
 	_barFiring->setMax(_unit->getBaseStats()->firing);
 	_barFiring->setValue((_unit->getBaseStats()->firing * _unit->getHealth()) / _unit->getBaseStats()->health);
 
 	ss.str(L"");
-	ss << (int)((_unit->getBaseStats()->throwing * _unit->getHealth()) / _unit->getBaseStats()->health);
+	ss << ((_unit->getBaseStats()->throwing * _unit->getHealth()) / _unit->getBaseStats()->health);
 	_numThrowing->setText(ss.str());
 	_barThrowing->setMax(_unit->getBaseStats()->throwing);
 	_barThrowing->setValue((_unit->getBaseStats()->throwing * _unit->getHealth()) / _unit->getBaseStats()->health);
 
 	ss.str(L"");
-	ss << (int)((_unit->getBaseStats()->melee * _unit->getHealth()) / _unit->getBaseStats()->health);
+	ss << ((_unit->getBaseStats()->melee * _unit->getHealth()) / _unit->getBaseStats()->health);
 	_numMelee->setText(ss.str());
 	_barMelee->setMax(_unit->getBaseStats()->melee);
 	_barMelee->setValue((_unit->getBaseStats()->melee * _unit->getHealth()) / _unit->getBaseStats()->health);

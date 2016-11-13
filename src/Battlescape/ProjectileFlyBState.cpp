@@ -725,7 +725,7 @@ int ProjectileFlyBState::getMaxThrowDistance(int weight, int strength, int level
  * Set the origin voxel, used for the blaster launcher.
  * @param pos the origin voxel.
  */
-void ProjectileFlyBState::setOriginVoxel(Position pos)
+void ProjectileFlyBState::setOriginVoxel(const Position& pos)
 {
 	_originVoxel = pos;
 }

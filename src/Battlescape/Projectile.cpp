@@ -117,7 +117,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	return calculateTrajectory(accuracy, originVoxel);
 }
 
-int Projectile::calculateTrajectory(double accuracy, Position originVoxel, bool excludeUnit)
+int Projectile::calculateTrajectory(double accuracy, const Position& originVoxel, bool excludeUnit)
 {
 	Tile *targetTile = _save->getTile(_action.target);
 	BattleUnit *bu = _action.actor;

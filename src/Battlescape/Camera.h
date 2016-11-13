@@ -96,7 +96,7 @@ public:
 	/// Get the map x/y screen offset.
 	Position getMapOffset() const;
 	/// Sets the map x/y screen offset.
-	void setMapOffset(Position pos);
+	void setMapOffset(const Position& pos);
 	/// Toggles showing all map layers.
 	int toggleShowAllLayers();
 	/// Checks if the camera is showing all map layers.

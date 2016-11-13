@@ -893,7 +893,7 @@ GameTime *SavedGame::getTime() const
  * Changes the current time of the game.
  * @param time Game time.
  */
-void SavedGame::setTime(GameTime time)
+void SavedGame::setTime(const GameTime& time)
 {
 	_time = new GameTime(time);
 }
@@ -1238,7 +1238,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & productions, const Mod * mod, Base * base) const
 {
 	const std::vector<std::string> &items = mod->getManufactureList();
-	const std::vector<Production *> baseProductions (base->getProductions());
+	const std::vector<Production *>& baseProductions (base->getProductions());
 
 	for (std::vector<std::string>::const_iterator iter = items.begin();
 		iter != items.end();

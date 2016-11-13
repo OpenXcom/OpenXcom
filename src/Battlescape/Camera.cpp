@@ -542,7 +542,7 @@ Position Camera::getMapOffset() const
  * Sets the map offset.
  * @param pos The map offset.
  */
-void Camera::setMapOffset(Position pos)
+void Camera::setMapOffset(const Position& pos)
 {
 	_mapOffset = pos;
 }

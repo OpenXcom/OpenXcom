@@ -2062,7 +2062,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 					}
 					break;
 				case MSC_ADDLINE:
-					success = addLine((MapDirection)(command->getDirection()), command->getRects());
+					success = addLine((command->getDirection()), command->getRects());
 					break;
 				case MSC_ADDCRAFT:
 					if (_craft)
@@ -2628,7 +2628,7 @@ bool BattlescapeGenerator::addLine(MapDirection direction, const std::vector<SDL
 	int tries = 0;
 	bool placed = false;
 
-	int roadX, roadY;
+	int roadX, roadY = 0;
 	int *iteratorValue = &roadX;
 	MapBlockType comparator = MT_NSROAD;
 	MapBlockType typeToAdd = MT_EWROAD;

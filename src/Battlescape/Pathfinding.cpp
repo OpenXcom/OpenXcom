@@ -859,7 +859,7 @@ bool Pathfinding::isOnStairs(const Position &startPosition, const Position &endP
  * @param direction Up or Down
  * @return bool Whether it's valid.
  */
-bool Pathfinding::validateUpDown(BattleUnit *bu, Position startPosition, const int direction, bool missile) const
+bool Pathfinding::validateUpDown(BattleUnit *bu, const Position& startPosition, const int direction, bool missile) const
 {
 	Position endPosition;
 	directionToVector(direction, &endPosition);

@@ -80,7 +80,7 @@ private:
 		_martyrKillsTotal, _postMortemKills, _slaveKillsTotal;
 	bool _bestSoldier, _globeTrotter;
 	void manageModularCommendations(std::map<std::string, int> &nextCommendationLevel, std::map<std::string, int> &modularCommendations, std::pair<std::string, int> statTotal, int criteria);
-	void awardCommendation(std::string type, std::string noun = "noNoun");
+	void awardCommendation(const std::string& type, const std::string& noun = "noNoun");
 public:
 	/// Creates a new soldier diary and loads its contents from YAML.
 	SoldierDiary(const YAML::Node& node);

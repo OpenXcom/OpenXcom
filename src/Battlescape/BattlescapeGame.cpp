@@ -1639,7 +1639,7 @@ void BattlescapeGame::setTUReserved(BattleActionType tur)
  */
 void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool newItem, bool removeItem)
 {
-	Position p = position;
+	const Position& p = position;
 
 	// don't spawn anything outside of bounds
 	if (_save->getTile(p) == 0)

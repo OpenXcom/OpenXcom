@@ -998,7 +998,7 @@ int AIModule::countKnownTargets() const
  * @param pos the Position to check for spotters.
  * @return spotters.
  */
-int AIModule::getSpottingUnits(Position pos) const
+int AIModule::getSpottingUnits(const Position& pos) const
 {
 	// if we don't actually occupy the position being checked, we need to do a virtual LOF check.
 	bool checking = pos != _unit->getPosition();
