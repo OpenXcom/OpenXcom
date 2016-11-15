@@ -296,12 +296,9 @@ BattleUnit::~BattleUnit()
 {
 	for (int i = 0; i < 5; ++i)
 		if (_cache[i]) delete _cache[i];
-	if (!getGeoscapeSoldier())
+	for (std::vector<BattleUnitKills*>::const_iterator i = _statistics->kills.begin(); i != _statistics->kills.end(); ++i)
 	{
-		for (std::vector<BattleUnitKills*>::const_iterator i = _statistics->kills.begin(); i != _statistics->kills.end(); ++i)
-		{
-			delete *i;
-		}
+		delete *i;
 	}
 	delete _statistics;
 	delete _currentAIState;
