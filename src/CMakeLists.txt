@@ -418,9 +418,13 @@ if ( APPLE )
     set ( set_exec_path OFF )
     set ( install_dest_dir "" )
     set ( data_install_dir bin )
+	set ( ICON_NAME "AppIcon" )
+	#set ( ICON_PATH "${PROJECT_SOURCE_DIR}/../res/mac/${ICON_NAME}" )
+	set ( MACOSX_BUNDLE_ICON_FILE "${ICON_NAME}" )
   else ()
-    set ( data_install_dir "${CMAKE_INSTALL_FULL_DATADIR}/openxcom" )
-    add_definitions( -DDATADIR="${data_install_dir}/" )
+    # set ( data_install_dir "${CMAKE_INSTALL_FULL_DATADIR}/OpenXcom" )
+    set ( data_install_dir "${EXECUTABLE_OUTPUT_PATH}/OpenXcom.app/Contents/Resources" )
+	add_definitions( -DDATADIR="${data_install_dir}/" )
   endif ()
 endif ()
 if ( set_exec_path )
@@ -431,8 +435,14 @@ if ( FORCE_INSTALL_DATA_TO_BIN )
   set ( data_install_dir bin )
 endif ()
 
-add_executable ( openxcom  ${application_type} ${openxcom_src} )
-install ( TARGETS openxcom ${install_dest} DESTINATION ${CMAKE_INSTALL_BINDIR} )
+if ( APPLE )
+	add_executable ( OpenXcom ${application_type} ${openxcom_src} )
+	install ( TARGETS OpenXcom ${install_dest} DESTINATION ${CMAKE_INSTALL_BINDIR} )
+else ()
+	add_executable ( openxcom ${application_type} ${openxcom_src} )
+	install ( TARGETS openxcom ${install_dest} DESTINATION ${CMAKE_INSTALL_BINDIR} )
+endif ()
+
 # Extra link flags for Windows. They need to be set before the SDL/YAML link flags, otherwise you will get strange link errors ('Undefined reference to WinMain@16')
 if ( WIN32 )
   set ( basic_windows_libs advapi32.lib shell32.lib shlwapi.lib )
@@ -447,15 +457,35 @@ if ( WIN32 )
   endif ()
   set ( system_libs ${basic_windows_libs} SDLmain ${static_flags} )
 endif ()
-target_link_libraries ( openxcom ${system_libs} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${SDL_LIBRARY} ${OPENGL_gl_LIBRARY} debug ${YAMLCPP_LIBRARY_DEBUG} optimized ${YAMLCPP_LIBRARY} )
+
+if ( APPLE )
+	target_link_libraries ( OpenXcom ${system_libs} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${SDL_LIBRARY} ${OPENGL_gl_LIBRARY} debug ${YAMLCPP_LIBRARY_DEBUG} optimized ${YAMLCPP_LIBRARY} )
+else ()
+	target_link_libraries ( openxcom ${system_libs} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${SDL_LIBRARY} ${OPENGL_gl_LIBRARY} debug ${YAMLCPP_LIBRARY_DEBUG} optimized ${YAMLCPP_LIBRARY} )
+endif ()
 
 set ( bin_data_dirs TFTD UFO common standard )
-foreach ( binpath ${bin_data_dirs} )
-  add_custom_command ( TARGET openxcom
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/${binpath} ${EXECUTABLE_OUTPUT_PATH}/${binpath} )
-  install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${binpath} DESTINATION ${data_install_dir} )
-endforeach()
+if ( APPLE )
+	add_custom_command ( TARGET OpenXcom
+		COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/OpenXcom.app/Contents/Resources
+	)
+	foreach ( binpath ${bin_data_dirs} )
+	  add_custom_command ( TARGET OpenXcom
+	    POST_BUILD
+	    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/${binpath} ${EXECUTABLE_OUTPUT_PATH}/OpenXcom.app/Contents/Resources/${binpath} )
+	  install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${binpath} DESTINATION ${data_install_dir} )
+	endforeach()
+	add_custom_command ( TARGET OpenXcom 
+		COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res/mac/AppIcon.icns ${EXECUTABLE_OUTPUT_PATH}/OpenXcom.app/Contents/Resources
+	)
+else ()
+	foreach ( binpath ${bin_data_dirs} )
+	  add_custom_command ( TARGET openxcom
+	    POST_BUILD
+	    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/${binpath} ${EXECUTABLE_OUTPUT_PATH}/${binpath} )
+	  install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${binpath} DESTINATION ${data_install_dir} )
+	endforeach()
+endif ()
 
 # Copy Windows DLLs to bin folder
 if ( WIN32 )
@@ -483,17 +513,17 @@ if ( APPLE AND CREATE_BUNDLE )
     get_filename_component ( framework_name ${framework} NAME )
     if ( EXISTS "${framework}" )
       if ( "${CMAKE_GENERATOR}" STREQUAL "Xcode" )
-	add_custom_command ( TARGET openxcom
+	add_custom_command ( TARGET OpenXcom
 	  POST_BUILD
-	  COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/Debug/openxcom.app/Contents/Frameworks/${framework_name}
-	  COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/Debug/openxcom.app/Contents/Frameworks/${framework_name}
-	  COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/Release/openxcom.app/Contents/Frameworks/${framework_name}
-	  COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/Release/openxcom.app/Contents/Frameworks/${framework_name} )
+	  COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/Debug/OpenXcom.app/Contents/Frameworks/${framework_name}
+	  COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/Debug/OpenXcom.app/Contents/Frameworks/${framework_name}
+	  COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/Release/OpenXcom.app/Contents/Frameworks/${framework_name}
+	  COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/Release/OpenXcom.app/Contents/Frameworks/${framework_name} )
       else ()
-	add_custom_command ( TARGET openxcom
+	add_custom_command ( TARGET OpenXcom
 	  POST_BUILD
-	  COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/openxcom.app/Contents/Frameworks/${framework_name}
-	  COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/openxcom.app/Contents/Frameworks/${framework_name} )
+	  COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/OpenXcom.app/Contents/Frameworks/${framework_name}
+	  COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/OpenXcom.app/Contents/Frameworks/${framework_name} )
       endif ()
     endif ()
   endforeach ()
