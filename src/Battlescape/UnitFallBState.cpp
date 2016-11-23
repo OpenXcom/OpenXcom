@@ -195,7 +195,6 @@ void UnitFallBState::think()
 						{
 							Position originalPosition = (*bs);
 							Position endPosition = originalPosition + offset;
-							Tile *currentTile = _parent->getSave()->getTile(originalPosition);
 							Tile *t = _parent->getSave()->getTile(endPosition);
 							Tile *bt = _parent->getSave()->getTile(endPosition + Position(0,0,-1));
 
