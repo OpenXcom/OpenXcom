@@ -47,7 +47,7 @@ public:
 	/// Cleans up the PathfindingNode.
 	~PathfindingNode();
 	/// Gets the node position.
-	const Position &getPosition() const;
+	Position getPosition() const;
 	/// Resets the node.
 	void reset();
 	/// Is checked?
@@ -70,7 +70,7 @@ public:
 	#endif
 
 	/// Connects to previous node along the path.
-	void connect(int tuCost, PathfindingNode* prevNode, int prevDir, const Position &target);
+	void connect(int tuCost, PathfindingNode* prevNode, int prevDir, Position target);
 	/// Connects to previous node along a visit.
 	void connect(int tuCost, PathfindingNode* prevNode, int prevDir);
 };

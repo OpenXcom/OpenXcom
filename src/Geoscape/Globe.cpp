@@ -514,7 +514,7 @@ void Globe::rotateStopLat()
  */
 void Globe::setZoom(size_t zoom)
 {
-	_zoom = std::min(std::max(zoom, (size_t)0u), _zoomRadius.size() - 1);
+	_zoom = Clamp(zoom, (size_t)0u, _zoomRadius.size() - 1);
 	_zoomTexture = (2 - (int)floor(_zoom / 2.0)) * (_texture->getTotalFrames() / 3);
 	_radius = _zoomRadius[_zoom];
 	_game->getSavedGame()->setGlobeZoom(_zoom);

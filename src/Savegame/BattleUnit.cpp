@@ -483,7 +483,7 @@ int BattleUnit::getId() const
  * @param pos position
  * @param updateLastPos refresh last stored position
  */
-void BattleUnit::setPosition(const Position& pos, bool updateLastPos)
+void BattleUnit::setPosition(Position pos, bool updateLastPos)
 {
 	if (updateLastPos) { _lastPos = _pos; }
 	_pos = pos;
@@ -493,7 +493,7 @@ void BattleUnit::setPosition(const Position& pos, bool updateLastPos)
  * Gets the BattleUnit's position.
  * @return position
  */
-const Position& BattleUnit::getPosition() const
+Position BattleUnit::getPosition() const
 {
 	return _pos;
 }
@@ -502,7 +502,7 @@ const Position& BattleUnit::getPosition() const
  * Gets the BattleUnit's position.
  * @return position
  */
-const Position& BattleUnit::getLastPosition() const
+Position BattleUnit::getLastPosition() const
 {
 	return _lastPos;
 }
@@ -511,7 +511,7 @@ const Position& BattleUnit::getLastPosition() const
  * Gets the BattleUnit's destination.
  * @return destination
  */
-const Position& BattleUnit::getDestination() const
+Position BattleUnit::getDestination() const
 {
 	return _destination;
 }
@@ -600,7 +600,7 @@ UnitStatus BattleUnit::getStatus() const
  * @param tileBelowMe Which tile is currently below the unit.
  * @param cache Update cache?
  */
-void BattleUnit::startWalking(int direction, const Position &destination, Tile *tileBelowMe, bool cache)
+void BattleUnit::startWalking(int direction, Position destination, Tile *tileBelowMe, bool cache)
 {
 	if (direction >= Pathfinding::DIR_UP)
 	{
@@ -744,7 +744,7 @@ int BattleUnit::getDiagonalWalkingPhase() const
  * @param point Position to look at.
  * @param turret True to turn the turret, false to turn the unit.
  */
-void BattleUnit::lookAt(const Position &point, bool turret)
+void BattleUnit::lookAt(Position point, bool turret)
 {
 	int dir = directionTo (point);
 
@@ -987,7 +987,7 @@ void BattleUnit::aim(bool aiming)
  * @param point given position.
  * @return direction.
  */
-int BattleUnit::directionTo(const Position &point) const
+int BattleUnit::directionTo(Position point) const
 {
 	double ox = point.x - _pos.x;
 	double oy = point.y - _pos.y;
@@ -1075,7 +1075,7 @@ int BattleUnit::getMorale() const
  * @param ignoreArmor Should the damage ignore armor resistance?
  * @return damage done after adjustment
  */
-int BattleUnit::damage(const Position &relative, int power, ItemDamageType type, bool ignoreArmor)
+int BattleUnit::damage(Position relative, int power, ItemDamageType type, bool ignoreArmor)
 {
 	UnitSide side = SIDE_FRONT;
 	UnitBodyPart bodypart = BODYPART_TORSO;

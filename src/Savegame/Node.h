@@ -68,7 +68,7 @@ public:
 	/// Gets node's priority.
 	int getPriority() const;
 	/// Gets the node's position.
-	const Position& getPosition() const;
+	Position getPosition() const;
 	/// Gets the node's segment.
 	int getSegment() const;
 	/// Gets the node's type.

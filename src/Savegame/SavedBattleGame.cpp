@@ -732,7 +732,7 @@ BattleUnit *SavedBattleGame::selectPlayerUnit(int dir, bool checkReselect, bool 
  * @param pos Position.
  * @return Pointer to a BattleUnit, or 0 when none is found.
  */
-BattleUnit *SavedBattleGame::selectUnit(const Position& pos)
+BattleUnit *SavedBattleGame::selectUnit(Position pos)
 {
 	BattleUnit *bu = getTile(pos)->getUnit();
 
@@ -1498,7 +1498,7 @@ void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit *bu)
  * @param testOnly If true then just checks if the unit can be placed at the position.
  * @return True if the unit could be successfully placed.
  */
-bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly)
+bool SavedBattleGame::setUnitPosition(BattleUnit *bu, Position position, bool testOnly)
 {
 	int size = bu->getArmor()->getSize() - 1;
 	Position zOffset (0,0,0);

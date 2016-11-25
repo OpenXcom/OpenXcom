@@ -52,3 +52,9 @@ inline _Tx Sign(const _Tx& x)
 {
 	return (_Tx(0) < x) - (x < _Tx(0));
 }
+
+template <class _Tx>
+inline _Tx Clamp(const _Tx& x, const _Tx& min, const _Tx& max)
+{
+	return std::min(std::max(x, min), max);
+}

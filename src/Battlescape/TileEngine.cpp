@@ -192,7 +192,7 @@ void TileEngine::calculateUnitLighting()
  * @param power Power.
  * @param layer Light is separated in 3 layers: Ambient, Static and Dynamic.
  */
-void TileEngine::addLight(const Position &center, int power, int layer)
+void TileEngine::addLight(Position center, int power, int layer)
 {
 	// only loop through the positive quadrant.
 	for (int x = 0; x <= power; ++x)
@@ -761,7 +761,7 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
  * (used when terrain has changed, which can reveal new parts of terrain or units).
  * @param position Position of the changed terrain.
  */
-void TileEngine::calculateFOV(const Position &position)
+void TileEngine::calculateFOV(Position position)
 {
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
@@ -1038,7 +1038,7 @@ bool TileEngine::tryReaction(BattleUnit *unit, BattleUnit *target, int attackTyp
  * @param unit The unit that caused the explosion.
  * @return The Unit that got hit.
  */
-BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit)
+BattleUnit *TileEngine::hit(Position center, int power, ItemDamageType type, BattleUnit *unit)
 {
 	Tile *tile = _save->getTile(Position(center.x/16, center.y/16, center.z/24));
 	if (!tile)
@@ -1142,7 +1142,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
  * @param maxRadius The maximum radius othe explosion.
  * @param unit The unit that caused the explosion.
  */
-void TileEngine::explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit)
+void TileEngine::explode(Position center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit)
 {
 	double centerZ = center.z / 24 + 0.5;
 	double centerX = center.x / 16 + 0.5;
@@ -2138,7 +2138,7 @@ int TileEngine::closeUfoDoors()
  * @param excludeAllBut [Optional] The only unit to be considered for ray hits.
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
  */
-int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut)
+int TileEngine::calculateLine(Position origin, Position target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut)
 {
 	int x, x0, x1, delta_x, step_x;
 	int y, y0, y1, delta_y, step_y;
@@ -2306,7 +2306,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
  * @param delta Is the deviation of the angles it should take into account, 0,0,0 is perfection.
  * @return The objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
  */
-int TileEngine::calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, const Position delta)
+int TileEngine::calculateParabola(Position origin, Position target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, const Position delta)
 {
 	double ro = sqrt((double)((target.x - origin.x) * (target.x - origin.x) + (target.y - origin.y) * (target.y - origin.y) + (target.z - origin.z) * (target.z - origin.z)));
 
@@ -2365,7 +2365,7 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
  * @param voxel The voxel to trace down.
  * @return z coord of "ground".
  */
-int TileEngine::castedShade(const Position& voxel)
+int TileEngine::castedShade(Position voxel)
 {
 	int zstart = voxel.z;
 	Position tmpCoord = voxel / Position(16,16,24);
@@ -2394,7 +2394,7 @@ int TileEngine::castedShade(const Position& voxel)
  * @return True if visible.
  */
 
-bool TileEngine::isVoxelVisible(const Position& voxel)
+bool TileEngine::isVoxelVisible(Position voxel)
 {
 	int zstart = voxel.z+3; // slight Z adjust
 	if ((zstart/24)!=(voxel.z/24))
@@ -2423,7 +2423,7 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
  * @param excludeAllBut If set, the only unit to be considered for ray hits.
  * @return The objectnumber(0-3) or unit(4) or out of map (5) or -1 (hit nothing).
  */
-int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit *excludeAllBut)
+int TileEngine::voxelCheck(Position voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit *excludeAllBut)
 {
 	if (_save->isBeforeGame())
 	{
@@ -2517,7 +2517,7 @@ void TileEngine::togglePersonalLighting()
  * @param pos2 Position of second square.
  * @return Distance.
  */
-int TileEngine::distance(const Position &pos1, const Position &pos2) const
+int TileEngine::distance(Position pos1, Position pos2) const
 {
 	int x = pos1.x - pos2.x;
 	int y = pos1.y - pos2.y;
@@ -2531,7 +2531,7 @@ int TileEngine::distance(const Position &pos1, const Position &pos2) const
  * @param considerZ Whether to consider the z coordinate.
  * @return Distance.
  */
-int TileEngine::distanceSq(const Position &pos1, const Position &pos2, bool considerZ) const
+int TileEngine::distanceSq(Position pos1, Position pos2, bool considerZ) const
 {
 	int x = pos1.x - pos2.x;
 	int y = pos1.y - pos2.y;
@@ -2747,7 +2747,7 @@ bool TileEngine::validMeleeRange(const Position& pos, int direction, BattleUnit 
  * @param position Current position.
  * @return Direction or -1 when no window found.
  */
-int TileEngine::faceWindow(const Position &position)
+int TileEngine::faceWindow(Position position)
 {
 	static const Position oneTileEast = Position(1, 0, 0);
 	static const Position oneTileSouth = Position(0, 1, 0);
@@ -2857,7 +2857,7 @@ void TileEngine::recalculateFOV()
  * @param target The target point of the action.
  * @return direction.
  */
-int TileEngine::getDirectionTo(const Position &origin, const Position &target) const
+int TileEngine::getDirectionTo(Position origin, Position target) const
 {
 	double ox = target.x - origin.x;
 	double oy = target.y - origin.y;

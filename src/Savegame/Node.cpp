@@ -137,7 +137,7 @@ int Node::getPriority() const
  * Gets the Node's position.
  * @return position
  */
-const Position& Node::getPosition() const
+Position Node::getPosition() const
 {
 	return _pos;
 }
