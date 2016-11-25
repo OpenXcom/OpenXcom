@@ -18,11 +18,9 @@
  */
 #include "RNG.h"
 #include <cmath>
+#include <limits>
 #include <time.h>
 #include <stdlib.h>
-#ifndef UINT64_MAX
-#define UINT64_MAX 0xffffffffffffffffULL
-#endif
 
 namespace OpenXcom
 {
@@ -78,7 +76,7 @@ void setSeed(uint64_t n)
 int generate(int min, int max)
 {
 	uint64_t num = next();
-	return (int)(num % (max - min + 1) + min);
+	return num % (max - min + 1) + min;
 }
 
 /**
@@ -90,7 +88,8 @@ int generate(int min, int max)
 double generate(double min, double max)
 {
 	double num = next();
-	return (num / ((double)UINT64_MAX / (max - min)) + min);
+	double int_max = (double)std::numeric_limits<uint64_t>::max();
+	return num / (int_max / (max - min)) + min;
 }
 
 /**
@@ -102,7 +101,7 @@ double generate(double min, double max)
  */
 int seedless(int min, int max)
 {
-	return (rand() % (max - min + 1) + min);
+	return rand() % (max - min + 1) + min;
 }
 
 
@@ -138,7 +137,7 @@ double boxMuller(double m, double s)
 		use_last = 1;
 	}
 
-	return( m + y1 * s );
+	return m + y1 * s;
 }
 
 /**
@@ -149,7 +148,7 @@ double boxMuller(double m, double s)
  */
 bool percent(int value)
 {
-	return (generate(0, 99) < value);
+	return generate(0, 99) < value;
 }
 
 /**
@@ -160,7 +159,7 @@ bool percent(int value)
 int generateEx(int max)
 {
 	uint64_t num = next();
-	return (int)(num % max);
+	return num % max;
 }
 
 }
