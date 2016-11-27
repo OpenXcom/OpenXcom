@@ -120,7 +120,7 @@ Data folders:
 - /Users/Shared/OpenXcom
 - . (the current directory)
 
-### Linux
+### Linux / \*BSD
 
 User folder:
 - $XDG\_DATA\_HOME/openxcom (if $XDG\_DATA\_HOME is defined)
@@ -137,6 +137,7 @@ Data folders:
 - $HOME/.local/share/openxcom (if $XDG\_DATA\_HOME is not defined)
 - $XDG\_DATA\_DIRS/openxcom (for each directory in $XDG\_DATA\_DIRS if $XDG\_DATA\_DIRS is defined)
 - /usr/local/share/openxcom
+- /usr/share/openxcom
 - . (the current directory)
 
 ## Configuration
