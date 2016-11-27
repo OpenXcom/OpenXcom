@@ -187,22 +187,4 @@ double Target::getDistance(const Target *target) const
 	return acos(cos(_lat) * cos(target->getLatitude()) * cos(target->getLongitude() - _lon) + sin(_lat) * sin(target->getLatitude()));
 }
 
-/**
- * Gets the mission site's depth.
- * @return the depth of the site.
- */
-int Target::getSiteDepth() const
-{
-	return _depth;
-}
-
-/**
- * Sets the mission site's depth.
- * @param depth the depth we want.
- */
-void Target::setSiteDepth(int depth)
-{
-	_depth = depth;
-}
-
 }

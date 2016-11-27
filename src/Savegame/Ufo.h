@@ -40,6 +40,7 @@ class Mod;
 class Ufo : public MovingTarget
 {
 public:
+	static const char *ALTITUDE_STRING[];
 	enum UfoStatus { FLYING, LANDED, CRASHED, DESTROYED };
 private:
 	const RuleUfo *_rules;
@@ -95,6 +96,8 @@ public:
 	std::string getDirection() const;
 	/// Gets the UFO's altitude.
 	std::string getAltitude() const;
+	/// Gets the UFO's altitude.
+	int getAltitudeInt() const;
 	/// Sets the UFO's altitude.
 	void setAltitude(const std::string &altitude);
 	/// Gets the UFO status

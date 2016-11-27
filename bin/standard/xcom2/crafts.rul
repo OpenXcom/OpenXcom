@@ -12,7 +12,7 @@ crafts: #done
     refuelRate: 50
     transferTime: 72
     score: 200
-    maxDepth: 3
+    maxAltitude: 4
     battlescapeTerrainData:
       name: TRITON
       mapDataSets:
@@ -49,7 +49,7 @@ crafts: #done
     refuelRate: 50
     transferTime: 96
     score: 250
-    maxDepth: 2
+    maxAltitude: 3
   - type: STR_MANTA
     sprite: 4
     fuelMax: 30
@@ -60,7 +60,7 @@ crafts: #done
     refuelItem: STR_ZRBITE
     refuelRate: 5
     score: 250
-    maxDepth: 3
+    maxAltitude: 4
   - type: STR_HAMMERHEAD
     sprite: 1
     fuelMax: 60
@@ -72,7 +72,7 @@ crafts: #done
     refuelItem: STR_ZRBITE
     refuelRate: 5
     score: 300
-    maxDepth: 3
+    maxAltitude: 4
     battlescapeTerrainData:
       name: HAMMER
       mapDataSets:
@@ -108,7 +108,7 @@ crafts: #done
     spacecraft: true
     refuelRate: 5
     score: 400
-    maxDepth: 3
+    maxAltitude: 4
     battlescapeTerrainData:
       name: LEVIATH
       mapDataSets:

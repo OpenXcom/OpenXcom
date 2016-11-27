@@ -151,7 +151,7 @@ UfoDetectedState::UfoDetectedState(Ufo *ufo, GeoscapeState *state, bool detected
 	const std::vector<std::string> &crafts = _game->getMod()->getCraftsList();
 	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end() && !underwater; ++i)
 	{
-		underwater = _game->getMod()->getCraft(*i)->getMaxDepth() > 0;
+		underwater = _game->getMod()->getCraft(*i)->isWaterOnly();
 	}
 	if (underwater && !_state->getGlobe()->insideLand(_ufo->getLongitude(), _ufo->getLatitude()))
 	{

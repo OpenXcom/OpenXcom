@@ -181,8 +181,7 @@ GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *way
 	_txtMaxSpeed->setText(tr("STR_MAXIMUM_SPEED_UC").arg(Text::formatNumber(_craft->getRules()->getMaxSpeed())));
 
 	std::string altitude = _craft->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _craft->getAltitude();
-	bool underwater = _craft->getRules()->getMaxDepth() > 0;
-	if (underwater && !_globe->insideLand(_craft->getLongitude(), _craft->getLatitude()))
+	if (_craft->getRules()->isWaterOnly() && !_globe->insideLand(_craft->getLongitude(), _craft->getLatitude()))
 	{
 		altitude = "STR_AIRBORNE";
 	}

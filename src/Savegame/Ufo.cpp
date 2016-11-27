@@ -34,6 +34,14 @@
 namespace OpenXcom
 {
 
+const char *Ufo::ALTITUDE_STRING[] = {
+	"STR_GROUND",
+	"STR_VERY_LOW",
+	"STR_LOW_UC",
+	"STR_HIGH_UC",
+	"STR_VERY_HIGH"
+};
+
 /**
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
@@ -387,11 +395,27 @@ std::string Ufo::getDirection() const
 
 /**
  * Returns the current altitude of the UFO.
- * @return Altitude.
+ * @return Altitude as string ID.
  */
 std::string Ufo::getAltitude() const
 {
 	return _altitude;
+}
+
+/**
+ * Returns the current altitude of the UFO.
+ * @return Altitude as integer (0-4).
+ */
+int Ufo::getAltitudeInt() const
+{
+	for (size_t i = 0; i < 5; ++i)
+	{
+		if (ALTITUDE_STRING[i] == _altitude)
+		{
+			return i;
+		}
+	}
+	return -1;
 }
 
 /**
