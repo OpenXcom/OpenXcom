@@ -883,7 +883,7 @@ void GeoscapeState::time5Seconds()
 						if (!(*j)->isInDogfight() && !(*j)->getDistance(u))
 						{
 							_dogfightsToBeStarted.push_back(new DogfightState(this, (*j), u));
-							if (u->getAltitudeInt() > (*j)->getRules()->getMaxAltitude())
+							if ((*j)->getRules()->isWaterOnly() && u->getAltitudeInt() > (*j)->getRules()->getMaxAltitude())
 							{
 								popup(new DogfightErrorState((*j), tr("STR_UNABLE_TO_ENGAGE_DEPTH")));
 								_dogfightsToBeStarted.back()->setMinimized(true);

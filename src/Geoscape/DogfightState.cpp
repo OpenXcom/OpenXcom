@@ -1658,7 +1658,7 @@ void DogfightState::setMinimized(const bool minimized)
  */
 void DogfightState::btnMinimizedIconClick(Action *)
 {
-	if (_ufo->getAltitudeInt() > _craft->getRules()->getMaxAltitude())
+	if (_craft->getRules()->isWaterOnly() && _ufo->getAltitudeInt() > _craft->getRules()->getMaxAltitude())
 	{
 		_state->popup(new DogfightErrorState(_craft, tr("STR_UNABLE_TO_ENGAGE_DEPTH")));
 		setWaitForAltitude(true);
