@@ -134,13 +134,11 @@ void showError(const std::string &error)
 static char const *getHome()
 {
 	char const *home = getenv("HOME");
-#ifndef _WIN32
 	if (!home)
 	{
 		struct passwd *const pwd = getpwuid(getuid());
 		home = pwd->pw_dir;
 	}
-#endif
 	return home;
 }
 #endif
@@ -220,16 +218,13 @@ std::vector<std::string> findDataFolders()
 	list.push_back("/Users/Shared/OpenXcom/");
 #else
 	list.push_back("/usr/local/share/openxcom/");
-#ifndef __FreeBSD__
 	list.push_back("/usr/share/openxcom/");
-#endif
 #ifdef DATADIR
 	snprintf(path, MAXPATHLEN, "%s/", DATADIR);
 	list.push_back(path);
 #endif
 
 #endif
-	
 	// Get working directory
 	list.push_back("./");
 #endif
@@ -251,7 +246,6 @@ std::vector<std::string> findUserFolders()
 	return list;
 #endif
 
-	
 #ifdef _WIN32
 	char path[MAX_PATH];
 
