@@ -56,7 +56,7 @@ ManufactureState::ManufactureState(Base *base) : _base(base)
 	_txtProduced = new Text(56, 18, 168, 44);
 	_txtCost = new Text(44, 27, 222, 44);
 	_txtTimeLeft = new Text(60, 27, 260, 44);
-	_lstManufacture = new TextList(288, 90, 8, 80);
+	_lstManufacture = new TextList(288, 88, 8, 80);
 
 	// Set palette
 	setInterface("manufactureMenu");
