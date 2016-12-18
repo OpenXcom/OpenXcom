@@ -71,6 +71,21 @@ namespace OpenXcom
 		ArticleDefinitionList articles = getAvailableArticles(save, mod);
 		for (size_t it=0; it<articles.size(); ++it)
 		{
+			if (articles[it]->id == article_id)
+			{
+				return it;
+			}
+		}
+		for (size_t it = 0; it<articles.size(); ++it)
+		{
+			if (articles[it]->id == UC_ID)
+			{
+				article_id = UC_ID;
+				return it;
+			}
+		}
+		for (size_t it = 0; it<articles.size(); ++it)
+		{
 			for (std::vector<std::string>::iterator j = articles[it]->requires.begin(); j != articles[it]->requires.end(); ++j)
 			{
 				if (article_id == *j)
@@ -78,15 +93,6 @@ namespace OpenXcom
 					article_id = articles[it]->id;
 					return it;
 				}
-			}
-			if (articles[it]->id == article_id)
-			{
-				return it;
-			}
-			if (articles[it]->id == UC_ID)
-			{
-				article_id = UC_ID;
-				return it;
 			}
 		}
 		return -1;
