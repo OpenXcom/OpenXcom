@@ -63,11 +63,14 @@ SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(
  */
 SavedBattleGame::~SavedBattleGame()
 {
-	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
+	if (_mapsize_z * _mapsize_y * _mapsize_x > 0)
 	{
-		delete _tiles[i];
+		for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
+		{
+			delete _tiles[i];
+		}
+		delete[] _tiles;
 	}
-	delete[] _tiles;
 
 	for (std::vector<MapDataSet*>::iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
@@ -488,27 +491,28 @@ Tile **SavedBattleGame::getTiles() const
  */
 void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
 {
-	if (!_nodes.empty())
+	// Clear old map data
+	if (_mapsize_z * _mapsize_y * _mapsize_x > 0)
 	{
 		for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 		{
 			delete _tiles[i];
 		}
 		delete[] _tiles;
-
-		for (std::vector<Node*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
-		{
-			delete *i;
-		}
-
-		_nodes.clear();
-		_mapDataSets.clear();
 	}
+
+	for (std::vector<Node*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
+	{
+		delete *i;
+	}
+	_nodes.clear();
+	_mapDataSets.clear();
+
+	// Create tile objects
 	_mapsize_x = mapsize_x;
 	_mapsize_y = mapsize_y;
 	_mapsize_z = mapsize_z;
 	_tiles = new Tile*[_mapsize_z * _mapsize_y * _mapsize_x];
-	/* create tile objects */
 	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
 		Position pos;
