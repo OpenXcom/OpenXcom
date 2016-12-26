@@ -818,7 +818,6 @@ void BattlescapeGame::handleNonTargetAction()
 		if (!_currentAction.result.empty())
 		{
 			_parentState->warning(_currentAction.result);
-			_currentAction.result = "";
 		}
 		else if (_currentAction.type == BA_PRIME && _currentAction.value > -1)
 		{
@@ -847,6 +846,7 @@ void BattlescapeGame::handleNonTargetAction()
 				_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
 			}
 		}
+		_currentAction.result = "";
 		_currentAction.type = BA_NONE;
 		_parentState->updateSoldierInfo();
 	}
