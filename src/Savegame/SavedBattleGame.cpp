@@ -116,9 +116,11 @@ SavedBattleGame::~SavedBattleGame()
  */
 void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGame)
 {
-	_mapsize_x = node["width"].as<int>(_mapsize_x);
-	_mapsize_y = node["length"].as<int>(_mapsize_y);
-	_mapsize_z = node["height"].as<int>(_mapsize_z);
+	int mapsize_x = node["width"].as<int>(_mapsize_x);
+	int mapsize_y = node["length"].as<int>(_mapsize_y);
+	int mapsize_z = node["height"].as<int>(_mapsize_z);
+	initMap(mapsize_x, mapsize_y, mapsize_z);
+
 	_missionType = node["missionType"].as<std::string>(_missionType);
 	_globalShade = node["globalshade"].as<int>(_globalShade);
 	_turn = node["turn"].as<int>(_turn);
@@ -131,8 +133,6 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 		MapDataSet *mds = mod->getMapDataSet(name);
 		_mapDataSets.push_back(mds);
 	}
-
-	initMap(_mapsize_x, _mapsize_y, _mapsize_z);
 
 	if (!node["tileTotalBytesPer"])
 	{
