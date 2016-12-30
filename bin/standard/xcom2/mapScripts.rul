@@ -17,6 +17,8 @@ mapScripts: #done
     - type: fillArea
   - type: PLANE
     commands:
+    - type: resize
+      size: 5
     - type: addUFO
     - type: addCraft
     - type: addBlock

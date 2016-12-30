@@ -177,7 +177,7 @@ void Slider::handle(Action *action, State *state)
 	if (_pressed && (action->getDetails()->type == SDL_MOUSEMOTION || action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
 	{
 		int cursorX = action->getAbsoluteXMouse();
-		double buttonX = std::min(std::max(_minX, cursorX + _offsetX), _maxX);
+		double buttonX = Clamp(cursorX + _offsetX, _minX, _maxX);
 		double pos = (buttonX - _minX) / (_maxX - _minX);
 		int value = _min + (int)Round((_max - _min) * pos);
 		setValue(value);
@@ -220,11 +220,11 @@ void Slider::setValue(int value)
 {
 	if (_min < _max)
 	{
-		_value = std::min(std::max(_min, value), _max);
+		_value = Clamp(value, _min, _max);
 	}
 	else
 	{
-		_value = std::min(std::max(_max, value), _min);
+		_value = Clamp(value, _max, _min);
 	}
 	double pos = (double)(_value - _min) / (double)(_max - _min);
 	setPosition(pos);

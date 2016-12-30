@@ -62,10 +62,6 @@ public:
 	void load(const YAML::Node& node);
 	/// Saves the AI Module to YAML.
 	YAML::Node save() const;
-	/// Enters the Module.
-	void enter();
-	/// Exits the Module.
-	void exit();
 	/// Runs Module functionality every AI cycle.
 	void think(BattleAction *action);
 	/// Sets the "unit was hit" flag true.
@@ -83,7 +79,7 @@ public:
 	/// count how many xcom/civilian units are known to this unit.
 	int countKnownTargets() const;
 	/// count how many known XCom units are able to see this unit.
-	int getSpottingUnits(Position pos) const;
+	int getSpottingUnits(const Position& pos) const;
 	/// Selects the nearest target we can see, and return the number of viable targets.
 	int selectNearestTarget();
 	/// Selects the closest known xcom unit for ambushing.

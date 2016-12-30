@@ -96,6 +96,14 @@ void UnitFallBState::think()
 			}
 		}
 
+		if ((*unit)->getStatus() == STATUS_WALKING || (*unit)->getStatus() == STATUS_FLYING)
+		{
+			(*unit)->keepWalking(tileBelow, true); 	// advances the phase
+			_parent->getMap()->cacheUnit(*unit);	// make sure the unit sprites are up to date
+			++unit;
+			continue;
+		}
+
 		falling = largeCheck
 			&& (*unit)->getPosition().z != 0
 			&& (*unit)->getTile()->hasNoFloor(tileBelow)
@@ -126,13 +134,7 @@ void UnitFallBState::think()
 				}
 			}
 		}
-
-		if ((*unit)->getStatus() == STATUS_WALKING || (*unit)->getStatus() == STATUS_FLYING)
-		{
-			(*unit)->keepWalking(tileBelow, true); 	// advances the phase
-			_parent->getMap()->cacheUnit(*unit);	// make sure the unit sprites are up to date
-		}
-
+		
 		falling = largeCheck
 			&& (*unit)->getPosition().z != 0
 			&& (*unit)->getTile()->hasNoFloor(tileBelow)
@@ -192,14 +194,14 @@ void UnitFallBState::think()
 						for (std::vector<Position>::iterator bs = bodySections.begin(); bs < bodySections.end(); )
 						{
 							Position originalPosition = (*bs);
-							Tile *currentTile = _parent->getSave()->getTile(originalPosition);
-							Tile *t = _parent->getSave()->getTile(originalPosition + offset);
-							Tile *bt = _parent->getSave()->getTile(originalPosition + offset + Position(0,0,-1));
+							Position endPosition = originalPosition + offset;
+							Tile *t = _parent->getSave()->getTile(endPosition);
+							Tile *bt = _parent->getSave()->getTile(endPosition + Position(0,0,-1));
 
 							bool aboutToBeOccupiedFromAbove = t && std::find(tilesToFallInto.begin(), tilesToFallInto.end(), t) != tilesToFallInto.end();
 							bool alreadyTaken = t && std::find(escapeTiles.begin(), escapeTiles.end(), t) != escapeTiles.end();
 							bool alreadyOccupied = t && t->getUnit() && (t->getUnit() != unitBelow);
-							bool movementBlocked = _parent->getSave()->getPathfinding()->isBlocked(currentTile, t, dir, unitBelow);
+							bool movementBlocked = _parent->getSave()->getPathfinding()->getTUCost(originalPosition, dir, &endPosition, *ub, 0, false) == 255;
 							bool hasFloor = t && !t->hasNoFloor(bt);
 							bool unitCanFly = unitBelow->getMovementType() == MT_FLY;
 
@@ -265,8 +267,13 @@ void UnitFallBState::think()
 				if ((*unit)->getSpecialAbility() == SPECAB_BURNFLOOR || (*unit)->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 				{
 					(*unit)->getTile()->ignite(1);
-					Position here = ((*unit)->getPosition() * Position(16,16,24)) + Position(8,8,-((*unit)->getTile()->getTerrainLevel()));
-					_parent->getTileEngine()->hit(here, (*unit)->getBaseStats()->strength, DT_IN, (*unit));
+					Position groundVoxel = ((*unit)->getPosition() * Position(16,16,24)) + Position(8,8,-((*unit)->getTile()->getTerrainLevel()));
+					_parent->getTileEngine()->hit(groundVoxel, (*unit)->getBaseStats()->strength, DT_IN, (*unit));
+
+					if ((*unit)->getStatus() != STATUS_STANDING) // ie: we burned a hole in the floor and fell through it
+					{
+						_parent->getPathfinding()->abortPath();
+					}
 				}
 				// move our personal lighting with us
 				_terrain->calculateUnitLighting();
@@ -274,9 +281,12 @@ void UnitFallBState::think()
 				(*unit)->setCache(0);
 				_terrain->calculateFOV(*unit);
 				_parent->checkForProximityGrenades(*unit);
-				if (_parent->getTileEngine()->checkReactionFire(*unit))
-					_parent->getPathfinding()->abortPath();
-				unit = _parent->getSave()->getFallingUnits()->erase(unit);
+				if ((*unit)->getStatus() == STATUS_STANDING)
+				{
+					if (_parent->getTileEngine()->checkReactionFire(*unit))
+						_parent->getPathfinding()->abortPath();
+					unit = _parent->getSave()->getFallingUnits()->erase(unit);
+				}
 			}
 		}
 		else

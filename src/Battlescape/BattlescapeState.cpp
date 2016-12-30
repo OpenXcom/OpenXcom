@@ -174,7 +174,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _firstInit(true), _isMouseSc
 	
 	// Add in custom reserve buttons
 	Surface *icons = _game->getMod()->getSurface("ICONS.PCK");
-	if (_game->getMod()->getSurface("TFTDReserve"))
+	if (_game->getMod()->getSurface("TFTDReserve", false))
 	{
 		Surface *tftdIcons = _game->getMod()->getSurface("TFTDReserve");
 		tftdIcons->setX(48);
@@ -1962,10 +1962,11 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 	{
 		_game->getMod()->getSoundByDepth(0, _save->getAmbientSound())->stopLoop();
 	}
+	AlienDeployment *ruleDeploy = _game->getMod()->getDeployment(_save->getMissionType());
 	std::string nextStage;
-	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
+	if (ruleDeploy)
 	{
-		nextStage = _game->getMod()->getDeployment(_save->getMissionType())->getNextStage();
+		nextStage = ruleDeploy->getNextStage();
 	}
 
 	if (!nextStage.empty() && inExitArea)
@@ -1986,15 +1987,15 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		_game->popState();
 		_game->pushState(new DebriefingState);
 		std::string cutscene;
-		if (_game->getMod()->getDeployment(_save->getMissionType()))
+		if (ruleDeploy)
 		{
 			if (abort || inExitArea == 0)
 			{
-				cutscene = _game->getMod()->getDeployment(_save->getMissionType())->getLoseCutscene();
+				cutscene = ruleDeploy->getLoseCutscene();
 			}
 			else
 			{
-				cutscene = _game->getMod()->getDeployment(_save->getMissionType())->getWinCutscene();
+				cutscene = ruleDeploy->getWinCutscene();
 			}
 		}
 		if (!cutscene.empty())

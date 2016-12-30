@@ -57,7 +57,7 @@ void AlienStrategy::init(const Mod *mod)
 	std::vector<std::string> regions = mod->getRegionsList();
 	for (std::vector<std::string>::const_iterator rr = regions.begin(); rr != regions.end(); ++rr)
 	{
-		RuleRegion *region = mod->getRegion(*rr);
+		RuleRegion *region = mod->getRegion(*rr, true);
 		_regionChances.set(*rr, region->getWeight());
 		WeightedOptions *missions = new WeightedOptions(region->getAvailableMissions());
 		_regionMissions.insert(std::make_pair(*rr, missions));
@@ -83,9 +83,9 @@ void AlienStrategy::load(const YAML::Node &node)
 	{
 		std::string region = (*nn)["region"].as<std::string>();
 		const YAML::Node &missions = (*nn)["missions"];
-		std::auto_ptr<WeightedOptions> options(new WeightedOptions());
+		WeightedOptions *options = new WeightedOptions();
 		options->load(missions);
-		_regionMissions.insert(std::make_pair(region, options.release()));
+		_regionMissions.insert(std::make_pair(region, options));
 	}
 	_missionLocations = node["missionLocations"].as< std::map<std::string, std::vector<std::pair<std::string, int> > > >(_missionLocations);
 	_missionRuns = node["missionsRun"].as< std::map<std::string, int> >(_missionRuns);

@@ -32,13 +32,13 @@ namespace OpenXcom
 
 	ArticleStateTFTDUso::ArticleStateTFTDUso(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs)
 	{
-		RuleUfo *ufo = _game->getMod()->getUfo(defs->id);
+		RuleUfo *ufo = _game->getMod()->getUfo(defs->id, true);
 		
 		_lstInfo = new TextList(150, 50, 168, 142);
 		add(_lstInfo);
 
 		_lstInfo->setColor(Palette::blockOffset(0)+2);
-		_lstInfo->setColumns(2, 100, 50);
+		_lstInfo->setColumns(2, 95, 55);
 		_lstInfo->setDot(true);
 
 		_lstInfo->addRow(2, tr("STR_DAMAGE_CAPACITY").c_str(), Text::formatNumber(ufo->getMaxDamage()).c_str());

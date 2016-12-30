@@ -36,7 +36,7 @@ namespace OpenXcom
 
 	ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo *defs) : ArticleState(defs->id)
 	{
-		RuleUfo *ufo = _game->getMod()->getUfo(defs->id);
+		RuleUfo *ufo = _game->getMod()->getUfo(defs->id, true);
 
 		// add screen elements
 		_txtTitle = new Text(155, 32, 5, 24);

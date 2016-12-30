@@ -38,6 +38,7 @@
 #include "../Savegame/SoldierDeath.h"
 #include "../Savegame/BattleUnitStatistics.h"
 #include "../Savegame/Country.h"
+#include "../Savegame/AlienBase.h"
 
 namespace OpenXcom
 {
@@ -124,6 +125,7 @@ void StatisticsState::listStats()
 	int64_t totalIncome = sumVector(save->getIncomes());
 	int64_t totalExpenses = sumVector(save->getExpenditures());
 
+	int alienBasesDestroyed = 0, xcomBasesLost = 0;
 	int missionsWin = 0, missionsLoss = 0, nightMissions = 0;
 	int bestScore = -9999, worstScore = 9999;
 	for (std::vector<MissionStatistics*>::const_iterator i = save->getMissionStatistics()->begin(); i != save->getMissionStatistics()->end(); ++i)
@@ -141,6 +143,14 @@ void StatisticsState::listStats()
 		if ((*i)->daylight > 5)
 		{
 			nightMissions++;
+		}
+		if ((*i)->isAlienBase() && (*i)->success)
+		{
+			alienBasesDestroyed++;
+		}
+		if ((*i)->isBaseDefense() && !(*i)->success)
+		{
+			xcomBasesLost++;
 		}
 	}
 	// Make sure dummy values aren't left in
@@ -230,8 +240,15 @@ void StatisticsState::listStats()
 	}
 
 	std::map<std::string, int> ids = save->getAllIds();
+	int alienBases = alienBasesDestroyed;
+	for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
+	{
+		if ((*i)->isDiscovered())
+		{
+			alienBases++;
+		}
+	}
 	int ufosDetected = std::max(0, ids["STR_UFO"] - 1);
-	int alienBases = std::max(0, ids["STR_ALIEN_BASE"] - 1);
 	int terrorSites = std::max(0, ids["STR_TERROR_SITE"] - 1);
 	int totalCrafts = 0;
 	for (std::vector<std::string>::const_iterator i = _game->getMod()->getCraftsList().begin(); i != _game->getMod()->getCraftsList().end(); ++i)
@@ -239,7 +256,7 @@ void StatisticsState::listStats()
 		totalCrafts += std::max(0, ids[*i] - 1);
 	}
 
-	int currentBases = save->getBases()->size();
+	int xcomBases = save->getBases()->size() + xcomBasesLost;
 	int currentScientists = 0, currentEngineers = 0;
 	for (std::vector<Base*>::const_iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
 	{
@@ -283,7 +300,7 @@ void StatisticsState::listStats()
 	_lstStats->addRow(2, tr("STR_TOTAL_ALIEN_BASES").c_str(), Text::formatNumber(alienBases).c_str());
 	_lstStats->addRow(2, tr("STR_COUNTRIES_LOST").c_str(), Text::formatNumber(countriesLost).c_str());
 	_lstStats->addRow(2, tr("STR_TOTAL_TERROR_SITES").c_str(), Text::formatNumber(terrorSites).c_str());
-	_lstStats->addRow(2, tr("STR_TOTAL_BASES").c_str(), Text::formatNumber(currentBases).c_str());
+	_lstStats->addRow(2, tr("STR_TOTAL_BASES").c_str(), Text::formatNumber(xcomBases).c_str());
 	_lstStats->addRow(2, tr("STR_TOTAL_CRAFT").c_str(), Text::formatNumber(totalCrafts).c_str());
 	_lstStats->addRow(2, tr("STR_TOTAL_SCIENTISTS").c_str(), Text::formatNumber(currentScientists).c_str());
 	_lstStats->addRow(2, tr("STR_TOTAL_ENGINEERS").c_str(), Text::formatNumber(currentEngineers).c_str());

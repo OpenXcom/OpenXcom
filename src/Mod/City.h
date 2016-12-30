@@ -35,7 +35,7 @@ private:
 	std::string _name;
 	
 	/// Gets the city's default name (unused).
-	std::wstring getDefaultName(Language* lang) const { return L""; }
+	std::wstring getDefaultName(Language *) const { return L""; }
 public:
 	/// Creates a new city at a certain position.
 	City(const std::string &name, double lon, double lat);

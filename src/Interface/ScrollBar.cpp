@@ -158,7 +158,7 @@ void ScrollBar::handle(Action *action, State *state)
 	if (_pressed && (action->getDetails()->type == SDL_MOUSEMOTION || action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
 	{
 		int cursorY = action->getAbsoluteYMouse() - getY();
-		int y = std::min(std::max(cursorY + _offset, 0), getHeight() - _thumbRect.h + 1);
+		int y = Clamp(cursorY + _offset, 0, getHeight() - _thumbRect.h + 1);
 		double scale = (double)_list->getRows() / getHeight();
 		int scroll = (int)Round(y * scale);
 		_list->scrollTo(scroll);

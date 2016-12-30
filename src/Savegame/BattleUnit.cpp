@@ -296,12 +296,9 @@ BattleUnit::~BattleUnit()
 {
 	for (int i = 0; i < 5; ++i)
 		if (_cache[i]) delete _cache[i];
-	if (!getGeoscapeSoldier())
+	for (std::vector<BattleUnitKills*>::const_iterator i = _statistics->kills.begin(); i != _statistics->kills.end(); ++i)
 	{
-		for (std::vector<BattleUnitKills*>::const_iterator i = _statistics->kills.begin(); i != _statistics->kills.end(); ++i)
-		{
-			delete *i;
-		}
+		delete *i;
 	}
 	delete _statistics;
 	delete _currentAIState;
@@ -370,7 +367,7 @@ void BattleUnit::load(const YAML::Node &node)
 			_recolor.push_back(std::make_pair(p[i][0].as<int>(), p[i][1].as<int>()));
 		}
 	}
-	_mindControllerID = node["mincControllerID"].as<int>(_mindControllerID);
+	_mindControllerID = node["mindControllerID"].as<int>(_mindControllerID);
 }
 
 /**
@@ -486,7 +483,7 @@ int BattleUnit::getId() const
  * @param pos position
  * @param updateLastPos refresh last stored position
  */
-void BattleUnit::setPosition(const Position& pos, bool updateLastPos)
+void BattleUnit::setPosition(Position pos, bool updateLastPos)
 {
 	if (updateLastPos) { _lastPos = _pos; }
 	_pos = pos;
@@ -496,7 +493,7 @@ void BattleUnit::setPosition(const Position& pos, bool updateLastPos)
  * Gets the BattleUnit's position.
  * @return position
  */
-const Position& BattleUnit::getPosition() const
+Position BattleUnit::getPosition() const
 {
 	return _pos;
 }
@@ -505,7 +502,7 @@ const Position& BattleUnit::getPosition() const
  * Gets the BattleUnit's position.
  * @return position
  */
-const Position& BattleUnit::getLastPosition() const
+Position BattleUnit::getLastPosition() const
 {
 	return _lastPos;
 }
@@ -514,7 +511,7 @@ const Position& BattleUnit::getLastPosition() const
  * Gets the BattleUnit's destination.
  * @return destination
  */
-const Position& BattleUnit::getDestination() const
+Position BattleUnit::getDestination() const
 {
 	return _destination;
 }
@@ -603,7 +600,7 @@ UnitStatus BattleUnit::getStatus() const
  * @param tileBelowMe Which tile is currently below the unit.
  * @param cache Update cache?
  */
-void BattleUnit::startWalking(int direction, const Position &destination, Tile *tileBelowMe, bool cache)
+void BattleUnit::startWalking(int direction, Position destination, Tile *tileBelowMe, bool cache)
 {
 	if (direction >= Pathfinding::DIR_UP)
 	{
@@ -747,7 +744,7 @@ int BattleUnit::getDiagonalWalkingPhase() const
  * @param point Position to look at.
  * @param turret True to turn the turret, false to turn the unit.
  */
-void BattleUnit::lookAt(const Position &point, bool turret)
+void BattleUnit::lookAt(Position point, bool turret)
 {
 	int dir = directionTo (point);
 
@@ -990,7 +987,7 @@ void BattleUnit::aim(bool aiming)
  * @param point given position.
  * @return direction.
  */
-int BattleUnit::directionTo(const Position &point) const
+int BattleUnit::directionTo(Position point) const
 {
 	double ox = point.x - _pos.x;
 	double oy = point.y - _pos.y;
@@ -1078,7 +1075,7 @@ int BattleUnit::getMorale() const
  * @param ignoreArmor Should the damage ignore armor resistance?
  * @return damage done after adjustment
  */
-int BattleUnit::damage(const Position &relative, int power, ItemDamageType type, bool ignoreArmor)
+int BattleUnit::damage(Position relative, int power, ItemDamageType type, bool ignoreArmor)
 {
 	UnitSide side = SIDE_FRONT;
 	UnitBodyPart bodypart = BODYPART_TORSO;
@@ -1633,20 +1630,22 @@ void BattleUnit::prepareNewTurn(bool fullProcess)
 		return;
 	}
 
+
+	_unitsSpottedThisTurn.clear();
+
 	// revert to original faction
 	// don't give it back its TUs or anything this round
 	// because it's no longer a unit of the team getting TUs back
 	if (_faction != _originalFaction)
 	{
 		_faction = _originalFaction;
-		return;
 	}
-
-	_unitsSpottedThisTurn.clear();
-
-	recoverTimeUnits();
-
+	else
+	{
+		recoverTimeUnits();
+	}
 	_dontReselect = false;
+
 	_motionPoints = 0;
 
 	// transition between stages, don't do damage or panic
@@ -1671,7 +1670,6 @@ void BattleUnit::prepareNewTurn(bool fullProcess)
 	// if unit is dead, AI state should be gone
 	if (_health == 0 && _currentAIState)
 	{
-		_currentAIState->exit();
 		delete _currentAIState;
 		_currentAIState = 0;
 	}
@@ -1788,11 +1786,9 @@ void BattleUnit::setAIModule(AIModule *ai)
 {
 	if (_currentAIState)
 	{
-		_currentAIState->exit();
 		delete _currentAIState;
 	}
 	_currentAIState = ai;
-	_currentAIState->enter();
 }
 
 /**
@@ -2959,7 +2955,7 @@ void BattleUnit::breathe()
 	{
 		// deviation from original: TFTD used a static 10% chance for every animation frame,
 		// instead let's use 5%, but allow morale to affect it.
-		_breathing = (_status != STATUS_WALKING && RNG::percent(105 - _morale));
+		_breathing = (_status != STATUS_WALKING && RNG::seedless(0, 99) < (105 - _morale));
 		_breathFrame = 0;
 	}
 
@@ -3199,7 +3195,7 @@ std::string BattleUnit::getMurdererWeapon() const
  * Set the murderer's weapon.
  * @param string murderer's weapon.
  */
-void BattleUnit::setMurdererWeapon(std::string weapon)
+void BattleUnit::setMurdererWeapon(const std::string& weapon)
 {
 	_murdererWeapon = weapon;
 }
@@ -3217,7 +3213,7 @@ std::string BattleUnit::getMurdererWeaponAmmo() const
  * Set the murderer's weapon's ammo.
  * @param string murderer weapon ammo.
  */
-void BattleUnit::setMurdererWeaponAmmo(std::string weaponAmmo)
+void BattleUnit::setMurdererWeaponAmmo(const std::string& weaponAmmo)
 {
 	_murdererWeaponAmmo = weaponAmmo;
 }

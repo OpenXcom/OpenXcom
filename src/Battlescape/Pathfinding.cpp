@@ -65,7 +65,7 @@ Pathfinding::~Pathfinding()
  * @param pos Position.
  * @return Pointer to node.
  */
-PathfindingNode *Pathfinding::getNode(const Position& pos)
+PathfindingNode *Pathfinding::getNode(Position pos)
 {
 	return &_nodes[_save->getTileIndex(pos)];
 }
@@ -182,7 +182,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
  * @param maxTUCost Maximum time units the path can cost.
  * @return True if a path exists, false otherwise.
  */
-bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPosition, BattleUnit *target, bool sneak, int maxTUCost)
+bool Pathfinding::aStarPath(Position startPosition, Position endPosition, BattleUnit *target, bool sneak, int maxTUCost)
 {
 	// reset every node, so we have to check them all
 	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
@@ -248,7 +248,7 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
  * @param missile Is this a guided missile?
  * @return TU cost or 255 if movement is impossible.
  */
-int Pathfinding::getTUCost(const Position &startPosition, int direction, Position *endPosition, BattleUnit *unit, BattleUnit *target, bool missile)
+int Pathfinding::getTUCost(Position startPosition, int direction, Position *endPosition, BattleUnit *unit, BattleUnit *target, bool missile)
 {
 	_unit = unit;
 	directionToVector(direction, endPosition);
@@ -299,7 +299,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			Position verticalOffset (0, 0, 0);
 
 			// if we are on a stairs try to go up a level
-			if (direction < DIR_UP && startTile->getTerrainLevel() <= -16 && !aboveDestination->hasNoFloor(destinationTile) && !triedStairs)
+			if (direction < DIR_UP && startTile->getTerrainLevel() <= -16 && aboveDestination && !aboveDestination->hasNoFloor(destinationTile) && !triedStairs)
 			{
 					numberOfPartsGoingUp++;
 
@@ -433,7 +433,8 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				cost = (int)((double)cost * 1.5);
 			}
 			cost += wallcost;
-			if (_unit->getFaction() == FACTION_HOSTILE &&
+			if (_unit->getFaction() != FACTION_PLAYER &&
+				_unit->getSpecialAbility() < SPECAB_BURNFLOOR &&
 				destinationTile->getFire() > 0)
 				cost += 32; // try to find a better path, but don't exclude this path entirely.
 
@@ -519,7 +520,7 @@ void Pathfinding::directionToVector(int direction, Position *vector)
  * @param vector Pointer to a position (which acts as a vector).
  * @param dir Resulting direction.
  */
-void Pathfinding::vectorToDirection(const Position &vector, int &dir)
+void Pathfinding::vectorToDirection(Position vector, int &dir)
 {
 	dir = -1;
 	int x[8] = {0, 1, 1, 1, 0, -1, -1, -1};
@@ -789,7 +790,7 @@ bool Pathfinding::canFallDown(Tile *here, int size) const
  * @param endPosition The position we wanna reach.
  * @return True if the unit is going up a stairs.
  */
-bool Pathfinding::isOnStairs(const Position &startPosition, const Position &endPosition) const
+bool Pathfinding::isOnStairs(Position startPosition, Position endPosition) const
 {
 	//condition 1 : endposition has to the south a terrainlevel -16 object (upper part of the stairs)
 	if (_save->getTile(endPosition + Position(0, 1, 0)) && _save->getTile(endPosition + Position(0, 1, 0))->getTerrainLevel() == -16)
@@ -858,7 +859,7 @@ bool Pathfinding::isOnStairs(const Position &startPosition, const Position &endP
  * @param direction Up or Down
  * @return bool Whether it's valid.
  */
-bool Pathfinding::validateUpDown(BattleUnit *bu, Position startPosition, const int direction, bool missile) const
+bool Pathfinding::validateUpDown(BattleUnit *bu, const Position& startPosition, const int direction, bool missile) const
 {
 	Position endPosition;
 	directionToVector(direction, &endPosition);
@@ -1015,7 +1016,7 @@ bool Pathfinding::removePreview()
  * @param maxTUCost Maximum time units the path can cost.
  * @return True if a path exists, false otherwise.
  */
-bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, BattleUnit *targetUnit, bool sneak, int maxTUCost)
+bool Pathfinding::bresenhamPath(Position origin, Position target, BattleUnit *targetUnit, bool sneak, int maxTUCost)
 {
 	int xd[8] = {0, 1, 1, 1, 0, -1, -1, -1};
 	int yd[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
@@ -1146,7 +1147,7 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
  */
 std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 {
-	const Position &start = unit->getPosition();
+	Position start = unit->getPosition();
 	int energyMax = unit->getEnergy();
 	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
 	{

@@ -114,6 +114,7 @@ void create()
 	_info.push_back(OptionInfo("globeAllRadarsOnBaseBuild", &globeAllRadarsOnBaseBuild, true));
 	_info.push_back(OptionInfo("audioSampleRate", &audioSampleRate, 22050));
 	_info.push_back(OptionInfo("audioBitDepth", &audioBitDepth, 16));
+	_info.push_back(OptionInfo("audioChunkSize", &audioChunkSize, 1024));
 	_info.push_back(OptionInfo("pauseMode", &pauseMode, 0));
 	_info.push_back(OptionInfo("battleNotifyDeath", &battleNotifyDeath, false));
 	_info.push_back(OptionInfo("showFundsOnGeoscape", &showFundsOnGeoscape, false));
@@ -175,7 +176,7 @@ void create()
 	_info.push_back(OptionInfo("globeSeasons", &globeSeasons, false, "STR_GLOBESEASONS", "STR_GEOSCAPE"));
 	_info.push_back(OptionInfo("psiStrengthEval", &psiStrengthEval, false, "STR_PSISTRENGTHEVAL", "STR_GEOSCAPE"));
 	_info.push_back(OptionInfo("canTransferCraftsWhileAirborne", &canTransferCraftsWhileAirborne, false, "STR_CANTRANSFERCRAFTSWHILEAIRBORNE", "STR_GEOSCAPE")); // When the craft can reach the destination base with its fuel
-	_info.push_back(OptionInfo("spendResearchedItems", &spendResearchedItems, false, "STR_SPENDRESEARCHEDITEMS", "STR_GEOSCAPE"));
+	_info.push_back(OptionInfo("retainCorpses", &retainCorpses, false, "STR_RETAINCORPSES", "STR_GEOSCAPE"));
 	_info.push_back(OptionInfo("fieldPromotions", &fieldPromotions, false, "STR_FIELDPROMOTIONS", "STR_GEOSCAPE"));
 	_info.push_back(OptionInfo("meetingPoint", &meetingPoint, false, "STR_MEETINGPOINT", "STR_GEOSCAPE"));
 	
@@ -448,7 +449,7 @@ static void _scanMods(const std::string &modsDir)
 	std::vector<std::string> contents = CrossPlatform::getFolderContents(modsDir);
 	for (std::vector<std::string>::iterator i = contents.begin(); i != contents.end(); ++i)
 	{
-		std::string modPath = modsDir + "/" + *i;
+		std::string modPath = modsDir + CrossPlatform::PATH_SEPARATOR + *i;
 		if (!CrossPlatform::folderExists(modPath))
 		{
 			// skip non-directories (e.g. README.txt)
@@ -759,7 +760,11 @@ void setFolders()
 	if (_userFolder.empty())
 	{
 		std::vector<std::string> user = CrossPlatform::findUserFolders();
-		_configFolder = CrossPlatform::findConfigFolder();
+
+		if (_configFolder.empty())
+		{
+			_configFolder = CrossPlatform::findConfigFolder();
+		}
 
 		// Look for an existing user folder
 		for (std::vector<std::string>::reverse_iterator i = user.rbegin(); i != user.rend(); ++i)
@@ -842,7 +847,7 @@ void userSplitMasters()
 				std::vector<std::string> mods = doc["mods"].as<std::vector< std::string> >(std::vector<std::string>());
 				if (std::find(mods.begin(), mods.end(), (*i)) != mods.end())
 				{
-					std::string dstFile = masterFolder + "/" + (*j);
+					std::string dstFile = masterFolder + CrossPlatform::PATH_SEPARATOR + (*j);
 					CrossPlatform::moveFile(srcFile, dstFile);
 					j = saves.erase(j);
 				}
@@ -1026,7 +1031,7 @@ std::string getConfigFolder()
  */
 std::string getMasterUserFolder()
 {
-	return _userFolder + getActiveMaster() + "/";
+	return _userFolder + getActiveMaster() + CrossPlatform::PATH_SEPARATOR;
 }
 
 /**

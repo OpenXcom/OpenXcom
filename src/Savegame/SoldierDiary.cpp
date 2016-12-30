@@ -166,12 +166,13 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, std::vector
 {
 	if (allMissionStatistics->empty()) return;
 	MissionStatistics* missionStatistics = allMissionStatistics->back();
-	std::vector<BattleUnitKills*> unitKills = unitStatistics->kills;
+	std::vector<BattleUnitKills*> &unitKills = unitStatistics->kills;
 	for (std::vector<BattleUnitKills*>::const_iterator kill = unitKills.begin() ; kill != unitKills.end() ; ++kill)
 	{
 		(*kill)->makeTurnUnique();
 		_killList.push_back(*kill);
 	}
+	unitKills.clear();
 	if (missionStatistics->success)
 	{
 		if (unitStatistics->loneSurvivor)
@@ -546,7 +547,7 @@ void SoldierDiary::manageModularCommendations(std::map<std::string, int> &nextCo
  * @param type string
  * @param noun string
  */
-void SoldierDiary::awardCommendation(std::string type, std::string noun)
+void SoldierDiary::awardCommendation(const std::string& type, const std::string& noun)
 {
 	bool newCommendation = true;
 	for (std::vector<SoldierCommendations*>::iterator i = _commendations.begin() ; i != _commendations.end() ; ++i)

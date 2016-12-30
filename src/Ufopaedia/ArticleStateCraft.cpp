@@ -34,7 +34,7 @@ namespace OpenXcom
 
 	ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft *defs) : ArticleState(defs->id)
 	{
-		RuleCraft *craft = _game->getMod()->getCraft(defs->id);
+		RuleCraft *craft = _game->getMod()->getCraft(defs->id, true);
 
 		// add screen elements
 		_txtTitle = new Text(210, 32, 5, 24);

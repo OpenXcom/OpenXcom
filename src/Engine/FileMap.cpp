@@ -186,6 +186,11 @@ void load(const std::string &modId, const std::string &path, bool ignoreMods)
 	_mapFiles(modId, path, "", ignoreMods);
 }
 
+bool isResourcesEmpty(void)
+{
+	return _resources.empty();
+}
+
 }
 
 }

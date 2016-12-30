@@ -35,6 +35,7 @@
 #include "../Savegame/Waypoint.h"
 #include "SelectDestinationState.h"
 #include "../Engine/Options.h"
+#include "Globe.h"
 
 namespace OpenXcom
 {
@@ -180,6 +181,10 @@ GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *way
 	_txtMaxSpeed->setText(tr("STR_MAXIMUM_SPEED_UC").arg(Text::formatNumber(_craft->getRules()->getMaxSpeed())));
 
 	std::string altitude = _craft->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _craft->getAltitude();
+	if (_craft->getRules()->isWaterOnly() && !_globe->insideLand(_craft->getLongitude(), _craft->getLatitude()))
+	{
+		altitude = "STR_AIRBORNE";
+	}
 	_txtAltitude->setText(tr("STR_ALTITUDE_").arg(tr(altitude)));
 
 	_txtFuel->setText(tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage())));

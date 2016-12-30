@@ -72,9 +72,6 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 	_txtMedalLevel = new Text(120, 18, 186, 36);
 	_txtMedalInfo = new Text(280, 32, 20, 135);
 	_lstCommendations = new TextList(240, 80, 48, 52);
-	// Commendation sprites
-	_commendationSprite = _game->getMod()->getSurfaceSet("Commendations");
-	_commendationDecoration = _game->getMod()->getSurfaceSet("CommendationDecorations");
 	for (int i = 0; i != 10; ++i)
 	{
 		_commendations.push_back(new Surface(31, 8, 16, 52 + 8*i));
@@ -334,6 +331,10 @@ void SoldierDiaryPerformanceState::init()
 void SoldierDiaryPerformanceState::drawSprites()
 {
 	if (_display != DIARY_COMMENDATIONS) return;
+
+	// Commendation sprites
+	_commendationSprite = _game->getMod()->getSurfaceSet("Commendations");
+	_commendationDecoration = _game->getMod()->getSurfaceSet("CommendationDecorations");
 
 	// Clear sprites
 	for (int i = 0; i != 10; ++i)

@@ -186,7 +186,7 @@ public:
 	/// Gets the current game time.
 	GameTime *getTime() const;
 	/// Sets the current game time.
-	void setTime(GameTime time);
+	void setTime(const GameTime& time);
 	/// Gets the current ID for an object.
 	int getId(const std::string &name);
 	/// Resets the list of object IDs.

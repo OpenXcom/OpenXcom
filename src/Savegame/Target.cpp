@@ -37,9 +37,10 @@ Target::Target() : _lon(0.0), _lat(0.0), _depth(0)
  */
 Target::~Target()
 {
-	for (size_t i = 0; i < _followers.size(); ++i)
+	std::vector<Target*> followers = _followers; // We need to copy this as it's gonna be modified
+	for (std::vector<Target*>::iterator i = followers.begin(); i != followers.end(); ++i)
 	{
-		Craft *craft = dynamic_cast<Craft*>(_followers[i]);
+		Craft *craft = dynamic_cast<Craft*>(*i);
 		if (craft)
 		{
 			craft->returnToBase();
@@ -184,24 +185,6 @@ std::vector<Target*> *Target::getFollowers()
 double Target::getDistance(const Target *target) const
 {
 	return acos(cos(_lat) * cos(target->getLatitude()) * cos(target->getLongitude() - _lon) + sin(_lat) * sin(target->getLatitude()));
-}
-
-/**
- * Gets the mission site's depth.
- * @return the depth of the site.
- */
-int Target::getSiteDepth() const
-{
-	return _depth;
-}
-
-/**
- * Sets the mission site's depth.
- * @param depth the depth we want.
- */
-void Target::setSiteDepth(int depth)
-{
-	_depth = depth;
 }
 
 }

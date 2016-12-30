@@ -123,7 +123,7 @@ public:
 	/// Handles unit AI.
 	void handleAI(BattleUnit *unit);
 	/// Drops an item and affects it with gravity.
-	void dropItem(const Position &position, BattleItem *item, bool newItem = false, bool removeItem = false);
+	void dropItem(Position position, BattleItem *item, bool newItem = false, bool removeItem = false);
 	/// Converts a unit into a unit of another type.
 	BattleUnit *convertUnit(BattleUnit *unit);
 	/// Handles kneeling action.
@@ -135,9 +135,9 @@ public:
 	/// Determines whether there is an action currently going on.
 	bool isBusy() const;
 	/// Activates primary action (left click).
-	void primaryAction(const Position &pos);
+	void primaryAction(Position pos);
 	/// Activates secondary action (right click).
-	void secondaryAction(const Position &pos);
+	void secondaryAction(Position pos);
 	/// Handler for the blaster launcher button.
 	void launchAction();
 	/// Handler for the psi button.

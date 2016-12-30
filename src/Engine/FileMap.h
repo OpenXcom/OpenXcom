@@ -56,6 +56,9 @@ namespace FileMap
 	/// ignoreMods is false, it will add any rulesets it finds to the front of the vector
 	/// returned by getMods().
 	void load(const std::string &modId, const std::string &path, bool ignoreMods);
+
+	/// Determines if _resources set is empty
+	bool isResourcesEmpty(void);
 }
 
 }

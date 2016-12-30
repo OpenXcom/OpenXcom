@@ -63,11 +63,14 @@ SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(
  */
 SavedBattleGame::~SavedBattleGame()
 {
-	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
+	if (_mapsize_z * _mapsize_y * _mapsize_x > 0)
 	{
-		delete _tiles[i];
+		for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
+		{
+			delete _tiles[i];
+		}
+		delete[] _tiles;
 	}
-	delete[] _tiles;
 
 	for (std::vector<MapDataSet*>::iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
@@ -113,9 +116,11 @@ SavedBattleGame::~SavedBattleGame()
  */
 void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGame)
 {
-	_mapsize_x = node["width"].as<int>(_mapsize_x);
-	_mapsize_y = node["length"].as<int>(_mapsize_y);
-	_mapsize_z = node["height"].as<int>(_mapsize_z);
+	int mapsize_x = node["width"].as<int>(_mapsize_x);
+	int mapsize_y = node["length"].as<int>(_mapsize_y);
+	int mapsize_z = node["height"].as<int>(_mapsize_z);
+	initMap(mapsize_x, mapsize_y, mapsize_z);
+
 	_missionType = node["missionType"].as<std::string>(_missionType);
 	_globalShade = node["globalshade"].as<int>(_globalShade);
 	_turn = node["turn"].as<int>(_turn);
@@ -128,8 +133,6 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 		MapDataSet *mds = mod->getMapDataSet(name);
 		_mapDataSets.push_back(mds);
 	}
-
-	initMap(_mapsize_x, _mapsize_y, _mapsize_z);
 
 	if (!node["tileTotalBytesPer"])
 	{
@@ -216,7 +219,7 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 			if ((unit->getId() == selectedUnit) || (_selectedUnit == 0 && !unit->isOut()))
 				_selectedUnit = unit;
 		}
-		if (unit->getStatus() != STATUS_DEAD)
+		if (unit->getStatus() != STATUS_DEAD && unit->getStatus() != STATUS_IGNORE_ME)
 		{
 			if (const YAML::Node &ai = (*i)["AI"])
 			{
@@ -251,7 +254,17 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 				item->load(*i);
 				type = (*i)["inventoryslot"].as<std::string>();
 				if (type != "NULL")
-					item->setSlot(mod->getInventory(type));
+				{
+					if (mod->getInventory(type))
+					{
+						item->setSlot(mod->getInventory(type));
+						
+					}
+					else
+					{
+						item->setSlot(mod->getInventory("STR_GROUND"));
+					}
+				}				
 				int owner = (*i)["owner"].as<int>();
 				int prevOwner = (*i)["previousOwner"].as<int>(-1);
 				int unit = (*i)["unit"].as<int>();
@@ -281,7 +294,7 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 				{
 					Position pos = (*i)["position"].as<Position>();
 					if (pos.x != -1)
-						getTile(pos)->addItem(item, mod->getInventory("STR_GROUND"));
+						getTile(pos)->addItem(item, mod->getInventory("STR_GROUND", true));
 				}
 				toContainer[pass]->push_back(item);
 			}
@@ -478,27 +491,28 @@ Tile **SavedBattleGame::getTiles() const
  */
 void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
 {
-	if (!_nodes.empty())
+	// Clear old map data
+	if (_mapsize_z * _mapsize_y * _mapsize_x > 0)
 	{
 		for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 		{
 			delete _tiles[i];
 		}
 		delete[] _tiles;
-
-		for (std::vector<Node*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
-		{
-			delete *i;
-		}
-
-		_nodes.clear();
-		_mapDataSets.clear();
 	}
+
+	for (std::vector<Node*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
+	{
+		delete *i;
+	}
+	_nodes.clear();
+	_mapDataSets.clear();
+
+	// Create tile objects
 	_mapsize_x = mapsize_x;
 	_mapsize_y = mapsize_y;
 	_mapsize_z = mapsize_z;
 	_tiles = new Tile*[_mapsize_z * _mapsize_y * _mapsize_x];
-	/* create tile objects */
 	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
 		Position pos;
@@ -722,7 +736,7 @@ BattleUnit *SavedBattleGame::selectPlayerUnit(int dir, bool checkReselect, bool 
  * @param pos Position.
  * @return Pointer to a BattleUnit, or 0 when none is found.
  */
-BattleUnit *SavedBattleGame::selectUnit(const Position& pos)
+BattleUnit *SavedBattleGame::selectUnit(Position pos)
 {
 	BattleUnit *bu = getTile(pos)->getUnit();
 
@@ -1488,7 +1502,7 @@ void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit *bu)
  * @param testOnly If true then just checks if the unit can be placed at the position.
  * @return True if the unit could be successfully placed.
  */
-bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly)
+bool SavedBattleGame::setUnitPosition(BattleUnit *bu, Position position, bool testOnly)
 {
 	int size = bu->getArmor()->getSize() - 1;
 	Position zOffset (0,0,0);
@@ -1695,7 +1709,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
  * @param entryPoint The position around which to attempt to place the unit.
  * @return True if the unit was successfully placed.
  */
-bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, Position entryPoint, bool largeFriend)
+bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, const Position& entryPoint, bool largeFriend)
 {
 	if (setUnitPosition(unit, entryPoint))
 	{
@@ -1937,7 +1951,7 @@ std::string &SavedBattleGame::getMusic()
  * Set the music track for this battle.
  * @param track the track name.
  */
-void SavedBattleGame::setMusic(std::string track)
+void SavedBattleGame::setMusic(const std::string& track)
 {
 	_music = track;
 }

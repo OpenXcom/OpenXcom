@@ -31,6 +31,12 @@ namespace OpenXcom
  */
 namespace CrossPlatform
 {
+#ifdef _WIN32
+	const char PATH_SEPARATOR = '\\';
+#else
+	const char PATH_SEPARATOR = '/';
+#endif
+
 	/// Gets the available error dialog.
 	void getErrorDialog();
 	/// Displays an error message.

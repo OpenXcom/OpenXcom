@@ -25,7 +25,7 @@ namespace OpenXcom
 /**
  * Initializes an alien base
  */
-AlienBase::AlienBase() : Target(), _id(0), _inBattlescape(false), _discovered(false)
+AlienBase::AlienBase(AlienDeployment *deployment) : Target(), _id(0), _inBattlescape(false), _discovered(false), _deployment(deployment)
 {
 }
 
@@ -62,6 +62,7 @@ YAML::Node AlienBase::save() const
 		node["inBattlescape"] = _inBattlescape;
 	if (_discovered)
 		node["discovered"] = _discovered;
+	node["deployment"] = _deployment->getType();
 	return node;
 }
 
@@ -72,7 +73,7 @@ YAML::Node AlienBase::save() const
 YAML::Node AlienBase::saveId() const
 {
 	YAML::Node node = Target::saveId();
-	node["type"] = "STR_ALIEN_BASE";
+	node["type"] = _deployment->getMarkerName();
 	node["id"] = _id;
 	return node;
 }
@@ -102,7 +103,7 @@ void AlienBase::setId(int id)
  */
 std::wstring AlienBase::getDefaultName(Language *lang) const
 {
-	return lang->getString("STR_ALIEN_BASE_").arg(_id);
+	return lang->getString(_deployment->getMarkerName() + "_").arg(_id);
 }
 
 /**
@@ -113,7 +114,7 @@ int AlienBase::getMarker() const
 {
 	if (!_discovered)
 		return -1;
-	return 7;
+	return _deployment->getMarkerIcon();
 }
 
 /**
@@ -168,6 +169,11 @@ bool AlienBase::isDiscovered() const
 void AlienBase::setDiscovered(bool discovered)
 {
 	_discovered = discovered;
+}
+
+AlienDeployment *AlienBase::getDeployment() const
+{
+	return _deployment;
 }
 
 }

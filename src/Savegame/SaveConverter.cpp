@@ -76,7 +76,7 @@ template <> std::wstring load(char* data) { return Language::utf8ToWstr(data); }
 
 char *SaveConverter::binaryBuffer(const std::string &filename, std::vector<char> &buffer) const
 {
-	std::string s = _savePath + "/" + filename;
+	std::string s = _savePath + CrossPlatform::PATH_SEPARATOR + filename;
 	std::ifstream datFile(s.c_str(), std::ios::in | std::ios::binary);
 	if (!datFile)
 	{
@@ -96,7 +96,7 @@ SaveConverter::SaveConverter(int save, Mod *mod) : _save(0), _mod(mod), _rules(m
 {
 	std::ostringstream ssFolder, ssPath;
 	ssFolder << "GAME_" << save;
-	ssPath << Options::getMasterUserFolder() << "/" << ssFolder.str();
+	ssPath << Options::getMasterUserFolder() << ssFolder.str();
 	_saveName = ssFolder.str();
 	_savePath = ssPath.str();
 	ssPath << "/SAVEINFO.DAT";
@@ -124,7 +124,7 @@ void SaveConverter::getList(Language *lang, SaveOriginal info[NUM_SAVES])
 
 		int id = i + 1;
 		std::ostringstream ss;
-		ss << Options::getMasterUserFolder() << "/GAME_" << id << "/SAVEINFO.DAT";
+		ss << Options::getMasterUserFolder() << "GAME_" << id << CrossPlatform::PATH_SEPARATOR << "SAVEINFO.DAT";
 		std::ifstream datFile(ss.str().c_str(), std::ios::in | std::ios::binary);
 		if (datFile)
 		{
@@ -169,7 +169,7 @@ SavedGame *SaveConverter::loadOriginal()
 	_save->getIncomes().clear();
 	for (size_t i = 0; i < _rules->getCountries().size(); ++i)
 	{
-		Country *country = new Country(_mod->getCountry(_rules->getCountries()[i]));
+		Country *country = new Country(_mod->getCountry(_rules->getCountries()[i], true));
 		country->getActivityAlien().clear();
 		country->getActivityXcom().clear();
 		country->getFunding().clear();
@@ -177,7 +177,7 @@ SavedGame *SaveConverter::loadOriginal()
 	}
 	for (size_t i = 0; i < _rules->getRegions().size(); ++i)
 	{
-		Region *region = new Region(_mod->getRegion(_rules->getRegions()[i]));
+		Region *region = new Region(_mod->getRegion(_rules->getRegions()[i], true));
 		region->getActivityAlien().clear();
 		region->getActivityXcom().clear();
 		_save->getRegions()->push_back(region);
@@ -555,7 +555,7 @@ void SaveConverter::loadDatMissions()
 			int region = i / MISSIONS;
 
 			YAML::Node node;
-			AlienMission *m = new AlienMission(*_mod->getAlienMission(_rules->getMissions()[mission]));
+			AlienMission *m = new AlienMission(*_mod->getAlienMission(_rules->getMissions()[mission], true));
 			node["region"] = _rules->getRegions()[region];
 			node["race"] = _rules->getCrews()[race];
 			node["nextWave"] = wave * 30;
@@ -564,15 +564,15 @@ void SaveConverter::loadDatMissions()
 			node["uniqueID"] = _save->getId("ALIEN_MISSIONS");
 			if (m->getRules().getObjective() == OBJECTIVE_SITE)
 			{
-				if (_mod->getRegion(_rules->getRegions()[region])->getMissionZones().size() >= 3)
+				if (_mod->getRegion(_rules->getRegions()[region], true)->getMissionZones().size() >= 3)
 				{
 					// pick a city for terror missions
-					node["missionSiteZone"] = RNG::generate(0, _mod->getRegion(_rules->getRegions()[region])->getMissionZones().at(3).areas.size() - 1);
+					node["missionSiteZone"] = RNG::generate(0, _mod->getRegion(_rules->getRegions()[region], true)->getMissionZones().at(3).areas.size() - 1);
 				}
 				else
 				{
 					// try to account for TFTD's artefacts and such
-					node["missionSiteZone"] = RNG::generate(0, _mod->getRegion(_rules->getRegions()[region])->getMissionZones().at(0).areas.size() - 1);
+					node["missionSiteZone"] = RNG::generate(0, _mod->getRegion(_rules->getRegions()[region], true)->getMissionZones().at(0).areas.size() - 1);
 				}
 			}
 			m->load(node, *_save);
@@ -621,7 +621,7 @@ void SaveConverter::loadDatLoc()
 		case TARGET_UFO:
 		case TARGET_CRASH:
 		case TARGET_LANDED:
-			ufo = new Ufo(_mod->getUfo(_rules->getUfos()[0]));
+			ufo = new Ufo(_mod->getUfo(_rules->getUfos()[0], true));
 			ufo->setId(id);
 			ufo->setCrashId(id);
 			ufo->setLandId(id);
@@ -630,7 +630,7 @@ void SaveConverter::loadDatLoc()
 			target = ufo;
 			break;
 		case TARGET_CRAFT:
-			craft = new Craft(_mod->getCraft(_rules->getCrafts()[0]), 0, id);
+			craft = new Craft(_mod->getCraft(_rules->getCrafts()[0], true), 0, id);
 			target = craft;
 			break;
 		case TARGET_XBASE:
@@ -638,7 +638,7 @@ void SaveConverter::loadDatLoc()
 			target = xbase;
 			break;
 		case TARGET_ABASE:
-			abase = new AlienBase();
+			abase = new AlienBase(_mod->getDeployment("STR_ALIEN_BASE_ASSAULT", true));
 			abase->setId(id);
 			abase->setAlienRace(_rules->getCrews()[dat]);
 			abase->setDiscovered(!visibility.test(0));
@@ -652,19 +652,19 @@ void SaveConverter::loadDatLoc()
 			target = waypoint;
 			break;
 		case TARGET_TERROR:
-			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR"), _mod->getDeployment("STR_TERROR_MISSION"));
+			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR", true), _mod->getDeployment("STR_TERROR_MISSION", true));
 			break;
 		case TARGET_PORT:
-			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR"), _mod->getDeployment("STR_PORT_TERROR"));
+			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR", true), _mod->getDeployment("STR_PORT_TERROR", true));
 			break;
 		case TARGET_ISLAND:
-			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR"), _mod->getDeployment("STR_ISLAND_TERROR"));
+			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR", true), _mod->getDeployment("STR_ISLAND_TERROR", true));
 			break;
 		case TARGET_SHIP:
-			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR"), _mod->getDeployment("STR_CARGO_SHIP_P1"));
+			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR", true), _mod->getDeployment("STR_CARGO_SHIP_P1", true));
 			break;
 		case TARGET_ARTEFACT:
-			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR"), _mod->getDeployment("STR_ARTIFACT_SITE_P1"));
+			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR", true), _mod->getDeployment("STR_ARTIFACT_SITE_P1", true));
 			break;
 		}
 		if (mission != 0)
@@ -713,7 +713,7 @@ void SaveConverter::loadDatBase()
 				size_t facilityType = load<Uint8>(bdata + _rules->getOffset("BASE.DAT_FACILITIES") + k);
 				if (facilityType < _rules->getFacilities().size())
 				{
-					BaseFacility *facility = new BaseFacility(_mod->getBaseFacility(_rules->getFacilities()[facilityType]), base);
+					BaseFacility *facility = new BaseFacility(_mod->getBaseFacility(_rules->getFacilities()[facilityType], true), base);
 					int x = k % BASE_SIZE;
 					int y = k / BASE_SIZE;
 					int days = load<Uint8>(bdata + _rules->getOffset("BASE.DAT_FACILITIES") + FACILITIES + k);
@@ -813,7 +813,7 @@ void SaveConverter::loadDatTransfer()
 				if (baseSrc == 255)
 				{
 					std::string newCraft = _rules->getCrafts()[dat];
-					transfer->setCraft(new Craft(_mod->getCraft(newCraft), b, _save->getId(newCraft)));
+					transfer->setCraft(new Craft(_mod->getCraft(newCraft, true), b, _save->getId(newCraft)));
 				}
 				else
 				{
@@ -864,13 +864,13 @@ void SaveConverter::loadDatCraft()
 			Craft *craft = dynamic_cast<Craft*>(_targets[i]);
 			if (craft != 0)
 			{
-				craft->changeRules(_mod->getCraft(_rules->getCrafts()[type]));
+				craft->changeRules(_mod->getCraft(_rules->getCrafts()[type], true));
 
 				int lweapon = load<Uint8>(cdata + _rules->getOffset("CRAFT.DAT_LEFT_WEAPON"));
 				int lammo = load<Uint16>(cdata + _rules->getOffset("CRAFT.DAT_LEFT_AMMO"));
 				if (lweapon != 0xFF)
 				{
-					CraftWeapon *cw = new CraftWeapon(_mod->getCraftWeapon(_rules->getCraftWeapons()[lweapon]), lammo);
+					CraftWeapon *cw = new CraftWeapon(_mod->getCraftWeapon(_rules->getCraftWeapons()[lweapon], true), lammo);
 					craft->getWeapons()->at(0) = cw;
 				}
 				int flight = load<Uint8>(cdata + _rules->getOffset("CRAFT.DAT_FLIGHT"));
@@ -878,7 +878,7 @@ void SaveConverter::loadDatCraft()
 				int rammo = load<Uint8>(cdata + _rules->getOffset("CRAFT.DAT_RIGHT_AMMO"));
 				if (rweapon != 0xFF)
 				{
-					CraftWeapon *cw = new CraftWeapon(_mod->getCraftWeapon(_rules->getCraftWeapons()[rweapon]), rammo);
+					CraftWeapon *cw = new CraftWeapon(_mod->getCraftWeapon(_rules->getCraftWeapons()[rweapon], true), rammo);
 					craft->getWeapons()->at(1) = cw;
 				}
 
@@ -896,7 +896,7 @@ void SaveConverter::loadDatCraft()
 					int qty = load<Uint8>(cdata + _rules->getOffset("CRAFT.DAT_ITEMS") + k);
 					for (int v = 0; v < qty; ++v)
 					{
-						RuleItem *rule = _mod->getItem(_rules->getItems()[k + 10]);
+						RuleItem *rule = _mod->getItem(_rules->getItems()[k + 10], true);
 						craft->getVehicles()->push_back(new Vehicle(rule, rule->getClipSize(), 4));
 					}
 				}
@@ -931,7 +931,7 @@ void SaveConverter::loadDatCraft()
 			Ufo *ufo = dynamic_cast<Ufo*>(_targets[i]);
 			if (ufo != 0)
 			{
-				ufo->changeRules(_mod->getUfo(_rules->getUfos()[type - 5]));
+				ufo->changeRules(_mod->getUfo(_rules->getUfos()[type - 5], true));
 				node["damage"] = (int)load<Uint16>(cdata + _rules->getOffset("CRAFT.DAT_DAMAGE"));
 				node["altitude"] = xcomAltitudes[load<Uint16>(cdata + _rules->getOffset("CRAFT.DAT_ALTITUDE"))];
 				node["speed"] = (int)load<Uint16>(cdata + _rules->getOffset("CRAFT.DAT_SPEED"));
@@ -945,7 +945,7 @@ void SaveConverter::loadDatCraft()
 				if (m == 0)
 				{
 					YAML::Node subnode;
-					m = new AlienMission(*_mod->getAlienMission(_rules->getMissions()[mission]));
+					m = new AlienMission(*_mod->getAlienMission(_rules->getMissions()[mission], true));
 					subnode["region"] = _rules->getRegions()[region];
 					subnode["race"] = _rules->getCrews()[load<Uint16>(cdata + _rules->getOffset("CRAFT.DAT_RACE"))];
 					subnode["nextWave"] = 1;
@@ -1055,7 +1055,7 @@ void SaveConverter::loadDatSoldier()
 			node["look"] = (int)load<Uint8>(sdata + _rules->getOffset("SOLDIER.DAT_LOOK"));
 			node["id"] = _save->getId("STR_SOLDIER");
 
-			Soldier *soldier = new Soldier(_mod->getSoldier(_mod->getSoldiersList().front()), 0);
+			Soldier *soldier = new Soldier(_mod->getSoldier(_mod->getSoldiersList().front(), true), 0);
 			soldier->load(node, _mod, _save);
 			if (base != 0xFFFF)
 			{
@@ -1132,7 +1132,7 @@ void SaveConverter::loadDatUp()
 				for (std::vector<std::string>::const_iterator r = requires.begin(); r != requires.end(); ++r)
 				{
 					RuleResearch *research = _mod->getResearch(*r);
-					if (research->getCost() == 0)
+					if (research && research->getCost() == 0)
 					{
 						_save->addFinishedResearch(research, _mod);
 					}

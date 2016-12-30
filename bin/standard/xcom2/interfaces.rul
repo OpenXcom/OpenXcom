@@ -674,6 +674,7 @@ interfaces: #done
       - id: list
         color: 244   # blue
         color2: 1  # white
+        border: 1
       - id: ammoColor
         color: 239   # purple
       - id: button

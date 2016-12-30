@@ -127,43 +127,22 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Mod *m)
 			{
 				if (_rules->getCategory() == "STR_CRAFT")
 				{
-					Craft *craft = new Craft(m->getCraft(i->first), b, g->getId(i->first));
+					Craft *craft = new Craft(m->getCraft(i->first, true), b, g->getId(i->first));
 					craft->setStatus("STR_REFUELLING");
 					b->getCrafts()->push_back(craft);
 					break;
 				}
 				else
 				{
-					// Check if it's ammo to reload a craft
-					if (m->getItem(i->first)->getBattleType() == BT_NONE)
+					if (m->getItem(i->first, true)->getBattleType() == BT_NONE)
 					{
 						for (std::vector<Craft*>::iterator c = b->getCrafts()->begin(); c != b->getCrafts()->end(); ++c)
 						{
-							if ((*c)->getStatus() != "STR_READY")
-								continue;
-							for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
-							{
-								if ((*w) != 0 && (*w)->getRules()->getClipItem() == i->first && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
-								{
-									(*w)->setRearming(true);
-									(*c)->setStatus("STR_REARMING");
-								}
-							}
-						}
-					}
-					// Check if it's fuel to refuel a craft
-					if (m->getItem(i->first)->getBattleType() == BT_NONE)
-					{
-						for (std::vector<Craft*>::iterator c = b->getCrafts()->begin(); c != b->getCrafts()->end(); ++c)
-						{
-							if ((*c)->getStatus() != "STR_READY")
-								continue;
-							if ((*c)->getRules()->getRefuelItem() == i->first && 100 > (*c)->getFuelPercentage())
-								(*c)->setStatus("STR_REFUELLING");
+							(*c)->reuseItem(i->first);
 						}
 					}
 					if (getSellItems())
-						g->setFunds(g->getFunds() + (m->getItem(i->first)->getSellCost() * i->second));
+						g->setFunds(g->getFunds() + (m->getItem(i->first, true)->getSellCost() * i->second));
 					else
 						b->getStorageItems()->addItem(i->first, i->second);
 				}

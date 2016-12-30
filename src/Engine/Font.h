@@ -30,6 +30,12 @@ namespace OpenXcom
 class Surface;
 class Palette;
 
+struct FontImage
+{
+	int width, height, spacing;
+	Surface *surface;
+};
+
 /**
  * Takes care of loading and storing each character in a sprite font.
  * Sprite fonts consist of a set of characters split in fixed-size regions.
@@ -39,8 +45,7 @@ class Palette;
 class Font
 {
 private:
-	std::vector<Surface*> _surfaces;
-	int _width, _height, _spacing;
+	std::vector<FontImage> _images;
 	std::map< wchar_t, std::pair<size_t, SDL_Rect> > _chars;
 	bool _monospace;
 	/// Determines the size and position of each character in the font.

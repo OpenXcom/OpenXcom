@@ -225,7 +225,7 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 				qty += (*j)->getItems()->getItem(*i);
 			}
 		}
-		RuleItem *rule = _game->getMod()->getItem(*i);
+		RuleItem *rule = _game->getMod()->getItem(*i, true);
 		if (qty > 0 && (Options::canSellLiveAliens || !rule->isAlien()))
 		{
 			TransferRow row = { TRANSFER_ITEM, rule, tr(*i), rule->getSellCost(), qty, 0, 0 };
@@ -334,7 +334,7 @@ void SellState::updateList()
 			}
 		}
 		std::wostringstream ssQty, ssAmount;
-		ssQty << _items[i].qtySrc;
+		ssQty << _items[i].qtySrc - _items[i].amount;
 		ssAmount << _items[i].amount;
 		_lstItems->addRow(4, name.c_str(), ssQty.str().c_str(), ssAmount.str().c_str(), Text::formatFunding(_items[i].cost).c_str());
 		_rows.push_back(i);
@@ -626,7 +626,7 @@ void SellState::changeByValue(int change, int dir)
 		soldier = (Soldier*)getRow().rule;
 		if (soldier->getArmor()->getStoreItem() != Armor::NONE)
 		{
-			armor = _game->getMod()->getItem(soldier->getArmor()->getStoreItem());
+			armor = _game->getMod()->getItem(soldier->getArmor()->getStoreItem(), true);
 			_spaceChange += dir * armor->getSize();
 		}
 		break;
@@ -636,7 +636,7 @@ void SellState::changeByValue(int change, int dir)
 		{
 			if (*w)
 			{
-				weapon = _game->getMod()->getItem((*w)->getRules()->getLauncherItem());
+				weapon = _game->getMod()->getItem((*w)->getRules()->getLauncherItem(), true);
 				total += weapon->getSize();
 				ammo = _game->getMod()->getItem((*w)->getRules()->getClipItem());
 				if (ammo)

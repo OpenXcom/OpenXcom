@@ -37,7 +37,7 @@ items: #done
     costSell: 211000
     transferTime: 48
   - type: STR_GAUSS_CANNON_AMMO
-    size: 0
+    size: 0.1
     clipSize: 1
     costSell: 200
     transferTime: 48
@@ -45,7 +45,7 @@ items: #done
     bulletSprite: 6
     hitSound: 31
     hitAnimation: 46
-    power: 110
+    power: 120
     damageType: 4
     vaporColor: 2
     vaporDensity: 10
@@ -92,7 +92,7 @@ items: #done
     weight: 1
     hitSound: 21
     hitAnimation: 26
-    power: 60
+    power: 50
     damageType: 1
     clipSize: 30
     battleType: 2
@@ -125,7 +125,7 @@ items: #done
     costBuy: 3000
     costSell: 2250
     transferTime: 48
-    power: 85
+    power: 90
     damageType: 3
     clipSize: 8
     battleType: 2
@@ -161,7 +161,7 @@ items: #done
     bulletSprite: 8
     fireSound: 36
     hitSound: 31
-    power: 110
+    power: 130
     damageType: 5
     hitAnimation: 46
     accuracySnap: 85

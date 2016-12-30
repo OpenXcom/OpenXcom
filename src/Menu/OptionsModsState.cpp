@@ -167,7 +167,6 @@ void OptionsModsState::lstModsRefresh(size_t scrollLoc)
 			continue;
 		}
 
-		std::string  modId   = modInfo.getId();
 		std::wstring modName = Language::fsToWstr(modInfo.getName());
 		_lstMods->addRow(3, modName.c_str(), L"", (i->second ? tr("STR_YES").c_str() : tr("STR_NO").c_str()));
 		_mods.push_back(*i);

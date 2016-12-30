@@ -179,28 +179,26 @@ void Craft::load(const YAML::Node &node, const Mod *mod, SavedGame *save)
 				}
 			}
 		}
-		else if (type == "STR_ALIEN_BASE")
-		{
-			for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
-			{
-				if ((*i)->getId() == id)
-				{
-					setDestination(*i);
-					break;
-				}
-			}
-		}
 		else
 		{
 			// Backwards compatibility
 			if (type == "STR_ALIEN_TERROR")
 				type = "STR_TERROR_SITE";
-			for (std::vector<MissionSite*>::iterator i = save->getMissionSites()->begin(); i != save->getMissionSites()->end(); ++i)
+			bool found = false;
+			for (std::vector<MissionSite*>::iterator i = save->getMissionSites()->begin(); i != save->getMissionSites()->end() && !found; ++i)
 			{
 				if ((*i)->getId() == id && (*i)->getDeployment()->getMarkerName() == type)
 				{
 					setDestination(*i);
-					break;
+					found = true;
+				}
+			}
+			for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end() && !found; ++i)
+			{
+				if ((*i)->getId() == id && (*i)->getDeployment()->getMarkerName() == type)
+				{
+					setDestination(*i);
+					found = true;
 				}
 			}
 		}
@@ -1012,6 +1010,29 @@ void Craft::unload(const Mod *mod)
 			(*s)->setCraft(0);
 		}
 	}
+}
+
+/**
+ * Checks if an item can be reused by the craft and
+ * updates its status appropriately.
+ * @param item Item ID.
+ */
+void Craft::reuseItem(const std::string& item)
+{
+	if (_status != "STR_READY")
+		return;
+	// Check if it's ammo to reload the craft
+	for (std::vector<CraftWeapon*>::iterator w = _weapons.begin(); w != _weapons.end(); ++w)
+	{
+		if ((*w) != 0 && item == (*w)->getRules()->getClipItem() && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+		{
+			(*w)->setRearming(true);
+			_status = "STR_REARMING";
+		}
+	}
+	// Check if it's fuel to refuel the craft
+	if (item == _rules->getRefuelItem() && _fuel < _rules->getMaxFuel())
+		_status = "STR_REFUELLING";
 }
 
 }

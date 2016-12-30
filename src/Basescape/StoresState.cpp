@@ -91,7 +91,7 @@ StoresState::StoresState(Base *base) : _base(base)
 		int qty = _base->getStorageItems()->getItem(*i);
 		if (qty > 0)
 		{
-			RuleItem *rule = _game->getMod()->getItem(*i);
+			RuleItem *rule = _game->getMod()->getItem(*i, true);
 			std::wostringstream ss, ss2;
 			ss << qty;
 			ss2 << qty * rule->getSize();

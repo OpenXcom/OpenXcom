@@ -112,6 +112,9 @@
     <PostBuildEvent>
       <Command>copy /y "$(ProjectDir)..\deps\lib\$(Platform)\*.dll" "$(ProjectDir)..\bin\$(Platform)\"</Command>
     </PostBuildEvent>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -142,6 +145,9 @@
     <PostBuildEvent>
       <Command>copy /y "$(ProjectDir)..\deps\lib\$(Platform)\*.dll" "$(ProjectDir)..\bin\$(Platform)\"</Command>
     </PostBuildEvent>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -175,6 +181,9 @@
     <PostBuildEvent>
       <Command>copy /y "$(ProjectDir)..\deps\lib\$(Platform)\*.dll" "$(ProjectDir)..\bin\$(Platform)\"</Command>
     </PostBuildEvent>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -207,6 +216,9 @@
     <PostBuildEvent>
       <Command>copy /y "$(ProjectDir)..\deps\lib\$(Platform)\*.dll" "$(ProjectDir)..\bin\$(Platform)\"</Command>
     </PostBuildEvent>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Basescape\BaseInfoState.cpp" />
@@ -252,7 +264,6 @@
     <ClCompile Include="Battlescape\AbortMissionState.cpp" />
     <ClCompile Include="Battlescape\ActionMenuItem.cpp" />
     <ClCompile Include="Battlescape\ActionMenuState.cpp" />
-    <ClCompile Include="Battlescape\AlienBAIState.cpp" />
     <ClCompile Include="Battlescape\AliensCrashState.cpp" />
     <ClCompile Include="Battlescape\AIModule.cpp" />
     <ClCompile Include="Battlescape\BattlescapeGame.cpp" />
@@ -282,7 +293,6 @@
     <ClCompile Include="Battlescape\Pathfinding.cpp" />
     <ClCompile Include="Battlescape\PathfindingNode.cpp" />
     <ClCompile Include="Battlescape\PathfindingOpenSet.cpp" />
-    <ClCompile Include="Battlescape\CivilianBAIState.cpp" />
     <ClCompile Include="Battlescape\PrimeGrenadeState.cpp" />
     <ClCompile Include="Battlescape\Projectile.cpp" />
     <ClCompile Include="Battlescape\ProjectileFlyBState.cpp" />
@@ -574,7 +584,6 @@
     <ClInclude Include="Battlescape\AbortMissionState.h" />
     <ClInclude Include="Battlescape\ActionMenuItem.h" />
     <ClInclude Include="Battlescape\ActionMenuState.h" />
-    <ClInclude Include="Battlescape\AlienBAIState.h" />
     <ClInclude Include="Battlescape\AliensCrashState.h" />
     <ClInclude Include="Battlescape\AIModule.h" />
     <ClInclude Include="Battlescape\BattlescapeGame.h" />
@@ -604,7 +613,6 @@
     <ClInclude Include="Battlescape\Pathfinding.h" />
     <ClInclude Include="Battlescape\PathfindingNode.h" />
     <ClInclude Include="Battlescape\PathfindingOpenSet.h" />
-    <ClInclude Include="Battlescape\CivilianBAIState.h" />
     <ClInclude Include="Battlescape\Position.h" />
     <ClInclude Include="Battlescape\PrimeGrenadeState.h" />
     <ClInclude Include="Battlescape\Projectile.h" />

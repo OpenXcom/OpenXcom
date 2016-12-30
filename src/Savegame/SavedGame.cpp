@@ -173,6 +173,11 @@ static bool _isCurrentGameType(const SaveInfo &saveInfo, const std::string &curM
 	else
 	{
 		gameMaster = saveInfo.mods[0];
+		size_t pos = gameMaster.find(" ver: ");
+		if (pos != std::string::npos)
+		{
+			gameMaster = gameMaster.substr(0, pos);
+		}
 	}
 
 	if (gameMaster != curMaster)
@@ -386,9 +391,17 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 	// Alien bases must be loaded before alien missions
 	for (YAML::const_iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
 	{
-		AlienBase *b = new AlienBase();
-		b->load(*i);
-		_alienBases.push_back(b);
+		std::string deployment = (*i)["deployment"].as<std::string>("STR_ALIEN_BASE_ASSAULT");
+		if (mod->getDeployment(deployment))
+		{
+			AlienBase *b = new AlienBase(mod->getDeployment(deployment));
+			b->load(*i);
+			_alienBases.push_back(b);
+		}
+		else
+		{
+			Log(LOG_ERROR) << "Failed to load deployment for alien base " << deployment;
+		}
 	}
 
 	// Missions must be loaded before UFOs.
@@ -399,9 +412,9 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 		if (mod->getAlienMission(missionType))
 		{
 			const RuleAlienMission &mRule = *mod->getAlienMission(missionType);
-			std::auto_ptr<AlienMission> mission(new AlienMission(mRule));
+			AlienMission *mission = new AlienMission(mRule);
 			mission->load(*it, *this);
-			_activeMissions.push_back(mission.release());
+			_activeMissions.push_back(mission);
 		}
 		else
 		{
@@ -577,7 +590,7 @@ void SavedGame::save(const std::string &filename) const
 			{
 				continue;
 			}
-			activeMods.push_back(i->first);
+			activeMods.push_back(i->first + " ver: " + modInfo.getVersion());
 		}
 	}
 	brief["mods"] = activeMods;
@@ -880,7 +893,7 @@ GameTime *SavedGame::getTime() const
  * Changes the current time of the game.
  * @param time Game time.
  */
-void SavedGame::setTime(GameTime time)
+void SavedGame::setTime(const GameTime& time)
 {
 	_time = new GameTime(time);
 }
@@ -1130,7 +1143,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 	{
 		for (std::vector<std::string>::const_iterator itUnlocked = (*it)->getUnlocked().begin(); itUnlocked != (*it)->getUnlocked().end(); ++itUnlocked)
 		{
-			unlocked.push_back(mod->getResearch(*itUnlocked));
+			unlocked.push_back(mod->getResearch(*itUnlocked, true));
 		}
 	}
 	for (std::vector<std::string>::const_iterator iter = researchProjects.begin(); iter != researchProjects.end(); ++iter)
@@ -1225,7 +1238,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & productions, const Mod * mod, Base * base) const
 {
 	const std::vector<std::string> &items = mod->getManufactureList();
-	const std::vector<Production *> baseProductions (base->getProductions());
+	const std::vector<Production *>& baseProductions (base->getProductions());
 
 	for (std::vector<std::string>::const_iterator iter = items.begin();
 		iter != items.end();

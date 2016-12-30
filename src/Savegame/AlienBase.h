@@ -19,6 +19,7 @@
  */
 #include "Target.h"
 #include <string>
+#include "../Mod/AlienDeployment.h"
 #include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
@@ -33,9 +34,10 @@ private:
 	int _id;
 	std::string _race;
 	bool _inBattlescape, _discovered;
+	AlienDeployment *_deployment;
 public:
 	/// Creates an alien base.
-	AlienBase();
+	AlienBase(AlienDeployment *deployment);
 	/// Cleans up the alien base.
 	~AlienBase();
 	/// Loads the alien base from YAML.
@@ -64,6 +66,9 @@ public:
 	bool isDiscovered() const;
 	/// Sets the alien base's discovered status.
 	void setDiscovered(bool discovered);
+
+	AlienDeployment *getDeployment() const;
+ 
 };
 
 }

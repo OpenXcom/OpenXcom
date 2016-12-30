@@ -44,7 +44,7 @@ private:
 	SavedBattleGame *_save;
 	std::vector<Uint16> *_voxelData;
 	static const int heightFromCenter[11];
-	void addLight(const Position &center, int power, int layer);
+	void addLight(Position center, int power, int layer);
 	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1, bool checkingFromOrigin = false);
 	bool _personalLighting;
 public:
@@ -59,7 +59,7 @@ public:
 	/// Calculates the field of view from a units view point.
 	bool calculateFOV(BattleUnit *unit);
 	/// Calculates the field of view within range of a certain position.
-	void calculateFOV(const Position &position);
+	void calculateFOV(Position position);
 	/// Checks reaction fire.
 	bool checkReactionFire(BattleUnit *unit);
 	/// Recalculates lighting of the battlescape for terrain.
@@ -67,9 +67,9 @@ public:
 	/// Recalculates lighting of the battlescape for units.
 	void calculateUnitLighting();
 	/// Handles bullet/weapon hits.
-	BattleUnit *hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit);
+	BattleUnit *hit(Position center, int power, ItemDamageType type, BattleUnit *unit);
 	/// Handles explosions.
-	void explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit = 0);
+	void explode(Position center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit = 0);
 	/// Checks if a destroyed tile starts an explosion.
 	Tile *checkForTerrainExplosions();
 	/// Unit opens door?
@@ -77,9 +77,9 @@ public:
 	/// Closes ufo doors.
 	int closeUfoDoors();
 	/// Calculates a line trajectory.
-	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
+	int calculateLine(Position origin, Position target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
 	/// Calculates a parabola trajectory.
-	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, const Position delta);
+	int calculateParabola(Position origin, Position target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, const Position delta);
 	/// Gets the origin voxel of a unit's eyesight.
 	Position getSightOriginVoxel(BattleUnit *currentUnit);
 	/// Checks visibility of a unit on this tile.
@@ -87,9 +87,9 @@ public:
 	/// Turn XCom soldier's personal lighting on or off.
 	void togglePersonalLighting();
 	/// Checks the distance between two positions.
-	int distance(const Position &pos1, const Position &pos2) const;
+	int distance(Position pos1, Position pos2) const;
 	/// Checks the distance squared between two positions.
-	int distanceSq(const Position &pos1, const Position &pos2, bool considerZ = true) const;
+	int distanceSq(Position pos1, Position pos2, bool considerZ = true) const;
 	/// Checks the horizontal blockage of a tile.
 	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type, bool skipObject = false);
 	/// Checks the vertical blockage of a tile.
@@ -99,9 +99,9 @@ public:
 	/// Returns melee validity between two units.
 	bool validMeleeRange(BattleUnit *attacker, BattleUnit *target, int dir);
 	/// Returns validity of a melee attack from a given position.
-	bool validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target, Position *dest, bool preferEnemy = true);
+	bool validMeleeRange(const Position& pos, int direction, BattleUnit *attacker, BattleUnit *target, Position *dest, bool preferEnemy = true);
 	/// Gets the AI to look through a window.
-	int faceWindow(const Position &position);
+	int faceWindow(Position position);
 	/// Checks a unit's % exposure on a tile.
 	int checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit, BattleUnit *excludeAllBut);
 	/// Checks validity for targetting a unit.
@@ -109,17 +109,17 @@ public:
 	/// Check validity for targetting a tile.
 	bool canTargetTile(Position *originVoxel, Tile *tile, int part, Position *scanVoxel, BattleUnit *excludeUnit);
 	/// Calculates the z voxel for shadows.
-	int castedShade(const Position& voxel);
+	int castedShade(Position voxel);
 	/// Checks the visibility of a given voxel.
-	bool isVoxelVisible(const Position& voxel);
+	bool isVoxelVisible(Position voxel);
 	/// Checks what type of voxel occupies this space.
-	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
+	int voxelCheck(Position voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
 	/// Blows this tile up.
 	bool detonate(Tile* tile);
 	/// Validates a throwing action.
-	bool validateThrow(BattleAction &action, Position originVoxel, Position targetVoxel, double *curve = 0, int *voxelType = 0);
+	bool validateThrow(BattleAction &action, const Position& originVoxel, const Position& targetVoxel, double *curve = 0, int *voxelType = 0);
 	/// Opens any doors this door is connected to.
-	void checkAdjacentDoors(Position pos, int part);
+	void checkAdjacentDoors(const Position& pos, int part);
 	/// Creates a vector of units that can spot this unit.
 	std::vector<std::pair<BattleUnit *, int> > getSpottingUnits(BattleUnit* unit);
 	/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.
@@ -131,11 +131,11 @@ public:
 	/// Recalculates FOV of all units in-game.
 	void recalculateFOV();
 	/// Get direction to a certain point
-	int getDirectionTo(const Position &origin, const Position &target) const;
+	int getDirectionTo(Position origin, Position target) const;
 	/// determine the origin voxel of a given action.
 	Position getOriginVoxel(BattleAction &action, Tile *tile);
 	/// mark a region of the map as "dangerous" for a turn.
-	void setDangerZone(Position pos, int radius, BattleUnit *unit);
+	void setDangerZone(const Position& pos, int radius, BattleUnit *unit);
 
 };
 

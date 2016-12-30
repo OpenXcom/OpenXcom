@@ -120,24 +120,6 @@ YAML::Node AIModule::save() const
 }
 
 /**
- * Enters the current AI state.
- */
-void AIModule::enter()
-{
-	// ROOOAARR !
-
-}
-
-
-/**
- * Exits the current AI state.
- */
-void AIModule::exit()
-{
-
-}
-
-/**
  * Runs any code the state needs to keep updating every AI cycle.
  * @param action (possible) AI action to execute after thinking is done.
  */
@@ -1016,7 +998,7 @@ int AIModule::countKnownTargets() const
  * @param pos the Position to check for spotters.
  * @return spotters.
  */
-int AIModule::getSpottingUnits(Position pos) const
+int AIModule::getSpottingUnits(const Position& pos) const
 {
 	// if we don't actually occupy the position being checked, we need to do a virtual LOF check.
 	bool checking = pos != _unit->getPosition();
@@ -1364,8 +1346,8 @@ void AIModule::evaluateAIMode()
 		ambushOdds *= 0.6;
 	}
 
-	// no weapons? don't pick combat or ambush
-	if (!_melee && !_rifle && !_blaster)
+	// no weapons, not psychic? don't pick combat or ambush
+	if (!_melee && !_rifle && !_blaster && _unit->getBaseStats()->psiSkill == 0)
 	{
 		combatOdds = 0;
 		ambushOdds = 0;
@@ -1894,7 +1876,7 @@ bool AIModule::psiAction()
 
 	_aggroTarget = 0;
 		// don't let mind controlled soldiers mind control other soldiers.
-	if (_unit->getOriginalFaction() != _unit->getFaction()
+	if (_unit->getOriginalFaction() == _unit->getFaction()
 		// and we have the required 25 TUs and can still make it to cover
 		&& _unit->getTimeUnits() > _escapeTUs + cost
 		// and we didn't already do a psi action this round

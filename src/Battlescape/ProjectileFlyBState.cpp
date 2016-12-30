@@ -216,7 +216,9 @@ void ProjectileFlyBState::init()
 		Tile *targetTile = _parent->getSave()->getTile(_action.target);
 		Position hitPos;
 		Position originVoxel = _parent->getTileEngine()->getOriginVoxel(_action, _parent->getSave()->getTile(_origin));
-		if (targetTile->getUnit() != 0)
+		if (targetTile->getUnit() &&
+			((_unit->getFaction() != FACTION_PLAYER) ||
+			targetTile->getUnit()->getVisible()))
 		{
 			if (_origin == _action.target || targetTile->getUnit() == _unit)
 			{
@@ -225,7 +227,10 @@ void ProjectileFlyBState::init()
 			}
 			else
 			{
-				_parent->getTileEngine()->canTargetUnit(&originVoxel, targetTile, &_targetVoxel, _unit);
+				if (!_parent->getTileEngine()->canTargetUnit(&originVoxel, targetTile, &_targetVoxel, _unit))
+				{
+					_targetVoxel = Position(-16,-16,-24); // out of bounds, even after voxel to tile calculation.
+				}
 			}
 		}
 		else if (targetTile->getMapData(O_OBJECT) != 0)
@@ -277,9 +282,6 @@ void ProjectileFlyBState::init()
 bool ProjectileFlyBState::createNewProjectile()
 {
 	++_action.autoShotCounter;
-
-	if (_action.type != BA_THROW && _action.type != BA_LAUNCH)
-		_unit->getStatistics()->shotsFiredCounter++;
 
 	// create a new projectile
 	Projectile *projectile = new Projectile(_parent->getMod(), _parent->getSave(), _action, _origin, _targetVoxel, _ammo);
@@ -378,7 +380,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		{
 			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon) / accuracyDivider);
 		}
-		if (_projectileImpact != V_EMPTY || _action.type == BA_LAUNCH)
+		if (_targetVoxel != Position(-16,-16,-24) && (_projectileImpact != V_EMPTY || _action.type == BA_LAUNCH))
 		{
 			// set the soldier in an aiming position
 			_unit->aim(true);
@@ -417,6 +419,10 @@ bool ProjectileFlyBState::createNewProjectile()
 			return false;
 		}
 	}
+	
+	if (_action.type != BA_THROW && _action.type != BA_LAUNCH)
+		_unit->getStatistics()->shotsFiredCounter++;
+
 	return true;
 }
 
@@ -719,7 +725,7 @@ int ProjectileFlyBState::getMaxThrowDistance(int weight, int strength, int level
  * Set the origin voxel, used for the blaster launcher.
  * @param pos the origin voxel.
  */
-void ProjectileFlyBState::setOriginVoxel(Position pos)
+void ProjectileFlyBState::setOriginVoxel(const Position& pos)
 {
 	_originVoxel = pos;
 }

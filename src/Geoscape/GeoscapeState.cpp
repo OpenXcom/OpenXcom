@@ -734,7 +734,7 @@ void GeoscapeState::time5Seconds()
 						return;
 					if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
 					{
-						mission->setWaveCountdown(30 * (RNG::generate(0, 48) + 400));
+						mission->setWaveCountdown(30 * (RNG::generate(0, 400) + 48));
 						(*i)->setDestination(0);
 						base->setupDefenses();
 						timerReset();
@@ -836,6 +836,7 @@ void GeoscapeState::time5Seconds()
 							Waypoint *w = new Waypoint();
 							w->setLongitude((*j)->getMeetLongitude());
 							w->setLatitude((*j)->getMeetLatitude());
+							w->setId(u->getId());
 							(*j)->setDestination(0);
 							popup(new GeoscapeCraftState((*j), _globe, w));
 						}
@@ -867,7 +868,6 @@ void GeoscapeState::time5Seconds()
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
 				MissionSite* m = dynamic_cast<MissionSite*>((*j)->getDestination());
 				AlienBase* b = dynamic_cast<AlienBase*>((*j)->getDestination());
-				bool underwater = false;
 				if (u != 0)
 				{
 					switch (u->getStatus())
@@ -880,20 +880,16 @@ void GeoscapeState::time5Seconds()
 							continue;
 						}
 						// Can we actually fight it
-						if ((*j)->getDestination()->getSiteDepth() > (*j)->getRules()->getMaxDepth())
-						{
-							popup(new DogfightErrorState((*j), tr("STR_UNABLE_TO_ENGAGE_DEPTH")));
-							++j;
-							continue;
-						}
-						else
-						{
-							underwater = (*j)->getRules()->getMaxDepth() > 0;
-						}
 						if (!(*j)->isInDogfight() && !(*j)->getDistance(u))
 						{
 							_dogfightsToBeStarted.push_back(new DogfightState(this, (*j), u));
-							if (underwater && !_globe->insideLand((*j)->getLongitude(), (*j)->getLatitude()))
+							if ((*j)->getRules()->isWaterOnly() && u->getAltitudeInt() > (*j)->getRules()->getMaxAltitude())
+							{
+								popup(new DogfightErrorState((*j), tr("STR_UNABLE_TO_ENGAGE_DEPTH")));
+								_dogfightsToBeStarted.back()->setMinimized(true);
+								_dogfightsToBeStarted.back()->setWaitForAltitude(true);
+							}
+							else if ((*j)->getRules()->isWaterOnly() && !_globe->insideLand((*j)->getLongitude(), (*j)->getLatitude()))
 							{
 								popup(new DogfightErrorState((*j), tr("STR_UNABLE_TO_ENGAGE_AIRBORNE")));
 								_dogfightsToBeStarted.back()->setMinimized(true);
@@ -1287,19 +1283,17 @@ void GeoscapeState::time30Minutes()
 	// Handle UFO detection and give aliens points
 	for (std::vector<Ufo*>::iterator u = _game->getSavedGame()->getUfos()->begin(); u != _game->getSavedGame()->getUfos()->end(); ++u)
 	{
-		int points = 0;
+		int points = (*u)->getRules()->getMissionScore(); //one point per UFO in-flight per half hour
 		switch ((*u)->getStatus())
 		{
 		case Ufo::LANDED:
-			points++;
+			points *= 2;
 		case Ufo::FLYING:
-			points++;
 			// Get area
 			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 			{
 				if ((*k)->getRules()->insideRegion((*u)->getLongitude(), (*u)->getLatitude()))
 				{
-					//one point per UFO in-flight per half hour
 					(*k)->addActivityAlien(points);
 					break;
 				}
@@ -1309,7 +1303,6 @@ void GeoscapeState::time30Minutes()
 			{
 				if ((*k)->getRules()->insideCountry((*u)->getLongitude(), (*u)->getLatitude()))
 				{
-					//one point per UFO in-flight per half hour
 					(*k)->addActivityAlien(points);
 					break;
 				}
@@ -1503,17 +1496,24 @@ private:
  */
 void GenerateSupplyMission::operator()(const AlienBase *base) const
 {
-	if (RNG::percent(6))
+	if (_mod.getAlienMission(base->getDeployment()->getGenMissionType()))
 	{
-		//Spawn supply mission for this base.
-		const RuleAlienMission &rule = *_mod.getAlienMission("STR_ALIEN_SUPPLY");
-		AlienMission *mission = new AlienMission(rule);
-		mission->setRegion(_save.locateRegion(*base)->getRules()->getType(), _mod);
-		mission->setId(_save.getId("ALIEN_MISSIONS"));
-		mission->setRace(base->getAlienRace());
-		mission->setAlienBase(base);
-		mission->start();
-		_save.getAlienMissions().push_back(mission);
+		if (RNG::percent(base->getDeployment()->getGenMissionFrequency()))
+		{
+			//Spawn supply mission for this base.
+			const RuleAlienMission &rule = *_mod.getAlienMission(base->getDeployment()->getGenMissionType());
+			AlienMission *mission = new AlienMission(rule);
+			mission->setRegion(_save.locateRegion(*base)->getRules()->getType(), _mod);
+			mission->setId(_save.getId("ALIEN_MISSIONS"));
+			mission->setRace(base->getAlienRace());
+			mission->setAlienBase(base);
+			mission->start();
+			_save.getAlienMissions().push_back(mission);
+		}
+	}
+	else if (base->getDeployment()->getGenMissionType() != "")
+	{
+		throw Exception("Alien Base tried to generate undefined mission: " + base->getDeployment()->getGenMissionType());
 	}
 }
 
@@ -1551,21 +1551,14 @@ void GeoscapeState::time1Day()
 			(*i)->removeResearch(*iter);
 			RuleResearch * bonus = 0;
 			const RuleResearch * research = (*iter)->getRules();
-			// If "researched" the live alien, his body sent to the stores.
-			if (Options::spendResearchedItems && research->needItem() && _game->getMod()->getUnit(research->getName()))
+			if (Options::retainCorpses && research->destroyItem() && _game->getMod()->getUnit(research->getName()))
 			{
-				(*i)->getStorageItems()->addItem(
-					_game->getMod()->getArmor(
-						_game->getMod()->getUnit(
-							research->getName()
-						)->getArmor()
-					)->getCorpseGeoscape()
-				);
+				(*i)->getStorageItems()->addItem(_game->getMod()->getArmor(_game->getMod()->getUnit(research->getName())->getArmor(), true)->getCorpseGeoscape());
 			}
 			if (!(*iter)->getRules()->getGetOneFree().empty())
 			{
 				std::vector<std::string> possibilities;
-				for (std::vector<std::string>::const_iterator f = (*iter)->getRules()->getGetOneFree().begin(); f != (*iter)->getRules()->getGetOneFree().end(); ++f)
+				for (std::vector<std::string>::const_iterator f = research->getGetOneFree().begin(); f != research->getGetOneFree().end(); ++f)
 				{
 					bool newFound = true;
 					for (std::vector<const RuleResearch*>::const_iterator discovered = _game->getSavedGame()->getDiscoveredResearch().begin(); discovered != _game->getSavedGame()->getDiscoveredResearch().end() && newFound; ++discovered)
@@ -1584,11 +1577,11 @@ void GeoscapeState::time1Day()
 				{
 					size_t pick = RNG::generate(0, possibilities.size()-1);
 					std::string sel = possibilities.at(pick);
-					bonus = _game->getMod()->getResearch(sel);
+					bonus = _game->getMod()->getResearch(sel, true);
 					_game->getSavedGame()->addFinishedResearch(bonus, _game->getMod());
 					if (!bonus->getLookup().empty())
 					{
-						_game->getSavedGame()->addFinishedResearch(_game->getMod()->getResearch(bonus->getLookup()), _game->getMod());
+						_game->getSavedGame()->addFinishedResearch(_game->getMod()->getResearch(bonus->getLookup(), true), _game->getMod());
 					}
 				}
 			}
@@ -1601,7 +1594,7 @@ void GeoscapeState::time1Day()
 			_game->getSavedGame()->addFinishedResearch(research, _game->getMod());
 			if (!research->getLookup().empty())
 			{
-				_game->getSavedGame()->addFinishedResearch(_game->getMod()->getResearch(research->getLookup()), _game->getMod());
+				_game->getSavedGame()->addFinishedResearch(_game->getMod()->getResearch(research->getLookup(), true), _game->getMod());
 			}
 			if (!research->getCutscene().empty())
 			{
@@ -1613,9 +1606,9 @@ void GeoscapeState::time1Day()
 			}
 			popup(new ResearchCompleteState(newResearch, bonus, research));
 			std::vector<RuleResearch *> newPossibleResearch;
-			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRules(), _game->getMod(), *i);
+			_game->getSavedGame()->getDependableResearch (newPossibleResearch, research, _game->getMod(), *i);
 			std::vector<RuleManufacture *> newPossibleManufacture;
-			_game->getSavedGame()->getDependableManufacture (newPossibleManufacture, (*iter)->getRules(), _game->getMod(), *i);
+			_game->getSavedGame()->getDependableManufacture (newPossibleManufacture, research, _game->getMod(), *i);
 			timerReset();
 			// check for possible researching weapon before clip
 			if (newResearch)
@@ -1646,7 +1639,7 @@ void GeoscapeState::time1Day()
 			{
 				for (std::vector<ResearchProject*>::const_iterator iter2 = (*j)->getResearch().begin(); iter2 != (*j)->getResearch().end(); ++iter2)
 				{
-					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName() &&
+					if (research->getName() == (*iter2)->getRules()->getName() &&
 						_game->getMod()->getUnit((*iter2)->getRules()->getName()) == 0)
 					{
 						(*j)->removeResearch(*iter2);
@@ -1674,7 +1667,6 @@ void GeoscapeState::time1Day()
 			}
 		}
 	}
-	const RuleAlienMission *baseMission = _game->getMod()->getRandomMission(OBJECTIVE_BASE, _game->getSavedGame()->getMonthsPassed());
 	// handle regional and country points for alien bases
 	for (std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 	{
@@ -1682,7 +1674,7 @@ void GeoscapeState::time1Day()
 		{
 			if ((*k)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
 			{
-				(*k)->addActivityAlien(baseMission->getPoints() / 10);
+				(*k)->addActivityAlien((*b)->getDeployment()->getPoints());
 				break;
 			}
 		}
@@ -1690,7 +1682,7 @@ void GeoscapeState::time1Day()
 		{
 			if ((*k)->getRules()->insideCountry((*b)->getLongitude(), (*b)->getLatitude()))
 			{
-				(*k)->addActivityAlien(baseMission->getPoints() / 10);
+				(*k)->addActivityAlien((*b)->getDeployment()->getPoints());
 				break;
 			}
 		}
@@ -2055,6 +2047,11 @@ void GeoscapeState::handleDogfights()
 				(*d)->setMinimized(false);
 				(*d)->setWaitForPoly(false);
 			}
+			else if ((*d)->getWaitForAltitude() && (*d)->getUfo()->getAltitudeInt() <= (*d)->getCraft()->getRules()->getMaxAltitude())
+			{
+				(*d)->setMinimized(false);
+				(*d)->setWaitForAltitude(false);
+			}
 			else
 			{
 				_minimizedDogfights++;
@@ -2313,7 +2310,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 		{
 			// we'll use the regions listed in the command, if any, otherwise check all the regions in the ruleset looking for matches
 			std::vector<std::string> regions = (command->hasRegionWeights()) ? command->getRegions(month) : mod->getRegionsList();
-			missionRules = mod->getAlienMission(missionType);
+			missionRules = mod->getAlienMission(missionType, true);
 			targetZone = missionRules->getSpawnZone();
 
 			for (std::vector<std::string>::iterator i = regions.begin(); i != regions.end();)
@@ -2335,7 +2332,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 				}
 				// ok, we found a region that doesn't have our mission in it, let's see if it has an appropriate landing zone.
 				// if it does, let's add it to our list of valid areas, taking note of which mission area(s) matched.
-				RuleRegion *region = mod->getRegion(*i);
+				RuleRegion *region = mod->getRegion(*i, true);
 				if ((int)(region->getMissionZones().size()) > targetZone)
 				{
 					std::vector<MissionArea> areas = region->getMissionZones()[targetZone].areas;

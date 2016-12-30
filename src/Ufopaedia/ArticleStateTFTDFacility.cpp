@@ -32,7 +32,7 @@ namespace OpenXcom
 
 	ArticleStateTFTDFacility::ArticleStateTFTDFacility(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs)
 	{
-		RuleBaseFacility *facility = _game->getMod()->getBaseFacility(defs->id);
+		RuleBaseFacility *facility = _game->getMod()->getBaseFacility(defs->id, true);
 
 		_lstInfo = new TextList(150, 50, 168, 150);
 		add(_lstInfo);
