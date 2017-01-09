@@ -47,7 +47,7 @@ namespace OpenXcom
  * @param node Pointer to the node the unit originates from.
  */
 AIModule::AIModule(SavedBattleGame *save, BattleUnit *unit, Node *node) : _save(save), _unit(unit), _aggroTarget(0), _knownEnemies(0), _visibleEnemies(0), _spottingEnemies(0),
-																				_escapeTUs(0), _ambushTUs(0), _reserveTUs(0), _rifle(false), _melee(false), _blaster(false),
+																				_escapeTUs(0), _ambushTUs(0), _rifle(false), _melee(false), _blaster(false),
 																				_didPsi(false), _AIMode(AI_PATROL), _closestDist(100), _fromNode(node), _toNode(0)
 {
 	_traceAI = Options::traceAI;

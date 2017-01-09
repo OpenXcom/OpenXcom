@@ -44,7 +44,7 @@ private:
 	BattleUnit *_unit;
 	BattleUnit *_aggroTarget;
 	int _knownEnemies, _visibleEnemies, _spottingEnemies;
-	int _escapeTUs, _ambushTUs, _reserveTUs;
+	int _escapeTUs, _ambushTUs;
 	BattleAction *_escapeAction, *_ambushAction, *_attackAction, *_patrolAction, *_psiAction;
 	bool _rifle, _melee, _blaster;
 	bool _traceAI, _didPsi;
