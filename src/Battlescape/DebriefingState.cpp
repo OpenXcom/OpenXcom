@@ -758,8 +758,6 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	_base = base;
-
 	// UFO crash/landing site disappears
 	for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
 	{
@@ -1011,7 +1009,7 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 			}
-			else if (oldFaction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea())
+			else if (oldFaction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea()) && !_destroyBase
 				// mind controlled units may as well count as unconscious
 				&& faction == FACTION_PLAYER && (!(*j)->isOut() || (*j)->getStatus() == STATUS_IGNORE_ME))
 			{
@@ -1218,8 +1216,8 @@ void DebriefingState::prepareDebriefing()
 			{
 				if ((*i) == base)
 				{
-
 					delete (*i);
+					base = 0; // To avoid similar (potential) problems as with the deleted craft
 					_game->getSavedGame()->getBases()->erase(i);
 					break;
 				}
@@ -1254,6 +1252,9 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 	_missionStatistics->success = success;
+
+	// remember the base for later use (of course only if it's not lost already (in that case base=0))
+	_base = base;
 }
 
 /**
