@@ -534,7 +534,8 @@ void BattlescapeGame::endTurn()
 void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *origMurderer, bool hiddenExplosion, bool terrainExplosion)
 {
 	// If the victim was killed by the murderer's death explosion, fetch who killed the murderer and make HIM the murderer!
-	if (origMurderer && !origMurderer->getGeoscapeSoldier() && origMurderer->getUnitRules()->getSpecialAbility() == SPECAB_EXPLODEONDEATH && origMurderer->getStatus() == STATUS_DEAD && origMurderer->getMurdererId() != 0)
+	if (origMurderer && !origMurderer->getGeoscapeSoldier() && (origMurderer->getUnitRules()->getSpecialAbility() == SPECAB_EXPLODEONDEATH || origMurderer->getUnitRules()->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
+		&& origMurderer->getStatus() == STATUS_DEAD && origMurderer->getMurdererId() != 0)
 	{
 		for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
