@@ -1,4 +1,4 @@
-// This file was copied from the bsnes project. 
+// This file was copied from the bsnes project.
 
 // This is the license info, from ruby.hpp:
 
@@ -21,7 +21,7 @@
 
 namespace OpenXcom
 {
-	
+
 bool OpenGL::checkErrors = true;
 
 std::string strGLError(GLenum glErr)
@@ -116,7 +116,7 @@ void OpenGL::resize(unsigned width, unsigned height)
 		glGenTextures(1, &gltexture);
 		glErrorCheck();
 	}
-	
+
 	iwidth = width;
 	iheight = height;
 	if (buffer_surface) delete buffer_surface;
@@ -151,9 +151,9 @@ void OpenGL::clear() {
 
 void OpenGL::refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned outwidth, unsigned outheight, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand)
 {
-    while (glGetError() != GL_NO_ERROR); // clear possible error from who knows where
+	while (glGetError() != GL_NO_ERROR); // clear possible error from who knows where
 	clear();
-    if (shader_support && (fragmentshader || vertexshader))
+	if (shader_support && (fragmentshader || vertexshader))
 	{
 		glUseProgram(glprogram);
 		glErrorCheck();
@@ -209,7 +209,7 @@ void OpenGL::refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned 
 	int u2 = outwidth - rightBlackBand;
 	int v1 = outheight - topBlackBand;
 	int v2 = bottomBlackBand;
-	
+
 	glBegin(GL_TRIANGLE_STRIP);
 	glTexCoord2f(0, 0); glVertex3i(u1, v1, 0);
 	glTexCoord2f(w, 0); glVertex3i(u2, v1, 0);
@@ -251,7 +251,7 @@ bool OpenGL::set_shader(const char *source_yaml_filename)
 		}
 
 		if (vertexshader)
-		{			
+		{
 			if ((tCount>0 && tShader[0] == vertexshader) || (tCount>1 && tShader[1] == vertexshader)) //necessary check
 			{
 				glDetachShader(glprogram, vertexshader);
@@ -422,7 +422,7 @@ void OpenGL::init(int w, int h)
 	&& glDetachShader && glLinkProgram && glGetUniformLocation && glIsProgram && glIsShader
 	&& glUniform1i && glUniform2fv && glUniform4fv && glGetAttachedShaders
 	&& glGetShaderiv && glGetShaderInfoLog && glGetProgramiv && glGetProgramInfoLog;
-	
+
 	if (shader_support)
 	{
 		if (glprogram) {
