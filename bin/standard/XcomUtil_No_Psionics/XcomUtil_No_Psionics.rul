@@ -4,12 +4,35 @@ facilities:
   - delete: STR_MIND_SHIELD
 items:
   - delete: STR_PSI_AMP
+# can't remove this weapon
   - type: ALIEN_PSI_WEAPON
-    tuUse: 999 # can't remove this weapon
+    tuUse: 999
 research:
   - delete: STR_MIND_SHIELD
   - delete: STR_PSI_LAB
   - delete: STR_PSI_AMP
+# fix lab unlockers
+  - name: STR_ETHEREAL_COMMANDER
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_COMMANDER_PLUS
+      - STR_ALIEN_ORIGINS
+  - name: STR_ETHEREAL_LEADER
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_ALIEN_ORIGINS
+  - name: STR_ETHEREAL_SOLDIER
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_SECTOID_LEADER
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_ALIEN_ORIGINS
+  - name: STR_SECTOID_COMMANDER
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_COMMANDER_PLUS
+      - STR_ALIEN_ORIGINS
 manufacture:
   - delete: STR_PSI_AMP
 ufopaedia:
