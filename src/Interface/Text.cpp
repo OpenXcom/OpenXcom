@@ -25,6 +25,9 @@
 #include "../Engine/ShaderDraw.h"
 #include "../Engine/ShaderMove.h"
 
+// -KM Debug -
+ #include <iostream>
+
 namespace OpenXcom
 {
 
@@ -160,6 +163,8 @@ void Text::initText(Font *big, Font *small, Language *lang)
  */
 void Text::setText(const std::wstring &text)
 {
+	// -KM- Debug
+	//std::wcout << text << std::endl;
 	_text = text;
 	processText();
 	// If big text won't fit the space, try small text
@@ -358,6 +363,8 @@ int Text::getTextWidth(int line) const
  * Takes care of any text post-processing like calculating
  * line metrics for alignment and wordwrapping if necessary.
  */
+
+// Time for some refactoring -KM-
 void Text::processText()
 {
 	if (_font == 0 || _lang == 0)
@@ -382,8 +389,54 @@ void Text::processText()
 	bool start = true;
 	Font *font = _font;
 
+	std::vector<int> wordWidths;
+	std::vector<int> spaceWidths;
+	std::vector<int> linebreaks;
+	std::vector<std::wstring> words;
+	std::vector<std::wstring> spaces;
+	int wordcount = 0;
+	size_t lastSeparator = -1;
+
+
+	// QND
+	size_t c;
+	for (c = 0; c <= str->size(); ++c) {
+		if (c == str->size() || Font::isLinebreak((*str)[c])) {
+			if (lastSeparator+1 != c) {
+				words.push_back(str->substr(lastSeparator+1));
+				spaces.push_back(std::wstring());
+			}
+
+			if (c == str->size())
+				break;
+			// \x02 marks start of small text
+			/*else if ((*str)[c] == 2)
+				font = _small;*/
+		}
+		if (Font::isSpace((*str)[c]) || Font::isSeparator((*str)[c])) {
+			// NOTE! Shouldn't do this for nonbreaking spaces! Oder?
+			if (Font::isSpace((*str)[c])) {
+				words.push_back(str->substr(lastSeparator+1, c-lastSeparator-1));
+				spaces.push_back(str->substr(c, 1));
+			} else {
+				words.push_back(str->substr(lastSeparator+1, c-lastSeparator));
+				spaces.push_back(std::wstring());
+			}
+
+			lastSeparator = c;
+		}
+	}
+
+	std::wcout << L"Testing!!! ";
+
+	for (c = 0; c < words.size(); ++c) {
+		std::wcout << words[c] << spaces[c];
+	}
+
+	std::wcout << std::endl << L"Testing Done!!!" << std::endl;
+
 	// Go through the text character by character
-	for (size_t c = 0; c <= str->size(); ++c)
+	for (c = 0; c <= str->size(); ++c)
 	{
 		// End of the line
 		if (c == str->size() || Font::isLinebreak((*str)[c]))
@@ -391,6 +444,13 @@ void Text::processText()
 			// Add line measurements for alignment later
 			_lineWidth.push_back(width);
 			_lineHeight.push_back(font->getCharSize(L'\n').h);
+			// -KM-
+			if (word != 0) {
+				wordWidths.push_back(word);
+				spaceWidths.push_back(0);
+				words.push_back(str->substr(lastSeparator+1, c-lastSeparator-1));
+				spaces.push_back(std::wstring());
+			}
 			width = 0;
 			word = 0;
 			start = true;
@@ -410,7 +470,22 @@ void Text::processText()
 				textIndentation++;
 			}
 			space = c;
+			lastSeparator = c;
 			width += font->getCharSize((*str)[c]).w;
+			//std::cout << "word width: " << word << std::endl;
+			//std::cout << "\tcumulative width w space:" << width << std::endl;
+			wordcount ++;
+
+			// -KM- If it's a space, we shouldn't add its size to the word
+			// length.
+			if (Font::isSpace((*str)[c])) {
+				wordWidths.push_back(word);
+				spaceWidths.push_back(font->getCharSize((*str)[c]).w);
+				//wchar_t x = ((*str)[c]);
+			} else {
+				wordWidths.push_back(word + font->getCharSize((*str)[c]).w);
+				spaceWidths.push_back(0);
+			}
 			word = 0;
 			start = false;
 		}
@@ -432,6 +507,7 @@ void Text::processText()
 				size_t indentLocation = c;
 				if (_lang->getTextWrapping() == WRAP_WORDS || Font::isSpace((*str)[c]))
 				{
+					linebreaks.push_back(wordcount);
 					// Go back to the last space and put a linebreak there
 					width -= word;
 					indentLocation = space;
@@ -480,6 +556,18 @@ void Text::processText()
 			}
 		}
 	}
+
+	std::cout << "WORD WRAP DEBUG: " << std::endl << "word lengths: ";
+	std::copy(wordWidths.begin(), wordWidths.end(), std::ostream_iterator<int>(std::cout, " "));
+	std::cout << std::endl << "break points: ";
+	std::copy(linebreaks.begin(), linebreaks.end(), std::ostream_iterator<int>(std::cout, " "));
+	std::cout << std::endl << "space lengths: ";
+	std::copy(spaceWidths.begin(), spaceWidths.end(), std::ostream_iterator<int>(std::cout, " "));
+	std::cout << std::endl;
+	std::cout << "Indentation: " << textIndentation << std::endl;
+	std::cout << "width: " << getWidth() << std::endl;
+	std::wcout << "Before: " << _text << std::endl;
+	std::wcout << "After: " << _wrappedText << std::endl;
 
 	_redraw = true;
 }
@@ -555,7 +643,7 @@ void Text::draw()
 	}
 
 	// Show text borders for debugging
-	if (Options::debugUi)
+	//if (Options::debugUi)
 	{
 		SDL_Rect r;
 		r.w = getWidth();
