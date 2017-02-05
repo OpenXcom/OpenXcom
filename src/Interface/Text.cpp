@@ -360,11 +360,84 @@ int Text::getTextWidth(int line) const
 }
 
 /**
+ * Handles alignment and word wrap for a single line of input text.
+ */
+
+void Text::processLine(const std::wstring & str, size_t c_start, size_t c_end, 
+	Font * font) {
+
+	std::wcout << "Outputting line: '";
+	std::wstring thisLine = str.substr(c_start, c_end-c_start);
+	std::wcout << thisLine << std::endl;
+
+	// Do word wrap if required. It's not required if word wrap is off
+	// or if the line's too short to need wrapping.
+
+	//int width = getWidth();
+
+	//bool wrapRequired = _wrap && thisLine.size() >= width;
+
+	// TODO? if not wrapRequired but the line is too long, truncate it?
+	// Will handle problems with very long memorial names, for instance.
+
+	int lineHeight = font->getCharSize(L'\n').h;
+	int lineWidth = 0;
+
+	// Get line width; we'll need it whether there's wrap or not.
+	for (size_t c = 0; c < c_end-c_start; ++c) {
+		if (!Font::isLinebreak(thisLine[c]) && thisLine[c] != 1) {
+			lineWidth += font->getCharSize(thisLine[c]).w;
+		}
+	}
+
+	if (_wrap) {
+		// TBD
+
+		// Split into words.
+		/*std::vector<int> wordWidths;
+		std::vector<int> spaceWidths;
+		std::vector<int> linebreaks;
+		std::vector<std::wstring> words;
+		std::vector<std::wstring> spaces;
+
+		size_t found = str->find_first_of(Font::getBreakableSeparators());
+		size_t last_found = 0;
+
+  		while (found!=std::wstring::npos) {
+  			if 
+  		}
+  	{
+    	processLine(*str, last_found, found, font);
+    	if (found != std::wstring::npos && (*str)[found] == 2)
+    		font = _small;
+
+    	last_found = found;
+    	found = str->find_first_of(Font::getLinebreaks(), found+1);
+	}*/
+	} else {
+		_lineWidth.push_back(lineWidth);
+		_lineHeight.push_back(lineHeight);
+	}
+
+	std::wcout << "pL: Line height " << lineHeight << " and width " << lineWidth << std::endl;
+}
+
+/**
  * Takes care of any text post-processing like calculating
  * line metrics for alignment and wordwrapping if necessary.
  */
 
-// Time for some refactoring -KM-
+ // Time for some refactoring -KM-
+ // RE specification: If a line starts with a space, then all lines after
+ // that one should be indented to match that space.
+ // _lineWidth and _lineHeight needs to contain the width and height of 
+ // every line, but to avoid varying line heights, the height is always set
+ // to the height of the newline char.
+
+ // I think splitting this into two parts will be the best. The outer part
+ // splits on newlines, and the inner part does word wrap on that particular
+ // line, if required.
+
 void Text::processText()
 {
 	if (_font == 0 || _lang == 0)
@@ -400,7 +473,7 @@ void Text::processText()
 
 	// QND
 	size_t c;
-	for (c = 0; c <= str->size(); ++c) {
+	/*for (c = 0; c <= str->size(); ++c) {
 		if (c == str->size() || Font::isLinebreak((*str)[c])) {
 			if (lastSeparator+1 != c) {
 				words.push_back(str->substr(lastSeparator+1));
@@ -410,8 +483,8 @@ void Text::processText()
 			if (c == str->size())
 				break;
 			// \x02 marks start of small text
-			/*else if ((*str)[c] == 2)
-				font = _small;*/
+			//else if ((*str)[c] == 2)
+			//	font = _small;
 		}
 		if (Font::isSpace((*str)[c]) || Font::isSeparator((*str)[c])) {
 			// NOTE! Shouldn't do this for nonbreaking spaces! Oder?
@@ -433,14 +506,46 @@ void Text::processText()
 		std::wcout << words[c] << spaces[c];
 	}
 
-	std::wcout << std::endl << L"Testing Done!!!" << std::endl;
+	std::wcout << std::endl << L"Testing Done!!!" << std::endl;*/
 
 	// Go through the text character by character
+
+	std::wcout << "===================================" << std::endl;
+	std::wcout << "Whole line is '" << *str << "'" << std::endl;
+
+	size_t found = str->find_first_of(Font::getLinebreaks());
+	size_t last_found = 0;
+  	while (found!=std::wstring::npos)
+  	{
+    	processLine(*str, last_found, found, font);
+    	if (found != std::wstring::npos && (*str)[found] == 2)
+    		font = _small;
+
+    	last_found = found;
+    	found = str->find_first_of(Font::getLinebreaks(), found+1);
+	}
+
+	processLine(*str, last_found, str->size(), font);
+
+	if (!_wrap) {
+		/*std::copy(_lineWidth.begin(), _lineWidth.end(), std::ostream_iterator<int>(std::cout, " "));
+		std::wcout << std::endl;
+		std::copy(_lineHeight.begin(), _lineHeight.end(), std::ostream_iterator<int>(std::cout, " "));
+		std::wcout << std::endl;
+		_lineWidth.clear();
+		_lineHeight.clear();
+		font = _font;*/
+		_redraw = true;
+		return;
+	}
+
 	for (c = 0; c <= str->size(); ++c)
 	{
 		// End of the line
 		if (c == str->size() || Font::isLinebreak((*str)[c]))
 		{
+			std::wcout << "pT: EOL with value " << (int)( (*str)[c]) << " at idx " << c << std::endl;
+			std::wcout << "pT: Line height " << font->getCharSize(L'\n').h << " and width " << width << std::endl;
 			// Add line measurements for alignment later
 			_lineWidth.push_back(width);
 			_lineHeight.push_back(font->getCharSize(L'\n').h);
@@ -468,6 +573,7 @@ void Text::processText()
 			if (c == textIndentation)
 			{
 				textIndentation++;
+				std::wcout << "Increment textIndentation to " << textIndentation << std::endl;
 			}
 			space = c;
 			lastSeparator = c;
@@ -566,8 +672,12 @@ void Text::processText()
 	std::cout << std::endl;
 	std::cout << "Indentation: " << textIndentation << std::endl;
 	std::cout << "width: " << getWidth() << std::endl;
-	std::wcout << "Before: " << _text << std::endl;
-	std::wcout << "After: " << _wrappedText << std::endl;
+	std::wcout << "Before: '" << _text << "'" << std::endl;
+	std::wcout << "After: '" << *str << "'" << std::endl;
+		std::copy(_lineWidth.begin(), _lineWidth.end(), std::ostream_iterator<int>(std::cout, " "));
+		std::wcout << std::endl;
+		std::copy(_lineHeight.begin(), _lineHeight.end(), std::ostream_iterator<int>(std::cout, " "));
+		std::wcout << std::endl;
 
 	_redraw = true;
 }

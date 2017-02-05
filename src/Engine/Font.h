@@ -63,6 +63,12 @@ public:
 	static inline bool isSeparator(wchar_t c) { return (c == L'-' || c == '/'); }
 	/// Checks if a character is a non-breaking space.
 	static inline bool isNonBreakableSpace(wchar_t c) { return (c == L'\xA0'); }
+
+	// Get the characters that qualify for linebreak.
+	static inline std::wstring getLinebreaks() { return (std::wstring(L"\n\x02")); }
+	// Get the characters that word wrap can break on.
+	static inline std::wstring getBreakableSeparators() { return (std::wstring(L" -/")); }
+
 	/// Loads the font from YAML.
 	void load(const YAML::Node& node);
 	/// Generate the terminal font.

@@ -49,6 +49,7 @@ private:
 	TextVAlign _valign;
 	Uint8 _color, _color2;
 
+	void processLine(const std::wstring & str, size_t c_start, size_t c_end, Font * font);
 	/// Processes the contained text.
 	void processText();
 	/// Gets the X position of a text line.
