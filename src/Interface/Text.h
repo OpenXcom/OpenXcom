@@ -49,7 +49,12 @@ private:
 	TextVAlign _valign;
 	Uint8 _color, _color2;
 
-	void processLine(const std::wstring & str, size_t c_start, size_t c_end, Font * font);
+	/// Calculate where to break a line for word wrap
+	std::vector<int> calcEvenWordWrap(const std::vector<int> & wordWidths,
+		const std::vector<int> & spaceWidths, 
+		int indentation, int width) const;
+	/// Process a line of text for word wrap purposes.
+	std::wstring processLine(const std::wstring & str, size_t c_start, size_t c_end, Font * font);
 	/// Processes the contained text.
 	void processText();
 	/// Gets the X position of a text line.
