@@ -373,12 +373,12 @@ void Text::processLine(const std::wstring & str, size_t c_start, size_t c_end,
 	// Do word wrap if required. It's not required if word wrap is off
 	// or if the line's too short to need wrapping.
 
-	//int width = getWidth();
-
-	//bool wrapRequired = _wrap && thisLine.size() >= width;
-
-	// TODO? if not wrapRequired but the line is too long, truncate it?
+	// TODO? if not wrap but the line is too long, truncate it?
 	// Will handle problems with very long memorial names, for instance.
+
+	// TODO refac? There seems to be two phases here. Word wrapping and
+	// determining width/etc of lines that are either word-wrapped or
+	// short enough.
 
 	int lineHeight = font->getCharSize(L'\n').h;
 	int lineWidth = 0;
@@ -390,31 +390,50 @@ void Text::processLine(const std::wstring & str, size_t c_start, size_t c_end,
 		}
 	}
 
-	if (_wrap) {
-		// TBD
-
-		// Split into words.
+	if (_wrap /* && lineWidth >= getWidth() */ ) {
+		std::wcout << "WRAP" << std::endl;
+		
 		/*std::vector<int> wordWidths;
-		std::vector<int> spaceWidths;
-		std::vector<int> linebreaks;
+		std::vector<int> spaceWidths;*/
 		std::vector<std::wstring> words;
 		std::vector<std::wstring> spaces;
 
-		size_t found = str->find_first_of(Font::getBreakableSeparators());
-		size_t last_found = 0;
+		// Split into words. 
 
-  		while (found!=std::wstring::npos) {
-  			if 
-  		}
-  	{
-    	processLine(*str, last_found, found, font);
-    	if (found != std::wstring::npos && (*str)[found] == 2)
-    		font = _small;
+		for 
 
-    	last_found = found;
-    	found = str->find_first_of(Font::getLinebreaks(), found+1);
-	}*/
-	} else {
+		size_t found = -1, lastFound = 0;
+	  	do
+	  	{
+	  		lastFound = found;
+	    	found = thisLine.find_first_of(Font::getBreakableSeparators(), 
+	    		found+1);
+
+	  		if (found == std::wstring::npos)
+	  			found = thisLine.size();
+
+			// number of chars in word, including trailing space/separator.
+	  		size_t numChars = found - lastFound; 
+
+	  		// If it is the last word or has a trailing space, split
+	  		if (found+1 >= thisLine.size() || Font::isSpace(thisLine[found])) {
+	  			// Main word, not including space
+	  			words.push_back(thisLine.substr(lastFound+1, numChars-1));
+	  			spaces.push_back(thisLine.substr(found, 1)); // Suffix space
+	  		} else {
+	  			// Otherwise, there's no space to split off.
+	  			words.push_back(thisLine.substr(lastFound+1, numChars));
+	  			spaces.push_back( L"" ); // No space.
+	  		}
+
+	  		std::wcout << found << "\t" << lastFound << std::endl;
+	  		std::wcout << "'" << thisLine.substr(lastFound+1, found-lastFound) << "'" << std::endl;
+		} while (found < thisLine.size());
+
+		
+    }
+	else 
+	{
 		_lineWidth.push_back(lineWidth);
 		_lineHeight.push_back(lineHeight);
 	}
@@ -513,19 +532,24 @@ void Text::processText()
 	std::wcout << "===================================" << std::endl;
 	std::wcout << "Whole line is '" << *str << "'" << std::endl;
 
-	size_t found = str->find_first_of(Font::getLinebreaks());
-	size_t last_found = 0;
-  	while (found!=std::wstring::npos)
+	size_t found = 0, lastFound = 0;
+  	do
   	{
-    	processLine(*str, last_found, found, font);
-    	if (found != std::wstring::npos && (*str)[found] == 2)
-    		font = _small;
+  		if ((*str)[found] == 2)
+  			font = _small;
 
-    	last_found = found;
+  		lastFound = found;
     	found = str->find_first_of(Font::getLinebreaks(), found+1);
-	}
 
-	processLine(*str, last_found, str->size(), font);
+  		if (found == std::wstring::npos)
+  			found = str->size();
+
+  		std::wcout << found << "\t" << lastFound << std::endl;
+    	processLine(*str, lastFound, found, font);
+	} while (found < str->size()); //!=std::wstring::npos);
+
+	//std::wcout << found << "\t" << last_found << std::endl;
+	//processLine(*str, last_found, str->size(), font);
 
 	if (!_wrap) {
 		/*std::copy(_lineWidth.begin(), _lineWidth.end(), std::ostream_iterator<int>(std::cout, " "));
