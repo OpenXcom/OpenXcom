@@ -468,12 +468,17 @@ std::vector<int> Text::calcEvenWordWrap(
  * Handles alignment and word wrap for a single line of input text.
  */
 
-std::wstring Text::processLine(const std::wstring & str, size_t c_start, size_t c_end, 
+std::wstring Text::processLine(const std::wstring & str, 
+	//std::wstring::const_iterator str_begin, std::wstring::const_iterator str_end
+	size_t c_start, size_t c_end, 
 	Font * font) 
 {
 
+	std::wstring::const_iterator str_begin = str.begin() + c_start,
+		str_end = str.begin() + c_end;
+
 	std::wcout << "Outputting line: '";
-	std::wstring thisLine = str.substr(c_start, c_end-c_start);
+	std::wstring thisLine = std::wstring(str_begin, str_end);
 	std::wcout << thisLine << std::endl;
 
 	// Do word wrap if required. It's not required if word wrap is off
@@ -498,62 +503,54 @@ std::wstring Text::processLine(const std::wstring & str, size_t c_start, size_t 
 		}
 	}
 
-	if (_wrap /* && lineWidth >= getWidth() */ ) 
+	if (_wrap) 
 	{
 		std::wcout << "WRAP" << std::endl;
 		
-		std::vector<std::wstring> words;
+		std::vector<std::wstring::const_iterator> wordBeginnings;
 		std::vector<std::wstring> spaces;
 
 		// Split into words and get the word and space widths.
 
-		size_t cur, lastSeparator = -1, numChars = 0;
+		size_t cur, lastSeparator = -1;
+		//std::wstring::const_iterator pos;
 
 		for (cur = 0; cur <= thisLine.size(); ++cur) 
 		{
-			++numChars;
-
 			// TODO: Fix so it doesn't catch nonbreaking space
-			if (cur == thisLine.size() || Font::isSpace(thisLine[cur]))
+			if (cur == thisLine.size() || Font::isSpace(thisLine[cur]) || 
+				Font::isSeparator(thisLine[cur]))
 			{
-				words.push_back(thisLine.substr(lastSeparator+1, numChars-1));
-				spaces.push_back(thisLine.substr(cur, 1));
-				lastSeparator = cur;
-				numChars = 0;
-			}
-			else if (Font::isSeparator(thisLine[cur]))
-			{
-				words.push_back(thisLine.substr(lastSeparator+1, numChars));
-				spaces.push_back(L"");
-				lastSeparator = cur;
-				numChars = 0;
+				//words.push_back(thisLine.substr(lastSeparator+1, numChars-1));
+				wordBeginnings.push_back(str_begin + lastSeparator + 1);
 			}
 		}
+		wordBeginnings.push_back(str_end);
 
-		std::vector<int> wordWidths(words.size(), 0);
-		std::vector<int> spaceWidths(words.size(), 0);
+		std::vector<int> wordWidths(wordBeginnings.size()-1, 0);
+		std::vector<int> spaceWidths(wordBeginnings.size()-1, 0);
 
-		for (cur = 0; cur < words.size(); ++cur) {
+		for (cur = 0; cur < wordBeginnings.size()-1; ++cur) {
 			// Count the width of each word and space.
 			// TODO? Use accumulate
-			size_t i;
-			for (i = 0; i < words[cur].size(); ++i) {
-				if (!Font::isLinebreak(words[cur][i]) && words[cur][i] != 1) {
-					wordWidths[cur] += font->getCharSize(words[cur][i]).w;
+			std::wstring::const_iterator i;
+			for (i = wordBeginnings[cur]; i < wordBeginnings[cur+1]; ++i) {
+				if (!Font::isLinebreak(*i) && *i != 1) {
+					wordWidths[cur] += font->getCharSize(*i).w;
 				}
 			}
-			for (i = 0; i < spaces[cur].size(); ++i) {
-				if (!Font::isLinebreak(spaces[cur][i]) && spaces[cur][i] != 1) {
-					spaceWidths[cur] += font->getCharSize(spaces[cur][i]).w;
-				}
+			// must be breaking space here.
+			wchar_t lastChar = *(wordBeginnings[cur+1]-1);
+			if (Font::isSpace(lastChar)) {
+				wordWidths[cur] -= font->getCharSize(lastChar).w;
+				spaceWidths[cur] += font->getCharSize(lastChar).w;
 			}
-			std::wcout << "'" << words[cur] << "' '" << spaces[cur] << "'" << std::endl;
-			std::wcout << "'" << wordWidths[cur] << "' '" << spaceWidths[cur] << "'" << std::endl;
 		}
 
 		// QND FIX LATER
 		// En particulaire: will not work properly if there's a shift-to-small
 		// in the middle of the text.
+		// But note: that won't happen because shift-to-small is a newline!
 
 		std::vector<int> breakPoints = calcEvenWordWrap(wordWidths, 
 			spaceWidths, 0, getWidth()); // TODO: Indentation !!!
@@ -563,19 +560,16 @@ std::wstring Text::processLine(const std::wstring & str, size_t c_start, size_t 
 		for (cur = 1; cur < breakPoints.size(); ++cur) {
 			lineWidth = 0;
 
-			if (cur != 1) 
+			// beware: copies over spaces for now
+			for (c = (size_t)breakPoints[cur-1]; c < (size_t)breakPoints[cur]; ++c) 
 			{
-				x += L"\n";
-			}
-			for (c = (size_t)breakPoints[cur-1]; c < (size_t)breakPoints[cur]-1; ++c) 
-			{
-				x = x + words[c] + spaces[c];
+				//x = x + words[c] + spaces[c];
+				x += std::wstring(wordBeginnings[c], wordBeginnings[c+1]);
 				lineWidth += wordWidths[c] + spaceWidths[c];
 			}
-			x = x + words[c];
-			lineWidth += wordWidths[c];
 
-			std::wcout << lineWidth << std::endl;
+			x += L"\n";
+
 			_lineWidth.push_back(lineWidth);
 			_lineHeight.push_back(lineHeight);
 		}
@@ -842,7 +836,7 @@ void Text::draw()
 	}
 
 	// Show text borders for debugging
-	//if (Options::debugUi)
+	if (Options::debugUi)
 	{
 		SDL_Rect r;
 		r.w = getWidth();
