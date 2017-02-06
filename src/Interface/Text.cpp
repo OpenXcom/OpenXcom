@@ -411,8 +411,8 @@ std::vector<int> Text::calcEvenWordWrap(
 		cumulativeSpaces.push_back(cumulativeSpaces[i] + spaceWidths[i]);
 	}
 
-	// Now the idea is to minimize raggedness, i.e. the squared distance from
-	// the end of each line to the width of the text box. 
+	// Now the idea is to minimize raggedness, here measured by the squared 
+	// distance from the end of each line to the end of the text box. 
 
 	minima[0] = 0; // If we've placed no lines, the cost is zero.
 
@@ -433,7 +433,7 @@ std::vector<int> Text::calcEvenWordWrap(
 			// every word prior to the ith, is less than the current record 
 			// cost for handling all words up to the jth, update the record.
 
-			int cost = minima[i] + (width-line_length)*(width-line_length);
+			int cost = minima[i] + pow(width-line_length, 2);
 
 			if (cost < minima[j]) 
 			{
@@ -461,7 +461,6 @@ std::vector<int> Text::calcEvenWordWrap(
 	}
 
 	reverse(breakPoints.begin(), breakPoints.end());
-
 	return(breakPoints);
 }
 
@@ -568,11 +567,14 @@ std::wstring Text::processLine(const std::wstring & str, size_t c_start, size_t 
 			{
 				x += L"\n";
 			}
-			for (c = (size_t)breakPoints[cur-1]; c < (size_t)breakPoints[cur]; ++c) 
+			for (c = (size_t)breakPoints[cur-1]; c < (size_t)breakPoints[cur]-1; ++c) 
 			{
 				x = x + words[c] + spaces[c];
 				lineWidth += wordWidths[c] + spaceWidths[c];
 			}
+			x = x + words[c];
+			lineWidth += wordWidths[c];
+
 			std::wcout << lineWidth << std::endl;
 			_lineWidth.push_back(lineWidth);
 			_lineHeight.push_back(lineHeight);
@@ -632,52 +634,9 @@ void Text::processText()
 	bool start = true;
 	Font *font = _font;
 
-	std::vector<int> wordWidths;
-	std::vector<int> spaceWidths;
-	std::vector<int> linebreaks;
-	std::vector<std::wstring> words;
-	std::vector<std::wstring> spaces;
-	int wordcount = 0;
-	size_t lastSeparator = -1;
-
-
 	// QND
 	size_t c;
-	/*for (c = 0; c <= str->size(); ++c) {
-		if (c == str->size() || Font::isLinebreak((*str)[c])) {
-			if (lastSeparator+1 != c) {
-				words.push_back(str->substr(lastSeparator+1));
-				spaces.push_back(std::wstring());
-			}
-
-			if (c == str->size())
-				break;
-			// \x02 marks start of small text
-			//else if ((*str)[c] == 2)
-			//	font = _small;
-		}
-		if (Font::isSpace((*str)[c]) || Font::isSeparator((*str)[c])) {
-			// NOTE! Shouldn't do this for nonbreaking spaces! Oder?
-			if (Font::isSpace((*str)[c])) {
-				words.push_back(str->substr(lastSeparator+1, c-lastSeparator-1));
-				spaces.push_back(str->substr(c, 1));
-			} else {
-				words.push_back(str->substr(lastSeparator+1, c-lastSeparator));
-				spaces.push_back(std::wstring());
-			}
-
-			lastSeparator = c;
-		}
-	}
-
-	std::wcout << L"Testing!!! ";
-
-	for (c = 0; c < words.size(); ++c) {
-		std::wcout << words[c] << spaces[c];
-	}
-
-	std::wcout << std::endl << L"Testing Done!!!" << std::endl;*/
-
+	
 	// Go through the text character by character
 
 	std::wcout << "===================================" << std::endl;
@@ -701,23 +660,10 @@ void Text::processText()
     	outStr += processLine(*str, lastFound, found, font);
 	} while (found < str->size()); //!=std::wstring::npos);
 
-	//std::wcout << found << "\t" << last_found << std::endl;
-	//processLine(*str, last_found, str->size(), font);
-
-	//if (!_wrap) {
-		/*std::copy(_lineWidth.begin(), _lineWidth.end(), std::ostream_iterator<int>(std::cout, " "));
-		std::wcout << std::endl;
-		std::copy(_lineHeight.begin(), _lineHeight.end(), std::ostream_iterator<int>(std::cout, " "));
-		std::wcout << std::endl;
-		_lineWidth.clear();
-		_lineHeight.clear();
-		font = _font;*/
-		_redraw = true;
-		//str = &outStr;
-		_wrappedText = outStr;
-		str = &_wrappedText;
-		return;
-	//}
+	_redraw = true;
+	_wrappedText = outStr;
+	str = &_wrappedText;
+	return;
 
 	// -- Does not handle WRAP_LETTERS
 	// -- Does not handle TextIndentation
@@ -729,18 +675,7 @@ void Text::processText()
 		// End of the line
 		if (c == str->size() || Font::isLinebreak((*str)[c]))
 		{
-			std::wcout << "pT: EOL with value " << (int)( (*str)[c]) << " at idx " << c << std::endl;
-			std::wcout << "pT: Line height " << font->getCharSize(L'\n').h << " and width " << width << std::endl;
 			// Add line measurements for alignment later
-			_lineWidth.push_back(width);
-			_lineHeight.push_back(font->getCharSize(L'\n').h);
-			// -KM-
-			if (word != 0) {
-				wordWidths.push_back(word);
-				spaceWidths.push_back(0);
-				words.push_back(str->substr(lastSeparator+1, c-lastSeparator-1));
-				spaces.push_back(std::wstring());
-			}
 			width = 0;
 			word = 0;
 			start = true;
@@ -761,22 +696,8 @@ void Text::processText()
 				std::wcout << "Increment textIndentation to " << textIndentation << std::endl;
 			}
 			space = c;
-			lastSeparator = c;
 			width += font->getCharSize((*str)[c]).w;
-			//std::cout << "word width: " << word << std::endl;
-			//std::cout << "\tcumulative width w space:" << width << std::endl;
-			wordcount ++;
 
-			// -KM- If it's a space, we shouldn't add its size to the word
-			// length.
-			if (Font::isSpace((*str)[c])) {
-				wordWidths.push_back(word);
-				spaceWidths.push_back(font->getCharSize((*str)[c]).w);
-				//wchar_t x = ((*str)[c]);
-			} else {
-				wordWidths.push_back(word + font->getCharSize((*str)[c]).w);
-				spaceWidths.push_back(0);
-			}
 			word = 0;
 			start = false;
 		}
@@ -798,7 +719,6 @@ void Text::processText()
 				size_t indentLocation = c;
 				if (_lang->getTextWrapping() == WRAP_WORDS || Font::isSpace((*str)[c]))
 				{
-					linebreaks.push_back(wordcount);
 					// Go back to the last space and put a linebreak there
 					width -= word;
 					indentLocation = space;
@@ -847,22 +767,6 @@ void Text::processText()
 			}
 		}
 	}
-
-	std::cout << "WORD WRAP DEBUG: " << std::endl << "word lengths: ";
-	std::copy(wordWidths.begin(), wordWidths.end(), std::ostream_iterator<int>(std::cout, " "));
-	std::cout << std::endl << "break points: ";
-	std::copy(linebreaks.begin(), linebreaks.end(), std::ostream_iterator<int>(std::cout, " "));
-	std::cout << std::endl << "space lengths: ";
-	std::copy(spaceWidths.begin(), spaceWidths.end(), std::ostream_iterator<int>(std::cout, " "));
-	std::cout << std::endl;
-	std::cout << "Indentation: " << textIndentation << std::endl;
-	std::cout << "width: " << getWidth() << std::endl;
-	std::wcout << "Before: '" << _text << "'" << std::endl;
-	std::wcout << "After: '" << *str << "'" << std::endl;
-		std::copy(_lineWidth.begin(), _lineWidth.end(), std::ostream_iterator<int>(std::cout, " "));
-		std::wcout << std::endl;
-		std::copy(_lineHeight.begin(), _lineHeight.end(), std::ostream_iterator<int>(std::cout, " "));
-		std::wcout << std::endl;
 
 	_redraw = true;
 }
