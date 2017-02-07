@@ -1299,8 +1299,8 @@ void AIModule::evaluateAIMode()
 		escapeOdds *= 0.7;
 		break;
 	default:
-		combatOdds *= std::max(0.1, std::min(2.0, 1.2 + (_unit->getAggression() / 10)));
-		escapeOdds *= std::min(2.0, std::max(0.1, 0.9 - (_unit->getAggression() / 10)));
+		combatOdds *= std::max(0.1, std::min(2.0, 1.2 + (_unit->getAggression() / 10.0)));
+		escapeOdds *= std::min(2.0, std::max(0.1, 0.9 - (_unit->getAggression() / 10.0)));
 		break;
 	}
 
