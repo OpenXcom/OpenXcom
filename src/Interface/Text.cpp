@@ -433,7 +433,8 @@ std::vector<int> Text::calcEvenWordWrap(
 			// every word prior to the ith, is less than the current record 
 			// cost for handling all words up to the jth, update the record.
 
-			int cost = minima[i] + pow(width-line_length, 2);
+			// Provokes a bug.
+			int cost = minima[i] + abs(width-line_length);//pow(width-line_length, 2);
 
 			if (cost < minima[j]) 
 			{
@@ -474,12 +475,14 @@ std::wstring Text::processLine(const std::wstring & str,
 	Font * font) 
 {
 
+	// Could really need tests with nonbreaking spaces etc...
+
 	std::wstring::const_iterator str_begin = str.begin() + c_start,
 		str_end = str.begin() + c_end;
 
 	std::wcout << "Outputting line: '";
-	std::wstring thisLine = std::wstring(str_begin, str_end);
-	std::wcout << thisLine << std::endl;
+	//std::wstring thisLine = std::wstring(str_begin, str_end);
+	//std::wcout << thisLine << std::endl;
 
 	// Do word wrap if required. It's not required if word wrap is off
 	// or if the line's too short to need wrapping.
@@ -494,12 +497,14 @@ std::wstring Text::processLine(const std::wstring & str,
 	int lineHeight = font->getCharSize(L'\n').h;
 	int lineWidth = 0;
 
+	std::wstring::const_iterator pos;
+
 	size_t c;
 
 	// Get line width; we'll need it whether there's wrap or not.
-	for (c = 0; c < c_end-c_start; ++c) {
-		if (!Font::isLinebreak(thisLine[c]) && thisLine[c] != 1) {
-			lineWidth += font->getCharSize(thisLine[c]).w;
+	for (pos = str_begin; pos != str_end; ++pos) {
+		if (!Font::isLinebreak(*pos) && *pos != 1) {
+			lineWidth += font->getCharSize(*pos).w;
 		}
 	}
 
@@ -511,21 +516,16 @@ std::wstring Text::processLine(const std::wstring & str,
 		std::vector<std::wstring> spaces;
 
 		// Split into words and get the word and space widths.
-
-		size_t cur, lastSeparator = -1;
-		//std::wstring::const_iterator pos;
-
-		for (cur = 0; cur <= thisLine.size(); ++cur) 
-		{
+		
+		wordBeginnings.push_back(str_begin);
+		for (pos = str_begin; pos != str_end; ++pos) {
 			// TODO: Fix so it doesn't catch nonbreaking space
-			if (cur == thisLine.size() || Font::isSpace(thisLine[cur]) || 
-				Font::isSeparator(thisLine[cur]))
-			{
-				//words.push_back(thisLine.substr(lastSeparator+1, numChars-1));
-				wordBeginnings.push_back(str_begin + lastSeparator + 1);
+			if (Font::isSpace(*pos) || Font::isSeparator(*pos)) {
+				wordBeginnings.push_back(pos + 1);
 			}
-		}
+		}			
 		wordBeginnings.push_back(str_end);
+		size_t cur;
 
 		std::vector<int> wordWidths(wordBeginnings.size()-1, 0);
 		std::vector<int> spaceWidths(wordBeginnings.size()-1, 0);
@@ -533,10 +533,9 @@ std::wstring Text::processLine(const std::wstring & str,
 		for (cur = 0; cur < wordBeginnings.size()-1; ++cur) {
 			// Count the width of each word and space.
 			// TODO? Use accumulate
-			std::wstring::const_iterator i;
-			for (i = wordBeginnings[cur]; i < wordBeginnings[cur+1]; ++i) {
-				if (!Font::isLinebreak(*i) && *i != 1) {
-					wordWidths[cur] += font->getCharSize(*i).w;
+			for (pos = wordBeginnings[cur]; pos < wordBeginnings[cur+1]; ++pos) {
+				if (!Font::isLinebreak(*pos) && *pos != 1) {
+					wordWidths[cur] += font->getCharSize(*pos).w;
 				}
 			}
 			// must be breaking space here.
@@ -548,10 +547,7 @@ std::wstring Text::processLine(const std::wstring & str,
 		}
 
 		// QND FIX LATER
-		// En particulaire: will not work properly if there's a shift-to-small
-		// in the middle of the text.
-		// But note: that won't happen because shift-to-small is a newline!
-
+		
 		std::vector<int> breakPoints = calcEvenWordWrap(wordWidths, 
 			spaceWidths, 0, getWidth()); // TODO: Indentation !!!
 
@@ -560,18 +556,18 @@ std::wstring Text::processLine(const std::wstring & str,
 		for (cur = 1; cur < breakPoints.size(); ++cur) {
 			lineWidth = 0;
 
-			// beware: copies over spaces for now
+			// beware: copies spaces for now, even for final word on line!!!
 			for (c = (size_t)breakPoints[cur-1]; c < (size_t)breakPoints[cur]; ++c) 
 			{
 				//x = x + words[c] + spaces[c];
-				x += std::wstring(wordBeginnings[c], wordBeginnings[c+1]);
+				x = x + std::wstring(wordBeginnings[c], wordBeginnings[c+1]);
 				lineWidth += wordWidths[c] + spaceWidths[c];
 			}
 
-			x += L"\n";
-
+			std::wcout << lineWidth << std::endl;
 			_lineWidth.push_back(lineWidth);
 			_lineHeight.push_back(lineHeight);
+			x += L"\n";	 // <-- PROBLEM! See intro.
 		}
 
 		std::wcout << x << std::endl;
