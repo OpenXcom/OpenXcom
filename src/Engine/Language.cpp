@@ -381,8 +381,18 @@ void Language::getList(std::vector<std::string> &files, std::vector<std::wstring
 void Language::load(const std::string &filename)
 {
 	YAML::Node doc = YAML::LoadFile(filename);
-	_id = doc.begin()->first.as<std::string>();
-	YAML::Node lang = doc.begin()->second;
+	YAML::Node lang;
+	if (doc.begin()->second.IsMap())
+	{
+		_id = doc.begin()->first.as<std::string>();
+		lang = doc.begin()->second;
+	}
+	// Fallback when file is missing language specifier
+	else
+	{
+		_id = CrossPlatform::noExt(CrossPlatform::baseFilename(filename));
+		lang = doc;
+	}
 	for (YAML::const_iterator i = lang.begin(); i != lang.end(); ++i)
 	{
 		// Regular strings

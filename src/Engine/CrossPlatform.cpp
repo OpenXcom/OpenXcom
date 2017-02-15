@@ -556,7 +556,7 @@ bool deleteFile(const std::string &path)
 
 std::string baseFilename(const std::string &path)
 {
-	size_t sep = path.find_last_of(PATH_SEPARATOR);
+	size_t sep = path.find_last_of("/\\");
 	std::string filename;
 	if (sep == std::string::npos)
 	{

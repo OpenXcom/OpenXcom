@@ -449,7 +449,7 @@ if ( WIN32 )
 endif ()
 
 # backtrace(3) requires libexecinfo on some *BSD systems
-if (${CMAKE_SYSTEM_NAME} MATCHES FreeBSD OR ${CMAKE_SYSTEM_NAME} MATCHES NetBSD)
+if (${CMAKE_SYSTEM_NAME} MATCHES FreeBSD OR ${CMAKE_SYSTEM_NAME} MATCHES NetBSD OR ${CMAKE_SYSTEM_NAME} MATCHES OpenBSD)
   set ( system_libs -lexecinfo )
 endif ()
 

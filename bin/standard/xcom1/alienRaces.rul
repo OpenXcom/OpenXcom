@@ -50,7 +50,6 @@ alienRaces:
       - STR_REAPER_TERRORIST
       - STR_REAPER_TERRORIST
   - id: STR_MIXED
-    retaliation: false
     members:
       - STR_ETHEREAL_SOLDIER
       - STR_ETHEREAL_LEADER

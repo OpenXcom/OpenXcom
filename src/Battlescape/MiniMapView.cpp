@@ -66,7 +66,7 @@ void MiniMapView::draw()
 	{
 		return;
 	}
-	drawRect(0, 0, getWidth(), getHeight(), 0);
+	drawRect(0, 0, getWidth(), getHeight(), 15);
 	this->lock();
 	for (int lvl = 0; lvl <= _camera->getCenterPosition().z; lvl++)
 	{
@@ -94,7 +94,7 @@ void MiniMapView::draw()
 						Surface * s = _set->getFrame (data->getMiniMapIndex()+35);
 						if (s)
 						{
-							int shade = 15;
+							int shade = 16;
 							if (t->isDiscovered(2))
 							{
 								shade = t->getShade();
