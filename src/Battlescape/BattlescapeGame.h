@@ -189,6 +189,7 @@ public:
 	int getDepth() const;
 	/// Sets up a mission complete notification.
 	void missionComplete();
+	std::list<BattleState*> getStates();
 };
 
 }
