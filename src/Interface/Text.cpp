@@ -164,8 +164,6 @@ void Text::initText(Font *big, Font *small, Language *lang)
  */
 void Text::setText(const std::wstring &text)
 {
-	// -KM- Debug
-	//std::wcout << text << std::endl;
 	_text = text;
 	processText();
 	// If big text won't fit the space, try small text
@@ -369,10 +367,6 @@ std::vector<size_t> Text::calcEvenWordWrap(
 	const std::vector<int> & wordWidths, const std::vector<int> & spaceWidths, 
 	int indentation, int width) const 
 {
-
-	// TODO: Handle overlong words. It's going to be ugly.
-	// Also TODO elsewhere: handle indentation. Should be easier.
-
 	size_t numWords = wordWidths.size(), i, j;
 
 	std::vector<int> minCostSoFar(numWords+1, 1<<30);
@@ -406,23 +400,31 @@ std::vector<size_t> Text::calcEvenWordWrap(
 	// distance from the end of each line to the end of the text box. 
 
 	minCostSoFar[0] = 0; // If we've placed no lines, the cost is zero.
+	bool exceededMaxWidth = false;
 
 	for (i = 0; i < numWords; ++i) 
 	{
-		for (j = i+1; j <= numWords; ++j) 
+		exceededMaxWidth = false;
+		for (j = i+1; j <= numWords && !exceededMaxWidth; ++j) 
 		{
 			// If we can fit all words from the ith to the jth on a line...
-			int line_length = indentation + cumulativeLength[j] + 
+			int lineWidth = indentation + cumulativeLength[j] + 
 				cumulativeSpaces[j-1] - (cumulativeLength[i] + 
 					cumulativeSpaces[i]);
 
-			if (line_length >= width) 
-				break;
-
 			// ... and if the cost of doing so, plus the best cost of handling
 			// every word prior to the ith, is less than the current record 
-			// cost for handling all words up to the jth, update the record.
-			int cost = minCostSoFar[i] + pow(width-line_length, 2);
+			// cost for handling all words up to the jth; update the record.
+			int cost = minCostSoFar[i] + pow(width-lineWidth, 2);
+
+			// We're permitted to exceed the line width, but only once, and
+			// at a very stiff penalty. The point here is to be able to handle
+			// sentences with words longer than the width.
+			if (lineWidth >= width)
+			{
+				exceededMaxWidth = true;
+				cost += pow(width+1, 2);
+			}
 
 			if (cost < minCostSoFar[j]) 
 			{
@@ -463,15 +465,8 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
 	// Could really need tests with nonbreaking spaces etc...
 	size_t i, j;
 
-	// Do word wrap if required. It's not required if word wrap is off
-	// or if the line's too short to need wrapping.
-
 	// TODO? if not wrap but the line is too long, truncate it?
 	// Will handle problems with very long memorial names, for instance.
-
-	// TODO refac? There seems to be two phases here. Word wrapping and
-	// determining width/etc of lines that are either word-wrapped or
-	// short enough.
 
 	int lineHeight = font->getCharSize(L'\n').h;
 	int lineWidth = 0;
@@ -481,13 +476,14 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
 	std::vector<std::wstring> spaces;
 	std::wstring::const_iterator pos;
 
-	// Get line width; we'll need it whether there's wrap or not.
+	// Get line width and clean the string of chars that don't exist.
 	for (pos = str_begin; pos != str_end; ++pos) {
-		if (!Font::isLinebreak(*pos) && *pos != 1) {
+		if (!Font::isLinebreak(*pos) && *pos != TOK_FLIP_COLORS) {
 			lineWidth += font->getCharSize(*pos).w;
 		}
 	}
 
+	// If no word wrap, just set the dimensions and return the string.
 	if (!_wrap) {
 		_lineWidth.push_back(lineWidth);
 		_lineHeight.push_back(lineHeight);
@@ -608,7 +604,7 @@ void Text::processText()
 
   	do
   	{
-  		if ((*str)[found] == TOK_BREAK_SMALL_FONT)
+  		if ((*str)[found] == TOK_BREAK_SMALLLINE)
   			font = _small;
 
   		lastFound = found;
@@ -778,7 +774,7 @@ void Text::draw()
 			line++;
 			y += font->getCharSize(*c).h;
 			x = getLineX(line);
-			if (*c == TOK_BREAK_SMALL_FONT)
+			if (*c == TOK_BREAK_SMALLLINE)
 			{
 				font = _small;
 			}
@@ -792,6 +788,9 @@ void Text::draw()
 			if (dir < 0)
 				x += dir * font->getCharSize(*c).w;
 			Surface* chr = font->getChar(*c);
+			if (chr == 0)
+				chr = font->getChar(L'?');
+
 			chr->setX(x);
 			chr->setY(y);
 			ShaderDraw<PaletteShift>(ShaderSurface(this, 0, 0), ShaderCrop(chr), ShaderScalar(color), ShaderScalar(mul), ShaderScalar(mid));

@@ -215,6 +215,9 @@ int Font::getSpacing() const
 SDL_Rect Font::getCharSize(wchar_t c)
 {
 	SDL_Rect size = { 0, 0, 0, 0 };
+	if (_chars.find(c) == _chars.end()) 
+		c = L'?';
+	
 	if (c != TOK_FLIP_COLORS && !isLinebreak(c) && !isSpace(c))
 	{
 		FontImage *image = &_images[_chars[c].first];

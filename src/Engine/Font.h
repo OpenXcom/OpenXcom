@@ -37,7 +37,7 @@ struct FontImage
 };
 
 /* Special text tokens */
-const int TOK_BREAK_SMALL_FONT = 2;		// line break and change to small font
+const int TOK_BREAK_SMALLLINE = 2;		// line break and change to small font
 const int TOK_FLIP_COLORS = 1;			// flip color scheme
 const int TOK_NBSP = 0xA0;				// non-breaking space
 
@@ -61,7 +61,7 @@ public:
 	/// Cleans up the font.
 	~Font();
 	/// Checks if a character is a linebreak.
-	static inline bool isLinebreak(wchar_t c) { return (c == L'\n' || c == TOK_BREAK_SMALL_FONT); }
+	static inline bool isLinebreak(wchar_t c) { return (c == L'\n' || c == TOK_BREAK_SMALLLINE); }
 	/// Checks if a character is a blank space (includes non-breaking spaces).
 	static inline bool isSpace(wchar_t c) { return (c == L' ' || c == TOK_NBSP); }
 	/// Checks if a character is a breaking space.
