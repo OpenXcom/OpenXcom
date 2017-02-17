@@ -427,7 +427,7 @@ void Text::processText()
 			word += charWidth;
 
 			// Wordwrap if the last word doesn't fit the line
-			if (_wrap && width >= getWidth() && !start)
+			if (_wrap && width >= getWidth() && (!start || _lang->getTextWrapping() == WRAP_LETTERS))
 			{
 				size_t indentLocation = c;
 				if (_lang->getTextWrapping() == WRAP_WORDS || Font::isSpace((*str)[c]))

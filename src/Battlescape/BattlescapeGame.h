@@ -117,7 +117,7 @@ public:
 	/// Sets state think interval.
 	void setStateInterval(Uint32 interval);
 	/// Checks for casualties in battle.
-	void checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion = false, bool terrainExplosion = false);
+	void checkForCasualties(BattleItem *murderweapon, BattleUnit *origMurderer, bool hiddenExplosion = false, bool terrainExplosion = false);
 	/// Checks reserved tu.
 	bool checkReservedTU(BattleUnit *bu, int tu, bool justChecking = false);
 	/// Handles unit AI.
@@ -189,6 +189,7 @@ public:
 	int getDepth() const;
 	/// Sets up a mission complete notification.
 	void missionComplete();
+	std::list<BattleState*> getStates();
 };
 
 }

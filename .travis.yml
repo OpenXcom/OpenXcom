@@ -21,8 +21,6 @@ addons:
       - libboost-dev
 
 env:
-  - BUILD_TYPE=Debug EXTRA_WARNING_FLAGS=""
-  - BUILD_TYPE=Release EXTRA_WARNING_FLAGS=""
   - BUILD_TYPE=Debug EXTRA_WARNING_FLAGS="-Wall -Wextra"
   - BUILD_TYPE=Release EXTRA_WARNING_FLAGS="-Wall -Wextra"
 

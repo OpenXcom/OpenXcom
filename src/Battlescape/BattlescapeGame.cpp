@@ -527,27 +527,28 @@ void BattlescapeGame::endTurn()
 /**
  * Checks for casualties and adjusts morale accordingly.
  * @param murderweapon Need to know this, for a HE explosion there is an instant death.
- * @param murderer This is needed for credits for the kill.
+ * @param origMurderer This is needed for credits for the kill.
  * @param hiddenExplosion Set to true for the explosions of UFO Power sources at start of battlescape.
  * @param terrainExplosion Set to true for the explosions of terrain.
  */
-void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion, bool terrainExplosion)
+void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *origMurderer, bool hiddenExplosion, bool terrainExplosion)
 {
 	// If the victim was killed by the murderer's death explosion, fetch who killed the murderer and make HIM the murderer!
-	if (murderer && !murderer->getGeoscapeSoldier() && murderer->getUnitRules()->getSpecialAbility() == SPECAB_EXPLODEONDEATH && murderer->getStatus() == STATUS_DEAD && murderer->getMurdererId() != 0)
+	if (origMurderer && !origMurderer->getGeoscapeSoldier() && (origMurderer->getUnitRules()->getSpecialAbility() == SPECAB_EXPLODEONDEATH || origMurderer->getUnitRules()->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
+		&& origMurderer->getStatus() == STATUS_DEAD && origMurderer->getMurdererId() != 0)
 	{
 		for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
-			if ((*i)->getId() == murderer->getMurdererId())
+			if ((*i)->getId() == origMurderer->getMurdererId())
 			{
-				murderer = (*i);
+				origMurderer = (*i);
 			}
 		}
 	}
 
 	// Fetch the murder weapon
 	std::string tempWeapon = "STR_WEAPON_UNKNOWN", tempAmmo = "STR_WEAPON_UNKNOWN";
-	if (murderer)
+	if (origMurderer)
 	{
 		if (murderweapon)
 		{
@@ -555,7 +556,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			tempWeapon = tempAmmo;
 		}
 
-		BattleItem *weapon = murderer->getItem("STR_RIGHT_HAND");
+		BattleItem *weapon = origMurderer->getItem("STR_RIGHT_HAND");
 		if (weapon)
 		{
 			for (std::vector<std::string>::iterator c = weapon->getRules()->getCompatibleAmmo()->begin(); c != weapon->getRules()->getCompatibleAmmo()->end(); ++c)
@@ -566,7 +567,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				}
 			}
 		}
-		weapon = murderer->getItem("STR_LEFT_HAND");
+		weapon = origMurderer->getItem("STR_LEFT_HAND");
 		if (weapon)
 		{
 			for (std::vector<std::string>::iterator c = weapon->getRules()->getCompatibleAmmo()->begin(); c != weapon->getRules()->getCompatibleAmmo()->end(); ++c)
@@ -583,6 +584,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	{
 		if ((*j)->getStatus() == STATUS_IGNORE_ME) continue;
 		BattleUnit *victim = (*j);
+		BattleUnit *murderer = origMurderer;
 
 		BattleUnitKills killStat;
 		killStat.mission = _parentState->getGame()->getSavedGame()->getMissionStatistics()->size();
@@ -2246,6 +2248,11 @@ void BattlescapeGame::cleanupDeleted()
 int BattlescapeGame::getDepth() const
 {
 	return _save->getDepth();
+}
+
+std::list<BattleState*> BattlescapeGame::getStates()
+{
+	return _states;
 }
 
 }

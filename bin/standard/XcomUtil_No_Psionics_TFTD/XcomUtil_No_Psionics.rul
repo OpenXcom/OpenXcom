@@ -1,15 +1,38 @@
 # Based on XcomUtil by Scott Jones and BladeFireLight
-items:
-  - delete: STR_MC_DISRUPTOR
-  - type: ALIEN_PSI_WEAPON
-    tuUse: 9999
 facilities:
   - delete: STR_MC_LAB
   - delete: STR_MC_GENERATOR
+items:
+  - delete: STR_MC_DISRUPTOR
+# can't remove this weapon
+  - type: ALIEN_PSI_WEAPON
+    tuUse: 9999
 research:
   - delete: STR_MC_DISRUPTOR
   - delete: STR_MC_GENERATOR
   - delete: STR_MC_LAB
+# fix lab unlockers
+  - name: STR_CALCINITE_TERRORIST
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_HALLUCINOID_TERRORIST
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_DEEP_ONE_TERRORIST
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_XARQUID_TERRORIST
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_TENTACULAT_TERRORIST
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_BIODRONE_TERRORIST
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_TRISCENE_TERRORIST
+    unlocks:
+      - STR_ALIEN_ORIGINS
 manufacture:
   - delete: STR_MC_DISRUPTOR
 ufopaedia:

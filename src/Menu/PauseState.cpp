@@ -31,6 +31,7 @@
 #include "OptionsGeoscapeState.h"
 #include "OptionsBattlescapeState.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {
@@ -101,6 +102,10 @@ PauseState::PauseState(OptionsOrigin origin) : _origin(origin)
 	else if (origin == OPT_BATTLESCAPE)
 	{
 		_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, Options::keyBattleOptions);
+		if (!_game->getSavedGame()->getSavedBattle()->getBattleGame()->getStates().empty())
+		{
+			_btnOptions->setVisible(false);
+		}
 	}
 
 	_txtTitle->setAlign(ALIGN_CENTER);

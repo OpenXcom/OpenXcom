@@ -47,7 +47,7 @@ namespace OpenXcom
  * @param node Pointer to the node the unit originates from.
  */
 AIModule::AIModule(SavedBattleGame *save, BattleUnit *unit, Node *node) : _save(save), _unit(unit), _aggroTarget(0), _knownEnemies(0), _visibleEnemies(0), _spottingEnemies(0),
-																				_escapeTUs(0), _ambushTUs(0), _reserveTUs(0), _rifle(false), _melee(false), _blaster(false),
+																				_escapeTUs(0), _ambushTUs(0), _rifle(false), _melee(false), _blaster(false),
 																				_didPsi(false), _AIMode(AI_PATROL), _closestDist(100), _fromNode(node), _toNode(0)
 {
 	_traceAI = Options::traceAI;
@@ -1299,8 +1299,8 @@ void AIModule::evaluateAIMode()
 		escapeOdds *= 0.7;
 		break;
 	default:
-		combatOdds *= std::max(0.1, std::min(2.0, 1.2 + (_unit->getAggression() / 10)));
-		escapeOdds *= std::min(2.0, std::max(0.1, 0.9 - (_unit->getAggression() / 10)));
+		combatOdds *= std::max(0.1, std::min(2.0, 1.2 + (_unit->getAggression() / 10.0)));
+		escapeOdds *= std::min(2.0, std::max(0.1, 0.9 - (_unit->getAggression() / 10.0)));
 		break;
 	}
 
