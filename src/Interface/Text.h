@@ -50,11 +50,12 @@ private:
 	Uint8 _color, _color2;
 
 	/// Calculate where to break a line for word wrap
-	std::vector<int> calcEvenWordWrap(const std::vector<int> & wordWidths,
+	std::vector<size_t> calcEvenWordWrap(const std::vector<int> & wordWidths,
 		const std::vector<int> & spaceWidths, 
 		int indentation, int width) const;
 	/// Process a line of text for word wrap purposes.
-	std::wstring processLine(const std::wstring & str, size_t c_start, size_t c_end, Font * font);
+	std::wstring processLine(std::wstring::const_iterator str_begin, 
+		std::wstring::const_iterator str_end, Font * font);
 	/// Processes the contained text.
 	void processText();
 	/// Gets the X position of a text line.

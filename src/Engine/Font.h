@@ -36,6 +36,11 @@ struct FontImage
 	Surface *surface;
 };
 
+/* Special text tokens */
+const int TOK_BREAK_SMALL_FONT = 2;		// line break and change to small font
+const int TOK_FLIP_COLORS = 1;			// flip color scheme
+const int TOK_NBSP = 0xA0;				// non-breaking space
+
 /**
  * Takes care of loading and storing each character in a sprite font.
  * Sprite fonts consist of a set of characters split in fixed-size regions.
@@ -56,19 +61,17 @@ public:
 	/// Cleans up the font.
 	~Font();
 	/// Checks if a character is a linebreak.
-	static inline bool isLinebreak(wchar_t c) { return (c == L'\n' || c == L'\x02'); }
+	static inline bool isLinebreak(wchar_t c) { return (c == L'\n' || c == TOK_BREAK_SMALL_FONT); }
 	/// Checks if a character is a blank space (includes non-breaking spaces).
-	static inline bool isSpace(wchar_t c) { return (c == L' ' || c == L'\xA0'); }
+	static inline bool isSpace(wchar_t c) { return (c == L' ' || c == TOK_NBSP); }
+	/// Checks if a character is a breaking space.
+	static inline bool isBrkSpace(wchar_t c) { return (c == L' '); }
 	/// Checks if a character is a word separator.
 	static inline bool isSeparator(wchar_t c) { return (c == L'-' || c == '/'); }
-	/// Checks if a character is a non-breaking space.
-	static inline bool isNonBreakableSpace(wchar_t c) { return (c == L'\xA0'); }
-
+	
 	// Get the characters that qualify for linebreak.
 	static inline std::wstring getLinebreaks() { return (std::wstring(L"\n\x02")); }
-	// Get the characters that word wrap can break on.
-	static inline std::wstring getBreakableSeparators() { return (std::wstring(L" -/")); }
-
+	
 	/// Loads the font from YAML.
 	void load(const YAML::Node& node);
 	/// Generate the terminal font.
