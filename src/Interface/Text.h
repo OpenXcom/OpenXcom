@@ -55,7 +55,8 @@ private:
 		int indentation, int width) const;
 	/// Process a line of text for word wrap purposes.
 	std::wstring processLine(std::wstring::const_iterator str_begin, 
-		std::wstring::const_iterator str_end, Font * font);
+		std::wstring::const_iterator str_end, Font * font, 
+		int & indentation);
 	/// Processes the contained text.
 	void processText();
 	/// Gets the X position of a text line.

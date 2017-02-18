@@ -460,7 +460,7 @@ std::vector<size_t> Text::calcEvenWordWrap(
  */
 
 std::wstring Text::processLine(std::wstring::const_iterator str_begin, 
-	std::wstring::const_iterator str_end, Font * font) 
+	std::wstring::const_iterator str_end, Font * font, int & indentation) 
 {
 	// Could really need tests with nonbreaking spaces etc...
 	size_t i, j;
@@ -476,7 +476,7 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
 	std::vector<std::wstring> spaces;
 	std::wstring::const_iterator pos;
 
-	// Get line width and clean the string of chars that don't exist.
+	// Get line width.
 	for (pos = str_begin; pos != str_end; ++pos) {
 		if (!Font::isLinebreak(*pos) && *pos != TOK_FLIP_COLORS) {
 			lineWidth += font->getCharSize(*pos).w;
@@ -489,6 +489,21 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
 		_lineHeight.push_back(lineHeight);
 		return(std::wstring(str_begin, str_end));
 	}
+
+	// If we're told to do indentation, count the number of leading spaces
+	// and add them to the indentation int while advancing the begin 
+	// iterator. (We'll add all the spaces back at the end, which is why
+	// we want to advance the begin iterator, so none count twice.)
+	if (_indent) 
+	{
+		while(str_begin != str_end && Font::isBrkSpace(*str_begin))
+		{
+			++str_begin;
+			++indentation;
+		}
+	}
+
+	int indentationWidth = indentation * font->getCharSize(TOK_NBSP).w;
 
 	// Split into words and get the word and space widths.
 	// wordBeginnings points to the beginning of each word, while
@@ -546,7 +561,7 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
 	}
 	
 	std::vector<size_t> breakPoints = calcEvenWordWrap(wordWidths, 
-		spaceWidths, 0, getWidth()); // TODO: Indentation !!!
+		spaceWidths, indentation, getWidth());
 
 	std::wstring wrappedLines;
 
@@ -558,9 +573,10 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
 			lineWidth += wordWidths[j] + spaceWidths[j];
 
 		lineWidth -= spaceWidths[lastWord-1];
+		lineWidth += indentationWidth;
 
-		wrappedLines += std::wstring(wordBeginnings[firstWord], 
-			spaceBeginnings[lastWord]);
+		wrappedLines += std::wstring(indentation, TOK_NBSP) + std::wstring(
+			wordBeginnings[firstWord], spaceBeginnings[lastWord]);
 
 		_lineWidth.push_back(lineWidth);
 		_lineHeight.push_back(lineHeight);
@@ -578,8 +594,7 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
  * line metrics for alignment and wordwrapping if necessary.
  */
 
- // Time for some refactoring -KM-
- // RE specification: If a line starts with a space, then all lines after
+  // RE specification: If a line starts with a space, then all lines after
  // that one should be indented to match that space.
  // _lineWidth and _lineHeight needs to contain the width and height of 
  // every line, but to avoid varying line heights, the height is always set
@@ -596,37 +611,39 @@ void Text::processText()
 
 	_lineWidth.clear();
 	_lineHeight.clear();
+	_wrappedText.clear();
 
 	Font *font = _font;
 
-	size_t found = 0, lastFound = 0;
-	_wrappedText.clear();
+	size_t nextLineStart = 0, lineStart = 0;
+	int indentation = 0;		// number of spaces to indent each line.
 
   	do
   	{
-  		if ((*str)[found] == TOK_BREAK_SMALLLINE)
+  		lineStart = nextLineStart;
+  		// Find the next linebreak (end of line), or end of string.
+  		nextLineStart = str->find_first_of(Font::getLinebreaks(), lineStart);
+
+    	// Turn end of line into beginning of next by adding one.
+    	// Don't add one if we're at the end of the string, since there's
+    	// nothing left to get there.
+  		if (nextLineStart == std::wstring::npos)
+  			nextLineStart = str->size();
+  		else
+  			nextLineStart ++;
+
+  		// Check if the linebreak just before the start of our line
+  		// is a small line marker. If we're on the first line, we can't
+  		// go past the beginning, so don't try to do so.
+  		if ((*str)[lineStart == 0 ? 0 : lineStart-1] == TOK_BREAK_SMALLLINE)
   			font = _small;
 
-  		lastFound = found;
-    	found = str->find_first_of(Font::getLinebreaks(), found+1);
-
-  		if (found == std::wstring::npos)
-  			found = str->size();
-
-    	_wrappedText += processLine(str->begin()+lastFound, 
-    		str->begin()+found, font);
-	} while (found < str->size());
+    	_wrappedText += processLine(str->begin()+lineStart, 
+    		str->begin()+nextLineStart, font, indentation);
+	} while (nextLineStart < str->size());
 
 	_redraw = true;
 	str = &_wrappedText;
-
-	// -- Does not handle TextIndentation
-	// textIndentation works like this:
-	// if _indent, then any leading brk spaces count towards an indent
-	// that is then enforced on subsequent lines. But I haven't seen any
-	// use of this!
-	// -- The code is not very pretty and should be refactored further
-	//		(evidence of two stages here...)
 }
 
 /**
