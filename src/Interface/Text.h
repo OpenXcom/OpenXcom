@@ -53,6 +53,10 @@ private:
 	std::vector<size_t> calcEvenWordWrap(const std::vector<int> & wordWidths,
 		const std::vector<int> & spaceWidths, 
 		int indentation, int width) const;
+	/// Return a truncated string if it's too long to display on a line.
+	static std::wstring getTruncatedLine(std::wstring::const_iterator
+		strBegin, std::wstring::const_iterator strEnd, Font * font, 
+		int maxWidth, int & outputWidth);
 	/// Process a line of text for word wrap purposes.
 	std::wstring processLine(std::wstring::const_iterator str_begin, 
 		std::wstring::const_iterator str_end, Font * font, 

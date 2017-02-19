@@ -363,6 +363,10 @@ int Text::getTextWidth(int line) const
  * from http://xxyxyz.org/line-breaking/
  */
 
+// TODO: Fix inconsistent comments here!
+// does break[j]=i mean that the line ending after j begins after i
+// or that the line ending before j starts before i?
+
 std::vector<size_t> Text::calcEvenWordWrap(
 	const std::vector<int> & wordWidths, const std::vector<int> & spaceWidths, 
 	int indentation, int width) const 
@@ -430,8 +434,8 @@ std::vector<size_t> Text::calcEvenWordWrap(
 			{
 				minCostSoFar[j] = cost;
 
-				// Make note that to attain this record, the previous line
-				// should have a break before the ith word.
+				// best break so far for line ending before word j is to 
+				// start with word i.
 				breaks[j] = i; 
 			}
 		}
@@ -452,7 +456,62 @@ std::vector<size_t> Text::calcEvenWordWrap(
 	}
 
 	reverse(breakPoints.begin(), breakPoints.end());
-	return(breakPoints);
+	return breakPoints;
+}
+
+/**
+ * XXX TODO description here. iterators can be made const, most likely.
+ */
+
+std::wstring Text::getTruncatedLine(std::wstring::const_iterator 
+	strBegin, std::wstring::const_iterator strEnd, Font * font, int maxWidth,
+	int & outputWidth)
+{
+	const std::wstring truncateWith = L"...";
+	int truncateWidth = 0;
+
+	// Count the width of truncateWith
+	std::wstring::const_iterator pos;
+	for (pos = truncateWith.begin(); pos != truncateWith.end(); ++pos)
+		truncateWidth += font->getCharSize(*pos).w;
+
+	// Count the width of the line from strBegin to strEnd. Make note of
+	// the longest line span that's less than truncateWith from the end,
+	// and of the width of the whole input string.
+	// Can be optimized.
+	int strWidth = 0, strWidthBeforeTrunc, thisCharWidth;
+	std::wstring::const_iterator firstAfterTrunc = strEnd;
+
+	for (pos = strBegin; pos != strEnd; ++pos)
+	{
+		thisCharWidth = 0;
+		if (Font::isLinebreak(*pos) || *pos != TOK_FLIP_COLORS)
+			thisCharWidth = font->getCharSize(*pos).w;
+
+		if (strWidth + truncateWidth <= maxWidth && 
+			strWidth + truncateWidth + thisCharWidth > maxWidth)
+		{
+			firstAfterTrunc = pos;
+			strWidthBeforeTrunc = strWidth + truncateWidth;
+		}	
+		strWidth += thisCharWidth;
+	}
+	// If the width is too large, return up to the longest line span above
+	// and paste the truncateWith at the end. Otherwise just return the 
+	// string.
+	if (strWidth > maxWidth)
+	{
+		std::wcout << "!!!!" << std::wstring(strBegin, strEnd) << "!!!!" << std::endl;
+		std::wcout << "<<<" << std::wstring(strBegin, firstAfterTrunc) + truncateWith << "!!!!" << std::endl;
+		outputWidth = strWidthBeforeTrunc + truncateWidth;
+		// If the string ends in a linebreak, we need to preserve it.
+		if (Font::isLinebreak(*(strEnd-1)))
+			return std::wstring(strBegin, firstAfterTrunc) + truncateWith +
+				*(strEnd-1);
+		return std::wstring(strBegin, firstAfterTrunc) + truncateWith;
+	}
+	else
+		return std::wstring(strBegin, strEnd);
 }
 
 /**
@@ -462,11 +521,8 @@ std::vector<size_t> Text::calcEvenWordWrap(
 std::wstring Text::processLine(std::wstring::const_iterator str_begin, 
 	std::wstring::const_iterator str_end, Font * font, int & indentation) 
 {
-	// Could really need tests with nonbreaking spaces etc...
+	// Could really use tests with nonbreaking spaces etc...
 	size_t i, j;
-
-	// TODO? if not wrap but the line is too long, truncate it?
-	// Will handle problems with very long memorial names, for instance.
 
 	int lineHeight = font->getCharSize(L'\n').h;
 	int lineWidth = 0;
@@ -477,17 +533,20 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
 	std::wstring::const_iterator pos;
 
 	// Get line width.
-	for (pos = str_begin; pos != str_end; ++pos) {
-		if (!Font::isLinebreak(*pos) && *pos != TOK_FLIP_COLORS) {
+	for (pos = str_begin; pos != str_end; ++pos) 
+	{
+		if (!Font::isLinebreak(*pos) && *pos != TOK_FLIP_COLORS) 
 			lineWidth += font->getCharSize(*pos).w;
-		}
 	}
 
 	// If no word wrap, just set the dimensions and return the string.
-	if (!_wrap) {
+	if (!_wrap) 
+	{
+		std::wstring outString = getTruncatedLine(str_begin, str_end, font, 
+			getWidth(), lineWidth);
 		_lineWidth.push_back(lineWidth);
 		_lineHeight.push_back(lineHeight);
-		return(std::wstring(str_begin, str_end));
+		return outString;
 	}
 
 	// If we're told to do indentation, count the number of leading spaces
@@ -514,8 +573,10 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
 	wordBeginnings.push_back(str_begin);
 	spaceBeginnings.push_back(str_begin);
 
-	for (pos = str_begin; pos != str_end; ++pos) {
-		if (!Font::isBrkSpace(*pos) && spaceRun) {
+	for (pos = str_begin; pos != str_end; ++pos) 
+	{
+		if (!Font::isBrkSpace(*pos) && spaceRun) 
+		{
 			spaceRun = false;
 			wordBeginnings.push_back(pos);
 		}
@@ -535,7 +596,8 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
 			spaceBeginnings.push_back(pos+1);
 		}
 
-		if (!spaceRun && Font::isBrkSpace(*pos)) {
+		if (!spaceRun && Font::isBrkSpace(*pos)) 
+		{
 			spaceBeginnings.push_back(pos);
 			spaceRun = true;
 		}
@@ -546,18 +608,18 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
 	std::vector<int> wordWidths(wordBeginnings.size()-1, 0);
 	std::vector<int> spaceWidths(wordBeginnings.size()-1, 0);
 
-	for (i = 0; i < wordBeginnings.size()-1; ++i) {
+	for (i = 0; i < wordBeginnings.size()-1; ++i) 
+	{
 		// Count the width of each word and space.
 		// The word in question
-		for (pos = wordBeginnings[i]; pos < spaceBeginnings[i+1]; ++pos) {
-			if (!Font::isLinebreak(*pos) && *pos != TOK_FLIP_COLORS) {
+		for (pos = wordBeginnings[i]; pos < spaceBeginnings[i+1]; ++pos) 
+		{
+			if (!Font::isLinebreak(*pos) && *pos != TOK_FLIP_COLORS) 
 				wordWidths[i] += font->getCharSize(*pos).w;
-			}
 		}
 		// The succeeding run of spaces
-		for (pos = spaceBeginnings[i+1]; pos < wordBeginnings[i+1]; ++pos) {
+		for (pos = spaceBeginnings[i+1]; pos < wordBeginnings[i+1]; ++pos) 
 			spaceWidths[i] += font->getCharSize(*pos).w;
-		}
 	}
 	
 	std::vector<size_t> breakPoints = calcEvenWordWrap(wordWidths, 
@@ -565,7 +627,8 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
 
 	std::wstring wrappedLines;
 
-	for (i = 1; i < breakPoints.size(); ++i) {
+	for (i = 1; i < breakPoints.size(); ++i) 
+	{
 		size_t firstWord = breakPoints[i-1], lastWord = breakPoints[i];
 		int lineWidth = 0;
 
@@ -586,7 +649,7 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
 		}
 	}
 
-	return(wrappedLines);
+	return wrappedLines;
 }
 
 /**
@@ -618,7 +681,7 @@ void Text::processText()
 	size_t nextLineStart = 0, lineStart = 0;
 	int indentation = 0;		// number of spaces to indent each line.
 
-  	do
+  	while (nextLineStart < str->size())
   	{
   		lineStart = nextLineStart;
   		// Find the next linebreak (end of line), or end of string.
@@ -640,10 +703,11 @@ void Text::processText()
 
     	_wrappedText += processLine(str->begin()+lineStart, 
     		str->begin()+nextLineStart, font, indentation);
-	} while (nextLineStart < str->size());
+	}
 
 	_redraw = true;
-	str = &_wrappedText;
+	if (!_wrap)
+		_text = _wrappedText;
 }
 
 /**
