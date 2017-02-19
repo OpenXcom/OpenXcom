@@ -460,58 +460,68 @@ std::vector<size_t> Text::calcEvenWordWrap(
 }
 
 /**
- * XXX TODO description here. iterators can be made const, most likely.
+ * Truncate a line or string that's too long.
+ * @param outputWidth is set by to the width of the returned string.
  */
 
 std::wstring Text::getTruncatedLine(std::wstring::const_iterator 
 	strBegin, std::wstring::const_iterator strEnd, Font * font, int maxWidth,
 	int & outputWidth)
 {
-	const std::wstring truncateWith = L"...";
-	int truncateWidth = 0;
+	// The truncation algorithm works like this:
+	// First find a position to truncate the string plus a number of dots
+	// to add to the end so that the combined width is as close to the
+	// max width as possible (to avoid very ragged right points).
+	// If the full string ends up longer than the max width, return the 
+	// truncated string, otherwise return the full string.
 
-	// Count the width of truncateWith
-	std::wstring::const_iterator pos;
-	for (pos = truncateWith.begin(); pos != truncateWith.end(); ++pos)
-		truncateWidth += font->getCharSize(*pos).w;
+	wchar_t truncateSymbol = '.'; 
+	int tSymbolWidth = font->getCharSize(truncateSymbol).w;
+	int minSymbols = 2, maxSymbols = 5; 
 
-	// Count the width of the line from strBegin to strEnd. Make note of
-	// the longest line span that's less than truncateWith from the end,
-	// and of the width of the whole input string.
-	// Can be optimized.
-	int strWidth = 0, strWidthBeforeTrunc, thisCharWidth;
-	std::wstring::const_iterator firstAfterTrunc = strEnd;
+	int strWidth = 0, thisCharWidth;
+	int recordDistFromEnd = maxWidth, recordSymbols;
+	std::wstring::const_iterator firstAfterTrunc = strEnd, pos;
 
 	for (pos = strBegin; pos != strEnd; ++pos)
 	{
-		thisCharWidth = 0;
-		if (Font::isLinebreak(*pos) || *pos != TOK_FLIP_COLORS)
-			thisCharWidth = font->getCharSize(*pos).w;
-
-		if (strWidth + truncateWidth <= maxWidth && 
-			strWidth + truncateWidth + thisCharWidth > maxWidth)
+		if (strWidth <= maxWidth)
 		{
-			firstAfterTrunc = pos;
-			strWidthBeforeTrunc = strWidth + truncateWidth;
-		}	
-		strWidth += thisCharWidth;
+			// Solve strWidth + x * tSymbolWidth = maxWidth, then round x 
+			// down and clamp to no less than min, no more than max.
+			// x = (maxWidth - strWidth) / tSymbolWidth
+			int numSymbolsFit = std::min(maxSymbols, std::max(minSymbols,
+				(maxWidth - strWidth)/tSymbolWidth));
+			int totalWidth = strWidth + numSymbolsFit * tSymbolWidth;
+			int distanceFromEnd = maxWidth - totalWidth;
+
+			// If we fill the line better than the current record, replace
+			// it (but don't truncate just after spaces; looks weird).
+			if (distanceFromEnd >= 0 && distanceFromEnd <= recordDistFromEnd
+				&& (pos == strBegin || !Font::isSpace(*(pos-1))))
+			{
+				recordDistFromEnd = distanceFromEnd;
+				firstAfterTrunc = pos;
+				recordSymbols = numSymbolsFit;
+			}
+		}
+
+		if (Font::isLinebreak(*pos) || *pos != TOK_FLIP_COLORS)
+			strWidth = font->getCharSize(*pos).w;
 	}
-	// If the width is too large, return up to the longest line span above
-	// and paste the truncateWith at the end. Otherwise just return the 
-	// string.
+	// If the string is too long, truncate and return, otherwise just return
+	// the whole thing.
 	if (strWidth > maxWidth)
 	{
-		std::wcout << "!!!!" << std::wstring(strBegin, strEnd) << "!!!!" << std::endl;
-		std::wcout << "<<<" << std::wstring(strBegin, firstAfterTrunc) + truncateWith << "!!!!" << std::endl;
-		outputWidth = strWidthBeforeTrunc + truncateWidth;
+		std::wstring truncation = std::wstring(recordSymbols, truncateSymbol);
 		// If the string ends in a linebreak, we need to preserve it.
 		if (Font::isLinebreak(*(strEnd-1)))
-			return std::wstring(strBegin, firstAfterTrunc) + truncateWith +
+			return std::wstring(strBegin, firstAfterTrunc) + truncation +
 				*(strEnd-1);
-		return std::wstring(strBegin, firstAfterTrunc) + truncateWith;
+		return std::wstring(strBegin, firstAfterTrunc) + truncation;
 	}
-	else
-		return std::wstring(strBegin, strEnd);
+	
+	return std::wstring(strBegin, strEnd);
 }
 
 /**
