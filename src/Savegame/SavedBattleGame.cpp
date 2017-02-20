@@ -363,20 +363,7 @@ void SavedBattleGame::loadMapResources(Mod *mod)
 			_tiles[i]->getMapData(&mdID, &mdsID, part);
 			if (mdID != -1 && mdsID != -1)
 			{
-				if (mdsID < _mapDataSets.size())
-				{
-					while (mdID >= _mapDataSets[mdsID]->getObjects()->size())
-					{
-						mdID -= _mapDataSets[mdsID]->getObjects()->size();
-						mdsID++;
-					}
-					_tiles[i]->setMapData(_mapDataSets[mdsID]->getObjects()->at(mdID), mdID, mdsID, part);
-				}
-				else
-				{
-					--part;
-					++part;
-				}
+				_tiles[i]->setMapData(_mapDataSets[mdsID]->getObjects()->at(mdID), mdID, mdsID, part);
 			}
 		}
 	}
