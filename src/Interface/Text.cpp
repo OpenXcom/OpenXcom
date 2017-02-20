@@ -479,7 +479,7 @@ std::wstring Text::getTruncatedLine(std::wstring::const_iterator
 	int tSymbolWidth = font->getCharSize(truncateSymbol).w;
 	int minSymbols = 2, maxSymbols = 5; 
 
-	int strWidth = 0, thisCharWidth;
+	int strWidth = 0;
 	int recordDistFromEnd = maxWidth, recordSymbols;
 	std::wstring::const_iterator firstAfterTrunc = strEnd, pos;
 
@@ -507,7 +507,7 @@ std::wstring Text::getTruncatedLine(std::wstring::const_iterator
 		}
 
 		if (Font::isLinebreak(*pos) || *pos != TOK_FLIP_COLORS)
-			strWidth = font->getCharSize(*pos).w;
+			strWidth += font->getCharSize(*pos).w;
 	}
 	// If the string is too long, truncate and return, otherwise just return
 	// the whole thing.
