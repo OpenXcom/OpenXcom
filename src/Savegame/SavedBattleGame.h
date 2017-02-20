@@ -90,7 +90,7 @@ public:
 	/// Saves a saved battle game to YAML.
 	YAML::Node save() const;
 	/// Sets the dimensions of the map and initializes it.
-	void initMap(int mapsize_x, int mapsize_y, int mapsize_z);
+	void initMap(int mapsize_x, int mapsize_y, int mapsize_z, bool resetTerrain = true);
 	/// Initialises the pathfinding and tileengine.
 	void initUtilities(Mod *mod);
 	/// Gets the game's mapdatafiles.

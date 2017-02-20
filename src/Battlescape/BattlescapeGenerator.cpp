@@ -101,7 +101,7 @@ void BattlescapeGenerator::init()
 
 	_blocksToDo = (_mapsize_x / 10) * (_mapsize_y / 10);
 	// creates the tile objects
-	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
+	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z, false);
 	_save->initUtilities(_mod);
 }
 
