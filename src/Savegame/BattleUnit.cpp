@@ -1133,7 +1133,7 @@ int BattleUnit::damage(Position relative, int power, ItemDamageType type, bool i
 			case 6:	side = SIDE_LEFT; 										break;
 			case 7:	side = RNG::generate(0,2) < 2 ? SIDE_FRONT:SIDE_LEFT; 	break;
 			}
-			if (relative.z > getHeight())
+			if (relative.z >= getHeight())
 			{
 				bodypart = BODYPART_HEAD;
 			}
@@ -3103,7 +3103,7 @@ void BattleUnit::recoverTimeUnits()
 		TURecovery = int(encumbrance * TURecovery);
 	}
 	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
-	TURecovery -= (TURecovery * (_fatalWounds[BODYPART_LEFTLEG]+_fatalWounds[BODYPART_RIGHTLEG] * 10))/100;
+	TURecovery -= (TURecovery * ((_fatalWounds[BODYPART_LEFTLEG]+_fatalWounds[BODYPART_RIGHTLEG]) * 10))/100;
 	setTimeUnits(TURecovery);
 
 	// recover energy
