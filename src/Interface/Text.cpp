@@ -19,11 +19,15 @@
 #include "Text.h"
 #include <cmath>
 #include <sstream>
+#include <numeric>
 #include "../Engine/Font.h"
 #include "../Engine/Options.h"
 #include "../Engine/Language.h"
 #include "../Engine/ShaderDraw.h"
 #include "../Engine/ShaderMove.h"
+
+// -KM Debug -
+ #include <iostream>
 
 namespace OpenXcom
 {
@@ -355,9 +359,323 @@ int Text::getTextWidth(int line) const
 }
 
 /**
+ * Performs minimum raggedness word wrap using the shortest path algorithm
+ * from http://xxyxyz.org/line-breaking/
+ */
+
+// TODO: Fix inconsistent comments here!
+// does break[j]=i mean that the line ending after j begins after i
+// or that the line ending before j starts before i?
+
+std::vector<size_t> Text::calcEvenWordWrap(
+	const std::vector<int> & wordWidths, const std::vector<int> & spaceWidths, 
+	int indentation, int width) const 
+{
+	size_t numWords = wordWidths.size(), i, j;
+
+	std::vector<int> minCostSoFar(numWords+1, 1<<30);
+	std::vector<int> breaks(numWords+1, 0);
+	std::vector<int> cumulativeLength(1, 0), cumulativeSpaces(1, 0);
+
+	// We want to know "length of a line starting before kth word and ending 
+	// before the nth" in constant time.
+
+	// The length of a line starting at the beginning and ending before 
+	// the kth word is cumulativeLength[k] + cumulativeSpaces[k-1], 
+	// where cumulativeLength[k] is the length of a line ending before the 
+	// kth word, spaces notwithstanding, and cumulativeSpaces[k] is the 
+	// combined length of all spaces before the kth word, including the one 
+	// just after the (k-1)th word.
+
+	// A line starting before kth and ending before nth with no leading or 
+	// trailing spaces must thus be (length from 0th to nth) - 
+	// (length from 0th to kth + space after (k-1)th word)
+	// i.e.
+	// cumulativeLength[n] + cumulativeSpaces[n-1] - cumulativeLength[k] -
+	//		cumulativeSpaces[k]
+
+	for (i = 0; i < numWords; ++i) 
+	{
+		cumulativeLength.push_back(cumulativeLength[i] + wordWidths[i]);
+		cumulativeSpaces.push_back(cumulativeSpaces[i] + spaceWidths[i]);
+	}
+
+	// Now the idea is to minimize raggedness, here measured by the squared 
+	// distance from the end of each line to the end of the text box. 
+
+	minCostSoFar[0] = 0; // If we've placed no lines, the cost is zero.
+	bool exceededMaxWidth = false;
+
+	for (i = 0; i < numWords; ++i) 
+	{
+		exceededMaxWidth = false;
+		for (j = i+1; j <= numWords && !exceededMaxWidth; ++j) 
+		{
+			// If we can fit all words from the ith to the jth on a line...
+			int lineWidth = indentation + cumulativeLength[j] + 
+				cumulativeSpaces[j-1] - (cumulativeLength[i] + 
+					cumulativeSpaces[i]);
+
+			// ... and if the cost of doing so, plus the best cost of handling
+			// every word prior to the ith, is less than the current record 
+			// cost for handling all words up to the jth; update the record.
+			int cost = minCostSoFar[i] + pow(width-lineWidth, 2);
+
+			// We're permitted to exceed the line width, but only once, and
+			// at a very stiff penalty. The point here is to be able to handle
+			// sentences with words longer than the width.
+			if (lineWidth >= width)
+			{
+				exceededMaxWidth = true;
+				cost += pow(width+1, 2);
+			}
+
+			if (cost < minCostSoFar[j]) 
+			{
+				minCostSoFar[j] = cost;
+
+				// best break so far for line ending before word j is to 
+				// start with word i.
+				breaks[j] = i; 
+			}
+		}
+	}
+
+	// Now go through the record break points. (We know that the last line 
+	// ends after the final word; then use breaks[] to find out where the next
+	// to last line ends and so on down to the first line.)
+
+	std::vector<size_t> breakPoints;
+
+	j = numWords;
+	breakPoints.push_back(numWords);
+	while (j > 0) 
+	{
+		breakPoints.push_back(breaks[j]);
+		j = breaks[j];
+	}
+
+	reverse(breakPoints.begin(), breakPoints.end());
+	return breakPoints;
+}
+
+/**
+ * Truncate a line or string that's too long.
+ * @param outputWidth is set by to the width of the returned string.
+ */
+
+std::wstring Text::getTruncatedLine(std::wstring::const_iterator 
+	strBegin, std::wstring::const_iterator strEnd, Font * font, int maxWidth,
+	int & outputWidth)
+{
+	// The truncation algorithm works like this:
+	// First find a position to truncate the string plus a number of dots
+	// to add to the end so that the combined width is as close to the
+	// max width as possible (to avoid very ragged right points).
+	// If the full string ends up longer than the max width, return the 
+	// truncated string, otherwise return the full string.
+
+	wchar_t truncateSymbol = '.'; 
+	int tSymbolWidth = font->getCharSize(truncateSymbol).w;
+	int minSymbols = 2, maxSymbols = 5; 
+
+	int strWidth = 0;
+	int recordDistFromEnd = maxWidth, recordSymbols;
+	std::wstring::const_iterator firstAfterTrunc = strEnd, pos;
+
+	// TODO: Fix raggedness that has now been revealed.
+	for (pos = strBegin; pos != strEnd; ++pos)
+	{
+		if (strWidth <= maxWidth)
+		{
+			// Solve strWidth + x * tSymbolWidth + 1 = maxWidth, then round x 
+			// down and clamp to no less than min, no more than max.
+			// x = (maxWidth - strWidth - 1) / tSymbolWidth
+			// The -1 is because we need an extra pixel to end the last dot,
+			// so 5 dots (say) take tSymbolWidth * 5 + 1.
+			int numSymbolsFit = std::min(maxSymbols, std::max(minSymbols,
+				(maxWidth - strWidth-1)/tSymbolWidth));
+			int totalWidth = strWidth + numSymbolsFit * tSymbolWidth + 1;
+			int distanceFromEnd = maxWidth - totalWidth;
+
+			// If we fill the line better than the current record, replace
+			// it (but don't truncate just after spaces; looks weird).
+			if (distanceFromEnd >= 0 && distanceFromEnd <= recordDistFromEnd
+				&& (pos == strBegin || !Font::isSpace(*(pos-1))))
+			{
+				recordDistFromEnd = distanceFromEnd;
+				firstAfterTrunc = pos;
+				recordSymbols = numSymbolsFit;
+			}
+		}
+
+		if (Font::isLinebreak(*pos) || *pos != TOK_FLIP_COLORS)
+			strWidth += font->getCharSize(*pos).w;
+	}
+	// If the string is too long, truncate and return, otherwise just return
+	// the whole thing.
+	if (strWidth > maxWidth)
+	{
+		std::wstring truncation = std::wstring(recordSymbols, truncateSymbol);
+		// If the string ends in a linebreak, we need to preserve it.
+		if (Font::isLinebreak(*(strEnd-1)))
+			return std::wstring(strBegin, firstAfterTrunc) + truncation +
+				*(strEnd-1);
+		return std::wstring(strBegin, firstAfterTrunc) + truncation;
+	}
+	
+	return std::wstring(strBegin, strEnd);
+}
+
+/**
+ * Handles alignment and word wrap for a single line of input text.
+ */
+
+std::wstring Text::processLine(std::wstring::const_iterator str_begin, 
+	std::wstring::const_iterator str_end, Font * font, int & indentation) 
+{
+	// Could really use tests with nonbreaking spaces etc...
+	size_t i, j;
+
+	int lineHeight = font->getCharSize(L'\n').h;
+	int lineWidth = 0;
+
+	std::vector<std::wstring::const_iterator> wordBeginnings,
+		spaceBeginnings;
+	std::vector<std::wstring> spaces;
+	std::wstring::const_iterator pos;
+
+	// Get line width.
+	for (pos = str_begin; pos != str_end; ++pos) 
+	{
+		if (!Font::isLinebreak(*pos) && *pos != TOK_FLIP_COLORS) 
+			lineWidth += font->getCharSize(*pos).w;
+	}
+
+	// If no word wrap, just set the dimensions and return the string.
+	if (!_wrap) 
+	{
+		std::wstring outString = getTruncatedLine(str_begin, str_end, font, 
+			getWidth(), lineWidth);
+		_lineWidth.push_back(lineWidth);
+		_lineHeight.push_back(lineHeight);
+		return outString;
+	}
+
+	// If we're told to do indentation, count the number of leading spaces
+	// and add them to the indentation int while advancing the begin 
+	// iterator. (We'll add all the spaces back at the end, which is why
+	// we want to advance the begin iterator, so none count twice.)
+	if (_indent) 
+	{
+		while(str_begin != str_end && Font::isBrkSpace(*str_begin))
+		{
+			++str_begin;
+			++indentation;
+		}
+	}
+
+	int indentationWidth = indentation * font->getCharSize(TOK_NBSP).w;
+
+	// Split into words and get the word and space widths.
+	// wordBeginnings points to the beginning of each word, while
+	// spaceBeginning points to the beginning of the preceding space/s.
+	// Because of corner cases like " - ", this is fairly complex.
+	bool spaceRun = false;
+	
+	wordBeginnings.push_back(str_begin);
+	spaceBeginnings.push_back(str_begin);
+
+	for (pos = str_begin; pos != str_end; ++pos) 
+	{
+		if (!Font::isBrkSpace(*pos) && spaceRun) 
+		{
+			spaceRun = false;
+			wordBeginnings.push_back(pos);
+		}
+		// Set the beginning of next word to whatever came after the
+		// separator -- unless there's a space next, in which case we don't
+		// break at that point, because it may cause a leading space on the
+		// next line.
+
+		// If the text wrapping method is WRAP_LETTERS, then every non-space 
+		// letter works like a separator.
+		bool sepOrWrapLetters = Font::isSeparator(*pos) || 
+			(_lang->getTextWrapping() == WRAP_LETTERS && !Font::isBrkSpace(*pos));
+		
+		if (!spaceRun && sepOrWrapLetters && !Font::isBrkSpace(*(pos+1)))
+		{
+			wordBeginnings.push_back(pos+1);
+			spaceBeginnings.push_back(pos+1);
+		}
+
+		if (!spaceRun && Font::isBrkSpace(*pos)) 
+		{
+			spaceBeginnings.push_back(pos);
+			spaceRun = true;
+		}
+	}	
+	wordBeginnings.push_back(str_end);
+	spaceBeginnings.push_back(str_end);
+
+	std::vector<int> wordWidths(wordBeginnings.size()-1, 0);
+	std::vector<int> spaceWidths(wordBeginnings.size()-1, 0);
+
+	for (i = 0; i < wordBeginnings.size()-1; ++i) 
+	{
+		// Count the width of each word and space.
+		// The word in question
+		for (pos = wordBeginnings[i]; pos < spaceBeginnings[i+1]; ++pos) 
+		{
+			if (!Font::isLinebreak(*pos) && *pos != TOK_FLIP_COLORS) 
+				wordWidths[i] += font->getCharSize(*pos).w;
+		}
+		// The succeeding run of spaces
+		for (pos = spaceBeginnings[i+1]; pos < wordBeginnings[i+1]; ++pos) 
+			spaceWidths[i] += font->getCharSize(*pos).w;
+	}
+	
+	std::vector<size_t> breakPoints = calcEvenWordWrap(wordWidths, 
+		spaceWidths, indentation, getWidth());
+
+	std::wstring wrappedLines;
+
+	for (i = 1; i < breakPoints.size(); ++i) 
+	{
+		size_t firstWord = breakPoints[i-1], lastWord = breakPoints[i];
+		int lineWidth = 0;
+
+		for (j = firstWord; j < lastWord; ++j)
+			lineWidth += wordWidths[j] + spaceWidths[j];
+
+		lineWidth -= spaceWidths[lastWord-1];
+		lineWidth += indentationWidth;
+
+		wrappedLines += std::wstring(indentation, TOK_NBSP) + std::wstring(
+			wordBeginnings[firstWord], spaceBeginnings[lastWord]);
+
+		_lineWidth.push_back(lineWidth);
+		_lineHeight.push_back(lineHeight);
+		if (i < breakPoints.size()-1)
+		{
+			wrappedLines += L"\n";	 
+		}
+	}
+
+	return wrappedLines;
+}
+
+/**
  * Takes care of any text post-processing like calculating
  * line metrics for alignment and wordwrapping if necessary.
  */
+
+  // RE specification: If a line starts with a space, then all lines after
+ // that one should be indented to match that space.
+ // _lineWidth and _lineHeight needs to contain the width and height of 
+ // every line, but to avoid varying line heights, the height is always set
+ // to the height of the newline char.
+
 void Text::processText()
 {
 	if (_font == 0 || _lang == 0)
@@ -367,121 +685,42 @@ void Text::processText()
 
 	std::wstring *str = &_text;
 
-	// Use a separate string for wordwrapping text
-	if (_wrap)
-	{
-		_wrappedText = _text;
-		str = &_wrappedText;
-	}
-
 	_lineWidth.clear();
 	_lineHeight.clear();
+	_wrappedText.clear();
 
-	int width = 0, word = 0;
-	size_t space = 0, textIndentation = 0;
-	bool start = true;
 	Font *font = _font;
 
-	// Go through the text character by character
-	for (size_t c = 0; c <= str->size(); ++c)
-	{
-		// End of the line
-		if (c == str->size() || Font::isLinebreak((*str)[c]))
-		{
-			// Add line measurements for alignment later
-			_lineWidth.push_back(width);
-			_lineHeight.push_back(font->getCharSize(L'\n').h);
-			width = 0;
-			word = 0;
-			start = true;
+	size_t nextLineStart = 0, lineStart = 0;
+	int indentation = 0;		// number of spaces to indent each line.
 
-			if (c == str->size())
-				break;
-			// \x02 marks start of small text
-			else if ((*str)[c] == 2)
-				font = _small;
-		}
-		// Keep track of spaces for wordwrapping
-		else if (Font::isSpace((*str)[c]) || Font::isSeparator((*str)[c]))
-		{
-			// Store existing indentation
-			if (c == textIndentation)
-			{
-				textIndentation++;
-			}
-			space = c;
-			width += font->getCharSize((*str)[c]).w;
-			word = 0;
-			start = false;
-		}
-		// Keep track of the width of the last line and word
-		else if ((*str)[c] != 1)
-		{
-			if (font->getChar((*str)[c]) == 0)
-			{
-				(*str)[c] = L'?';
-			}
-			int charWidth = font->getCharSize((*str)[c]).w;
+  	while (nextLineStart < str->size())
+  	{
+  		lineStart = nextLineStart;
+  		// Find the next linebreak (end of line), or end of string.
+  		nextLineStart = str->find_first_of(Font::getLinebreaks(), lineStart);
 
-			width += charWidth;
-			word += charWidth;
+    	// Turn end of line into beginning of next by adding one.
+    	// Don't add one if we're at the end of the string, since there's
+    	// nothing left to get there.
+  		if (nextLineStart == std::wstring::npos)
+  			nextLineStart = str->size();
+  		else
+  			nextLineStart ++;
 
-			// Wordwrap if the last word doesn't fit the line
-			if (_wrap && width >= getWidth() && (!start || _lang->getTextWrapping() == WRAP_LETTERS))
-			{
-				size_t indentLocation = c;
-				if (_lang->getTextWrapping() == WRAP_WORDS || Font::isSpace((*str)[c]))
-				{
-					// Go back to the last space and put a linebreak there
-					width -= word;
-					indentLocation = space;
-					if (Font::isSpace((*str)[space]))
-					{
-						width -= font->getCharSize((*str)[space]).w;
-						(*str)[space] = L'\n';
-					}
-					else
-					{
-						str->insert(space+1, L"\n");
-						indentLocation++;
-					}
-				}
-				else if (_lang->getTextWrapping() == WRAP_LETTERS)
-				{
-					// Go back to the last letter and put a linebreak there
-					str->insert(c, L"\n");
-					width -= charWidth;
-				}
+  		// Check if the linebreak just before the start of our line
+  		// is a small line marker. If we're on the first line, we can't
+  		// go past the beginning, so don't try to do so.
+  		if ((*str)[lineStart == 0 ? 0 : lineStart-1] == TOK_BREAK_SMALLLINE)
+  			font = _small;
 
-				// Keep initial indentation of text
-				if (textIndentation > 0)
-				{
-					str->insert(indentLocation+1, L" \xA0", textIndentation);
-					indentLocation += textIndentation;
-				}
-				// Indent due to word wrap.
-				if (_indent)
-				{
-					str->insert(indentLocation+1, L" \xA0");
-					width += font->getCharSize(L' ').w + font->getCharSize(L'\xA0').w;
-				}
-
-				_lineWidth.push_back(width);
-				_lineHeight.push_back(font->getCharSize(L'\n').h);
-				if (_lang->getTextWrapping() == WRAP_WORDS)
-				{
-					width = word;
-				}
-				else if (_lang->getTextWrapping() == WRAP_LETTERS)
-				{
-					width = 0;
-				}
-				start = true;
-			}
-		}
+    	_wrappedText += processLine(str->begin()+lineStart, 
+    		str->begin()+nextLineStart, font, indentation);
 	}
 
 	_redraw = true;
+	if (!_wrap)
+		_text = _wrappedText;
 }
 
 /**
@@ -629,12 +868,12 @@ void Text::draw()
 			line++;
 			y += font->getCharSize(*c).h;
 			x = getLineX(line);
-			if (*c == L'\x02')
+			if (*c == TOK_BREAK_SMALLLINE)
 			{
 				font = _small;
 			}
 		}
-		else if (*c == L'\x01')
+		else if (*c == TOK_FLIP_COLORS)
 		{
 			color = (color == _color ? _color2 : _color);
 		}
@@ -643,6 +882,9 @@ void Text::draw()
 			if (dir < 0)
 				x += dir * font->getCharSize(*c).w;
 			Surface* chr = font->getChar(*c);
+			if (chr == 0)
+				chr = font->getChar(L'?');
+
 			chr->setX(x);
 			chr->setY(y);
 			ShaderDraw<PaletteShift>(ShaderSurface(this, 0, 0), ShaderCrop(chr), ShaderScalar(color), ShaderScalar(mul), ShaderScalar(mid));
