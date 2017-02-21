@@ -483,16 +483,19 @@ std::wstring Text::getTruncatedLine(std::wstring::const_iterator
 	int recordDistFromEnd = maxWidth, recordSymbols;
 	std::wstring::const_iterator firstAfterTrunc = strEnd, pos;
 
+	// TODO: Fix raggedness that has now been revealed.
 	for (pos = strBegin; pos != strEnd; ++pos)
 	{
 		if (strWidth <= maxWidth)
 		{
-			// Solve strWidth + x * tSymbolWidth = maxWidth, then round x 
+			// Solve strWidth + x * tSymbolWidth + 1 = maxWidth, then round x 
 			// down and clamp to no less than min, no more than max.
-			// x = (maxWidth - strWidth) / tSymbolWidth
+			// x = (maxWidth - strWidth - 1) / tSymbolWidth
+			// The -1 is because we need an extra pixel to end the last dot,
+			// so 5 dots (say) take tSymbolWidth * 5 + 1.
 			int numSymbolsFit = std::min(maxSymbols, std::max(minSymbols,
-				(maxWidth - strWidth)/tSymbolWidth));
-			int totalWidth = strWidth + numSymbolsFit * tSymbolWidth;
+				(maxWidth - strWidth-1)/tSymbolWidth));
+			int totalWidth = strWidth + numSymbolsFit * tSymbolWidth + 1;
 			int distanceFromEnd = maxWidth - totalWidth;
 
 			// If we fill the line better than the current record, replace

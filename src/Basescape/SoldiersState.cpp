@@ -102,7 +102,7 @@ SoldiersState::SoldiersState(Base *base) : _base(base)
 
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-	_lstSoldiers->setColumns(3, 114, 92, 74);
+	_lstSoldiers->setColumns(4, 112, 2, 92, 74);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
@@ -128,7 +128,7 @@ void SoldiersState::init()
 	_lstSoldiers->clearList();
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
-		_lstSoldiers->addRow(3, (*i)->getName(true).c_str(), tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
+		_lstSoldiers->addRow(4, (*i)->getName(true).c_str(), "", tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
 		if ((*i)->getCraft() == 0)
 		{
 			_lstSoldiers->setRowColor(row, _lstSoldiers->getSecondaryColor());
