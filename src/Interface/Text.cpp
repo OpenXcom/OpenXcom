@@ -66,7 +66,7 @@ std::wstring Text::formatNumber(int64_t value, const std::wstring &currency)
 	//setlocale(LC_MONETARY, ""); // see http://www.cplusplus.com/reference/clocale/localeconv/
 	//setlocale(LC_CTYPE, ""); // this is necessary for mbstowcs to work correctly
 	//struct lconv * lc = localeconv();
-	std::wstring thousands_sep = L"\xA0";// Language::cpToWstr(lc->mon_thousands_sep);
+	std::wstring thousands_sep = std::wstring(1, TOK_NBSP);
 
 	bool negative = (value < 0);
 	std::wostringstream ss;
@@ -363,10 +363,6 @@ int Text::getTextWidth(int line) const
  * from http://xxyxyz.org/line-breaking/
  */
 
-// TODO: Fix inconsistent comments here!
-// does break[j]=i mean that the line ending after j begins after i
-// or that the line ending before j starts before i?
-
 std::vector<size_t> Text::calcEvenWordWrap(
 	const std::vector<int> & wordWidths, const std::vector<int> & spaceWidths, 
 	int indentation, int width) const 
@@ -377,22 +373,22 @@ std::vector<size_t> Text::calcEvenWordWrap(
 	std::vector<int> breaks(numWords+1, 0);
 	std::vector<int> cumulativeLength(1, 0), cumulativeSpaces(1, 0);
 
-	// We want to know "length of a line starting before kth word and ending 
-	// before the nth" in constant time.
+	// We want to know "length of a line starting after the kth word and 
+	// ending after the nth" in constant time.
 
-	// The length of a line starting at the beginning and ending before 
-	// the kth word is cumulativeLength[k] + cumulativeSpaces[k-1], 
-	// where cumulativeLength[k] is the length of a line ending before the 
-	// kth word, spaces notwithstanding, and cumulativeSpaces[k] is the 
-	// combined length of all spaces before the kth word, including the one 
-	// just after the (k-1)th word.
+	// The length of a line starting at the beginning and ending after 
+	// the kth is cumulative_length[k] + cumulative_spaces[k-1], 
+	// where cumulative_length[k] is the length of a line ending after the kth 
+	// word, spaces notwithstanding, and cumulative_spaces[k] is the combined 
+	// length of all spaces up to and including the kth word, including the
+	// spaces just after that word.
 
 	// A line starting before kth and ending before nth with no leading or 
 	// trailing spaces must thus be (length from 0th to nth) - 
 	// (length from 0th to kth + space after (k-1)th word)
 	// i.e.
-	// cumulativeLength[n] + cumulativeSpaces[n-1] - cumulativeLength[k] -
-	//		cumulativeSpaces[k]
+	// cumulative_length[n] + cumulative_spaces[n-1] - cumulative_length[k] -
+	//		cumulative_spaces[k]
 
 	for (i = 0; i < numWords; ++i) 
 	{
@@ -416,9 +412,11 @@ std::vector<size_t> Text::calcEvenWordWrap(
 				cumulativeSpaces[j-1] - (cumulativeLength[i] + 
 					cumulativeSpaces[i]);
 
-			// ... and if the cost of doing so, plus the best cost of handling
-			// every word prior to the ith, is less than the current record 
-			// cost for handling all words up to the jth; update the record.
+			// ... and if the cost of doing so, plus the best cost of 
+			// handling word number 0..i on prior lines, is less than
+			// the current record cost for handling words 0..j, update the
+			// record (as we've found a better split: new line just after the
+			// ith word).
 			int cost = minCostSoFar[i] + pow(width-lineWidth, 2);
 
 			// We're permitted to exceed the line width, but only once, and
@@ -434,8 +432,9 @@ std::vector<size_t> Text::calcEvenWordWrap(
 			{
 				minCostSoFar[j] = cost;
 
-				// best break so far for line ending before word j is to 
-				// start with word i.
+				// Record that the best way seen so far of wrapping the words
+				// up to and including the jth involves breaking the next to 
+				// last line after the ith word.
 				breaks[j] = i; 
 			}
 		}
