@@ -567,7 +567,7 @@ std::wstring Text::processLine(std::wstring::const_iterator strBegin,
 	// we want to advance the begin iterator, so none count twice.)
 	if (_indent) 
 	{
-		while(strBegin != strEnd && Font::isBrkSpace(*strBegin))
+		while(strBegin != strEnd && Font::isBreakableSpace(*strBegin))
 		{
 			++strBegin;
 			++indentation;
@@ -587,7 +587,7 @@ std::wstring Text::processLine(std::wstring::const_iterator strBegin,
 
 	for (pos = strBegin; pos != strEnd; ++pos) 
 	{
-		if (!Font::isBrkSpace(*pos) && spaceRun) 
+		if (!Font::isBreakableSpace(*pos) && spaceRun) 
 		{
 			spaceRun = false;
 			wordBeginnings.push_back(pos);
@@ -600,15 +600,15 @@ std::wstring Text::processLine(std::wstring::const_iterator strBegin,
 		// If the text wrapping method is WRAP_LETTERS, then every non-space 
 		// letter works like a separator.
 		bool sepOrWrapLetters = Font::isSeparator(*pos) || 
-			(_lang->getTextWrapping() == WRAP_LETTERS && !Font::isBrkSpace(*pos));
+			(_lang->getTextWrapping() == WRAP_LETTERS && !Font::isBreakableSpace(*pos));
 		
-		if (!spaceRun && sepOrWrapLetters && !Font::isBrkSpace(*(pos+1)))
+		if (!spaceRun && sepOrWrapLetters && !Font::isBreakableSpace(*(pos+1)))
 		{
 			wordBeginnings.push_back(pos+1);
 			spaceBeginnings.push_back(pos+1);
 		}
 
-		if (!spaceRun && Font::isBrkSpace(*pos)) 
+		if (!spaceRun && Font::isBreakableSpace(*pos)) 
 		{
 			spaceBeginnings.push_back(pos);
 			spaceRun = true;

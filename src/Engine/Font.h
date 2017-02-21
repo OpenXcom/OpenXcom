@@ -64,10 +64,12 @@ public:
 	static inline bool isLinebreak(wchar_t c) { return (c == L'\n' || c == TOK_BREAK_SMALLLINE); }
 	/// Checks if a character is a blank space (includes non-breaking spaces).
 	static inline bool isSpace(wchar_t c) { return (c == L' ' || c == TOK_NBSP); }
-	/// Checks if a character is a breaking space.
-	static inline bool isBrkSpace(wchar_t c) { return (c == L' '); }
 	/// Checks if a character is a word separator.
 	static inline bool isSeparator(wchar_t c) { return (c == L'-' || c == '/'); }
+	/// Checks if a character is a non-breaking space.
+	static inline bool isNonBreakableSpace(wchar_t c) { return (c == TOK_NBSP); }
+	/// Checks if a character is a breaking space.
+	static inline bool isBreakableSpace(wchar_t c) { return (c == L' '); }
 	
 	// Get the characters that qualify for linebreak.
 	static inline std::wstring getLinebreaks() { return (std::wstring(L"\n\x02")); }
