@@ -1156,14 +1156,6 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	// calculate the clips for each type based on the recovered rounds.
-	for (std::map<RuleItem*, int>::const_iterator i = _rounds.begin(); i != _rounds.end(); ++i)
-	{
-		int total_clips = i->second / i->first->getClipSize();
-		if (total_clips > 0)
-			base->getStorageItems()->addItem(i->first->getType(), total_clips);
-	}
-
 	// recover all our goodies
 	if (playersSurvived > 0)
 	{
@@ -1187,6 +1179,14 @@ void DebriefingState::prepareDebriefing()
 		// assuming this was a multi-stage mission,
 		// recover everything that was in the craft in the previous stage
 		recoverItems(battle->getGuaranteedRecoveredItems(), base);
+	}
+
+	// calculate the clips for each type based on the recovered rounds.
+	for (std::map<RuleItem*, int>::const_iterator i = _rounds.begin(); i != _rounds.end(); ++i)
+	{
+		int total_clips = i->second / i->first->getClipSize();
+		if (total_clips > 0)
+			base->getStorageItems()->addItem(i->first->getType(), total_clips);
 	}
 
 	// reequip craft after a non-base-defense mission (of course only if it's not lost already (that case craft=0))
