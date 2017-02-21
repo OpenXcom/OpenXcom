@@ -530,8 +530,8 @@ std::wstring Text::getTruncatedLine(std::wstring::const_iterator
  * Handles alignment and word wrap for a single line of input text.
  */
 
-std::wstring Text::processLine(std::wstring::const_iterator str_begin, 
-	std::wstring::const_iterator str_end, Font * font, int & indentation) 
+std::wstring Text::processLine(std::wstring::const_iterator strBegin, 
+	std::wstring::const_iterator strEnd, Font * font, int & indentation) 
 {
 	// Could really use tests with nonbreaking spaces etc...
 	size_t i, j;
@@ -545,7 +545,7 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
 	std::wstring::const_iterator pos;
 
 	// Get line width.
-	for (pos = str_begin; pos != str_end; ++pos) 
+	for (pos = strBegin; pos != strEnd; ++pos) 
 	{
 		if (!Font::isLinebreak(*pos) && *pos != TOK_FLIP_COLORS) 
 			lineWidth += font->getCharSize(*pos).w;
@@ -554,7 +554,7 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
 	// If no word wrap, just set the dimensions and return the string.
 	if (!_wrap) 
 	{
-		std::wstring outString = getTruncatedLine(str_begin, str_end, font, 
+		std::wstring outString = getTruncatedLine(strBegin, strEnd, font, 
 			getWidth(), lineWidth);
 		_lineWidth.push_back(lineWidth);
 		_lineHeight.push_back(lineHeight);
@@ -567,9 +567,9 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
 	// we want to advance the begin iterator, so none count twice.)
 	if (_indent) 
 	{
-		while(str_begin != str_end && Font::isBrkSpace(*str_begin))
+		while(strBegin != strEnd && Font::isBrkSpace(*strBegin))
 		{
-			++str_begin;
+			++strBegin;
 			++indentation;
 		}
 	}
@@ -582,10 +582,10 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
 	// Because of corner cases like " - ", this is fairly complex.
 	bool spaceRun = false;
 	
-	wordBeginnings.push_back(str_begin);
-	spaceBeginnings.push_back(str_begin);
+	wordBeginnings.push_back(strBegin);
+	spaceBeginnings.push_back(strBegin);
 
-	for (pos = str_begin; pos != str_end; ++pos) 
+	for (pos = strBegin; pos != strEnd; ++pos) 
 	{
 		if (!Font::isBrkSpace(*pos) && spaceRun) 
 		{
@@ -614,8 +614,8 @@ std::wstring Text::processLine(std::wstring::const_iterator str_begin,
 			spaceRun = true;
 		}
 	}	
-	wordBeginnings.push_back(str_end);
-	spaceBeginnings.push_back(str_end);
+	wordBeginnings.push_back(strEnd);
+	spaceBeginnings.push_back(strEnd);
 
 	std::vector<int> wordWidths(wordBeginnings.size()-1, 0);
 	std::vector<int> spaceWidths(wordBeginnings.size()-1, 0);
