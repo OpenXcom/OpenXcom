@@ -87,7 +87,7 @@ BattlescapeGenerator::~BattlescapeGenerator()
 /**
  * Sets up all our various arrays and whatnot according to the size of the map.
  */
-void BattlescapeGenerator::init()
+void BattlescapeGenerator::init(bool resetTerrain)
 {
 	_blocks.clear();
 	_landingzone.clear();
@@ -101,7 +101,7 @@ void BattlescapeGenerator::init()
 
 	_blocksToDo = (_mapsize_x / 10) * (_mapsize_y / 10);
 	// creates the tile objects
-	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z, false);
+	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z, resetTerrain);
 	_save->initUtilities(_mod);
 }
 
@@ -1970,7 +1970,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 	// set up our map generation vars
 	_dummy = new MapBlock("dummy");
 
-	init();
+	init(true);
 
 	MapBlock* craftMap = 0;
 	std::vector<MapBlock*> ufoMaps;
@@ -2210,7 +2210,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 					{
 						_mapsize_z = command->getSizeZ();
 					}
-					init();
+					init(false);
 					break;
 				default:
 					break;
