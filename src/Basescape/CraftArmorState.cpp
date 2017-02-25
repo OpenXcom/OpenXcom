@@ -35,6 +35,7 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Mod/RuleInterface.h"
 #include "../Mod/RuleSoldier.h"
+#include <algorithm>
 
 namespace OpenXcom
 {
