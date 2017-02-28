@@ -349,12 +349,12 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 				for(std::map<std::string, int>::const_iterator k = tempTotal.begin(); k != tempTotal.end(); ++k)
 				{
 					int criteria = -1;
-									std::string noun = (*k).first;
+					std::string noun = (*k).first;
 					// If there is no matching noun, get the first award criteria.
-									if (nextCommendationLevel.count(noun) == 0)
+					if (nextCommendationLevel.count(noun) == 0)
 						criteria = (*j).second.front();
 					// Otherwise, get the criteria that reflects the soldier's commendation level.
-									else if ((unsigned int)nextCommendationLevel[noun] != (*j).second.size())
+					else if ((unsigned int)nextCommendationLevel[noun] != (*j).second.size())
 						criteria = (*j).second.at(nextCommendationLevel[noun]);
 
 					// If a criteria was set AND the stat's count exceeds the criteria.
@@ -369,31 +369,37 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 					awardCommendationBool = false;
 					break;
 				}
-				else
-				{
-					awardCommendationBool = true;
-				}
 			}
+			// Medals that are based on _how_ a kill was achieved are found here.
 			else if ((*j).first == "killsWithCriteriaCareer" || (*j).first == "killsWithCriteriaMission" || (*j).first == "killsWithCriteriaTurn")
 			{
 				// Fetch the kill criteria list.
-				std::vector<std::map<int, std::vector<std::string> > > *_killCriteriaList = (*i).second->getKillCriteria();
+				if (!(*i).second->getKillCriteria())
+					break;
+				std::vector<std::vector<std::pair<int, std::vector<std::string> > > > *_killCriteriaList = (*i).second->getKillCriteria();
+				
+				bool andCriteriaMet = true;
 				
 				// Loop over the OR vectors.
-				for (std::vector<std::map<int, std::vector<std::string> > >::const_iterator orCriteria = _killCriteriaList->begin(); orCriteria != _killCriteriaList->end(); ++orCriteria)
-				{
+				for (std::vector<std::vector<std::pair<int, std::vector<std::string> > > >::const_iterator orCriteria = _killCriteriaList->begin(); orCriteria != _killCriteriaList->end(); ++orCriteria)
+				{	
+					andCriteriaMet = true;
 					// Loop over the AND vectors.
-					for (std::map<int, std::vector<std::string> >::const_iterator andCriteria = orCriteria->begin(); andCriteria != orCriteria->end(); ++andCriteria)
+					for (std::vector<std::pair<int, std::vector<std::string> > >::const_iterator andCriteria = orCriteria->begin(); andCriteria != orCriteria->end(); ++andCriteria)
 					{
-						int count = 0; // How many AND vectors (list of DETAILs) have been successful.
-						if ((*j).first == "killsWithCriteriaTurn" || (*j).first == "killsWithCriteriaMission")
-							count++; // Turns and missions start at 1 because of how thisTime and lastTime work.
+						int detailCount = 0; // How many kills have met the same DETAIL						
 						int thisTime = -1; // Time being a turn or a mission.
 						int lastTime = -1;
 						bool goToNextTime = false;
+						
+						if ((*j).first == "killsWithCriteriaTurn" || (*j).first == "killsWithCriteriaMission")
+							detailCount++; // Turns and missions start at 1 because of how thisTime and lastTime work.
+												
 						// Loop over the KILLS.
 						for (std::vector<BattleUnitKills*>::const_iterator singleKill = _killList.begin(); singleKill != _killList.end(); ++singleKill)
-						{
+						{							
+							bool foundMatch = true;
+							
 							if ((*j).first == "killsWithCriteriaMission")
 							{
 								thisTime = (*singleKill)->mission;
@@ -422,17 +428,15 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 							}
 							else if (thisTime != lastTime && (*j).first != "killsWithCriteriaCareer") 
 							{
-								count = 1; // Reset.
+								detailCount = 1; // Reset.
 								goToNextTime = false;
 								continue;
 							}
-							bool foundMatch = true;
 							
-							// Loop over the DETAILs of the AND vector.
+							// Loop over the DETAILs of one AND vector.
 							for (std::vector<std::string>::const_iterator detail = andCriteria->second.begin(); detail != andCriteria->second.end(); ++detail)
-							{
-								std::string battleTypeArray[] = { "BT_NONE", "BT_FIREARM", "BT_AMMO", "BT_MELEE", "BT_GRENADE",
-									"BT_PROXIMITYGRENADE", "BT_MEDIKIT", "BT_SCANNER", "BT_MINDPROBE", "BT_PSIAMP", "BT_FLARE", "BT_CORPSE", "BT_END" };
+							{							
+								std::string battleTypeArray[] = { "BT_NONE", "BT_FIREARM", "BT_AMMO", "BT_MELEE", "BT_GRENADE",	"BT_PROXIMITYGRENADE", "BT_MEDIKIT", "BT_SCANNER", "BT_MINDPROBE", "BT_PSIAMP", "BT_FLARE", "BT_CORPSE", "BT_END" };
 								int battleType = 0;
 								for (; battleType != 13; ++battleType)
 								{
@@ -442,8 +446,7 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 									}
 								}
 
-								std::string damageTypeArray[] = { "DT_NONE", "DT_AP", "DT_IN", "DT_HE", "DT_LASER", "DT_PLASMA",
-									"DT_STUN", "DT_MELEE", "DT_ACID", "DT_SMOKE", "DT_END"};
+								std::string damageTypeArray[] = { "DT_NONE", "DT_AP", "DT_IN", "DT_HE", "DT_LASER", "DT_PLASMA", "DT_STUN", "DT_MELEE", "DT_ACID", "DT_SMOKE", "DT_END"};
 								int damageType = 0;
 								for (; damageType != 11; ++damageType)
 								{
@@ -453,8 +456,8 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 									}
 								}
 
-								// See if we find no matches with any criteria. If so, break and try the next kill.
-								RuleItem *weapon = mod->getItem((*singleKill)->weaponAmmo);
+								// See if we find _no_ matches with any criteria. If so, break and try the next kill.
+								RuleItem *weapon = mod->getItem((*singleKill)->weapon);
 								RuleItem *weaponAmmo = mod->getItem((*singleKill)->weaponAmmo);
 								if (weapon == 0 || weaponAmmo == 0 ||
 									((*singleKill)->rank != (*detail) && (*singleKill)->race != (*detail) &&
@@ -466,29 +469,28 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 									foundMatch = false;
 									break;
 								}
-							}
+							} /// End of DETAIL loop.
 							if (foundMatch) 
 							{
-								count++;
-								if ( count == (*andCriteria).first) 
+								detailCount++;
+								if ( detailCount == (*andCriteria).first) 
 									goToNextTime = true; // Criteria met, move to next mission/turn.
 							}
-						}
-						int multiCriteria = (*andCriteria).first;
-						// If one of the AND criteria fail, stop looking.
-						if (multiCriteria == 0 || count / multiCriteria < (*j).second.at(nextCommendationLevel["noNoun"]))
+						} /// End of KILLs loop.
+						// If _no_ kill met this DETAIL, then the whole AND block is failed. Move to the next OR block.
+						if (detailCount == 0 || detailCount < (*andCriteria).first * (*j).second.at(nextCommendationLevel["noNoun"]))
 						{
-							awardCommendationBool = false;
+							andCriteriaMet = false;
 							break;
 						}
-						else
-						{
-							awardCommendationBool = true;
-						}
-					}
-					if (awardCommendationBool) 
-						break; // Stop looking because we are getting one regardless.
-				}
+					} /// End of AND loop.
+				  if (andCriteriaMet)
+				    break; // Stop looking, becuase we _are_ getting one, regardless of what's in the next OR block.
+				} /// End of OR loop. 
+				
+				if (!andCriteriaMet)
+					awardCommendationBool = false;
+				
 			}
 		}
 		if (awardCommendationBool)
