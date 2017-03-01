@@ -2250,4 +2250,9 @@ int BattlescapeGame::getDepth() const
 	return _save->getDepth();
 }
 
+std::list<BattleState*> BattlescapeGame::getStates()
+{
+	return _states;
+}
+
 }
