@@ -396,6 +396,7 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 						int thisTime = -1; // Time being a turn or a mission.
 						int lastTime = -1;
 						bool goToNextTime = false;
+						int successionCount = 0; // How many blocks of kills were in the same turn or mission.
 						
 						if ((*j).first == "killsWithCriteriaTurn" || (*j).first == "killsWithCriteriaMission")
 							detailCount++; // Turns and missions start at 1 because of how thisTime and lastTime work.
@@ -477,12 +478,20 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 							if (foundMatch) 
 							{
 								detailCount++;
+								
 								if ( detailCount == (*andCriteria).first) 
+								{
 									goToNextTime = true; // Criteria met, move to next mission/turn.
+									successionCount++;
+								}
 							}
 						} /// End of KILLs loop.
+						if ((*andCriteria).first  != 1)
+						{
+							detailCount = successionCount;
+						}
 						// If _no_ kill met this DETAIL, then the whole AND block is failed. Move to the next OR block.
-						if (detailCount == 0 || detailCount < (*andCriteria).first * (*j).second.at(nextCommendationLevel["noNoun"]))
+						if (detailCount == 0 || detailCount < (*j).second.at(nextCommendationLevel["noNoun"]))
 						{
 							andCriteriaMet = false;
 							break;
@@ -624,7 +633,8 @@ std::map<std::string, int> SoldierDiary::getWeaponTotal()
 	std::map<std::string, int> list;
 	for(std::vector<BattleUnitKills*>::const_iterator kill = _killList.begin(); kill != _killList.end(); ++kill)
 	{
-		list[(*kill)->weapon]++;
+		if ((*kill)->faction == FACTION_HOSTILE)
+			list[(*kill)->weapon]++;
 	}
 	return list;
 }
@@ -637,7 +647,8 @@ std::map<std::string, int> SoldierDiary::getWeaponAmmoTotal()
 	std::map<std::string, int> list;
 	for(std::vector<BattleUnitKills*>::const_iterator kill = _killList.begin(); kill != _killList.end(); ++kill)
 	{
-		list[(*kill)->weaponAmmo]++;
+		if ((*kill)->faction == FACTION_HOSTILE)
+			list[(*kill)->weaponAmmo]++;
 	}
 	return list;
 }

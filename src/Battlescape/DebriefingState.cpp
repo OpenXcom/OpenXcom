@@ -476,16 +476,16 @@ void DebriefingState::btnOkClick(Action *)
 	}
 	else
 	{
+		if (!_deadSoldiersCommended.empty())
+		{
+			_game->pushState(new CommendationLateState(_deadSoldiersCommended));
+		}
+		if (!_soldiersCommended.empty())
+		{
+			_game->pushState(new CommendationState(_soldiersCommended));
+		}
 		if (!_destroyBase)
 		{
-			if (!_deadSoldiersCommended.empty())
-			{
-				_game->pushState(new CommendationLateState(_deadSoldiersCommended));
-			}
-			if (!_soldiersCommended.empty())
-			{
-				_game->pushState(new CommendationState(_soldiersCommended));
-			}
 			if (_game->getSavedGame()->handlePromotions(participants))
 			{
 				_game->pushState(new PromotionsState);
