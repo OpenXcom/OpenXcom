@@ -881,17 +881,17 @@ void SoldierDiary::awardOriginalEightCommendation()
 /**
  * Award post-humous best-of commendation.
  */
-void SoldierDiary::awardBestOfRank(SoldierRank rank)
+void SoldierDiary::awardBestOfRank(int score)
 {
-	_bestOfRank = (int)rank + 1;
+	_bestOfRank = score;
 }
 
 /**
  * Award post-humous best-of commendation.
  */
-void SoldierDiary::awardBestOverall()
+void SoldierDiary::awardBestOverall(int score)
 {
-	_bestSoldier = true;
+	_bestSoldier = score;
 }
 
 /**

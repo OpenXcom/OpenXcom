@@ -329,11 +329,11 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 		}
 		if ((*deadUnit)->getId() == bestScoreID[(*deadUnit)->getGeoscapeSoldier()->getRank()])
 		{
-			(*deadUnit)->getGeoscapeSoldier()->getDiary()->awardBestOfRank((*deadUnit)->getGeoscapeSoldier()->getRank());
+			(*deadUnit)->getGeoscapeSoldier()->getDiary()->awardBestOfRank(bestScore[(*deadUnit)->getGeoscapeSoldier()->getRank()]);
 		}
 		if ((*deadUnit)->getId() == bestOverallScorersID)
 		{
-			(*deadUnit)->getGeoscapeSoldier()->getDiary()->awardBestOverall();
+			(*deadUnit)->getGeoscapeSoldier()->getDiary()->awardBestOverall(bestOverallScore);
 		}
 	}
 
