@@ -673,6 +673,7 @@ void InventoryState::btnApplyTemplateClick(Action *)
 
 					// move matched item from ground to the appropriate inv slot
 					(*groundItem)->setOwner(unit);
+					(*groundItem)->setTile(0);
 					(*groundItem)->setSlot(_game->getMod()->getInventory((*templateIt)->getSlot(), true));
 					(*groundItem)->setSlotX((*templateIt)->getSlotX());
 					(*groundItem)->setSlotY((*templateIt)->getSlotY());

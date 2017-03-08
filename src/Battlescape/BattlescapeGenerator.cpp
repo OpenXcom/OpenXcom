@@ -87,7 +87,7 @@ BattlescapeGenerator::~BattlescapeGenerator()
 /**
  * Sets up all our various arrays and whatnot according to the size of the map.
  */
-void BattlescapeGenerator::init()
+void BattlescapeGenerator::init(bool resetTerrain)
 {
 	_blocks.clear();
 	_landingzone.clear();
@@ -101,7 +101,7 @@ void BattlescapeGenerator::init()
 
 	_blocksToDo = (_mapsize_x / 10) * (_mapsize_y / 10);
 	// creates the tile objects
-	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
+	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z, resetTerrain);
 	_save->initUtilities(_mod);
 }
 
@@ -736,6 +736,8 @@ void BattlescapeGenerator::deployXCOM()
 	// equip soldiers based on equipment-layout
 	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
+		// set all the items on this tile as belonging to the XCOM faction.
+		(*i)->setXCOMProperty(true);
 		// don't let the soldiers take extra ammo yet
 		if ((*i)->getRules()->getBattleType() == BT_AMMO)
 			continue;
@@ -1938,7 +1940,6 @@ void BattlescapeGenerator::loadWeapons()
 				if ((*j)->getSlot() == _game->getMod()->getInventory("STR_GROUND", true) && (*i)->setAmmoItem(*j) == 0)
 				{
 					_save->getItems()->push_back(*j);
-					(*j)->setXCOMProperty(true);
 					(*j)->setSlot(_game->getMod()->getInventory("STR_RIGHT_HAND", true));
 					loaded = true;
 				}
@@ -1969,7 +1970,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 	// set up our map generation vars
 	_dummy = new MapBlock("dummy");
 
-	init();
+	init(true);
 
 	MapBlock* craftMap = 0;
 	std::vector<MapBlock*> ufoMaps;
@@ -2209,7 +2210,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 					{
 						_mapsize_z = command->getSizeZ();
 					}
-					init();
+					init(false);
 					break;
 				default:
 					break;

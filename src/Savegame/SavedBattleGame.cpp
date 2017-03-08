@@ -489,7 +489,7 @@ Tile **SavedBattleGame::getTiles() const
  * @param mapsize_y
  * @param mapsize_z
  */
-void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
+void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z, bool resetTerrain)
 {
 	// Clear old map data
 	if (_mapsize_z * _mapsize_y * _mapsize_x > 0)
@@ -506,7 +506,11 @@ void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
 		delete *i;
 	}
 	_nodes.clear();
-	_mapDataSets.clear();
+
+	if (resetTerrain)
+	{
+		_mapDataSets.clear();
+	}
 
 	// Create tile objects
 	_mapsize_x = mapsize_x;
