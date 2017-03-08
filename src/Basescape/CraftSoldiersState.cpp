@@ -54,7 +54,7 @@ struct SortFunctor : public std::binary_function<Soldier *, Soldier *, bool>
 };
 
 #define GET_ATTRIB_STAT_FN(attrib) \
-	int attrib##Stat(Game *game, Soldier *s) { return s->getCurrentStats()->attrib; }
+	int attrib##Stat(Game *, Soldier *s) { return s->getCurrentStats()->attrib; }
 GET_ATTRIB_STAT_FN(tu)
 GET_ATTRIB_STAT_FN(stamina)
 GET_ATTRIB_STAT_FN(health)
@@ -83,7 +83,7 @@ int psiSkillStat(Game *game, Soldier *s)
 GET_ATTRIB_STAT_FN(melee)
 #undef GET_ATTRIB_STAT_FN
 #define GET_SOLDIER_STAT_FN(attrib, camelCaseAttrib) \
-	int attrib##Stat(Game *game, Soldier *s) { return s->get##camelCaseAttrib(); }
+	int attrib##Stat(Game *, Soldier *s) { return s->get##camelCaseAttrib(); }
 GET_SOLDIER_STAT_FN(rank, Rank)
 GET_SOLDIER_STAT_FN(missions, Missions)
 GET_SOLDIER_STAT_FN(kills, Kills)
@@ -225,7 +225,7 @@ CraftSoldiersState::~CraftSoldiersState()
  * Sorts the soldiers list by the selected criterion
  * @param action Pointer to an action.
  */
-void CraftSoldiersState::cbxSortByChange(Action *action)
+void CraftSoldiersState::cbxSortByChange(Action *)
 {
 	size_t selIdx = _cbxSortBy->getSelected();
 	if (selIdx == (size_t)-1)
