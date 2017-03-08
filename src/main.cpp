@@ -58,7 +58,7 @@ void signalLogger(int sig)
 #include <exception>
 void exceptionLogger()
 {
-	static int logged = 0;
+	static bool logged = false;
 	std::string error;
 	try
 	{

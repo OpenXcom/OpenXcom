@@ -260,7 +260,6 @@ void MovingTarget::calculateMeetPoint()
 	do
 	{
 		_meetPointLat += nx*sin(_meetPointLon) - ny*cos(_meetPointLon);
-		// using std::abs instead of abs since abs can't handle floating point
 		if (std::abs(_meetPointLat) < M_PI_2) _meetPointLon += nz - (nx*cos(_meetPointLon) + ny*sin(_meetPointLon))*tan(_meetPointLat); else _meetPointLon += M_PI;
 		path += _speedRadian;
 

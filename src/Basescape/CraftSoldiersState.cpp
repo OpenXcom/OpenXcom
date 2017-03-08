@@ -65,7 +65,7 @@ GET_ATTRIB_STAT_FN(throwing)
 GET_ATTRIB_STAT_FN(strength)
 int psiStrengthStat(Game *game, Soldier *s)
 {
-	// don't reveal psi strength before it would otherwise be known
+	// don't reveal (relative) psi strength before it would otherwise be known
 	if (s->getCurrentStats()->psiSkill > 0
 	 || (Options::psiStrengthEval
 	     && game->getSavedGame()->isResearched(game->getMod()->getPsiRequirements())))
@@ -162,8 +162,28 @@ CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft)
 	PUSH_IN("STR_FIRING_ACCURACY", firingStat);
 	PUSH_IN("STR_THROWING_ACCURACY", throwingStat);
 	PUSH_IN("STR_STRENGTH", strengthStat);
-	PUSH_IN("STR_PSIONIC_STRENGTH", psiStrengthStat);
-	PUSH_IN("STR_PSIONIC_SKILL", psiSkillStat);
+
+	// don't show psionic sort options until they actually have data they can use
+	bool showPsiStrength = Options::psiStrengthEval
+			&& _game->getSavedGame()->isResearched(_game->getMod()->getPsiRequirements());
+	bool showPsiSkill = false;
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	{
+		if (showPsiSkill) { break; }
+		if ((*i)->getCurrentStats()->psiSkill > 0)
+		{
+			showPsiSkill = true;
+		}
+	}
+	if (showPsiStrength)
+	{
+		PUSH_IN("STR_PSIONIC_STRENGTH", psiStrengthStat);
+	}
+	if (showPsiSkill)
+	{
+		PUSH_IN("STR_PSIONIC_SKILL", psiSkillStat);
+	}
+
 	PUSH_IN("STR_MELEE_ACCURACY", meleeStat);
 
 #undef PUSH_IN
@@ -287,7 +307,6 @@ void CraftSoldiersState::init()
 {
 	State::init();
 	initList();
-
 }
 
 /**
