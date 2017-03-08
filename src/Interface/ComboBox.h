@@ -53,12 +53,13 @@ private:
 	Language *_lang;
 	Uint8 _color;
 	bool _toggled;
+	bool _popupAboveButton;
 
 	void drawArrow();
 	void setDropdown(int options);
 public:
 	/// Creates a combo box with the specified size and position.
-	ComboBox(State *state, int width, int height, int x = 0, int y = 0);
+	ComboBox(State *state, int width, int height, int x = 0, int y = 0, bool popupAboveButton = false);
 	/// Cleans up the combo box.
 	~ComboBox();
 	/// Sets the X position of the surface.

@@ -38,12 +38,12 @@ const int ComboBox::MAX_ITEMS = 10;
 const int ComboBox::BUTTON_WIDTH = 14;
 const int ComboBox::TEXT_HEIGHT = 8;
 
-static int getPopupWindowY(Game *game, int buttonHeight, int buttonY, int popupHeight)
+static int getPopupWindowY(int buttonHeight, int buttonY, int popupHeight, bool popupAboveButton)
 {
 	int belowButtonY = buttonY + buttonHeight;
-	if (belowButtonY + popupHeight > Screen::ORIGINAL_HEIGHT + game->getScreen()->getDY())
+	if (popupAboveButton)
 	{
-		// popup list won't fit below the button; display it above
+		// used when popup list won't fit below the button; display it above
 		return buttonY - popupHeight;
 	}
 	return belowButtonY;
@@ -57,7 +57,7 @@ static int getPopupWindowY(Game *game, int buttonHeight, int buttonY, int popupH
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-ComboBox::ComboBox(State *state, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _change(0), _sel(0), _state(state), _lang(0), _toggled(false)
+ComboBox::ComboBox(State *state, int width, int height, int x, int y, bool popupAboveButton) : InteractiveSurface(width, height, x, y), _change(0), _sel(0), _state(state), _lang(0), _toggled(false), _popupAboveButton(popupAboveButton)
 {
 	_button = new TextButton(width, height, x, y);
 	_button->setComboBox(this);
@@ -65,7 +65,7 @@ ComboBox::ComboBox(State *state, int width, int height, int x, int y) : Interact
 	_arrow = new Surface(11, 8, x + width - BUTTON_WIDTH, y + 4);
 
 	int popupHeight = MAX_ITEMS * TEXT_HEIGHT + VERTICAL_MARGIN * 2;
-	int popupY = getPopupWindowY(State::_game, height, y, popupHeight);
+	int popupY = getPopupWindowY(height, y, popupHeight, popupAboveButton);
 	_window = new Window(state, width, popupHeight, x, popupY);
 	_window->setThinBorder();
 
@@ -118,7 +118,7 @@ void ComboBox::setY(int y)
 	_arrow->setY(y + 4);
 
 	int popupHeight = _window->getHeight();
-	int popupY = getPopupWindowY(State::_game, getHeight(), y, popupHeight);
+	int popupY = getPopupWindowY(getHeight(), y, popupHeight, _popupAboveButton);
 	_window->setY(popupY);
 	_list->setY(popupY + VERTICAL_MARGIN);
 }
@@ -306,7 +306,7 @@ void ComboBox::setDropdown(int options)
 	}
 
 	int popupHeight = items * h + VERTICAL_MARGIN * 2;
-	int popupY = getPopupWindowY(State::_game, getHeight(), getY(), popupHeight);
+	int popupY = getPopupWindowY(getHeight(), getY(), popupHeight, _popupAboveButton);
 	_window->setY(popupY);
 	_window->setHeight(popupHeight);
 	_list->setY(popupY + VERTICAL_MARGIN);
@@ -377,7 +377,6 @@ void ComboBox::handle(Action *action, State *state)
 		 action->getAbsoluteYMouse() < topY || action->getAbsoluteYMouse() >= topY + getHeight() + _window->getHeight()))
 	{
 		toggle();
-		_toggled = false;
 	}
 	if (_toggled)
 	{

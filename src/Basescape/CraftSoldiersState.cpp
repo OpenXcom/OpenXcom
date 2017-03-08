@@ -74,7 +74,12 @@ int psiStrengthStat(Game *game, Soldier *s)
 	}
 	return 0;
 }
-GET_ATTRIB_STAT_FN(psiSkill)
+int psiSkillStat(Game *game, Soldier *s)
+{
+	// protect against negative psiSkill (possible when Options::anytimePsiTraining
+	// is enabled)
+	return (s->getCurrentStats()->psiSkill > 0) ? s->getCurrentStats()->psiSkill : 0;
+}
 GET_ATTRIB_STAT_FN(melee)
 #undef GET_ATTRIB_STAT_FN
 #define GET_SOLDIER_STAT_FN(attrib, camelCaseAttrib) \
@@ -103,7 +108,7 @@ CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft)
 	_txtCraft = new Text(84, 9, 224, 32);
 	_txtAvailable = new Text(110, 9, 16, 24);
 	_txtUsed = new Text(110, 9, 122, 24);
-	_cbxSortBy = new ComboBox(this, 148, 16, 8, 176);
+	_cbxSortBy = new ComboBox(this, 148, 16, 8, 176, true);
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
@@ -189,7 +194,7 @@ CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft)
 #undef PUSH_IN
 
 	_cbxSortBy->setOptions(sortOptions);
-	_cbxSortBy->setSelected(-1);
+	_cbxSortBy->setSelected(0);
 	_cbxSortBy->onChange((ActionHandler)&CraftSoldiersState::cbxSortByChange);
 	_cbxSortBy->setText(tr("STR_SORT_BY"));
 
