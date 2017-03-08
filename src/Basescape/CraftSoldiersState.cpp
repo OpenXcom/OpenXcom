@@ -74,7 +74,7 @@ int psiStrengthStat(Game *game, Soldier *s)
 	}
 	return 0;
 }
-int psiSkillStat(Game *game, Soldier *s)
+int psiSkillStat(Game *, Soldier *s)
 {
 	// protect against negative psiSkill (possible when Options::anytimePsiTraining
 	// is enabled)
