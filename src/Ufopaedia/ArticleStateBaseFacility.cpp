@@ -131,18 +131,81 @@ namespace OpenXcom
 		ss << Text::formatFunding(facility->getMonthlyCost());
 		_lstInfo->addRow(2, tr("STR_MAINTENANCE_COST").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(2, 1, Palette::blockOffset(13)+0);
-
+		size_t row = 3;
 		if (facility->getDefenseValue() > 0)
 		{
 			ss.str(L"");ss.clear();
 			ss << facility->getDefenseValue();
 			_lstInfo->addRow(2, tr("STR_DEFENSE_VALUE").c_str(), ss.str().c_str());
-			_lstInfo->setCellColor(3, 1, Palette::blockOffset(13)+0);
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(13) + 0);
 
 			ss.str(L"");ss.clear();
 			ss << Text::formatPercentage(facility->getHitRatio());
 			_lstInfo->addRow(2, tr("STR_HIT_RATIO").c_str(), ss.str().c_str());
-			_lstInfo->setCellColor(4, 1, Palette::blockOffset(13)+0);
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(13) + 0);
+		}
+		if (facility->getRadarRange() > 0)
+		{
+			ss.str(L""); ss.clear();
+			ss << facility->getRadarRange();
+			_lstInfo->addRow(2, tr("STR_RADAR_RANGE").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(13) + 0);
+
+			ss.str(L""); ss.clear();
+			ss << Text::formatPercentage(facility->getRadarChance());
+			if (facility->isHyperwave())
+				ss << tr("STR_HYPERWAVE_MARK");
+			_lstInfo->addRow(2, tr("STR_RADAR_CHANCE").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(13) + 0);
+		}
+		if (facility->getStorage() > 0)
+		{
+			ss.str(L""); ss.clear();
+			ss << facility->getStorage();
+			_lstInfo->addRow(2, tr("STR_STORAGE_CAP").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(13) + 0);
+		}
+		if (facility->getPersonnel() > 0)
+		{
+			ss.str(L""); ss.clear();
+			ss << facility->getPersonnel();
+			_lstInfo->addRow(2, tr("STR_PERSONNEL_CAP").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(13) + 0);
+		}
+		if (facility->getAliens() > 0)
+		{
+			ss.str(L""); ss.clear();
+			ss << facility->getAliens();
+			_lstInfo->addRow(2, tr("STR_ALIENS_CAP").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(13) + 0);
+		}
+		if (facility->getCrafts() > 0)
+		{
+			ss.str(L""); ss.clear();
+			ss << facility->getCrafts();
+			_lstInfo->addRow(2, tr("STR_CRAFT_CAP").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(13) + 0);
+		}
+		if (facility->getLaboratories() > 0)
+		{
+			ss.str(L""); ss.clear();
+			ss << facility->getLaboratories();
+			_lstInfo->addRow(2, tr("STR_LABORATORY_CAP").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(13) + 0);
+		}
+		if (facility->getWorkshops() > 0)
+		{
+			ss.str(L""); ss.clear();
+			ss << facility->getWorkshops();
+			_lstInfo->addRow(2, tr("STR_WORKSHOP_CAP").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(13) + 0);
+		}
+		if (facility->getPsiLaboratories() > 0)
+		{
+			ss.str(L""); ss.clear();
+			ss << facility->getPsiLaboratories();
+			_lstInfo->addRow(2, tr("STR_PSILAB_CAP").c_str(), ss.str().c_str());
+			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(13) + 0);
 		}
 		centerAllSurfaces();
 	}
