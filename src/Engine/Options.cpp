@@ -965,7 +965,7 @@ void save(const std::string &filename)
 
 		out << doc;
 
-		sav << out.c_str();
+		sav << out.c_str() << std::endl;
 	}
 	catch (YAML::Exception &e)
 	{
