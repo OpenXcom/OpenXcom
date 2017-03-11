@@ -1,7 +1,7 @@
 #<!--
 #   Standard Openxcom shader file
 #
-#   Copyright (C) 2013 - Openxcom Project - http://openxcom.org/
+#   Copyright (C) 2013 - Openxcom Project - https://openxcom.org/
 #
 #   AUTHOR: Powerc80
 #

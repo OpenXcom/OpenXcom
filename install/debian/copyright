@@ -1,6 +1,6 @@
 Format: http://dep.debian.net/deps/dep5
 Upstream-Name: openxcom
-Source: http://openxcom.org/
+Source: https://openxcom.org/
 
 Files: *
 Copyright: 2009 Daniel Filipe "SupSuper" <openxcom@gmail.com>

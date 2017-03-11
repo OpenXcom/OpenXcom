@@ -12,7 +12,7 @@ Build-Depends:
 	libyaml-cpp-dev (>= 0.5),
 	libboost-dev
 Standards-Version: 3.9.6
-Homepage: http://openxcom.org/
+Homepage: https://openxcom.org/
 Vcs-Git: git://github.com/SupSuper/OpenXcom.git
 Vcs-Browser: https://github.com/SupSuper/OpenXcom
 

@@ -17,7 +17,7 @@ Release:        0
 Group:          Amusements/Games/Strategy/Turn Based 
 License:        GPL-3.0
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-URL:            http://openxcom.org/
+URL:            https://openxcom.org/
 Source0:        %{name}-%{version}.tar.gz
 Summary:        Open-source clone of UFO: Enemy Unknown
 BuildRequires:  cmake 

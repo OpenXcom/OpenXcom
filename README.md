@@ -4,7 +4,7 @@ OpenXcom is an open-source clone of the popular "UFO: Enemy Unknown" ("X-COM:
 UFO Defense" in the USA release) and "X-COM: Terror From the Deep" videogames
 by Microprose, licensed under the GPL and written in C++ / SDL.
 
-See more info at the [website](http://openxcom.org)
+See more info at the [website](https://openxcom.org)
 and the [wiki](http://ufopaedia.org/index.php?title=OpenXcom).
 
 Uses modified code from SDL\_gfx (LGPL) with permission from author.

@@ -35,4 +35,4 @@ Or, if you prefer to keep your build always separate from the game data files fo
 
 1. Enjoy!
 
-Should you require any further assistance regarding the OSX build - feel free to ask around on the official forums - http://openxcom.org/forum/ or contact us directly on GitHub - http://github.com/luciderous, http://github.com/rcreasey
+Should you require any further assistance regarding the OSX build - feel free to ask around on the official forums - https://openxcom.org/forum/ or contact us directly on GitHub - http://github.com/luciderous, http://github.com/rcreasey
