@@ -239,7 +239,6 @@ void MovingTarget::calculateMeetPoint()
 	// Speed ratio
 	if (AreSame(u->getSpeedRadian(), 0.0)) return;
 	const double speedRatio = _speedRadian/ u->getSpeedRadian();
-	if (speedRatio <= 1) return;
 
 	// The direction pseudovector
 	double	nx = cos(u->getLatitude())*sin(u->getLongitude())*sin(u->getDestination()->getLatitude()) -
@@ -256,15 +255,18 @@ void MovingTarget::calculateMeetPoint()
 	// Initialize
 	double path=0, distance;
 
-	// Finding the meeting point
-	do
+	// Finding the meeting point. Don't search further than halfway across the
+	// globe (distance from interceptor's current point >= 1), as that may 
+	// cause the interceptor to go the wrong way later.
+	for (path = 0; 
+		path < M_PI && distance - path*speedRatio > 0 && path*speedRatio < 1;
+		path += _speedRadian)
 	{
 		_meetPointLat += nx*sin(_meetPointLon) - ny*cos(_meetPointLon);
 		if (std::abs(_meetPointLat) < M_PI_2) _meetPointLon += nz - (nx*cos(_meetPointLon) + ny*sin(_meetPointLon))*tan(_meetPointLat); else _meetPointLon += M_PI;
-		path += _speedRadian;
 
 		distance = acos(cos(_lat) * cos(_meetPointLat) * cos(_meetPointLon - _lon) + sin(_lat) * sin(_meetPointLat));
-	} while (path < M_PI && distance - path*speedRatio > 0);
+	}
 
 	// Correction overflowing angles
 	double lonSign = Sign(_meetPointLon);
