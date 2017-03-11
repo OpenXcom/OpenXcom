@@ -18,6 +18,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "../Engine/State.h"
+#include <vector>
 
 namespace OpenXcom
 {
@@ -26,7 +27,10 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
+class ComboBox;
 class Base;
+class Soldier;
+struct SortFunctor;
 
 /**
  * Select Squad screen that lets the player
@@ -38,18 +42,24 @@ private:
 	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtTitle, *_txtName, *_txtRank, *_txtCraft, *_txtAvailable, *_txtUsed;
+	ComboBox *_cbxSortBy;
 	TextList *_lstSoldiers;
 
 	Base *_base;
 	size_t _craft;
 	Uint8 _otherCraftColor;
-	///initializes the display list based on the craft soldier's list and the position to display
-	void initList(size_t scrl);
+	std::vector<Soldier *> _origSoldierOrder;
+	std::vector<SortFunctor *> _sortFunctors;
+
+	/// initializes the display list based on the craft soldier's list
+	void initList();
 public:
 	/// Creates the Craft Soldiers state.
 	CraftSoldiersState(Base *base, size_t craft);
 	/// Cleans up the Craft Soldiers state.
 	~CraftSoldiersState();
+	/// Handler for changing the sort by combobox.
+	void cbxSortByChange(Action *action);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Updates the soldiers list.
