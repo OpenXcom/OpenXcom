@@ -1157,8 +1157,7 @@ void DebriefingState::prepareDebriefing()
 				if ((((*j)->isInExitArea() || (*j)->getStatus() == STATUS_IGNORE_ME) && (battle->getMissionType() != "STR_BASE_DEFENSE" || success)) || !aborted)
 				{ // so game is not aborted or aborted and unit is on exit area
 					UnitStats statIncrease;
-					bool hasImproved = (*j)->postMissionProcedures(save, statIncrease);
-					//if (hasImproved)
+					(*j)->postMissionProcedures(save, statIncrease);
 					if ((*j)->getGeoscapeSoldier())
 						_soldierStats.push_back(std::pair<std::wstring, UnitStats>((*j)->getGeoscapeSoldier()->getName(), statIncrease));
 					playerInExitArea++;
