@@ -317,24 +317,23 @@ SectionEnd
 
 Section "$(SETUP_PATCH)" SecPatch
 
-	;(uses NSISdl.dll)
-	NSISdl::download "https://openxcom.org/download/extras/universal-patch.zip" "$TEMP\universal-patch.zip"
+	;(uses inetc.dll)
+	inetc::get "https://openxcom.org/download/extras/universal-patch.zip" "$TEMP\universal-patch.zip" /end
 	Pop $0
-	StrCmp $0 success success1
-		SetDetailsView show
-		DetailPrint "download failed: $0"
-		Abort
-	success1:
-	
+	StrCmp $0 "OK" patch_ok1 patch_fail1
+		
+	patch_ok1:	
 	;(uses nsisunz.dll)
 	nsisunz::UnzipToLog "$TEMP\universal-patch.zip" "$INSTDIR\UFO"
 	Pop $0
-	StrCmp $0 "success" success2
-		SetDetailsView show
-		DetailPrint "unzipping failed: $0"
-		Abort
-	success2:
-	
+	StrCmp $0 "success" patch_ok2 patch_fail1
+		
+	patch_fail1:
+	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(SETUP_WARNING_PATCH) /SD IDYES IDYES patch_ok2 IDNO patch_fail2
+	patch_fail2:
+	Abort "Error"
+		
+	patch_ok2:	
 	Delete "$TEMP\universal-patch.zip"
 
 SectionEnd
