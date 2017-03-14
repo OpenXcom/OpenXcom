@@ -1210,3 +1210,7 @@ en-US:
   STR_TOTAL_ALIEN_BASES: "Alien colonies discovered"
   STR_PSIONIC_STRENGTH_ABBREVIATION: "MST"
   STR_PSIONIC_SKILL_ABBREVIATION: "MSK"
+  FEMALE_CIVILIAN: "Civilian, Female"
+  MALE_CIVILIAN: "Civilian, Male"
+  DOCKER_CIVILIAN: "Civilian, Docker"
+  SAILOR_CIVILIAN: "Civilian, Sailor"
