@@ -252,13 +252,10 @@ void MovingTarget::calculateMeetPoint()
 	ny *= nk;
 	nz *= nk;
 
-	// Initialize
-	double path=0, distance;
-
 	// Finding the meeting point. Don't search further than halfway across the
 	// globe (distance from interceptor's current point >= 1), as that may 
 	// cause the interceptor to go the wrong way later.
-	for (path = 0; 
+	for (double path = 0, distance = 1;
 		path < M_PI && distance - path*speedRatio > 0 && path*speedRatio < 1;
 		path += _speedRadian)
 	{
