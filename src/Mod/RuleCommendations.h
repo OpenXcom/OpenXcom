@@ -32,7 +32,7 @@ class RuleCommendations
 {
 private:
 	std::map<std::string, std::vector<int> > _criteria;
-    std::vector<std::map<int, std::vector<std::string> > > _killCriteria;
+	std::vector<std::vector<std::pair<int, std::vector<std::string> > > > _killCriteria;
 	std::string _description;
 	int _sprite;
 public:
@@ -47,7 +47,7 @@ public:
 	/// Get the commendation's award criteria.
 	std::map<std::string, std::vector<int> > *getCriteria();
 	/// Get the commendation's award kill related criteria.
-	std::vector<std::map<int, std::vector<std::string> > > *getKillCriteria();
+	std::vector<std::vector<std::pair<int, std::vector<std::string> > > > *getKillCriteria();
 	/// Get the commendation's sprite.
 	int getSprite() const;
 

@@ -77,8 +77,8 @@ private:
 		_hitCounterTotal, _ironManTotal, _longDistanceHitCounterTotal, _lowAccuracyHitCounterTotal, _shotsFiredCounterTotal, _shotsLandedCounterTotal,
 		_shotAtCounter10in1Mission,	_hitCounter5in1Mission, _timesWoundedTotal, _KIA, _allAliensKilledTotal, _allAliensStunnedTotal,
 		_woundsHealedTotal, _allUFOs, _allMissionTypes, _statGainTotal, _revivedUnitTotal, _wholeMedikitTotal, _braveryGainTotal, _bestOfRank, _MIA,
-		_martyrKillsTotal, _postMortemKills, _slaveKillsTotal;
-	bool _bestSoldier, _globeTrotter;
+		_martyrKillsTotal, _postMortemKills, _slaveKillsTotal, _bestSoldier;
+	bool _globeTrotter;
 	void manageModularCommendations(std::map<std::string, int> &nextCommendationLevel, std::map<std::string, int> &modularCommendations, std::pair<std::string, int> statTotal, int criteria);
 	void awardCommendation(const std::string& type, const std::string& noun = "noNoun");
 public:
@@ -139,9 +139,9 @@ public:
 	/// Award special commendation to the original 8 soldiers.
 	void awardOriginalEightCommendation();
 	/// Award post-humous best-of rank commendation.
-	void awardBestOfRank(SoldierRank rank);
+	void awardBestOfRank(int score);
 	/// Award post-humous best overall commendation.
-	void awardBestOverall();
+	void awardBestOverall(int score);
 	/// Award post-humous kills commendation.
 	void awardPostMortemKill(int kills);
 	/// Get the total number of shots fired.

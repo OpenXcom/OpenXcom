@@ -461,11 +461,11 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 		}
 		if ((*deadUnit)->getId() == bestScoreID[(*deadUnit)->getGeoscapeSoldier()->getRank()])
 		{
-			(*deadUnit)->getGeoscapeSoldier()->getDiary()->awardBestOfRank((*deadUnit)->getGeoscapeSoldier()->getRank());
+			(*deadUnit)->getGeoscapeSoldier()->getDiary()->awardBestOfRank(bestScore[(*deadUnit)->getGeoscapeSoldier()->getRank()]);
 		}
 		if ((*deadUnit)->getId() == bestOverallScorersID)
 		{
-			(*deadUnit)->getGeoscapeSoldier()->getDiary()->awardBestOverall();
+			(*deadUnit)->getGeoscapeSoldier()->getDiary()->awardBestOverall(bestOverallScore);
 		}
 	}
 
@@ -681,16 +681,16 @@ void DebriefingState::btnOkClick(Action *)
 	}
 	else
 	{
+		if (!_deadSoldiersCommended.empty())
+		{
+			_game->pushState(new CommendationLateState(_deadSoldiersCommended));
+		}
+		if (!_soldiersCommended.empty())
+		{
+			_game->pushState(new CommendationState(_soldiersCommended));
+		}
 		if (!_destroyBase)
 		{
-			if (!_deadSoldiersCommended.empty())
-			{
-				_game->pushState(new CommendationLateState(_deadSoldiersCommended));
-			}
-			if (!_soldiersCommended.empty())
-			{
-				_game->pushState(new CommendationState(_soldiersCommended));
-			}
 			if (_game->getSavedGame()->handlePromotions(participants))
 			{
 				_game->pushState(new PromotionsState);
