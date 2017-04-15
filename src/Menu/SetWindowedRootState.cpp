@@ -75,10 +75,15 @@ SetWindowedRootState::SetWindowedRootState(OptionsOrigin origin, OptionsVideoSta
 	_txtWindowedModePositionY->setWordWrap(true);
 	_txtWindowedModePositionY->setText(tr("STR_DISPLAY_WINDOW_POSITION_NEW_Y"));
 
-	_edtWindowedModePositionX->setText(static_cast<std::wostringstream*>( &(std::wostringstream() << Options::newWindowedModePositionX) )->str());
+	std::wostringstream wss, wss2;
+
+	wss << Options::newWindowedModePositionX;
+	wss2 << Options::newWindowedModePositionY;
+
+	_edtWindowedModePositionX->setText(wss.str());
 	_edtWindowedModePositionX->setConstraint(TEC_NUMERIC);
 
-	_edtWindowedModePositionY->setText(static_cast<std::wostringstream*>( &(std::wostringstream() << Options::newWindowedModePositionY) )->str());
+	_edtWindowedModePositionY->setText(wss2.str());
 	_edtWindowedModePositionY->setConstraint(TEC_NUMERIC);
 
 	centerAllSurfaces();
