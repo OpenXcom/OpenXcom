@@ -1145,8 +1145,7 @@ void GraphsState::shiftButtons(Action *action)
 
 void GraphsState::scrollButtons(std::vector<GraphButInfo *> &toggles, std::vector<ToggleTextButton *> &buttons, size_t &offset, int step)
 {
-	// minus one, 'cause we'll already added the TOTAL button to toggles
-	if ( int(step + (int)offset) < 0 || offset + step + GRAPH_MAX_BUTTONS >= toggles.size()-1)
+	if ( int(step + (int)offset) < 0 || offset + step + GRAPH_MAX_BUTTONS >= toggles.size())
 		return;
 	// set the next offset - cheaper to do it from starters
 	offset += step;
