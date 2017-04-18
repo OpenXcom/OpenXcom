@@ -112,6 +112,13 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 		endPosition.z++;
 		destinationTile = _save->getTile(endPosition);
 	}
+	// make sure we didn't just try to adjust the Z of our destination outside the map
+	// this occurs in rare circumstances where an object has terrainLevel -24 on the top floor
+	// and is considered passable terrain for whatever reason (usually bigwall type objects)
+	if (endPosition.z == _save->getMapSizeZ())
+	{
+		return; // Icarus is a bad role model for XCom soldiers.
+	}
 	// check if we have floor, else lower destination (for non flying units only, because otherwise they never reached this place)
 	while (canFallDown(destinationTile, _unit->getArmor()->getSize()) && _movementType != MT_FLY)
 	{
