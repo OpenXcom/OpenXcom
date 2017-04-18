@@ -270,7 +270,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 				makeSoldierString((*i).second.strength).c_str(),
 				makeSoldierString((*i).second.psiStrength).c_str(),
 				makeSoldierString((*i).second.psiSkill).c_str(),
-				"");
+				L"");
 		// note: final dummy element to cause dot filling until the end of the line
 	}
 
