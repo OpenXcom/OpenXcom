@@ -93,7 +93,7 @@ missionScripts: #done
         STR_MEDITERRANEAN: 10
         STR_SOUTH_CHINA_SEA: 10
         STR_INDIAN_OCEAN: 10
-        STR_SEA_OF_JAPAN: 10
+        STR_THE_EAST_SEA: 10
         STR_NORTH_SEA: 10
         STR_CARRIBEAN: 10
     useTable: false
