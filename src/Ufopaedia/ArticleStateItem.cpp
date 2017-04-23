@@ -245,6 +245,10 @@ namespace OpenXcom
 
 				ss.str(L"");ss.clear();
 				ss << item->getPower();
+				if (item->getShotgunPellets())
+				{
+					ss << L"x" << item->getShotgunPellets();
+				}
 				_txtAmmoDamage[0]->setText(ss.str());
 				break;
 			default: break;
