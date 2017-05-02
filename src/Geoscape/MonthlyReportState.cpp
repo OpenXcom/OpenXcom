@@ -360,6 +360,11 @@ void MonthlyReportState::calculateChanges()
 	// now that we have our totals we can send the relevant info to the countries
 	// and have them make their decisions weighted on the council's perspective.
 	const RuleAlienMission *infiltration = _game->getMod()->getRandomMission(OBJECTIVE_INFILTRATION, _game->getSavedGame()->getMonthsPassed());
+	int pactScore = 0;
+	if (infiltration)
+	{
+		pactScore = infiltration->getPoints();
+	}
 	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 	{
 		// add them to the list of new pact members
@@ -372,7 +377,7 @@ void MonthlyReportState::calculateChanges()
 		}
 		// determine satisfaction level, sign pacts, adjust funding
 		// and update activity meters,
-		(*k)->newMonth(xcomTotal, alienTotal, infiltration->getPoints());
+		(*k)->newMonth(xcomTotal, alienTotal, pactScore);
 		// and after they've made their decisions, calculate the difference, and add
 		// them to the appropriate lists.
 		_fundingDiff += (*k)->getFunding().back()-(*k)->getFunding().at((*k)->getFunding().size()-2);
