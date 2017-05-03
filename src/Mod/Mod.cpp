@@ -1909,12 +1909,15 @@ const RuleAlienMission *Mod::getRandomMission(MissionObjective objective, size_t
 			possibilities[totalWeight] = i->second;
 		}
 	}
-	int pick = RNG::generate(1, totalWeight);
-	for (std::map<int, RuleAlienMission*>::const_iterator i = possibilities.begin(); i != possibilities.end(); ++i)
+	if (totalWeight > 0)
 	{
-		if (pick <= i->first)
+		int pick = RNG::generate(1, totalWeight);
+		for (std::map<int, RuleAlienMission*>::const_iterator i = possibilities.begin(); i != possibilities.end(); ++i)
 		{
-			return i->second;
+			if (pick <= i->first)
+			{
+				return i->second;
+			}
 		}
 	}
 	return 0;
