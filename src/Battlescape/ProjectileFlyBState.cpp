@@ -229,7 +229,8 @@ void ProjectileFlyBState::init()
 			{
 				if (!_parent->getTileEngine()->canTargetUnit(&originVoxel, targetTile, &_targetVoxel, _unit))
 				{
-					_targetVoxel = Position(-16,-16,-24); // out of bounds, even after voxel to tile calculation.
+					// target nothing, targets the middle of the tile
+					_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
 				}
 			}
 		}
