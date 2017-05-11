@@ -197,12 +197,25 @@ void AlienMission::think(Game &engine, const Globe &globe)
 	{
 		for (std::vector<Country*>::iterator c = game.getCountries()->begin(); c != game.getCountries()->end(); ++c)
 		{
-			if (!(*c)->getPact() && !(*c)->getNewPact() && mod.getRegion(_region, true)->insideRegion((*c)->getRules()->getLabelLongitude(), (*c)->getRules()->getLabelLatitude()))
+			RuleRegion *region = mod.getRegion(_region, true);
+			if (!(*c)->getPact() && !(*c)->getNewPact() && region->insideRegion((*c)->getRules()->getLabelLongitude(), (*c)->getRules()->getLabelLatitude()))
 			{
 				(*c)->setNewPact();
-				std::vector<MissionArea> areas = mod.getRegion(_region, true)->getMissionZones().at(_rule.getSpawnZone()).areas;
-				MissionArea area = areas.at(RNG::generate(0, areas.size()-1));
-				spawnAlienBase(engine, area);
+				std::vector<MissionArea> areas = region->getMissionZones().at(_rule.getSpawnZone()).areas;
+				MissionArea area;
+				std::pair<double, double> pos;
+				int tries = 0;
+				do
+				{
+					area = areas.at(RNG::generate(0, areas.size()-1));
+					pos.first = RNG::generate(std::min(area.lonMin, area.lonMax), std::max(area.lonMin, area.lonMax));
+					pos.second = RNG::generate(std::min(area.latMin, area.latMax), std::max(area.latMin, area.latMax));
+					++tries;
+				}
+				while (!(globe.insideLand(pos.first, pos.second)
+					&& region->insideRegion(pos.first, pos.second))
+					&& tries < 100);
+				spawnAlienBase(engine, area, pos);
 				break;
 			}
 		}
@@ -211,9 +224,22 @@ void AlienMission::think(Game &engine, const Globe &globe)
 	}
 	if (_rule.getObjective() == OBJECTIVE_BASE && _nextWave == _rule.getWaveCount())
 	{
-		std::vector<MissionArea> areas = mod.getRegion(_region, true)->getMissionZones().at(_rule.getSpawnZone()).areas;
-		MissionArea area = areas.at(RNG::generate(0, areas.size()-1));
-		spawnAlienBase(engine, area);
+		RuleRegion *region = mod.getRegion(_region, true);
+		std::vector<MissionArea> areas = region->getMissionZones().at(_rule.getSpawnZone()).areas;
+		MissionArea area;
+		std::pair<double, double> pos;
+		int tries = 0;
+		do
+		{
+			area = areas.at(RNG::generate(0, areas.size()-1));
+			pos.first = RNG::generate(std::min(area.lonMin, area.lonMax), std::max(area.lonMin, area.lonMax));
+			pos.second = RNG::generate(std::min(area.latMin, area.latMax), std::max(area.latMin, area.latMax));
+			++tries;
+		}
+		while (!(globe.insideLand(pos.first, pos.second)
+			&& region->insideRegion(pos.first, pos.second))
+			&& tries < 100);
+		spawnAlienBase(engine, area, pos);
 	}
 
 	if (_nextWave != _rule.getWaveCount())
@@ -639,7 +665,7 @@ void AlienMission::addScore(double lon, double lat, SavedGame &game) const
  * @param engine The game engine, required to get access to game data and game rules.
  * @param zone The mission zone, required for determining the base coordinates.
  */
-void AlienMission::spawnAlienBase(Game &engine, const MissionArea &area)
+void AlienMission::spawnAlienBase(Game &engine, const MissionArea &area, std::pair<double, double> pos)
 {
 	SavedGame &game = *engine.getSavedGame();
 	const Mod &ruleset = *engine.getMod();
@@ -660,8 +686,8 @@ void AlienMission::spawnAlienBase(Game &engine, const MissionArea &area)
 	AlienBase *ab = new AlienBase(deployment);
 	ab->setAlienRace(_race);
 	ab->setId(game.getId(deployment->getMarkerName()));
-	ab->setLongitude(RNG::generate(area.lonMin, area.lonMax));
-	ab->setLatitude(RNG::generate(area.latMin, area.latMax));
+	ab->setLongitude(pos.first);
+	ab->setLatitude(pos.second);
 	game.getAlienBases()->push_back(ab);
 	addScore(ab->getLongitude(), ab->getLatitude(), game);
 }
