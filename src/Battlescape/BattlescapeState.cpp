@@ -1579,6 +1579,22 @@ inline void BattlescapeState::handle(Action *action)
 						_save->getBattleGame()->checkForCasualties(0, 0, true, false);
 						_save->getBattleGame()->handleState();
 					}
+					// "ctrl-w" - warp unit
+					else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_w && (SDL_GetModState() & KMOD_CTRL) != 0)
+					{
+						debug(L"Beam me up Scotty");
+						BattleUnit *unit = _save->getSelectedUnit();
+						Position newPos;
+						_map->getSelectorPosition(&newPos);
+						if (unit != 0 && newPos.x >= 0)
+						{
+							unit->getTile()->setUnit(0);
+							unit->setPosition(newPos);
+							_save->getTile(newPos)->setUnit(unit);
+							_save->getTileEngine()->calculateUnitLighting();
+							_save->getBattleGame()->handleState();
+						}
+					}
 					// f11 - voxel map dump
 					else if (action->getDetails()->key.keysym.sym == SDLK_F11)
 					{
