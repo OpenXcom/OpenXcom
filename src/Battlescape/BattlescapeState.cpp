@@ -2032,8 +2032,7 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 			// Autosave if game is over
 			if (_game->getSavedGame()->getEnding() != END_NONE && _game->getSavedGame()->isIronman())
 			{
-				_game->getSavedGame()->setBattleGame(0);
-				_game->pushState(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN, _palette));
+				_game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_IRONMAN, _palette));
 			}
 		}
 	}
