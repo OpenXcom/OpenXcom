@@ -195,18 +195,9 @@ void UnitDieBState::think()
 			}
 		}
 		// if all units from either faction are killed - auto-end the mission.
-		if (_parent->getSave()->getSide() == FACTION_PLAYER && Options::battleAutoEnd)
+		if (_parent->getSave()->getSide() == FACTION_PLAYER)
 		{
-			int liveAliens = 0;
-			int liveSoldiers = 0;
-			_parent->tallyUnits(liveAliens, liveSoldiers);
-
-			if (liveAliens == 0 || liveSoldiers == 0)
-			{
-				_parent->getSave()->setSelectedUnit(0);
-				_parent->cancelCurrentAction(true);
-				_parent->requestEndTurn();
-			}
+			_parent->autoEndBattle();
 		}
 	}
 	else if (_extraFrame == 1)

@@ -194,17 +194,9 @@ void PsiAttackBState::psiAttack()
 			// if all units from either faction are mind controlled - auto-end the mission.
 			if (_parent->getSave()->getSide() == FACTION_PLAYER)
 			{
-				if (Options::battleAutoEnd && Options::allowPsionicCapture)
+				if (Options::allowPsionicCapture)
 				{
-					int liveAliens = 0;
-					int liveSoldiers = 0;
-					_parent->tallyUnits(liveAliens, liveSoldiers);
-					if (liveAliens == 0 || liveSoldiers == 0)
-					{
-						_parent->getSave()->setSelectedUnit(0);
-						_parent->cancelCurrentAction(true);
-						_parent->requestEndTurn();
-					}
+					_parent->autoEndBattle();
 				}
 				game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
 				_parent->getSave()->getBattleState()->updateSoldierInfo();

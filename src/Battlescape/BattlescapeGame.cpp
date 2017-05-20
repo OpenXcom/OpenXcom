@@ -2255,4 +2255,33 @@ std::list<BattleState*> BattlescapeGame::getStates()
 	return _states;
 }
 
+/**
+ * Ends the turn if auto-end battle is enabled
+ * and all mission objectives are completed.
+ */
+void BattlescapeGame::autoEndBattle()
+{
+	if (Options::battleAutoEnd)
+	{
+		bool end = false;
+		if (_save->getObjectiveType() == MUST_DESTROY)
+		{
+			end = _save->allObjectivesDestroyed();
+		}
+		else
+		{
+			int liveAliens = 0;
+			int liveSoldiers = 0;
+			tallyUnits(liveAliens, liveSoldiers);
+			end = (liveAliens == 0 || liveSoldiers == 0);
+		}
+		if (end)
+		{
+			_save->setSelectedUnit(0);
+			cancelCurrentAction(true);
+			requestEndTurn();
+		}
+	}
+}
+
 }
