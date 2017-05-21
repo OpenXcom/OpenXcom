@@ -323,12 +323,15 @@ en-GB:
   STR_ARTIFACT_SITE_P2: "ALIEN CONTACT SITE PART TWO"
   STR_ARTIFACT_SITE_P2_BRIEFING: "Having negotiated the Alien structures and entered the complex the mission goals are clear. Penetrate the heart of the Alien facility and destroy the Synomium Molecular Control Device to complete the mission. To abort place all aquanauts on the access lift start point and click on 'Abort Mission' icon."
 
-  STR_TLETH_P1: "SIGSBEE DEEP MISSION{NEWLINE}ALIEN CITY LEVEL ONE"
+  STR_SIGSBEE_DEEP_MISSION: "SIGSBEE DEEP MISSION{NEWLINE}ALIEN CITY LEVEL ONE"
   STR_TLETH_P1_BRIEFING: "We are entering the unknown, from here on in there could be anything waiting for us. We know there are 2 further levels to the Alien city and your squad must race to the exit on this level to enter the next. Place all aquanauts on the exit and click the 'Abort Mission' icon to advance. Aborting elsewhere will terminate the mission."
-  STR_TLETH_P2: "T'LETH ATTACK MISSION{NEWLINE}ALIEN CITY LEVEL TWO"
+  STR_TLETH_ATTACK_MISSION: "T'LETH ATTACK MISSION{NEWLINE}ALIEN CITY LEVEL TWO"
   STR_TLETH_P2_BRIEFING: "Further into the unknown, from here on in there could be anything waiting for us. We know there is a further level to the Alien city and your squad must race to the exit on this level to enter the next. Place all aquanauts on the exit and click the 'Abort Mission' icon to advance. Aborting elsewhere will terminate the mission."
-  STR_TLETH_P3: "FINAL T'LETH MISSION{NEWLINE}ALIEN CITY LEVEL THREE"
+  STR_FINAL_TLETH_MISSION: "FINAL T'LETH MISSION{NEWLINE}ALIEN CITY LEVEL THREE"
   STR_TLETH_P3_BRIEFING: "The end is in sight, from here on in we are searching for the crypt of the Ultimate Alien. Destroy the 8 power feeds to the tomb to finish off the Alien threat. Don't give up now! Aborting will terminate the mission."
+  STR_TLETH_P1: "ALIEN CITY LEVEL ONE"
+  STR_TLETH_P2: "ALIEN CITY LEVEL TWO"
+  STR_TLETH_P3: "ALIEN CITY LEVEL THREE"
 
   STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION: "NO FREE SUB PENS FOR CRAFT PRODUCTION!{SMALLLINE}Each Flying Sub assigned to a base, transferred to a base, purchased or constructed uses one Sub Pen. Build a new Sub Pen or transfer a sub to another base."
   STR_NO_FREE_HANGARS_FOR_PURCHASE: "NO FREE SUB PENS FOR PURCHASE!{SMALLLINE}Each Flying Sub assigned to a base, transferred to a base, purchased or constructed uses one Sub Pen. Build a new Sub Pen or transfer a sub to another base."

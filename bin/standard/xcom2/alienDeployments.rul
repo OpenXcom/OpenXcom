@@ -2577,6 +2577,8 @@ alienDeployments: #done
     script: TLETH_P1
     loseCutscene: loseGame
     briefing:
+      title: STR_SIGSBEE_DEEP_MISSION
+      desc: STR_TLETH_P1_BRIEFING
       palette: 5
       music: GMBIGMAR
       background: BACK05.SCR
@@ -2716,6 +2718,8 @@ alienDeployments: #done
     script: TLETH_P2_P3
     loseCutscene: loseGame
     briefing:
+      title: STR_TLETH_ATTACK_MISSION
+      desc: STR_TLETH_P2_BRIEFING
       palette: 4
       music: GMBIGMAR
       background: BACK01.SCR
@@ -2854,6 +2858,8 @@ alienDeployments: #done
     winCutscene: winGame
     loseCutscene: loseGame
     briefing:
+      title: STR_FINAL_TLETH_MISSION
+      desc: STR_TLETH_P3_BRIEFING
       palette: 4
       music: GMBIGMAR
       background: BACK01.SCR
