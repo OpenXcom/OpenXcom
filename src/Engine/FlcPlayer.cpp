@@ -96,7 +96,7 @@ FlcPlayer::~FlcPlayer()
  * @param dx An offset on the x axis for the video to be rendered
  * @param dy An offset on the y axis for the video to be rendered
  */
-bool FlcPlayer::init(const char *filename, void(*frameCallBack)(), Game *game, int dx, int dy)
+bool FlcPlayer::init(const char *filename, void(*frameCallBack)(), Game *game, bool useInternalAudio, int dx, int dy)
 {
 	if (_fileBuf != 0)
 	{
@@ -108,6 +108,7 @@ bool FlcPlayer::init(const char *filename, void(*frameCallBack)(), Game *game, i
 	_realScreen = game->getScreen();
 	_realScreen->clear();
 	_game = game;
+	_useInternalAudio = useInternalAudio;
 	_dx = dx;
 	_dy = dy;
 	
@@ -285,6 +286,7 @@ bool FlcPlayer::isValidFrame(Uint8 *frameHeader, Uint32 &frameSize, Uint16 &fram
 
 void FlcPlayer::decodeAudio(int frames)
 {
+
 	int audioFramesFound = 0;
 
 	while (audioFramesFound < frames && !isEndOfFile(_audioFrameData))
@@ -442,37 +444,44 @@ void FlcPlayer::playAudioFrame(Uint16 sampleRate)
 	* Uint16 unknown4 - always 0
 	* Uint8[] unsigned 1-byte 1-channel PCM data of length _chunkSize_ (so the total chunk is _chunkSize_ + 6-byte flc header + 10 byte audio header */
 
-	if (!_hasAudio)
+	if (_useInternalAudio)
 	{
-		_audioData.sampleRate = sampleRate;
-		_hasAudio = true;
-		initAudio(AUDIO_S16SYS, 1);
+		if (!_hasAudio)
+		{
+			_audioData.sampleRate = sampleRate;
+			_hasAudio = true;
+			initAudio(AUDIO_S16SYS, 1);
+		}
+		else
+		{
+			/* Cannot change sample rate mid-video */
+			assert(sampleRate == _audioData.sampleRate);
+		}
+
+		SDL_SemWait(_audioData.sharedLock);
+		AudioBuffer *loadingBuff = _audioData.loadingBuffer;
+		assert(loadingBuff->currSamplePos == 0);
+		int newSize = (_audioFrameSize + loadingBuff->sampleCount )*2;
+		if (newSize > loadingBuff->sampleBufSize)
+		{
+			/* If the sample count has changed, we need to reallocate (Handles initial state
+			* of '0' sample count too, as realloc(NULL, size) == malloc(size) */
+			loadingBuff->samples = (Sint16*)realloc(loadingBuff->samples, newSize);
+			loadingBuff->sampleBufSize = newSize;
+		}
+
+		for (unsigned int i = 0; i < _audioFrameSize; i++)
+		{
+			loadingBuff->samples[loadingBuff->sampleCount + i] = (float)((_chunkData[i]) -128) * 240 * _volume;
+		}
+		loadingBuff->sampleCount += _audioFrameSize;
+
+		SDL_SemPost(_audioData.sharedLock);
 	}
 	else
 	{
-		/* Cannot change sample rate mid-video */
-		assert(sampleRate == _audioData.sampleRate);
+		_audioData.sampleRate = sampleRate; // this is used to keep the framerate correct
 	}
-
-	SDL_SemWait(_audioData.sharedLock);
-	AudioBuffer *loadingBuff = _audioData.loadingBuffer;
-	assert(loadingBuff->currSamplePos == 0);
-	int newSize = (_audioFrameSize + loadingBuff->sampleCount )*2;
-	if (newSize > loadingBuff->sampleBufSize)
-	{
-		/* If the sample count has changed, we need to reallocate (Handles initial state
-		* of '0' sample count too, as realloc(NULL, size) == malloc(size) */
-		loadingBuff->samples = (Sint16*)realloc(loadingBuff->samples, newSize);
-		loadingBuff->sampleBufSize = newSize;
-	}
-
-	for (unsigned int i = 0; i < _audioFrameSize; i++)
-	{
-		loadingBuff->samples[loadingBuff->sampleCount + i] = (float)((_chunkData[i]) -128) * 240 * _volume;
-	}
-	loadingBuff->sampleCount += _audioFrameSize;
-
-	SDL_SemPost(_audioData.sharedLock);
 }
 
 void FlcPlayer::color256()
@@ -789,34 +798,37 @@ void FlcPlayer::audioCallback(void *userData, Uint8 *stream, int len)
 
 void FlcPlayer::initAudio(Uint16 format, Uint8 channels)
 {
-	int err;
-
-	err = Mix_OpenAudio(_audioData.sampleRate, format, channels, _audioFrameSize *2);
 	_videoDelay = 1000 / (_audioData.sampleRate / _audioFrameSize );
-
-	if (err)
+	if (_useInternalAudio)
 	{
-		Log(LOG_WARNING) << Mix_GetError();
-		Log(LOG_WARNING) << "Failed to init cutscene audio";
-		return;
+		int err;
+
+		err = Mix_OpenAudio(_audioData.sampleRate, format, channels, _audioFrameSize *2);
+
+		if (err)
+		{
+			Log(LOG_WARNING) << Mix_GetError();
+			Log(LOG_WARNING) << "Failed to init cutscene audio";
+			return;
+		}
+
+		/* Start runnable */
+		_audioData.sharedLock = SDL_CreateSemaphore(1);
+
+		_audioData.loadingBuffer = new AudioBuffer();
+		_audioData.loadingBuffer->currSamplePos = 0;
+		_audioData.loadingBuffer->sampleCount = 0;
+		_audioData.loadingBuffer->samples = (Sint16 *)malloc(_audioFrameSize * 2);
+		_audioData.loadingBuffer->sampleBufSize = _audioFrameSize * 2;
+
+		_audioData.playingBuffer = new AudioBuffer();
+		_audioData.playingBuffer->currSamplePos = 0;
+		_audioData.playingBuffer->sampleCount = 0;
+		_audioData.playingBuffer->samples = (Sint16 *)malloc(_audioFrameSize * 2);
+		_audioData.playingBuffer->sampleBufSize = _audioFrameSize * 2;
+
+		Mix_HookMusic(FlcPlayer::audioCallback, &_audioData);
 	}
-
-	/* Start runnable */
-	_audioData.sharedLock = SDL_CreateSemaphore(1);
-
-	_audioData.loadingBuffer = new AudioBuffer();
-	_audioData.loadingBuffer->currSamplePos = 0;
-	_audioData.loadingBuffer->sampleCount = 0;
-	_audioData.loadingBuffer->samples = (Sint16 *)malloc(_audioFrameSize * 2);
-	_audioData.loadingBuffer->sampleBufSize = _audioFrameSize * 2;
-
-	_audioData.playingBuffer = new AudioBuffer();
-	_audioData.playingBuffer->currSamplePos = 0;
-	_audioData.playingBuffer->sampleCount = 0;
-	_audioData.playingBuffer->samples = (Sint16 *)malloc(_audioFrameSize * 2);
-	_audioData.playingBuffer->sampleBufSize = _audioFrameSize * 2;
-
-	Mix_HookMusic(FlcPlayer::audioCallback, &_audioData);
 }
 
 void FlcPlayer::deInitAudio()

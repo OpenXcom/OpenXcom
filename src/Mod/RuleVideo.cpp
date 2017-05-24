@@ -59,6 +59,12 @@ void RuleVideo::load(const YAML::Node &node)
 		for (YAML::const_iterator i = videos.begin(); i != videos.end(); ++i)
 			_videos.push_back((*i).as<std::string>());
 	}
+	
+	if (const YAML::Node &tracks = node["audioTracks"])
+	{
+		for (YAML::const_iterator i = tracks.begin(); i != tracks.end(); ++i)
+			_audioTracks.push_back((*i).as<std::string>());
+	}
 
 	if (const YAML::Node &slideshow = node["slideshow"])
 	{
@@ -93,6 +99,11 @@ const SlideshowHeader & RuleVideo::getSlideshowHeader() const
 const std::vector<SlideshowSlide> * RuleVideo::getSlides() const
 {
 	return &_slides;
+}
+
+const std::vector<std::string> * RuleVideo::getAudioTracks() const
+{
+	return &_audioTracks;
 }
 
 }

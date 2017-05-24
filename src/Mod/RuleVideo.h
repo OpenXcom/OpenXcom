@@ -46,7 +46,7 @@ class RuleVideo
 private:
 	std::string _id;
 	bool _useUfoAudioSequence;
-	std::vector<std::string> _videos;
+	std::vector<std::string> _videos, _audioTracks;
 	SlideshowHeader _slideshowHeader;
 	std::vector<SlideshowSlide> _slides;
 public:
@@ -59,6 +59,7 @@ public:
 	const std::vector<std::string> * getVideos() const;
 	const SlideshowHeader & getSlideshowHeader() const;
 	const std::vector<SlideshowSlide> * getSlides() const;
+	const std::vector<std::string> * getAudioTracks() const;
 };
 
 }

@@ -28,11 +28,11 @@ namespace OpenXcom
 class VideoState : public State
 {
 private:
-	const std::vector<std::string> *_videos;
+	const std::vector<std::string> *_videos, *_tracks;
 	bool _useUfoAudioSequence;
 public:
 	/// Creates the Intro state.
-	VideoState(const std::vector<std::string> *videos, bool useUfoAudioSequence);
+	VideoState(const std::vector<std::string> *videos, const std::vector<std::string> *tracks, bool useUfoAudioSequence);
 	/// Cleans up the Intro state.
 	~VideoState();
 	/// Plays the video
