@@ -951,9 +951,16 @@ void Inventory::arrangeGround(bool alterOffset)
 bool Inventory::fitItem(RuleInventory *newSlot, BattleItem *item, std::string &warning)
 {
 	bool placed = false;
-	for (int y2 = 0; y2 <= newSlot->getY() / RuleInventory::SLOT_H && !placed; ++y2)
+	int maxSlotX = 0;
+	int maxSlotY = 0;
+	for (std::vector<RuleSlot>::iterator j = newSlot->getSlots()->begin(); j != newSlot->getSlots()->end(); ++j)
 	{
-		for (int x2 = 0; x2 <= newSlot->getX() / RuleInventory::SLOT_W && !placed; ++x2)
+		if (j->x > maxSlotX) maxSlotX = j->x;
+		if (j->y > maxSlotY) maxSlotY = j->y;
+	}
+	for (int y2 = 0; y2 <= maxSlotY && !placed; ++y2)
+	{
+		for (int x2 = 0; x2 <= maxSlotX && !placed; ++x2)
 		{
 			if (!overlapItems(_selUnit, item, newSlot, x2, y2) && newSlot->fitItemInSlot(item->getRules(), x2, y2))
 			{
