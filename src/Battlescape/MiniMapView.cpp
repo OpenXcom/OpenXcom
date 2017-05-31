@@ -20,6 +20,7 @@
 #include "../fmath.h"
 #include "MiniMapView.h"
 #include "MiniMapState.h"
+#include "Pathfinding.h"
 #include "../Savegame/Tile.h"
 #include "Camera.h"
 #include "../Engine/Action.h"
@@ -113,7 +114,14 @@ void MiniMapView::draw()
 					frame += t->getPosition().x - t->getUnit()->getPosition().x;
 					frame += _frame * size * size;
 					Surface * s = _set->getFrame(frame);
-					s->blitNShade(this, x, y, 0);
+					if (size > 1 && t->getUnit()->getFaction() == FACTION_NEUTRAL)
+					{
+						s->blitNShade(this, x, y, 0, false, Pathfinding::red);
+					}
+					else
+					{
+						s->blitNShade(this, x, y, 0);
+					}
 				}
 				// perhaps (at least one) item on this tile?
 				if (t->isDiscovered(2) && !t->getInventory()->empty())
