@@ -50,7 +50,7 @@ namespace OpenXcom
 		static bool isArticleAvailable(SavedGame *save, ArticleDefinition *article);
 
 		/// open Ufopaedia on a certain entry.
-		static void openArticle(Game *game, std::string &article_id);
+		static void openArticle(Game *game, const std::string &article_id);
 
 		/// open Ufopaedia article from a given article definition.
 		static void openArticle(Game *game, ArticleDefinition *article);

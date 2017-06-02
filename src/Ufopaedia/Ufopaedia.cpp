@@ -154,7 +154,8 @@ namespace OpenXcom
 	 */
 	void Ufopaedia::openArticle(Game *game, ArticleDefinition *article)
 	{
-		_current_index = getArticleIndex(game->getSavedGame(), game->getMod(), article->id);
+		std::string id = article->id;
+		_current_index = getArticleIndex(game->getSavedGame(), game->getMod(), id);
 		if (_current_index != (size_t) -1)
 		{
 			game->pushState(createArticleState(article));
@@ -166,12 +167,13 @@ namespace OpenXcom
 	 * @param game Pointer to actual game.
 	 * @param article_id Article id to find.
 	 */
-	void Ufopaedia::openArticle(Game *game, std::string &article_id)
+	void Ufopaedia::openArticle(Game *game, const std::string &article_id)
 	{
-		_current_index = getArticleIndex(game->getSavedGame(), game->getMod(), article_id);
+		std::string id = article_id;
+		_current_index = getArticleIndex(game->getSavedGame(), game->getMod(), id);
 		if (_current_index != (size_t) -1)
 		{
-			ArticleDefinition *article = game->getMod()->getUfopaediaArticle(article_id);
+			ArticleDefinition *article = game->getMod()->getUfopaediaArticle(id);
 			game->pushState(createArticleState(article));
 		}
 	}
