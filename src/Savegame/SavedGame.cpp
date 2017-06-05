@@ -1192,7 +1192,8 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
         if (itDiscovered != discovered.end())
         {
             bool remove = true;
-            /* Check if research is a item with getOneFree,
+            /*
+             * Check if research is a item with getOneFree,
              * which is still available,
              * if so do not remove from list
              */
@@ -1211,7 +1212,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
             /*
              * Check if alive alien still is available for research,
              * if so do not remove from list
-            */
+             */
             else if (liveAlien)
             {
                 if (isResearchAvailable(research, unlocked, mod))
@@ -1346,7 +1347,7 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
          *  When counters of "getOneFree" and "unlocks" are
          *  equal to the respective size of the research,
          *  remove topic, since nothing more can be discovered by the player
-        */
+         */
         if (countUnlocks == r->getUnlocked().size() && countGetOneFree == r->getGetOneFree().size())
         {
             return false;
