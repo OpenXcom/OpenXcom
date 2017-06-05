@@ -83,6 +83,8 @@ public:
 	int getStartDirection() const;
 	/// Dequeues a direction.
 	int dequeuePath();
+	/// Increase TU cost to move from 1 tile to other specifically for walls/doors.
+	void incDoorWallCost(Tile *tile, int part, int *wallcost, int *doorcost, int direction);
 	/// Gets the TU cost to move from 1 tile to the other.
 	int getTUCost(Position startPosition, int direction, Position *endPosition, BattleUnit *unit, BattleUnit *target, bool missile);
 	/// Aborts the current path.
