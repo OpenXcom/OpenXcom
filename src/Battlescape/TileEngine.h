@@ -47,9 +47,6 @@ private:
 	void addLight(Position center, int power, int layer);
 	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1, bool checkingFromOrigin = false);
 	bool _personalLighting;
-    Tile *_cacheTile;
-    Tile *_cacheTileBelow;
-    Position _cacheTilePos;
 public:
 	/// Creates a new TileEngine class.
 	TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData);
@@ -117,8 +114,6 @@ public:
 	bool isVoxelVisible(Position voxel);
 	/// Checks what type of voxel occupies this space.
 	int voxelCheck(Position voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
-    /// Flushes cache of voxel check
-    void voxelCheckFlush(void);
 	/// Blows this tile up.
 	bool detonate(Tile* tile);
 	/// Validates a throwing action.
