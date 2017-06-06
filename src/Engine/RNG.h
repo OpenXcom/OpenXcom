@@ -18,7 +18,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <algorithm>
-#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 namespace OpenXcom
