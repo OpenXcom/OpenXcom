@@ -1515,6 +1515,15 @@ bool AIModule::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, 
 	{
 		return false;
 	}
+
+	Tile *targetTile = _save->getTile(targetPos);
+
+	// don't throw grenades at flying enemies.
+	if (grenade && targetPos.z > 0 && targetTile->hasNoFloor(_save->getTile(targetPos - Position(0,0,1))))
+	{
+		return false;
+	}
+
 	if (diff == -1)
 	{
 		diff = _save->getBattleState()->getGame()->getSavedGame()->getDifficultyCoefficient();
@@ -1539,8 +1548,8 @@ bool AIModule::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, 
 	efficacy += diff/2;
 
 	// account for the unit we're targetting
-	BattleUnit *target = _save->getTile(targetPos)->getUnit();
-	if (target && !_save->getTile(targetPos)->getDangerous())
+	BattleUnit *target = targetTile->getUnit();
+	if (target && !targetTile->getDangerous())
 	{
 		++enemiesAffected;
 		++efficacy;
