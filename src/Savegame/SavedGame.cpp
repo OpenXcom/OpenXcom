@@ -1149,60 +1149,74 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 	for (std::vector<std::string>::const_iterator iter = researchProjects.begin(); iter != researchProjects.end(); ++iter)
 	{
 		RuleResearch *research = mod->getResearch(*iter);
+
+		// Check if a research is available,
+		// when this is not the case remove from list
 		if (!isResearchAvailable(research, unlocked, mod))
 		{
 			continue;
 		}
-		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin(), discovered.end(), research);
 
-		bool liveAlien = mod->getUnit(research->getName()) != 0;
-
-		if (itDiscovered != discovered.end())
+		// Check if the research has "requires" which need to be satisfied,
+		// if so count them and check if all of them are in "discovered",
+		// if not remove from list.
+		// Check is performed here in case a modder thinks giving a "requires" to alive aliens or item with getOneFree is somehow approriate.
+		// We also do not call all the rest of the function, hopefully saving some performance.
+		if (!research->getRequirements().empty())
 		{
-			bool cull = true;
-			if (!research->getGetOneFree().empty())
+			size_t countRequirements(0);
+			for (size_t itReqs = 0; itReqs != research->getRequirements().size(); ++itReqs)
 			{
-				for (std::vector<std::string>::const_iterator ohBoy = research->getGetOneFree().begin(); ohBoy != research->getGetOneFree().end(); ++ohBoy)
+				std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin(), discovered.end(), mod->getResearch(research->getRequirements().at(itReqs)));
+				if (itDiscovered != discovered.end())
 				{
-					std::vector<const RuleResearch *>::const_iterator more_iteration = std::find(discovered.begin(), discovered.end(), mod->getResearch(*ohBoy));
-					if (more_iteration == discovered.end())
-					{
-						cull = false;
-						break;
-					}
+					countRequirements++;
 				}
 			}
-			if (!liveAlien && cull)
+			if (countRequirements != research->getRequirements().size())
 			{
 				continue;
 			}
-			else
-			{
-				std::vector<std::string>::const_iterator leaderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_LEADER_PLUS");
-				std::vector<std::string>::const_iterator cmnderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_COMMANDER_PLUS");
-
-				bool leader ( leaderCheck != research->getUnlocked().end());
-				bool cmnder ( cmnderCheck != research->getUnlocked().end());
-
-				if (leader)
-				{
-					std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), mod->getResearch("STR_LEADER_PLUS"));
-					if (found == discovered.end())
-						cull = false;
-				}
-
-				if (cmnder)
-				{
-					std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), mod->getResearch("STR_COMMANDER_PLUS"));
-					if (found == discovered.end())
-						cull = false;
-				}
-
-				if (cull)
-					continue;
-			}
 		}
 
+		// Lets check the list of already discovered researches and take care of cleaning up
+		// the research menu list when needed, but keep alive aliens and items with getOneFree around
+		// as long as they have something to discover by the player.
+		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin(), discovered.end(), research);
+		bool liveAlien = mod->getUnit(research->getName()) != 0;
+		if (itDiscovered != discovered.end())
+		{
+			bool remove = true;
+
+			// Check if research is a item with getOneFree,
+			// which is still available,
+			// if so do not remove from list
+			if (!liveAlien && !research->getGetOneFree().empty())
+			{
+				if (isResearchAvailable(research, unlocked, mod))
+				{
+					remove = false;
+				}
+			}
+			if (!liveAlien && remove)
+			{
+				continue;
+			}
+
+			// Check if alive alien still is available for research,
+			// if so do not remove from list
+			else if (liveAlien)
+			{
+				if (isResearchAvailable(research, unlocked, mod))
+				{
+					remove = false;
+				}
+				if (remove)
+				{
+					continue;
+				}
+			}
+		}
 		if (std::find_if (baseResearchProjects.begin(), baseResearchProjects.end(), findRuleResearch(research)) != baseResearchProjects.end())
 		{
 			continue;
@@ -1210,20 +1224,6 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 		if (research->needItem() && base->getStorageItems()->getItem(research->getName()) == 0)
 		{
 			continue;
-		}
-		if (!research->getRequirements().empty())
-		{
-			size_t tally(0);
-			for (size_t itreq = 0; itreq != research->getRequirements().size(); ++itreq)
-			{
-				itDiscovered = std::find(discovered.begin(), discovered.end(), mod->getResearch(research->getRequirements().at(itreq)));
-				if (itDiscovered != discovered.end())
-				{
-					tally++;
-				}
-			}
-			if (tally != research->getRequirements().size())
-				continue;
 		}
 		projects.push_back (research);
 	}
@@ -1270,56 +1270,75 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 	{
 		return false;
 	}
-	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
 	bool liveAlien = mod->getUnit(r->getName()) != 0;
 	if (_debug || std::find(unlocked.begin(), unlocked.end(), r) != unlocked.end())
 	{
 		return true;
 	}
-	else if (liveAlien)
+
+	// Checks if research has "dependencies",
+	// if so count how many of them are in discovered,
+	// if all are in discovered make research available.
+	// Check is performed here in case a modder thinks giving a "requires" to alive aliens or item with getOneFree is somehow approriate.
+	// We also do not call all the rest of the function, hopefully saving some performance.
+	if (!r->getDependencies().empty())
 	{
-		if (!r->getGetOneFree().empty())
+		size_t countDependencies(0);
+		for (size_t itDeps = 0; itDeps != r->getDependencies().size(); ++itDeps)
 		{
-			std::vector<std::string>::const_iterator leaderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_LEADER_PLUS");
-			std::vector<std::string>::const_iterator cmnderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_COMMANDER_PLUS");
-
-			bool leader ( leaderCheck != r->getUnlocked().end());
-			bool cmnder ( cmnderCheck != r->getUnlocked().end());
-
-			if (leader)
+			std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin(), discovered.end(), mod->getResearch(r->getDependencies().at(itDeps)));
+			if (itDiscovered != discovered.end())
 			{
-				std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), mod->getResearch("STR_LEADER_PLUS"));
-				if (found == discovered.end())
-					return true;
-			}
-
-			if (cmnder)
-			{
-				std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), mod->getResearch("STR_COMMANDER_PLUS"));
-				if (found == discovered.end())
-					return true;
+				countDependencies++;
 			}
 		}
-	}
-	for (std::vector<std::string>::const_iterator itFree = r->getGetOneFree().begin(); itFree != r->getGetOneFree().end(); ++itFree)
-	{
-		if (std::find(unlocked.begin(), unlocked.end(), mod->getResearch(*itFree)) == unlocked.end())
-		{
-			return true;
-		}
-	}
-
-	for (std::vector<std::string>::const_iterator iter = deps.begin(); iter != deps.end(); ++ iter)
-	{
-		RuleResearch *research = mod->getResearch(*iter);
-		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin(), discovered.end(), research);
-		if (itDiscovered == discovered.end())
+		if (countDependencies != r->getDependencies().size())
 		{
 			return false;
 		}
 	}
 
+	// Check if research is either a alive alien or has "getOneFree",
+	// if so count how many of the researches "getOneFree" and "unlocks" are in discovered,
+	// if at least one of each are not in discovered keep research available.
+	else if (liveAlien || !r->getGetOneFree().empty())
+	{
+		size_t countUnlocks(0);
+		size_t countGetOneFree(0);
+
+		if (!r->getGetOneFree().empty())
+		{
+			for (size_t itGetOneFree = 0; itGetOneFree != r->getGetOneFree().size(); ++itGetOneFree)
+			{
+				std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin(), discovered.end(), mod->getResearch(r->getGetOneFree().at(itGetOneFree)));
+				if (itDiscovered != discovered.end())
+				{
+					countGetOneFree++;
+				}
+			}
+		}
+
+		if (!r->getUnlocked().empty())
+		{
+			for (size_t itUnlocks = 0; itUnlocks != r->getUnlocked().size(); ++itUnlocks)
+			{
+				std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin(), discovered.end(), mod->getResearch(r->getUnlocked().at(itUnlocks)));
+				if (itDiscovered != discovered.end())
+				{
+					countUnlocks++;
+				}
+			}
+		}
+
+		// When counters of "getOneFree" and "unlocks" are
+		// equal to the respective size of the research,
+		// remove topic, since nothing more can be discovered by the player.
+		if (countUnlocks == r->getUnlocked().size() && countGetOneFree == r->getGetOneFree().size())
+		{
+			return false;
+		}
+	}
 	return true;
 }
 
