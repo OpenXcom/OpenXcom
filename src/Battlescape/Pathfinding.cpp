@@ -243,6 +243,17 @@ bool Pathfinding::aStarPath(Position startPosition, Position endPosition, Battle
 	return false;
 }
 
+void Pathfinding::incDoorWallCost(Tile *tile, int part, int *wallcost, int *doorcost, int direction)
+{
+	if (!tile->getMapData(part)) return;
+	if (tile->getMapData(part)->isDoor() && (direction & 1)) return; //skip hinged
+	if (!tile->getMapData(part)->isUFODoor()) //non ufo doors, i.e. walls
+		*wallcost += tile->getTUCost(part, _movementType);
+	else
+	if (tile->isUfoDoorClosed(part)) //only closed door, semiclosed aren't affecting
+		*doorcost += tile->getTUCost(part, _movementType);
+}
+
 /**
  * Gets the TU cost to move from 1 tile to the other (ONE STEP ONLY).
  * But also updates the endPosition, because it is possible
@@ -269,6 +280,8 @@ int Pathfinding::getTUCost(Position startPosition, int direction, Position *endP
 	int numberOfPartsFalling = 0;
 	int numberOfPartsChangingHeight = 0;
 	int totalCost = 0;
+	int wallcost = 0;
+	int doorcost = 0;
 
 	for (int x = 0; x <= size; ++x)
 		for (int y = 0; y <= size; ++y)
@@ -387,24 +400,139 @@ int Pathfinding::getTUCost(Position startPosition, int direction, Position *endP
 					return 255;
 			}
 
-			int wallcost = 0; // walking through rubble walls, but don't charge for walking diagonally through doors (which is impossible),
-							// they're a special case unto themselves, if we can walk past them diagonally, it means we can go around,
-							// as there is no wall blocking us.
-			if (direction == 0 || direction == 7 || direction == 1)
-				wallcost += startTile->getTUCost(O_NORTHWALL, _movementType);
-			if (!fellDown && (direction == 2 || direction == 1 || direction == 3))
-				wallcost += destinationTile->getTUCost(O_WESTWALL, _movementType);
-			if (!fellDown && (direction == 4 || direction == 3 || direction == 5))
-				wallcost += destinationTile->getTUCost(O_NORTHWALL, _movementType);
-			if (direction == 6 || direction == 5 || direction == 7)
-				wallcost += startTile->getTUCost(O_WESTWALL, _movementType);
-			// don't let tanks phase through doors.
-			if (x && y)
+			Tile *startEastTile = _save->getTile(startPosition + offset + Position(1,0,0));
+			Tile *startSouthTile = _save->getTile(startPosition + offset + Position(0,1,0));
+			Tile *startWestTile = _save->getTile(startPosition + offset + Position(-1,0,0));
+			Tile *startNorthTile = _save->getTile(startPosition + offset + Position(0,-1,0));
+			Tile *startNorthEastTile = _save->getTile(startPosition + offset + Position(1,-1,0));
+			Tile *startSouthWestTile = _save->getTile(startPosition + offset + Position(-1,1,0));
+			if (!fellDown)
 			{
-				if ((destinationTile->getMapData(O_NORTHWALL) && destinationTile->getMapData(O_NORTHWALL)->isDoor()) ||
-					(destinationTile->getMapData(O_WESTWALL) && destinationTile->getMapData(O_WESTWALL)->isDoor()))
+				switch (direction)
 				{
-					return 255;
+				case 0:
+					if (x == 0)
+						incDoorWallCost(startTile, O_NORTHWALL, &wallcost, &doorcost, direction);
+					else
+					{
+						incDoorWallCost(destinationTile, O_WESTWALL, &wallcost, &doorcost, direction);
+						if (!startTile->isUfoDoorClosed(O_NORTHWALL) || !startWestTile->isUfoDoorClosed(O_NORTHWALL)) //west of x>0 should present
+							incDoorWallCost(startTile, O_NORTHWALL, &wallcost, &doorcost, direction);
+					}
+					break;
+				case 1:
+					incDoorWallCost(startTile, O_NORTHWALL, &wallcost, &doorcost, direction); // north
+					incDoorWallCost(destinationTile, O_WESTWALL, &wallcost, &doorcost, direction); // west wall of northeast
+					if (startEastTile)
+					{
+						// do not make additional charge for the second segment of adjacent closed door when passing diagonally
+						if (!startTile->isUfoDoorClosed(O_NORTHWALL) || !startEastTile->isUfoDoorClosed(O_NORTHWALL))
+							incDoorWallCost(startEastTile, O_NORTHWALL, &wallcost, &doorcost, direction); //north wall of east
+						if (!destinationTile->isUfoDoorClosed(O_WESTWALL) || !startEastTile->isUfoDoorClosed(O_WESTWALL))
+							incDoorWallCost(startEastTile, O_WESTWALL, &wallcost, &doorcost, direction); //west wall of east
+					}
+					break;
+				case 2:
+					if (y == 0)
+						incDoorWallCost(destinationTile, O_WESTWALL, &wallcost, &doorcost, direction);
+					else
+					{
+						incDoorWallCost(destinationTile, O_NORTHWALL, &wallcost, &doorcost, direction);
+						if (!destinationTile->isUfoDoorClosed(O_WESTWALL) || (startNorthEastTile && !startNorthEastTile->isUfoDoorClosed(O_WESTWALL)))
+							incDoorWallCost(destinationTile, O_WESTWALL, &wallcost, &doorcost, direction);
+					}
+					break;
+				case 3:
+					incDoorWallCost(destinationTile, O_NORTHWALL, &wallcost, &doorcost, direction); //north wall of southeast
+					incDoorWallCost(destinationTile, O_WESTWALL, &wallcost, &doorcost, direction); //west wall of southeast
+					if (startSouthTile)
+						if (!destinationTile->isUfoDoorClosed(O_NORTHWALL) || !startSouthTile->isUfoDoorClosed(O_NORTHWALL))
+							incDoorWallCost(startSouthTile, O_NORTHWALL, &wallcost, &doorcost, direction); //north wall of south
+					if (startEastTile)
+						if (!destinationTile->isUfoDoorClosed(O_WESTWALL) || !startEastTile->isUfoDoorClosed(O_WESTWALL))
+							incDoorWallCost(startEastTile, O_WESTWALL, &wallcost, &doorcost, direction); //west wall of east
+					break;
+				case 4:
+					if (x == 0)
+						incDoorWallCost(destinationTile, O_NORTHWALL, &wallcost, &doorcost, direction);
+					else
+					{
+						incDoorWallCost(destinationTile, O_WESTWALL, &wallcost, &doorcost, direction);
+						if (!destinationTile->isUfoDoorClosed(O_NORTHWALL) || (startSouthWestTile && !startSouthWestTile->isUfoDoorClosed(O_NORTHWALL)))
+							incDoorWallCost(destinationTile, O_NORTHWALL, &wallcost, &doorcost, direction);
+					}
+					break;
+				case 5:
+					incDoorWallCost(destinationTile, O_NORTHWALL, &wallcost, &doorcost, direction); //north wall of southwest
+					incDoorWallCost(startTile, O_WESTWALL, &wallcost, &doorcost, direction); // west
+					if (startSouthTile)
+					{
+						if (!destinationTile->isUfoDoorClosed(O_NORTHWALL) || !startSouthTile->isUfoDoorClosed(O_NORTHWALL))
+							incDoorWallCost(startSouthTile, O_NORTHWALL, &wallcost, &doorcost, direction); //north wall of south
+						if (!startTile->isUfoDoorClosed(O_WESTWALL) || !startSouthTile->isUfoDoorClosed(O_WESTWALL))
+							incDoorWallCost(startSouthTile, O_WESTWALL, &wallcost, &doorcost, direction); //west fall of south
+					}
+					break;
+				case 6:
+					if (y == 0)
+						incDoorWallCost(startTile, O_WESTWALL, &wallcost, &doorcost, direction);
+					else
+					{
+						incDoorWallCost(destinationTile, O_NORTHWALL, &wallcost, &doorcost, direction);
+						if (!startTile->isUfoDoorClosed(O_WESTWALL) || !startNorthTile->isUfoDoorClosed(O_WESTWALL)) //north of y>0 should present
+							incDoorWallCost(startTile, O_WESTWALL, &wallcost, &doorcost, direction);
+					}
+					break;
+				case 7:
+					incDoorWallCost(startTile, O_WESTWALL, &wallcost, &doorcost, direction); // west
+					incDoorWallCost(startTile, O_NORTHWALL, &wallcost, &doorcost, direction); // north
+					if (startWestTile)
+						if (!startTile->isUfoDoorClosed(O_NORTHWALL) || !startWestTile->isUfoDoorClosed(O_NORTHWALL))
+							incDoorWallCost(startWestTile, O_NORTHWALL, &wallcost, &doorcost, direction); //north wall of south
+					if (startNorthTile)
+						if (!startTile->isUfoDoorClosed(O_WESTWALL) || !startNorthTile->isUfoDoorClosed(O_WESTWALL))
+							incDoorWallCost(startNorthTile, O_WESTWALL, &wallcost, &doorcost, direction); //west wall of north
+					break;
+				}
+			}
+			// don't let tanks phase through hinged doors.
+			if (size>0)
+			{
+				switch (direction)
+				{
+				case 0:
+					if (x>0 && destinationTile->getMapData(O_WESTWALL) && destinationTile->getMapData(O_WESTWALL)->isDoor() )
+						return 255;
+					if (startTile->getMapData(O_NORTHWALL) && startTile->getMapData(O_NORTHWALL)->isDoor() )
+						return 255;
+					break;
+				case 2:
+					if (y>0 && destinationTile->getMapData(O_NORTHWALL) && destinationTile->getMapData(O_NORTHWALL)->isDoor() )
+						return 255;
+					if (destinationTile->getMapData(O_WESTWALL) && destinationTile->getMapData(O_WESTWALL)->isDoor() )
+						return 255;
+					break;
+				case 4:
+					if (x>0 && destinationTile->getMapData(O_WESTWALL) && destinationTile->getMapData(O_WESTWALL)->isDoor() )
+						return 255;
+					if (destinationTile->getMapData(O_NORTHWALL) && destinationTile->getMapData(O_NORTHWALL)->isDoor() )
+						return 255;
+					break;
+				case 6:
+					if (y>0 && destinationTile->getMapData(O_NORTHWALL) && destinationTile->getMapData(O_NORTHWALL)->isDoor() )
+						return 255;
+					if (startTile->getMapData(O_WESTWALL) && startTile->getMapData(O_WESTWALL)->isDoor() )
+						return 255;
+					break;
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+					if (x>0 && destinationTile->getMapData(O_WESTWALL) && destinationTile->getMapData(O_WESTWALL)->isDoor() )
+						return 255;
+					if (y>0 && destinationTile->getMapData(O_NORTHWALL) && destinationTile->getMapData(O_NORTHWALL)->isDoor() )
+						return 255;
+					break;
 				}
 			}
 			// check if the destination tile can be walked over
@@ -436,10 +564,8 @@ int Pathfinding::getTUCost(Position startPosition, int direction, Position *endP
 			// diagonal walking (uneven directions) costs 50% more tu's
 			if (direction < DIR_UP && direction & 1)
 			{
-				wallcost /= 2;
 				cost = (int)((double)cost * 1.5);
 			}
-			cost += wallcost;
 			if (_unit->getFaction() != FACTION_PLAYER &&
 				_unit->getSpecialAbility() < SPECAB_BURNFLOOR &&
 				destinationTile->getFire() > 0)
@@ -476,6 +602,14 @@ int Pathfinding::getTUCost(Position startPosition, int direction, Position *endP
 			totalCost += cost;
 			cost = 0;
 		}
+
+	if (direction < DIR_UP && direction & 1)
+	{
+		wallcost = (int)((double)wallcost * 1.5 * 0.5); //diagonal, thus avaraged between both parts
+//		doorcost = (int)((double)doorcost * 1.5);
+	}
+	totalCost += wallcost;
+	totalCost += doorcost * (size+1)*(size+1); //doors can be opened once even for bigunits
 
 	// for bigger sized units, check the path between parts in an X shape at the end position
 	if (size)
