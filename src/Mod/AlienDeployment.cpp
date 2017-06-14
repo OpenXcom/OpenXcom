@@ -145,6 +145,7 @@ void AlienDeployment::load(const YAML::Node &node, Mod *mod)
 	_finalDestination = node["finalDestination"].as<bool>(_finalDestination);
 	_winCutscene = node["winCutscene"].as<std::string>(_winCutscene);
 	_loseCutscene = node["loseCutscene"].as<std::string>(_loseCutscene);
+	_abortCutscene = node["abortCutscene"].as<std::string>(_abortCutscene);
 	_script = node["script"].as<std::string>(_script);
 	_alert = node["alert"].as<std::string>(_alert);
 	_alertBackground = node["alertBackground"].as<std::string>(_alertBackground);
@@ -310,6 +311,15 @@ std::string AlienDeployment::getWinCutscene() const
 std::string AlienDeployment::getLoseCutscene() const
 {
 	return _loseCutscene;
+}
+
+/**
+* Gets the cutscene to play when the mission is aborted.
+* @return the cutscene to play when the mission is aborted.
+*/
+std::string AlienDeployment::getAbortCutscene() const
+{
+	return _abortCutscene;
 }
 
 /**

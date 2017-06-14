@@ -2005,7 +2005,11 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		std::string cutscene;
 		if (ruleDeploy)
 		{
-			if (abort || inExitArea == 0)
+			if (abort)
+			{
+				cutscene = ruleDeploy->getAbortCutscene();
+			}
+			else if (inExitArea == 0)
 			{
 				cutscene = ruleDeploy->getLoseCutscene();
 			}
