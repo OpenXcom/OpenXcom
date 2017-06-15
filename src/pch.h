@@ -7,7 +7,9 @@
 
 // c++ headers
 #ifdef _MSC_VER
+#ifndef _SCL_SECURE_NO_WARNINGS
 #define _SCL_SECURE_NO_WARNINGS
+#endif
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 #define _USE_MATH_DEFINES
