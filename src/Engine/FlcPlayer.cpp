@@ -21,7 +21,9 @@
  * Based on http://www.libsdl.org/projects/flxplay/
  */
 #ifdef _MSC_VER
+#ifndef _SCL_SECURE_NO_WARNINGS
 #define _SCL_SECURE_NO_WARNINGS
+#endif
 #endif
 #include "FlcPlayer.h"
 #include <algorithm>
