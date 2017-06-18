@@ -1135,72 +1135,29 @@ const std::vector<const RuleResearch *> & SavedGame::getDiscoveredResearch() con
  */
 void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & projects, const Mod * mod, Base * base) const
 {
-	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
+	const std::vector<const RuleResearch *> & discoveredList(getDiscoveredResearch());
 	std::vector<std::string> researchProjects = mod->getResearchList();
 	const std::vector<ResearchProject *> & baseResearchProjects = base->getResearch();
-	std::vector<const RuleResearch *> unlocked;
+	std::vector<const RuleResearch *> unlockedList;
 
-	// Create list of pointers for all unlocks for already discovered research topics and handle errors
-	for (std::vector<const RuleResearch *>::const_iterator it = discovered.begin(); it != discovered.end(); ++it)
+	// Create list of unlocks for already discovered research topics and handle errors
+	for (std::vector<const RuleResearch *>::const_iterator i = discoveredList.begin(); i != discoveredList.end(); ++i)
 	{
-		for (std::vector<std::string>::const_iterator itUnlocked = (*it)->getUnlocked().begin(); itUnlocked != (*it)->getUnlocked().end(); ++itUnlocked)
+		for (std::vector<std::string>::const_iterator j = (*i)->getUnlocked().begin(); j != (*i)->getUnlocked().end(); ++j)
 		{
-			unlocked.push_back(mod->getResearch(*itUnlocked, true));
+			unlockedList.push_back(mod->getResearch(*j, true));
 		}
 	}
 
 	// Create list of research topics available to be researched on the given base, shown in research menu
-	for (std::vector<std::string>::const_iterator itModResearchList = researchProjects.begin(); itModResearchList != researchProjects.end(); ++itModResearchList)
+	for (std::vector<std::string>::const_iterator i = researchProjects.begin(); i != researchProjects.end(); ++i)
 	{
-		RuleResearch *research = mod->getResearch(*itModResearchList);
+		RuleResearch *research = mod->getResearch(*i);
 
-		// Check for dependencies, unlocked list, debug and possible  initial stop conditions
-		if (!isResearchAvailable(research, unlocked))
+		// Check for debug, requires, unlockedList, dependencies and possible removal conditions
+		if (!isResearchAvailable(research, unlockedList))
 		{
 			continue;
-		}
-
-		// Check if "requires" are satiesfied
-		if (!research->getRequirements().empty())
-		{
-			if(!isResearched(research->getRequirements()))
-			{
-				continue;
-			}
-		}
-
-		// Check which topics are researched and
-		// how to handle reresearchable topics to keep them on the list
-		if(isResearched(research->getName()))
-		{
-			bool removeFromMenu = true;
-
-			// Hide hidden topics / fake researches
-			// One time use only
-			// see STR_PLASMA_CANON_DEP1 STR_PLASMA_CANON_DEP2 as example
-			if(research->getCost() == 0 || research->getPoints() == 0)
-			{
-				continue;
-			}
-
-			if(!research->getGetOneFree().empty())
-			{
-				if(!isResearched(research->getGetOneFree()))
-				{
-					removeFromMenu = false;
-				}
-			}
-			if(!research->getUnlocked().empty())
-			{
-				if(!isResearched(research->getUnlocked()))
-				{
-					removeFromMenu = false;
-				}
-			}
-			if(removeFromMenu)
-			{
-				continue;
-			}
 		}
 
 		// Check if this topic is already being researched on the current base
@@ -1213,6 +1170,40 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 		if (research->needItem() && base->getStorageItems()->getItem(research->getName()) == 0)
 		{
 			continue;
+		}
+
+		// Check which topics are researched and
+		// how to handle reresearchable topics to keep them on the list
+		if (isResearched(research->getName()))
+		{
+			bool removeFromMenu = true;
+
+			// Hide hidden topics / fake researches
+			if (research->getCost() == 0 && research->getPoints() == 0)
+			{
+				continue;
+			}
+
+			if (!research->getGetOneFree().empty())
+			{
+				if (!isResearched(research->getGetOneFree()))
+				{
+					removeFromMenu = false;
+				}
+			}
+
+			if (!research->getUnlocked().empty())
+			{
+				if (!isResearched(research->getUnlocked()))
+				{
+					removeFromMenu = false;
+				}
+			}
+
+			if (removeFromMenu)
+			{
+				continue;
+			}
 		}
 		projects.push_back (research);
 	}
@@ -1250,39 +1241,62 @@ void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & produc
  * Check whether a ResearchProject can be researched.
  * @param r the RuleResearch to test.
  * @param unlocked the list of currently unlocked RuleResearch
- * @param mod the current Mod
  * @return true if the RuleResearch can be researched
  */
-bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked) const
+bool SavedGame::isResearchAvailable (RuleResearch * research, const std::vector<const RuleResearch *> & unlockedList) const
 {
-	if (r == 0)
+	if (research == 0)
 	{
 		return false;
 	}
-
-	// Check for debug mode or topic is contained in the unlocked list
-	if (_debug || std::find(unlocked.begin(), unlocked.end(), r) != unlocked.end())
+	if (_debug)
 	{
 		return true;
 	}
-
+	// Check if "requires" are satiesfied
+	if (!research->getRequirements().empty())
+	{
+		if(!isResearched(research->getRequirements()))
+		{
+			return false;
+		}
+	}
+	// Check if topic is already unlocked
+	if(std::find(unlockedList.begin(), unlockedList.end(), research) != unlockedList.end())
+	{
+		return true;
+	}
 	// Check if "dependencies" are satiesfied
-	if (!r->getDependencies().empty())
+	if (!research->getDependencies().empty())
 	{
-		if(!isResearched(r->getDependencies()))
+		if(!isResearched(research->getDependencies()))
 		{
 			return false;
 		}
 	}
-
-	// Skip reresearchable topics with "getOneFree" and "unlocks" once they are completly exhausted
-	if(!r->getGetOneFree().empty() && (!r->getUnlocked().empty()))
+/*	// Skip reresearchable topics with "getOneFree" and or "unlocks" once they are completly exhausted
+	if(isResearched(research->getName()) && (!research->getGetOneFree().empty() || !research->getUnlocked().empty()))
 	{
-		if(isResearched(r->getGetOneFree()) && isResearched(r->getUnlocked()))
+		bool skip = true;
+		if(!research->getGetOneFree().empty())
+		{
+			if(!isResearched(research->getGetOneFree()))
+			{
+				skip = false;;
+			}
+		}
+		if(!research->getUnlocked().empty())
+		{
+			if(!isResearched(research->getUnlocked()))
+			{
+				skip = false;
+			}
+		}
+		if(skip)
 		{
 			return false;
 		}
-	}
+	}*/
 	return true;
 }
 
