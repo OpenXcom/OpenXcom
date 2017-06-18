@@ -1274,29 +1274,6 @@ bool SavedGame::isResearchAvailable (RuleResearch * research, const std::vector<
 			return false;
 		}
 	}
-/*	// Skip reresearchable topics with "getOneFree" and or "unlocks" once they are completly exhausted
-	if(isResearched(research->getName()) && (!research->getGetOneFree().empty() || !research->getUnlocked().empty()))
-	{
-		bool skip = true;
-		if(!research->getGetOneFree().empty())
-		{
-			if(!isResearched(research->getGetOneFree()))
-			{
-				skip = false;;
-			}
-		}
-		if(!research->getUnlocked().empty())
-		{
-			if(!isResearched(research->getUnlocked()))
-			{
-				skip = false;
-			}
-		}
-		if(skip)
-		{
-			return false;
-		}
-	}*/
 	return true;
 }
 
