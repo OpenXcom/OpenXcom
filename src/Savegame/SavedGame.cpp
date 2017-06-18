@@ -1135,95 +1135,75 @@ const std::vector<const RuleResearch *> & SavedGame::getDiscoveredResearch() con
  */
 void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & projects, const Mod * mod, Base * base) const
 {
-	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
+	const std::vector<const RuleResearch *> & discoveredList(getDiscoveredResearch());
 	std::vector<std::string> researchProjects = mod->getResearchList();
 	const std::vector<ResearchProject *> & baseResearchProjects = base->getResearch();
-	std::vector<const RuleResearch *> unlocked;
-	for (std::vector<const RuleResearch *>::const_iterator it = discovered.begin(); it != discovered.end(); ++it)
+	std::vector<const RuleResearch *> unlockedList;
+
+	// Create list of unlocks for already discovered research topics and handle errors
+	for (std::vector<const RuleResearch *>::const_iterator i = discoveredList.begin(); i != discoveredList.end(); ++i)
 	{
-		for (std::vector<std::string>::const_iterator itUnlocked = (*it)->getUnlocked().begin(); itUnlocked != (*it)->getUnlocked().end(); ++itUnlocked)
+		for (std::vector<std::string>::const_iterator j = (*i)->getUnlocked().begin(); j != (*i)->getUnlocked().end(); ++j)
 		{
-			unlocked.push_back(mod->getResearch(*itUnlocked, true));
+			unlockedList.push_back(mod->getResearch(*j, true));
 		}
 	}
-	for (std::vector<std::string>::const_iterator iter = researchProjects.begin(); iter != researchProjects.end(); ++iter)
+
+	// Create list of research topics available to be researched on the given base, shown in research menu
+	for (std::vector<std::string>::const_iterator i = researchProjects.begin(); i != researchProjects.end(); ++i)
 	{
-		RuleResearch *research = mod->getResearch(*iter);
-		if (!isResearchAvailable(research, unlocked, mod))
+		RuleResearch *research = mod->getResearch(*i);
+
+		// Check for debug, requires, unlockedList, dependencies and possible removal conditions
+		if (!isResearchAvailable(research, unlockedList))
 		{
 			continue;
 		}
-		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin(), discovered.end(), research);
 
-		bool liveAlien = mod->getUnit(research->getName()) != 0;
-
-		if (itDiscovered != discovered.end())
-		{
-			bool cull = true;
-			if (!research->getGetOneFree().empty())
-			{
-				for (std::vector<std::string>::const_iterator ohBoy = research->getGetOneFree().begin(); ohBoy != research->getGetOneFree().end(); ++ohBoy)
-				{
-					std::vector<const RuleResearch *>::const_iterator more_iteration = std::find(discovered.begin(), discovered.end(), mod->getResearch(*ohBoy));
-					if (more_iteration == discovered.end())
-					{
-						cull = false;
-						break;
-					}
-				}
-			}
-			if (!liveAlien && cull)
-			{
-				continue;
-			}
-			else
-			{
-				std::vector<std::string>::const_iterator leaderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_LEADER_PLUS");
-				std::vector<std::string>::const_iterator cmnderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_COMMANDER_PLUS");
-
-				bool leader ( leaderCheck != research->getUnlocked().end());
-				bool cmnder ( cmnderCheck != research->getUnlocked().end());
-
-				if (leader)
-				{
-					std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), mod->getResearch("STR_LEADER_PLUS"));
-					if (found == discovered.end())
-						cull = false;
-				}
-
-				if (cmnder)
-				{
-					std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), mod->getResearch("STR_COMMANDER_PLUS"));
-					if (found == discovered.end())
-						cull = false;
-				}
-
-				if (cull)
-					continue;
-			}
-		}
-
+		// Check if this topic is already being researched on the current base
 		if (std::find_if (baseResearchProjects.begin(), baseResearchProjects.end(), findRuleResearch(research)) != baseResearchProjects.end())
 		{
 			continue;
 		}
+
+		// Check for needed item on current base
 		if (research->needItem() && base->getStorageItems()->getItem(research->getName()) == 0)
 		{
 			continue;
 		}
-		if (!research->getRequirements().empty())
+
+		// Check which topics are researched and
+		// how to handle reresearchable topics to keep them on the list
+		if (isResearched(research->getName()))
 		{
-			size_t tally(0);
-			for (size_t itreq = 0; itreq != research->getRequirements().size(); ++itreq)
+			bool removeFromMenu = true;
+
+			// Hide hidden topics / fake researches
+			if (research->getCost() == 0 && research->getPoints() == 0)
 			{
-				itDiscovered = std::find(discovered.begin(), discovered.end(), mod->getResearch(research->getRequirements().at(itreq)));
-				if (itDiscovered != discovered.end())
+				continue;
+			}
+
+			if (!research->getGetOneFree().empty())
+			{
+				if (!isResearched(research->getGetOneFree()))
 				{
-					tally++;
+					removeFromMenu = false;
 				}
 			}
-			if (tally != research->getRequirements().size())
+
+			if (!research->getUnlocked().empty())
+			{
+				if (!isResearched(research->getUnlocked()))
+				{
+					removeFromMenu = false;
+				}
+			}
+
+			if (removeFromMenu)
+			{
 				continue;
+			}
 		}
 		projects.push_back (research);
 	}
@@ -1261,65 +1241,39 @@ void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & produc
  * Check whether a ResearchProject can be researched.
  * @param r the RuleResearch to test.
  * @param unlocked the list of currently unlocked RuleResearch
- * @param mod the current Mod
  * @return true if the RuleResearch can be researched
  */
-bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, const Mod * mod) const
+bool SavedGame::isResearchAvailable (RuleResearch * research, const std::vector<const RuleResearch *> & unlockedList) const
 {
-	if (r == 0)
+	if (research == 0)
 	{
 		return false;
 	}
-	std::vector<std::string> deps = r->getDependencies();
-	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
-	bool liveAlien = mod->getUnit(r->getName()) != 0;
-	if (_debug || std::find(unlocked.begin(), unlocked.end(), r) != unlocked.end())
+	if (_debug)
 	{
 		return true;
 	}
-	else if (liveAlien)
+	// Check if "requires" are satiesfied
+	if (!research->getRequirements().empty())
 	{
-		if (!r->getGetOneFree().empty())
-		{
-			std::vector<std::string>::const_iterator leaderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_LEADER_PLUS");
-			std::vector<std::string>::const_iterator cmnderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_COMMANDER_PLUS");
-
-			bool leader ( leaderCheck != r->getUnlocked().end());
-			bool cmnder ( cmnderCheck != r->getUnlocked().end());
-
-			if (leader)
-			{
-				std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), mod->getResearch("STR_LEADER_PLUS"));
-				if (found == discovered.end())
-					return true;
-			}
-
-			if (cmnder)
-			{
-				std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), mod->getResearch("STR_COMMANDER_PLUS"));
-				if (found == discovered.end())
-					return true;
-			}
-		}
-	}
-	for (std::vector<std::string>::const_iterator itFree = r->getGetOneFree().begin(); itFree != r->getGetOneFree().end(); ++itFree)
-	{
-		if (std::find(unlocked.begin(), unlocked.end(), mod->getResearch(*itFree)) == unlocked.end())
-		{
-			return true;
-		}
-	}
-
-	for (std::vector<std::string>::const_iterator iter = deps.begin(); iter != deps.end(); ++ iter)
-	{
-		RuleResearch *research = mod->getResearch(*iter);
-		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin(), discovered.end(), research);
-		if (itDiscovered == discovered.end())
+		if(!isResearched(research->getRequirements()))
 		{
 			return false;
 		}
 	}
-
+	// Check if topic is already unlocked
+	if(std::find(unlockedList.begin(), unlockedList.end(), research) != unlockedList.end())
+	{
+		return true;
+	}
+	// Check if "dependencies" are satiesfied
+	if (!research->getDependencies().empty())
+	{
+		if(!isResearched(research->getDependencies()))
+		{
+			return false;
+		}
+	}
 	return true;
 }
 
