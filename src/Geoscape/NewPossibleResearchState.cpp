@@ -77,22 +77,25 @@ NewPossibleResearchState::NewPossibleResearchState(Base * base, const std::vecto
 	_lstPossibilities->setAlign(ALIGN_CENTER);
 	_lstPossibilities->setScrolling(true, 0);
 	
-	size_t tally(0);
+	bool foundNew = false;
 	for (std::vector<RuleResearch *>::const_iterator iter = possibilities.begin(); iter != possibilities.end(); ++iter)
 	{
-		bool liveAlien = (*iter)->needItem() && _game->getMod()->getUnit((*iter)->getName()) != 0;
-		if (!_game->getSavedGame()->wasResearchPopped(*iter) && (*iter)->getRequirements().empty() && !liveAlien)
+		// Note: ignore all topics with "requires" (same reason as in NewResearchListState::fillProjectList())
+		if ((*iter)->getRequirements().empty())
 		{
-			_game->getSavedGame()->addPoppedResearch((*iter));
-			_lstPossibilities->addRow (1, tr((*iter)->getName()).c_str());
-		}
-		else
-		{
-			tally++;
+			// Also ignore:
+			// 1. things that already popped before
+			// 2. things that never popped, but are researched already (can happen for topics that can be researched multiple times)
+			if (!_game->getSavedGame()->wasResearchPopped(*iter) && !_game->getSavedGame()->isResearched((*iter)->getName(), false))
+			{
+				_game->getSavedGame()->addPoppedResearch((*iter));
+				_lstPossibilities->addRow(1, tr((*iter)->getName()).c_str());
+				foundNew = true;
+			}
 		}
 	}
 
-	if (!(tally == possibilities.size() || possibilities.empty()))
+	if (foundNew)
 	{
 		_txtTitle->setText(tr("STR_WE_CAN_NOW_RESEARCH"));
 	}

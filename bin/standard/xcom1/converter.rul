@@ -441,9 +441,9 @@ converter:
     - STR_HEAVY_CANNON
     - STR_AUTO_CANNON
     - STR_ROCKET_LAUNCHER
-    - STR_SMALL_ROCKET
-    - STR_LARGE_ROCKET
-    - STR_INCENDIARY_ROCKET
+#    - STR_SMALL_ROCKET        # doesn't exist in UP.DAT
+#    - STR_LARGE_ROCKET        # doesn't exist in UP.DAT
+#    - STR_INCENDIARY_ROCKET   # doesn't exist in UP.DAT
     - STR_LASER_PISTOL
     - STR_LASER_RIFLE
     - STR_HEAVY_LASER

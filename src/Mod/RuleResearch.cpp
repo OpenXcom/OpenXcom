@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleResearch.h"
+#include "../Engine/Exception.h"
 
 namespace OpenXcom
 {
@@ -47,6 +48,11 @@ void RuleResearch::load(const YAML::Node &node, int listOrder)
 	if (!_listOrder)
 	{
 		_listOrder = listOrder;
+	}
+	// This is necessary, research code assumes it!
+	if (!_requires.empty() && _cost != 0)
+	{
+		throw Exception("Research topic " + _name + " has requirements, but the cost is not zero. Sorry, this is not allowed!");
 	}
 }
 
