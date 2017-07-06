@@ -199,7 +199,8 @@ void UnitSprite::draw()
 										&UnitSprite::drawRoutine4,
 										&UnitSprite::drawRoutine19,
 										&UnitSprite::drawRoutine20,
-										&UnitSprite::drawRoutine21};
+										&UnitSprite::drawRoutine21,
+										&UnitSprite::drawRoutine3};
 	// Call the matching routine
 	(this->*(routines[_drawingRoutine]))();
 }
@@ -807,7 +808,8 @@ void UnitSprite::drawRoutine2()
 }
 
 /**
- * Drawing routine for cyberdiscs.
+ * Drawing routine for cyberdiscs. (3)
+ * and helicopters (22)
  */
 void UnitSprite::drawRoutine3()
 {
@@ -821,13 +823,15 @@ void UnitSprite::drawRoutine3()
 	const int offXSprite = 16; // sprites are double width
 
 	// draw the animated propulsion below the hwp
-	if (_part > 0)
+	if (_drawingRoutine == 3)
 	{
-		s = _unitSurface->getFrame(32 + ((_part-1) * 8) + _animationFrame);
-		s->setX(offXSprite);
-		drawRecolored(s);
+		if (_part > 0)
+		{
+			s = _unitSurface->getFrame(32 + ((_part-1) * 8) + _animationFrame);
+			s->setX(offXSprite);
+			drawRecolored(s);
+		}
 	}
-
 	s = _unitSurface->getFrame((_part * 8) + _unit->getDirection());
 	
 	// offset everything to the left by 16 pixels.
@@ -835,6 +839,17 @@ void UnitSprite::drawRoutine3()
 	s->setX(offXSprite);
 
 	drawRecolored(s);
+
+	// draw the animated propulsion above the hwp
+	if (_drawingRoutine == 22)
+	{
+		if (_part > 0)
+		{
+			s = _unitSurface->getFrame(32 + ((_part-1) * 8) + _animationFrame);
+			s->setX(offXSprite);
+			drawRecolored(s);
+		}
+	}
 }
 
 /**
