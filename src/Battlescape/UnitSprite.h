@@ -34,8 +34,8 @@ class UnitSprite : public Surface
 {
 private:
 	BattleUnit *_unit;
-	BattleItem *_itemA, *_itemB;
-	SurfaceSet *_unitSurface, *_itemSurfaceA, *_itemSurfaceB;
+	BattleItem *_itemR, *_itemL;
+	SurfaceSet *_unitSurface, *_itemSurfaceR, *_itemSurfaceL;
 	int _part, _animationFrame, _drawingRoutine;
 	bool _helmet;
 	const std::pair<Uint8, Uint8> *_color;
@@ -88,8 +88,6 @@ public:
 	void setSurfaces(SurfaceSet *unitSurface, SurfaceSet *itemSurfaceA, SurfaceSet *itemSurfaceB);
 	/// Sets the battleunit to be rendered.
 	void setBattleUnit(BattleUnit *unit, int part = 0);
-	/// Sets the battleitem to be rendered.
-	void setBattleItem(BattleItem *item);
 	/// Sets the animation frame.
 	void setAnimationFrame(int frame);
 	/// Draws the unit.

@@ -1561,22 +1561,6 @@ void Map::cacheUnit(BattleUnit *unit)
 			}
 			
 			unitSprite->setBattleUnit(unit, i);
-
-			BattleItem *rhandItem = unit->getItem("STR_RIGHT_HAND");
-			BattleItem *lhandItem = unit->getItem("STR_LEFT_HAND");
-			if (rhandItem && !rhandItem->getRules()->isFixed())
-			{
-				unitSprite->setBattleItem(rhandItem);
-			}
-			if (lhandItem && !lhandItem->getRules()->isFixed())
-			{
-				unitSprite->setBattleItem(lhandItem);
-			}
-
-			if (!lhandItem && !rhandItem)
-			{
-				unitSprite->setBattleItem(0);
-			}
 			unitSprite->setSurfaces(_game->getMod()->getSurfaceSet(unit->getArmor()->getSpriteSheet()),
 									_game->getMod()->getSurfaceSet("HANDOB.PCK"),
 									_game->getMod()->getSurfaceSet("HANDOB2.PCK"));
