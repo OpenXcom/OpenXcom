@@ -1,0 +1,22 @@
+root = true
+
+[*]
+; Broken in Visual Studio
+;charset = utf-8
+trim_trailing_whitespace = true
+
+[*.{yml,rul}]
+indent_style = space
+indent_size = 2
+
+[*.{c,cpp,h,hpp}]
+indent_style = tab
+indent_brace_style = Allman
+insert_final_newline = true
+
+[Makefile]
+indent_style = tab
+
+[CMakeLists.txt]
+indent_style = space
+indent_size = 2
