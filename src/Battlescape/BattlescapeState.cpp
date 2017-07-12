@@ -519,10 +519,13 @@ void BattlescapeState::init()
 		_reserve = _btnReserveNone;
 		break;
 	}
-	if (_firstInit && playableUnitSelected())
+	if (_firstInit)
 	{
-		_battleGame->setupCursor();
-		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+		if (playableUnitSelected())
+		{
+			_battleGame->setupCursor();
+			_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+		}
 		_firstInit = false;
 		_btnReserveNone->setGroup(&_reserve);
 		_btnReserveSnap->setGroup(&_reserve);
