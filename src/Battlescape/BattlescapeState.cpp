@@ -521,6 +521,10 @@ void BattlescapeState::init()
 	}
 	if (_firstInit)
 	{
+		if (!playableUnitSelected())
+		{
+			selectNextPlayerUnit();
+		}
 		if (playableUnitSelected())
 		{
 			_battleGame->setupCursor();
