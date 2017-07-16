@@ -807,7 +807,7 @@ int Tile::getTopItemSprite()
  * average out any smoke added by the number of overlaps.
  * apply fire/smoke damage to units as applicable.
  */
-void Tile::prepareNewTurn()
+void Tile::prepareNewTurn(bool smokeDamage)
 {
 	// we've received new smoke in this turn, but we're not on fire, average out the smoke.
 	if ( _overlaps != 0 && _smoke != 0 && _fire == 0)
@@ -843,10 +843,13 @@ void Tile::prepareNewTurn()
 			// no fire: must be smoke
 			else
 			{
-				// try to knock this guy out.
-				if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0 && _unit->getArmor()->getSize() == 1)
+				if (smokeDamage)
 				{
-					_unit->damage(Position(0,0,0), (_smoke / 4) + 1, DT_SMOKE, true);
+					// try to knock this guy out.
+					if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0 && _unit->getArmor()->getSize() == 1)
+					{
+						_unit->damage(Position(0,0,0), (_smoke / 4) + 1, DT_SMOKE, true);
+					}
 				}
 			}
 		}
