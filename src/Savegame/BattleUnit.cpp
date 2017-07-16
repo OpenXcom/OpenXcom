@@ -3242,4 +3242,13 @@ int BattleUnit::getMindControllerId() const
 	return _mindControllerID;
 }
 
+int BattleUnit::getFiringXP() const
+{
+	return _expFiring;
+}
+void BattleUnit::nerfFiringXP(int newXP)
+{
+	_expFiring = newXP;
+}
+
 }

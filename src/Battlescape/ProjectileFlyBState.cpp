@@ -558,7 +558,7 @@ void ProjectileFlyBState::think()
 						offset = -2;
 					}
 					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == _action.weapon->getRules()->getAutoShots() || !_action.weapon->getAmmoItem())));
-
+					int firingXP = _unit->getFiringXP();
 					// special shotgun behaviour: trace extra projectile paths, and add bullet hits at their termination points.
 					if (_ammo && _ammo->getRules()->getShotgunPellets()  != 0)
 					{
@@ -578,7 +578,11 @@ void ProjectileFlyBState::think()
 								{
 									Explosion *explosion = new Explosion(proj->getPosition(1), _ammo->getRules()->getHitAnimation());
 									_parent->getMap()->getExplosions()->push_back(explosion);
-									_parent->getSave()->getTileEngine()->hit(proj->getPosition(1), _ammo->getRules()->getPower(), _ammo->getRules()->getDamageType(), 0);
+									_parent->getSave()->getTileEngine()->hit(proj->getPosition(1), _ammo->getRules()->getPower(), _ammo->getRules()->getDamageType(), _unit);
+									if (_ammo->getRules()->getBattleType() != BT_MELEE && _ammo->getRules()->getExplosionRadius() != 0)
+									{
+										_parent->getTileEngine()->explode(proj->getPosition(1), _ammo->getRules()->getPower(), _ammo->getRules()->getDamageType(), _ammo->getRules()->getExplosionRadius(), _unit);
+									}
 								}
 							}
 							++i;
@@ -627,6 +631,10 @@ void ProjectileFlyBState::think()
 							if (_ammo != 0)
 								victim->setMurdererWeaponAmmo(_ammo->getRules()->getName());
 						}
+					}
+					if (_unit->getFiringXP() > firingXP + 1)
+					{
+						_unit->nerfFiringXP(firingXP + 1);
 					}
 				}
 				else if (_action.type != BA_AUTOSHOT || _action.autoShotCounter == _action.weapon->getRules()->getAutoShots() || !_action.weapon->getAmmoItem())
