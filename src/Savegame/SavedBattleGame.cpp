@@ -1365,6 +1365,7 @@ void SavedBattleGame::prepareNewTurn()
 		{
 			tilesOnSmoke.push_back(getTiles()[i]);
 		}
+		getTiles()[i]->setDangerous(false);
 	}
 
 	// now make the smoke spread.

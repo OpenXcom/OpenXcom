@@ -2980,7 +2980,7 @@ void TileEngine::setDangerZone(const Position& pos, int radius, BattleUnit *unit
 		return;
 	}
 	// set the epicenter as dangerous
-	tile->setDangerous();
+	tile->setDangerous(true);
 	Position originVoxel = (pos * Position(16,16,24)) + Position(8,8,12 + -tile->getTerrainLevel());
 	Position targetVoxel;
 	for (int x = -radius; x != radius; ++x)
@@ -3006,7 +3006,7 @@ void TileEngine::setDangerZone(const Position& pos, int radius, BattleUnit *unit
 						{
 							if (trajectory.size() && (trajectory.back() / Position(16,16,24)) == pos + Position(x,y,0))
 							{
-								tile->setDangerous();
+								tile->setDangerous(true);
 							}
 						}
 					}

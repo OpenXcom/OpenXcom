@@ -232,7 +232,7 @@ public:
 	/// increment the overlap value on this tile.
 	void addOverlap();
 	/// set the danger flag on this tile (so the AI will avoid it).
-	void setDangerous();
+	void setDangerous(bool danger);
 	/// check the danger flag on this tile.
 	bool getDangerous() const;
 	/// adds a particle to this tile's array.

@@ -855,7 +855,6 @@ void Tile::prepareNewTurn(bool smokeDamage)
 		}
 	}
 	_overlaps = 0;
-	_danger = false;
 }
 
 /**
@@ -960,9 +959,9 @@ void Tile::addOverlap()
 /**
  * set the danger flag on this tile.
  */
-void Tile::setDangerous()
+void Tile::setDangerous(bool danger)
 {
-	_danger = true;
+	_danger = danger;
 }
 
 /**
