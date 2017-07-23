@@ -208,6 +208,8 @@ public:
 	static int UFOPAEDIA_CURSOR;
 	static int GRAPHS_CURSOR;
 	static int DAMAGE_RANGE;
+	static int DAMAGE_RANGE_MIN;
+	static int DAMAGE_RANGE_MAX;
 	static int EXPLOSIVE_DAMAGE_RANGE;
 	static int FIRE_DAMAGE_RANGE[2];
 	static std::string DEBRIEF_MUSIC_GOOD;
