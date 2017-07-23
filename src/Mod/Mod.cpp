@@ -118,6 +118,8 @@ int Mod::BATTLESCAPE_CURSOR;
 int Mod::UFOPAEDIA_CURSOR;
 int Mod::GRAPHS_CURSOR;
 int Mod::DAMAGE_RANGE;
+int Mod::DAMAGE_RANGE_MIN;
+int Mod::DAMAGE_RANGE_MAX;
 int Mod::EXPLOSIVE_DAMAGE_RANGE;
 int Mod::FIRE_DAMAGE_RANGE[2];
 std::string Mod::DEBRIEF_MUSIC_GOOD;
@@ -155,6 +157,8 @@ void Mod::resetGlobalStatics()
 	UFOPAEDIA_CURSOR = 252;
 	GRAPHS_CURSOR = 252;
 	DAMAGE_RANGE = 100;
+	DAMAGE_RANGE_MIN = 0;
+	DAMAGE_RANGE_MAX = 200;
 	EXPLOSIVE_DAMAGE_RANGE = 50;
 	FIRE_DAMAGE_RANGE[0] = 5;
 	FIRE_DAMAGE_RANGE[1] = 10;
@@ -1165,6 +1169,8 @@ void Mod::loadFile(const std::string &filename)
 		UFOPAEDIA_CURSOR = (*i)["ufopaediaCursor"].as<int>(UFOPAEDIA_CURSOR);
 		GRAPHS_CURSOR = (*i)["graphsCursor"].as<int>(GRAPHS_CURSOR);
 		DAMAGE_RANGE = (*i)["damageRange"].as<int>(DAMAGE_RANGE);
+		DAMAGE_RANGE_MIN = (*i)["damageRangeMin"].as<int>(DAMAGE_RANGE_MIN);
+		DAMAGE_RANGE_MAX = (*i)["damageRangeMax"].as<int>(DAMAGE_RANGE_MAX);
 		EXPLOSIVE_DAMAGE_RANGE = (*i)["explosiveDamageRange"].as<int>(EXPLOSIVE_DAMAGE_RANGE);
 		size_t num = 0;
 		for (YAML::const_iterator j = (*i)["fireDamageRange"].begin(); j != (*i)["fireDamageRange"].end() && num < 2; ++j)
