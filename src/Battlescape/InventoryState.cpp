@@ -571,6 +571,11 @@ void InventoryState::btnCreateTemplateClick(Action *)
 	std::vector<BattleItem*> *unitInv = _battleGame->getSelectedUnit()->getInventory();
 	for (std::vector<BattleItem*>::iterator j = unitInv->begin(); j != unitInv->end(); ++j)
 	{
+		if ((*j)->getRules()->isFixed()) {
+			// don't copy fixed weapons into the template
+			continue;
+		}
+
 		std::string ammo;
 		if ((*j)->needsAmmo() && (*j)->getAmmoItem())
 		{
@@ -602,9 +607,14 @@ static void _clearInventory(Game *game, std::vector<BattleItem*> *unitInv, Tile 
 	// clear unit's inventory (i.e. move everything to the ground)
 	for (std::vector<BattleItem*>::iterator i = unitInv->begin(); i != unitInv->end(); )
 	{
-		(*i)->setOwner(NULL);
-		groundTile->addItem(*i, groundRuleInv);
-		i = unitInv->erase(i);
+		if ((*i)->getRules()->isFixed()) {
+			// don't drop fixed weapons
+			++i;
+		} else {
+			(*i)->setOwner(NULL);
+			groundTile->addItem(*i, groundRuleInv);
+			i = unitInv->erase(i);
+		}
 	}
 }
 
@@ -657,6 +667,16 @@ void InventoryState::btnApplyTemplateClick(Action *)
 
 				if ((*templateIt)->getItemType() == groundItemName)
 				{
+					// if the template item would overlap with an existing item (i.e. a fixed
+					// weapon that didn't get cleared in _clearInventory() above), skip it
+					if (Inventory::overlapItems(unit, *groundItem,
+								    _game->getMod()->getInventory((*templateIt)->getSlot(), true),
+								    (*templateIt)->getSlotX(), (*templateIt)->getSlotY())) {
+						// don't display 'item not found' warning message
+						found = true;
+						break;
+					}
+
 					// if the loaded ammo doesn't match the template item's,
 					// remember the weapon for later and continue scanning
 					BattleItem *loadedAmmo = (*groundItem)->getAmmoItem();

@@ -525,7 +525,7 @@ void Inventory::mouseClick(Action *action, State *state)
 					x += _groundOffset;
 				}
 				BattleItem *item = _selUnit->getItem(slot, x, y);
-				if (item != 0)
+				if (item != 0 && !item->getRules()->isFixed())
 				{
 					if ((SDL_GetModState() & KMOD_CTRL))
 					{
