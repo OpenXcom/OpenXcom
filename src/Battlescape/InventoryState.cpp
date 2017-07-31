@@ -610,11 +610,12 @@ static void _clearInventory(Game *game, std::vector<BattleItem*> *unitInv, Tile 
 		if ((*i)->getRules()->isFixed()) {
 			// don't drop fixed weapons
 			++i;
-		} else {
-			(*i)->setOwner(NULL);
-			groundTile->addItem(*i, groundRuleInv);
-			i = unitInv->erase(i);
+			continue;
 		}
+
+		(*i)->setOwner(NULL);
+		groundTile->addItem(*i, groundRuleInv);
+		i = unitInv->erase(i);
 	}
 }
 
