@@ -183,7 +183,19 @@ void AlienMission::think(Game &engine, const Globe &globe)
 		std::vector<MissionArea> areas = mod.getRegion(_region, true)->getMissionZones().at((_rule.getSpawnZone() == -1) ? trajectory.getZone(0) : _rule.getSpawnZone()).areas;
 		MissionArea area = areas.at((_missionSiteZone == -1) ? RNG::generate(0, areas.size()-1) : _missionSiteZone);
 		Texture *texture = mod.getGlobe()->getTexture(area.texture);
-		AlienDeployment *deployment = mod.getDeployment(wave.ufoType) ? mod.getDeployment(wave.ufoType) : mod.getDeployment(texture->getRandomDeployment(), true);
+		AlienDeployment *deployment;
+		if (mod.getDeployment(wave.ufoType))
+		{
+			deployment = mod.getDeployment(wave.ufoType);
+		}
+		else
+		{
+			if (!texture)
+			{
+				throw Exception("Error occurred while spawning mission site: " + _rule.getType());
+			}
+			deployment = mod.getDeployment(texture->getRandomDeployment(), true);
+		}
 		spawnMissionSite(game, deployment, area);
 	}
 
@@ -462,6 +474,10 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			}
 			else
 			{
+				if (!texture)
+				{
+					throw Exception("Error occurred while spawning mission site: " + _rule.getType());
+				}
 				deployment = mod.getDeployment(texture->getRandomDeployment(), true);
 			}
 			MissionSite *missionSite = spawnMissionSite(game, deployment, area);
@@ -671,13 +687,14 @@ void AlienMission::spawnAlienBase(Game &engine, const MissionArea &area, std::pa
 	const Mod &ruleset = *engine.getMod();
 	// Once the last UFO is spawned, the aliens build their base.
 	AlienDeployment *deployment;
+	Texture *texture = ruleset.getGlobe()->getTexture(area.texture);
 	if (ruleset.getDeployment(_rule.getSiteType()))
 	{
 		deployment = ruleset.getDeployment(_rule.getSiteType());
 	}
-	else if (ruleset.getGlobe()->getTexture(area.texture) && !ruleset.getGlobe()->getTexture(area.texture)->getDeployments().empty())
+	else if (texture && !texture->getDeployments().empty())
 	{
-		deployment = ruleset.getDeployment(ruleset.getGlobe()->getTexture(area.texture)->getRandomDeployment(), true);
+		deployment = ruleset.getDeployment(texture->getRandomDeployment(), true);
 	}
 	else
 	{
