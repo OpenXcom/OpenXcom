@@ -147,8 +147,8 @@ items: #done
     invHeight: 3
     turretType: 2
     battleType: 1
-    # special behaviour here: for a HWP with compatible ammo, setting a clipsize
-    # defines the max ammo for the HWP, and the clipsize on the weapon dictates
+    # special behaviour here: for a HWP with compatible ammo, setting a clipSize
+    # defines the max ammo for the HWP, and the clipSize on the weapon dictates
     # how many rounds it adds.
     compatibleAmmo:
       - STR_GAUSS_CANNON_AMMO
@@ -759,6 +759,7 @@ items: #done
     twoHanded: true
     invWidth: 1
     invHeight: 3
+    clipSize: -1
   - type: STR_CHEMICAL_FLARE
     size: 0.1
     costBuy: 60
