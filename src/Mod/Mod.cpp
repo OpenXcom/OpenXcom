@@ -2216,11 +2216,9 @@ std::string Mod::getFontName() const
  */
  int Mod::getMinRadarRange() const
  {
-	static int minRadarRange = -1;
+	int minRadarRange = 0;
 
-	if (minRadarRange < 0)
 	{
-		minRadarRange = 0;
 		for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
 		{
 			RuleBaseFacility *f = getBaseFacility(*i);

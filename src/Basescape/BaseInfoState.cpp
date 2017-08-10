@@ -346,18 +346,20 @@ void BaseInfoState::init()
 	_barDefense->setValue(_base->getDefenseValue());
 
 	std::wostringstream ss10;
-	ss10 << _base->getShortRangeDetection();
+	int shortRangeDetection = _base->getShortRangeDetection();
+	ss10 << shortRangeDetection;
 	_numShortRange->setText(ss10.str());
 
-	_barShortRange->setMax(_base->getShortRangeDetection());
-	_barShortRange->setValue(_base->getShortRangeDetection());
+	_barShortRange->setMax(shortRangeDetection);
+	_barShortRange->setValue(shortRangeDetection);
 
 	std::wostringstream ss11;
-	ss11 << _base->getLongRangeDetection();
+	int longRangeDetection = _base->getLongRangeDetection();
+	ss11 << longRangeDetection;
 	_numLongRange->setText(ss11.str());
 
-	_barLongRange->setMax(_base->getLongRangeDetection());
-	_barLongRange->setValue(_base->getLongRangeDetection());
+	_barLongRange->setMax(longRangeDetection);
+	_barLongRange->setValue(longRangeDetection);
 }
 
 /**
