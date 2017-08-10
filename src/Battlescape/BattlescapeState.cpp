@@ -922,9 +922,7 @@ void BattlescapeState::btnInventoryClick(Action *)
 		updateSoldierInfo();
 	}
 	if (playableUnitSelected()
-		&& (_save->getSelectedUnit()->getArmor()->getSize() == 1 || _save->getDebugMode())
-		&& (_save->getSelectedUnit()->getOriginalFaction() == FACTION_PLAYER ||
-			_save->getSelectedUnit()->getRankString() != "STR_LIVE_TERRORIST"))
+		&& (_save->getSelectedUnit()->hasInventory() || _save->getDebugMode()))
 	{
 		// clean up the waypoints
 		if (_battleGame->getCurrentAction()->type == BA_LAUNCH)
