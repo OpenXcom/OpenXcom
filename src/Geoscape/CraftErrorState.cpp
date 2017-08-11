@@ -46,12 +46,12 @@ CraftErrorState::CraftErrorState(GeoscapeState *state, const std::wstring &msg) 
 	_txtMessage = new Text(246, 96, 37, 42);
 
 	// Set palette
-	setInterface("geoCraftScreens");
+	setInterface("craftError");
 
-	add(_window, "window", "geoCraftScreens");
-	add(_btnOk, "button", "geoCraftScreens");
-	add(_btnOk5Secs, "button", "geoCraftScreens");
-	add(_txtMessage, "text1", "geoCraftScreens");
+	add(_window, "window", "craftError");
+	add(_btnOk, "button", "craftError");
+	add(_btnOk5Secs, "button", "craftError");
+	add(_txtMessage, "text1", "craftError");
 
 	centerAllSurfaces();
 

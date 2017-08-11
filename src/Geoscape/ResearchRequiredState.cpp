@@ -43,11 +43,11 @@ ResearchRequiredState::ResearchRequiredState(RuleItem *item)
 	_txtTitle = new Text(288, 80, 16, 50);
 
 	// Set palette
-	setInterface("geoResearch");
+	setInterface("geoResearchRequired");
 
-	add(_window, "window", "geoResearch");
-	add(_btnOk, "button", "geoResearch");
-	add(_txtTitle, "text1", "geoResearch");
+	add(_window, "window", "geoResearchRequired");
+	add(_btnOk, "button", "geoResearchRequired");
+	add(_txtTitle, "text1", "geoResearchRequired");
 
 	centerAllSurfaces();
 

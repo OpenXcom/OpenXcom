@@ -60,22 +60,22 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Soldier *soldier, int rowEntr
 	_lstKills = new TextList(270, 32, 20, 100);
 
 	// Set palette
-	setInterface("soldierMission");
+	setInterface("soldierDiaryMission");
 
-	add(_window, "window", "soldierMission");
-	add(_btnOk, "button", "soldierMission");
-	add(_btnPrev, "button", "soldierMission");
-	add(_btnNext, "button", "soldierMission");
-	add(_txtTitle, "text", "soldierMission");
-	add(_txtUFO, "text", "soldierMission");
-	add(_txtScore, "text", "soldierMission");
-	add(_txtKills, "text", "soldierMission");
-	add(_txtLocation, "text", "soldierMission");
-	add(_txtRace, "text", "soldierMission");
-	add(_txtDaylight, "text", "soldierMission");
-	add(_txtDaysWounded, "text", "soldierMission");
-	add(_txtNoRecord, "text", "soldierMission");
-	add(_lstKills, "list", "soldierMission");
+	add(_window, "window", "soldierDiaryMission");
+	add(_btnOk, "button", "soldierDiaryMission");
+	add(_btnPrev, "button", "soldierDiaryMission");
+	add(_btnNext, "button", "soldierDiaryMission");
+	add(_txtTitle, "text", "soldierDiaryMission");
+	add(_txtUFO, "text", "soldierDiaryMission");
+	add(_txtScore, "text", "soldierDiaryMission");
+	add(_txtKills, "text", "soldierDiaryMission");
+	add(_txtLocation, "text", "soldierDiaryMission");
+	add(_txtRace, "text", "soldierDiaryMission");
+	add(_txtDaylight, "text", "soldierDiaryMission");
+	add(_txtDaysWounded, "text", "soldierDiaryMission");
+	add(_txtNoRecord, "text", "soldierDiaryMission");
+	add(_lstKills, "list", "soldierDiaryMission");
 
 	centerAllSurfaces();
 

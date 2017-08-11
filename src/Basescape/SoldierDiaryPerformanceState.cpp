@@ -79,23 +79,23 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 	}
 
 	// Set palette
-	setInterface("soldierDiary");
+	setInterface("soldierDiaryPerformance");
 
-	add(_window, "window", "soldierDiary");
-	add(_btnOk, "button", "soldierDiary");
-	add(_btnKills, "button", "soldierDiary");
-	add(_btnMissions, "button", "soldierDiary");
-	add(_btnCommendations, "button", "soldierDiary");
-	add(_btnPrev, "button", "soldierDiary");
-	add(_btnNext, "button", "soldierDiary");
-	add(_txtTitle, "text1", "soldierDiary");
-	add(_lstPerformance, "list", "soldierDiary");
-	add(_lstKillTotals, "text2", "soldierDiary");
-	add(_lstMissionTotals, "text2", "soldierDiary");
-	add(_txtMedalName, "text2", "soldierDiary");
-	add(_txtMedalLevel, "text2", "soldierDiary");
-	add(_txtMedalInfo, "text2", "soldierDiary");
-	add(_lstCommendations, "list", "soldierDiary");
+	add(_window, "window", "soldierDiaryPerformance");
+	add(_btnOk, "button", "soldierDiaryPerformance");
+	add(_btnKills, "button", "soldierDiaryPerformance");
+	add(_btnMissions, "button", "soldierDiaryPerformance");
+	add(_btnCommendations, "button", "soldierDiaryPerformance");
+	add(_btnPrev, "button", "soldierDiaryPerformance");
+	add(_btnNext, "button", "soldierDiaryPerformance");
+	add(_txtTitle, "text1", "soldierDiaryPerformance");
+	add(_lstPerformance, "list", "soldierDiaryPerformance");
+	add(_lstKillTotals, "text2", "soldierDiaryPerformance");
+	add(_lstMissionTotals, "text2", "soldierDiaryPerformance");
+	add(_txtMedalName, "text2", "soldierDiaryPerformance");
+	add(_txtMedalLevel, "text2", "soldierDiaryPerformance");
+	add(_txtMedalInfo, "text2", "soldierDiaryPerformance");
+	add(_lstCommendations, "list", "soldierDiaryPerformance");
 	for (int i = 0; i != 10; ++i)
 	{
 		add(_commendations[i]);

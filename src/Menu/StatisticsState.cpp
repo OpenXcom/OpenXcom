@@ -56,12 +56,12 @@ StatisticsState::StatisticsState()
 	_lstStats = new TextList(280, 136, 12, 36);
 
 	// Set palette
-	setInterface("newGameMenu");
+	setInterface("endGameStatistics");
 
-	add(_window, "window", "saveMenus");
-	add(_btnOk, "button", "saveMenus");
-	add(_txtTitle, "text", "saveMenus");
-	add(_lstStats, "list", "saveMenus");
+	add(_window, "window", "endGameStatistics");
+	add(_btnOk, "button", "endGameStatistics");
+	add(_txtTitle, "text", "endGameStatistics");
+	add(_lstStats, "list", "endGameStatistics");
 
 	centerAllSurfaces();
 

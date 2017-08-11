@@ -48,13 +48,13 @@ ResearchCompleteState::ResearchCompleteState(const RuleResearch *newResearch, co
 	_txtResearch = new Text(230, 32, 45, 96);
 
 	// Set palette
-	setInterface("geoResearch");
+	setInterface("geoResearchComplete");
 
-	add(_window, "window", "geoResearch");
-	add(_btnOk, "button", "geoResearch");
-	add(_btnReport, "button", "geoResearch");
-	add(_txtTitle, "text1", "geoResearch");
-	add(_txtResearch, "text2", "geoResearch");
+	add(_window, "window", "geoResearchComplete");
+	add(_btnOk, "button", "geoResearchComplete");
+	add(_btnReport, "button", "geoResearchComplete");
+	add(_txtTitle, "text1", "geoResearchComplete");
+	add(_txtResearch, "text2", "geoResearchComplete");
 
 	centerAllSurfaces();
 

@@ -59,9 +59,9 @@ MultipleTargetsState::MultipleTargetsState(std::vector<Target*> targets, Craft *
 		_window = new Window(this, 136, winHeight, 60, winY, POPUP_VERTICAL);
 
 		// Set palette
-		setInterface("UFOInfo");
+		setInterface("multipleTargets");
 
-		add(_window, "window", "UFOInfo");
+		add(_window, "window", "multipleTargets");
 
 		// Set up objects
 		_window->setBackground(_game->getMod()->getSurface("BACK15.SCR"));
@@ -72,7 +72,7 @@ MultipleTargetsState::MultipleTargetsState(std::vector<Target*> targets, Craft *
 			TextButton *button = new TextButton(116, BUTTON_HEIGHT, 70, y);
 			button->setText(_targets[i]->getName(_game->getLanguage()));
 			button->onMouseClick((ActionHandler)&MultipleTargetsState::btnTargetClick);
-			add(button, "button", "UFOInfo");
+			add(button, "button", "multipleTargets");
 
 			_btnTargets.push_back(button);
 

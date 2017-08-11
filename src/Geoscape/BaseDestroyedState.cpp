@@ -44,11 +44,11 @@ BaseDestroyedState::BaseDestroyedState(Base *base) : _base(base)
 	_txtMessage = new Text(224, 48, 48, 76);
 
 	// Set palette
-	setInterface("UFOInfo");
+	setInterface("baseDestroyed");
 
-	add(_window, "window", "UFOInfo");
-	add(_btnOk, "button", "UFOInfo");
-	add(_txtMessage, "text", "UFOInfo");
+	add(_window, "window", "baseDestroyed");
+	add(_btnOk, "button", "baseDestroyed");
+	add(_txtMessage, "text", "baseDestroyed");
 
 	centerAllSurfaces();
 

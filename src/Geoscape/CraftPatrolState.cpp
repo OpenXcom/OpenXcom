@@ -49,13 +49,13 @@ CraftPatrolState::CraftPatrolState(Craft *craft, Globe *globe) : _craft(craft), 
 	_txtPatrolling = new Text(224, 17, 16, 120);
 
 	// Set palette
-	setInterface("geoCraftScreens");
+	setInterface("craftPatrol");
 
-	add(_window, "window", "geoCraftScreens");
-	add(_btnOk, "button", "geoCraftScreens");
-	add(_btnRedirect, "button", "geoCraftScreens");
-	add(_txtDestination, "text1", "geoCraftScreens");
-	add(_txtPatrolling, "text1", "geoCraftScreens");
+	add(_window, "window", "craftPatrol");
+	add(_btnOk, "button", "craftPatrol");
+	add(_btnRedirect, "button", "craftPatrol");
+	add(_txtDestination, "text1", "craftPatrol");
+	add(_txtPatrolling, "text1", "craftPatrol");
 
 	centerAllSurfaces();
 
