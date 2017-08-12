@@ -46,6 +46,21 @@ interfaces:
         color: 138   # yellow
       - id: button
         color: 133   # minty green
+  - type: endGameStatistics
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 133   # minty green
+      - id: text
+        color: 239   # bright green
+        color2: 138  # yellow
+      - id: list
+        color: 138   # yellow
+        color2: 133  # minty green
+        border: 133  # minty green
+      - id: button
+        color: 133   # minty green
   - type: optionsMenu
     elements:
       - id: palette
@@ -148,7 +163,7 @@ interfaces:
         color: 138   # yellow
       - id: battlescapeColor
         color: 0    # white
-  - type: geoCraftScreens
+  - type: geoCraft
     elements:
       - id: palette
         color: 4     # aqua
@@ -173,6 +188,53 @@ interfaces:
         color: 239   # bright green
         color2: 138  # yellow
         border: 133  # minty green
+  - type: intercept
+    elements:
+      - id: palette
+        color: 4     # aqua
+        color2: 6    # oxide
+      - id: window
+        color: 239   # bright green
+      - id: text1
+        color: 239   # bright green
+        color2: 138  # yellow
+        border: 133  # minty green
+      - id: text2
+        color: 133   # minty green
+        color2: 138  # yellow
+        border: 133  # minty green
+      - id: button
+        color: 133   # minty green
+      - id: list
+        color: 239   # bright green
+        color2: 138  # yellow
+        border: 133  # minty green
+  - type: craftPatrol
+    elements:
+      - id: palette
+        color: 4     # aqua
+        color2: 6    # oxide
+      - id: window
+        color: 239   # bright green
+      - id: text1
+        color: 239   # bright green
+        color2: 138  # yellow
+        border: 133  # minty green
+      - id: button
+        color: 133   # minty green
+  - type: craftError
+    elements:
+      - id: palette
+        color: 4     # aqua
+        color2: 6    # oxide
+      - id: window
+        color: 239   # bright green
+      - id: text1
+        color: 239   # bright green
+        color2: 138  # yellow
+        border: 133  # minty green
+      - id: button
+        color: 133   # minty green
   - type: targetInfo
     elements:
       - id: palette
@@ -241,6 +303,42 @@ interfaces:
         color2: 138  # yellow
       - id: button
         color: 133   # minty green
+  - type: UFOLost
+    elements:
+      - id: palette
+        color: 7     # dark blue/purple
+        color2: 2    # red/orange
+      - id: window
+        color: 133   # minty green
+      - id: text
+        color: 133   # minty green
+        color2: 138  # yellow
+      - id: button
+        color: 133   # minty green
+  - type: multipleTargets
+    elements:
+      - id: palette
+        color: 7     # dark blue/purple
+        color2: 2    # red/orange
+      - id: window
+        color: 133   # minty green
+      - id: text
+        color: 133   # minty green
+        color2: 138  # yellow
+      - id: button
+        color: 133   # minty green
+  - type: baseDestroyed
+    elements:
+      - id: palette
+        color: 7     # dark blue/purple
+        color2: 2    # red/orange
+      - id: window
+        color: 133   # minty green
+      - id: text
+        color: 133   # minty green
+        color2: 138  # yellow
+      - id: button
+        color: 133   # minty green
   - type: baseDefense
     palette: PAL_BASESCAPE
     elements:
@@ -297,7 +395,43 @@ interfaces:
         color: 138   # yellow
       - id: button
         color: 133   # minty green
+  - type: geoResearchComplete
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 239   # bright green
+      - id: text1
+        color: 239   # bright green
+      - id: text2
+        color: 138   # yellow
+      - id: button
+        color: 133   # minty green
+  - type: geoResearchRequired
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 239   # bright green
+      - id: text1
+        color: 239   # bright green
+      - id: text2
+        color: 138   # yellow
+      - id: button
+        color: 133   # minty green
   - type: geoManufacture
+    elements:
+      - id: palette
+        color: 6     # oxide
+      - id: window
+        color: 239   # bright green
+      - id: text1
+        color: 239   # bright green
+      - id: text2
+        color: 138   # yellow
+      - id: button
+        color: 133   # minty green
+  - type: geoManufactureComplete
     elements:
       - id: palette
         color: 6     # oxide
@@ -529,6 +663,23 @@ interfaces:
         color2: 138  # yellow
       - id: button
         color: 239   # bright green
+  - type: commendationsLate
+    music: GMLOSE
+    palette: PAL_BASESCAPE
+    elements:
+      - id: palette
+        color: 7     # violet
+      - id: window
+        color: 218   # blue
+      - id: text
+        color: 218   # blue
+        color2: 208  # white
+      - id: list
+        color: 246   # purple
+        color2: 218  # blue
+        border: 218  # blue
+      - id: button
+        color: 218   # blue
   - type: geoscape
     elements:
       - id: palette
@@ -998,7 +1149,25 @@ interfaces:
         border: 241  # pink
       - id: button
         color: 246   # purple
-  - type: soldierMission
+  - type: soldierDiaryPerformance
+    palette: PAL_BASESCAPE
+    elements:
+      - id: palette
+        color: 7     # violet
+      - id: window
+        color: 241   # pink
+      - id: text1
+        color: 218   # blue
+      - id: text2
+        color: 241   # pink
+        color2: 218  # blue
+      - id: list
+        color: 218   # blue
+        color2: 241   # pink
+        border: 241  # pink
+      - id: button
+        color: 246   # purple
+  - type: soldierDiaryMission
     palette: PAL_BASESCAPE
     elements:
       - id: palette

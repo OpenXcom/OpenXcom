@@ -43,11 +43,11 @@ UfoLostState::UfoLostState(const std::wstring &id) : _id(id)
 	_txtTitle = new Text(160, 32, 48, 72);
 
 	// Set palette
-	setInterface("UFOInfo");
+	setInterface("UFOLost");
 
-	add(_window, "window", "UFOInfo");
-	add(_btnOk, "button", "UFOInfo");
-	add(_txtTitle, "text", "UFOInfo");
+	add(_window, "window", "UFOLost");
+	add(_btnOk, "button", "UFOLost");
+	add(_txtTitle, "text", "UFOLost");
 
 	centerAllSurfaces();
 

@@ -60,17 +60,17 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 	_lstCrafts = new TextList(288, 64, 8, 78);
 
 	// Set palette
-	setInterface("geoCraftScreens");
+	setInterface("intercept");
 
-	add(_window, "window", "geoCraftScreens");
-	add(_btnCancel, "button", "geoCraftScreens");
-	add(_btnGotoBase, "button", "geoCraftScreens");
-	add(_txtTitle, "text1", "geoCraftScreens");
-	add(_txtCraft, "text2", "geoCraftScreens");
-	add(_txtStatus, "text2", "geoCraftScreens");
-	add(_txtBase, "text2", "geoCraftScreens");
-	add(_txtWeapons, "text2", "geoCraftScreens");
-	add(_lstCrafts, "list", "geoCraftScreens");
+	add(_window, "window", "intercept");
+	add(_btnCancel, "button", "intercept");
+	add(_btnGotoBase, "button", "intercept");
+	add(_txtTitle, "text1", "intercept");
+	add(_txtCraft, "text2", "intercept");
+	add(_txtStatus, "text2", "intercept");
+	add(_txtBase, "text2", "intercept");
+	add(_txtWeapons, "text2", "intercept");
+	add(_lstCrafts, "list", "intercept");
 
 	centerAllSurfaces();
 

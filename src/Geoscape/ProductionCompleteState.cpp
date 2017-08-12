@@ -52,12 +52,12 @@ ProductionCompleteState::ProductionCompleteState(Base *base, const std::wstring 
 	_txtMessage = new Text(246, 110, 37, 35);
 
 	// Set palette
-	setInterface("geoManufacture");
+	setInterface("geoManufactureComplete");
 
-	add(_window, "window", "geoManufacture");
-	add(_btnOk, "button", "geoManufacture");
-	add(_btnGotoBase, "button", "geoManufacture");
-	add(_txtMessage, "text1", "geoManufacture");
+	add(_window, "window", "geoManufactureComplete");
+	add(_btnOk, "button", "geoManufactureComplete");
+	add(_btnGotoBase, "button", "geoManufactureComplete");
+	add(_txtMessage, "text1", "geoManufactureComplete");
 
 	centerAllSurfaces();
 

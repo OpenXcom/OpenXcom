@@ -46,12 +46,12 @@ CommendationLateState::CommendationLateState(std::vector<Soldier*> soldiersMedal
 	_lstSoldiers = new TextList(288, 128, 8, 32);
 
 	// Set palette
-	setInterface("soldierMemorial");
+	setInterface("commendationsLate");
 
-	add(_window, "window", "soldierMemorial");
-	add(_btnOk, "button", "soldierMemorial");
-	add(_txtTitle, "text", "soldierMemorial");
-	add(_lstSoldiers, "list", "soldierMemorial");
+	add(_window, "window", "commendationsLate");
+	add(_btnOk, "button", "commendationsLate");
+	add(_txtTitle, "text", "commendationsLate");
+	add(_lstSoldiers, "list", "commendationsLate");
 
 	centerAllSurfaces();
 
