@@ -439,11 +439,14 @@ void BattlescapeGenerator::nextStage()
 	for (std::vector<BattleItem*>::iterator i = takeToNextStage.begin(); i != takeToNextStage.end(); ++i)
 	{
 		_save->getItems()->push_back(*i);
-		_craftInventoryTile->addItem(*i, ground);
-		if ((*i)->getUnit())
+		if (!(*i)->isAmmo())
 		{
-			_craftInventoryTile->setUnit((*i)->getUnit());
-			(*i)->getUnit()->setPosition(_craftInventoryTile->getPosition());
+			_craftInventoryTile->addItem(*i, ground);
+			if ((*i)->getUnit())
+			{
+				_craftInventoryTile->setUnit((*i)->getUnit());
+				(*i)->getUnit()->setPosition(_craftInventoryTile->getPosition());
+			}
 		}
 	}
 
