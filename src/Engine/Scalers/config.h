@@ -1,6 +1,6 @@
 // ****************************************************************************
 // * This file is part of the HqMAME project. It is distributed under         *
-// * GNU General Public License: http://www.gnu.org/licenses/gpl-3.0          *
+// * GNU General Public License: http://www.gnu.org/licenses/gpl.html         *
 // * Copyright (C) Zenju (zenju AT gmx DOT de) - All Rights Reserved          *
 // *                                                                          *
 // * Additionally and as a special exception, the author gives permission     *
@@ -23,17 +23,17 @@ namespace xbrz
 struct ScalerCfg
 {
     ScalerCfg() :
-        luminanceWeight(1),
-        equalColorTolerance(30),
+        luminanceWeight_(1),
+        equalColorTolerance_(30),
         dominantDirectionThreshold(3.6),
         steepDirectionThreshold(2.2),
-        newTestAttribute(0) {}
+        newTestAttribute_(0) {}
 
-    double luminanceWeight;
-    double equalColorTolerance;
+    double luminanceWeight_;
+    double equalColorTolerance_;
     double dominantDirectionThreshold;
     double steepDirectionThreshold;
-    double newTestAttribute; //unused; test new parameters
+    double newTestAttribute_; //unused; test new parameters
 };
 }
 

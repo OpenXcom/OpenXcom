@@ -548,25 +548,12 @@ bool Screen::use32bitScaler()
 	int h = Options::displayHeight;
 	int baseW = Options::baseXResolution;
 	int baseH = Options::baseYResolution;
-	int maxScale = 0;
 
-	if (Options::useHQXFilter)
-	{
-		maxScale = 4;
-	}
-	else if (Options::useXBRZFilter)
-	{
-		maxScale = 6;
-	}
-
-	for (int i = 2; i <= maxScale; i++)
-	{
-		if (w == baseW * i && h == baseH * i)
-		{
-			return true;
-		}
-	}
-	return false;
+	return ((Options::useHQXFilter || Options::useXBRZFilter) && (
+			(w == baseW * 2 && h == baseH * 2) ||
+			(w == baseW * 3 && h == baseH * 3) ||
+			(w == baseW * 4 && h == baseH * 4) ||
+			(w == baseW * 5 && h == baseH * 5 && Options::useXBRZFilter)));
 }
 
 /**
