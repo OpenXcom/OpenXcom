@@ -661,7 +661,9 @@ bool Zoom::haveSSE2()
  */
 void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand, OpenGL *glOut)
 {
-	if (Screen::isOpenGLEnabled())
+	int dstWidth = dst->w - leftBlackBand - rightBlackBand;
+	int dstHeight = dst->h - topBlackBand - bottomBlackBand;
+	if (Screen::useOpenGL())
 	{
 #ifndef __NO_OPENGL
 		if (glOut->buffer_surface)
@@ -677,14 +679,14 @@ void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, int topBlackBand, in
 	{
 		_zoomSurfaceY(src, dst, 0, 0);
 	}
-	else if (dst->w - leftBlackBand - rightBlackBand == src->w && dst->h - topBlackBand - bottomBlackBand == src->h)
+	else if (dstWidth == src->w && dstHeight == src->h)
 	{
 		SDL_Rect dstrect = {(Sint16)leftBlackBand, (Sint16)topBlackBand, (Uint16)src->w, (Uint16)src->h};
 		SDL_BlitSurface(src, NULL, dst, &dstrect);
 	}
 	else
 	{
-		SDL_Surface *tmp = SDL_CreateRGBSurface(dst->flags, dst->w - leftBlackBand - rightBlackBand, dst->h - topBlackBand - bottomBlackBand, dst->format->BitsPerPixel, 0, 0, 0, 0);
+		SDL_Surface *tmp = SDL_CreateRGBSurface(dst->flags, dstWidth, dstHeight, dst->format->BitsPerPixel, 0, 0, 0, 0);
 		_zoomSurfaceY(src, tmp, 0, 0);
 		if (src->format->palette != NULL)
 		{
@@ -721,16 +723,16 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 	int dgap;
 	static bool proclaimed = false;
 
-	if (Screen::is32bitEnabled())
+	if (Screen::use32bitScaler())
 	{
 		if (Options::useXBRZFilter)
 		{
 			// check the resolution to see which scale we need
-			for (size_t factor = 2; factor <= 5; factor++)
+			for (size_t factor = 2; factor <= 6; factor++)
 			{
 				if (dst->w == src->w * (int)factor && dst->h == src->h * (int)factor)
 				{
-					xbrz::scale(factor, (uint32_t*)src->pixels, (uint32_t*)dst->pixels, src->w, src->h);
+					xbrz::scale(factor, (uint32_t*)src->pixels, (uint32_t*)dst->pixels, src->w, src->h, xbrz::ColorFormat::RGB);
 					return 0;
 				}
 			}
