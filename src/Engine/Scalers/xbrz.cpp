@@ -1090,7 +1090,7 @@ void xbrz::scale(size_t factor, const uint32_t* src, uint32_t* trg, int srcWidth
 {
     switch (colFmt)
     {
-        case ColorFormat::ARGB:
+        case ARGB:
             switch (factor)
             {
                 case 2:
@@ -1106,7 +1106,7 @@ void xbrz::scale(size_t factor, const uint32_t* src, uint32_t* trg, int srcWidth
             }
             break;
 
-        case ColorFormat::RGB:
+        case RGB:
             switch (factor)
             {
                 case 2:
@@ -1130,10 +1130,10 @@ bool xbrz::equalColorTest(uint32_t col1, uint32_t col2, ColorFormat colFmt, doub
 {
     switch (colFmt)
     {
-        case ColorFormat::ARGB:
+        case ARGB:
             return ColorDistanceARGB::dist(col1, col2, luminanceWeight) < equalColorTolerance;
 
-        case ColorFormat::RGB:
+        case RGB:
             return ColorDistanceRGB::dist(col1, col2, luminanceWeight) < equalColorTolerance;
     }
     assert(false);

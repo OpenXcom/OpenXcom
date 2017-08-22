@@ -732,7 +732,7 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 			{
 				if (dst->w == src->w * (int)factor && dst->h == src->h * (int)factor)
 				{
-					xbrz::scale(factor, (uint32_t*)src->pixels, (uint32_t*)dst->pixels, src->w, src->h, xbrz::ColorFormat::RGB);
+					xbrz::scale(factor, (uint32_t*)src->pixels, (uint32_t*)dst->pixels, src->w, src->h, xbrz::RGB);
 					return 0;
 				}
 			}
