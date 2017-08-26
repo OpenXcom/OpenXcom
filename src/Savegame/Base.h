@@ -64,6 +64,8 @@ private:
 	double getIgnoredStores();
 	/// Gets the base's default name (unused).
 	std::wstring getDefaultName(Language *) const { return L""; }
+
+	using Target::load;
 public:
 	/// Creates a new base.
 	Base(const Mod *mod);

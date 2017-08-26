@@ -388,11 +388,6 @@ template <> inline unsigned char rotateBlendInfo<ROT_180>(unsigned char b) { ret
 template <> inline unsigned char rotateBlendInfo<ROT_270>(unsigned char b) { return ((b << 6) | (b >> 2)) & 0xff; }
 
 
-#ifndef NDEBUG
-    int debugPixelX = -1;
-    int debugPixelY = 12;
-    __declspec(thread) bool breakIntoDebugger = false;
-#endif
 
 
 /*
@@ -422,10 +417,6 @@ void blendPixel(const Kernel_3x3& ker,
 #define h get_h<rotDeg>(ker)
 #define i get_i<rotDeg>(ker)
 
-#ifndef NDEBUG
-    if (breakIntoDebugger)
-        __debugbreak(); //__asm int 3;
-#endif
 
     const unsigned char blend = rotateBlendInfo<rotDeg>(blendInfo);
 
@@ -574,9 +565,6 @@ void scaleImage(const uint32_t* src, uint32_t* trg, int srcWidth, int srcHeight,
 
         for (int x = 0; x < srcWidth; ++x, out += Scaler::scale)
         {
-#ifndef NDEBUG
-            breakIntoDebugger = debugPixelX == x && debugPixelY == y;
-#endif
             //all those bounds checks have only insignificant impact on performance!
             const int x_m1 = std::max(x - 1, 0); //perf: prefer array indexing to additional pointers!
             const int x_p1 = std::min(x + 1, srcWidth - 1);
@@ -1023,7 +1011,7 @@ struct Scaler6x : public ColorGradient
 
 struct ColorDistanceRGB
 {
-    static double dist(uint32_t pix1, uint32_t pix2, double luminanceWeight)
+    static double dist(uint32_t pix1, uint32_t pix2, double /*luminanceWeight*/)
     {
         return DistYCbCrBuffer::dist(pix1, pix2);
 
@@ -1035,7 +1023,7 @@ struct ColorDistanceRGB
 
 struct ColorDistanceARGB
 {
-    static double dist(uint32_t pix1, uint32_t pix2, double luminanceWeight)
+    static double dist(uint32_t pix1, uint32_t pix2, double /*luminanceWeight*/)
     {
         const double a1 = getAlpha(pix1) / 255.0 ;
         const double a2 = getAlpha(pix2) / 255.0 ;

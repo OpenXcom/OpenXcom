@@ -57,6 +57,8 @@ private:
 	int _shootingAt, _hitFrame, _fireCountdown, _escapeCountdown;
 	/// Calculates a new speed vector to the destination.
 	void calculateSpeed();
+
+	using MovingTarget::load;
 public:
 	/// Creates a UFO of the specified type.
 	Ufo(const RuleUfo *rules);
