@@ -59,6 +59,7 @@ private:
 	void calculateSpeed();
 
 	using MovingTarget::load;
+	using MovingTarget::save;
 public:
 	/// Creates a UFO of the specified type.
 	Ufo(const RuleUfo *rules);

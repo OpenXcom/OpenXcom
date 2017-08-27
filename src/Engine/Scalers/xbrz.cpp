@@ -161,7 +161,7 @@ template <class T> inline
 T square(T value) { return value * value; }
 
 
-
+/*
 inline
 double distRGB(uint32_t pix1, uint32_t pix2)
 {
@@ -199,7 +199,7 @@ double distYCbCr(uint32_t pix1, uint32_t pix2, double lumaWeight)
     //we skip division by 255 to have similar range like other distance functions
     return std::sqrt(square(lumaWeight * y) + square(c_b) + square(c_r));
 }
-
+*/
 
 struct DistYCbCrBuffer //30% perf boost compared to distYCbCr()!
 {
