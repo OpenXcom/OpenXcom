@@ -936,7 +936,7 @@ int TileEngine::determineReactionType(BattleUnit *unit, BattleUnit *target)
 		unit->getTimeUnits() > unit->getActionTUs(BA_HIT, meleeWeapon) &&
 		(unit->getOriginalFaction() != FACTION_PLAYER ||
 		_save->getGeoscapeSave()->isResearched(meleeWeapon->getRules()->getRequirements())) &&
-		(_save->getDepth() != 0 || meleeWeapon->getRules()->isWaterOnly() == false))
+		_save->isItemUsable(meleeWeapon->getRules()))
 	{
 		return BA_HIT;
 	}
@@ -953,7 +953,7 @@ int TileEngine::determineReactionType(BattleUnit *unit, BattleUnit *target)
 		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon)) &&
 		(unit->getOriginalFaction() != FACTION_PLAYER ||
 		_save->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements())) &&
-		(_save->getDepth() != 0 || weapon->getRules()->isWaterOnly() == false))
+		_save->isItemUsable(meleeWeapon->getRules()))
 	{
 		return BA_SNAPSHOT;
 	}

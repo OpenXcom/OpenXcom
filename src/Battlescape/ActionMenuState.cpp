@@ -215,11 +215,17 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			_action->result = "STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED";
 			_game->popState();
 		}
-		else if (weapon->isWaterOnly() &&
-			_game->getSavedGame()->getSavedBattle()->getDepth() == 0 &&
-			_action->type != BA_THROW)
+		else if (_action->type != BA_THROW &&
+			!_game->getSavedGame()->getSavedBattle()->isItemUsable(weapon))
 		{
-			_action->result = "STR_UNDERWATER_EQUIPMENT";
+			if (weapon->isWaterOnly())
+			{
+				_action->result = "STR_UNDERWATER_EQUIPMENT";
+			}
+			else if (weapon->isLandOnly())
+			{
+				_action->result = "STR_LAND_EQUIPMENT";
+			}
 			_game->popState();
 		}
 		else if (_action->type == BA_PRIME)

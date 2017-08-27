@@ -179,7 +179,7 @@ void AIModule::think(BattleAction *action)
 	if (action->weapon)
 	{
 		RuleItem *rule = action->weapon->getRules();
-		if (!rule->isWaterOnly() || _save->getDepth() != 0)
+		if (_save->isItemUsable(rule))
 		{
 			if (rule->getBattleType() == BT_FIREARM)
 			{

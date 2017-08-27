@@ -37,6 +37,7 @@ class TileEngine;
 class BattleItem;
 class Mod;
 class State;
+class RuleItem;
 
 /**
  * The battlescape data that gets written to disk when the game is saved.
@@ -289,6 +290,8 @@ public:
 	/// Sets the turn to start the aliens cheating.
 	void setCheatTurn(int turn);
 	bool isBeforeGame() const;
+	/// Checks if an item is usable on this map.
+	bool isItemUsable(RuleItem *item) const;
 };
 
 }

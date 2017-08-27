@@ -39,6 +39,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/Logger.h"
 #include "SerializationHelper.h"
+#include "../Mod/RuleItem.h"
 
 namespace OpenXcom
 {
@@ -2042,6 +2043,20 @@ void SavedBattleGame::setCheatTurn(int turn)
 bool SavedBattleGame::isBeforeGame() const
 {
 	return _beforeGame;
+}
+
+/**
+ * Checks if an item can be used in the current battlescape conditions.
+ * @return True if it's usable, False otherwise.
+ */
+bool SavedBattleGame::isItemUsable(RuleItem *item) const
+{
+	if ((_depth == 0 && item->isWaterOnly()) ||
+		(_depth != 0 && item->isLandOnly()))
+	{
+		return false;
+	}
+	return true;
 }
 
 }

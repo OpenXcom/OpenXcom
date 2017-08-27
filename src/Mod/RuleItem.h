@@ -65,7 +65,7 @@ private:
 	bool _flatRate, _arcingShot;
 	int _listOrder, _maxRange, _aimRange, _snapRange, _autoRange, _minRange, _dropoff, _bulletSpeed, _explosionSpeed, _autoShots, _shotgunPellets;
 	std::string _zombieUnit;
-	bool _strengthApplied, _skillApplied, _LOSRequired, _underwaterOnly;
+	bool _strengthApplied, _skillApplied, _LOSRequired, _underwaterOnly, _landOnly;
 	int _meleeSound, _meleePower, _meleeAnimation, _meleeHitSound, _specialType, _vaporColor, _vaporDensity, _vaporProbability;
 public:
 	/// Creates a blank item ruleset.
@@ -218,8 +218,10 @@ public:
 	int getMeleeAnimation() const;
 	/// Check if LOS is required to use this item (only applies to psionic type items)
 	bool isLOSRequired() const;
-	/// Is this item restricted to use underwater?
+	/// Is this item restricted to underwater use?
 	bool isWaterOnly() const;
+	/// Is this item restricted to land use?
+	bool isLandOnly() const;
 	/// Get the associated special type of this item.
 	int getSpecialType() const;
 	/// Get the color offset to use for the vapor trail.
