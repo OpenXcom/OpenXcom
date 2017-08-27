@@ -133,8 +133,11 @@ void SoldierDiaryMissionState::init()
 	
 	_lstKills->clearList();
 	_txtTitle->setText(tr(missionStatistics->at(missionId)->type));
-	_txtUFO->setText(tr(missionStatistics->at(missionId)->ufo));
-	_txtUFO->setVisible(missionStatistics->at(missionId)->ufo != "NO_UFO");
+	if (missionStatistics->at(missionId)->isUfoMission())
+	{
+		_txtUFO->setText(tr(missionStatistics->at(missionId)->ufo));
+	}
+	_txtUFO->setVisible(missionStatistics->at(missionId)->isUfoMission());
 	_txtScore->setText(tr("STR_SCORE_VALUE").arg(missionStatistics->at(missionId)->score));
 	_txtLocation->setText(tr("STR_LOCATION").arg(tr(missionStatistics->at(missionId)->getLocationString())));
 	_txtRace->setText(tr("STR_RACE_TYPE").arg(tr(missionStatistics->at(missionId)->alienRace)));
