@@ -953,7 +953,7 @@ int TileEngine::determineReactionType(BattleUnit *unit, BattleUnit *target)
 		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon)) &&
 		(unit->getOriginalFaction() != FACTION_PLAYER ||
 		_save->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements())) &&
-		_save->isItemUsable(meleeWeapon->getRules()))
+		_save->isItemUsable(weapon->getRules()))
 	{
 		return BA_SNAPSHOT;
 	}
