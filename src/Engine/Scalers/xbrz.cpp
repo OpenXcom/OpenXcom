@@ -206,9 +206,9 @@ struct DistYCbCrBuffer //30% perf boost compared to distYCbCr()!
 public:
     static double dist(uint32_t pix1, uint32_t pix2)
     {
-#if defined _MSC_VER && _MSC_VER < 1900
-#error function scope static initialization is not yet thread-safe!
-#endif
+//#if defined _MSC_VER && _MSC_VER < 1900
+//#error function scope static initialization is not yet thread-safe!
+//#endif
         static const DistYCbCrBuffer inst;
         return inst.distImpl(pix1, pix2);
     }
