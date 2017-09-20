@@ -119,6 +119,14 @@ std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vect
 			{
 				conditionsMet = conditionsMet && (*j)->isMet(name->second, currentStats.psiSkill > 0 || psiStrengthEval);
 			}
+			else
+			{
+				// if name == currentStatsMap.end() we've searched for a stat that doesn't exist.
+				// this means psi training. if there's no "psiTraining" stat in the statsMap,
+				// this soldier isn't in training, so we won't append his name with the psiTraining tag.
+				// presumably conditionsMet was originally initialized as false, but for whatever reason that was changed, hence this.
+				conditionsMet = false;
+			}
 		}
 		if (conditionsMet)
 		{
