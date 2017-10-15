@@ -307,7 +307,11 @@ bool OpenGL::set_shader(const char *source_yaml_filename)
 		glGetProgramInfoLog(glprogram, infoLogLength, NULL, infoLog);
 		glErrorCheck();
 
-		Log(LOG_ERROR) << "OpenGL shader link failed \"" << infoLog << "\"\n";
+		Log(LOG_ERROR) << "OpenGL shader link failed:";
+		if (infoLogLength)
+		{
+			Log(LOG_ERROR) << infoLog;
+		}
 
 		delete[] infoLog;
 		glDeleteProgram(glprogram);
@@ -339,7 +343,11 @@ static GLuint createShader(GLenum type, const char *source)
 		glGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
 		glErrorCheck();
 
-		Log(LOG_ERROR) << "OpenGL shader compilation failed: \"" << infoLog << "\"\n";
+		Log(LOG_ERROR) << "OpenGL shader compilation failed:";
+		if (infoLogLength)
+		{
+			Log(LOG_ERROR) << infoLog;
+		}
 
 		delete[] infoLog;
 		glDeleteShader(shader);
