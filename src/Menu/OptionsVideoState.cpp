@@ -237,6 +237,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 			if (_filters[i] == path)
 			{
 				selFilter = i;
+				break;
 			}
 		}
 #endif

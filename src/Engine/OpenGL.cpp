@@ -315,7 +315,7 @@ bool OpenGL::set_shader(const char *source_yaml_filename)
 		glprogram = 0;
 	}
 
-	return !(glprogram == 0 || vertexshader == 0 || fragmentshader == 0);
+	return !(glprogram == 0 || (vertexshader == 0 && fragmentshader == 0));
 }
 
 static GLuint createShader(GLenum type, const char *source)
