@@ -1,4 +1,4 @@
-// This file was copied from the bsnes project. 
+// This file was copied from the bsnes project.
 
 // This is the license info, from ruby.hpp:
 
@@ -41,9 +41,7 @@ class OpenGL {
 public:
   GLuint gltexture;
   GLuint glprogram;
-  GLuint fragmentshader;
   bool linear;
-  GLuint vertexshader;
   bool shader_support;
 
   uint32_t *buffer;
