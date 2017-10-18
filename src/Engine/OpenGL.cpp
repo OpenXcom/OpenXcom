@@ -287,7 +287,7 @@ bool OpenGL::set_shader(const char *source_yaml_filename)
 			glErrorCheck();
 			if (infoLogLength == 0)
 			{
-				Log(LOG_ERROR) << "OpenGL shader link failed: No log returned from driver\n";
+				Log(LOG_ERROR) << "OpenGL shader link failed: No log returned from driver";
 			}
 			else
 			{
@@ -295,7 +295,7 @@ bool OpenGL::set_shader(const char *source_yaml_filename)
 				glGetProgramInfoLog(glprogram, infoLogLength, NULL, infoLog);
 				glErrorCheck();
 
-				Log(LOG_ERROR) << "OpenGL shader link failed \"" << infoLog << "\"\n";
+				Log(LOG_ERROR) << "OpenGL shader link failed \"" << infoLog << "\"";
 
 				delete[] infoLog;
 			}
@@ -326,7 +326,7 @@ static GLuint createShader(GLenum type, const char *source)
 		glErrorCheck();
 		if (infoLogLength == 0)
 		{
-			Log(LOG_ERROR) << "OpenGL shader compilation failed: No log returned from driver\n";
+			Log(LOG_ERROR) << "OpenGL shader compilation failed: No log returned from driver";
 		}
 		else
 		{
@@ -334,7 +334,7 @@ static GLuint createShader(GLenum type, const char *source)
 			glGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
 			glErrorCheck();
 
-			Log(LOG_ERROR) << "OpenGL shader compilation failed: \"" << infoLog << "\"\n";
+			Log(LOG_ERROR) << "OpenGL shader compilation failed: \"" << infoLog << "\"";
 
 			delete[] infoLog;
 		}
