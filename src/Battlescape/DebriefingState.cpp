@@ -1013,6 +1013,10 @@ void DebriefingState::prepareDebriefing()
 			{
 				playersUnconscious++;
 			}
+			else if ((*j)->isInExitArea(END_POINT))
+			{
+				playerInExitArea++;
+			}
 			playersSurvived++;
 		}
 		else if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getStatus() == STATUS_DEAD)
@@ -1030,6 +1034,12 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
+	
+	if (ruleDeploy && ruleDeploy->isEscapeMission() && playerInExitArea > 0)
+	{
+		success = true;
+	}
+	playerInExitArea = 0;
 	if (playersSurvived == 1)
 	{
 		for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
@@ -1154,7 +1164,7 @@ void DebriefingState::prepareDebriefing()
 		{ // so this unit is not dead...
 			if (oldFaction == FACTION_PLAYER)
 			{
-				if ((((*j)->isInExitArea() || (*j)->getStatus() == STATUS_IGNORE_ME) && (battle->getMissionType() != "STR_BASE_DEFENSE" || success)) || !aborted)
+				if ((((*j)->isInExitArea(START_POINT) || (*j)->getStatus() == STATUS_IGNORE_ME) && (battle->getMissionType() != "STR_BASE_DEFENSE" || success)) || !aborted || (aborted && (*j)->isInExitArea(END_POINT)))
 				{ // so game is not aborted or aborted and unit is on exit area
 					UnitStats statIncrease;
 					(*j)->postMissionProcedures(save, statIncrease);
@@ -1209,6 +1219,7 @@ void DebriefingState::prepareDebriefing()
 				else
 				{ // so game is aborted and unit is not on exit area
 					addStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", 1, -value);
+					playersSurvived--;
 					if (soldier != 0)
 					{
 						(*j)->updateGeoscapeStats(soldier);
@@ -1217,7 +1228,7 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 			}
-			else if (oldFaction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea()) && !_destroyBase
+			else if (oldFaction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea(START_POINT)) && !_destroyBase
 				// mind controlled units may as well count as unconscious
 				&& faction == FACTION_PLAYER && (!(*j)->isOut() || (*j)->getStatus() == STATUS_IGNORE_ME))
 			{

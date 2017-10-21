@@ -68,7 +68,7 @@ private:
 	std::vector<std::string> _terrains, _music;
 	int _shade;
 	std::string _nextStage, _race, _script;
-	bool _finalDestination, _isAlienBase;
+	bool _finalDestination, _isAlienBase, _isEscapeMission;
 	std::string _winCutscene, _loseCutscene, _abortCutscene;
 	std::string _alert, _alertBackground;
 	BriefingData _briefingData;
@@ -160,6 +160,8 @@ public:
 	std::string getGenMissionType() const;
 
 	int getGenMissionFrequency() const;
+
+	bool isEscapeMission() const;
 
 };
 
