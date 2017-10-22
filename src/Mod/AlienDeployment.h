@@ -49,6 +49,7 @@ struct BriefingData
 	BriefingData() : palette(0), textOffset(0), music("GMDEFEND"), background("BACK16.SCR"), showCraft(true), showTarget(true) { /*Empty by Design*/ };
 };
 enum ChronoTrigger { FORCE_LOSE, FORCE_ABORT, FORCE_WIN };
+enum EscapeType { ESCAPE_NONE, ESCAPE_EXIT, ESCAPE_ENTRY, ESCAPE_EITHER };
 /**
  * Represents a specific type of Alien Deployment.
  * Contains constant info about a Alien Deployment like
@@ -68,7 +69,7 @@ private:
 	std::vector<std::string> _terrains, _music;
 	int _shade;
 	std::string _nextStage, _race, _script;
-	bool _finalDestination, _isAlienBase, _isEscapeMission;
+	bool _finalDestination, _isAlienBase;
 	std::string _winCutscene, _loseCutscene, _abortCutscene;
 	std::string _alert, _alertBackground;
 	BriefingData _briefingData;
@@ -77,6 +78,7 @@ private:
 	int _markerIcon, _durationMin, _durationMax, _minDepth, _maxDepth, _minSiteDepth, _maxSiteDepth, _genMissionFrequency;
 	int _objectiveType, _objectivesRequired, _objectiveCompleteScore, _objectiveFailedScore, _despawnPenalty, _points, _turnLimit, _cheatTurn;
 	ChronoTrigger _chronoTrigger;
+	EscapeType _escapeType;
 public:
 	/// Creates a blank Alien Deployment ruleset.
 	AlienDeployment(const std::string &type);
@@ -161,7 +163,7 @@ public:
 
 	int getGenMissionFrequency() const;
 
-	bool isEscapeMission() const;
+	EscapeType getEscapeType() const;
 
 };
 

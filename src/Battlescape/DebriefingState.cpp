@@ -801,10 +801,10 @@ void DebriefingState::prepareDebriefing()
 	Base *base = 0;
 	std::string target;
 
-	int playerInExitArea = 0; // if this stays 0 the craft is lost...
+	int playersInExitArea = 0; // if this stays 0 the craft is lost...
 	int playersSurvived = 0; // if this stays 0 the craft is lost...
 	int playersUnconscious = 0;
-
+	int playersInEntryArea = 0;
 
 	_stats.push_back(new DebriefingStat("STR_ALIENS_KILLED", false));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_CORPSES_RECOVERED", false));
@@ -1015,7 +1015,11 @@ void DebriefingState::prepareDebriefing()
 			}
 			else if ((*j)->isInExitArea(END_POINT))
 			{
-				playerInExitArea++;
+				playersInExitArea++;
+			}
+			else if ((*j)->isInExitArea(START_POINT))
+			{
+				playersInEntryArea++;
 			}
 			playersSurvived++;
 		}
@@ -1035,11 +1039,21 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 	
-	if (ruleDeploy && ruleDeploy->isEscapeMission() && playerInExitArea > 0)
+	if (ruleDeploy && ruleDeploy->getEscapeType() != ESCAPE_NONE)
 	{
-		success = true;
+		if (ruleDeploy->getEscapeType() == ESCAPE_ENTRY)
+		{
+			if (playersInEntryArea > 0)
+			{
+				success = true;
+			}
+		}
+		else if (playersInExitArea > 0)
+		{
+			success = true;
+		}
 	}
-	playerInExitArea = 0;
+	playersInExitArea = 0;
 	if (playersSurvived == 1)
 	{
 		for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
@@ -1170,7 +1184,7 @@ void DebriefingState::prepareDebriefing()
 					(*j)->postMissionProcedures(save, statIncrease);
 					if ((*j)->getGeoscapeSoldier())
 						_soldierStats.push_back(std::pair<std::wstring, UnitStats>((*j)->getGeoscapeSoldier()->getName(), statIncrease));
-					playerInExitArea++;
+					playersInExitArea++;
 
 					recoverItems((*j)->getInventory(), base);
 
@@ -1258,7 +1272,7 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
-	if (craft != 0 && ((playerInExitArea == 0 && aborted) || (playersSurvived == 0)))
+	if (craft != 0 && ((playersInExitArea == 0 && aborted) || (playersSurvived == 0)))
 	{
 		addStat("STR_XCOM_CRAFT_LOST", 1, -craft->getRules()->getScore());
 		// Since this is not a base defense mission, we can safely erase the craft,
