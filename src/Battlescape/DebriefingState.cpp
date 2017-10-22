@@ -1041,19 +1041,19 @@ void DebriefingState::prepareDebriefing()
 	
 	if (ruleDeploy && ruleDeploy->getEscapeType() != ESCAPE_NONE)
 	{
-		if (ruleDeploy->getEscapeType() == ESCAPE_ENTRY)
+		if (ruleDeploy->getEscapeType() != ESCAPE_EXIT)
 		{
-			if (playersInEntryArea > 0)
-			{
-				success = true;
-			}
+			success = playersInEntryArea > 0;
 		}
-		else if (playersInExitArea > 0)
+		
+		if (ruleDeploy->getEscapeType() != ESCAPE_ENTRY)
 		{
-			success = true;
+			success = success || playersInExitArea > 0;
 		}
 	}
+
 	playersInExitArea = 0;
+
 	if (playersSurvived == 1)
 	{
 		for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
