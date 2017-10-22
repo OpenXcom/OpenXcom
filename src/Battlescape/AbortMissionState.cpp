@@ -69,7 +69,7 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 	AlienDeployment *deployment = _game->getMod()->getDeployment(_battleGame->getMissionType());
 	if (deployment != 0)
 	{
-		exit = !deployment->getNextStage().empty();
+		exit = !deployment->getNextStage().empty() || deployment->isEscapeMission();
 		const std::vector<MapScript*> *scripts = _game->getMod()->getMapScript(deployment->getScript());
 		if (scripts != 0)
 		{
