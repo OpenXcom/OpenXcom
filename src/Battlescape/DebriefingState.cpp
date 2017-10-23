@@ -1313,7 +1313,24 @@ void DebriefingState::prepareDebriefing()
 			_txtTitle->setText(tr("STR_ALIENS_DEFEATED"));
 			if (objectiveCompleteText != "")
 			{
-				addStat(objectiveCompleteText, 1, objectiveCompleteScore);
+				int victoryStat = 0;
+				if (ruleDeploy->getEscapeType() != ESCAPE_NONE)
+				{
+					if (ruleDeploy->getEscapeType() != ESCAPE_EXIT)
+					{
+						victoryStat += playersInEntryArea;
+					}
+					if (ruleDeploy->getEscapeType() != ESCAPE_ENTRY)
+					{
+						victoryStat += playersInExitArea;
+					}
+				}
+				else
+				{
+					victoryStat = 1;
+				}
+
+				addStat(objectiveCompleteText, victoryStat, objectiveCompleteScore);
 			}
 		}
 
