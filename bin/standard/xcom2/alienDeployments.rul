@@ -2576,6 +2576,7 @@ alienDeployments: #done
     finalDestination: true
     script: TLETH_P1
     loseCutscene: loseGame
+    abortCutscene: loseGame
     briefing:
       title: STR_SIGSBEE_DEEP_MISSION
       desc: STR_TLETH_P1_BRIEFING
@@ -2717,6 +2718,7 @@ alienDeployments: #done
     nextStage: STR_TLETH_P3
     script: TLETH_P2_P3
     loseCutscene: loseGame
+    abortCutscene: loseGame
     briefing:
       title: STR_TLETH_ATTACK_MISSION
       desc: STR_TLETH_P2_BRIEFING
@@ -2857,6 +2859,7 @@ alienDeployments: #done
     script: TLETH_P2_P3
     winCutscene: winGame
     loseCutscene: loseGame
+    abortCutscene: loseGame
     briefing:
       title: STR_FINAL_TLETH_MISSION
       desc: STR_TLETH_P3_BRIEFING
