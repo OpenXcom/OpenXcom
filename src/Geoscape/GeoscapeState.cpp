@@ -655,6 +655,7 @@ void GeoscapeState::timeAdvance()
 		timeSpan = 12 * 5 * 6 * 2 * 24;
 	}
 
+
 	for (int i = 0; i < timeSpan && !_pause; ++i)
 	{
 		TimeTrigger trigger;
@@ -676,7 +677,7 @@ void GeoscapeState::timeAdvance()
 		}
 	}
 
-	_pause = !_dogfightsToBeStarted.empty();
+	_pause = !_dogfightsToBeStarted.empty() || _zoomInEffectTimer->isRunning() || _zoomOutEffectTimer->isRunning();
 
 	timeDisplay();
 	_globe->draw();
@@ -709,44 +710,41 @@ void GeoscapeState::time5Seconds()
 		switch ((*i)->getStatus())
 		{
 		case Ufo::FLYING:
-			if (!_zoomInEffectTimer->isRunning() && !_zoomOutEffectTimer->isRunning())
+			(*i)->think();
+			if ((*i)->reachedDestination())
 			{
-				(*i)->think();
-				if ((*i)->reachedDestination())
+				size_t count = _game->getSavedGame()->getMissionSites()->size();
+				AlienMission *mission = (*i)->getMission();
+				bool detected = (*i)->getDetected();
+				mission->ufoReachedWaypoint(**i, *_game, *_globe);
+				if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 				{
-					size_t count = _game->getSavedGame()->getMissionSites()->size();
-					AlienMission *mission = (*i)->getMission();
-					bool detected = (*i)->getDetected();
-					mission->ufoReachedWaypoint(**i, *_game, *_globe);
-					if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
+					if (!((*i)->getTrajectory().getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN && (*i)->getStatus() == Ufo::LANDED))
+						popup(new UfoLostState((*i)->getName(_game->getLanguage())));
+				}
+				if (count < _game->getSavedGame()->getMissionSites()->size())
+				{
+					MissionSite *site = _game->getSavedGame()->getMissionSites()->back();
+					site->setDetected(true);
+					popup(new MissionDetectedState(site, this));
+				}
+				// If UFO was destroyed, don't spawn missions
+				if ((*i)->getStatus() == Ufo::DESTROYED)
+					return;
+				if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
+				{
+					mission->setWaveCountdown(30 * (RNG::generate(0, 400) + 48));
+					(*i)->setDestination(0);
+					base->setupDefenses();
+					timerReset();
+					if (!base->getDefenses()->empty())
 					{
-						if (!((*i)->getTrajectory().getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN && (*i)->getStatus() == Ufo::LANDED))
-							popup(new UfoLostState((*i)->getName(_game->getLanguage())));
+						popup(new BaseDefenseState(base, *i, this));
 					}
-					if (count < _game->getSavedGame()->getMissionSites()->size())
+					else
 					{
-						MissionSite *site = _game->getSavedGame()->getMissionSites()->back();
-						site->setDetected(true);
-						popup(new MissionDetectedState(site, this));
-					}
-					// If UFO was destroyed, don't spawn missions
-					if ((*i)->getStatus() == Ufo::DESTROYED)
+						handleBaseDefense(base, *i);
 						return;
-					if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
-					{
-						mission->setWaveCountdown(30 * (RNG::generate(0, 400) + 48));
-						(*i)->setDestination(0);
-						base->setupDefenses();
-						timerReset();
-						if (!base->getDefenses()->empty())
-						{
-							popup(new BaseDefenseState(base, *i, this));
-						}
-						else
-						{
-							handleBaseDefense(base, *i);
-							return;
-						}
 					}
 				}
 			}
@@ -858,10 +856,9 @@ void GeoscapeState::time5Seconds()
 					}
 				}
 			}
-			if (!_zoomInEffectTimer->isRunning() && !_zoomOutEffectTimer->isRunning())
-			{
-				(*j)->think();
-			}
+
+			(*j)->think();
+
 			if ((*j)->reachedDestination())
 			{
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
