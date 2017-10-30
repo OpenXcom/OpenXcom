@@ -198,7 +198,9 @@ void BattleItem::setAmmoQuantity(int qty)
  */
 bool BattleItem::spendBullet()
 {
-	_ammoQuantity--;
+	if (_ammoQuantity > 0)
+		_ammoQuantity--;
+
 	if (_ammoQuantity == 0)
 		return false;
 	else

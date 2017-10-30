@@ -18,6 +18,7 @@
  */
 #include "RuleItem.h"
 #include "RuleInventory.h"
+#include "../Engine/Exception.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
 #include "Mod.h"
@@ -116,6 +117,10 @@ void RuleItem::load(const YAML::Node &node, Mod *mod, int listOrder)
 	_accuracyMelee = node["accuracyMelee"].as<int>(_accuracyMelee);
 	_tuMelee = node["tuMelee"].as<int>(_tuMelee);
 	_battleType = (BattleType)node["battleType"].as<int>(_battleType);
+	if ((_battleType == BT_MELEE || _battleType == BT_FIREARM) && _clipSize == 0 && _compatibleAmmo.empty())
+	{
+		throw Exception("Weapon " + _type + " has clip size 0 and no ammo defined. Please use 'clipSize: -1' for unlimited ammo, or allocate a compatibleAmmo item.");
+	}
 	_twoHanded = node["twoHanded"].as<bool>(_twoHanded);
 	_waypoints = node["waypoints"].as<int>(_waypoints);
 	_fixedWeapon = node["fixedWeapon"].as<bool>(_fixedWeapon);
