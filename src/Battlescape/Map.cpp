@@ -867,22 +867,25 @@ void Map::drawTerrain(Surface *surface)
 							int part = 0;
 							part += ttile->getPosition().x - tunit->getPosition().x;
 							part += (ttile->getPosition().y - tunit->getPosition().y)*2;
-							tmpSurface = tunit->getCache(&invalid, part);
-							if (tmpSurface)
+							if (part != 1 && part != 2)
 							{
-								Position offset;
-								calculateWalkingOffset(tunit, &offset);
-								offset.y += 24;
-								tmpSurface->blitNShade(surface, screenPosition.x + offset.x - _spriteWidth / 2, screenPosition.y + offset.y, ttile->getShade());
-								if (tunit->getArmor()->getSize() > 1)
+								tmpSurface = tunit->getCache(&invalid, part);
+								if (tmpSurface)
 								{
-									offset.y += 4;
-								}
-								if (tunit->getFire() > 0)
-								{
-									frameNumber = 4 + (_animFrame / 2);
-									tmpSurface = _game->getMod()->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
-									tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, 0);
+									Position offset;
+									calculateWalkingOffset(tunit, &offset);
+									offset.y += 24;
+									tmpSurface->blitNShade(surface, screenPosition.x + offset.x - _spriteWidth / 2, screenPosition.y + offset.y, ttile->getShade());
+									if (tunit->getArmor()->getSize() > 1)
+									{
+										offset.y += 4;
+									}
+									if (tunit->getFire() > 0)
+									{
+										frameNumber = 4 + (_animFrame / 2);
+										tmpSurface = _game->getMod()->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
+										tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, 0);
+									}
 								}
 							}
 						}

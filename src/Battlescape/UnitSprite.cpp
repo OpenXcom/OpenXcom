@@ -1364,7 +1364,7 @@ void UnitSprite::drawRoutine11()
 
 	const int offTurretX[8] = { -2, -6, -5, 0, 5, 6, 2, 0 }; // turret offsets
 	const int offTurretYAbove[8] = { 5, 3, 0, 0, 0, 3, 5, 4 }; // turret offsets
-	const int offTurretYBelow[8] = { -12, -13, -16, -16, -16, -13, -12, -12 }; // turret offsets
+	const int offTurretYBelow[8] = { -11, -13, -16, -16, -16, -13, -11, -12 }; // turret offsets
 	const int offXSprite = 16; // sprites are double width
 
 	int body = 0;
