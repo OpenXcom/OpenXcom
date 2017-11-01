@@ -309,10 +309,10 @@ int Pathfinding::getTUCost(Position startPosition, int direction, Position *endP
 			if (direction < DIR_UP && startTile->getTerrainLevel() <= -16 && aboveDestination && !aboveDestination->hasNoFloor(destinationTile) && !triedStairs)
 			{
 					numberOfPartsGoingUp++;
+					verticalOffset.z++;
 
 					if (numberOfPartsGoingUp > size)
 					{
-						verticalOffset.z++;
 						endPosition->z++;
 						destinationTile = _save->getTile(*endPosition + offset);
 						belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
@@ -344,7 +344,7 @@ int Pathfinding::getTUCost(Position startPosition, int direction, Position *endP
 			if (!destinationTile)
 				return 255;
 
-			if (direction < DIR_UP && endPosition->z == startTile->getPosition().z)
+			if (direction < DIR_UP && endPosition->z == startTile->getPosition().z && numberOfPartsGoingUp == 0)
 			{
 				// check if we can go this way
 				if (isBlocked(startTile, destinationTile, direction, target))

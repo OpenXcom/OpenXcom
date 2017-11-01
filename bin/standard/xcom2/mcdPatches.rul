@@ -556,6 +556,10 @@ MCDPatches: #will never be done
         bigWall: 0
       - MCDIndex: 21
         bigWall: 3
+      - MCDIndex: 29
+        bigWall: 0
+      - MCDIndex: 32
+        bigWall: 0
   - type: UINT3
     data:
       - MCDIndex: 9
@@ -584,3 +588,23 @@ MCDPatches: #will never be done
         bigWall: 9
       - MCDIndex: 9
         bigWall: 9
+  - type: MU
+    data:
+      - MCDIndex: 7
+        bigWall: 0
+      - MCDIndex: 8
+        bigWall: 0
+  - type: CORAL
+    data:
+      - MCDIndex: 9
+        bigWall: 0
+      - MCDIndex: 10
+        bigWall: 0
+      - MCDIndex: 11
+        bigWall: 0
+      - MCDIndex: 12
+        bigWall: 0
+      - MCDIndex: 13
+        bigWall: 0
+      - MCDIndex: 14
+        bigWall: 0
