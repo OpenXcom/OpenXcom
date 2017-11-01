@@ -1858,6 +1858,10 @@ void GeoscapeState::globeClick(Action *action)
  */
 void GeoscapeState::btnInterceptClick(Action *)
 {
+	if (buttonsDisabled())
+	{
+		return;
+	}
 	_game->pushState(new InterceptState(_globe));
 }
 
@@ -1867,6 +1871,10 @@ void GeoscapeState::btnInterceptClick(Action *)
  */
 void GeoscapeState::btnBasesClick(Action *)
 {
+	if (buttonsDisabled())
+	{
+		return;
+	}
 	timerReset();
 	if (!_game->getSavedGame()->getBases()->empty())
 	{
@@ -1884,6 +1892,10 @@ void GeoscapeState::btnBasesClick(Action *)
  */
 void GeoscapeState::btnGraphsClick(Action *)
 {
+	if (buttonsDisabled())
+	{
+		return;
+	}
 	_game->pushState(new GraphsState);
 }
 
@@ -1893,6 +1905,10 @@ void GeoscapeState::btnGraphsClick(Action *)
  */
 void GeoscapeState::btnUfopaediaClick(Action *)
 {
+	if (buttonsDisabled())
+	{
+		return;
+	}
 	Ufopaedia::open(_game);
 }
 
@@ -1902,6 +1918,10 @@ void GeoscapeState::btnUfopaediaClick(Action *)
  */
 void GeoscapeState::btnOptionsClick(Action *)
 {
+	if (buttonsDisabled())
+	{
+		return;
+	}
 	_game->pushState(new PauseState(OPT_GEOSCAPE));
 }
 
@@ -1911,6 +1931,10 @@ void GeoscapeState::btnOptionsClick(Action *)
  */
 void GeoscapeState::btnFundingClick(Action *)
 {
+	if (buttonsDisabled())
+	{
+		return;
+	}
 	_game->pushState(new FundingState);
 }
 
@@ -2685,6 +2709,10 @@ void GeoscapeState::resize(int &dX, int &dY)
 	_sideLine->setHeight(Options::baseYResolution);
 	_sideLine->setY(0);
 	_sideLine->drawRect(0, 0, _sideLine->getWidth(), _sideLine->getHeight(), 15);
+}
+bool GeoscapeState::buttonsDisabled()
+{
+	return _zoomInEffectTimer->isRunning() || _zoomOutEffectTimer->isRunning();
 }
 
 }
