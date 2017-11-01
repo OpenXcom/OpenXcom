@@ -996,6 +996,19 @@ void GeoscapeState::time5Seconds()
 			++i;
 		}
 	}
+	
+	// Check any dogfights waiting to open
+	for (std::list<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
+	{
+		if ((*d)->isMinimized())
+		{
+			if (((*d)->getWaitForPoly() && _globe->insideLand((*d)->getUfo()->getLongitude(), (*d)->getUfo()->getLatitude())) ||
+				((*d)->getWaitForAltitude() && (*d)->getUfo()->getAltitudeInt() <= (*d)->getCraft()->getRules()->getMaxAltitude()))
+			{
+				_pause = true; // the USO reached the sea during this interval period, stop the timer and let handleDogfights() take it from there.
+			}
+		}
+	}
 
 	// Clean up unused waypoints
 	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end();)
