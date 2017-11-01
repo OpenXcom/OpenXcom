@@ -1624,7 +1624,8 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 			{
 				if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_DEAD)
 				{
-					addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getUnit()->getValue());
+					int points = (*it)->getRules()->getRecoveryPoints();
+					addStat("STR_ALIEN_CORPSES_RECOVERED", 1, points);
 					base->getStorageItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape(), 1);
 				}
 				else if ((*it)->getRules()->getBattleType() == BT_CORPSE)
