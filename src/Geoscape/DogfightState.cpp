@@ -378,6 +378,21 @@ DogfightState::DogfightState(GeoscapeState *state, Craft *craft, Ufo *ufo) : _st
 
 	// Draw correct number on the minimized dogfight icon.
 	std::wostringstream ss1;
+	if (_craft->getInterceptionOrder() == 0)
+	{
+		int maxInterceptionOrder = 0;
+		for (std::vector<Base*>::iterator baseIt = _game->getSavedGame()->getBases()->begin(); baseIt != _game->getSavedGame()->getBases()->end(); ++baseIt)
+		{
+			for (std::vector<Craft*>::iterator craftIt = (*baseIt)->getCrafts()->begin(); craftIt != (*baseIt)->getCrafts()->end(); ++craftIt)
+			{
+				if ((*craftIt)->getInterceptionOrder() > maxInterceptionOrder)
+				{
+					maxInterceptionOrder = (*craftIt)->getInterceptionOrder();
+				}
+			}
+		}
+		_craft->setInterceptionOrder(++maxInterceptionOrder);
+	}
 	ss1 << _craft->getInterceptionOrder();
 	_txtInterceptionNumber->setText(ss1.str());
 	_txtInterceptionNumber->setVisible(false);
@@ -556,7 +571,10 @@ DogfightState::~DogfightState()
 		_projectiles.pop_back();
 	}
 	if (_craft)
+	{
 		_craft->setInDogfight(false);
+		_craft->setInterceptionOrder(0);
+	}
 	// set the ufo as "free" for the next engagement (as applicable)
 	if (_ufo)
 		_ufo->setInterceptionProcessed(false);

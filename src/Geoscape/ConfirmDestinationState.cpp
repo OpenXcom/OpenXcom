@@ -107,21 +107,6 @@ void ConfirmDestinationState::btnOkClick(Action *)
 	}
 	_craft->setDestination(_target);
 	_craft->setStatus("STR_OUT");
-	if (_craft->getInterceptionOrder() == 0)
-	{
-		int maxInterceptionOrder = 0;
-		for (std::vector<Base*>::iterator baseIt = _game->getSavedGame()->getBases()->begin(); baseIt != _game->getSavedGame()->getBases()->end(); ++baseIt)
-		{
-			for (std::vector<Craft*>::iterator craftIt = (*baseIt)->getCrafts()->begin(); craftIt != (*baseIt)->getCrafts()->end(); ++craftIt)
-			{
-				if ((*craftIt)->getInterceptionOrder() > maxInterceptionOrder)
-				{
-					maxInterceptionOrder = (*craftIt)->getInterceptionOrder();
-				}
-			}
-		}
-		_craft->setInterceptionOrder(++maxInterceptionOrder);
-	}
 	_game->popState();
 	_game->popState();
 }
