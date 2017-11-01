@@ -1216,7 +1216,16 @@ void TileEngine::explode(Position center, int power, ItemDamageType type, int ma
 						int min = power_ * (100 - dmgRng) / 100;
 						int max = power_ * (100 + dmgRng) / 100;
 						BattleUnit *bu = dest->getUnit();
+						Tile *tileBelow = _save->getTile(dest->getPosition() - Position(0,0,1));
 						int wounds = 0;
+						if (!bu && dest->getPosition().z > 0 && dest->hasNoFloor(tileBelow))
+						{
+							bu = tileBelow->getUnit();
+							if (bu && bu->getHeight() + bu->getFloatHeight() - tileBelow->getTerrainLevel() <= 24)
+							{
+								bu = 0; // if the unit below has no voxels poking into the tile, don't damage it.
+							}
+						}
 						if (bu && unit)
 						{
 							wounds = bu->getFatalWounds();
