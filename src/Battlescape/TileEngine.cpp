@@ -857,7 +857,24 @@ std::vector<std::pair<BattleUnit *, int> > TileEngine::getSpottingUnits(BattleUn
 				Position originVoxel = getOriginVoxel(falseAction, 0);
 				Position targetVoxel;
 				AIModule *ai = (*i)->getAIModule();
-				bool gotHit = (ai != 0 && ai->getWasHitBy(unit->getId()));
+
+				// Inquisitor's note regarding 'gotHit' variable
+				// in vanilla, the 'hitState' flag is the only part of this equation that comes into play.
+				// any time a unit takes damage, this flag is set, then it would be reset by a call to
+				// a function analogous to SavedBattleGame::resetUnitHitStates(), any time:
+				// 1: a unit was selected by being clicked on.
+				// 2: either "next unit" button was pressed.
+				// 3: the inventory screen was accessed. (i didn't look too far into this one, it's possible it's only called in the pre-mission equip screen)
+				// 4: the same place where we call it, immediately before every move the AI makes.
+				// this flag is responsible for units turning around to respond to hits, and is in keeping with the details listed on http://www.ufopaedia.org/index.php/Reaction_fire_triggers
+				// we've gone for a slightly different implementation: AI units keep a list of which units have hit them and don't forget until the end of the player's turn.
+				// this method is in keeping with the spirit of the original feature, but much less exploitable by players.
+				// the hitState flag in our implementation allows player units to turn and react as they did in the original, (which is far less cumbersome than giving them all an AI module)
+				// we don't extend the same "enhanced aggressor memory" courtesy to players, because in the original, they could only turn and react to damage immediately after it happened.
+				// this is because as much as we want the player's soldiers dead, we don't want them to feel like we're being unfair about it.
+
+				bool gotHit = (ai != 0 && ai->getWasHitBy(unit->getId())) || (ai == 0 && (*i)->getHitState());
+
 					// can actually see the target Tile, or we got hit
 				if (((*i)->checkViewSector(unit->getPosition()) || gotHit) &&
 					// can actually target the unit

@@ -2059,4 +2059,15 @@ bool SavedBattleGame::isItemUsable(RuleItem *item) const
 	return true;
 }
 
+/**
+ * Resets all unit hit state flags.
+ */
+void SavedBattleGame::resetUnitHitStates()
+{
+	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
+	{
+		(*i)->resetHitState();
+	}
+}
+
 }

@@ -105,6 +105,7 @@ void BattlescapeGame::think()
 		// it's a non player side (ALIENS or CIVILIANS)
 		if (_save->getSide() != FACTION_PLAYER)
 		{
+			_save->resetUnitHitStates();
 			if (!_debugPlay)
 			{
 				if (_save->getSelectedUnit())
