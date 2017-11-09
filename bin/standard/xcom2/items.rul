@@ -27,7 +27,7 @@ items: #done
     costSell: 22500
     transferTime: 48
   - type: STR_CRAFT_GAS_CANNON_ROUNDS_X50
-    size: 0
+    size: 0.1 # changed from vanilla - these took up no space at all in the original, and so have been given the minimum size.
     costBuy: 1240
     costSell: 1012
     transferTime: 96
