@@ -2315,14 +2315,22 @@ int BattleUnit::getFatalWound(int part) const
  */
 void BattleUnit::heal(int part, int woundAmount, int healthAmount)
 {
-	if (part < 0 || part > 5)
+	if (part < 0 || part > 5 || !_fatalWounds[part])
+	{
 		return;
-	if (!_fatalWounds[part])
-		return;
+	}
+
 	_fatalWounds[part] -= woundAmount;
+	if (_fatalWounds[part] < 0)
+	{
+		_fatalWounds[part] = 0;
+	}
+
 	_health += healthAmount;
 	if (_health > getBaseStats()->health)
+	{
 		_health = getBaseStats()->health;
+	}
 }
 
 /**
