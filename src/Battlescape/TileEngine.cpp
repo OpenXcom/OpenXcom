@@ -53,8 +53,9 @@ const int TileEngine::heightFromCenter[11] = {0,-2,+2,-4,+4,-6,+6,-8,+8,-12,+12}
  * @param save Pointer to SavedBattleGame object.
  * @param voxelData List of voxel data.
  */
-TileEngine::TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData) : _save(save), _voxelData(voxelData), _personalLighting(true)
+TileEngine::TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData) : _save(save), _voxelData(voxelData), _personalLighting(true), _cacheTile(0), _cacheTileBelow(0)
 {
+	_cacheTilePos = Position(-1,-1,-1);
 }
 
 /**
@@ -677,7 +678,7 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
 	{
 		return false;
 	}
-
+	voxelCheckFlush();
 // find out height range
 
 	if (!minZfound)
@@ -1065,6 +1066,7 @@ BattleUnit *TileEngine::hit(Position center, int power, ItemDamageType type, Bat
 
 	BattleUnit *bu = tile->getUnit();
 	int adjustedDamage = 0;
+	voxelCheckFlush();
 	const int part = voxelCheck(center, unit);
 	if (part >= V_FLOOR && part <= V_OBJECT)
 	{
@@ -2183,6 +2185,11 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 	Position lastPoint(origin);
 	int result;
 	int steps = 0;
+	bool excludeAllUnits = false;
+	if (_save->isBeforeGame())
+	{
+		excludeAllUnits = true; // don't start unit spotting before pre-game inventory stuff (large units on the craftInventory tile will cause a crash if they're "spotted")
+	}
 
 	//start and end points
 	x0 = origin.x;	 x1 = target.x;
@@ -2223,6 +2230,8 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 	//starting point
 	y = y0;
 	z = z0;
+
+	if (doVoxelCheck) voxelCheckFlush();
 
 	//step through longest delta (which we have swapped to x)
 	for (x = x0; x != (x1+step_x); x += step_x)
@@ -2289,7 +2298,7 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 				cx = x;	cz = z; cy = y;
 				if (swap_xz) std::swap(cx, cz);
 				if (swap_xy) std::swap(cx, cy);
-				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
+				result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut);
 				if (result != V_EMPTY)
 				{
 					if (trajectory != 0)
@@ -2313,7 +2322,7 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 				cx = x;	cz = z; cy = y;
 				if (swap_xz) std::swap(cx, cz);
 				if (swap_xy) std::swap(cx, cy);
-				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible,  excludeAllBut);
+				result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible,  excludeAllBut);
 				if (result != V_EMPTY)
 				{
 					if (trajectory != 0)
@@ -2414,6 +2423,7 @@ int TileEngine::castedShade(Position voxel)
 	Position tmpVoxel = voxel;
 	int z;
 
+	voxelCheckFlush();
 	for (z = zstart; z>0; z--)
 	{
 		tmpVoxel.z = z;
@@ -2435,6 +2445,8 @@ bool TileEngine::isVoxelVisible(Position voxel)
 		return true; // visible!
 	Position tmpVoxel = voxel;
 	int zend = (zstart/24)*24 +24;
+
+	voxelCheckFlush();
 	for (int z = zstart; z<zend; z++)
 	{
 		tmpVoxel.z=z;
@@ -2459,33 +2471,48 @@ bool TileEngine::isVoxelVisible(Position voxel)
  */
 int TileEngine::voxelCheck(Position voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit *excludeAllBut)
 {
-	if (_save->isBeforeGame())
-	{
-		excludeAllUnits = true; // don't start unit spotting before pre-game inventory stuff (large units on the craftInventory tile will cause a crash if they're "spotted")
-	}
-	Tile *tile = _save->getTile(voxel / Position(16, 16, 24));
-	// check if we are not out of the map
-	if (tile == 0 || voxel.x < 0 || voxel.y < 0 || voxel.z < 0)
+	if (voxel.x < 0 || voxel.y < 0 || voxel.z < 0) //preliminary out of map
 	{
 		return V_OUTOFBOUNDS;
 	}
-	Tile *tileBelow = _save->getTile(tile->getPosition() + Position(0,0,-1));
+	Position pos = voxel / Position(16, 16, 24);
+	Tile *tile, *tileBelow;
+	if (_cacheTilePos == pos)
+	{
+		tile = _cacheTile;
+		tileBelow = _cacheTileBelow;
+	}
+	else
+	{
+		tile = _save->getTile(pos);
+		if (!tile) // check if we are not out of the map
+		{
+			return V_OUTOFBOUNDS; //not even cache
+		}
+		tileBelow = _save->getTile(pos + Position(0,0,-1));
+		_cacheTilePos = pos;
+		_cacheTile = tile;
+		_cacheTileBelow = tileBelow;
+ 	}
+
 	if (tile->isVoid() && tile->getUnit() == 0 && (!tileBelow || tileBelow->getUnit() == 0))
 	{
 		return V_EMPTY;
 	}
 
-	if ((voxel.z % 24 == 0 || voxel.z % 24 == 1) && tile->getMapData(O_FLOOR) && tile->getMapData(O_FLOOR)->isGravLift())
+	if (tile->getMapData(O_FLOOR) && tile->getMapData(O_FLOOR)->isGravLift() && (voxel.z % 24 == 0 || voxel.z % 24 == 1))
 	{
 		if ((tile->getPosition().z == 0) || (tileBelow && tileBelow->getMapData(O_FLOOR) && !tileBelow->getMapData(O_FLOOR)->isGravLift()))
+		{
 			return V_FLOOR;
+		}
 	}
 
 	// first we check terrain voxel data, not to allow 2x2 units stick through walls
 	for (int i=0; i< 4; ++i)
 	{
 		MapData *mp = tile->getMapData(i);
-		if (tile->isUfoDoorOpen(i))
+		if (((i==1) || (i==2)) && tile->isUfoDoorOpen(i))
 			continue;
 		if (mp != 0)
 		{
@@ -2506,8 +2533,7 @@ int TileEngine::voxelCheck(Position voxel, BattleUnit *excludeUnit, bool exclude
 		// in this case we couldn't have unit standing at current tile.
 		if (unit == 0 && tile->hasNoFloor(0))
 		{
-			tile = _save->getTile(Position(voxel.x/16, voxel.y/16, (voxel.z/24)-1)); //below
-			if (tile) unit = tile->getUnit();
+			if (tileBelow) unit = tileBelow->getUnit();
 		}
 
 		if (unit != 0 && unit != excludeUnit && (!excludeAllBut || unit == excludeAllBut) && (!onlyVisible || unit->getVisible() ) )
@@ -2534,6 +2560,13 @@ int TileEngine::voxelCheck(Position voxel, BattleUnit *excludeUnit, bool exclude
 		}
 	}
 	return V_EMPTY;
+}
+
+void TileEngine::voxelCheckFlush()
+{
+	_cacheTilePos = Position(-1,-1,-1);
+	_cacheTile = 0;
+	_cacheTileBelow = 0;
 }
 
 /**
