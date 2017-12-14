@@ -746,6 +746,13 @@ std::pair<double, double> AlienMission::getWaypoint(const UfoTrajectory &traject
 	{
 		waveNumber = _rule.getWaveCount() - 1;
 	}
+	if (nextWaypoint >= region.getMissionZones().size())
+	{
+		std::stringstream ss, ss2;
+		ss << nextWaypoint;
+		ss2 << region.getMissionZones().size();
+		throw Exception("Error occurred while trying to determine waypoint for mission type: " + _rule.getType() + " in region: " + region.getType() + ", mission tried to find a waypoint in zone " + ss.str() + " but this region only has " + ss2.str() + "zone types defined.");
+	}
 
 	if (_missionSiteZone != -1 && _rule.getWave(waveNumber).objective && trajectory.getZone(nextWaypoint) == (size_t)(_rule.getSpawnZone()))
 	{
@@ -757,7 +764,6 @@ std::pair<double, double> AlienMission::getWaypoint(const UfoTrajectory &traject
 	{
 		return getLandPoint(globe, region, trajectory.getZone(nextWaypoint));
 	}
-
 	return region.getRandomPoint(trajectory.getZone(nextWaypoint));
 }
 
@@ -767,6 +773,13 @@ std::pair<double, double> AlienMission::getWaypoint(const UfoTrajectory &traject
  */
 std::pair<double, double> AlienMission::getLandPoint(const Globe &globe, const RuleRegion &region, size_t zone)
 {
+	if (zone >= region.getMissionZones().size())
+	{
+		std::stringstream ss, ss2;
+		ss << zone;
+		ss2 << region.getMissionZones().size();
+		throw Exception("Error occurred while trying to determine landing point for mission type: " + _rule.getType() + " in region: " + region.getType() + ", mission tried to find a waypoint in zone " + ss.str() + " but this region only has " + ss2.str() + "zone types defined.");
+	}
 	int tries = 0;
 	std::pair<double, double> pos;
 	do
