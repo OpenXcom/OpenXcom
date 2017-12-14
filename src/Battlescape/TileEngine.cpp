@@ -2234,7 +2234,7 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 	if (doVoxelCheck) voxelCheckFlush();
 
 	//step through longest delta (which we have swapped to x)
-	for (x = x0; x != (x1+step_x); x += step_x)
+	for (x = x0;; x += step_x)
 	{
 		//copy position
 		cx = x;	cy = y;	cz = z;
@@ -2282,6 +2282,9 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 
 			lastPoint = Position(cx, cy, cz);
 		}
+
+		if (x == x1) break;
+
 		//update progress in other planes
 		drift_xy = drift_xy - delta_y;
 		drift_xz = drift_xz - delta_z;
@@ -2368,39 +2371,37 @@ int TileEngine::calculateParabola(Position origin, Position target, bool storeTr
 	int y = origin.y;
 	int z = origin.z;
 	int i = 8;
+	int result = V_EMPTY;
+	std::vector<Position> _trajectory;
 	Position lastPosition = Position(x,y,z);
+	Position nextPosition = lastPosition;
 	while (z > 0)
 	{
 		x = (int)((double)origin.x + (double)i * cos(te) * sin(fi));
 		y = (int)((double)origin.y + (double)i * sin(te) * sin(fi));
 		z = (int)((double)origin.z + (double)i * cos(fi) - zK * ((double)i - ro / 2.0) * ((double)i - ro / 2.0) + zA);
-		if (storeTrajectory && trajectory)
-		{
-			trajectory->push_back(Position(x, y, z));
-		}
 		//passes through this point?
-		Position nextPosition = Position(x,y,z);
-		int result = calculateLine(lastPosition, nextPosition, false, 0, excludeUnit);
+		nextPosition = Position(x,y,z);
+		_trajectory.clear();
+		result = calculateLine(lastPosition, nextPosition, false, 0, excludeUnit);
 		if (result != V_EMPTY)
 		{
-			if (lastPosition.z < nextPosition.z)
-			{
-				result = V_OUTOFBOUNDS;
-			}
-			if (!storeTrajectory && trajectory != 0)
-			{ // store the position of impact
-				trajectory->push_back(nextPosition);
-			}
-			return result;
+			result = calculateLine(lastPosition, nextPosition, true, &_trajectory, excludeUnit);
+			nextPosition = _trajectory.back(); //pick the INSIDE position of impact
+			break;
 		}
-		lastPosition = Position(x,y,z);
+		if (storeTrajectory && trajectory)
+		{
+			trajectory->push_back(nextPosition);
+		}
+		lastPosition = nextPosition;
 		++i;
 	}
-	if (!storeTrajectory && trajectory != 0)
+	if (trajectory != 0)
 	{ // store the position of impact
-		trajectory->push_back(Position(x, y, z));
+		trajectory->push_back(nextPosition);
 	}
-	return V_EMPTY;
+	return result;
 }
 
 /**
@@ -2840,7 +2841,7 @@ int TileEngine::faceWindow(Position position)
  * @param voxelType The type of voxel at which this parabola terminates.
  * @return Validity of action.
  */
-bool TileEngine::validateThrow(BattleAction &action, const Position& originVoxel, const Position& targetVoxel, double *curve, int *voxelType)
+bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Position targetVoxel, double *curve, int *voxelType, bool forced)
 {
 	bool foundCurve = false;
 	double curvature = 0.5;
@@ -2856,6 +2857,7 @@ bool TileEngine::validateThrow(BattleAction &action, const Position& originVoxel
 	}
 
 	Tile *targetTile = _save->getTile(action.target);
+	Position targetPos = (targetVoxel / Position(16, 16, 24));
 	// object blocking - can't throw here
 	if (action.type == BA_THROW
 		&& targetTile
@@ -2879,7 +2881,8 @@ bool TileEngine::validateThrow(BattleAction &action, const Position& originVoxel
 	{
 		std::vector<Position> trajectory;
 		test = calculateParabola(originVoxel, targetVoxel, false, &trajectory, action.actor, curvature, Position(0,0,0));
-		if (test != V_OUTOFBOUNDS && (trajectory.at(0) / Position(16, 16, 24)) == (targetVoxel / Position(16, 16, 24)))
+		Position tilePos = ((trajectory.at(0) + Position(0,0,1)) / Position(16, 16, 24));
+		if (forced || (test != V_OUTOFBOUNDS && tilePos == targetPos))
 		{
 			if (voxelType)
 			{
