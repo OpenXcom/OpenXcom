@@ -746,9 +746,9 @@ std::pair<double, double> AlienMission::getWaypoint(const UfoTrajectory &traject
 	{
 		waveNumber = _rule.getWaveCount() - 1;
 	}
-	if (nextWaypoint >= region.getMissionZones().size())
+	if (trajectory.getZone(nextWaypoint) >= region.getMissionZones().size())
 	{
-		logMissionError(nextWaypoint, region);
+		logMissionError(trajectory.getZone(nextWaypoint), region);
 	}
 
 	if (_missionSiteZone != -1 && _rule.getWave(waveNumber).objective && trajectory.getZone(nextWaypoint) == (size_t)(_rule.getSpawnZone()))
@@ -830,8 +830,15 @@ void AlienMission::logMissionError(int zone, const RuleRegion &region)
 {
 	std::stringstream ss, ss2;
 	ss << zone;
-	ss2 << region.getMissionZones().size() - 1;
-	throw Exception("Error occurred while trying to determine waypoint for mission type: " + _rule.getType() + " in region: " + region.getType() + ", mission tried to find a waypoint in zone " + ss.str() + " but this region only has zones valid up to " + ss2.str() + ".");
+	if (region.getMissionZones().size() > 0)
+	{
+		ss2 << region.getMissionZones().size() - 1;
+		throw Exception("Error occurred while trying to determine waypoint for mission type: " + _rule.getType() + " in region: " + region.getType() + ", mission tried to find a waypoint in zone " + ss.str() + " but this region only has zones valid up to " + ss2.str() + ".");
+	}
+	else
+	{
+		throw Exception("Error occurred while trying to determine waypoint for mission type: " + _rule.getType() + " in region: " + region.getType() + ", region has no valid zones.");
+	}
 }
 
 }
