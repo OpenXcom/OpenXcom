@@ -121,6 +121,8 @@ private:
 	std::pair<double, double> getLandPoint(const Globe &globe, const RuleRegion &region, size_t zone);
 	/// Spawns a MissionSite at a specific location.
 	MissionSite *spawnMissionSite(SavedGame &game, AlienDeployment *deployment, const MissionArea &area);
+	/// Provides some error information for bad mission definitions
+	void logMissionError(int zone, const RuleRegion &region);
 
 };
 
