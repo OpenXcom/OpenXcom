@@ -1628,10 +1628,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 					if (corpseUnit->getStatus() == STATUS_DEAD)
 					{
 						base->getStorageItems()->addItem(corpseUnit->getArmor()->getCorpseGeoscape(), 1);
-						if ((*it)->getRules()->getRecoveryPoints())
-						{
-							addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
-						}
+						addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
 					}
 					else if (corpseUnit->getStatus() == STATUS_UNCONSCIOUS ||
 							// or it's in timeout because it's unconscious from the previous stage
@@ -1720,13 +1717,13 @@ void DebriefingState::recoverAlien(BattleUnit *from, Base *base)
 		if (!from->getArmor()->getCorpseBattlescape().empty())
 		{
 			RuleItem *corpseRule = _game->getMod()->getItem(from->getArmor()->getCorpseBattlescape().front());
-			if (corpseRule && corpseRule->getRecoveryPoints())
+			if (corpseRule && corpseRule->isRecoverable())
 			{
 				addStat("STR_ALIEN_CORPSES_RECOVERED", 1, corpseRule->getRecoveryPoints());
+				std::string corpseItem = from->getArmor()->getCorpseGeoscape();
+				base->getStorageItems()->addItem(corpseItem, 1);
 			}
 		}
-		std::string corpseItem = from->getArmor()->getCorpseGeoscape();
-		base->getStorageItems()->addItem(corpseItem, 1);
 	}
 	else
 	{
