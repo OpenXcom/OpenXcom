@@ -1720,7 +1720,7 @@ void DebriefingState::recoverAlien(BattleUnit *from, Base *base)
 		if (!from->getArmor()->getCorpseBattlescape().empty())
 		{
 			RuleItem *corpseRule = _game->getMod()->getItem(from->getArmor()->getCorpseBattlescape().front());
-			if (corpseRule)
+			if (corpseRule && corpseRule->getRecoveryPoints())
 			{
 				addStat("STR_ALIEN_CORPSES_RECOVERED", 1, corpseRule->getRecoveryPoints());
 			}
