@@ -1717,8 +1717,14 @@ void DebriefingState::recoverAlien(BattleUnit *from, Base *base)
 	if (base->getAvailableContainment() == 0 && _game->getSavedGame()->getMonthsPassed() > -1)
 	{
 		_noContainment = true;
-		addStat("STR_ALIEN_CORPSES_RECOVERED", 1, from->getValue());
-
+		if (!from->getArmor()->getCorpseBattlescape().empty())
+		{
+			RuleItem *corpseRule = _game->getMod()->getItem(from->getArmor()->getCorpseBattlescape().front());
+			if (corpseRule)
+			{
+				addStat("STR_ALIEN_CORPSES_RECOVERED", 1, corpseRule->getRecoveryPoints());
+			}
+		}
 		std::string corpseItem = from->getArmor()->getCorpseGeoscape();
 		base->getStorageItems()->addItem(corpseItem, 1);
 	}
