@@ -828,10 +828,10 @@ void AlienMission::setMissionSiteZone(int zone)
 
 void AlienMission::logMissionError(int zone, const RuleRegion &region)
 {
-	std::stringstream ss, ss2;
-	ss << zone;
 	if (region.getMissionZones().size() > 0)
 	{
+		std::stringstream ss, ss2;
+		ss << zone;
 		ss2 << region.getMissionZones().size() - 1;
 		throw Exception("Error occurred while trying to determine waypoint for mission type: " + _rule.getType() + " in region: " + region.getType() + ", mission tried to find a waypoint in zone " + ss.str() + " but this region only has zones valid up to " + ss2.str() + ".");
 	}
