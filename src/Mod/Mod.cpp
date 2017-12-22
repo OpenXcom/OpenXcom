@@ -976,10 +976,17 @@ void Mod::loadFile(const std::string &filename)
 			}
 			_ufopaediaListOrder += 100;
 			rule->load(*i, _ufopaediaListOrder);
-			if (rule->section != UFOPAEDIA_NOT_AVAILABLE &&
-				std::find(_ufopaediaCatIndex.begin(), _ufopaediaCatIndex.end(), rule->section) == _ufopaediaCatIndex.end())
+			if (rule->section != UFOPAEDIA_NOT_AVAILABLE)
 			{
-				_ufopaediaCatIndex.push_back(rule->section);
+				if (_ufopaediaSections.find(rule->section) == _ufopaediaSections.end())
+				{
+					_ufopaediaSections[rule->section] = rule->getListOrder();
+					_ufopaediaCatIndex.push_back(rule->section);
+				}
+				else
+				{
+					_ufopaediaSections[rule->section] = std::min(_ufopaediaSections[rule->section], rule->getListOrder());
+				}
 			}
 		}
 		else if ((*i)["delete"])
@@ -2085,30 +2092,40 @@ template <>
 struct compareRule<ArticleDefinition> : public std::binary_function<const std::string&, const std::string&, bool>
 {
 	Mod *_mod;
-	static std::map<std::string, int> _sections;
+	const std::map<std::string, int> &_sections;
 
-	compareRule(Mod *mod) : _mod(mod)
+	compareRule(Mod *mod) : _mod(mod), _sections(mod->getUfopaediaSections())
 	{
-		const std::vector<std::string> &list = mod->getUfopaediaCategoryList();
-		int order = 0;
-		for (std::vector<std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
-		{
-			_sections[*i] = order++;
-		}
-		_sections[UFOPAEDIA_NOT_AVAILABLE] = order++;
 	}
 
 	bool operator()(const std::string &r1, const std::string &r2) const
 	{
 		ArticleDefinition *rule1 = _mod->getUfopaediaArticle(r1);
 		ArticleDefinition *rule2 = _mod->getUfopaediaArticle(r2);
-		if (_sections[rule1->section] == _sections[rule2->section])
+		if (rule1->section == rule2->section)
 			return (rule1->getListOrder() < rule2->getListOrder());
 		else
-			return (_sections[rule1->section] < _sections[rule2->section]);
+			return (_sections.at(rule1->section) < _sections.at(rule2->section));
 	}
 };
-std::map<std::string, int> compareRule<ArticleDefinition>::_sections;
+
+/**
+ * Ufopaedia sections use article list order.
+ */
+struct compareSection : public std::binary_function<const std::string&, const std::string&, bool>
+{
+	Mod *_mod;
+	const std::map<std::string, int> &_sections;
+
+	compareSection(Mod *mod) : _mod(mod), _sections(mod->getUfopaediaSections())
+	{
+	}
+
+	bool operator()(const std::string &r1, const std::string &r2) const
+	{
+		return _sections.at(r1) < _sections.at(r2);
+	}
+};
 
 /**
  * Sorts all our lists according to their weight.
@@ -2124,7 +2141,9 @@ void Mod::sortLists()
 	// special cases
 	std::sort(_craftWeaponsIndex.begin(), _craftWeaponsIndex.end(), compareRule<RuleCraftWeapon>(this));
 	std::sort(_armorsIndex.begin(), _armorsIndex.end(), compareRule<Armor>(this));
+	_ufopaediaSections[UFOPAEDIA_NOT_AVAILABLE] = 0;
 	std::sort(_ufopaediaIndex.begin(), _ufopaediaIndex.end(), compareRule<ArticleDefinition>(this));
+	std::sort(_ufopaediaCatIndex.begin(), _ufopaediaCatIndex.end(), compareSection(this));
 }
 
 /**

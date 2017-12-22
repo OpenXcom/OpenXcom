@@ -141,6 +141,7 @@ private:
 	GameTime _startingTime;
 	StatAdjustment _statAdjustment[5];
 
+	std::map<std::string, int> _ufopaediaSections;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _invsIndex, _ufosIndex;
 	std::vector<std::string> _soldiersIndex, _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _ufopaediaCatIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
 	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex, _missionScriptIndex;
@@ -180,6 +181,8 @@ private:
 	void modResources();
 	/// Sorts all our lists according to their weight.
 	void sortLists();
+
+	void exportResources();
 public:
 	static int DOOR_OPEN;
 	static int SLIDING_DOOR_OPEN;
@@ -219,6 +222,9 @@ public:
 	Mod();
 	/// Cleans up the mod.
 	~Mod();
+
+	/// For internal use only
+	const std::map<std::string, int> &getUfopaediaSections() const { return _ufopaediaSections; }
 
 	/// Gets a particular font.
 	Font *getFont(const std::string &name, bool error = true) const;

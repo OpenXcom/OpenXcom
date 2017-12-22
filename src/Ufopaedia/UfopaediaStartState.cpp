@@ -65,7 +65,8 @@ namespace OpenXcom
 
 			_btnSections.push_back(button);
 		}
-		_txtTitle->setY(_btnSections.front()->getY() - _txtTitle->getHeight());
+		if (!_btnSections.empty())
+			_txtTitle->setY(_btnSections.front()->getY() - _txtTitle->getHeight());
 
 		centerAllSurfaces();
 
