@@ -42,7 +42,9 @@
 #include <windows.h>
 #include <shlobj.h>
 #include <shlwapi.h>
+#ifdef _MSC_VER
 #include <dbghelp.h>
+#endif
 #ifndef SHGFP_TYPE_CURRENT
 #define SHGFP_TYPE_CURRENT 0
 #endif
@@ -51,7 +53,9 @@
 #pragma comment(lib, "advapi32.lib")
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "shlwapi.lib")
+#ifdef _MSC_VER
 #pragma comment(lib, "dbghelp.lib")
+#endif
 #endif
 #else
 #include <iostream>
@@ -895,7 +899,7 @@ void setWindowIcon(int winResource, const std::string &unixPath)
  */
 void stackTrace(void *ctx)
 {
-#ifdef _WIN32
+#ifdef _MSC_VER
 	const int MAX_SYMBOL_LENGTH = 1024;
 	CONTEXT context;
 	if (ctx != 0)
@@ -904,14 +908,9 @@ void stackTrace(void *ctx)
 	}
 	else
 	{
-#ifdef _MSC_VER
 		memset(&context, 0, sizeof(CONTEXT));
 		context.ContextFlags = CONTEXT_FULL;
 		RtlCaptureContext(&context);
-#else
-		// TODO: Doesn't work on MinGW
-		return;
-#endif
 	}
 	HANDLE thread = GetCurrentThread();
 	HANDLE process = GetCurrentProcess();
@@ -987,6 +986,11 @@ void stackTrace(void *ctx)
 	}
 	SymCleanup(process);
 #else
+#ifdef _WIN32
+	// TODO: Figure out stack trace on MinGW, use dbg
+	Log(LOG_FATAL) << "Unfortunately, no stack trace information is available";
+	return;
+#else
 	const int MAX_STACK_FRAMES = 16;
 	void *array[MAX_STACK_FRAMES];
 	size_t size = backtrace(array, MAX_STACK_FRAMES);
@@ -998,6 +1002,7 @@ void stackTrace(void *ctx)
 	}
 
 	free(strings);
+#endif
 #endif
 }
 
