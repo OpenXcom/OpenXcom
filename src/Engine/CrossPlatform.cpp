@@ -752,7 +752,8 @@ std::pair<std::wstring, std::wstring> timeToString(time_t time)
  */
 bool naturalCompare(const std::wstring &a, const std::wstring &b)
 {
-#if defined(_WIN32) && (!defined(__MINGW32__) || defined(__MINGW64_VERSION_MAJOR))
+//#if defined(_WIN32) && (!defined(__MINGW32__) || defined(__MINGW64_VERSION_MAJOR))
+#ifdef _MSC_VER
 	return (StrCmpLogicalW(a.c_str(), b.c_str()) < 0);
 #else
 	// sorry unix users you get ASCII sort
