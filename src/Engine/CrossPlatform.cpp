@@ -45,9 +45,6 @@
 #ifdef _MSC_VER
 #include <dbghelp.h>
 #endif
-#ifndef SHGFP_TYPE_CURRENT
-#define SHGFP_TYPE_CURRENT 0
-#endif
 #define EXCEPTION_CODE_CXX 0xe06d7363
 #ifndef __GNUC__
 #pragma comment(lib, "advapi32.lib")
@@ -164,7 +161,7 @@ std::vector<std::string> findDataFolders()
 	char path[MAX_PATH];
 
 	// Get Documents folder
-	if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path)))
+	if (SHGetSpecialFolderPathA(NULL, path, CSIDL_PERSONAL, FALSE))
 	{
 		PathAppendA(path, "OpenXcom\\");
 		list.push_back(path);
@@ -254,7 +251,7 @@ std::vector<std::string> findUserFolders()
 	char path[MAX_PATH];
 
 	// Get Documents folder
-	if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, path)))
+	if (SHGetSpecialFolderPathA(NULL, path, CSIDL_PERSONAL, FALSE))
 	{
 		PathAppendA(path, "OpenXcom\\");
 		list.push_back(path);
