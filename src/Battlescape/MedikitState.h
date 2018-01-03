@@ -42,6 +42,7 @@ class MedikitState : public State
 	BattleItem *_item;
 	BattleAction *_action;
 	int _tu;
+	bool _revivedSoldier;
 	/// Handler for the end button.
 	void onEndClick(Action *action);
 	/// Handler for the heal button.
@@ -52,6 +53,8 @@ class MedikitState : public State
 	void onPainKillerClick(Action *action);
 	/// Updates the medikit interface.
 	void update();
+	/// Award BattleUnitStatistics.revivedSoldier.
+	void awardRevivedSoldier();
 public:
 	/// Creates the MedikitState.
 	MedikitState(BattleUnit *targetUnit, BattleAction *action);
