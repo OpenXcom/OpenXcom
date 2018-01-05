@@ -752,15 +752,21 @@ std::pair<std::wstring, std::wstring> timeToString(time_t time)
  */
 bool naturalCompare(const std::wstring &a, const std::wstring &b)
 {
-//#if defined(_WIN32) && (!defined(__MINGW32__) || defined(__MINGW64_VERSION_MAJOR))
-#ifdef _MSC_VER
-	return (StrCmpLogicalW(a.c_str(), b.c_str()) < 0);
-#else
-	// sorry unix users you get ASCII sort
-	std::wstring::const_iterator i, j;
-	for (i = a.begin(), j = b.begin(); i != a.end() && j != b.end() && tolower(*i) == tolower(*j); i++, j++);
-	return (i != a.end() && j != b.end() && tolower(*i) < tolower(*j));
+#if defined(_WIN32) && (!defined(__MINGW32__) || defined(__MINGW64_VERSION_MAJOR))
+	typedef int (WINAPI *WinStrCmp)(PCWSTR, PCWSTR);
+	WinStrCmp pWinStrCmp = (WinStrCmp)GetProcAddress(GetModuleHandleA("shlwapi.dll"), "StrCmpLogicalW");
+	if (pWinStrCmp)
+	{
+		return (pWinStrCmp(a.c_str(), b.c_str()) < 0);
+	}
+	else
 #endif
+	{
+		// sorry unix users you get ASCII sort
+		std::wstring::const_iterator i, j;
+		for (i = a.begin(), j = b.begin(); i != a.end() && j != b.end() && tolower(*i) == tolower(*j); i++, j++);
+		return (i != a.end() && j != b.end() && tolower(*i) < tolower(*j));
+	}
 }
 
 /**

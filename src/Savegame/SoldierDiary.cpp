@@ -875,6 +875,7 @@ int SoldierDiary::getMonthsService() const
  */
 void SoldierDiary::awardOriginalEightCommendation()
 {
+	// TODO: Unhardcode this
 	_commendations.push_back(new SoldierCommendations("STR_MEDAL_ORIGINAL8_NAME", "NoNoun"));
 }
 
