@@ -112,7 +112,8 @@ void ExplosionBState::init()
 			int frameDelay = 0;
 			int counter = std::max(1, (_power/5) / 5);
 			_parent->getMap()->setBlastFlash(true);
-			for (int i = 0; i < _power/5; i++)
+			int lowerLimit = std::max(1, _power/5);
+			for (int i = 0; i < lowerLimit; i++)
 			{
 				int X = RNG::generate(-_power/2,_power/2);
 				int Y = RNG::generate(-_power/2,_power/2);
