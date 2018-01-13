@@ -303,31 +303,30 @@ struct BattleUnitKills
 */
 struct BattleUnitStatistics
 {
-	/// Variables
-	bool wasUnconcious;						// Tracks if the soldier fell unconcious
-	int shotAtCounter;                      // Tracks how many times the unit was shot at
-	int hitCounter;							// Tracks how many times the unit was hit
-	int shotByFriendlyCounter;				// Tracks how many times the unit was hit by a friendly
-	int shotFriendlyCounter;				// Tracks how many times the unit was hit a friendly
-	bool loneSurvivor;						// Tracks if the soldier was the only survivor
-	bool ironMan;							// Tracks if the soldier was the only soldier on the mission
-	int longDistanceHitCounter;				// Tracks how many long distance shots were landed
-	int lowAccuracyHitCounter;				// Tracks how many times the unit landed a low probability shot
-	int shotsFiredCounter;					// Tracks how many times a unit has shot
-	int shotsLandedCounter;					// Tracks how many times a unit has hit his target
-	std::vector<BattleUnitKills*> kills;	// Tracks kills
-	int daysWounded;                        // Tracks how many days the unit was wounded for
-	bool KIA;								// Tracks if the soldier was killed in battle
-	bool nikeCross;							// Tracks if a soldier killed every alien
-	bool mercyCross;                        // Tracks if a soldier stunned every alien
-	int woundsHealed;                       // Tracks how many times a fatal wound was healed by this unit
-	UnitStats delta;                        // Tracks the increase in unit stats (is not saved, only used during debriefing)
-	int appliedStimulant;                   // Tracks how many times this soldier applied stimulant
-	int appliedPainKill;                    // Tracks how many times this soldier applied pain killers
-	int revivedSoldier;                     // Tracks how many times this soldier revived another unit
-	bool MIA;								// Tracks if the soldier was left behind :(
-	int martyr;								// Tracks how many kills the soldier landed on the turn of his death
-	int slaveKills;                         // Tracks how many kills the soldier landed thanks to a mind controlled unit.
+	bool wasUnconcious;                  ///< Tracks if the soldier fell unconcious
+	int shotAtCounter;                   ///< Tracks how many times the unit was shot at
+	int hitCounter;                      ///< Tracks how many times the unit was hit
+	int shotByFriendlyCounter;           ///< Tracks how many times the unit was hit by a friendly
+	int shotFriendlyCounter;             ///< Tracks how many times the unit was hit a friendly
+	bool loneSurvivor;                   ///< Tracks if the soldier was the only survivor
+	bool ironMan;                        ///< Tracks if the soldier was the only soldier on the mission
+	int longDistanceHitCounter;          ///< Tracks how many long distance shots were landed
+	int lowAccuracyHitCounter;           ///< Tracks how many times the unit landed a low probability shot
+	int shotsFiredCounter;               ///< Tracks how many times a unit has shot
+	int shotsLandedCounter;              ///< Tracks how many times a unit has hit his target
+	std::vector<BattleUnitKills*> kills; ///< Tracks kills
+	int daysWounded;                     ///< Tracks how many days the unit was wounded for
+	bool KIA;                            ///< Tracks if the soldier was killed in battle
+	bool nikeCross;                      ///< Tracks if a soldier killed every alien
+	bool mercyCross;                     ///< Tracks if a soldier stunned every alien
+	int woundsHealed;                    ///< Tracks how many times a fatal wound was healed by this unit
+	UnitStats delta;                     ///< Tracks the increase in unit stats (is not saved, only used during debriefing)
+	int appliedStimulant;                ///< Tracks how many times this soldier applied stimulant
+	int appliedPainKill;                 ///< Tracks how many times this soldier applied pain killers
+	int revivedSoldier;                  ///< Tracks how many times this soldier revived another unit
+	bool MIA;                            ///< Tracks if the soldier was left behind :(
+	int martyr;                          ///< Tracks how many kills the soldier landed on the turn of his death
+	int slaveKills;                      ///< Tracks how many kills the soldier landed thanks to a mind controlled unit.
 
 	/// Functions
 	// Duplicate entry check

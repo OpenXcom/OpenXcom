@@ -119,7 +119,7 @@ MedikitButton::MedikitButton(int y) : InteractiveSurface(30, 20, 190, y)
  * @param targetUnit The wounded unit.
  * @param action The healing action.
  */
-MedikitState::MedikitState (BattleUnit *targetUnit, BattleAction *action) : _targetUnit(targetUnit), _action(action)
+MedikitState::MedikitState (BattleUnit *targetUnit, BattleAction *action) : _targetUnit(targetUnit), _action(action), _revivedSoldier(false)
 {
 	if (Options::maximizeInfoScreens)
 	{
@@ -232,7 +232,7 @@ void MedikitState::onHealClick(Action *)
 		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS && _targetUnit->getStunlevel() < _targetUnit->getHealth() && _targetUnit->getHealth() > 0)
 		{
 			_targetUnit->setTimeUnits(0);
-			_action->actor->getStatistics()->revivedSoldier++;
+			awardRevivedSoldier();
 		}
 		_unit->getStatistics()->woundsHealed++;
 	}
@@ -310,6 +310,22 @@ void MedikitState::update()
 	_stimulantTxt->setText(toString(_item->getStimulantQuantity()));
 	_healTxt->setText(toString(_item->getHealQuantity()));
 	_medikitView->invalidate();
+}
+
+/**
+ * Award statistic once per MedikitState.
+ */
+void MedikitState::awardRevivedSoldier()
+{
+	if (_revivedSoldier)
+	{
+		return;
+	}
+	else
+	{
+		_action->actor->getStatistics()->revivedSoldier++;
+		_revivedSoldier = true;
+	}
 }
 
 }
