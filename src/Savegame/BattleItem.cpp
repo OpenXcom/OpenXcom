@@ -72,6 +72,7 @@ void BattleItem::load(const YAML::Node &node)
 	_stimulant = node["stimulant"].as<int>(_stimulant);
 	_fuseTimer = node["fuseTimer"].as<int>(_fuseTimer);
 	_droppedOnAlienTurn = node["droppedOnAlienTurn"].as<bool>(_droppedOnAlienTurn);
+	_XCOMProperty = node["XCOMProperty"].as<bool>(_XCOMProperty);
 }
 
 /**
@@ -139,7 +140,10 @@ YAML::Node BattleItem::save() const
 	node["fuseTimer"] = _fuseTimer;
 	if (_droppedOnAlienTurn)
 		node["droppedOnAlienTurn"] = _droppedOnAlienTurn;
-
+	if (_XCOMProperty)
+	{
+		node["XCOMProperty"] = _XCOMProperty;
+	}
 	return node;
 }
 
