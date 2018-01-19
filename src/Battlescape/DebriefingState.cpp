@@ -1648,7 +1648,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 					}
 				}
 				// only add recovery points for unresearched items
-				else if (!_game->getSavedGame()->isResearched((*it)->getRules()->getType()))
+				else if (!_game->getSavedGame()->isResearched((*it)->getRules()->getRequirements()))
 				{
 					addStat("STR_ALIEN_ARTIFACTS_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
 				}
