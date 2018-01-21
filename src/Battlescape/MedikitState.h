@@ -42,6 +42,7 @@ class MedikitState : public State
 	BattleItem *_item;
 	BattleAction *_action;
 	int _tu;
+	bool _revivedTarget;
 	/// Handler for the end button.
 	void onEndClick(Action *action);
 	/// Handler for the heal button.
