@@ -445,8 +445,8 @@ int Pathfinding::getTUCost(Position startPosition, int direction, Position *endP
 				destinationTile->getFire() > 0)
 				cost += 32; // try to find a better path, but don't exclude this path entirely.
 
-			// TFTD thing: tiles on fire are cost 2 TUs more for whatever reason.
-			if (_save->getDepth() > 0 && destinationTile->getFire() > 0)
+			// TFTD thing: underwater tiles on fire or filled with smoke cost 2 TUs more for whatever reason.
+			if (_save->getDepth() > 0 && (destinationTile->getFire() > 0 || destinationTile->getSmoke() > 0))
 			{
 				cost += 2;
 			}
