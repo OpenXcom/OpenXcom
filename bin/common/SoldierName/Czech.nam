@@ -4,46 +4,16 @@ lookWeights:
   - 0
   - 0
 maleFirst:
-  - Jan
-  - Tomas
-  - Zbysek
-  - Zdenik
-  - Michal
-  - Martin
-  - Jioi
-  - Ivo
-  - Pavel
-  - Karel
-  - Frantisek
-  - Ctirad
-  - Zbynik
-  - Vladimir
-  - Jaroslav
-  - Petr
-  - Josef
-  - Vaclav
-  - Miroslav
-  - Mila
-  - Lukas
-  - David
-  - Jakub
-  - Stanislav
-  - Roman
-  - Ondoej
-  - Radek
-  - Antonin
-  - Jozef
-  - Emil
-  - Filip
-  - Ales  
+  - Ales
   - Alexandr
   - Alexej
-  - Ambroz	
+  - Ambroz
   - Andrej
+  - Antonin
   - Arnost
   - Artur
   - Augustyn
-  - Bartolomej	
+  - Bartolomej
   - Bedrich
   - Benedikt
   - Bernard
@@ -51,7 +21,7 @@ maleFirst:
   - Blazej
   - Bohdan
   - Bohumil
-  - Bohumir	
+  - Bohumir
   - Bohuslav
   - Boleslav
   - Bonifac
@@ -61,22 +31,27 @@ maleFirst:
   - Bretislav
   - Bronislav
   - Bruno
-  - Ctibor
   - Cenek
-  - Cestmir	
+  - Cestmir
+  - Ctibor
+  - Ctirad
   - Dalibor
   - Dalimil
+  - David
   - Dobroslav
   - Dominik
   - Drahoslav
   - Dusan
   - Eduard
+  - Emil
   - Erik
   - Evzen
   - Felix
   - Ferdinand
+  - Filip
+  - Frantisek
   - Gustav
-  - Hanus	
+  - Hanus
   - Havel
   - Herman
   - Hubert
@@ -86,15 +61,22 @@ maleFirst:
   - Igor
   - Ilja
   - Ivan
+  - Ivo
   - Jachym
+  - Jakub
+  - Jan
   - Jarmil
   - Jaromir
+  - Jaroslav
   - Jeronym
   - Jindrich
-  - Jiri	
-  - Jonas	
+  - Jiri
+  - Jonas
+  - Josef
+  - Jozef
   - Julius
   - Kamil
+  - Karel
   - Kazimir
   - Klement
   - Kristian
@@ -103,61 +85,70 @@ maleFirst:
   - Kvido
   - Ladislav
   - Leopold
-  - Leos	
+  - Leos
   - Libor
   - Lubomir
   - Lubor
-  - Lubos	
+  - Lubos
   - Ludek
   - Ludvik
-  - Lukas	
+  - Lukas
   - Lumir
   - Marcel
   - Marek
   - Marian
-  - Matej	
-  - Matous	
-  - Maxmilian	
+  - Martin
+  - Matej
+  - Matous
+  - Maxmilian
   - Medard
-  - Mikulas	
+  - Michal
+  - Mikulas
   - Milan
-  - Milos	
+  - Milos
   - Miloslav
+  - Miroslav
   - Mojmir
   - Oldrich
   - Oleg
   - Oliver
-  - Ondrej	
+  - Ondrej
   - Oskar
   - Otakar
   - Otmar
   - Oto
-  - Pankrac	
+  - Pankrac
   - Patrik
+  - Pavel
+  - Petr
   - Pravoslav
-  - Prokop
   - Premysl
+  - Prokop
+  - Radek
   - Radim
   - Radomir
   - Radoslav
   - Radovan
+  - Rehor
+  - Roman
   - Rostislav
   - Rudolf
-  - Rehor	
   - Samuel
   - Servac
   - Silvestr
+  - Simon
   - Slavomir
   - Sobeslav
+  - Stanislav
+  - Stefan
+  - Stepan
   - Svatopluk
   - Svatoslav
-  - Simon
-  - Stefan
-  - Stepan	
-  - Tadeas	
+  - Tadeas
   - Teodor
   - Tibor
-  - Tomas	
+  - Tomas
+  - Vaclav
   - Valdemar
   - Valentyn
   - Vavrinec
@@ -170,55 +161,29 @@ maleFirst:
   - Vit
   - Vitezslav
   - Vladan
+  - Vladimir
   - Vladislav
   - Vlastimil
   - Vlastislav
   - Vojtech
   - Vratislav
   - Zbynek
+  - Zbysek
   - Zdenek
   - Zikmund
 femaleFirst:
-  - Anna
-  - Marie
-  - Jana
-  - Iva
-  - Irina
-  - Ludmila
-  - Pavla
-  - Kateoina
-  - Simona
-  - Lucie
-  - Lenka
-  - Alena
-  - Gabina
-  - Jioina
-  - Michaela
-  - Ivana
-  - Monika
-  - Veronika
-  - Jarmila
-  - Zdeoka
-  - Jitka
-  - Helena
-  - Petra
-  - Eva
-  - Hana
-  - Vira
-  - Tereza
   - Adela
-  - Adele
   - Adriena
   - Agata
+  - Alena
   - Alica
   - Alzbeta
   - Ana
   - Ancika
-  - Andel
   - Andela
   - Aneta
   - Anezka
-  - Anichka
+  - Anna
   - Antoinetta
   - Antonie
   - Bara
@@ -234,27 +199,34 @@ femaleFirst:
   - Bozena
   - Branislava
   - Dagmar
-  - Daleka
   - Dalibora
   - Dominika
   - Drahomira
   - Drahoslava
-  - Dusa
   - Dusana
   - Dusanka
-  - Duska
   - Edita
   - Eliska
   - Elita
   - Emilia
+  - Eva
   - Frantiska
+  - Gabina
+  - Hana
   - Hedvika
+  - Helena
   - Irena
+  - Irina
+  - Iva
+  - Ivana
   - Izabela
+  - Jana
+  - Jarmila
   - Jaromila
   - Jaroslava
   - Jindriska
   - Jirina
+  - Jitka
   - Johana
   - Jolana
   - Josefa
@@ -270,45 +242,55 @@ femaleFirst:
   - Kunigunde
   - Kveta
   - Ladislava
+  - Lenka
   - Leona
   - Libena
   - Libuse
   - Lida
   - Lidmila
   - Lubomira
+  - Lucie
   - Lucina
+  - Ludmila
   - Lydie
   - Madlenka
   - Magdalena
   - Maria
+  - Marie
   - Marketa
   - Matylda
+  - Michaela
   - Milada
   - Milana
   - Milena
   - Miloslava
+  - Monika
   - Nada
   - Nadezda
   - Otilie
+  - Pavla
   - Pavlina
+  - Petra
   - Radka
   - Radomila
   - Radomira
   - Radoslava
   - Ruzena
   - Sara
+  - Simona
   - Sobeska
   - Sobeslava
   - Stanislava
   - Stefanija
   - Stepanka
-  - Svetla
   - Svetlana
   - Tatana
+  - Tereza
   - Ursula
   - Vaclava
   - Vendula
   - Vera
+  - Veronika
   - Vladimira
   - Vlasta
   - Zdenka
@@ -324,11 +306,13 @@ maleLast:
   - Blazek
   - Broz
   - Bures
+  - Carda
   - Cech
   - Cermak
   - Cerny
   - Cervenka
   - Cizek
+  - Dobrynsky
   - Dolezal
   - Dusek
   - Dvorak
@@ -356,6 +340,7 @@ maleLast:
   - Kopecky
   - Kovar
   - Kovarik
+  - Krajan
   - Kral
   - Kratochvil
   - Kraus
@@ -363,9 +348,11 @@ maleLast:
   - Kriz
   - Kubis
   - Kucera
+  - Kvitoslav
   - Machacek
   - Maly
   - Mares
+  - Marny
   - Martinek
   - Masek
   - Matejka
@@ -373,10 +360,13 @@ maleLast:
   - Moravec
   - Mueller
   - Musil
+  - Nadinicky
   - Navratil
+  - Necesal
   - Nemec
   - Nemecek
   - Neumann
+  - Nemy
   - Novak
   - Novotny
   - Pesek
@@ -386,6 +376,7 @@ maleLast:
   - Prochazka
   - Richter
   - Riha
+  - Rosa
   - Ruzicka
   - Sedlacek
   - Sichy
@@ -398,11 +389,13 @@ maleLast:
   - Stanek
   - Stastny
   - Stepanek
+  - Stransky
   - Strnad
   - Sulc
   - Svoboda
   - Sykora
   - Tuma
+  - Tycka
   - Urban
   - Vacek
   - Valenta
@@ -412,56 +405,37 @@ maleLast:
   - Vlcek
   - Zelenka
   - Zeman
-  - Stransky
-  - Tyeka
-  - Dobrynsky
-  - Krajan
-  - Marny
-  - Nimy
-  - Neeesal
-  - Rosa
-  - Kvitoslav
-  - Nadinicky
-  - Doevak
-  - Eerny
-  - Dvooak
-  - Ruzieka
-  - Sedlaeek
-  - Machaeek
-  - Carda
-  - Kueera
 femaleLast:
-  - Zemanova
-  - Kolaoova
-  - Krejei
-  - Eermakova
-  - Navratilova
-  - Komyrova
-  - Urbanova
-  - Vaokova
-  - Koizna
-  - Kratochvilova
-  - Vlazkova
-  - Trojska
-  - Petrova
-  - Romanova
-  - Kovaoova
   - Bartosova
-  - Musilova
-  - Polakova
-  - Koneena
+  - Brozova
+  - Cermakova
+  - Hruba
+  - Kolarova
+  - Komyrova
+  - Konecna
+  - Kovacova
+  - Kratochvilova
+  - Krejci
+  - Krizna
   - Mala
-  - Tkadlecova
-  - Zhdanovich
+  - Maskova
+  - Matusova
+  - Musilova
+  - Navratilova
+  - Olhova
+  - Petrova
+  - Polakova
+  - Romanova
   - Soukupova
   - Stastna
-  - Vavrova
-  - Oihova
-  - Ticha
-  - Matusova
-  - Maskova
-  - Hruba
   - Stejskalova
+  - Ticha
+  - Tkadlecova
+  - Trojska
   - Tumova
+  - Urbanova
+  - Vaskova
+  - Vavrova
+  - Vlazkova
   - Zakova
-  - Brozova
+  - Zemanova
