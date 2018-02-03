@@ -19,10 +19,6 @@
 #include "SaveConverter.h"
 #include <yaml-cpp/yaml.h>
 #include <SDL_endian.h>
-#include <fstream>
-#include <sstream>
-#include <iomanip>
-#include <bitset>
 #include "../Engine/Options.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
@@ -57,6 +53,13 @@
 #include "../Mod/RuleConverter.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../fmath.h"
+
+#include "../Mod/Unit.hpp"
+
+#include <fstream>
+#include <sstream>
+#include <iomanip>
+#include <bitset>
 
 namespace OpenXcom
 {

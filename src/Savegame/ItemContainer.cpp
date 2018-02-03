@@ -20,6 +20,8 @@
 #include "../Mod/Mod.h"
 #include "../Mod/RuleItem.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

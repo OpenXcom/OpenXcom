@@ -18,6 +18,9 @@
  */
 
 #include "RuleMusic.h"
+
+#include <yaml-cpp/yaml.h>
+
 #include <climits>
 
 namespace OpenXcom
@@ -30,7 +33,7 @@ namespace OpenXcom
  * also, 0.76 is roughly optimal for all the TFTD tracks.
  * @param type String defining the type.
  */
-RuleMusic::RuleMusic(const std::string &type) : _type(type), _catPos(INT_MAX), _normalization(0.76f) 
+RuleMusic::RuleMusic(const std::string &type) : _type(type), _catPos(INT_MAX), _normalization(0.76f)
 {
 }
 

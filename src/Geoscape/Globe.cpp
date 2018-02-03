@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Globe.h"
-#include <algorithm>
 #include "../fmath.h"
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
@@ -53,6 +52,10 @@
 #include "../Mod/RuleGlobe.h"
 #include "../Interface/Cursor.h"
 #include "../Engine/Screen.h"
+
+#include <SDL_timer.h> //For SDL_GetTicks().
+
+#include <algorithm>
 
 namespace OpenXcom
 {

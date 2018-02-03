@@ -19,7 +19,8 @@
  */
 #include <map>
 #include <string>
-#include <SDL.h>
+
+#include <SDL_video.h> // For SDL_Color.
 
 namespace OpenXcom
 {

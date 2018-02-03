@@ -21,6 +21,8 @@
 #include "SerializationHelper.h"
 #include "../Engine/Options.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

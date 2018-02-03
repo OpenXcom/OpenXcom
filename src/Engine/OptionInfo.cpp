@@ -17,8 +17,13 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "OptionInfo.h"
-#include <algorithm>
 #include "Exception.h"
+
+#include <yaml-cpp/yaml.h>
+
+#include <algorithm>
+#include <sstream>
+#include <iomanip>
 
 namespace OpenXcom
 {
@@ -107,8 +112,7 @@ void OptionInfo::load(const YAML::Node &node) const
  * (eg. for command-line options).
  * @param map Options map.
  */
-void OptionInfo::load(const std::map<std::string, std::string> &map) const
-{
+void OptionInfo::load(const std::map<std::string, std::string> &map) const{
 	std::string id = _id;
 	std::transform(id.begin(), id.end(), id.begin(), ::tolower);
 	std::map<std::string, std::string>::const_iterator it = map.find(id);

@@ -18,8 +18,6 @@
  */
 #include "Base.h"
 #include "../fmath.h"
-#include <stack>
-#include <algorithm>
 #include "BaseFacility.h"
 #include "../Mod/RuleBaseFacility.h"
 #include "Craft.h"
@@ -44,6 +42,11 @@
 #include "../Engine/Options.h"
 #include "../Mod/RuleSoldier.h"
 #include "../Engine/Logger.h"
+
+#include <yaml-cpp/yaml.h>
+
+#include <stack>
+#include <algorithm>
 
 namespace OpenXcom
 {

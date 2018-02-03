@@ -18,6 +18,8 @@
  */
 #include "RuleConverter.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

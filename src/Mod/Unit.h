@@ -19,7 +19,15 @@
  */
 #include <string>
 #include <vector>
-#include <yaml-cpp/yaml.h>
+
+/*
+* Instead of pulling in yaml-cpp, just pre-declare the require Node
+* we require in member function definitions.
+*/
+namespace YAML
+{
+class Node;
+}
 
 namespace OpenXcom
 {
@@ -123,7 +131,7 @@ public:
 };
 
 }
-
+/*
 namespace YAML
 {
 	template<>
@@ -166,3 +174,4 @@ namespace YAML
 		}
 	};
 }
+*/

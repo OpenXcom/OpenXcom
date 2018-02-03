@@ -19,8 +19,11 @@
  */
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Options.h"
+
 #include "Position.h"
+
 #include <vector>
+#include <list>
 
 namespace OpenXcom
 {

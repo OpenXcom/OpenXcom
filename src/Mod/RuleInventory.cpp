@@ -17,8 +17,11 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleInventory.h"
-#include <cmath>
 #include "RuleItem.h"
+
+#include <cmath>
+
+#include <yaml-cpp/yaml.h>
 
 namespace YAML
 {

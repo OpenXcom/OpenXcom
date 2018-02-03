@@ -21,6 +21,8 @@
 #include "../Mod/RuleAlienMission.h"
 #include "../Mod/AlienDeployment.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

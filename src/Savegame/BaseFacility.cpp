@@ -20,6 +20,8 @@
 #include "../Mod/RuleBaseFacility.h"
 #include "Base.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

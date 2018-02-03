@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "LoadGameState.h"
-#include <sstream>
 #include "../Engine/Logger.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Engine/Game.h"
@@ -34,6 +33,10 @@
 #include "../Engine/Sound.h"
 #include "../Mod/RuleInterface.h"
 #include "StatisticsState.h"
+
+#include <yaml-cpp/yaml.h>
+
+#include <sstream>
 
 namespace OpenXcom
 {

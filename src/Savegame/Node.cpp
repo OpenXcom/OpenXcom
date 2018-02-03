@@ -18,6 +18,10 @@
  */
 #include "Node.h"
 
+#include <yaml-cpp/yaml.h>
+
+#include "../Battlescape/Position.hpp"
+
 namespace OpenXcom
 {
 

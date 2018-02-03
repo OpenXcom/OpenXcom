@@ -19,6 +19,8 @@
 #include "RuleUfo.h"
 #include "RuleTerrain.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

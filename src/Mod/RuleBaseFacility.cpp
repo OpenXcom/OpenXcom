@@ -19,6 +19,8 @@
 #include "RuleBaseFacility.h"
 #include "Mod.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

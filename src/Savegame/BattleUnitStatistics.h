@@ -16,11 +16,24 @@
 * You should have received a copy of the GNU General Public License
 * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <string>
-#include <sstream>
-#include <yaml-cpp/yaml.h>
 #include "BattleUnit.h"
 #include "../Engine/Language.h"
+
+#include <string>
+#include <sstream>
+
+/*
+* TODO: separate file by classes, then extract the definitions.
+* Instead of pulling in yaml-cpp, just pre-declare the require Node
+* we require in member function definitions.
+*/
+/*namespace YAML
+{
+class Node;
+}
+*/
+
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {

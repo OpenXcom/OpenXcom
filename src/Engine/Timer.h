@@ -17,9 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <SDL.h>
 #include "State.h"
 #include "Surface.h"
+
+#include <SDL_stdinc.h>
 
 namespace OpenXcom
 {
@@ -37,7 +38,7 @@ class Timer
 public:
 	static int maxFrameSkip;
 	static Uint32 gameSlowSpeed;
-	
+
 private:
 	Uint32 _start;
 	Uint32 _frameSkipStart;

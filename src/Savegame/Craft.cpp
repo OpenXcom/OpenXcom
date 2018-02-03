@@ -37,6 +37,8 @@
 #include "../Mod/AlienDeployment.h"
 #include "../Engine/Logger.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

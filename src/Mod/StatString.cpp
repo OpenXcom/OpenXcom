@@ -17,8 +17,11 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "StatString.h"
-#include <vector>
 #include "../Engine/Language.h"
+
+#include <yaml-cpp/yaml.h>
+
+#include <vector>
 
 namespace OpenXcom
 {

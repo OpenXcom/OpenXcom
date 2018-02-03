@@ -18,6 +18,8 @@
  */
 #include "RuleManufacture.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 /**

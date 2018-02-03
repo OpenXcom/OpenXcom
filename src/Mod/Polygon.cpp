@@ -19,6 +19,10 @@
 #include "Polygon.h"
 #include "../fmath.h"
 
+#include <yaml-cpp/yaml.h>
+
+#include <vector>
+
 namespace OpenXcom
 {
 

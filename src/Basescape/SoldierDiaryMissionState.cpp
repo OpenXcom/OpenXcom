@@ -31,6 +31,8 @@
 #include "../Savegame/MissionStatistics.h"
 #include "../Savegame/BattleUnitStatistics.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 
@@ -130,7 +132,7 @@ void SoldierDiaryMissionState::init()
 		missionId = 0;
 	}
 	int daysWounded = missionStatistics->at(missionId)->injuryList[_soldier->getId()];
-	
+
 	_lstKills->clearList();
 	_txtTitle->setText(tr(missionStatistics->at(missionId)->type));
 	if (missionStatistics->at(missionId)->isUfoMission())
@@ -145,7 +147,7 @@ void SoldierDiaryMissionState::init()
 	_txtDaylight->setText(tr("STR_DAYLIGHT_TYPE").arg(tr(missionStatistics->at(missionId)->getDaylightString())));
 	_txtDaysWounded->setText(tr("STR_DAYS_WOUNDED").arg(daysWounded));
 	_txtDaysWounded->setVisible(daysWounded != 0);
-	
+
 	int kills = 0;
 	bool stunOrKill = false;
 

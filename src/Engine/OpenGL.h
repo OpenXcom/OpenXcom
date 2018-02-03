@@ -11,7 +11,6 @@
 
 #ifndef __NO_OPENGL
 
-#include <SDL.h>
 #include <SDL_opengl.h>
 #include <string>
 

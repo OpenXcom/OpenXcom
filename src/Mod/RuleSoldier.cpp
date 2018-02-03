@@ -21,6 +21,10 @@
 #include "SoldierNamePool.h"
 #include "../Engine/FileMap.h"
 
+#include "Unit.hpp"
+
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

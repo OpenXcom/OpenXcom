@@ -18,6 +18,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "../Engine/State.h"
+
+#include <SDL_thread.h> //For SDL_Thread.
+
 #include <sstream>
 
 namespace OpenXcom

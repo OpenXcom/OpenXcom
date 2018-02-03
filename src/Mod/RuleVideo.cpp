@@ -17,8 +17,11 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleVideo.h"
-#include <climits>
 #include "../Engine/Screen.h"
+
+#include <climits>
+
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {

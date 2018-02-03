@@ -18,11 +18,14 @@
  */
 #include "MapDataSet.h"
 #include "MapData.h"
-#include <fstream>
 #include <SDL_endian.h>
 #include "../Engine/Exception.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/FileMap.h"
+
+#include <fstream>
+
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {

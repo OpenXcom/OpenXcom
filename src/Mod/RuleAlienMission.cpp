@@ -19,6 +19,8 @@
 #include "RuleAlienMission.h"
 #include "../Savegame/WeightedOptions.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace YAML
 {
 	template<>

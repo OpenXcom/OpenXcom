@@ -17,12 +17,15 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CraftWeapon.h"
-#include <cmath>
-#include <algorithm>
 #include "../Mod/RuleCraftWeapon.h"
 #include "../Mod/Mod.h"
 #include "../Mod/RuleItem.h"
 #include "CraftWeaponProjectile.h"
+
+#include <yaml-cpp/yaml.h>
+
+#include <cmath>
+#include <algorithm>
 
 namespace OpenXcom
 {

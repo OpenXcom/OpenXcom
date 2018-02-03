@@ -18,10 +18,12 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "../Engine/State.h"
-#include <SDL.h>
-#include <string>
 #include "OptionsBaseState.h"
 #include "../Savegame/SavedGame.h"
+
+#include <SDL_video.h> //For SDL_Color.
+
+#include <string>
 
 namespace OpenXcom
 {

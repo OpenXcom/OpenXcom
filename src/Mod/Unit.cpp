@@ -20,6 +20,8 @@
 #include "../Engine/Exception.h"
 #include "Mod.h"
 
+#include "Unit.hpp"
+
 namespace OpenXcom
 {
 

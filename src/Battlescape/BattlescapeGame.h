@@ -18,7 +18,8 @@
  * along with OpenXcom.  If not, see <http:///www.gnu.org/licenses/>.
  */
 #include "Position.h"
-#include <SDL.h>
+#include <SDL_stdinc.h>
+
 #include <string>
 #include <list>
 #include <vector>

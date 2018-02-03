@@ -17,11 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Language.h"
-#include <fstream>
-#include <cassert>
-#include <set>
-#include <climits>
-#include <algorithm>
 #include "CrossPlatform.h"
 #include "Logger.h"
 #include "Options.h"
@@ -34,6 +29,14 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
+
+#include <fstream>
+#include <cassert>
+#include <set>
+#include <climits>
+#include <algorithm>
+
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {

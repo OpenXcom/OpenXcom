@@ -19,6 +19,8 @@
 #include "Region.h"
 #include "../Mod/RuleRegion.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

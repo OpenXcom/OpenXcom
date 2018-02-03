@@ -38,6 +38,8 @@
 #include <SDL_mixer.h>
 #include <SDL_thread.h>
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

@@ -19,7 +19,8 @@
  */
 #include <vector>
 #include <string>
-#include <SDL.h>
+
+#include <SDL_video.h>  // For SDL_color.
 
 namespace OpenXcom
 {
