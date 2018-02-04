@@ -22,6 +22,7 @@
 * we require in member function definitions.
 */
 #include <map>
+#include <string>
 
 namespace YAML
 {
