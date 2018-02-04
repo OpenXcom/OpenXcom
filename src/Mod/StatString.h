@@ -21,6 +21,7 @@
 #include "StatStringCondition.h"
 
 #include <map>
+#include <string>
 
 /*
 * Instead of pulling in yaml-cpp, just pre-declare the require Node
