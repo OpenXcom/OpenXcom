@@ -26,13 +26,14 @@
 #include "BattlescapeState.h"
 #include "../Savegame/Tile.h"
 #include "Pathfinding.h"
-#include "../Engine/RNG.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Mod/Armor.h"
 #include "../Mod/Mod.h"
 #include "../Mod/RuleItem.h"
 #include "../fmath.h"
+#include "../Engine/RNG.hpp"
+#include "../Engine/RNG.h"
 
 #include <yaml-cpp/yaml.h>
 

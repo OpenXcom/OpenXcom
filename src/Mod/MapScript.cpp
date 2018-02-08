@@ -22,6 +22,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Exception.h"
 
+#include <algorithm>
 
 namespace OpenXcom
 {

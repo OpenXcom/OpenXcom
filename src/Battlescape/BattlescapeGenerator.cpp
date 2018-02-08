@@ -16,9 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <assert.h>
-#include <fstream>
-#include <sstream>
 #include "BattlescapeGenerator.h"
 #include "TileEngine.h"
 #include "Inventory.h"
@@ -60,6 +57,11 @@
 #include "../Mod/AlienDeployment.h"
 #include "../Mod/RuleBaseFacility.h"
 #include "../Mod/Texture.h"
+
+#include <assert.h>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
 
 namespace OpenXcom
 {

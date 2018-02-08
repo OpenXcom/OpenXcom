@@ -123,6 +123,7 @@ set ( engine_src
   Engine/Options.cpp
   Engine/Palette.cpp
   Engine/RNG.cpp
+  Engine/RNG-ETI.cpp
   Engine/Scalers/hq2x.cpp
   Engine/Scalers/hq3x.cpp
   Engine/Scalers/hq4x.cpp
