@@ -984,6 +984,11 @@ void BattleUnit::aim(bool aiming)
 
 /**
  * Returns the direction from this unit to a given point.
+ * 0 <-> y = -1, x = 0
+ * 1 <-> y = -1, x = 1
+ * 3 <-> y = 1, x = 1
+ * 5 <-> y = 1, x = -1
+ * 7 <-> y = -1, x = -1
  * @param point given position.
  * @return direction.
  */
@@ -2879,7 +2884,7 @@ void BattleUnit::adjustStats(const StatAdjustment &adjustment)
 	_stats.psiStrength += adjustment.statGrowth.psiStrength * adjustment.growthMultiplier * _stats.psiStrength / 100;
 	_stats.psiSkill += adjustment.statGrowth.psiSkill * adjustment.growthMultiplier * _stats.psiSkill / 100;
 	_stats.melee += adjustment.statGrowth.melee * adjustment.growthMultiplier * _stats.melee / 100;
-	
+
 	_stats.firing *= adjustment.aimAndArmorMultiplier;
 	_maxArmor[0] *= adjustment.aimAndArmorMultiplier;
 	_maxArmor[1] *= adjustment.aimAndArmorMultiplier;

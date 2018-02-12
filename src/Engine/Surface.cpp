@@ -943,6 +943,24 @@ void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half, int
 }
 
 /**
+ * Specific blit function to blit battlescape terrain data in different shades in a fast way.
+ * @param surface destination blit to
+ * @param x
+ * @param y
+ * @param shade shade offset
+ * @param range area that limit draw surface
+ */
+void Surface::blitNShade(Surface *surface, int x, int y, int shade, GraphSubset range)
+{
+	ShaderMove<Uint8> src(this, x, y);
+	ShaderMove<Uint8> dest(surface);
+
+	dest.setDomain(range);
+
+	ShaderDraw<StandardShade>(dest, src, ShaderScalar(shade));
+}
+
+/**
  * Set the surface to be redrawn.
  * @param valid true means redraw.
  */
@@ -985,7 +1003,7 @@ void Surface::resize(int width, int height)
 	int pitch = GetPitch(bpp, width);
 	void *alignedBuffer = NewAligned(bpp, width, height);
 	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom(alignedBuffer, width, height, bpp, pitch, 0, 0, 0, 0);
-	
+
 	if (surface == 0)
 	{
 		throw Exception(SDL_GetError());

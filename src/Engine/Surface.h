@@ -19,6 +19,7 @@
  */
 #include <SDL.h>
 #include <string>
+#include "GraphSubset.h"
 
 namespace OpenXcom
 {
@@ -211,7 +212,9 @@ public:
 	/// Unlocks the surface.
 	void unlock();
 	/// Specific blit function to blit battlescape terrain data in different shades in a fast way.
-	void blitNShade(Surface *surface, int x, int y, int off, bool half = false, int newBaseColor = 0);
+	void blitNShade(Surface *surface, int x, int y, int shade, bool half = false, int newBaseColor = 0);
+	/// Specific blit function to blit battlescape terrain data in different shades in a fast way.
+	void blitNShade(Surface *surface, int x, int y, int shade, GraphSubset range);
 	/// Invalidate the surface: force it to be redrawn
 	void invalidate(bool valid = true);
 	/// Gets the tooltip of the surface.

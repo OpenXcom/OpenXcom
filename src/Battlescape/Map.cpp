@@ -106,7 +106,7 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_scrollKeyTimer = new Timer(SCROLL_INTERVAL);
 	_scrollKeyTimer->onTimer((SurfaceHandler)&Map::scrollKey);
 	_camera->setScrollTimer(_scrollMouseTimer, _scrollKeyTimer);
-	
+
 	_txtAccuracy = new Text(24, 9, 0, 0);
 	_txtAccuracy->setSmall();
 	_txtAccuracy->setPalette(_game->getScreen()->getPalette());
@@ -244,6 +244,234 @@ void Map::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 }
 
 /**
+ * Check two positions if have same XY cords
+ */
+static bool positionHaveSameXY(Position a, Position b)
+{
+	return a.x == b.x && a.y == b.y;
+}
+
+
+/**
+ * Draw part of unit graphic that overlap current tile.
+ * @param surface
+ * @param bu
+ * @param tileNorth
+ * @param tileScreenPosition
+ * @param shade
+ */
+void Map::drawUnit(Surface *surface, Tile *unitTile, Tile *currTile, Position currTileScreenPosition, int shade, bool topLayer)
+{
+	const int tileFoorWidth = 32;
+	const int tileFoorHeight = 16;
+	const int tileHeight = 40;
+
+	if (!unitTile)
+	{
+		return;
+	}
+	BattleUnit* bu = unitTile->getUnit();
+	Position unitOffset;
+	bool unitFromBelow = false;
+	if (!bu)
+	{
+		Tile *below = _save->getTile(unitTile->getPosition() + Position(0,0,-1));
+		if (below && unitTile->hasNoFloor(below))
+		{
+			bu = below->getUnit();
+			if (!bu)
+			{
+				return;
+			}
+			unitFromBelow = true;
+		}
+		else
+		{
+			return;
+		}
+	}
+
+	if (!(bu->getVisible() || _save->getDebugMode()))
+	{
+		return;
+	}
+
+	unitOffset.x = unitTile->getPosition().x - bu->getPosition().x;
+	unitOffset.y = unitTile->getPosition().y - bu->getPosition().y;
+	int part = unitOffset.x + unitOffset.y*2;
+	bool ignored;
+	Surface *tmpSurface = bu->getCache(&ignored, part);
+	if (!tmpSurface)
+	{
+		return;
+	}
+
+	bool moving = bu->getStatus() == STATUS_WALKING || bu->getStatus() == STATUS_FLYING;
+	int bonusWidth = moving ? 0 : tileFoorWidth;
+	int topMargin = 0;
+	int bottomMargin = 0;
+
+	//if unit is from below then we draw only part that in in tile
+	if (unitFromBelow)
+	{
+		bottomMargin = -tileFoorHeight / 2;
+		topMargin = tileFoorHeight;
+	}
+	else if (topLayer)
+	{
+		topMargin = 2 * tileFoorHeight;
+	}
+	else
+	{
+		Tile *top = _save->getTile(unitTile->getPosition() + Position(0, 0, +1));
+		if (top && top->hasNoFloor(unitTile))
+		{
+			topMargin = -tileFoorHeight / 2;
+		}
+		else
+		{
+			topMargin = tileFoorHeight;
+		}
+	}
+
+	GraphSubset mask = GraphSubset(tileFoorWidth + bonusWidth, tileHeight + topMargin + bottomMargin).offset(currTileScreenPosition.x - bonusWidth / 2, currTileScreenPosition.y - topMargin);
+
+	if (moving)
+	{
+		GraphSubset leftMask = mask.offset(-tileFoorWidth/2, 0);
+		GraphSubset rightMask = mask.offset(+tileFoorWidth/2, 0);
+		int direction = bu->getDirection();
+		Position partCurr = currTile->getPosition();
+		Position partDest = bu->getDestination() + unitOffset;
+		Position partLast = bu->getLastPosition() + unitOffset;
+		bool isTileDestPos = positionHaveSameXY(partDest, partCurr);
+		bool isTileLastPos = positionHaveSameXY(partLast, partCurr);
+
+		//adjusting mask
+		if (positionHaveSameXY(partLast, partDest))
+		{
+			if (currTile == unitTile)
+			{
+				//no change
+			}
+			else
+			{
+				//nothing to draw
+				return;
+			}
+		}
+		else if (isTileDestPos)
+		{
+			//unit is moving to this tile
+			switch (direction)
+			{
+			case 0:
+			case 1:
+				mask = GraphSubset::intersection(mask, rightMask);
+				break;
+			case 2:
+				//no change
+				break;
+			case 3:
+				//no change
+				break;
+			case 4:
+				//no change
+				break;
+			case 5:
+			case 6:
+				mask = GraphSubset::intersection(mask, leftMask);
+				break;
+			case 7:
+				//nothing to draw
+				return;
+			}
+		}
+		else if (isTileLastPos)
+		{
+			//unit is exiting this tile
+			switch (direction)
+			{
+			case 0:
+				//no change
+				break;
+			case 1:
+			case 2:
+				mask = GraphSubset::intersection(mask, leftMask);
+				break;
+			case 3:
+				//nothing to draw
+				return;
+			case 4:
+			case 5:
+				mask = GraphSubset::intersection(mask, rightMask);
+				break;
+			case 6:
+				//no change
+				break;
+			case 7:
+				//no change
+				break;
+			}
+		}
+		else
+		{
+			Position leftPos = partCurr + Position(-1, 0, 0);
+			Position rightPos = partCurr + Position(0, -1, 0);
+			if (!topLayer && (partDest.z > partCurr.z || partLast.z > partCurr.z))
+			{
+				//unit change layers, it will be drawn by upper layer not lower.
+				return;
+			}
+			else if (
+				(direction == 1 && (partDest == rightPos || partLast == leftPos)) ||
+				(direction == 5 && (partDest == leftPos || partLast == rightPos)))
+			{
+				mask = GraphSubset(tileFoorWidth, tileHeight + 2 * tileFoorHeight).offset(currTileScreenPosition.x, currTileScreenPosition.y - 2 * tileFoorHeight);
+			}
+			else
+			{
+				//unit is not moving close to tile
+				return;
+			}
+		}
+	}
+	else if (unitTile != currTile)
+	{
+		return;
+	}
+
+	Position tileScreenPosition;
+	_camera->convertMapToScreen(unitTile->getPosition() + Position(0,0, unitFromBelow ? -1 : 0), &tileScreenPosition);
+	tileScreenPosition += _camera->getMapOffset();
+
+	// draw unit
+	Position offset;
+	int shadeOffset;
+	calculateWalkingOffset(bu, &offset, &shadeOffset);
+	int tileShade = currTile->isDiscovered(2) ? currTile->getShade() : 16;
+	int unitShade = (tileShade * (16 - shadeOffset) + shade * shadeOffset) / 16;
+	tmpSurface->blitNShade(surface, tileScreenPosition.x + offset.x - _spriteWidth / 2, tileScreenPosition.y + offset.y, unitShade, mask);
+	// draw fire
+	if (bu->getFire() > 0)
+	{
+		int frameNumber = 4 + (_animFrame / 2);
+		tmpSurface = _game->getMod()->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
+		tmpSurface->blitNShade(surface, tileScreenPosition.x + offset.x, tileScreenPosition.y + offset.y, 0, mask);
+	}
+	if (bu->getBreathFrame() > 0)
+	{
+		tmpSurface = _game->getMod()->getSurfaceSet("BREATH-1.PCK")->getFrame(bu->getBreathFrame() - 1);
+		// lower the bubbles for shorter or kneeling units.
+		offset.y += (22 - bu->getHeight());
+		if (tmpSurface)
+		{
+			tmpSurface->blitNShade(surface, tileScreenPosition.x + offset.x, tileScreenPosition.y + offset.y - 30, tileShade, mask);
+		}
+	}
+}
+
+/**
  * Draw the terrain.
  * Keep this function as optimised as possible. It's big to minimise overhead of function calls.
  * @param surface The surface to draw on.
@@ -260,10 +488,9 @@ void Map::drawTerrain(Surface *surface)
 	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
 	int dummy;
 	BattleUnit *unit = 0;
-	bool invalid;
 	int tileShade, wallShade, tileColor;
 	static const int arrowBob[8] = {0,1,2,1,0,1,2,1};
-	
+
 	NumberText *_numWaypid = 0;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
@@ -390,6 +617,7 @@ void Map::drawTerrain(Surface *surface)
 	surface->lock();
 	for (int itZ = beginZ; itZ <= endZ; itZ++)
 	{
+		bool topLayer = itZ == endZ;
 		for (int itX = beginX; itX <= endX; itX++)
 		{
 			for (int itY = beginY; itY <= endY; itY++)
@@ -453,239 +681,19 @@ void Map::drawTerrain(Surface *surface)
 						}
 					}
 
-					// special handling for a moving unit.
-					if (mapPosition.y > 0)
+					// special handling for a moving unit in background of tile.
+					const int backPosSize = 3;
+					Position backPos[backPosSize] =
 					{
-						Tile *tileNorth = _save->getTile(mapPosition - Position(0,1,0));
-						BattleUnit *bu = tileNorth->getUnit();
-						int tileNorthShade, tileTwoNorthShade, tileWestShade, tileNorthWestShade, tileSouthWestShade;
-						if (tileNorth->isDiscovered(2))
-						{
-							tileNorthShade = tileNorth->getShade();
-						}
-						else
-						{
-							tileNorthShade = 16;
-							bu = 0;
-						}
+						Position(0, -1, 0),
+						Position(-1, -1, 0),
+						Position(-1, 0, 0),
+					};
 
-						/*
-						 * Phase I: rerender the unit to make sure they don't get drawn over any walls or under any tiles
-						 */
-						if (bu && bu->getVisible() && bu->getStatus() == STATUS_WALKING && tile->getTerrainLevel() >= tileNorth->getTerrainLevel())
-						{
-							Position tileOffset = Position(16,-8,0);
-							// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
-							int part = 0;
-							part += tileNorth->getPosition().x - bu->getPosition().x;
-							part += (tileNorth->getPosition().y - bu->getPosition().y)*2;
-							tmpSurface = bu->getCache(&invalid, part);
-							if (tmpSurface)
-							{
-								// draw unit
-								Position offset;
-								calculateWalkingOffset(bu, &offset);
-								tmpSurface->blitNShade(surface, screenPosition.x + offset.x + tileOffset.x - _spriteWidth / 2, screenPosition.y + offset.y  + tileOffset.y, tileNorthShade);
-								// draw fire
-								if (bu->getFire() > 0)
-								{
-									frameNumber = 4 + (_animFrame / 2);
-									tmpSurface = _game->getMod()->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
-									tmpSurface->blitNShade(surface, screenPosition.x + offset.x + tileOffset.x, screenPosition.y + offset.y + tileOffset.y, 0);
-								}
-							}
-
-							/*
-							 * Phase II: rerender any east wall type objects in the tile to the north of the unit
-							 * only applies to movement in the north/south direction.
-							 */
-							if ((bu->getDirection() == 0 || bu->getDirection() == 4) && mapPosition.y >= 2)
-							{
-								Tile *tileTwoNorth = _save->getTile(mapPosition - Position(0,2,0));
-								if (tileTwoNorth->isDiscovered(2))
-								{
-									tileTwoNorthShade = tileTwoNorth->getShade();
-								}
-								else
-								{
-									tileTwoNorthShade = 16;
-								}
-								tmpSurface = tileTwoNorth->getSprite(O_OBJECT);
-								if (tmpSurface && tileTwoNorth->getMapData(O_OBJECT)->getBigWall() == 6)
-								{
-									tmpSurface->blitNShade(surface, screenPosition.x + tileOffset.x*2, screenPosition.y - tileTwoNorth->getMapData(O_OBJECT)->getYOffset() + tileOffset.y*2, tileTwoNorthShade);
-								}
-							}
-
-							/*
-							 * Phase III: render any south wall type objects in the tile to the northWest
-							 */
-							if (mapPosition.x > 0)
-							{
-								Tile *tileNorthWest = _save->getTile(mapPosition - Position(1,1,0));
-								if (tileNorthWest->isDiscovered(2))
-								{
-									tileNorthWestShade = tileNorthWest->getShade();
-								}
-								else
-								{
-									tileNorthWestShade = 16;
-								}
-								tmpSurface = tileNorthWest->getSprite(O_OBJECT);
-								if (tmpSurface && tileNorthWest->getMapData(O_OBJECT)->getBigWall() == 7)
-								{
-									tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tileNorthWest->getMapData(O_OBJECT)->getYOffset() + tileOffset.y*2, tileNorthWestShade);
-								}
-							}
-
-							/*
-							 * Phase IV: render any south or east wall type objects in the tile to the north
-							 */
-							if (tileNorth->getMapData(O_OBJECT) && tileNorth->getMapData(O_OBJECT)->getBigWall() >= 6 && tileNorth->getMapData(O_OBJECT)->getBigWall() != 9)
-							{
-								tmpSurface = tileNorth->getSprite(O_OBJECT);
-								if (tmpSurface)
-									tmpSurface->blitNShade(surface, screenPosition.x + tileOffset.x, screenPosition.y - tileNorth->getMapData(O_OBJECT)->getYOffset() + tileOffset.y, tileNorthShade);
-							}
-							if (mapPosition.x > 0)
-							{
-								/*
-								 * Phase V: re-render objects in the tile to the south west
-								 * only render half so it won't overlap other areas that are already drawn
-								 * and only apply this to movement in a north easterly or south westerly direction.
-								 */
-								if ( (bu->getDirection() == 1 || bu->getDirection() == 5) && mapPosition.y < endY-1)
-								{
-									Tile *tileSouthWest = _save->getTile(mapPosition + Position(-1, 1, 0));
-									if (tileSouthWest->isDiscovered(2))
-									{
-										tileSouthWestShade = tileSouthWest->getShade();
-									}
-									else
-									{
-										tileSouthWestShade = 16;
-									}
-									tmpSurface = tileSouthWest->getSprite(O_OBJECT);
-									if (tmpSurface)
-									{
-											tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x * 2, screenPosition.y - tileSouthWest->getMapData(O_OBJECT)->getYOffset(), tileSouthWestShade, true);
-									}
-								}
-
-								/*
-								 * Phase VI: we need to re-render everything in the tile to the west.
-								 */
-								Tile *tileWest = _save->getTile(mapPosition - Position(1,0,0));
-								BattleUnit *westUnit = tileWest->getUnit();
-								if (tileWest->isDiscovered(2))
-								{
-									tileWestShade = tileWest->getShade();
-								}
-								else
-								{
-									tileWestShade = 16;
-									westUnit = 0;
-								}
-								tmpSurface = tileWest->getSprite(O_WESTWALL);
-								if (tmpSurface && bu != unit)
-								{
-									if ((tileWest->getMapData(O_WESTWALL)->isDoor() || tileWest->getMapData(O_WESTWALL)->isUFODoor())
-											&& tileWest->isDiscovered(0))
-										wallShade = tileWest->getShade();
-									else
-										wallShade = tileWestShade;
-									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(O_WESTWALL)->getYOffset() + tileOffset.y, wallShade, true);
-								}
-								tmpSurface = tileWest->getSprite(O_NORTHWALL);
-								if (tmpSurface)
-								{
-									if ((tileWest->getMapData(O_NORTHWALL)->isDoor() || tileWest->getMapData(O_NORTHWALL)->isUFODoor())
-											&& tileWest->isDiscovered(1))
-										wallShade = tileWest->getShade();
-									else
-										wallShade = tileWestShade;
-									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(O_NORTHWALL)->getYOffset() + tileOffset.y, wallShade, true);
-								}
-								tmpSurface = tileWest->getSprite(O_OBJECT);
-								if (tmpSurface && (tileWest->getMapData(O_OBJECT)->getBigWall() < 6 || tileWest->getMapData(O_OBJECT)->getBigWall() == 9) && tileWest->getMapData(O_OBJECT)->getBigWall() != 3)
-								{
-									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(O_OBJECT)->getYOffset() + tileOffset.y, tileWestShade, true);
-									// if the object in the tile to the west is a diagonal big wall, we need to cover up the black triangle at the bottom
-									if (tileWest->getMapData(O_OBJECT)->getBigWall() == 2)
-									{
-										tmpSurface = tile->getSprite(O_FLOOR);
-										if (tmpSurface)
-											tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(O_FLOOR)->getYOffset(), tileShade);
-									}
-								}
-								// draw an item on top of the floor (if any)
-								int sprite = tileWest->getTopItemSprite();
-								if (sprite != -1)
-								{
-									tmpSurface = _game->getMod()->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
-									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileWest->getTerrainLevel() + tileOffset.y, tileWestShade, true);
-								}
-								// Draw soldier
-								if (westUnit && (!tileWest->getMapData(O_OBJECT) || tileWest->getMapData(O_OBJECT)->getBigWall() < 6 || tileWest->getMapData(O_OBJECT)->getBigWall() == 9) && (westUnit->getVisible() || _save->getDebugMode()))
-								{
-									// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
-									int part = 0;
-									part += tileWest->getPosition().x - westUnit->getPosition().x;
-									part += (tileWest->getPosition().y - westUnit->getPosition().y)*2;
-									tmpSurface = westUnit->getCache(&invalid, part);
-									if (tmpSurface)
-									{
-										Position offset;
-										calculateWalkingOffset(westUnit, &offset);
-										tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x + offset.x - _spriteWidth / 2, screenPosition.y + tileOffset.y + offset.y, tileWestShade, true);
-										if (westUnit->getFire() > 0)
-										{
-											frameNumber = 4 + (_animFrame / 2);
-											tmpSurface = _game->getMod()->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
-											tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x + offset.x, screenPosition.y + tileOffset.y + offset.y, 0, true);
-										}
-									}
-								}
-								// Draw smoke/fire
-								if (tileWest->getSmoke() && tileWest->isDiscovered(2))
-								{
-									frameNumber = 0;
-									int shade = 0;
-									if (!tileWest->getFire())
-									{
-										if (_save->getDepth() > 0)
-										{
-											frameNumber += Mod::UNDERWATER_SMOKE_OFFSET;
-										}
-										else
-										{
-											frameNumber += Mod::SMOKE_OFFSET;
-										}
-										frameNumber += int(floor((tileWest->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
-										shade = tileWestShade;
-									}
-
-									if ((_animFrame / 2) + tileWest->getAnimationOffset() > 3)
-									{
-										frameNumber += ((_animFrame / 2) + tileWest->getAnimationOffset() - 4);
-									}
-									else
-									{
-										frameNumber += (_animFrame / 2) + tileWest->getAnimationOffset();
-									}
-									tmpSurface = _game->getMod()->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
-									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y + tileOffset.y, shade, true);
-								}
-								// Draw object
-								if (tileWest->getMapData(O_OBJECT) && tileWest->getMapData(O_OBJECT)->getBigWall() >= 6 && tileWest->getMapData(O_OBJECT)->getBigWall() != 9)
-								{
-									tmpSurface = tileWest->getSprite(O_OBJECT);
-									tmpSurface->blitNShade(surface, screenPosition.x - tileOffset.x, screenPosition.y - tileWest->getMapData(O_OBJECT)->getYOffset() + tileOffset.y, tileWestShade, true);
-								}
-							}
-						}
+					for (int b = 0; b < backPosSize; ++b)
+					{
+						drawUnit(surface, _save->getTile(mapPosition + backPos[b]), tile, screenPosition, tileShade, topLayer);
 					}
-
 
 					// Draw walls
 					if (!tile->isVoid())
@@ -824,71 +832,23 @@ void Map::drawTerrain(Surface *surface)
 						}
 					}
 					unit = tile->getUnit();
-					// Draw soldier
-					if (unit && (unit->getVisible() || _save->getDebugMode()))
+					// Draw soldier from this tile or below
+					drawUnit(surface, tile, tile, screenPosition, tileShade, topLayer);
+
+					// special handling for a moving unit in forground of tile.
+					const int frontPosSize = 5;
+					Position frontPos[frontPosSize] =
 					{
-						// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
-						int part = 0;
-						part += tile->getPosition().x - unit->getPosition().x;
-						part += (tile->getPosition().y - unit->getPosition().y)*2;
-						tmpSurface = unit->getCache(&invalid, part);
-						if (tmpSurface)
-						{
-							Position offset;
-							calculateWalkingOffset(unit, &offset);
-							tmpSurface->blitNShade(surface, screenPosition.x + offset.x - _spriteWidth / 2, screenPosition.y + offset.y, tileShade);
-							if (unit->getFire() > 0)
-							{
-								frameNumber = 4 + (_animFrame / 2);
-								tmpSurface = _game->getMod()->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
-								tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, 0);
-							}
-							if (unit->getBreathFrame() > 0)
-							{
-								tmpSurface = _game->getMod()->getSurfaceSet("BREATH-1.PCK")->getFrame(unit->getBreathFrame() - 1);
-								// lower the bubbles for shorter or kneeling units.
-								offset.y += (22 - unit->getHeight());
-								if (tmpSurface)
-								{
-									tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y - 30, tileShade);
-								}
-							}
-						}
-					}
-					// if we can see through the floor, draw the soldier below it if it is on stairs
-					Tile *tileBelow = _save->getTile(mapPosition + Position(0, 0, -1));
-					if (itZ > 0 && tile->hasNoFloor(tileBelow))
+						Position(-1, +1, 0),
+						Position(0, +1, 0),
+						Position(+1, +1, 0),
+						Position(+1, 0, 0),
+						Position(+1, -1, 0),
+					};
+
+					for (int f = 0; f < frontPosSize; ++f)
 					{
-						BattleUnit *tunit = _save->selectUnit(Position(itX, itY, itZ-1));
-						Tile *ttile = _save->getTile(Position(itX, itY, itZ-1));
-						if (tunit && tunit->getVisible() && ttile->getTerrainLevel() < 0 && ttile->isDiscovered(2))
-						{
-							// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
-							int part = 0;
-							part += ttile->getPosition().x - tunit->getPosition().x;
-							part += (ttile->getPosition().y - tunit->getPosition().y)*2;
-							if (part != 1 && part != 2)
-							{
-								tmpSurface = tunit->getCache(&invalid, part);
-								if (tmpSurface)
-								{
-									Position offset;
-									calculateWalkingOffset(tunit, &offset);
-									offset.y += 24;
-									tmpSurface->blitNShade(surface, screenPosition.x + offset.x - _spriteWidth / 2, screenPosition.y + offset.y, ttile->getShade());
-									if (tunit->getArmor()->getSize() > 1)
-									{
-										offset.y += 4;
-									}
-									if (tunit->getFire() > 0)
-									{
-										frameNumber = 4 + (_animFrame / 2);
-										tmpSurface = _game->getMod()->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
-										tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, 0);
-									}
-								}
-							}
-						}
+						drawUnit(surface, _save->getTile(mapPosition + frontPos[f]), tile, screenPosition, tileShade, topLayer);
 					}
 
 					// Draw smoke/fire
@@ -947,7 +907,7 @@ void Map::drawTerrain(Surface *surface)
 					// Draw Path Preview
 					if (tile->getPreview() != -1 && tile->isDiscovered(0) && (_previewSetting & PATH_ARROWS))
 					{
-						if (itZ > 0 && tile->hasNoFloor(tileBelow))
+						if (itZ > 0 && tile->hasNoFloor(_save->getTile(tile->getPosition() + Position(0,0,-1))))
 						{
 							tmpSurface = _game->getMod()->getSurfaceSet("Pathfinding")->getFrame(11);
 							if (tmpSurface)
@@ -1381,7 +1341,7 @@ void Map::getSelectorPosition(Position *pos) const
  * @param unit Pointer to BattleUnit.
  * @param offset Pointer to the offset to return the calculation.
  */
-void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
+void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset, int *shadeOffset)
 {
 	int offsetX[8] = { 1, 1, 1, 0, -1, -1, -1, 0 };
 	int offsetY[8] = { 1, 0, -1, -1, -1, 0, 1, 1 };
@@ -1390,6 +1350,11 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 	int midphase = 4 + 4 * (dir % 2);
 	int endphase = 8 + 8 * (dir % 2);
 	int size = unit->getArmor()->getSize();
+
+	if (shadeOffset)
+	{
+		*shadeOffset = endphase == 16 ? phase : phase * 2;
+	}
 
 	if (size > 1)
 	{
@@ -1562,7 +1527,7 @@ void Map::cacheUnit(BattleUnit *unit)
 				cache = new Surface(_spriteWidth * 2, _spriteHeight);
 				cache->setPalette(this->getPalette());
 			}
-			
+
 			unitSprite->setBattleUnit(unit, i);
 			unitSprite->setSurfaces(_game->getMod()->getSurfaceSet(unit->getArmor()->getSpriteSheet()),
 									_game->getMod()->getSurfaceSet("HANDOB.PCK"),
