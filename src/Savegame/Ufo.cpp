@@ -295,7 +295,7 @@ int Ufo::getMarker() const
 	switch (_status)
 	{
 	case Ufo::FLYING:
-		return 2;
+		return _rules->getMarker() == -1 ? 2 : _rules->getMarker();
 	case Ufo::LANDED:
 		return 3;
 	case Ufo::CRASHED:

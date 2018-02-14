@@ -59,7 +59,12 @@ void RuleCraft::load(const YAML::Node &node, Mod *mod, int listOrder)
 		if (_sprite > 4)
 			_sprite += mod->getModOffset();
 	}
-	_marker = node["marker"].as<int>(_marker);
+	if (node["marker"])
+	{
+		_marker = node["marker"].as<int>(_marker);
+		if (_marker > 8)
+			_marker += mod->getModOffset();
+	}
 	_fuelMax = node["fuelMax"].as<int>(_fuelMax);
 	_damageMax = node["damageMax"].as<int>(_damageMax);
 	_speedMax = node["speedMax"].as<int>(_speedMax);
