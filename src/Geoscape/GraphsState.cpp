@@ -332,6 +332,29 @@ GraphsState::~GraphsState()
 }
 
 /**
+* Handle key shortcuts.
+* @param action Pointer to an action.
+*/
+void GraphsState::handle(Action *action)
+{
+	State::handle(action);
+
+	if (action->getDetails()->type == SDL_KEYDOWN)
+	{
+		if (action->getDetails()->key.keysym.sym == SDLK_F1)
+		{
+			// enable all buttons that have activity >= 1
+			pushButtonsActive();
+		}
+		else if (action->getDetails()->key.keysym.sym == SDLK_F2)
+		{
+			// enable all buttons that have activity >= 7
+			pushButtonsActive(7);
+		}
+	}
+}
+
+/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
@@ -619,6 +642,117 @@ void GraphsState::updateScale(double lowerLimit, double upperLimit)
 		_txtScale.at(i)->setText(Text::formatNumber(static_cast<int>(text)));
 		text += increment;
 	}
+}
+
+/**
+ * push all buttons that are currently active
+ */
+void GraphsState::pushButtonsActive(int minValue)
+{
+	if (!_country && !_finance)
+	{
+		pushRegionButtonsActive(minValue);
+	}
+	else if (!_finance)
+	{
+		pushCountryButtonsActive(minValue);
+	}
+}
+
+/**
+ * push all regions buttons that are currently active
+ */
+void GraphsState::pushRegionButtonsActive(int minValue)
+{
+	std::set<size_t> enabledRegions;
+
+	// only check the last 2 months if available
+	size_t entry = 0;
+	if (_game->getSavedGame()->getFundsList().size() >= 2)
+		entry = _game->getSavedGame()->getFundsList().size() - 2;
+
+	for (; entry != _game->getSavedGame()->getFundsList().size(); ++entry)
+	{
+		int total = 0;
+		if (_alien)
+		{
+			for (size_t iter = 0; iter != _game->getSavedGame()->getRegions()->size(); ++iter)
+			{
+				if (_game->getSavedGame()->getRegions()->at(iter)->getActivityAlien().at(entry) >= minValue)
+				{
+					enabledRegions.insert(iter);
+				}
+			}
+		}
+		else
+		{
+			for (size_t iter = 0; iter != _game->getSavedGame()->getRegions()->size(); ++iter)
+			{
+				if (_game->getSavedGame()->getRegions()->at(iter)->getActivityXcom().at(entry) >= minValue)
+				{
+					enabledRegions.insert(iter);
+				}
+			}
+		}
+	}
+
+	for (size_t iter = 0; iter != _game->getSavedGame()->getRegions()->size(); ++iter)
+	{
+		bool enabled = enabledRegions.find(iter) != enabledRegions.end();
+
+		_btnRegions[iter]->setPressed(enabled);
+		_regionToggles.at(iter + _butRegionsOffset)->_pushed = enabled;
+	}
+
+	drawLines();
+}
+
+/**
+ * push all country buttons that are currently active
+ */
+void GraphsState::pushCountryButtonsActive(int minValue)
+{
+	std::set<size_t> enabledCountries;
+
+	// only check the last 2 months if available
+	size_t entry = 0;
+	if (_game->getSavedGame()->getFundsList().size() >= 2)
+		entry = _game->getSavedGame()->getFundsList().size() - 2;
+
+	for (; entry != _game->getSavedGame()->getFundsList().size(); ++entry)
+	{
+		int total = 0;
+		if (_alien)
+		{
+			for (size_t iter = 0; iter != _game->getSavedGame()->getCountries()->size(); ++iter)
+			{
+				if (_game->getSavedGame()->getCountries()->at(iter)->getActivityAlien().at(entry) >= minValue)
+				{
+					enabledCountries.insert(iter);
+				}
+			}
+		}
+		else
+		{
+			for (size_t iter = 0; iter != _game->getSavedGame()->getCountries()->size(); ++iter)
+			{
+				if (_game->getSavedGame()->getCountries()->at(iter)->getActivityXcom().at(entry) >= minValue)
+				{
+					enabledCountries.insert(iter);
+				}
+			}
+		}
+	}
+
+	for (size_t iter = 0; iter != _game->getSavedGame()->getCountries()->size(); ++iter)
+	{
+		bool enabled = enabledCountries.find(iter) != enabledCountries.end();
+
+		_btnCountries[iter]->setPressed(enabled);
+		_countryToggles.at(iter + _butCountriesOffset)->_pushed = enabled;
+	}
+
+	drawLines();
 }
 
 /**
