@@ -102,12 +102,12 @@ public:
 	/// Draw Finances Lines.
 	void drawFinanceLines();
 	/// Scroll button lists
-	/// push all buttons that are currently active
-	void pushButtonsActive(int minValue = 1);
-	/// push all regions buttons that are currently active
-	void pushRegionButtonsActive(int minValue = 1);
-	/// push all country buttons that are currently active
-	void pushCountryButtonsActive(int minValue = 1);
+	/// push all buttons that are active on the current month
+	void pushButtonsActive(float minPercent);
+	/// push all regions buttons that are active on the current month
+	void pushRegionButtonsActive(float minPercent);
+	/// push all country buttons that are active on the current month
+	void pushCountryButtonsActive(float minPercent);
 };
 
 }
