@@ -2532,16 +2532,31 @@ int TileEngine::voxelCheck(Position voxel, BattleUnit *excludeUnit, bool exclude
 		BattleUnit *unit = tile->getUnit();
 		// sometimes there is unit on the tile below, but sticks up to this tile with his head,
 		// in this case we couldn't have unit standing at current tile.
-		if (unit == 0 && tile->hasNoFloor(0))
+		if (unit == 0 && tile->hasNoFloor(tileBelow))
 		{
-			if (tileBelow) unit = tileBelow->getUnit();
+			if (tileBelow)
+			{
+				tile = tileBelow;
+				unit = tile->getUnit();
+			}
 		}
-
 		if (unit != 0 && unit != excludeUnit && (!excludeAllBut || unit == excludeAllBut) && (!onlyVisible || unit->getVisible() ) )
 		{
 			Position tilepos;
 			Position unitpos = unit->getPosition();
-			int tz = unitpos.z*24 + unit->getFloatHeight()+(-tile->getTerrainLevel());//bottom
+			int terrainHeight = 0;
+			for (int x = 0; x < unit->getArmor()->getSize(); ++x)
+			{
+				for (int y = 0; y < unit->getArmor()->getSize(); ++y)
+				{
+					Tile *tempTile = _save->getTile(unitpos + Position(x,y,0));
+					if (tempTile->getTerrainLevel() < terrainHeight)
+					{
+						terrainHeight = tempTile->getTerrainLevel();
+					}
+				}
+			}
+			int tz = unitpos.z*24 + unit->getFloatHeight() - terrainHeight; //bottom most voxel, terrain heights are negative, so we subtract.
 			if ((voxel.z > tz) && (voxel.z <= tz + unit->getHeight()) )
 			{
 				int x = voxel.x%16;
