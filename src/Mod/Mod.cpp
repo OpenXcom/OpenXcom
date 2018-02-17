@@ -710,7 +710,7 @@ void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::st
  */
 void Mod::loadMod(const std::vector<std::string> &rulesetFiles, size_t modIdx)
 {
-	_modOffset = 1000 * modIdx;
+	_modOffset = 100000 * modIdx;
 
 	for (std::vector<std::string>::const_iterator i = rulesetFiles.begin(); i != rulesetFiles.end(); ++i)
 	{
