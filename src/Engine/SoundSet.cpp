@@ -83,11 +83,6 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 				if (size > 5) size -= 5; // skip 5 garbage name bytes at beginning
 				if (size) size--; // omit trailing null byte
 
-				int headersize = size + 36;
-				int soundsize = size;
-				memcpy(header + 4, &headersize, sizeof(headersize));
-				memcpy(header + 40, &soundsize, sizeof(soundsize));
-
 				newsound = new unsigned char[44 + size*2];
 				memcpy(newsound, header, 44);
 				if (size) memcpy(newsound + 44, sound+5, size);
@@ -99,6 +94,11 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 					*w = sound[5 + (offset16>>16)];
 				}
 				size = newsize + 44;
+
+				int headersize = newsize + 36;
+				int soundsize = newsize;
+				memcpy(newsound + 4, &headersize, sizeof(headersize));
+				memcpy(newsound + 40, &soundsize, sizeof(soundsize));
 			}
 		}
 		else if (0x40 == sound[0x18] && 0x1F == sound[0x19] && 0x00 == sound[0x1A] && 0x00 == sound[0x1B])
