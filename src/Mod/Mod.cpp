@@ -666,11 +666,26 @@ int Mod::getSoundOffset(int sound, const std::string& set) const
  */
 void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::string> > > &mods)
 {
+	std::vector<size_t> modOffsets(mods.size());
+	size_t offset = 0;
+	for (size_t i = 0; mods.size() > i; ++i)
+	{
+		modOffsets[i] = offset;
+		std::map<std::string, ModInfo>::const_iterator it = Options::getModInfos().find(mods[i].first);
+		if (it != Options::getModInfos().end())
+		{
+			offset += it->second.getReservedSpace();
+		}
+		else
+		{
+			offset += 1;
+		}
+	}
 	for (size_t i = 0; mods.size() > i; ++i)
 	{
 		try
 		{
-			loadMod(mods[i].second, i);
+			loadMod(mods[i].second, modOffsets[i]);
 		}
 		catch (Exception &e)
 		{
@@ -710,7 +725,7 @@ void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::st
  */
 void Mod::loadMod(const std::vector<std::string> &rulesetFiles, size_t modIdx)
 {
-	_modOffset = 100000 * modIdx;
+	_modOffset = 1000 * modIdx;
 
 	for (std::vector<std::string>::const_iterator i = rulesetFiles.begin(); i != rulesetFiles.end(); ++i)
 	{
