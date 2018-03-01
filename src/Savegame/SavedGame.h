@@ -92,9 +92,9 @@ struct PromotionInfo
 };
 
 /**
- *The game data that gets written to disk when the game is saved.
- *A saved game holds all the variable info in a game like funds,
- *game time, current bases and contents, world activities, score, etc.
+ * The game data that gets written to disk when the game is saved.
+ * A saved game holds all the variable info in a game like funds,
+ * game time, current bases and contents, world activities, score, etc.
  */
 class SavedGame
 {
@@ -138,6 +138,8 @@ public:
 	SavedGame();
 	/// Cleans up the saved game.
 	~SavedGame();
+	/// Sanitizies a mod name in a save.
+	static std::string sanitizeModName(const std::string &name);
 	/// Gets list of saves in the user directory.
 	static std::vector<SaveInfo> getList(Language *lang, bool autoquick);
 	/// Loads a saved game from YAML.
