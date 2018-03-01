@@ -709,8 +709,7 @@ void updateReservedSpace()
 {
 	Log(LOG_VERBOSE) << "Updating reservedSpace for master mods if necessary...";
 
-	std::string curMaster = getActiveMaster();
-	Log(LOG_VERBOSE) << "curMaster = " << curMaster;
+	Log(LOG_VERBOSE) << "_masterMod = " << _masterMod;
 
 	int maxSize = 1;
 	for (std::vector< std::pair<std::string, bool> >::reverse_iterator i = mods.rbegin(); i != mods.rend(); ++i)
@@ -722,9 +721,9 @@ void updateReservedSpace()
 		}
 
 		const ModInfo &modInfo = _modInfos.find(i->first)->second;
-		if (!modInfo.isMaster() && !modInfo.getMaster().empty() && modInfo.getMaster() != curMaster)
+		if (!modInfo.canActivate(_masterMod))
 		{
-			Log(LOG_VERBOSE) << "skipping mod for non-current master: " << i->first << "(" << modInfo.getMaster() << " != " << curMaster << ")";
+			Log(LOG_VERBOSE) << "skipping mod for non-current master: " << i->first << "(" << modInfo.getMaster() << " != " << _masterMod << ")";
 			continue;
 		}
 
