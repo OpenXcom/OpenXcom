@@ -161,32 +161,52 @@ SavedGame::~SavedGame()
 	delete _battleGame;
 }
 
+/**
+ * Removes version number from a mod name, if any.
+ * @param name Mod id from a savegame.
+ * @return Sanitized mod name.
+ */
+std::string SavedGame::sanitizeModName(const std::string &name)
+{
+	size_t versionInfoBreakPoint = name.find(" ver: ");
+	if (versionInfoBreakPoint == std::string::npos)
+	{
+		return name;
+	}
+	else
+	{
+		return name.substr(0, versionInfoBreakPoint);
+	}
+}
+
 static bool _isCurrentGameType(const SaveInfo &saveInfo, const std::string &curMaster)
 {
-	std::string gameMaster;
+	bool matchMasterMod = false;
 	if (saveInfo.mods.empty())
 	{
 		// if no mods listed in the savegame, this is an old-style
 		// savegame.  assume "xcom1" as the game type.
-		gameMaster = "xcom1";
+		matchMasterMod = (curMaster == "xcom1");
 	}
 	else
 	{
-		gameMaster = saveInfo.mods[0];
-		size_t pos = gameMaster.find(" ver: ");
-		if (pos != std::string::npos)
+		for (std::vector<std::string>::const_iterator i = saveInfo.mods.begin(); i != saveInfo.mods.end(); ++i)
 		{
-			gameMaster = gameMaster.substr(0, pos);
+			std::string name = SavedGame::sanitizeModName(*i);
+			if (name == curMaster)
+			{
+				matchMasterMod = true;
+				break;
+			}
 		}
 	}
 
-	if (gameMaster != curMaster)
+	if (!matchMasterMod)
 	{
 		Log(LOG_DEBUG) << "skipping save from inactive master: " << saveInfo.fileName;
-		return false;
 	}
 
-	return true;
+	return matchMasterMod;
 }
 
 /**
@@ -575,25 +595,13 @@ void SavedGame::save(const std::string &filename) const
 	}
 
 	// only save mods that work with the current master
-	std::vector<std::string> activeMods;
-	std::string curMasterId;
-	for (std::vector< std::pair<std::string, bool> >::iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
+	std::vector<const ModInfo*> activeMods = Options::getActiveMods();
+	std::vector<std::string> modsList;
+	for (std::vector<const ModInfo*>::const_iterator i = activeMods.begin(); i != activeMods.end(); ++i)
 	{
-		if (i->second)
-		{
-			ModInfo modInfo = Options::getModInfos().find(i->first)->second;
-			if (modInfo.isMaster())
-			{
-				curMasterId = i->first;
-			}
-			else if (!modInfo.getMaster().empty() && modInfo.getMaster() != curMasterId)
-			{
-				continue;
-			}
-			activeMods.push_back(i->first + " ver: " + modInfo.getVersion());
-		}
+		modsList.push_back((*i)->getId() + " ver: " + (*i)->getVersion());
 	}
-	brief["mods"] = activeMods;
+	brief["mods"] = modsList;
 	if (_ironman)
 		brief["ironman"] = _ironman;
 	out << brief;

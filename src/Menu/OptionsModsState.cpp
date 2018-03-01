@@ -74,8 +74,8 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 	for (std::vector< std::pair<std::string, bool> >::const_iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
 	{
 		std::string modId = i->first;
-		ModInfo modInfo = modInfos.find(modId)->second;
-		if (!modInfo.isMaster())
+		const ModInfo *modInfo = &modInfos.at(modId);
+		if (!modInfo->isMaster())
 		{
 			continue;
 		}
@@ -88,8 +88,8 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 		{
 			++curMasterIdx;
 		}
-		_masters.push_back(&modInfos.at(modId));
-		masterNames.push_back(Language::utf8ToWstr(modInfo.getName()));
+		_masters.push_back(modInfo);
+		masterNames.push_back(Language::utf8ToWstr(modInfo->getName()));
 	}
 
 	_cbxMasters->setOptions(masterNames);
@@ -136,15 +136,15 @@ void OptionsModsState::cbxMasterHover(Action *)
 void OptionsModsState::cbxMasterChange(Action *)
 {
 	std::string masterId = _masters[_cbxMasters->getSelected()]->getId();
-	for (size_t i = 0; i < Options::mods.size(); ++i)
+	for (std::vector< std::pair<std::string, bool> >::iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
 	{
-		if (masterId == Options::mods[i].first)
+		if (masterId == i->first)
 		{
-			Options::mods[i].second = true;
+			i->second = true;
 		}
-		else if (_curMasterId == Options::mods[i].first)
+		else if (_curMasterId == i->first)
 		{
-			Options::mods[i].second = false;
+			i->second = false;
 		}
 	}
 	Options::reload = true;
@@ -159,10 +159,10 @@ void OptionsModsState::lstModsRefresh(size_t scrollLoc)
 	_mods.clear();
 
 	// only show mods that work with the current master
-	for (std::vector< std::pair<std::string, bool> >::iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
+	for (std::vector< std::pair<std::string, bool> >::const_iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
 	{
 		ModInfo modInfo = Options::getModInfos().find(i->first)->second;
-		if (modInfo.isMaster() || (!modInfo.getMaster().empty() && modInfo.getMaster() != _curMasterId))
+		if (modInfo.isMaster() || !modInfo.canActivate(_curMasterId))
 		{
 			continue;
 		}
@@ -195,15 +195,15 @@ void OptionsModsState::lstModsClick(Action *action)
 	}
 
 	std::pair<std::string, bool> &mod(_mods.at(_lstMods->getSelectedRow()));
-	for (size_t i = 0; i < Options::mods.size(); ++i)
+	for (std::vector< std::pair<std::string, bool> >::iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
 	{
-		if (mod.first != Options::mods[i].first)
+		if (mod.first != i->first)
 		{
 			continue;
 		}
 
 		mod.second = ! mod.second;
-		Options::mods[i].second = mod.second;
+		i->second = mod.second;
 		_lstMods->setCellText(_lstMods->getSelectedRow(), 2, (mod.second ? tr("STR_YES") : tr("STR_NO")));
 
 		break;

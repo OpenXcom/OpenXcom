@@ -114,7 +114,7 @@ static void _mapFiles(const std::string &modId, const std::string &basePath,
 	std::vector<std::string> files = CrossPlatform::getFolderContents(fullDir);
 	std::set<std::string> rulesetFiles = _filterFiles(files, "rul");
 
-	if (!ignoreMods && rulesetFiles.size())
+	if (!ignoreMods && !rulesetFiles.empty())
 	{
 		_rulesets.insert(_rulesets.begin(), std::pair<std::string, std::vector<std::string> >(modId, std::vector<std::string>()));
 		for (std::set<std::string>::iterator i = rulesetFiles.begin(); i != rulesetFiles.end(); ++i)

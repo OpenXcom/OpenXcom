@@ -1,8 +1,11 @@
 project ( OpenXcom )
 
-cmake_minimum_required ( VERSION 2.8.5 )
+cmake_minimum_required ( VERSION 3.1 )
 set ( CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" )
 include(GNUInstallDirs)
+
+# For yaml-cpp
+set (CMAKE_CXX_STANDARD 11)
 
 option ( DEV_BUILD "Development Build. Disable this for release builds" ON )
 option ( BUILD_PACKAGE "Prepares build for creation of a package with CPack" ON )

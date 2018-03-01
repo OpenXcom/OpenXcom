@@ -465,30 +465,22 @@ void Game::loadLanguage(const std::string &filename)
 		throw Exception(path + ": " + std::string(e.what()));
 	}
 
-	for (std::vector< std::pair<std::string, bool> >::const_iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
+	std::vector<const ModInfo*> activeMods = Options::getActiveMods();
+	for (std::vector<const ModInfo*>::const_iterator i = activeMods.begin(); i != activeMods.end(); ++i)
 	{
-		if (i->second)
+		std::string file = (*i)->getPath() + ss.str();
+		if (CrossPlatform::fileExists(file))
 		{
-			std::string modId = i->first;
-			ModInfo modInfo = Options::getModInfos().find(modId)->second;
-			std::string file = modInfo.getPath() + ss.str();
-			if (CrossPlatform::fileExists(file))
-			{
-				_lang->load(file);
-			}
+			_lang->load(file);
 		}
 	}
 
-	ExtraStrings *strings = 0;
-	std::map<std::string, ExtraStrings *> extraStrings = _mod->getExtraStrings();
-	if (!extraStrings.empty())
+	const std::map<std::string, ExtraStrings*> &extraStrings = _mod->getExtraStrings();
+	std::map<std::string, ExtraStrings*>::const_iterator it = extraStrings.find(filename);
+	if (it != extraStrings.end())
 	{
-		if (extraStrings.find(filename) != extraStrings.end())
-		{
-			strings = extraStrings[filename];
-		}
+		_lang->load(it->second);
 	}
-	_lang->load(strings);
 }
 
 /**
