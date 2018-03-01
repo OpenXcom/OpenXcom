@@ -17,8 +17,7 @@ addons:
       - libsdl1.2-dev
       - libsdl-mixer1.2-dev
       - libsdl-image1.2-dev
-      - libsdl-gfx1.2-dev 
-      - libyaml-cpp-dev
+      - libsdl-gfx1.2-dev
 
 env:
   - BUILD_TYPE=Debug EXTRA_WARNING_FLAGS="-Wall -Wextra"
@@ -26,8 +25,14 @@ env:
 
 before_install:
   - if [ $TRAVIS_OS_NAME == osx ]; then brew install yaml-cpp sdl sdl_gfx sdl_image sdl_mixer --with-flac --with-libmikmod --with-libvorbis --with-static-lib; fi
+  - if [ $TRAVIS_OS_NAME == linux ]; then mkdir $TRAVIS_BUILD_DIR/dependency-prefix; fi
+  - if [ $TRAVIS_OS_NAME == linux ]; then export PKG_CONFIG_PATH=$TRAVIS_BUILD_DIR/dependency-prefix/lib/pkgconfig; fi
 
+install:
+  - if [ $TRAVIS_OS_NAME == linux ]; then mkdir -p $TRAVIS_BUILD_DIR/dependencies/; fi
+  - if [ $TRAVIS_OS_NAME == linux ]; then pushd $TRAVIS_BUILD_DIR/dependencies/ && git clone https://github.com/jbeder/yaml-cpp.git && pushd yaml-cpp && git checkout release-0.6.1 && cmake -DCMAKE_INSTALL_PREFIX=$TRAVIS_BUILD_DIR/dependency-prefix -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" -DYAML_CPP_BUILD_CONTRIB=NO -DYAML_CPP_BUILD_TOOLS=NO . && make -j2 && make install && popd && popd; fi
+      
 before_script:
-  - cmake . -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" -DCMAKE_CXX_FLAGS="${EXTRA_WARNING_FLAGS}" -DCMAKE_C_FLAGS="${EXTRA_WARNING_FLAGS}"
+  - cmake . -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" -DYAMLCPP_INCLUDE_DIR=$TRAVIS_BUILD_DIR/dependency-prefix/include -DCMAKE_CXX_FLAGS="${EXTRA_WARNING_FLAGS}" -DCMAKE_C_FLAGS="${EXTRA_WARNING_FLAGS}"
 
 script: make -j2
