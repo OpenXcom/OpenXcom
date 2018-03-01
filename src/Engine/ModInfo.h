@@ -57,6 +57,8 @@ public:
 	const std::string &getMaster() const;
 	/// Gets whether this mod is a master (i.e. a vanilla game/total conversion)
 	bool isMaster() const;
+	/// Gets whether this mod can be activated.
+	bool canActivate(const std::string &curMaster) const;
 	/// Gets the list of external resource dirs to load for this mod.
 	const std::vector<std::string> &getExternalResourceDirs() const;
 };

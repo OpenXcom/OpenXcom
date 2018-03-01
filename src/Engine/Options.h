@@ -107,6 +107,8 @@ namespace Options
 	const std::map<std::string, ModInfo> &getModInfos();
 	/// Refreshes the mods and filemaps.
 	void updateMods();
+	/// Gets the list of currently active mods.
+	std::vector<ModInfo> getActiveMods();
 }
 
 }

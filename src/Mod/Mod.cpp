@@ -666,6 +666,7 @@ int Mod::getSoundOffset(int sound, const std::string& set) const
  */
 void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::string> > > &mods)
 {
+	Log(LOG_INFO) << "Loading rulesets...";
 	for (size_t i = 0; mods.size() > i; ++i)
 	{
 		try
@@ -1984,7 +1985,7 @@ MCDPatch *Mod::getMCDPatch(const std::string &id) const
  * Gets the list of external sprites.
  * @return The list of external sprites.
  */
-std::vector<std::pair<std::string, ExtraSprites *> > Mod::getExtraSprites() const
+const std::vector<std::pair<std::string, ExtraSprites *> > &Mod::getExtraSprites() const
 {
 	return _extraSprites;
 }
@@ -1993,7 +1994,7 @@ std::vector<std::pair<std::string, ExtraSprites *> > Mod::getExtraSprites() cons
  * Gets the list of external sounds.
  * @return The list of external sounds.
  */
-std::vector<std::pair<std::string, ExtraSounds *> > Mod::getExtraSounds() const
+const std::vector<std::pair<std::string, ExtraSounds *> > &Mod::getExtraSounds() const
 {
 	return _extraSounds;
 }
@@ -2002,7 +2003,7 @@ std::vector<std::pair<std::string, ExtraSounds *> > Mod::getExtraSounds() const
  * Gets the list of external strings.
  * @return The list of external strings.
  */
-std::map<std::string, ExtraStrings *> Mod::getExtraStrings() const
+const std::map<std::string, ExtraStrings *> &Mod::getExtraStrings() const
 {
 	return _extraStrings;
 }
@@ -2011,7 +2012,7 @@ std::map<std::string, ExtraStrings *> Mod::getExtraStrings() const
  * Gets the list of StatStrings.
  * @return The list of StatStrings.
  */
-std::vector<StatString *> Mod::getStatStrings() const
+const std::vector<StatString *> &Mod::getStatStrings() const
 {
 	return _statStrings;
 }
@@ -2152,7 +2153,7 @@ void Mod::sortLists()
 /**
  * Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
  */
-std::vector<std::string> Mod::getPsiRequirements() const
+const std::vector<std::string> &Mod::getPsiRequirements() const
 {
 	return _psiRequirements;
 }
