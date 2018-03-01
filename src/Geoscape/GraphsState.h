@@ -65,6 +65,8 @@ public:
 	GraphsState();
 	/// Cleans up the Graphs state.
 	~GraphsState();
+	/// Handles any events.
+	void handle(Action *action);
 	/// Handler for clicking the Geoscape icon.
 	void btnGeoscapeClick(Action *action);
 	/// Handler for clicking the ufo region icon.
@@ -100,6 +102,12 @@ public:
 	/// Draw Finances Lines.
 	void drawFinanceLines();
 	/// Scroll button lists
+	/// push all buttons that are active on the current month
+	void pushButtonsActive(float minPercent);
+	/// push all regions buttons that are active on the current month
+	void pushRegionButtonsActive(float minPercent);
+	/// push all country buttons that are active on the current month
+	void pushCountryButtonsActive(float minPercent);
 };
 
 }

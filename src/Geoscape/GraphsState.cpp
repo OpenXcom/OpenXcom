@@ -332,6 +332,34 @@ GraphsState::~GraphsState()
 }
 
 /**
+* Handle key shortcuts.
+* @param action Pointer to an action.
+*/
+void GraphsState::handle(Action *action)
+{
+	State::handle(action);
+
+	if (action->getDetails()->type == SDL_KEYDOWN)
+	{
+		if (action->getDetails()->key.keysym.sym == SDLK_F1)
+		{
+			// enable all buttons that have activity >= 0.1%
+			pushButtonsActive(0.1);
+		}
+		else if (action->getDetails()->key.keysym.sym == SDLK_F2)
+		{
+			// enable all buttons that have activity >= 7%
+			pushButtonsActive(5);
+		}
+		else if (action->getDetails()->key.keysym.sym == SDLK_F3)
+		{
+			// disable all buttons
+			pushButtonsActive(0);
+		}
+	}
+}
+
+/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
@@ -619,6 +647,115 @@ void GraphsState::updateScale(double lowerLimit, double upperLimit)
 		_txtScale.at(i)->setText(Text::formatNumber(static_cast<int>(text)));
 		text += increment;
 	}
+}
+
+/**
+ * push all buttons that are active on the current month
+ */
+void GraphsState::pushButtonsActive(float minPercent)
+{
+	if (!_country && !_finance)
+	{
+		pushRegionButtonsActive(minPercent);
+	}
+	else if (!_finance)
+	{
+		pushCountryButtonsActive(minPercent);
+	}
+}
+
+/**
+ * push all regions buttons that are active on the current month
+ */
+void GraphsState::pushRegionButtonsActive(float minPercent)
+{
+	std::map<size_t, int> enabledRegions;
+	int total = 0;
+
+	// push the last month value to the list
+	if (_game->getSavedGame()->getFundsList().size() > 0)
+	{
+		size_t entry = _game->getSavedGame()->getFundsList().size() - 1;
+		if (_alien)
+		{
+			for (size_t iter = 0; iter != _game->getSavedGame()->getRegions()->size(); ++iter)
+			{
+				enabledRegions[iter] = _game->getSavedGame()->getRegions()->at(iter)->getActivityAlien().at(entry);
+				total += _game->getSavedGame()->getRegions()->at(iter)->getActivityAlien().at(entry);
+			}
+		}
+		else
+		{
+			for (size_t iter = 0; iter != _game->getSavedGame()->getRegions()->size(); ++iter)
+			{
+				enabledRegions[iter] = _game->getSavedGame()->getRegions()->at(iter)->getActivityXcom().at(entry);
+				total += _game->getSavedGame()->getRegions()->at(iter)->getActivityXcom().at(entry);
+			}
+		}
+	}
+
+	for (size_t iter = 0; iter != _game->getSavedGame()->getRegions()->size(); ++iter)
+	{
+		bool enabled = false;
+		std::map<size_t, int>::const_iterator rvalue = enabledRegions.find(iter);
+		if (total > 0 && rvalue != enabledRegions.end() && minPercent > 0)
+		{
+			float pvalue = ((float)rvalue->second / (float)total) * 100.0;
+			enabled = pvalue >= minPercent;
+		}
+
+		_btnRegions[iter]->setPressed(enabled);
+		_regionToggles.at(iter + _butRegionsOffset)->_pushed = enabled;
+	}
+
+	drawLines();
+}
+
+/**
+ * push all country buttons that are active on the current month
+ */
+void GraphsState::pushCountryButtonsActive(float minPercent)
+{
+	std::map<size_t, int> enabledCountries;
+	int total = 0;
+
+	// push the last month value to the list
+	if (_game->getSavedGame()->getFundsList().size() > 0)
+	{
+		size_t entry = _game->getSavedGame()->getFundsList().size() - 1;
+		if (_alien)
+		{
+			for (size_t iter = 0; iter != _game->getSavedGame()->getCountries()->size(); ++iter)
+			{
+				enabledCountries[iter] = _game->getSavedGame()->getCountries()->at(iter)->getActivityAlien().at(entry);
+				total += _game->getSavedGame()->getCountries()->at(iter)->getActivityAlien().at(entry);
+			}
+		}
+		else
+		{
+			for (size_t iter = 0; iter != _game->getSavedGame()->getCountries()->size(); ++iter)
+			{
+				enabledCountries[iter] = _game->getSavedGame()->getCountries()->at(iter)->getActivityXcom().at(entry);
+				total += _game->getSavedGame()->getCountries()->at(iter)->getActivityXcom().at(entry);
+			}
+		}
+	}
+
+	for (size_t iter = 0; iter != _game->getSavedGame()->getCountries()->size(); ++iter)
+	{
+		bool enabled = false;
+		std::map<size_t, int>::const_iterator rvalue = enabledCountries.find(iter);
+		if (total > 0 && rvalue != enabledCountries.end() && minPercent > 0)
+		{
+			float pvalue = ((float)rvalue->second / (float)total) * 100.0;
+			enabled = pvalue >= minPercent;
+		}
+
+		_btnCountries[iter]->setPressed(enabled);
+		_countryToggles.at(iter + _butCountriesOffset)->_pushed = enabled;
+	}
+
+	drawLines();
 }
 
 /**
