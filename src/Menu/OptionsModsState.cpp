@@ -232,7 +232,7 @@ void OptionsModsState::lstModsLeftArrowClick(Action *action)
 static void _moveAbove(const std::pair<std::string, bool> &srcMod, const std::pair<std::string, bool> &destMod)
 {
 	// insert copy of srcMod above destMod
-	for (std::vector< std::pair<std::string, bool> >::const_iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
+	for (std::vector< std::pair<std::string, bool> >::iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
 	{
 		if (destMod.first == i->first)
 		{
@@ -321,7 +321,7 @@ static void _moveBelow(const std::pair<std::string, bool> &srcMod, const std::pa
 	}
 	
 	// remove old copy of srcMod in separate loop since the insert above invalidated the iterator
-	for (std::vector< std::pair<std::string, bool> >::const_iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
+	for (std::vector< std::pair<std::string, bool> >::iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
 	{
 		if (srcMod.first == i->first)
 		{
