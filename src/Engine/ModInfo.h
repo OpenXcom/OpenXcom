@@ -32,6 +32,7 @@ private:
 	const std::string _path;
 	std::string _name, _desc, _version, _author, _url, _id, _master;
 	bool _isMaster;
+	int _reservedSpace;
 	std::vector<std::string> _externalResourceDirs;
 public:
 	/// Creates default metadata for a mod at the specified path.
@@ -57,6 +58,10 @@ public:
 	bool isMaster() const;
 	/// Gets whether this mod can be activated.
 	bool canActivate(const std::string &curMaster) const;
+	/// Gets size of mod, bigger mod reserve more values in common colections/surfacesets.
+	int getReservedSpace() const;
+	/// Sets mod size (DO NOT use this method outside Options::updateReservedSpace()).
+	void setReservedSpace(int reservedSpace);
 	/// Gets the list of external resource dirs to load for this mod.
 	const std::vector<std::string> &getExternalResourceDirs() const;
 };
