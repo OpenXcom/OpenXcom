@@ -595,11 +595,11 @@ void SavedGame::save(const std::string &filename) const
 	}
 
 	// only save mods that work with the current master
-	std::vector<ModInfo> activeMods = Options::getActiveMods();
+	std::vector<const ModInfo*> activeMods = Options::getActiveMods();
 	std::vector<std::string> modsList;
-	for (std::vector<ModInfo>::const_iterator i = activeMods.begin(); i != activeMods.end(); ++i)
+	for (std::vector<const ModInfo*>::const_iterator i = activeMods.begin(); i != activeMods.end(); ++i)
 	{
-		modsList.push_back(i->getId() + " ver: " + i->getVersion());
+		modsList.push_back((*i)->getId() + " ver: " + (*i)->getVersion());
 	}
 	brief["mods"] = modsList;
 	if (_ironman)

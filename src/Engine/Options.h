@@ -108,7 +108,7 @@ namespace Options
 	/// Refreshes the mods and filemaps.
 	void updateMods();
 	/// Gets the list of currently active mods.
-	std::vector<ModInfo> getActiveMods();
+	std::vector<const ModInfo*> getActiveMods();
 }
 
 }

@@ -1075,15 +1075,15 @@ const std::vector<OptionInfo> &getOptionInfo()
  * @sa ModInfo::canActivate
  * @return List of info for the active mods.
  */
-std::vector<ModInfo> getActiveMods()
+std::vector<const ModInfo *> getActiveMods()
 {
-	std::vector<ModInfo> activeMods;
+	std::vector<const ModInfo*> activeMods;
 	for (std::vector< std::pair<std::string, bool> >::iterator i = mods.begin(); i != mods.end(); ++i)
 	{
 		if (i->second)
 		{
-			ModInfo info = _modInfos.find(i->first)->second;
-			if (info.canActivate(_masterMod))
+			const ModInfo *info = &_modInfos.at(i->first);
+			if (info->canActivate(_masterMod))
 			{
 				activeMods.push_back(info);
 			}

@@ -36,8 +36,6 @@ private:
 public:
 	/// Creates default metadata for a mod at the specified path.
 	ModInfo(const std::string &path);
-	/// Cleans up.
-	virtual ~ModInfo();
 	/// Loads the metadata from YAML.
 	void load(const std::string &filename);
 	/// Gets the path where this mod resides on disk.

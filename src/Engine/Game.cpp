@@ -465,10 +465,10 @@ void Game::loadLanguage(const std::string &filename)
 		throw Exception(path + ": " + std::string(e.what()));
 	}
 
-	std::vector<ModInfo> activeMods = Options::getActiveMods();
-	for (std::vector<ModInfo>::const_iterator i = activeMods.begin(); i != activeMods.end(); ++i)
+	std::vector<const ModInfo*> activeMods = Options::getActiveMods();
+	for (std::vector<const ModInfo*>::const_iterator i = activeMods.begin(); i != activeMods.end(); ++i)
 	{
-		std::string file = i->getPath() + ss.str();
+		std::string file = (*i)->getPath() + ss.str();
 		if (CrossPlatform::fileExists(file))
 		{
 			_lang->load(file);

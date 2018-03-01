@@ -32,11 +32,6 @@ ModInfo::ModInfo(const std::string &path) :
 	// empty
 }
 
-ModInfo::~ModInfo()
-{
-	// empty
-}
-
 void ModInfo::load(const std::string &filename)
 {
 	YAML::Node doc = YAML::LoadFile(filename);
