@@ -17,10 +17,13 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SoldierNamePool.h"
-#include <sstream>
 #include "../Savegame/Soldier.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
+
+#include <yaml-cpp/yaml.h>
+
+#include <sstream>
 
 namespace OpenXcom
 {

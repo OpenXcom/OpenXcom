@@ -19,7 +19,17 @@
  */
 #include <list>
 #include <string>
-#include <yaml-cpp/yaml.h>
+#include <map>
+#include <vector>
+
+/*
+* Instead of pulling in yaml-cpp, just pre-declare the require Node
+* we require in member function definitions.
+*/
+namespace YAML
+{
+class Node;
+}
 
 namespace OpenXcom
 {

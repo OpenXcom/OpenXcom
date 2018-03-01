@@ -18,7 +18,16 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <string>
-#include <yaml-cpp/yaml.h>
+#include <vector>
+
+/*
+* Instead of pulling in yaml-cpp, just pre-declare the require Node
+* we require in member function definitions.
+*/
+namespace YAML
+{
+class Node;
+}
 
 namespace OpenXcom
 {

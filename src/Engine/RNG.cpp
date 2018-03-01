@@ -64,7 +64,7 @@ uint64_t getSeed()
  * Changes the current seed in use by the generator.
  * @param n New seed.
  */
-void setSeed(uint64_t n)
+void setSeed(const uint64_t n)
 {
 	x = n;
 }
@@ -75,7 +75,7 @@ void setSeed(uint64_t n)
  * @param max Maximum number, inclusive.
  * @return Generated number.
  */
-int generate(int min, int max)
+int generate(const int min,const int max)
 {
 	uint64_t num = next();
 	return (int)(num % (max - min + 1) + min);
@@ -87,9 +87,9 @@ int generate(int min, int max)
  * @param max Maximum number.
  * @return Generated number.
  */
-double generate(double min, double max)
+double generate(const double min,const double max)
 {
-	double num = next();
+	const double num = next();
 	return (num / ((double)UINT64_MAX / (max - min)) + min);
 }
 
@@ -100,7 +100,7 @@ double generate(double min, double max)
  * @param max Maximum number, inclusive.
  * @return Generated number.
  */
-int seedless(int min, int max)
+int seedless(const int min,const int max)
 {
 	return (rand() % (max - min + 1) + min);
 }
@@ -147,7 +147,7 @@ double boxMuller(double m, double s)
  * @param value Value percentage (0-100%)
  * @return True if the chance succeeded.
  */
-bool percent(int value)
+bool percent(const int value)
 {
 	return (generate(0, 99) < value);
 }
@@ -157,12 +157,12 @@ bool percent(int value)
  * @param max Maximum number, exclusive.
  * @return Generated number.
  */
-int generateEx(int max)
+int generateEx(const int max)
 {
 	uint64_t num = next();
 	return (int)(num % max);
 }
 
-}
 
+}
 }

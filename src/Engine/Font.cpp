@@ -22,6 +22,8 @@
 #include "FileMap.h"
 #include "Language.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

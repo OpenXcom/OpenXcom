@@ -84,6 +84,7 @@ set ( battlescape_src
   Battlescape/Projectile.cpp
   Battlescape/ProjectileFlyBState.cpp
   Battlescape/PromotionsState.cpp
+  Battlescape/Position.cpp
   Battlescape/PsiAttackBState.cpp
   Battlescape/ScannerState.cpp
   Battlescape/ScannerView.cpp
@@ -122,6 +123,7 @@ set ( engine_src
   Engine/Options.cpp
   Engine/Palette.cpp
   Engine/RNG.cpp
+  Engine/RNG-ETI.cpp
   Engine/Scalers/hq2x.cpp
   Engine/Scalers/hq3x.cpp
   Engine/Scalers/hq4x.cpp
@@ -295,6 +297,7 @@ set ( savegame_src
   Savegame/GameTime.cpp
   Savegame/ItemContainer.cpp
   Savegame/MissionSite.cpp
+  Savegame/MissionStatistics.cpp
   Savegame/MovingTarget.cpp
   Savegame/Node.cpp
   Savegame/Production.cpp

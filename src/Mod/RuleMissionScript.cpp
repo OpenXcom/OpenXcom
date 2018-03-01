@@ -19,6 +19,8 @@
 #include "RuleMissionScript.h"
 #include "../Engine/Exception.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

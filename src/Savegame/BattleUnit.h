@@ -17,9 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <vector>
-#include <string>
-#include <yaml-cpp/yaml.h>
 #include "../Battlescape/Position.h"
 #include "../Battlescape/BattlescapeGame.h"
 #include "../Mod/RuleItem.h"
@@ -27,6 +24,18 @@
 #include "../Mod/MapData.h"
 #include "Soldier.h"
 #include "BattleItem.h"
+
+#include <vector>
+#include <string>
+
+/*
+* Instead of pulling in yaml-cpp, just pre-declare the require Node
+* we require in member function definitions.
+*/
+namespace YAML
+{
+class Node;
+}
 
 namespace OpenXcom
 {

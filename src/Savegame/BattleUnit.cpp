@@ -18,7 +18,6 @@
  */
 #include "BattleUnit.h"
 #include "BattleItem.h"
-#include <sstream>
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
@@ -37,6 +36,12 @@
 #include "SavedBattleGame.h"
 #include "BattleUnitStatistics.h"
 #include "../fmath.h"
+
+#include "../Battlescape/Position.hpp"
+
+#include <yaml-cpp/yaml.h>
+
+#include <sstream>
 
 namespace OpenXcom
 {
@@ -383,7 +388,8 @@ YAML::Node BattleUnit::save() const
 	node["genUnitArmor"] = _armor->getType();
 	node["faction"] = (int)_faction;
 	node["status"] = (int)_status;
-	node["position"] = _pos;
+	// HAX DO NOT COMMIT
+	//node["position"] = _pos;
 	node["direction"] = _direction;
 	node["directionTurret"] = _directionTurret;
 	node["tu"] = _tu;

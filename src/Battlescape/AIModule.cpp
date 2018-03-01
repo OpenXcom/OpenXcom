@@ -16,8 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <climits>
-#include <algorithm>
 #include "AIModule.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Node.h"
@@ -28,13 +26,19 @@
 #include "BattlescapeState.h"
 #include "../Savegame/Tile.h"
 #include "Pathfinding.h"
-#include "../Engine/RNG.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Mod/Armor.h"
 #include "../Mod/Mod.h"
 #include "../Mod/RuleItem.h"
 #include "../fmath.h"
+#include "../Engine/RNG.hpp"
+#include "../Engine/RNG.h"
+
+#include <yaml-cpp/yaml.h>
+
+#include <climits>
+#include <algorithm>
 
 namespace OpenXcom
 {

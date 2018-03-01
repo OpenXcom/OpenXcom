@@ -20,6 +20,8 @@
 #include "../Engine/RNG.h"
 #include "../fmath.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

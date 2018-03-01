@@ -18,9 +18,11 @@
  */
 #include "SoundDefinition.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
-	
+
 SoundDefinition::SoundDefinition(const std::string &type) : _type(type)
 {
 }

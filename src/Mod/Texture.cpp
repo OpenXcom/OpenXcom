@@ -20,6 +20,8 @@
 #include "../Savegame/Target.h"
 #include "../Engine/RNG.h"
 
+#include "Texture.hpp"
+
 namespace OpenXcom
 {
 

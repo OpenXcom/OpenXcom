@@ -23,6 +23,8 @@
 #include "../Engine/RNG.h"
 #include "Mod.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

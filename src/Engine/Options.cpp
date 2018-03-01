@@ -19,21 +19,26 @@
 
 #include "Options.h"
 #include "../version.h"
+#include "Exception.h"
+#include "Logger.h"
+#include "CrossPlatform.h"
+#include "FileMap.h"
+#include "Screen.h"
+
 #include <SDL.h>
 #include <SDL_keysym.h>
 #include <SDL_mixer.h>
+#include <SDL_keyboard.h> //For SDLKey, transitively provided to Options.inc.h.
+#include <SDL_video.h> //For SDL_GrabMode, transitively provided to Options.inc.h.
+
+#include <yaml-cpp/yaml.h>
+
 #include <stdio.h>
 #include <iostream>
 #include <map>
 #include <sstream>
 #include <fstream>
 #include <algorithm>
-#include <yaml-cpp/yaml.h>
-#include "Exception.h"
-#include "Logger.h"
-#include "CrossPlatform.h"
-#include "FileMap.h"
-#include "Screen.h"
 
 namespace OpenXcom
 {

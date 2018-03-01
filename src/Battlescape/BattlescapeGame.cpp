@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <sstream>
 #include "BattlescapeGame.h"
 #include "BattlescapeState.h"
 #include "Map.h"
@@ -57,6 +56,9 @@
 #include "../Engine/Logger.h"
 #include "../Savegame/BattleUnitStatistics.h"
 #include "../fmath.h"
+
+#include <algorithm>
+#include <sstream>
 
 namespace OpenXcom
 {

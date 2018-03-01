@@ -17,11 +17,19 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <string>
-#include <yaml-cpp/yaml.h>
 #include "../Mod/Unit.h"
 #include "../Mod/StatString.h"
-	 
+#include <string>
+
+/*
+* Instead of pulling in yaml-cpp, just pre-declare the require Node
+* we require in member function definitions.
+*/
+namespace YAML
+{
+class Node;
+}
+
 namespace OpenXcom
 {
 

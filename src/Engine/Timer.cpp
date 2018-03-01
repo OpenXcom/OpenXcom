@@ -20,12 +20,14 @@
 #include "Game.h"
 #include "Options.h"
 
+#include <SDL_timer.h> //For SDL_GetTicks().
+
 namespace OpenXcom
 {
-	
+
 namespace
 {
-	
+
 const Uint32 accurate = 4;
 Uint32 slowTick()
 {
@@ -40,7 +42,7 @@ Uint32 slowTick()
 }//namespace
 
 Uint32 Timer::gameSlowSpeed = 1;
-int Timer::maxFrameSkip = 8; // this is a pretty good default at 60FPS. 
+int Timer::maxFrameSkip = 8; // this is a pretty good default at 60FPS.
 
 
 /**

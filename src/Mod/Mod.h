@@ -17,15 +17,25 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <map>
-#include <vector>
-#include <string>
-#include <SDL.h>
-#include <yaml-cpp/yaml.h>
 #include "../Engine/Options.h"
 #include "../Savegame/GameTime.h"
 #include "Unit.h"
 #include "RuleAlienMission.h"
+
+#include <SDL_video.h> //For SDL_Color.
+
+#include <map>
+#include <vector>
+#include <string>
+
+/*
+* Instead of pulling in yaml-cpp, just pre-declare the require Node
+* we require in member function definitions.
+*/
+namespace YAML
+{
+class Node;
+}
 
 namespace OpenXcom
 {
@@ -137,7 +147,7 @@ private:
 	int _costEngineer, _costScientist, _timePersonnel, _initialFunding, _turnAIUseGrenade, _turnAIUseBlaster, _defeatScore, _defeatFunds;
 	std::pair<std::string, int> _alienFuel;
 	std::string _fontName, _finalResearch;
-	YAML::Node _startingBase;
+	YAML::Node *_startingBase;
 	GameTime _startingTime;
 	StatAdjustment _statAdjustment[5];
 

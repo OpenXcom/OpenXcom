@@ -16,8 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <assert.h>
-#include <vector>
 #include "BattleItem.h"
 #include "SavedBattleGame.h"
 #include "SavedGame.h"
@@ -30,6 +28,7 @@
 #include "../Battlescape/BattlescapeState.h"
 #include "../Battlescape/BattlescapeGame.h"
 #include "../Battlescape/Position.h"
+#include "../Battlescape/Position.hpp"
 #include "../Mod/Mod.h"
 #include "../Mod/Armor.h"
 #include "../Engine/Game.h"
@@ -40,6 +39,10 @@
 #include "../Engine/Logger.h"
 #include "SerializationHelper.h"
 #include "../Mod/RuleItem.h"
+
+#include <assert.h>
+#include <vector>
+#include <algorithm>
 
 namespace OpenXcom
 {

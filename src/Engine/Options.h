@@ -17,11 +17,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <SDL.h>
-#include <string>
-#include <vector>
+#include <SDL_video.h> //For SDL_GrabMode, transitively provided to Options.inc.h.
 #include "OptionInfo.h"
 #include "ModInfo.h"
+
+#include <string>
+#include <vector>
 
 namespace OpenXcom
 {

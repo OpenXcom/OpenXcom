@@ -17,13 +17,14 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <list>
-#include <vector>
 #include "../Battlescape/Position.h"
 #include "../Mod/MapData.h"
 #include "BattleUnit.h"
 
 #include <SDL_types.h> // for Uint8
+
+#include <list>
+#include <vector>
 
 namespace OpenXcom
 {

@@ -17,7 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <yaml-cpp/yaml.h>
+
+#include <iosfwd>
 
 namespace OpenXcom
 {
@@ -68,46 +69,10 @@ public:
 
 };
 
-inline std::ostream& operator<<(std::ostream& out, const Position& pos)
-{
-	out << "(" << pos.x << "," << pos.y << ","<< pos.z << ")";
-	return out;
-}
+std::ostream& operator<<(std::ostream& out, const Position& pos);
 
-
-inline std::wostream& operator<<(std::wostream& wout, const Position& pos)
-{
-	wout << "(" << pos.x << "," << pos.y << ","<< pos.z << ")";
-	return wout;
-}
+std::wostream& operator<<(std::wostream& wout, const Position& pos);
 
 typedef Position Vector3i;
 
-}
-
-namespace YAML
-{
-	template<>
-	struct convert<OpenXcom::Position>
-	{
-		static Node encode(const OpenXcom::Position& rhs)
-		{
-			Node node;
-			node.push_back(rhs.x);
-			node.push_back(rhs.y);
-			node.push_back(rhs.z);
-			return node;
-		}
-
-		static bool decode(const Node& node, OpenXcom::Position& rhs)
-		{
-			if (!node.IsSequence() || node.size() != 3)
-				return false;
-
-			rhs.x = node[0].as<int>();
-			rhs.y = node[1].as<int>();
-			rhs.z = node[2].as<int>();
-			return true;
-		}
-	};
 }

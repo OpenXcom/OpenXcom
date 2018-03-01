@@ -17,11 +17,21 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "../Savegame/WeightedOptions.h"
+
 #include <string>
 #include <vector>
 #include <map>
-#include <yaml-cpp/yaml.h>
-#include "../Savegame/WeightedOptions.h"
+#include <set>
+
+/*
+* Instead of pulling in yaml-cpp, just pre-declare the require Node
+* we require in member function definitions.
+*/
+namespace YAML
+{
+class Node;
+}
 
 namespace OpenXcom
 {

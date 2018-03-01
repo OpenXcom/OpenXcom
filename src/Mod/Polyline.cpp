@@ -19,6 +19,10 @@
 #include "Polyline.h"
 #include "../fmath.h"
 
+#include <vector>
+
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

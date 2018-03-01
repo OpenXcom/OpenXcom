@@ -17,8 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <SDL_video.h> //For SDL_Color.
+
 #include <string>
-#include <SDL.h>
 
 namespace OpenXcom
 {

@@ -19,6 +19,8 @@
 #include "ResearchProject.h"
 #include "../Mod/RuleResearch.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 const float PROGRESS_LIMIT_UNKNOWN = 0.333f;

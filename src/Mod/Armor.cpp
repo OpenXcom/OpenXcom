@@ -17,6 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Armor.h"
+#include "Unit.hpp"
+
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {

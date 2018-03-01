@@ -19,6 +19,8 @@
 #include "Waypoint.h"
 #include "../Engine/Language.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

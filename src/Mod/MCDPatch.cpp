@@ -20,6 +20,8 @@
 #include "MapDataSet.h"
 #include "MapData.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

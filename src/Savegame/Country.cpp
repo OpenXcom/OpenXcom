@@ -20,6 +20,8 @@
 #include "../Mod/RuleCountry.h"
 #include "../Engine/RNG.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

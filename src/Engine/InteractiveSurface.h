@@ -17,10 +17,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <SDL.h>
-#include <map>
 #include "Surface.h"
 #include "State.h"
+
+#include <SDL_mouse.h>
+#include <SDL_keysym.h>
+
+#include <map>
 
 namespace OpenXcom
 {

@@ -18,6 +18,9 @@
  */
 
 #include "RuleInterface.h"
+
+#include <yaml-cpp/yaml.h>
+
 #include <climits>
 
 namespace OpenXcom
@@ -104,3 +107,4 @@ const std::string &RuleInterface::getMusic() const
 }
 
 }
+

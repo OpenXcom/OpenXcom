@@ -22,6 +22,10 @@
 #include "../Mod/RuleItem.h"
 #include "../Mod/RuleInventory.h"
 
+#include "../Battlescape/Position.hpp"
+
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 

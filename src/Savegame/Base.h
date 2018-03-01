@@ -20,7 +20,16 @@
 #include "Target.h"
 #include <string>
 #include <vector>
-#include <yaml-cpp/yaml.h>
+#include <list>
+
+/*
+* Instead of pulling in yaml-cpp, just pre-declare the require Node
+* we require in member function definitions.
+*/
+namespace YAML
+{
+class Node;
+}
 
 namespace OpenXcom
 {

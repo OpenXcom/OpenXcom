@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <algorithm>
 #include "../fmath.h"
 #include "MiniMapView.h"
 #include "MiniMapState.h"
@@ -32,6 +31,10 @@
 #include "../Mod/Armor.h"
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
+
+#include <SDL_timer.h>
+
+#include <algorithm>
 
 namespace OpenXcom
 {
