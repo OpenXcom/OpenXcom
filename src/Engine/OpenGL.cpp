@@ -203,19 +203,37 @@ void OpenGL::refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned 
 	//therefore, below vertices flip image to support top-left source.
 	//texture range = x1:0.0, y1:0.0, x2:1.0, y2:1.0
 	//vertex range = x1:0, y1:0, x2:width, y2:height
-	double w = double(inwidth)  / double(iwidth);
-	double h = double(inheight) / double(iheight);
-	int u1 = leftBlackBand;
-	int u2 = outwidth - rightBlackBand;
-	int v1 = outheight - topBlackBand;
-	int v2 = bottomBlackBand;
+	if (leftBlackBand + rightBlackBand + topBlackBand + bottomBlackBand == 0)
+	{
+		double w = double(inwidth)  / double(iwidth)  * 2;
+		double h = double(inheight) / double(iheight) * 2;
+		int u1 = 0;
+		int u2 = outwidth * 2;
+		int v1 = outheight;
+		int v2 = - outheight;
 
-	glBegin(GL_TRIANGLE_STRIP);
-	glTexCoord2f(0, 0); glVertex3i(u1, v1, 0);
-	glTexCoord2f(w, 0); glVertex3i(u2, v1, 0);
-	glTexCoord2f(0, h); glVertex3i(u1, v2, 0);
-	glTexCoord2f(w, h); glVertex3i(u2, v2, 0);
-	glEnd();
+		glBegin(GL_TRIANGLES);
+		glTexCoord2f(0, 0); glVertex3i(u1, v1, 0);
+		glTexCoord2f(w, 0); glVertex3i(u2, v1, 0);
+		glTexCoord2f(0, h); glVertex3i(u1, v2, 0);
+		glEnd();
+	}
+	else
+	{
+		double w = double(inwidth)  / double(iwidth);
+		double h = double(inheight) / double(iheight);
+		int u1 = leftBlackBand;
+		int u2 = outwidth - rightBlackBand;
+		int v1 = outheight - topBlackBand;
+		int v2 = bottomBlackBand;
+
+		glBegin(GL_TRIANGLE_STRIP);
+		glTexCoord2f(0, 0); glVertex3i(u1, v1, 0);
+		glTexCoord2f(w, 0); glVertex3i(u2, v1, 0);
+		glTexCoord2f(0, h); glVertex3i(u1, v2, 0);
+		glTexCoord2f(w, h); glVertex3i(u2, v2, 0);
+		glEnd();
+	}
 	glErrorCheck();
 
     if (shader_support)
