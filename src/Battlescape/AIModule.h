@@ -33,7 +33,7 @@ struct BattleAction;
 class BattlescapeState;
 class Node;
 
-enum AIMode { AI_PATROL, AI_AMBUSH, AI_COMBAT, AI_ESCAPE };
+enum class AIMode { PATROL, AMBUSH, COMBAT, ESCAPE };
 /**
  * This class is used by the BattleUnit AI.
  */
@@ -48,7 +48,8 @@ private:
 	BattleAction *_escapeAction, *_ambushAction, *_attackAction, *_patrolAction, *_psiAction;
 	bool _rifle, _melee, _blaster;
 	bool _traceAI, _didPsi;
-	int _AIMode, _intelligence, _closestDist;
+	AIMode _AIMode;
+    int _intelligence, _closestDist;
 	Node *_fromNode, *_toNode;
 	std::vector<int> _reachable, _reachableWithAttack, _wasHitBy;
 	BattleActionType _reserve;

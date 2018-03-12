@@ -48,7 +48,7 @@ namespace OpenXcom
  */
 AIModule::AIModule(SavedBattleGame *save, BattleUnit *unit, Node *node) : _save(save), _unit(unit), _aggroTarget(nullptr), _knownEnemies(0), _visibleEnemies(0), _spottingEnemies(0),
 																				_escapeTUs(0), _ambushTUs(0), _rifle(false), _melee(false), _blaster(false),
-																				_didPsi(false), _AIMode(AI_PATROL), _closestDist(100), _fromNode(node), _toNode(nullptr)
+																				_didPsi(false), _AIMode(AIMode::PATROL), _closestDist(100), _fromNode(node), _toNode(nullptr)
 {
 	_traceAI = Options::traceAI;
 
@@ -87,7 +87,7 @@ void AIModule::load(const YAML::Node &node)
 	int fromNodeID, toNodeID;
 	fromNodeID = node["fromNode"].as<int>(-1);
 	toNodeID = node["toNode"].as<int>(-1);
-	_AIMode = node["AIMode"].as<int>(0);
+	_AIMode = (AIMode)node["AIMode"].as<int>(0);
 	_wasHitBy = node["wasHitBy"].as<std::vector<int> >(_wasHitBy);
 	if (fromNodeID != -1)
 	{
@@ -114,7 +114,8 @@ YAML::Node AIModule::save() const
 	YAML::Node node;
 	node["fromNode"] = fromNodeID;
 	node["toNode"] = toNodeID;
-	node["AIMode"] = _AIMode;
+    //TODO: Deal with cast. Yaml-cpp custom types?
+	node["AIMode"] = (int)_AIMode;
 	node["wasHitBy"] = _wasHitBy;
 	return node;
 }
@@ -160,16 +161,16 @@ void AIModule::think(BattleAction *action)
 		std::string AIMode;
 		switch (_AIMode)
 		{
-		case 0:
+		case AIMode::PATROL:
 			AIMode = "Patrol";
 			break;
-		case 1:
+		case AIMode::AMBUSH:
 			AIMode = "Ambush";
 			break;
-		case 2:
+		case AIMode::COMBAT:
 			AIMode = "Combat";
 			break;
-		case 3:
+		case AIMode::ESCAPE:
 			AIMode = "Escape";
 			break;
 		}
@@ -235,21 +236,21 @@ void AIModule::think(BattleAction *action)
 
 	bool evaluate = false;
 
-	if (_AIMode == AI_ESCAPE)
+	if (_AIMode == AIMode::ESCAPE)
 	{
 		if (!_spottingEnemies || !_knownEnemies)
 		{
 			evaluate = true;
 		}
 	}
-	else if (_AIMode == AI_PATROL)
+	else if (_AIMode == AIMode::PATROL)
 	{
 		if (_spottingEnemies || _visibleEnemies || _knownEnemies || RNG::percent(10))
 		{
 			evaluate = true;
 		}
 	}
-	else if (_AIMode == AI_AMBUSH)
+	else if (_AIMode == AIMode::AMBUSH)
 	{
 		if (!_rifle || !_ambushTUs || _visibleEnemies)
 		{
@@ -257,7 +258,7 @@ void AIModule::think(BattleAction *action)
 		}
 	}
 
-	if (_AIMode == AI_COMBAT)
+	if (_AIMode == AIMode::COMBAT)
 	{
 		if (_attackAction->type == BA_RETHINK)
 		{
@@ -272,7 +273,7 @@ void AIModule::think(BattleAction *action)
 	}
 
 
-	if (_save->isCheating() && _AIMode != AI_COMBAT)
+	if (_save->isCheating() && _AIMode != AIMode::COMBAT)
 	{
 		evaluate = true;
 	}
@@ -285,16 +286,16 @@ void AIModule::think(BattleAction *action)
 			std::string AIMode;
 			switch (_AIMode)
 			{
-			case 0:
+			case AIMode::PATROL:
 				AIMode = "Patrol";
 				break;
-			case 1:
+			case AIMode::AMBUSH:
 				AIMode = "Ambush";
 				break;
-			case 2:
+			case AIMode::COMBAT:
 				AIMode = "Combat";
 				break;
-			case 3:
+			case AIMode::ESCAPE:
 				AIMode = "Escape";
 				break;
 			}
@@ -306,7 +307,7 @@ void AIModule::think(BattleAction *action)
 
 	switch (_AIMode)
 	{
-	case AI_ESCAPE:
+	case AIMode::ESCAPE:
 		_unit->setCharging(nullptr);
 		action->type = _escapeAction->type;
 		action->target = _escapeAction->target;
@@ -317,7 +318,7 @@ void AIModule::think(BattleAction *action)
 		// spin 180 at the end of your route.
 		_unit->setHiding(true);
 		break;
-	case AI_PATROL:
+	case AIMode::PATROL:
 		_unit->setCharging(nullptr);
 		if (action->weapon && action->weapon->getRules()->getBattleType() == BT_FIREARM)
 		{
@@ -338,7 +339,7 @@ void AIModule::think(BattleAction *action)
 		action->type = _patrolAction->type;
 		action->target = _patrolAction->target;
 		break;
-	case AI_COMBAT:
+	case AIMode::COMBAT:
 		action->type = _attackAction->type;
 		action->target = _attackAction->target;
 		// this may have changed to a grenade.
@@ -362,7 +363,7 @@ void AIModule::think(BattleAction *action)
 			action->waypoints = _attackAction->waypoints;
 		}
 		break;
-	case AI_AMBUSH:
+	case AIMode::AMBUSH:
 		_unit->setCharging(nullptr);
 		action->type = _ambushAction->type;
 		action->target = _ambushAction->target;
@@ -1185,7 +1186,7 @@ void AIModule::evaluateAIMode()
 {
 	if ((_unit->getCharging() && _attackAction->type != BA_RETHINK))
 	{
-		_AIMode = AI_COMBAT;
+		_AIMode = AIMode::COMBAT;
 		return;
 	}
 	// don't try to run away as often if we're a melee type, and really don't try to run away if we have a viable melee target, or we still have 50% or more TUs remaining.
@@ -1252,16 +1253,16 @@ void AIModule::evaluateAIMode()
 	// take our current mode into consideration
 	switch (_AIMode)
 	{
-	case AI_PATROL:
+	case AIMode::PATROL:
 		patrolOdds *= 1.1;
 		break;
-	case AI_AMBUSH:
+	case AIMode::AMBUSH:
 		ambushOdds *= 1.1;
 		break;
-	case AI_COMBAT:
+	case AIMode::COMBAT:
 		combatOdds *= 1.1;
 		break;
-	case AI_ESCAPE:
+	case AIMode::ESCAPE:
 		escapeOdds *= 1.1;
 		break;
 	}
@@ -1304,7 +1305,7 @@ void AIModule::evaluateAIMode()
 		break;
 	}
 
-	if (_AIMode == AI_COMBAT)
+	if (_AIMode == AIMode::COMBAT)
 	{
 		ambushOdds *= 1.5;
 	}
@@ -1361,32 +1362,32 @@ void AIModule::evaluateAIMode()
 		{
 			if (decision > escapeOdds + ambushOdds + combatOdds)
 			{
-				_AIMode = AI_PATROL;
+				_AIMode = AIMode::PATROL;
 			}
 			else
 			{
-				_AIMode = AI_COMBAT;
+				_AIMode = AIMode::COMBAT;
 			}
 		}
 		else
 		{
-			_AIMode = AI_AMBUSH;
+			_AIMode = AIMode::AMBUSH;
 		}
 	}
 	else
 	{
-		_AIMode = AI_ESCAPE;
+		_AIMode = AIMode::ESCAPE;
 	}
 
 	// if the aliens are cheating, or the unit is charging, enforce combat as a priority.
 	if ((_unit->getFaction() == FACTION_HOSTILE && _save->isCheating()) || _unit->getCharging() != nullptr)
 	{
-		_AIMode = AI_COMBAT;
+		_AIMode = AIMode::COMBAT;
 	}
 
 
 	// enforce the validity of our decision, and try fallback behaviour according to priority.
-	if (_AIMode == AI_COMBAT)
+	if (_AIMode == AIMode::COMBAT)
 	{
 		if (_save->getTile(_attackAction->target) && _save->getTile(_attackAction->target)->getUnit())
 		{
@@ -1403,25 +1404,25 @@ void AIModule::evaluateAIMode()
 		{
 			return;
 		}
-		_AIMode = AI_PATROL;
+		_AIMode = AIMode::PATROL;
 	}
 
-	if (_AIMode == AI_PATROL)
+	if (_AIMode == AIMode::PATROL)
 	{
 		if (_toNode)
 		{
 			return;
 		}
-		_AIMode = AI_AMBUSH;
+		_AIMode = AIMode::AMBUSH;
 	}
 
-	if (_AIMode == AI_AMBUSH)
+	if (_AIMode == AIMode::AMBUSH)
 	{
 		if (_ambushTUs != 0)
 		{
 			return;
 		}
-		_AIMode = AI_ESCAPE;
+		_AIMode = AIMode::ESCAPE;
 	}
 }
 
