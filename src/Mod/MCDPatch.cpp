@@ -168,7 +168,8 @@ void MCDPatch::modifyData(MapDataSet *dataSet) const
 	}
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _specialTypes.begin(); i != _specialTypes.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setSpecialType(i->second, dataSet->getObjects()->at(i->first)->getObjectType());
+        //TODO: Think about cast and how best go around that
+		dataSet->getObjects()->at(i->first)->setSpecialType((SpecialTile)i->second, dataSet->getObjects()->at(i->first)->getObjectType());
 	}
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _explosives.begin(); i != _explosives.end(); ++i)
 	{

@@ -1128,7 +1128,7 @@ void SavedBattleGame::addDestroyedObjective()
 		_objectivesDestroyed++;
 		if (allObjectivesDestroyed())
 		{
-			if (getObjectiveType() == MUST_DESTROY)
+			if (getObjectiveType() == SpecialTile::MUST_DESTROY)
 			{
 				_battleState->getBattleGame()->autoEndBattle();
 			}
@@ -1970,9 +1970,9 @@ void SavedBattleGame::setObjectiveType(int type)
  * Get the objective type for the current battle.
  * @return the objective type.
  */
-SpecialTileType SavedBattleGame::getObjectiveType() const
+SpecialTile SavedBattleGame::getObjectiveType() const
 {
-	return (SpecialTileType)(_objectiveType);
+	return (SpecialTile)(_objectiveType);
 }
 
 

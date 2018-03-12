@@ -90,7 +90,7 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 		for (int i = 0; i < _battleGame->getMapSizeXYZ(); ++i)
 		{
 			Tile *tile = _battleGame->getTiles()[i];
-			if (tile && tile->getMapData(O_FLOOR) && tile->getMapData(O_FLOOR)->getSpecialType() == END_POINT)
+			if (tile && tile->getMapData(O_FLOOR) && tile->getMapData(O_FLOOR)->getSpecialType() == SpecialTile::END_POINT)
 			{
 				exit = true;
 				break;
@@ -103,11 +103,11 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 	{
 		if ((*i)->getOriginalFaction() == FACTION_PLAYER && !(*i)->isOut())
 		{
-			if ((*i)->isInExitArea(START_POINT))
+			if ((*i)->isInExitArea(SpecialTile::START_POINT))
 			{
 				_inEntrance++;
 			}
-			else if ((*i)->isInExitArea(END_POINT))
+			else if ((*i)->isInExitArea(SpecialTile::END_POINT))
 			{
 				_inExit++;
 			}

@@ -24,7 +24,7 @@ namespace OpenXcom
 
 class MapDataSet;
 
-enum SpecialTileType{TILE=0,
+enum class SpecialTile{TILE=0,
 					START_POINT,
 					UFO_POWER_SOURCE,
 					UFO_NAVIGATION,
@@ -52,7 +52,7 @@ class MapData
 {
 private:
 	MapDataSet *_dataset;
-	SpecialTileType _specialType;
+	SpecialTile _specialType;
 	bool _isUfoDoor, _stopLOS, _isNoFloor, _isGravLift, _isDoor, _blockFire, _blockSmoke, _baseModule;
 	int _yOffset, _TUWalk, _TUFly, _TUSlide, _terrainLevel, _footstepSound, _dieMCD, _altMCD, _objectType, _lightSource;
 	int _armor, _flammable, _fuel, _explosive, _explosiveType, _bigWall;
@@ -96,9 +96,9 @@ public:
 	/// Get the type of tile.
 	int getObjectType() const;
 	/// Gets info about special tile types
-	SpecialTileType getSpecialType() const;
+	SpecialTile getSpecialType() const;
 	/// Sets a special tile type and object type.
-	void setSpecialType(int value, int otype);
+	void setSpecialType(SpecialTile value, int otype);
 	/// Gets the TU cost to move over the object.
 	int getTUCost(MovementType movementType) const;
 	/// Sets the TU cost to move over the object.

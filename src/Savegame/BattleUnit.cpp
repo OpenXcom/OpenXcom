@@ -2083,9 +2083,9 @@ bool BattleUnit::checkAmmo()
  * @param stt Type of exit tile to check for.
  * @return Is in the exit area?
  */
-bool BattleUnit::isInExitArea(SpecialTileType stt) const
+bool BattleUnit::isInExitArea(SpecialTile st) const
 {
-	return _tile && _tile->getMapData(O_FLOOR) && (_tile->getMapData(O_FLOOR)->getSpecialType() == stt);
+	return _tile && _tile->getMapData(O_FLOOR) && (_tile->getMapData(O_FLOOR)->getSpecialType() == st);
 }
 
 /**

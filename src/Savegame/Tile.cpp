@@ -460,7 +460,7 @@ int Tile::getShade() const
  * @param type the objective type for this mission we are checking against.
  * @return bool Return true objective was destroyed.
  */
-bool Tile::destroy(int part, SpecialTileType type)
+bool Tile::destroy(int part, SpecialTile type)
 {
 	bool _objective = false;
 	if (_objects[part])
@@ -497,7 +497,7 @@ bool Tile::destroy(int part, SpecialTileType type)
  * @param type the objective type for this mission we are checking against.
  * @return bool Return true objective was destroyed
  */
-bool Tile::damage(int part, int power, SpecialTileType type)
+bool Tile::damage(int part, int power, SpecialTile type)
 {
 	bool objective = false;
 	if (power >= _objects[part]->getArmor())
@@ -632,7 +632,7 @@ void Tile::animate()
 				continue;
 			}
 			newframe = _currentFrame[i] + 1;
-			if (_objects[i]->isUFODoor() && _objects[i]->getSpecialType() == START_POINT && newframe == 3)
+			if (_objects[i]->isUFODoor() && _objects[i]->getSpecialType() == SpecialTile::START_POINT && newframe == 3)
 			{
 				newframe = 7;
 			}

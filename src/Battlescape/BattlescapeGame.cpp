@@ -461,7 +461,7 @@ void BattlescapeGame::endTurn()
 			}
 			else if ((*j)->getOriginalFaction() == FACTION_PLAYER)
 			{
-				if ((*j)->isInExitArea(END_POINT))
+				if ((*j)->isInExitArea(SpecialTile::END_POINT))
 				{
 					inExit++;
 				}
@@ -477,7 +477,7 @@ void BattlescapeGame::endTurn()
 		}
 	}
 
-	if (_save->allObjectivesDestroyed() && _save->getObjectiveType() == MUST_DESTROY)
+	if (_save->allObjectivesDestroyed() && _save->getObjectiveType() == SpecialTile::MUST_DESTROY)
 	{
 		_parentState->finishBattle(false, liveSoldiers);
 		return;
@@ -2265,7 +2265,7 @@ void BattlescapeGame::autoEndBattle()
 	if (Options::battleAutoEnd)
 	{
 		bool end = false;
-		if (_save->getObjectiveType() == MUST_DESTROY)
+		if (_save->getObjectiveType() == SpecialTile::MUST_DESTROY)
 		{
 			end = _save->allObjectivesDestroyed();
 		}

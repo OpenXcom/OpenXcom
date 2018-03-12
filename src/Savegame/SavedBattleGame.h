@@ -274,7 +274,7 @@ public:
 	/// Sets the objective type for this mission.
 	void setObjectiveType(int type);
 	/// Gets the objective type of this mission.
-	SpecialTileType getObjectiveType() const;
+	SpecialTile getObjectiveType() const;
 	/// sets the ambient sound effect;
 	void setAmbientVolume(double volume);
 	/// gets the ambient sound effect;

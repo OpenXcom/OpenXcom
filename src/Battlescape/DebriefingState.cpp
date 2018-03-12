@@ -1013,11 +1013,11 @@ void DebriefingState::prepareDebriefing()
 			{
 				playersUnconscious++;
 			}
-			else if ((*j)->isInExitArea(END_POINT))
+			else if ((*j)->isInExitArea(SpecialTile::END_POINT))
 			{
 				playersInExitArea++;
 			}
-			else if ((*j)->isInExitArea(START_POINT))
+			else if ((*j)->isInExitArea(SpecialTile::START_POINT))
 			{
 				playersInEntryArea++;
 			}
@@ -1178,7 +1178,7 @@ void DebriefingState::prepareDebriefing()
 		{ // so this unit is not dead...
 			if (oldFaction == FACTION_PLAYER)
 			{
-				if ((((*j)->isInExitArea(START_POINT) || (*j)->getStatus() == STATUS_IGNORE_ME) && (battle->getMissionType() != "STR_BASE_DEFENSE" || success)) || !aborted || (aborted && (*j)->isInExitArea(END_POINT)))
+				if ((((*j)->isInExitArea(SpecialTile::START_POINT) || (*j)->getStatus() == STATUS_IGNORE_ME) && (battle->getMissionType() != "STR_BASE_DEFENSE" || success)) || !aborted || (aborted && (*j)->isInExitArea(SpecialTile::END_POINT)))
 				{ // so game is not aborted or aborted and unit is on exit area
 					UnitStats statIncrease;
 					(*j)->postMissionProcedures(save, statIncrease);
@@ -1242,7 +1242,7 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 			}
-			else if (oldFaction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea(START_POINT)) && !_destroyBase
+			else if (oldFaction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea(SpecialTile::START_POINT)) && !_destroyBase
 				// mind controlled units may as well count as unconscious
 				&& faction == FACTION_PLAYER && (!(*j)->isOut() || (*j)->getStatus() == STATUS_IGNORE_ME))
 			{
@@ -1351,7 +1351,8 @@ void DebriefingState::prepareDebriefing()
 				{
 					if (battle->getTiles()[i]->getMapData(part))
 					{
-						int specialType = battle->getTiles()[i]->getMapData(part)->getSpecialType();
+                        //TODO: Deal with cast to enum
+						int specialType = (int) battle->getTiles()[i]->getMapData(part)->getSpecialType();
 						if (specialType != nonRecoverType && _recoveryStats.find(specialType) != _recoveryStats.end())
 						{
 							addStat(_recoveryStats[specialType]->name, 1, _recoveryStats[specialType]->value);
@@ -1366,7 +1367,7 @@ void DebriefingState::prepareDebriefing()
 		{
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
-				if (battle->getTiles()[i]->getMapData(O_FLOOR) && (battle->getTiles()[i]->getMapData(O_FLOOR)->getSpecialType() == START_POINT))
+				if (battle->getTiles()[i]->getMapData(O_FLOOR) && (battle->getTiles()[i]->getMapData(O_FLOOR)->getSpecialType() == SpecialTile::START_POINT))
 					recoverItems(battle->getTiles()[i]->getInventory(), base);
 			}
 		}
@@ -1400,7 +1401,7 @@ void DebriefingState::prepareDebriefing()
 			// recover items from the craft floor
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
-				if (battle->getTiles()[i]->getMapData(O_FLOOR) && (battle->getTiles()[i]->getMapData(O_FLOOR)->getSpecialType() == START_POINT))
+				if (battle->getTiles()[i]->getMapData(O_FLOOR) && (battle->getTiles()[i]->getMapData(O_FLOOR)->getSpecialType() == SpecialTile::START_POINT))
 					recoverItems(battle->getTiles()[i]->getInventory(), base);
 			}
 		}
@@ -1413,7 +1414,8 @@ void DebriefingState::prepareDebriefing()
 		for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 		{
 			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
-			if ((*i)->item == _recoveryStats[ALIEN_ALLOYS]->name)
+            // TODO: Prevent cast
+			if ((*i)->item == _recoveryStats[(size_t)SpecialTile::ALIEN_ALLOYS]->name)
 			{
 				(*i)->qty = (*i)->qty / aadivider;
 				(*i)->score = (*i)->score / aadivider;

@@ -200,7 +200,7 @@ void BattlescapeGenerator::nextStage()
 		if ((*i)->getStatus() != STATUS_DEAD                              // if they're not dead
 			&& (((*i)->getOriginalFaction() == FACTION_PLAYER               // and they're a soldier
 			&& _save->isAborted()											  // and you aborted
-			&& !(*i)->isInExitArea(END_POINT))                                // and they're not on the exit
+			&& !(*i)->isInExitArea(SpecialTile::END_POINT))                                // and they're not on the exit
 			|| (*i)->getOriginalFaction() != FACTION_PLAYER))               // or they're not a soldier
 		{
 			if ((*i)->getOriginalFaction() == FACTION_HOSTILE && !(*i)->isOut())
@@ -299,12 +299,12 @@ void BattlescapeGenerator::nextStage()
 							if (tile->getMapData(O_FLOOR))
 							{
 								// in the skyranger? it goes home.
-								if (tile->getMapData(O_FLOOR)->getSpecialType() == START_POINT)
+								if (tile->getMapData(O_FLOOR)->getSpecialType() == SpecialTile::START_POINT)
 								{
 									toContainer = takeHomeGuaranteed;
 								}
 								// on the exit grid? it goes to stage two.
-								else if (tile->getMapData(O_FLOOR)->getSpecialType() == END_POINT)
+								else if (tile->getMapData(O_FLOOR)->getSpecialType() == SpecialTile::END_POINT)
 								{
 									toContainer = &takeToNextStage;
 								}
@@ -992,7 +992,7 @@ bool BattlescapeGenerator::canPlaceXCOMUnit(Tile *tile)
 	// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
 	if (tile &&
 		tile->getMapData(O_FLOOR) &&
-		tile->getMapData(O_FLOOR)->getSpecialType() == START_POINT &&
+		tile->getMapData(O_FLOOR)->getSpecialType() == SpecialTile::START_POINT &&
 		!tile->getMapData(O_OBJECT) &&
 		tile->getMapData(O_FLOOR)->getTUCost(MT_WALK) < 255)
 	{
@@ -1753,7 +1753,7 @@ void BattlescapeGenerator::fuelPowerSources()
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
 		if (_save->getTiles()[i]->getMapData(O_OBJECT)
-			&& _save->getTiles()[i]->getMapData(O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE)
+			&& _save->getTiles()[i]->getMapData(O_OBJECT)->getSpecialType() == SpecialTile::UFO_POWER_SOURCE)
 		{
 			BattleItem *alienFuel = new BattleItem(_game->getMod()->getItem(_game->getMod()->getAlienFuelName(), true), _save->getCurrentItemId());
 			_save->getItems()->push_back(alienFuel);
@@ -1771,7 +1771,7 @@ void BattlescapeGenerator::explodePowerSources()
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
 		if (_save->getTiles()[i]->getMapData(O_OBJECT)
-			&& _save->getTiles()[i]->getMapData(O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE && RNG::percent(75))
+			&& _save->getTiles()[i]->getMapData(O_OBJECT)->getSpecialType() == SpecialTile::UFO_POWER_SOURCE && RNG::percent(75))
 		{
 			Position pos;
 			pos.x = _save->getTiles()[i]->getPosition().x*16;
@@ -2971,7 +2971,8 @@ void BattlescapeGenerator::setupObjectives(AlienDeployment *ruleDeploy)
 		{
 			for (int j = 0; j != 4; ++j)
 			{
-				if (_save->getTiles()[i]->getMapData(j) && _save->getTiles()[i]->getMapData(j)->getSpecialType() == targetType)
+                //TODO: chase types up and remove cast
+				if (_save->getTiles()[i]->getMapData(j) && _save->getTiles()[i]->getMapData(j)->getSpecialType() == (SpecialTile)targetType)
 				{
 					actualCount++;
 				}
