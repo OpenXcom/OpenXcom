@@ -167,7 +167,7 @@ static soundInFile *introSounds[] =
 	hybridIntroSounds,
 	introCatOnlySounds,
 	sample3CatOnlySounds,
-	0
+	nullptr
 };
 
 
@@ -323,7 +323,7 @@ static struct AudioSequence
 	int trackPosition;
 	FlcPlayer *_flcPlayer;
 
-	AudioSequence(Mod *mod, FlcPlayer *flcPlayer) : mod(mod), m(0), s(0), trackPosition(0), _flcPlayer(flcPlayer)
+	AudioSequence(Mod *mod, FlcPlayer *flcPlayer) : mod(mod), m(nullptr), s(nullptr), trackPosition(0), _flcPlayer(flcPlayer)
 	{ }
 
 	void operator()()
@@ -384,7 +384,7 @@ static struct AudioSequence
 		}
 
 	}
-} *audioSequence = NULL;
+} *audioSequence = nullptr;
 
 
 static void audioHandler()
@@ -425,7 +425,7 @@ void VideoState::init()
 	int dx = (Options::baseXResolution - Screen::ORIGINAL_WIDTH) / 2;
 	int dy = (Options::baseYResolution - Screen::ORIGINAL_HEIGHT) / 2;
 
-	FlcPlayer *flcPlayer = NULL;
+	FlcPlayer *flcPlayer = nullptr;
 	size_t audioCounter = 0;
 	for (std::vector<std::string>::const_iterator it = _videos->begin(); it != _videos->end(); ++it)
 	{
@@ -454,14 +454,14 @@ void VideoState::init()
 		}
 
 		flcPlayer->init(videoFileName.c_str(),
-			 _useUfoAudioSequence ? &audioHandler : NULL,
+			 _useUfoAudioSequence ? &audioHandler : nullptr,
 			 _game, useInternalAudio, dx, dy);
 		flcPlayer->play(_useUfoAudioSequence);
 		if (_useUfoAudioSequence)
 		{
 			flcPlayer->delay(10000);
 			delete audioSequence;
-			audioSequence = NULL;
+			audioSequence = nullptr;
 		}
 		flcPlayer->deInit();
 
@@ -488,7 +488,7 @@ void VideoState::init()
 		Mix_FadeOutChannel(-1, FADE_DELAY * FADE_STEPS);
 		// SDL_Mixer has trouble with native midi and volume on windows,
 		// which is the most likely use case, so f@%# it.
-		if (Mix_GetMusicType(0) != MUS_MID)
+		if (Mix_GetMusicType(nullptr) != MUS_MID)
 		{
 			Mix_FadeOutMusic(FADE_DELAY * FADE_STEPS);
 			func_fade();

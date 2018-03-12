@@ -37,7 +37,7 @@ Sound *TextButton::soundPress;
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextButton::TextButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0), _contrast(false), _geoscapeButton(false), _comboBox(0)
+TextButton::TextButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(nullptr), _contrast(false), _geoscapeButton(false), _comboBox(nullptr)
 {
 	_text = new Text(width, height, 0, 0);
 	_text->setSmall();
@@ -56,7 +56,7 @@ TextButton::~TextButton()
 
 bool TextButton::isButtonHandled(Uint8 button)
 {
-	if (_comboBox != 0)
+	if (_comboBox != nullptr)
 	{
 		return (button == SDL_BUTTON_LEFT);
 	}
@@ -253,7 +253,7 @@ void TextButton::draw()
 	}
 
 	bool press;
-	if (_group == 0)
+	if (_group == nullptr)
 		press = isButtonPressed();
 	else
 		press = (*_group == this);
@@ -281,18 +281,18 @@ void TextButton::draw()
  */
 void TextButton::mousePress(Action *action, State *state)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && _group != 0)
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && _group != nullptr)
 	{
 		TextButton *old = *_group;
 		*_group = this;
-		if (old != 0)
+		if (old != nullptr)
 			old->draw();
 		draw();
 	}
 
 	if (isButtonHandled(action->getDetails()->button.button))
 	{
-		if (soundPress != 0 && _group == 0 &&
+		if (soundPress != nullptr && _group == nullptr &&
 			action->getDetails()->button.button != SDL_BUTTON_WHEELUP && action->getDetails()->button.button != SDL_BUTTON_WHEELDOWN)
 		{
 			soundPress->play(Mix_GroupAvailable(0));

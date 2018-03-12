@@ -40,7 +40,7 @@ Sound *Window::soundPopup[3];
  * @param y Y position in pixels.
  * @param popup Popup animation.
  */
-Window::Window(State *state, int width, int height, int x, int y, WindowPopup popup) : Surface(width, height, x, y), _dx(-x), _dy(-y), _bg(0), _color(0), _popup(popup), _popupStep(0.0), _state(state), _contrast(false), _screen(false), _thinBorder(false)
+Window::Window(State *state, int width, int height, int x, int y, WindowPopup popup) : Surface(width, height, x, y), _dx(-x), _dy(-y), _bg(nullptr), _color(0), _popup(popup), _popupStep(0.0), _state(state), _contrast(false), _screen(false), _thinBorder(false)
 {
 	_timer = new Timer(10);
 	_timer->onTimer((SurfaceHandler)&Window::popup);
@@ -53,7 +53,7 @@ Window::Window(State *state, int width, int height, int x, int y, WindowPopup po
 	{
 		setHidden(true);
 		_timer->start();
-		if (_state != 0)
+		if (_state != nullptr)
 		{
 			_screen = state->isScreen();
 			if (_screen)
@@ -121,7 +121,7 @@ void Window::think()
 		setHidden(false);
 	}
 
-	_timer->think(0, this);
+	_timer->think(nullptr, this);
 }
 
 /**
@@ -132,7 +132,7 @@ void Window::popup()
 	if (AreSame(_popupStep, 0.0))
 	{
 		int sound = RNG::seedless(0,2);
-		if (soundPopup[sound] != 0)
+		if (soundPopup[sound] != nullptr)
 		{
 			soundPopup[sound]->play(Mix_GroupAvailable(0));
 		}
@@ -250,7 +250,7 @@ void Window::draw()
 		}
 	}
 
-	if (_bg != 0)
+	if (_bg != nullptr)
 	{
 		_bg->getCrop()->x = square.x - _dx;
 		_bg->getCrop()->y = square.y - _dy;

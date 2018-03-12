@@ -221,7 +221,7 @@ void CraftInfoState::init()
 		CraftWeapon *w1 = _craft->getWeapons()->at(0);
 
 		_weapon1->clear();
-		if (w1 != 0)
+		if (w1 != nullptr)
 		{
 			Surface *frame = texture->getFrame(w1->getRules()->getSprite() + 48);
 			frame->setX(0);
@@ -260,7 +260,7 @@ void CraftInfoState::init()
 		CraftWeapon *w2 = _craft->getWeapons()->at(1);
 
 		_weapon2->clear();
-		if (w2 != 0)
+		if (w2 != nullptr)
 		{
 			Surface *frame = texture->getFrame(w2->getRules()->getSprite() + 48);
 			frame->setX(0);

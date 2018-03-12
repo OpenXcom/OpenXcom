@@ -67,11 +67,11 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 	// Check available areas (maybe should be cached somewhere)
 	bool exit = false, craft = true;
 	AlienDeployment *deployment = _game->getMod()->getDeployment(_battleGame->getMissionType());
-	if (deployment != 0)
+	if (deployment != nullptr)
 	{
 		exit = !deployment->getNextStage().empty() || deployment->getEscapeType() == ESCAPE_EXIT || deployment->getEscapeType() == ESCAPE_EITHER;
 		const std::vector<MapScript*> *scripts = _game->getMod()->getMapScript(deployment->getScript());
-		if (scripts != 0)
+		if (scripts != nullptr)
 		{
 			craft = false;
 			for (std::vector<MapScript*>::const_iterator i = scripts->begin(); i != scripts->end(); ++i)

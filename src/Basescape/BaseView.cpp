@@ -42,14 +42,14 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-BaseView::BaseView(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _base(0), _texture(0), _selFacility(0), _big(0), _small(0), _lang(0), _gridX(0), _gridY(0), _selSize(0), _selector(0), _blink(true)
+BaseView::BaseView(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _base(nullptr), _texture(nullptr), _selFacility(nullptr), _big(nullptr), _small(nullptr), _lang(nullptr), _gridX(0), _gridY(0), _selSize(0), _selector(nullptr), _blink(true)
 {
 	// Clear grid
 	for (int i = 0; i < BASE_SIZE; ++i)
 	{
 		for (int j = 0; j < BASE_SIZE; ++j)
 		{
-			_facilities[i][j] = 0;
+			_facilities[i][j] = nullptr;
 		}
 	}
 
@@ -91,14 +91,14 @@ void BaseView::initText(Font *big, Font *small, Language *lang)
 void BaseView::setBase(Base *base)
 {
 	_base = base;
-	_selFacility = 0;
+	_selFacility = nullptr;
 
 	// Clear grid
 	for (int x = 0; x < BASE_SIZE; ++x)
 	{
 		for (int y = 0; y < BASE_SIZE; ++y)
 		{
-			_facilities[x][y] = 0;
+			_facilities[x][y] = nullptr;
 		}
 	}
 
@@ -141,8 +141,8 @@ BaseFacility *BaseView::getSelectedFacility() const
  */
 void BaseView::resetSelectedFacility()
 {
-	_facilities[_selFacility->getX()][_selFacility->getY()] = 0;
-	_selFacility = 0;
+	_facilities[_selFacility->getX()][_selFacility->getY()] = nullptr;
+	_selFacility = nullptr;
 }
 
 
@@ -214,7 +214,7 @@ bool BaseView::isPlaceable(RuleBaseFacility *rule) const
 			{
 				return false;
 			}
-			if (_facilities[x][y] != 0)
+			if (_facilities[x][y] != nullptr)
 			{
 				return false;
 			}
@@ -226,10 +226,10 @@ bool BaseView::isPlaceable(RuleBaseFacility *rule) const
 	// Check for another facility to connect to
 	for (int i = 0; i < rule->getSize(); ++i)
 	{
-		if ((_gridX > 0 && _facilities[_gridX - 1][_gridY + i] != 0 && (bq || _facilities[_gridX - 1][_gridY + i]->getBuildTime() == 0)) ||
-			(_gridY > 0 && _facilities[_gridX + i][_gridY - 1] != 0 && (bq || _facilities[_gridX + i][_gridY - 1]->getBuildTime() == 0)) ||
-			(_gridX + rule->getSize() < BASE_SIZE && _facilities[_gridX + rule->getSize()][_gridY + i] != 0 && (bq || _facilities[_gridX + rule->getSize()][_gridY + i]->getBuildTime() == 0)) ||
-			(_gridY + rule->getSize() < BASE_SIZE && _facilities[_gridX + i][_gridY + rule->getSize()] != 0 && (bq || _facilities[_gridX + i][_gridY + rule->getSize()]->getBuildTime() == 0)))
+		if ((_gridX > 0 && _facilities[_gridX - 1][_gridY + i] != nullptr && (bq || _facilities[_gridX - 1][_gridY + i]->getBuildTime() == 0)) ||
+			(_gridY > 0 && _facilities[_gridX + i][_gridY - 1] != nullptr && (bq || _facilities[_gridX + i][_gridY - 1]->getBuildTime() == 0)) ||
+			(_gridX + rule->getSize() < BASE_SIZE && _facilities[_gridX + rule->getSize()][_gridY + i] != nullptr && (bq || _facilities[_gridX + rule->getSize()][_gridY + i]->getBuildTime() == 0)) ||
+			(_gridY + rule->getSize() < BASE_SIZE && _facilities[_gridX + i][_gridY + rule->getSize()] != nullptr && (bq || _facilities[_gridX + i][_gridY + rule->getSize()]->getBuildTime() == 0)))
 		{
 			return true;
 		}
@@ -247,10 +247,10 @@ bool BaseView::isQueuedBuilding(RuleBaseFacility *rule) const
 {
 	for (int i = 0; i < rule->getSize(); ++i)
 	{
-		if ((_gridX > 0 && _facilities[_gridX - 1][_gridY + i] != 0 && _facilities[_gridX - 1][_gridY + i]->getBuildTime() == 0) ||
-			(_gridY > 0 && _facilities[_gridX + i][_gridY - 1] != 0 && _facilities[_gridX + i][_gridY - 1]->getBuildTime() == 0) ||
-			(_gridX + rule->getSize() < BASE_SIZE && _facilities[_gridX + rule->getSize()][_gridY + i] != 0 && _facilities[_gridX + rule->getSize()][_gridY + i]->getBuildTime() == 0) ||
-			(_gridY + rule->getSize() < BASE_SIZE && _facilities[_gridX + i][_gridY + rule->getSize()] != 0 && _facilities[_gridX + i][_gridY + rule->getSize()]->getBuildTime() == 0))
+		if ((_gridX > 0 && _facilities[_gridX - 1][_gridY + i] != nullptr && _facilities[_gridX - 1][_gridY + i]->getBuildTime() == 0) ||
+			(_gridY > 0 && _facilities[_gridX + i][_gridY - 1] != nullptr && _facilities[_gridX + i][_gridY - 1]->getBuildTime() == 0) ||
+			(_gridX + rule->getSize() < BASE_SIZE && _facilities[_gridX + rule->getSize()][_gridY + i] != nullptr && _facilities[_gridX + rule->getSize()][_gridY + i]->getBuildTime() == 0) ||
+			(_gridY + rule->getSize() < BASE_SIZE && _facilities[_gridX + i][_gridY + rule->getSize()] != nullptr && _facilities[_gridX + i][_gridY + rule->getSize()]->getBuildTime() == 0))
 		{
 			return false;
 		}
@@ -300,7 +300,7 @@ void BaseView::reCalcQueuedBuildings()
  */
 void BaseView::updateNeighborFacilityBuildTime(BaseFacility* facility, BaseFacility* neighbor)
 {
-	if (facility != 0 && neighbor != 0
+	if (facility != nullptr && neighbor != nullptr
 	&& neighbor->getBuildTime() > neighbor->getRules()->getBuildTime()
 	&& facility->getBuildTime() + neighbor->getRules()->getBuildTime() < neighbor->getBuildTime())
 		neighbor->setBuildTime(facility->getBuildTime() + neighbor->getRules()->getBuildTime());
@@ -311,7 +311,7 @@ void BaseView::updateNeighborFacilityBuildTime(BaseFacility* facility, BaseFacil
  */
 void BaseView::think()
 {
-	_timer->think(0, this);
+	_timer->think(nullptr, this);
 }
 
 /**
@@ -406,7 +406,7 @@ void BaseView::draw()
 			{
 				for (int y = (*i)->getY(); y < (*i)->getY() + (*i)->getRules()->getSize(); ++y)
 				{
-					if (_facilities[x][y] != 0 && _facilities[x][y]->getBuildTime() == 0)
+					if (_facilities[x][y] != nullptr && _facilities[x][y]->getBuildTime() == 0)
 					{
 						Surface *frame = _texture->getFrame(7);
 						frame->setX(x * GRID_SIZE - GRID_SIZE / 2);
@@ -422,7 +422,7 @@ void BaseView::draw()
 			{
 				for (int subX = (*i)->getX(); subX < (*i)->getX() + (*i)->getRules()->getSize(); ++subX)
 				{
-					if (_facilities[subX][y] != 0 && _facilities[subX][y]->getBuildTime() == 0)
+					if (_facilities[subX][y] != nullptr && _facilities[subX][y]->getBuildTime() == 0)
 					{
 						Surface *frame = _texture->getFrame(8);
 						frame->setX(subX * GRID_SIZE);
@@ -469,13 +469,13 @@ void BaseView::draw()
 				}
 				else
 				{
-					(*i)->setCraft(0);
+					(*i)->setCraft(nullptr);
 				}
 				++craft;
 			}
 			else
 			{
-				(*i)->setCraft(0);
+				(*i)->setCraft(nullptr);
 			}
 		}
 
@@ -506,7 +506,7 @@ void BaseView::draw()
 void BaseView::blit(Surface *surface)
 {
 	Surface::blit(surface);
-	if (_selector != 0)
+	if (_selector != nullptr)
 	{
 		_selector->blit(surface);
 	}
@@ -540,7 +540,7 @@ void BaseView::mouseOver(Action *action, State *state)
 	}
 	else
 	{
-		_selFacility = 0;
+		_selFacility = nullptr;
 		if (_selSize > 0)
 		{
 			_selector->setVisible(false);
@@ -557,7 +557,7 @@ void BaseView::mouseOver(Action *action, State *state)
  */
 void BaseView::mouseOut(Action *action, State *state)
 {
-	_selFacility = 0;
+	_selFacility = nullptr;
 	if (_selSize > 0)
 	{
 		_selector->setVisible(false);

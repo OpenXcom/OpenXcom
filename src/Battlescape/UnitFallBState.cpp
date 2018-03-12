@@ -36,7 +36,7 @@ namespace OpenXcom
  * Sets up an UnitFallBState.
  * @param parent Pointer to the Battlescape.
  */
-UnitFallBState::UnitFallBState(BattlescapeGame *parent) : BattleState(parent), _terrain(0)
+UnitFallBState::UnitFallBState(BattlescapeGame *parent) : BattleState(parent), _terrain(nullptr)
 {
 
 }
@@ -111,7 +111,7 @@ void UnitFallBState::think()
 						// A falling unit might have already taken up this position so check that this unit is still here.
 						if (_parent->getSave()->getTile((*unit)->getLastPosition() + Position(x,y,0))->getUnit() == (*unit))
 						{
-							_parent->getSave()->getTile((*unit)->getLastPosition() + Position(x,y,0))->setUnit(0);
+							_parent->getSave()->getTile((*unit)->getLastPosition() + Position(x,y,0))->setUnit(nullptr);
 						}
 					}
 				}
@@ -202,7 +202,7 @@ void UnitFallBState::think()
 						bool aboutToBeOccupiedFromAbove = t && std::find(tilesToFallInto.begin(), tilesToFallInto.end(), t) != tilesToFallInto.end();
 						bool alreadyTaken = t && std::find(escapeTiles.begin(), escapeTiles.end(), t) != escapeTiles.end();
 						bool alreadyOccupied = t && t->getUnit() && (t->getUnit() != unitBelow);
-						bool movementBlocked = _parent->getSave()->getPathfinding()->getTUCost(originalPosition, dir, &endPosition, *ub, 0, false) == 255;
+						bool movementBlocked = _parent->getSave()->getPathfinding()->getTUCost(originalPosition, dir, &endPosition, *ub, nullptr, false) == 255;
 						bool hasFloor = t && !t->hasNoFloor(bt);
 						bool unitCanFly = unitBelow->getMovementType() == MT_FLY;
 
@@ -247,7 +247,7 @@ void UnitFallBState::think()
 					ub = unitsToMove.erase(ub);
 				}
 			}
-			_parent->checkForCasualties(0,*unit);
+			_parent->checkForCasualties(nullptr,*unit);
 		}
 		// we are just standing around, we are done falling.
 		if ((*unit)->getStatus() == STATUS_STANDING)
@@ -257,7 +257,7 @@ void UnitFallBState::think()
 				Position destination = (*unit)->getPosition() + Position(0,0,-1);
 				Tile *tileBelow = _parent->getSave()->getTile(destination);
 				(*unit)->startWalking(Pathfinding::DIR_DOWN, destination, tileBelow, onScreen);
-				(*unit)->setCache(0);
+				(*unit)->setCache(nullptr);
 				_parent->getMap()->cacheUnit(*unit);
 				++unit;
 			}
@@ -278,7 +278,7 @@ void UnitFallBState::think()
 				// move our personal lighting with us
 				_terrain->calculateUnitLighting();
 				_parent->getMap()->cacheUnit(*unit);
-				(*unit)->setCache(0);
+				(*unit)->setCache(nullptr);
 				_terrain->calculateFOV(*unit);
 				_parent->checkForProximityGrenades(*unit);
 				if ((*unit)->getStatus() == STATUS_STANDING)

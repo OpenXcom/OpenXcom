@@ -170,7 +170,7 @@ void LoadGameState::think()
 				Options::baseYResolution = Options::baseYGeoscape;
 				_game->getScreen()->resetDisplay(false);
 				_game->setState(new GeoscapeState);
-				if (_game->getSavedGame()->getSavedBattle() != 0)
+				if (_game->getSavedGame()->getSavedBattle() != nullptr)
 				{
 					_game->getSavedGame()->getSavedBattle()->loadMapResources(_game->getMod());
 					Options::baseXResolution = Options::baseXBattlescape;
@@ -193,7 +193,7 @@ void LoadGameState::think()
 				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getMod()->getInterface("errorMessages")->getElement("battlescapeColor")->color, "TAC00.SCR", _game->getMod()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
 
 			if (_game->getSavedGame() == s)
-				_game->setSavedGame(0);
+				_game->setSavedGame(nullptr);
 			else
 				delete s;
 		}
@@ -208,7 +208,7 @@ void LoadGameState::think()
 				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getMod()->getInterface("errorMessages")->getElement("battlescapeColor")->color, "TAC00.SCR", _game->getMod()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
 
 			if (_game->getSavedGame() == s)
-				_game->setSavedGame(0);
+				_game->setSavedGame(nullptr);
 			else
 				delete s;
 		}

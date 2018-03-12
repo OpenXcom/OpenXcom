@@ -29,7 +29,7 @@ namespace OpenXcom
  * of a filename followed by its contents.
  * @param path Full path to CAT file.
  */
-CatFile::CatFile(const char *path) : std::ifstream(path, std::ios::in | std::ios::binary), _amount(0), _offset(0), _size(0)
+CatFile::CatFile(const char *path) : std::ifstream(path, std::ios::in | std::ios::binary), _amount(0), _offset(nullptr), _size(nullptr)
 {
 	// Get amount of files
 	read((char*)&_amount, sizeof(_amount));
@@ -72,7 +72,7 @@ CatFile::~CatFile()
 char *CatFile::load(unsigned int i, bool name)
 {
 	if (i >= _amount)
-		return 0;
+		return nullptr;
 
 	seekg(_offset[i], std::ios::beg);
 

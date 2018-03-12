@@ -47,7 +47,7 @@
 namespace OpenXcom
 {
 
-AlienMission::AlienMission(const RuleAlienMission &rule) : _rule(rule), _nextWave(0), _nextUfoCounter(0), _spawnCountdown(0), _liveUfos(0), _uniqueID(0), _missionSiteZone(-1), _base(0)
+AlienMission::AlienMission(const RuleAlienMission &rule) : _rule(rule), _nextWave(0), _nextUfoCounter(0), _spawnCountdown(0), _liveUfos(0), _uniqueID(0), _missionSiteZone(-1), _base(nullptr)
 {
 	// Empty by design.
 }
@@ -310,10 +310,10 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Mod &mod, const Globe &
 	}
 	else if (_rule.getObjective() == OBJECTIVE_SUPPLY)
 	{
-		if (ufoRule == 0 || (wave.objective && !_base))
+		if (ufoRule == nullptr || (wave.objective && !_base))
 		{
 			// No base to supply!
-			return 0;
+			return nullptr;
 		}
 		// Our destination is always an alien base.
 		Ufo *ufo = new Ufo(ufoRule);
@@ -356,8 +356,8 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Mod &mod, const Globe &
 		ufo->setDestination(wp);
 		return ufo;
 	}
-	if (ufoRule == 0)
-		return 0;
+	if (ufoRule == nullptr)
+		return nullptr;
 	// Spawn according to sequence.
 	Ufo *ufo = new Ufo(ufoRule);
 	ufo->setMissionInfo(this, &trajectory);
@@ -814,7 +814,7 @@ MissionSite *AlienMission::spawnMissionSite(SavedGame &game, AlienDeployment *de
 		game.getMissionSites()->push_back(missionSite);
 		return missionSite;
 	}
-	return 0;
+	return nullptr;
 }
 
 /**

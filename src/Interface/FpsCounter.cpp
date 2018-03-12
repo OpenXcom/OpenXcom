@@ -93,7 +93,7 @@ void FpsCounter::handle(Action *action)
  */
 void FpsCounter::think()
 {
-	_timer->think(0, this);
+	_timer->think(nullptr, this);
 }
 
 /**

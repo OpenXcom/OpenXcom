@@ -85,7 +85,7 @@ void Font::loadTerminal()
 	image.surface = new Surface(s->w, s->h);
 	SDL_Color terminal[2] = {{0, 0, 0, 0}, {185, 185, 185, 255}};
 	image.surface->setPalette(terminal, 0, 2);
-	SDL_BlitSurface(s, 0, image.surface->getSurface(), 0);
+	SDL_BlitSurface(s, nullptr, image.surface->getSurface(), nullptr);
 	SDL_FreeSurface(s);
 	_images.push_back(image);
 
@@ -171,7 +171,7 @@ Surface *Font::getChar(wchar_t c)
 {
 	if (_chars.find(c) == _chars.end())
 	{
-		return 0;
+		return nullptr;
 	}
 	Surface *surface = _images[_chars[c].first].surface;
 	*surface->getCrop() = _chars[c].second;

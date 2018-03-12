@@ -61,7 +61,7 @@ PathfindingNode *PathfindingOpenSet::pop()
 	PathfindingNode *nd = entry->_node;
 	_queue.pop();
 	delete entry;
-	nd->_openentry = 0;
+	nd->_openentry = nullptr;
 
 	// Discarded entries might be visible now.
 	removeDiscarded();
@@ -80,7 +80,7 @@ void PathfindingOpenSet::push(PathfindingNode *node)
 	entry->_node = node;
 	entry->_cost = node->getTUCost(false) + node->getTUGuess();
 	if (node->_openentry)
-		node->_openentry->_node = 0;
+		node->_openentry->_node = nullptr;
 	node->_openentry = entry;
 	_queue.push(entry);
 }

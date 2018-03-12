@@ -48,11 +48,11 @@ Tile::SerializationKey Tile::serializationKey =
  * constructor
  * @param pos Position.
  */
-Tile::Tile(Position pos): _smoke(0), _fire(0), _explosive(0), _explosiveType(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(-1), _overlaps(0), _danger(false)
+Tile::Tile(Position pos): _smoke(0), _fire(0), _explosive(0), _explosiveType(0), _pos(pos), _unit(nullptr), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(-1), _overlaps(0), _danger(false)
 {
 	for (int i = 0; i < 4; ++i)
 	{
-		_objects[i] = 0;
+		_objects[i] = nullptr;
 		_mapDataID[i] = -1;
 		_mapDataSetID[i] = -1;
 		_currentFrame[i] = 0;
@@ -240,7 +240,7 @@ void Tile::getMapData(int *mapDataID, int *mapDataSetID, int part) const
  */
 bool Tile::isVoid() const
 {
-	return _objects[0] == 0 && _objects[1] == 0 && _objects[2] == 0 && _objects[3] == 0 && _smoke == 0 && _inventory.empty();
+	return _objects[0] == nullptr && _objects[1] == nullptr && _objects[2] == nullptr && _objects[3] == nullptr && _smoke == 0 && _inventory.empty();
 }
 
 /**
@@ -270,7 +270,7 @@ int Tile::getTUCost(int part, MovementType movementType) const
  */
 bool Tile::hasNoFloor(Tile *tileBelow) const
 {
-	if (tileBelow != 0 && tileBelow->getTerrainLevel() == -24)
+	if (tileBelow != nullptr && tileBelow->getTerrainLevel() == -24)
 		return false;
 	if (_objects[O_FLOOR])
 		return _objects[O_FLOOR]->isNoFloor();
@@ -320,7 +320,7 @@ int Tile::getFootstepSound(Tile *tileBelow) const
 		sound = _objects[O_FLOOR]->getFootstepSound();
 	if (_objects[O_OBJECT] && _objects[O_OBJECT]->getBigWall() <= 1 && _objects[O_OBJECT]->getFootstepSound() > -1)
 		sound = _objects[O_OBJECT]->getFootstepSound();
-	if (!_objects[O_FLOOR] && !_objects[O_OBJECT] && tileBelow != 0 && tileBelow->getTerrainLevel() == -24)
+	if (!_objects[O_FLOOR] && !_objects[O_OBJECT] && tileBelow != nullptr && tileBelow->getTerrainLevel() == -24)
 		sound = tileBelow->getMapData(O_OBJECT)->getFootstepSound();
 
 	return sound;
@@ -346,7 +346,7 @@ int Tile::openDoor(int part, BattleUnit *unit, BattleActionType reserve)
 			return -1;
 		setMapData(_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()), _objects[part]->getAltMCD(), _mapDataSetID[part],
 				   _objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD())->getObjectType());
-		setMapData(0, -1, -1, part);
+		setMapData(nullptr, -1, -1, part);
 		return 0;
 	}
 	if (_objects[part]->isUFODoor() && _currentFrame[part] == 0) // ufo door part 0 - door is closed
@@ -395,9 +395,9 @@ void Tile::setDiscovered(bool flag, int part)
 			_discovered[1] = true;
 		}
 		// if light on tile changes, units and objects on it change light too
-		if (_unit != 0)
+		if (_unit != nullptr)
 		{
-			_unit->setCache(0);
+			_unit->setCache(nullptr);
 		}
 	}
 }
@@ -470,7 +470,7 @@ bool Tile::destroy(int part, SpecialTileType type)
 		_objective = _objects[part]->getSpecialType() == type;
 		MapData *originalPart = _objects[part];
 		int originalMapDataSetID = _mapDataSetID[part];
-		setMapData(0, -1, -1, part);
+		setMapData(nullptr, -1, -1, part);
 		if (originalPart->getDieMCD())
 		{
 			MapData *dead = originalPart->getDataset()->getObjects()->at(originalPart->getDieMCD());
@@ -482,7 +482,7 @@ bool Tile::destroy(int part, SpecialTileType type)
 		}
 	}
 	/* check if the floor on the lowest level is gone */
-	if (part == O_FLOOR && getPosition().z == 0 && _objects[O_FLOOR] == 0)
+	if (part == O_FLOOR && getPosition().z == 0 && _objects[O_FLOOR] == nullptr)
 	{
 		/* replace with scorched earth */
 		setMapData(MapDataSet::getScorchedEarthTile(), 1, 0, O_FLOOR);
@@ -664,8 +664,8 @@ void Tile::animate()
  */
 Surface *Tile::getSprite(int part) const
 {
-	if (_objects[part] == 0)
-		return 0;
+	if (_objects[part] == nullptr)
+		return nullptr;
 
 	return _objects[part]->getDataset()->getSurfaceset()->getFrame(_objects[part]->getSprite(_currentFrame[part]));
 }
@@ -677,7 +677,7 @@ Surface *Tile::getSprite(int part) const
  */
 void Tile::setUnit(BattleUnit *unit, Tile *tileBelow)
 {
-	if (unit != 0)
+	if (unit != nullptr)
 	{
 		unit->setTile(this, tileBelow);
 	}
@@ -780,7 +780,7 @@ void Tile::removeItem(BattleItem *item)
 			break;
 		}
 	}
-	item->setTile(0);
+	item->setTile(nullptr);
 }
 
 /**

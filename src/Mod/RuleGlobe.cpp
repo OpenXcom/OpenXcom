@@ -224,7 +224,7 @@ void RuleGlobe::loadDat(const std::string &filename)
 Texture *RuleGlobe::getTexture(int id) const
 {
 	std::map<int, Texture*>::const_iterator i = _textures.find(id);
-	if (_textures.end() != i) return i->second; else return 0;
+	if (_textures.end() != i) return i->second; else return nullptr;
 }
 
 /**

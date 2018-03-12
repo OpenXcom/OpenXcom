@@ -146,7 +146,7 @@ public:
 	{
 		if (pos.x < 0 || pos.y < 0 || pos.z < 0
 			|| pos.x >= _mapsize_x || pos.y >= _mapsize_y || pos.z >= _mapsize_z)
-			return 0;
+			return nullptr;
 
 		return _tiles[getTileIndex(pos)];
 	}
@@ -222,7 +222,7 @@ public:
 	/// Gets the highest ranked, living XCom unit.
 	BattleUnit* getHighestRankedXCom();
 	/// Gets the morale modifier for XCom based on the highest ranked, living XCom unit, or the modifier for the unit passed to this function.
-	int getMoraleModifier(BattleUnit* unit = 0);
+	int getMoraleModifier(BattleUnit* unit = nullptr);
 	/// Checks whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit).
 	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
 	/// Attempts to place a unit on or near entryPoint.

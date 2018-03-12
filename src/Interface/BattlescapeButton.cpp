@@ -29,7 +29,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-BattlescapeButton::BattlescapeButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0), _inverted(false), _toggleMode(INVERT_NONE), _altSurface(0)
+BattlescapeButton::BattlescapeButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(nullptr), _inverted(false), _toggleMode(INVERT_NONE), _altSurface(nullptr)
 {
 }
 
@@ -67,7 +67,7 @@ Uint8 BattlescapeButton::getColor() const
 void BattlescapeButton::setGroup(BattlescapeButton **group)
 {
 	_group = group;
-	if (_group != 0 && *_group == this)
+	if (_group != nullptr && *_group == this)
 		_inverted = true;
 }
 
@@ -79,7 +79,7 @@ void BattlescapeButton::setGroup(BattlescapeButton **group)
  */
 void BattlescapeButton::mousePress(Action *action, State *state)
 {
-	if (_group != 0)
+	if (_group != nullptr)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{

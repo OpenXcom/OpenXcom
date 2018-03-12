@@ -144,7 +144,7 @@ namespace OpenXcom
 				return new ArticleStateTFTDUso(dynamic_cast<ArticleDefinitionTFTD *> (article));
 			default: break;
 		}
-		return 0;
+		return nullptr;
 	}
 
 	/**

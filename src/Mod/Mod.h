@@ -155,7 +155,7 @@ private:
 	void loadFile(const std::string &filename);
 	/// Loads a ruleset element.
 	template <typename T>
-	T *loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index = 0, const std::string &key = "type") const;
+	T *loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index = nullptr, const std::string &key = "type") const;
 	/// Gets a ruleset element.
 	template <typename T>
 	T *getRule(const std::string &id, const std::string &name, const std::map<std::string, T*> &map, bool error) const;

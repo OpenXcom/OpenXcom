@@ -47,14 +47,14 @@ namespace OpenXcom
  * @param depth the depth of the battlefield (used to determine movement type in case of MT_FLOAT).
  */
 BattleUnit::BattleUnit(Soldier *soldier, int depth) :
-	_faction(FACTION_PLAYER), _originalFaction(FACTION_PLAYER), _killedBy(FACTION_PLAYER), _id(0), _tile(0),
+	_faction(FACTION_PLAYER), _originalFaction(FACTION_PLAYER), _killedBy(FACTION_PLAYER), _id(0), _tile(nullptr),
 	_lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0), _toDirectionTurret(0),
 	_verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false),
-	_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
+	_dontReselect(false), _fire(0), _currentAIState(nullptr), _visible(false), _cacheInvalid(true),
 	_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0),
-	_motionPoints(0), _kills(0), _hitByFire(false), _hitByAnything(false), _moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
+	_motionPoints(0), _kills(0), _hitByFire(false), _hitByAnything(false), _moraleRestored(0), _coverReserve(0), _charging(nullptr), _turnsSinceSpotted(255),
 	_statistics(), _murdererId(0), _mindControllerID(0), _fatalShotSide(SIDE_FRONT), _fatalShotBodyPart(BODYPART_HEAD),
-	_geoscapeSoldier(soldier), _unitRules(0), _rankInt(0), _turretType(-1), _hidingForTurn(false), _respawn(false)
+	_geoscapeSoldier(soldier), _unitRules(nullptr), _rankInt(0), _turretType(-1), _hidingForTurn(false), _respawn(false)
 {
 	_name = soldier->getName(true);
 	_id = soldier->getId();
@@ -133,9 +133,9 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) :
 	for (int i = 0; i < 6; ++i)
 		_fatalWounds[i] = 0;
 	for (int i = 0; i < 5; ++i)
-		_cache[i] = 0;
+		_cache[i] = nullptr;
 	for (int i = 0; i < SPEC_WEAPON_MAX; ++i)
-		_specWeapon[i] = 0;
+		_specWeapon[i] = nullptr;
 
 	_activeHand = "STR_RIGHT_HAND";
 
@@ -160,14 +160,14 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) :
  */
 BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, StatAdjustment *adjustment, int depth) :
 	_faction(faction), _originalFaction(faction), _killedBy(faction), _id(id),
-	_tile(0), _lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0),
+	_tile(nullptr), _lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0),
 	_toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0),
-	_fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0),
+	_fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(nullptr),
 	_visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0),
 	_expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0), _motionPoints(0), _kills(0), _hitByFire(false), _hitByAnything(false),
-	_moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
+	_moraleRestored(0), _coverReserve(0), _charging(nullptr), _turnsSinceSpotted(255),
 	_statistics(), _murdererId(0), _mindControllerID(0), _fatalShotSide(SIDE_FRONT),
-	_fatalShotBodyPart(BODYPART_HEAD), _armor(armor),  _geoscapeSoldier(0), _unitRules(unit),
+	_fatalShotBodyPart(BODYPART_HEAD), _armor(armor),  _geoscapeSoldier(nullptr), _unitRules(unit),
 	_rankInt(0), _turretType(-1), _hidingForTurn(false), _respawn(false)
 {
 	_type = unit->getType();
@@ -246,9 +246,9 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, St
 	for (int i = 0; i < 6; ++i)
 		_fatalWounds[i] = 0;
 	for (int i = 0; i < 5; ++i)
-		_cache[i] = 0;
+		_cache[i] = nullptr;
 	for (int i = 0; i < SPEC_WEAPON_MAX; ++i)
-		_specWeapon[i] = 0;
+		_specWeapon[i] = nullptr;
 
 	_activeHand = "STR_RIGHT_HAND";
 	_gender = GENDER_MALE;
@@ -344,7 +344,7 @@ void BattleUnit::load(const YAML::Node &node)
 	_originalFaction = (UnitFaction)node["originalFaction"].as<int>(_originalFaction);
 	_kills = node["kills"].as<int>(_kills);
 	_dontReselect = node["dontReselect"].as<bool>(_dontReselect);
-	_charging = 0;
+	_charging = nullptr;
 	_spawnUnit = node["spawnUnit"].as<std::string>(_spawnUnit);
 	_motionPoints = node["motionPoints"].as<int>(0);
 	_respawn = node["respawn"].as<bool>(_respawn);
@@ -904,7 +904,7 @@ UnitFaction BattleUnit::getFaction() const
  */
 void BattleUnit::setCache(Surface *cache, int part)
 {
-	if (cache == 0)
+	if (cache == nullptr)
 	{
 		_cacheInvalid = true;
 	}
@@ -1295,7 +1295,7 @@ bool BattleUnit::isOut() const
  */
 int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 {
-	if (item == 0)
+	if (item == nullptr)
 	{
 		return 0;
 	}
@@ -1304,7 +1304,7 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 
 int BattleUnit::getActionTUs(BattleActionType actionType, RuleItem *item)
 {
-	if (item == 0)
+	if (item == nullptr)
 	{
 		return 0;
 	}
@@ -1512,7 +1512,7 @@ int BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *item)
 	if (item->getRules()->isTwoHanded())
 	{
 		// two handed weapon, means one hand should be empty
-		if (getItem("STR_RIGHT_HAND") != 0 && getItem("STR_LEFT_HAND") != 0)
+		if (getItem("STR_RIGHT_HAND") != nullptr && getItem("STR_LEFT_HAND") != nullptr)
 		{
 			result = result * 80 / 100;
 		}
@@ -1642,7 +1642,7 @@ void BattleUnit::prepareNewTurn(bool fullProcess)
 		if (_faction == FACTION_PLAYER && _currentAIState)
 		{
 			delete _currentAIState;
-			_currentAIState = 0;
+			_currentAIState = nullptr;
 		}
 	}
 	else
@@ -1676,7 +1676,7 @@ void BattleUnit::prepareNewTurn(bool fullProcess)
 	if (_health == 0 && _currentAIState)
 	{
 		delete _currentAIState;
-		_currentAIState = 0;
+		_currentAIState = nullptr;
 	}
 
 	// recover stun 1pt/turn
@@ -1892,7 +1892,7 @@ BattleItem *BattleUnit::getItem(RuleInventory *slot, int x, int y) const
 		}
 	}
 	// Ground items
-	else if (_tile != 0)
+	else if (_tile != nullptr)
 	{
 		for (std::vector<BattleItem*>::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
 		{
@@ -1902,7 +1902,7 @@ BattleItem *BattleUnit::getItem(RuleInventory *slot, int x, int y) const
 			}
 		}
 	}
-	return 0;
+	return nullptr;
 }
 
 /**
@@ -1920,24 +1920,24 @@ BattleItem *BattleUnit::getItem(const std::string &slot, int x, int y) const
 	{
 		for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 		{
-			if ((*i)->getSlot() != 0 && (*i)->getSlot()->getId() == slot && (*i)->occupiesSlot(x, y))
+			if ((*i)->getSlot() != nullptr && (*i)->getSlot()->getId() == slot && (*i)->occupiesSlot(x, y))
 			{
 				return *i;
 			}
 		}
 	}
 	// Ground items
-	else if (_tile != 0)
+	else if (_tile != nullptr)
 	{
 		for (std::vector<BattleItem*>::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
 		{
-			if ((*i)->getSlot() != 0 && (*i)->occupiesSlot(x, y))
+			if ((*i)->getSlot() != nullptr && (*i)->occupiesSlot(x, y))
 			{
 				return *i;
 			}
 		}
 	}
-	return 0;
+	return nullptr;
 }
 
 /**
@@ -1952,9 +1952,9 @@ BattleItem *BattleUnit::getMainHandWeapon(bool quickest) const
 
 	// ignore weapons without ammo (rules out grenades)
 	if (!weaponRightHand || !weaponRightHand->getAmmoItem() || !weaponRightHand->getAmmoItem()->getAmmoQuantity())
-		weaponRightHand = 0;
+		weaponRightHand = nullptr;
 	if (!weaponLeftHand || !weaponLeftHand->getAmmoItem() || !weaponLeftHand->getAmmoItem()->getAmmoQuantity())
-		weaponLeftHand = 0;
+		weaponLeftHand = nullptr;
 
 	// if there is only one weapon, it's easy:
 	if (weaponRightHand && !weaponLeftHand)
@@ -1962,7 +1962,7 @@ BattleItem *BattleUnit::getMainHandWeapon(bool quickest) const
 	else if (!weaponRightHand && weaponLeftHand)
 		return weaponLeftHand;
 	else if (!weaponRightHand && !weaponLeftHand)
-		return 0;
+		return nullptr;
 
 	// otherwise pick the one with the least snapshot TUs
 	int tuRightHand = weaponRightHand->getRules()->getTUSnap();
@@ -2034,7 +2034,7 @@ BattleItem *BattleUnit::getGrenadeFromBelt() const
 			return *i;
 		}
 	}
-	return 0;
+	return nullptr;
 }
 
 /**
@@ -2044,16 +2044,16 @@ BattleItem *BattleUnit::getGrenadeFromBelt() const
 bool BattleUnit::checkAmmo()
 {
 	BattleItem *weapon = getItem("STR_RIGHT_HAND");
-	if (!weapon || weapon->getAmmoItem() != 0 || weapon->getRules()->getBattleType() == BT_MELEE || getTimeUnits() < 15)
+	if (!weapon || weapon->getAmmoItem() != nullptr || weapon->getRules()->getBattleType() == BT_MELEE || getTimeUnits() < 15)
 	{
 		weapon = getItem("STR_LEFT_HAND");
-		if (!weapon || weapon->getAmmoItem() != 0 || weapon->getRules()->getBattleType() == BT_MELEE || getTimeUnits() < 15)
+		if (!weapon || weapon->getAmmoItem() != nullptr || weapon->getRules()->getBattleType() == BT_MELEE || getTimeUnits() < 15)
 		{
 			return false;
 		}
 	}
 	// we have a non-melee weapon with no ammo and 15 or more TUs - we might need to look for ammo then
-	BattleItem *ammo = 0;
+	BattleItem *ammo = nullptr;
 	bool wrong = true;
 	for (std::vector<BattleItem*>::iterator i = getInventory()->begin(); i != getInventory()->end(); ++i)
 	{
@@ -2073,7 +2073,7 @@ bool BattleUnit::checkAmmo()
 
 	spendTimeUnits(15);
 	weapon->setAmmoItem(ammo);
-	ammo->moveToOwner(0);
+	ammo->moveToOwner(nullptr);
 
 	return true;
 }
@@ -2161,7 +2161,7 @@ void BattleUnit::updateGeoscapeStats(Soldier *soldier) const
 bool BattleUnit::postMissionProcedures(SavedGame *geoscape, UnitStats &statsDiff)
 {
 	Soldier *s = geoscape->getSoldier(_id);
-	if (s == 0)
+	if (s == nullptr)
 	{
 		return false;
 	}
@@ -2390,7 +2390,7 @@ Armor *BattleUnit::getArmor() const
  */
 std::wstring BattleUnit::getName(Language *lang, bool debugAppendId) const
 {
-	if (_type != "SOLDIER" && lang != 0)
+	if (_type != "SOLDIER" && lang != nullptr)
 	{
 		std::wstring ret;
 
@@ -2473,7 +2473,7 @@ int BattleUnit::getValue() const
  */
 const std::vector<int> &BattleUnit::getDeathSounds() const
 {
-	if (_deathSound.empty() && _geoscapeSoldier != 0)
+	if (_deathSound.empty() && _geoscapeSoldier != nullptr)
 	{
 		if (_gender == GENDER_MALE)
 			return _geoscapeSoldier->getRules()->getMaleDeathSounds();
@@ -2760,7 +2760,7 @@ UnitFaction BattleUnit::getOriginalFaction() const
  */
 void BattleUnit::invalidateCache()
 {
-	for (int i = 0; i < 5; ++i) { _cache[i] = 0; }
+	for (int i = 0; i < 5; ++i) { _cache[i] = nullptr; }
 	_cacheInvalid = true;
 }
 
@@ -3031,7 +3031,7 @@ BattleItem *BattleUnit::getMeleeWeapon()
 	{
 		return melee;
 	}
-	return 0;
+	return nullptr;
 }
 
 /**
@@ -3068,7 +3068,7 @@ static inline BattleItem *createItem(SavedBattleGame *save, BattleUnit *unit, Ru
  */
 void BattleUnit::setSpecialWeapon(SavedBattleGame *save, const Mod *mod)
 {
-	RuleItem *item = 0;
+	RuleItem *item = nullptr;
 	int i = 0;
 
 	if (getUnitRules())
@@ -3106,7 +3106,7 @@ BattleItem *BattleUnit::getSpecialWeapon(BattleType type) const
 			return _specWeapon[i];
 		}
 	}
-	return 0;
+	return nullptr;
 }
 
 /**
@@ -3129,7 +3129,7 @@ void BattleUnit::recoverTimeUnits()
 	if (!isOut())
 	{
 		int ENRecovery;
-		if (_geoscapeSoldier != 0)
+		if (_geoscapeSoldier != nullptr)
 		{
 			ENRecovery = _geoscapeSoldier->getInitStats()->tu / 3;
 		}

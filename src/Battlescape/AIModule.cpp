@@ -46,9 +46,9 @@ namespace OpenXcom
  * @param unit Pointer to the unit.
  * @param node Pointer to the node the unit originates from.
  */
-AIModule::AIModule(SavedBattleGame *save, BattleUnit *unit, Node *node) : _save(save), _unit(unit), _aggroTarget(0), _knownEnemies(0), _visibleEnemies(0), _spottingEnemies(0),
+AIModule::AIModule(SavedBattleGame *save, BattleUnit *unit, Node *node) : _save(save), _unit(unit), _aggroTarget(nullptr), _knownEnemies(0), _visibleEnemies(0), _spottingEnemies(0),
 																				_escapeTUs(0), _ambushTUs(0), _rifle(false), _melee(false), _blaster(false),
-																				_didPsi(false), _AIMode(AI_PATROL), _closestDist(100), _fromNode(node), _toNode(0)
+																				_didPsi(false), _AIMode(AI_PATROL), _closestDist(100), _fromNode(node), _toNode(nullptr)
 {
 	_traceAI = Options::traceAI;
 
@@ -136,7 +136,7 @@ void AIModule::think(BattleAction *action)
 	_knownEnemies = countKnownTargets();
 	_visibleEnemies = selectNearestTarget();
 	_spottingEnemies = getSpottingUnits(_unit->getPosition());
-	_melee = _unit->getMeleeWeapon() != 0;
+	_melee = _unit->getMeleeWeapon() != nullptr;
 	_rifle = false;
 	_blaster = false;
 	_reachable = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits());
@@ -144,7 +144,7 @@ void AIModule::think(BattleAction *action)
 
 	if (_unit->getCharging() && _unit->getCharging()->isOut())
 	{
-		_unit->setCharging(0);
+		_unit->setCharging(nullptr);
 	}
 
 	if (_traceAI)
@@ -202,7 +202,7 @@ void AIModule::think(BattleAction *action)
 		}
 		else
 		{
-			action->weapon = 0;
+			action->weapon = nullptr;
 		}
 	}
 
@@ -307,7 +307,7 @@ void AIModule::think(BattleAction *action)
 	switch (_AIMode)
 	{
 	case AI_ESCAPE:
-		_unit->setCharging(0);
+		_unit->setCharging(nullptr);
 		action->type = _escapeAction->type;
 		action->target = _escapeAction->target;
 		// end this unit's turn.
@@ -318,7 +318,7 @@ void AIModule::think(BattleAction *action)
 		_unit->setHiding(true);
 		break;
 	case AI_PATROL:
-		_unit->setCharging(0);
+		_unit->setCharging(nullptr);
 		if (action->weapon && action->weapon->getRules()->getBattleType() == BT_FIREARM)
 		{
 			switch (_unit->getAggression())
@@ -363,7 +363,7 @@ void AIModule::think(BattleAction *action)
 		}
 		break;
 	case AI_AMBUSH:
-		_unit->setCharging(0);
+		_unit->setCharging(nullptr);
 		action->type = _ambushAction->type;
 		action->target = _ambushAction->target;
 		// face where we think our target will appear.
@@ -417,7 +417,7 @@ void AIModule::setupPatrol()
 {
 	Node *node;
 	_patrolAction->TU = 0;
-	if (_toNode != 0 && _unit->getPosition() == _toNode->getPosition())
+	if (_toNode != nullptr && _unit->getPosition() == _toNode->getPosition())
 	{
 		if (_traceAI)
 		{
@@ -427,7 +427,7 @@ void AIModule::setupPatrol()
 		// head off to next patrol node
 		_fromNode = _toNode;
 		_toNode->freeNode();
-		_toNode = 0;
+		_toNode = nullptr;
 		// take a peek through window before walking to the next node
 		int dir = _save->getTileEngine()->faceWindow(_unit->getPosition());
 		if (dir != -1 && dir != _unit->getDirection())
@@ -440,7 +440,7 @@ void AIModule::setupPatrol()
 		}
 	}
 
-	if (_fromNode == 0)
+	if (_fromNode == nullptr)
 	{
 		// assume closest node as "from node"
 		// on same level to avoid strange things, and the node has to match unit size or it will freeze
@@ -464,7 +464,7 @@ void AIModule::setupPatrol()
 	}
 	int triesLeft = 5;
 
-	while (_toNode == 0 && triesLeft)
+	while (_toNode == nullptr && triesLeft)
 	{
 		triesLeft--;
 		// look for a new node to walk towards
@@ -537,27 +537,27 @@ void AIModule::setupPatrol()
 			}
 		}
 
-		if (_toNode == 0)
+		if (_toNode == nullptr)
 		{
 			_toNode = _save->getPatrolNode(scout, _unit, _fromNode);
-			if (_toNode == 0)
+			if (_toNode == nullptr)
 			{
 				_toNode = _save->getPatrolNode(!scout, _unit, _fromNode);
 			}
 		}
 
-		if (_toNode != 0)
+		if (_toNode != nullptr)
 		{
 			_save->getPathfinding()->calculate(_unit, _toNode->getPosition());
 			if (_save->getPathfinding()->getStartDirection() == -1)
 			{
-				_toNode = 0;
+				_toNode = nullptr;
 			}
 			_save->getPathfinding()->abortPath();
 		}
 	}
 
-	if (_toNode != 0)
+	if (_toNode != nullptr)
 	{
 		_toNode->allocateNode();
 		_patrolAction->actor = _unit;
@@ -601,7 +601,7 @@ void AIModule::setupAmbush()
 			}
 			Position pos = (*i)->getPosition();
 			Tile *tile = _save->getTile(pos);
-			if (tile == 0 || _save->getTileEngine()->distance(pos, _unit->getPosition()) > 10 || pos.z != _unit->getPosition().z || tile->getDangerous() ||
+			if (tile == nullptr || _save->getTileEngine()->distance(pos, _unit->getPosition()) > 10 || pos.z != _unit->getPosition().z || tile->getDangerous() ||
 				std::find(_reachableWithAttack.begin(), _reachableWithAttack.end(), _save->getTileIndex(pos))  == _reachableWithAttack.end())
 				continue; // just ignore unreachable tiles
 
@@ -663,7 +663,7 @@ void AIModule::setupAmbush()
 			// hypothetically walk the target through the path.
 			while (tries > 0)
 			{
-				_save->getPathfinding()->getTUCost(currentPos, path.back(), &nextPos, _aggroTarget, 0, false);
+				_save->getPathfinding()->getTUCost(currentPos, path.back(), &nextPos, _aggroTarget, nullptr, false);
 				path.pop_back();
 				currentPos = nextPos;
 				Tile *tile = _save->getTile(currentPos);
@@ -792,7 +792,7 @@ void AIModule::setupEscape()
 	int score = -100000;
 	Position bestTile(0, 0, 0);
 
-	Tile *tile = 0;
+	Tile *tile = nullptr;
 
 	// weights of various factors in choosing a tile to which to withdraw
 	const int EXPOSURE_PENALTY = 10;
@@ -819,7 +819,7 @@ void AIModule::setupEscape()
 		{
 			// you know, maybe we should just stay where we are and not risk reaction fire... 
 			// or maybe continue to wherever we were running to and not risk looking stupid
-			if (_save->getTile(_unit->lastCover) != 0)
+			if (_save->getTile(_unit->lastCover) != nullptr)
 			{
 				_escapeAction->target = _unit->lastCover;
 			}
@@ -1040,7 +1040,7 @@ int AIModule::selectNearestTarget()
 {
 	int tally = 0;
 	_closestDist= 100;
-	_aggroTarget = 0;
+	_aggroTarget = nullptr;
 	Position target;
 	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
@@ -1058,7 +1058,7 @@ int AIModule::selectNearestTarget()
 					action.actor = _unit;
 					action.weapon = _attackAction->weapon;
 					action.target = (*i)->getPosition();
-					Position origin = _save->getTileEngine()->getOriginVoxel(action, 0);
+					Position origin = _save->getTileEngine()->getOriginVoxel(action, nullptr);
 					valid = _save->getTileEngine()->canTargetUnit(&origin, (*i)->getTile(), &target, _unit);
 				}
 				else
@@ -1066,7 +1066,7 @@ int AIModule::selectNearestTarget()
 					if (selectPointNearTarget(*i, _unit->getTimeUnits()))
 					{
 						int dir = _save->getTileEngine()->getDirectionTo(_attackAction->target, (*i)->getPosition());
-						valid = _save->getTileEngine()->validMeleeRange(_attackAction->target, dir, _unit, *i, 0);
+						valid = _save->getTileEngine()->validMeleeRange(_attackAction->target, dir, _unit, *i, nullptr);
 					}
 				}
 				if (valid)
@@ -1092,7 +1092,7 @@ int AIModule::selectNearestTarget()
  */
 bool AIModule::selectClosestKnownEnemy()
 {
-	_aggroTarget = 0;
+	_aggroTarget = nullptr;
 	int minDist = 255;
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
@@ -1106,7 +1106,7 @@ bool AIModule::selectClosestKnownEnemy()
 			}
 		}
 	}
-	return _aggroTarget != 0;
+	return _aggroTarget != nullptr;
 }
 
 /**
@@ -1116,7 +1116,7 @@ bool AIModule::selectClosestKnownEnemy()
 bool AIModule::selectRandomTarget()
 {
 	int farthest = -100;
-	_aggroTarget = 0;
+	_aggroTarget = nullptr;
 
 	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
@@ -1130,7 +1130,7 @@ bool AIModule::selectRandomTarget()
 			}
 		}
 	}
-	return _aggroTarget != 0;
+	return _aggroTarget != nullptr;
 }
 
 /**
@@ -1154,15 +1154,15 @@ bool AIModule::selectPointNearTarget(BattleUnit *target, int maxTUs) const
 				if (x || y) // skip the unit itself
 				{
 					Position checkPath = target->getPosition() + Position (x, y, z);
-					if (_save->getTile(checkPath) == 0 || std::find(_reachable.begin(), _reachable.end(), _save->getTileIndex(checkPath))  == _reachable.end())
+					if (_save->getTile(checkPath) == nullptr || std::find(_reachable.begin(), _reachable.end(), _save->getTileIndex(checkPath))  == _reachable.end())
 						continue;
 					int dir = _save->getTileEngine()->getDirectionTo(checkPath, target->getPosition());
-					bool valid = _save->getTileEngine()->validMeleeRange(checkPath, dir, _unit, target, 0);
+					bool valid = _save->getTileEngine()->validMeleeRange(checkPath, dir, _unit, target, nullptr);
 					bool fitHere = _save->setUnitPosition(_unit, checkPath, true);
 
 					if (valid && fitHere && !_save->getTile(checkPath)->getDangerous())
 					{
-						_save->getPathfinding()->calculate(_unit, checkPath, 0, maxTUs);
+						_save->getPathfinding()->calculate(_unit, checkPath, nullptr, maxTUs);
 						if (_save->getPathfinding()->getStartDirection() != -1 && _save->getPathfinding()->getPath().size() < distance)
 						{
 							_attackAction->target = checkPath;
@@ -1379,7 +1379,7 @@ void AIModule::evaluateAIMode()
 	}
 
 	// if the aliens are cheating, or the unit is charging, enforce combat as a priority.
-	if ((_unit->getFaction() == FACTION_HOSTILE && _save->isCheating()) || _unit->getCharging() != 0)
+	if ((_unit->getFaction() == FACTION_HOSTILE && _save->isCheating()) || _unit->getCharging() != nullptr)
 	{
 		_AIMode = AI_COMBAT;
 	}
@@ -1445,7 +1445,7 @@ bool AIModule::findFirePoint()
 	{
 		Position pos = _unit->getPosition() + *i;
 		Tile *tile = _save->getTile(pos);
-		if (tile == 0  ||
+		if (tile == nullptr  ||
 			std::find(_reachableWithAttack.begin(), _reachableWithAttack.end(), _save->getTileIndex(pos))  == _reachableWithAttack.end())
 			continue;
 		int score = 0;
@@ -1612,7 +1612,7 @@ void AIModule::meleeAction()
 		// cannot make a melee attack - consider some other behaviour, like running away, or standing motionless.
 		return;
 	}
-	if (_aggroTarget != 0 && !_aggroTarget->isOut())
+	if (_aggroTarget != nullptr && !_aggroTarget->isOut())
 	{
 		if (_save->getTileEngine()->validMeleeRange(_unit, _aggroTarget, _save->getTileEngine()->getDirectionTo(_unit->getPosition(), _aggroTarget->getPosition())))
 		{
@@ -1622,7 +1622,7 @@ void AIModule::meleeAction()
 	}
 	int chargeReserve = _unit->getTimeUnits() - attackCost;
 	int distance = (chargeReserve / 4) + 1;
-	_aggroTarget = 0;
+	_aggroTarget = nullptr;
 	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		int newDistance = _save->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition());
@@ -1642,7 +1642,7 @@ void AIModule::meleeAction()
 
 		}
 	}
-	if (_aggroTarget != 0)
+	if (_aggroTarget != nullptr)
 	{
 		if (_save->getTileEngine()->validMeleeRange(_unit, _aggroTarget, _save->getTileEngine()->getDirectionTo(_unit->getPosition(), _aggroTarget->getPosition())))
 		{
@@ -1666,8 +1666,8 @@ void AIModule::wayPointAction()
 		// cannot make a launcher attack - consider some other behaviour, like running away, or standing motionless.
 		return;
 	}
-	_aggroTarget = 0;
-	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end() && _aggroTarget == 0; ++i)
+	_aggroTarget = nullptr;
+	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end() && _aggroTarget == nullptr; ++i)
 	{
 		if (!validTarget(*i, true, _unit->getFaction() == FACTION_HOSTILE))
 			continue;
@@ -1680,7 +1680,7 @@ void AIModule::wayPointAction()
 		_save->getPathfinding()->abortPath();
 	}
 
-	if (_aggroTarget != 0)
+	if (_aggroTarget != nullptr)
 	{
 		_attackAction->type = BA_LAUNCH;
 		_attackAction->TU = _unit->getActionTUs(BA_LAUNCH, _attackAction->weapon);
@@ -1716,7 +1716,7 @@ void AIModule::wayPointAction()
 			CurrentPosition = CurrentPosition + DirectionVector;
 			Position voxelPosA ((CurrentPosition.x * 16)+8, (CurrentPosition.y * 16)+8, (CurrentPosition.z * 24)+16);
 			Position voxelPosb ((LastWayPoint.x * 16)+8, (LastWayPoint.y * 16)+8, (LastWayPoint.z * 24)+16);
-			CollidesWith = _save->getTileEngine()->calculateLine(voxelPosA, voxelPosb, false, 0, _unit, true);
+			CollidesWith = _save->getTileEngine()->calculateLine(voxelPosA, voxelPosb, false, nullptr, _unit, true);
 			if (CollidesWith > V_EMPTY && CollidesWith < V_UNIT)
 			{
 				_attackAction->waypoints.push_back(LastPosition);
@@ -1845,7 +1845,7 @@ void AIModule::grenadeAction()
 		{
 			return;
 		}
-		Position originVoxel = _save->getTileEngine()->getOriginVoxel(action, 0);
+		Position originVoxel = _save->getTileEngine()->getOriginVoxel(action, nullptr);
 		Position targetVoxel = action.target * Position (16,16,24) + Position (8,8, (2 + -_save->getTile(action.target)->getTerrainLevel()));
 		// are we within range?
 		if (_save->getTileEngine()->validateThrow(action, originVoxel, targetVoxel))
@@ -1883,7 +1883,7 @@ bool AIModule::psiAction()
 	}
 	bool LOSRequired = psiWeaponRules->isLOSRequired();
 
-	_aggroTarget = 0;
+	_aggroTarget = nullptr;
 		// don't let mind controlled soldiers mind control other soldiers.
 	if (_unit->getOriginalFaction() == _unit->getFaction()
 		// and we have the required 25 TUs and can still make it to cover
@@ -2034,7 +2034,7 @@ BattleActionType AIModule::getReserveMode()
 void AIModule::selectMeleeOrRanged()
 {
 	RuleItem *rangedWeapon = _attackAction->weapon->getRules();
-	RuleItem *meleeWeapon = _unit->getMeleeWeapon() ? _unit->getMeleeWeapon()->getRules() : 0;
+	RuleItem *meleeWeapon = _unit->getMeleeWeapon() ? _unit->getMeleeWeapon()->getRules() : nullptr;
 
 	if (!meleeWeapon)
 	{
@@ -2042,7 +2042,7 @@ void AIModule::selectMeleeOrRanged()
 		_melee = false;
 		return;
 	}
-	if (!rangedWeapon || _attackAction->weapon->getAmmoItem() == 0)
+	if (!rangedWeapon || _attackAction->weapon->getAmmoItem() == nullptr)
 	{
 		_rifle = false;
 		return;

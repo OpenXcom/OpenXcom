@@ -91,7 +91,7 @@ public:
 	/// Sets the item's inventory Y position.
 	void setSlotY(int y);
 	/// Checks if the item is occupying a slot.
-	bool occupiesSlot(int x, int y, BattleItem *item = 0) const;
+	bool occupiesSlot(int x, int y, BattleItem *item = nullptr) const;
 	/// Gets the item's ammo item.
 	BattleItem *getAmmoItem();
 	/// Determines if this item uses ammo.

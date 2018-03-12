@@ -41,7 +41,7 @@ namespace OpenXcom
  */
 BaseNameState::BaseNameState(Base *base, Globe *globe, bool first) : _base(base), _globe(globe), _first(first)
 {
-	_globe->onMouseOver(0);
+	_globe->onMouseOver(nullptr);
 
 	_screen = false;
 

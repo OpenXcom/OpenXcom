@@ -167,11 +167,11 @@ void Mod::resetGlobalStatics()
 	Globe::CITY_LABEL_COLOR = 138;
 	Globe::BASE_LABEL_COLOR = 133;
 
-	TextButton::soundPress = 0;
+	TextButton::soundPress = nullptr;
 
-	Window::soundPopup[0] = 0;
-	Window::soundPopup[1] = 0;
-	Window::soundPopup[2] = 0;
+	Window::soundPopup[0] = nullptr;
+	Window::soundPopup[1] = nullptr;
+	Window::soundPopup[2] = nullptr;
 
 	Pathfinding::red = 3;
 	Pathfinding::yellow = 10;
@@ -382,7 +382,7 @@ T *Mod::getRule(const std::string &id, const std::string &name, const std::map<s
 {
 	if (id.empty())
 	{
-		return 0;
+		return nullptr;
 	}
 	typename std::map<std::string, T*>::const_iterator i = map.find(id);
 	if (map.end() != i)
@@ -395,7 +395,7 @@ T *Mod::getRule(const std::string &id, const std::string &name, const std::map<s
 		{
 			throw Exception(name + " " + id + " not found");
 		}
-		return 0;
+		return nullptr;
 	}
 }
 
@@ -494,7 +494,7 @@ void Mod::playMusic(const std::string &name, int id)
 			loop = 0;
 		}
 
-		Music *music = 0;
+		Music *music = nullptr;
 		if (id == 0)
 		{
 			music = getRandomMusic(name);
@@ -538,10 +538,10 @@ Sound *Mod::getSound(const std::string &set, unsigned int sound, bool error) con
 	else
 	{
 		SoundSet *ss = getSoundSet(set, error);
-		if (ss != 0)
+		if (ss != nullptr)
 		{
 			Sound *s = ss->getSound(sound);
-			if (s == 0 && error)
+			if (s == nullptr && error)
 			{
 				std::ostringstream err;
 				err << "Sound " << sound << " in " << set << " not found";
@@ -551,7 +551,7 @@ Sound *Mod::getSound(const std::string &set, unsigned int sound, bool error) con
 		}
 		else
 		{
-			return 0;
+			return nullptr;
 		}
 	}
 }
@@ -816,7 +816,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
 	{
 		RuleCountry *rule = loadRule(*i, &_countries, &_countriesIndex);
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			rule->load(*i);
 		}
@@ -824,7 +824,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["regions"].begin(); i != doc["regions"].end(); ++i)
 	{
 		RuleRegion *rule = loadRule(*i, &_regions, &_regionsIndex);
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			rule->load(*i);
 		}
@@ -832,7 +832,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["facilities"].begin(); i != doc["facilities"].end(); ++i)
 	{
 		RuleBaseFacility *rule = loadRule(*i, &_facilities, &_facilitiesIndex);
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			_facilityListOrder += 100;
 			rule->load(*i, this, _facilityListOrder);
@@ -841,7 +841,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["crafts"].begin(); i != doc["crafts"].end(); ++i)
 	{
 		RuleCraft *rule = loadRule(*i, &_crafts, &_craftsIndex);
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			_craftListOrder += 100;
 			rule->load(*i, this, _craftListOrder);
@@ -850,7 +850,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["craftWeapons"].begin(); i != doc["craftWeapons"].end(); ++i)
 	{
 		RuleCraftWeapon *rule = loadRule(*i, &_craftWeapons, &_craftWeaponsIndex);
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			rule->load(*i, this);
 		}
@@ -858,7 +858,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["items"].begin(); i != doc["items"].end(); ++i)
 	{
 		RuleItem *rule = loadRule(*i, &_items, &_itemsIndex);
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			_itemListOrder += 100;
 			rule->load(*i, this, _itemListOrder);
@@ -867,7 +867,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["ufos"].begin(); i != doc["ufos"].end(); ++i)
 	{
 		RuleUfo *rule = loadRule(*i, &_ufos, &_ufosIndex);
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			rule->load(*i, this);
 		}
@@ -875,7 +875,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["invs"].begin(); i != doc["invs"].end(); ++i)
 	{
 		RuleInventory *rule = loadRule(*i, &_invs, &_invsIndex, "id");
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			_invListOrder += 10;
 			rule->load(*i, _invListOrder);
@@ -884,7 +884,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["terrains"].begin(); i != doc["terrains"].end(); ++i)
 	{
 		RuleTerrain *rule = loadRule(*i, &_terrains, &_terrainIndex, "name");
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			rule->load(*i, this);
 		}
@@ -892,7 +892,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["armors"].begin(); i != doc["armors"].end(); ++i)
 	{
 		Armor *rule = loadRule(*i, &_armors, &_armorsIndex);
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			rule->load(*i);
 		}
@@ -900,7 +900,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["soldiers"].begin(); i != doc["soldiers"].end(); ++i)
 	{
 		RuleSoldier *rule = loadRule(*i, &_soldiers, &_soldiersIndex);
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			rule->load(*i, this);
 		}
@@ -908,7 +908,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["units"].begin(); i != doc["units"].end(); ++i)
 	{
 		Unit *rule = loadRule(*i, &_units);
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			rule->load(*i, this);
 		}
@@ -916,7 +916,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["alienRaces"].begin(); i != doc["alienRaces"].end(); ++i)
 	{
 		AlienRace *rule = loadRule(*i, &_alienRaces, &_aliensIndex, "id");
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			rule->load(*i);
 		}
@@ -924,7 +924,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["alienDeployments"].begin(); i != doc["alienDeployments"].end(); ++i)
 	{
 		AlienDeployment *rule = loadRule(*i, &_alienDeployments, &_deploymentsIndex);
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			rule->load(*i, this);
 		}
@@ -932,7 +932,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["research"].begin(); i != doc["research"].end(); ++i)
 	{
 		RuleResearch *rule = loadRule(*i, &_research, &_researchIndex, "name");
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			_researchListOrder += 100;
 			rule->load(*i, _researchListOrder);
@@ -945,7 +945,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["manufacture"].begin(); i != doc["manufacture"].end(); ++i)
 	{
 		RuleManufacture *rule = loadRule(*i, &_manufacture, &_manufactureIndex, "name");
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			_manufactureListOrder += 100;
 			rule->load(*i, _manufactureListOrder);
@@ -985,7 +985,7 @@ void Mod::loadFile(const std::string &filename)
 				case UFOPAEDIA_TYPE_TFTD_USO:
 					rule = new ArticleDefinitionTFTD();
 					break;
-				default: rule = 0; break;
+				default: rule = nullptr; break;
 				}
 				_ufopaediaArticles[id] = rule;
 				_ufopaediaIndex.push_back(id);
@@ -1055,8 +1055,8 @@ void Mod::loadFile(const std::string &filename)
 	}
 	for (YAML::const_iterator i = doc["ufoTrajectories"].begin(); i != doc["ufoTrajectories"].end(); ++i)
 	{
-		UfoTrajectory *rule = loadRule(*i, &_ufoTrajectories, 0, "id");
-		if (rule != 0)
+		UfoTrajectory *rule = loadRule(*i, &_ufoTrajectories, nullptr, "id");
+		if (rule != nullptr)
 		{
 			rule->load(*i);
 		}
@@ -1064,7 +1064,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["alienMissions"].begin(); i != doc["alienMissions"].end(); ++i)
 	{
 		RuleAlienMission *rule = loadRule(*i, &_alienMissions, &_alienMissionsIndex);
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			rule->load(*i);
 		}
@@ -1131,7 +1131,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["interfaces"].begin(); i != doc["interfaces"].end(); ++i)
 	{
 		RuleInterface *rule = loadRule(*i, &_interfaces);
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			rule->load(*i);
 		}
@@ -1139,7 +1139,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["soundDefs"].begin(); i != doc["soundDefs"].end(); ++i)
 	{
 		SoundDefinition *rule = loadRule(*i, &_soundDefs);
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			rule->load(*i);
 		}
@@ -1235,7 +1235,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["missionScripts"].begin(); i != doc["missionScripts"].end(); ++i)
 	{
 		RuleMissionScript *rule = loadRule(*i, &_missionScripts, &_missionScriptIndex, "type");
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			rule->load(*i);
 		}
@@ -1255,7 +1255,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["cutscenes"].begin(); i != doc["cutscenes"].end(); ++i)
 	{
 		RuleVideo *rule = loadRule(*i, &_videos);
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			rule->load(*i);
 		}
@@ -1263,7 +1263,7 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["musics"].begin(); i != doc["musics"].end(); ++i)
 	{
 		RuleMusic *rule = loadRule(*i, &_musicDefs);
-		if (rule != 0)
+		if (rule != nullptr)
 		{
 			rule->load(*i);
 		}
@@ -1302,7 +1302,7 @@ void Mod::loadFile(const std::string &filename)
 template <typename T>
 T *Mod::loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::vector<std::string> *index, const std::string &key) const
 {
-	T *rule = 0;
+	T *rule = nullptr;
 	if (node[key])
 	{
 		std::string type = node[key].as<std::string>();
@@ -1315,7 +1315,7 @@ T *Mod::loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::ve
 		{
 			rule = new T(type);
 			(*map)[type] = rule;
-			if (index != 0)
+			if (index != nullptr)
 			{
 				index->push_back(type);
 			}
@@ -1329,7 +1329,7 @@ T *Mod::loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::ve
 		{
 			map->erase(i);
 		}
-		if (index != 0)
+		if (index != nullptr)
 		{
 			std::vector<std::string>::iterator idx = std::find(index->begin(), index->end(), type);
 			if (idx != index->end())
@@ -1389,7 +1389,7 @@ SavedGame *Mod::newSave() const
 	}
 
 	// Determine starting transport craft
-	Craft *transportCraft = 0;
+	Craft *transportCraft = nullptr;
 	for (std::vector<Craft*>::iterator c = base->getCrafts()->begin(); c != base->getCrafts()->end(); ++c)
 	{
 		if ((*c)->getRules()->getSoldiers() > 0)
@@ -1442,7 +1442,7 @@ SavedGame *Mod::newSave() const
 		for (size_t i = 0; i < randomTypes.size(); ++i)
 		{
 			Soldier *soldier = genSoldier(save, randomTypes[i]);
-			if (transportCraft != 0 && i < (unsigned)transportCraft->getRules()->getSoldiers())
+			if (transportCraft != nullptr && i < (unsigned)transportCraft->getRules()->getSoldiers())
 			{
 				soldier->setCraft(transportCraft);
 			}
@@ -1576,7 +1576,7 @@ RuleItem *Mod::getItem(const std::string &id, bool error) const
 {
 	if (id == Armor::NONE)
 	{
-		return 0;
+		return nullptr;
 	}
 	return getRule(id, "Item", _items, error);
 }
@@ -1946,7 +1946,7 @@ const RuleAlienMission *Mod::getRandomMission(MissionObjective objective, size_t
 			}
 		}
 	}
-	return 0;
+	return nullptr;
 }
 
 /**
@@ -1993,7 +1993,7 @@ const GameTime &Mod::getStartingTime() const
 MCDPatch *Mod::getMCDPatch(const std::string &id) const
 {
 	std::map<std::string, MCDPatch*>::const_iterator i = _MCDPatches.find(id);
-	if (_MCDPatches.end() != i) return i->second; else return 0;
+	if (_MCDPatches.end() != i) return i->second; else return nullptr;
 }
 
 /**
@@ -2181,7 +2181,7 @@ const std::vector<std::string> &Mod::getPsiRequirements() const
  */
 Soldier *Mod::genSoldier(SavedGame *save, std::string type) const
 {
-	Soldier *soldier = 0;
+	Soldier *soldier = nullptr;
 	int newId = save->getId("STR_SOLDIER");
 	if (type.empty())
 	{
@@ -2260,7 +2260,7 @@ std::string Mod::getFontName() const
 		for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
 		{
 			RuleBaseFacility *f = getBaseFacility(*i);
-			if (f == 0) continue;
+			if (f == nullptr) continue;
 
 			int radarRange = f->getRadarRange();
 			if (radarRange > 0 && (minRadarRange == 0 || minRadarRange > radarRange))
@@ -2320,7 +2320,7 @@ const std::vector<MapScript*> *Mod::getMapScript(const std::string& id) const
 	}
 	else
 	{
-		return 0;
+		return nullptr;
 	}
 }
 
@@ -2582,7 +2582,7 @@ void Mod::loadVanillaResources()
 			std::string catsWin[] = { "SAMPLE.CAT", "SAMPLE2.CAT" };
 
 			// Try the preferred format first, otherwise use the default priority
-			std::string *cats[] = { 0, catsWin, catsDos };
+			std::string *cats[] = { nullptr, catsWin, catsDos };
 			if (Options::preferredSound == SOUND_14)
 				cats[0] = catsWin;
 			else if (Options::preferredSound == SOUND_10)
@@ -2591,11 +2591,11 @@ void Mod::loadVanillaResources()
 			Options::currentSound = SOUND_AUTO;
 			for (size_t i = 0; i < sizeof(catsId) / sizeof(catsId[0]); ++i)
 			{
-				SoundSet *sound = 0;
-				for (size_t j = 0; j < sizeof(cats) / sizeof(cats[0]) && sound == 0; ++j)
+				SoundSet *sound = nullptr;
+				for (size_t j = 0; j < sizeof(cats) / sizeof(cats[0]) && sound == nullptr; ++j)
 				{
 					bool wav = true;
-					if (cats[j] == 0)
+					if (cats[j] == nullptr)
 						continue;
 					else if (cats[j] == catsDos)
 						wav = false;
@@ -2609,7 +2609,7 @@ void Mod::loadVanillaResources()
 						Options::currentSound = (wav) ? SOUND_14 : SOUND_10;
 					}
 				}
-				if (sound == 0)
+				if (sound == nullptr)
 				{
 					throw Exception(catsWin[i] + " not found");
 				}
@@ -2981,8 +2981,8 @@ void Mod::loadExtraResources()
 		const std::set<std::string> &soundFiles(FileMap::getVFolderContents("SOUND"));
 
 		// Check which music version is available
-		CatFile *adlibcat = 0, *aintrocat = 0;
-		GMCatFile *gmcat = 0;
+		CatFile *adlibcat = nullptr, *aintrocat = nullptr;
+		GMCatFile *gmcat = nullptr;
 
 		for (std::set<std::string>::iterator i = soundFiles.begin(); i != soundFiles.end(); ++i)
 		{
@@ -3004,8 +3004,8 @@ void Mod::loadExtraResources()
 		MusicFormat priority[] = { Options::preferredMusic, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI };
 		for (std::map<std::string, RuleMusic *>::const_iterator i = _musicDefs.begin(); i != _musicDefs.end(); ++i)
 		{
-			Music *music = 0;
-			for (size_t j = 0; j < sizeof(priority) / sizeof(priority[0]) && music == 0; ++j)
+			Music *music = nullptr;
+			for (size_t j = 0; j < sizeof(priority) / sizeof(priority[0]) && music == nullptr; ++j)
 			{
 				music = loadMusic(priority[j], (*i).first, (*i).second->getCatPos(), (*i).second->getNormalization(), adlibcat, aintrocat, gmcat);
 			}
@@ -3368,7 +3368,7 @@ Music *Mod::loadMusic(MusicFormat fmt, const std::string &file, int track, float
 {
 	/* MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI */
 	static const std::string exts[] = { "", ".flac", ".ogg", ".mp3", ".mod", ".wav", "", ".mid" };
-	Music *music = 0;
+	Music *music = nullptr;
 	std::set<std::string> soundContents = FileMap::getVFolderContents("SOUND");
 	try
 	{
@@ -3396,7 +3396,7 @@ Music *Mod::loadMusic(MusicFormat fmt, const std::string &file, int track, float
 					else
 					{
 						delete music;
-						music = 0;
+						music = nullptr;
 					}
 				}
 			}
@@ -3433,7 +3433,7 @@ Music *Mod::loadMusic(MusicFormat fmt, const std::string &file, int track, float
 	{
 		Log(LOG_INFO) << e.what();
 		if (music) delete music;
-		music = 0;
+		music = nullptr;
 	}
 	return music;
 }

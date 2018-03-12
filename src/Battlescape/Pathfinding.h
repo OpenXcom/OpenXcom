@@ -74,7 +74,7 @@ public:
 	/// Cleans up the Pathfinding.
 	~Pathfinding();
 	/// Calculates the shortest path.
-	void calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget = 0, int maxTUCost = 1000);
+	void calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget = nullptr, int maxTUCost = 1000);
 	/// Converts direction to a vector.
 	static void directionToVector(int direction, Position *vector);
 	/// Converts a vector to a direction.

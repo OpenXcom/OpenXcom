@@ -105,7 +105,7 @@ CraftArmorState::CraftArmorState(Base *base, size_t craft) : _base(base), _craft
 		{
 			color = _lstSoldiers->getSecondaryColor();
 		}
-		else if ((*i)->getCraft() != 0)
+		else if ((*i)->getCraft() != nullptr)
 		{
 			color = otherCraftColor;
 		}

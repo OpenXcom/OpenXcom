@@ -54,7 +54,7 @@ ResearchInfoState::ResearchInfoState(Base *base, RuleResearch *rule) : _base(bas
  * @param base Pointer to the base to get info from.
  * @param project A ResearchProject to modify
  */
-ResearchInfoState::ResearchInfoState(Base *base, ResearchProject *project) : _base(base), _project(project), _rule(0)
+ResearchInfoState::ResearchInfoState(Base *base, ResearchProject *project) : _base(base), _project(project), _rule(nullptr)
 {
 	buildUi();
 }
@@ -338,8 +338,8 @@ void ResearchInfoState::think()
 {
 	State::think();
 
-	_timerLess->think (this, 0);
-	_timerMore->think (this, 0);
+	_timerLess->think (this, nullptr);
+	_timerMore->think (this, nullptr);
 }
 
 }

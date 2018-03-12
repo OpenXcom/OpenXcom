@@ -413,11 +413,11 @@ DogfightState::DogfightState(GeoscapeState *state, Craft *craft, Ufo *ufo) : _st
 	for (unsigned int i = 0; i < _craft->getRules()->getWeapons(); ++i)
 	{
 		CraftWeapon *w = _craft->getWeapons()->at(i);
-		if (w == 0)
+		if (w == nullptr)
 			continue;
 
-		Surface *weapon = 0, *range = 0;
-		Text *ammo = 0;
+		Surface *weapon = nullptr, *range = nullptr;
+		Text *ammo = nullptr;
 		int x1, x2;
 		if (i == 0)
 		{
@@ -480,13 +480,13 @@ DogfightState::DogfightState(GeoscapeState *state, Craft *craft, Ufo *ufo) : _st
 		range->unlock();
 	}
 
-	if (!(_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0))
+	if (!(_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != nullptr))
 	{
 		_weapon1->setVisible(false);
 		_range1->setVisible(false);
 		_txtAmmo1->setVisible(false);
 	}
-	if (!(_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0))
+	if (!(_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != nullptr))
 	{
 		_weapon2->setVisible(false);
 		_range2->setVisible(false);
@@ -509,11 +509,11 @@ DogfightState::DogfightState(GeoscapeState *state, Craft *craft, Ufo *ufo) : _st
 	}
 
 	// technically this block is redundant, but i figure better to initialize the variables as SOMETHING
-	if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
+	if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != nullptr)
 	{
 		_w1FireInterval = _craft->getWeapons()->at(0)->getRules()->getStandardReload();
 	}
-	if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
+	if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != nullptr)
 	{
 		_w2FireInterval = _craft->getWeapons()->at(1)->getRules()->getStandardReload();
 	}
@@ -588,7 +588,7 @@ void DogfightState::think()
 	if (!_endDogfight)
 	{
 		update();
-		_craftDamageAnimTimer->think(this, 0);
+		_craftDamageAnimTimer->think(this, nullptr);
 	}
 	if (!_craft->isInDogfight() || _craft->getDestination() != _ufo || _ufo->getStatus() == Ufo::LANDED)
 	{
@@ -931,7 +931,7 @@ void DogfightState::update()
 		for (unsigned int i = 0; i < _craft->getRules()->getWeapons(); ++i)
 		{
 			CraftWeapon *w = _craft->getWeapons()->at(i);
-			if (w == 0)
+			if (w == nullptr)
 			{
 				continue;
 			}
@@ -1022,7 +1022,7 @@ void DogfightState::update()
 			for (std::vector<Target*>::iterator i = _ufo->getFollowers()->begin(); i != _ufo->getFollowers()->end();)
 			{
 				Craft* c = dynamic_cast<Craft*>(*i);
-				if (c != 0 && c->getNumSoldiers() == 0 && c->getNumVehicles() == 0)
+				if (c != nullptr && c->getNumSoldiers() == 0 && c->getNumVehicles() == 0)
 				{
 					c->returnToBase();
 					i = _ufo->getFollowers()->begin();
@@ -1362,11 +1362,11 @@ void DogfightState::btnCautiousPress(Action *)
 	{
 		_end = false;
 		setStatus("STR_CAUTIOUS_ATTACK");
-		if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
+		if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != nullptr)
 		{
 			_w1FireInterval = _craft->getWeapons()->at(0)->getRules()->getCautiousReload();
 		}
-		if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
+		if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != nullptr)
 		{
 			_w2FireInterval = _craft->getWeapons()->at(1)->getRules()->getCautiousReload();
 		}
@@ -1384,11 +1384,11 @@ void DogfightState::btnStandardPress(Action *)
 	{
 		_end = false;
 		setStatus("STR_STANDARD_ATTACK");
-		if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
+		if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != nullptr)
 		{
 			_w1FireInterval = _craft->getWeapons()->at(0)->getRules()->getStandardReload();
 		}
-		if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
+		if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != nullptr)
 		{
 			_w2FireInterval = _craft->getWeapons()->at(1)->getRules()->getStandardReload();
 		}
@@ -1406,11 +1406,11 @@ void DogfightState::btnAggressivePress(Action *)
 	{
 		_end = false;
 		setStatus("STR_AGGRESSIVE_ATTACK");
-		if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
+		if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != nullptr)
 		{
 			_w1FireInterval = _craft->getWeapons()->at(0)->getRules()->getAggressiveReload();
 		}
-		if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
+		if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != nullptr)
 		{
 			_w2FireInterval = _craft->getWeapons()->at(1)->getRules()->getAggressiveReload();
 		}
@@ -1592,9 +1592,9 @@ void DogfightState::weapon2Click(Action *)
  */
 void DogfightState::recolor(const int weaponNo, const bool currentState)
 {
-	InteractiveSurface *weapon = 0;
-	Text *ammo = 0;
-	Surface *range = 0;
+	InteractiveSurface *weapon = nullptr;
+	Text *ammo = nullptr;
+	Surface *range = nullptr;
 	if (weaponNo == 0)
 	{
 		weapon = _weapon1;

@@ -209,7 +209,7 @@ void UfoDetectedState::btnInterceptClick(Action *)
 {
 	_state->timerReset();
 	_state->getGlobe()->center(_ufo->getLongitude(), _ufo->getLatitude());
-	_game->pushState(new InterceptState(_state->getGlobe(), 0, _ufo));
+	_game->pushState(new InterceptState(_state->getGlobe(), nullptr, _ufo));
 }
 
 /**

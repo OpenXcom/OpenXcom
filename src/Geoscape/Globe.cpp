@@ -435,7 +435,7 @@ Polygon* Globe::getPolygonFromLonLat(double lon, double lat) const
 		}
 		if (odd) return *i;
 	}
-	return NULL;
+	return nullptr;
 }
 
 /**
@@ -652,7 +652,7 @@ void Globe::center(double lon, double lat)
  */
 bool Globe::insideLand(double lon, double lat) const
 {
-	return (getPolygonFromLonLat(lon,lat))!=NULL;
+	return (getPolygonFromLonLat(lon,lat))!=nullptr;
 }
 
 /**
@@ -710,7 +710,7 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 
 			for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 			{
-				if ((*j)->getLongitude() == (*i)->getLongitude() && (*j)->getLatitude() == (*i)->getLatitude() && (*j)->getDestination() == 0)
+				if ((*j)->getLongitude() == (*i)->getLongitude() && (*j)->getLatitude() == (*i)->getLatitude() && (*j)->getDestination() == nullptr)
 					continue;
 
 				if (targetNear((*j), x, y))
@@ -838,8 +838,8 @@ void Globe::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
  */
 void Globe::think()
 {
-	_blinkTimer->think(0, this);
-	_rotTimer->think(0, this);
+	_blinkTimer->think(nullptr, this);
+	_rotTimer->think(nullptr, this);
 }
 
 /**
@@ -1476,7 +1476,7 @@ void Globe::drawFlights()
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
 			// Hide crafts docked at base
-			if ((*j)->getStatus() != "STR_OUT" || (*j)->getDestination() == 0 /*|| pointBack((*j)->getLongitude(), (*j)->getLatitude())*/)
+			if ((*j)->getStatus() != "STR_OUT" || (*j)->getDestination() == nullptr /*|| pointBack((*j)->getLongitude(), (*j)->getLatitude())*/)
 				continue;
 
 			double lon1 = (*j)->getLongitude();
@@ -1585,7 +1585,7 @@ void Globe::mouseOver(Action *action, State *state)
 		// the mouse-release event is missed for any reason.
 		// (checking: is the dragScroll-mouse-button still pressed?)
 		// However if the SDL is also missed the release event, then it is to no avail :(
-		if (0 == (SDL_GetMouseState(0, 0)&SDL_BUTTON(Options::geoDragScrollButton)))
+		if (0 == (SDL_GetMouseState(nullptr, nullptr)&SDL_BUTTON(Options::geoDragScrollButton)))
 		{ // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if ((!_mouseMovedOverThreshold) && ((int)(SDL_GetTicks() - _mouseScrollingStartTime) <= (Options::dragScrollTimeTolerance)))
@@ -1728,7 +1728,7 @@ void Globe::mouseClick(Action *action, State *state)
 	if (_isMouseScrolling)
 	{
 		if (action->getDetails()->button.button != Options::geoDragScrollButton
-			&& 0 == (SDL_GetMouseState(0, 0)&SDL_BUTTON(Options::geoDragScrollButton)))
+			&& 0 == (SDL_GetMouseState(nullptr, nullptr)&SDL_BUTTON(Options::geoDragScrollButton)))
 		{ // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if ((!_mouseMovedOverThreshold) && ((int)(SDL_GetTicks() - _mouseScrollingStartTime) <= (Options::dragScrollTimeTolerance)))
@@ -1809,7 +1809,7 @@ void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int 
 
 	*shade = worldshades[ CreateShadow::getShadowValue(0, Cord(0.,0.,1.), getSunDirection(lon, lat), 0) ];
 	Polygon *t = getPolygonFromLonLat(lon,lat);
-	*texture = (t==NULL)? -1 : t->getTexture();
+	*texture = (t==nullptr)? -1 : t->getTexture();
 }
 
 /**

@@ -53,7 +53,7 @@ const int TileEngine::heightFromCenter[11] = {0,-2,+2,-4,+4,-6,+6,-8,+8,-12,+12}
  * @param save Pointer to SavedBattleGame object.
  * @param voxelData List of voxel data.
  */
-TileEngine::TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData) : _save(save), _voxelData(voxelData), _personalLighting(true), _cacheTile(0), _cacheTileBelow(0)
+TileEngine::TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData) : _save(save), _voxelData(voxelData), _personalLighting(true), _cacheTile(nullptr), _cacheTileBelow(nullptr)
 {
 	_cacheTilePos = Position(-1,-1,-1);
 }
@@ -255,7 +255,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	if ((unit->getHeight() + unit->getFloatHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel()) >= 24 + 4)
 	{
 		Tile *tileAbove = _save->getTile(pos + Position(0,0,1));
-		if (tileAbove && tileAbove->hasNoFloor(0))
+		if (tileAbove && tileAbove->hasNoFloor(nullptr))
 		{
 			++pos.z;
 		}
@@ -373,7 +373,7 @@ Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
 		originVoxel.y += 8;
 		originVoxel.z += 1; //topmost voxel
 	}
-	if (originVoxel.z >= (currentUnit->getPosition().z + 1)*24 && (!tileAbove || !tileAbove->hasNoFloor(0)))
+	if (originVoxel.z >= (currentUnit->getPosition().z + 1)*24 && (!tileAbove || !tileAbove->hasNoFloor(nullptr)))
 	{
 		while (originVoxel.z >= (currentUnit->getPosition().z + 1)*24)
 		{
@@ -463,7 +463,7 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
 	Position scanVoxel;
 	std::vector<Position> _trajectory;
 	BattleUnit *otherUnit = tile->getUnit();
-	if (otherUnit == 0) return 0; //no unit in this tile, even if it elevated and appearing in it.
+	if (otherUnit == nullptr) return 0; //no unit in this tile, even if it elevated and appearing in it.
 	if (otherUnit == excludeUnit) return 0; //skip self
 
 	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
@@ -539,11 +539,11 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 {
 	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
 	std::vector<Position> _trajectory;
-	bool hypothetical = potentialUnit != 0;
-	if (potentialUnit == 0)
+	bool hypothetical = potentialUnit != nullptr;
+	if (potentialUnit == nullptr)
 	{
 		potentialUnit = tile->getUnit();
-		if (potentialUnit == 0) return false; //no unit in this tile, even if it elevated and appearing in it.
+		if (potentialUnit == nullptr) return false; //no unit in this tile, even if it elevated and appearing in it.
 	}
 
 	if (potentialUnit == excludeUnit) return false; //skip self
@@ -690,7 +690,7 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
 			{
 				int tX = spiralArray[i*2];
 				int tY = spiralArray[i*2+1];
-				if (voxelCheck(Position(targetVoxel.x + tX, targetVoxel.y + tY, targetVoxel.z + j*2),0,true) == part) //bingo
+				if (voxelCheck(Position(targetVoxel.x + tX, targetVoxel.y + tY, targetVoxel.z + j*2),nullptr,true) == part) //bingo
 				{
 					if (!minZfound)
 					{
@@ -714,7 +714,7 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
 			{
 				int tX = spiralArray[i*2];
 				int tY = spiralArray[i*2+1];
-				if (voxelCheck(Position(targetVoxel.x + tX, targetVoxel.y + tY, targetVoxel.z + j*2),0,true) == part) //bingo
+				if (voxelCheck(Position(targetVoxel.x + tX, targetVoxel.y + tY, targetVoxel.z + j*2),nullptr,true) == part) //bingo
 				{
 					if (!maxZfound)
 					{
@@ -782,7 +782,7 @@ void TileEngine::calculateFOV(Position position)
 bool TileEngine::checkReactionFire(BattleUnit *unit)
 {
 	// reaction fire only triggered when the actioning unit is of the currently playing side, and is still on the map (alive)
-	if (unit->getFaction() != _save->getSide() || unit->getTile() == 0)
+	if (unit->getFaction() != _save->getSide() || unit->getTile() == nullptr)
 	{
 		return false;
 	}
@@ -855,7 +855,7 @@ std::vector<std::pair<BattleUnit *, int> > TileEngine::getSpottingUnits(BattleUn
 				falseAction.type = BA_SNAPSHOT;
 				falseAction.actor = *i;
 				falseAction.target = unit->getPosition();
-				Position originVoxel = getOriginVoxel(falseAction, 0);
+				Position originVoxel = getOriginVoxel(falseAction, nullptr);
 				Position targetVoxel;
 				AIModule *ai = (*i)->getAIModule();
 
@@ -874,7 +874,7 @@ std::vector<std::pair<BattleUnit *, int> > TileEngine::getSpottingUnits(BattleUn
 				// we don't extend the same "enhanced aggressor memory" courtesy to players, because in the original, they could only turn and react to damage immediately after it happened.
 				// this is because as much as we want the player's soldiers dead, we don't want them to feel like we're being unfair about it.
 
-				bool gotHit = (ai != 0 && ai->getWasHitBy(unit->getId())) || (ai == 0 && (*i)->getHitState());
+				bool gotHit = (ai != nullptr && ai->getWasHitBy(unit->getId())) || (ai == nullptr && (*i)->getHitState());
 
 					// can actually see the target Tile, or we got hit
 				if (((*i)->checkViewSector(unit->getPosition()) || gotHit) &&
@@ -909,7 +909,7 @@ std::vector<std::pair<BattleUnit *, int> > TileEngine::getSpottingUnits(BattleUn
 BattleUnit* TileEngine::getReactor(std::vector<std::pair<BattleUnit *, int> > spotters, int &attackType, BattleUnit *unit)
 {
 	int bestScore = -1;
-	BattleUnit *bu = 0;
+	BattleUnit *bu = nullptr;
 	for (std::vector<std::pair<BattleUnit *, int> >::iterator i = spotters.begin(); i != spotters.end(); ++i)
 	{
 		if (!(*i).first->isOut() &&
@@ -1015,10 +1015,10 @@ bool TileEngine::tryReaction(BattleUnit *unit, BattleUnit *target, int attackTyp
 		if (unit->getFaction() == FACTION_HOSTILE)
 		{
 			AIModule *ai = unit->getAIModule();
-			if (ai == 0)
+			if (ai == nullptr)
 			{
 				// should not happen, but just in case...
-				ai = new AIModule(_save, unit, 0);
+				ai = new AIModule(_save, unit, nullptr);
 				unit->setAIModule(ai);
 			}
 
@@ -1061,7 +1061,7 @@ BattleUnit *TileEngine::hit(Position center, int power, ItemDamageType type, Bat
 	Tile *tile = _save->getTile(Position(center.x/16, center.y/16, center.z/24));
 	if (!tile)
 	{
-		return 0;
+		return nullptr;
 	}
 
 	BattleUnit *bu = tile->getUnit();
@@ -1128,7 +1128,7 @@ BattleUnit *TileEngine::hit(Position center, int power, ItemDamageType type, Bat
 				if (type != DT_STUN && type != DT_HE && type != DT_IN && type != DT_MELEE)
 				{
 					Position p = Position(bu->getPosition().x * 16, bu->getPosition().y * 16, bu->getPosition().z * 24);
-					_save->getBattleGame()->statePushNext(new ExplosionBState(_save->getBattleGame(), p, 0, bu, 0));
+					_save->getBattleGame()->statePushNext(new ExplosionBState(_save->getBattleGame(), p, nullptr, bu, nullptr));
 				}
 			}
 
@@ -1242,7 +1242,7 @@ void TileEngine::explode(Position center, int power, ItemDamageType type, int ma
 							bu = tileBelow->getUnit();
 							if (bu && bu->getHeight() + bu->getFloatHeight() - tileBelow->getTerrainLevel() <= 24)
 							{
-								bu = 0; // if the unit below has no voxels poking into the tile, don't damage it.
+								bu = nullptr; // if the unit below has no voxels poking into the tile, don't damage it.
 							}
 						}
 						if (bu && unit)
@@ -1573,7 +1573,7 @@ Tile *TileEngine::checkForTerrainExplosions()
 			return _save->getTiles()[i];
 		}
 	}
-	return 0;
+	return nullptr;
 }
 
 /**
@@ -1588,7 +1588,7 @@ int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType 
 	int block = 0;
 
 	// safety check
-	if (startTile == 0 || endTile == 0) return 0;
+	if (startTile == nullptr || endTile == nullptr) return 0;
 	int direction = endTile->getPosition().z - startTile->getPosition().z;
 
 	if (direction == 0 ) return 0;
@@ -1648,7 +1648,7 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 	static const Position oneTileWest = Position(-1, 0, 0);
 
 	// safety check
-	if (startTile == 0 || endTile == 0) return 0;
+	if (startTile == nullptr || endTile == nullptr) return 0;
 	if (startTile->getPosition().z != endTile->getPosition().z) return 0;
 	Tile *tmpTile;
 
@@ -1813,7 +1813,7 @@ int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type, int di
 {
 	int blockage = 0;
 
-	if (tile == 0) return 0; // probably outside the map here
+	if (tile == nullptr) return 0; // probably outside the map here
 	if (tile->getMapData(part))
 	{
 		bool check = true;
@@ -2304,7 +2304,7 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 				result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut);
 				if (result != V_EMPTY)
 				{
-					if (trajectory != 0)
+					if (trajectory != nullptr)
 					{ // store the position of impact
 						trajectory->push_back(Position(cx, cy, cz));
 					}
@@ -2328,7 +2328,7 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 				result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible,  excludeAllBut);
 				if (result != V_EMPTY)
 				{
-					if (trajectory != 0)
+					if (trajectory != nullptr)
 					{ // store the position of impact
 						trajectory->push_back(Position(cx, cy, cz));
 					}
@@ -2383,7 +2383,7 @@ int TileEngine::calculateParabola(Position origin, Position target, bool storeTr
 		//passes through this point?
 		nextPosition = Position(x,y,z);
 		_trajectory.clear();
-		result = calculateLine(lastPosition, nextPosition, false, 0, excludeUnit);
+		result = calculateLine(lastPosition, nextPosition, false, nullptr, excludeUnit);
 		if (result != V_EMPTY)
 		{
 			result = calculateLine(lastPosition, nextPosition, true, &_trajectory, excludeUnit);
@@ -2397,7 +2397,7 @@ int TileEngine::calculateParabola(Position origin, Position target, bool storeTr
 		lastPosition = nextPosition;
 		++i;
 	}
-	if (trajectory != 0)
+	if (trajectory != nullptr)
 	{ // store the position of impact
 		trajectory->push_back(nextPosition);
 	}
@@ -2428,7 +2428,7 @@ int TileEngine::castedShade(Position voxel)
 	for (z = zstart; z>0; z--)
 	{
 		tmpVoxel.z = z;
-		if (voxelCheck(tmpVoxel, 0) != V_EMPTY) break;
+		if (voxelCheck(tmpVoxel, nullptr) != V_EMPTY) break;
 	}
 	return z;
 }
@@ -2452,11 +2452,11 @@ bool TileEngine::isVoxelVisible(Position voxel)
 	{
 		tmpVoxel.z=z;
 		// only OBJECT can cause additional occlusion (because of any shape)
-		if (voxelCheck(tmpVoxel, 0) == V_OBJECT) return false;
+		if (voxelCheck(tmpVoxel, nullptr) == V_OBJECT) return false;
 		++tmpVoxel.x;
-		if (voxelCheck(tmpVoxel, 0) == V_OBJECT) return false;
+		if (voxelCheck(tmpVoxel, nullptr) == V_OBJECT) return false;
 		++tmpVoxel.y;
-		if (voxelCheck(tmpVoxel, 0) == V_OBJECT) return false;
+		if (voxelCheck(tmpVoxel, nullptr) == V_OBJECT) return false;
 	}
 	return true;
 }
@@ -2496,7 +2496,7 @@ int TileEngine::voxelCheck(Position voxel, BattleUnit *excludeUnit, bool exclude
 		_cacheTileBelow = tileBelow;
  	}
 
-	if (tile->isVoid() && tile->getUnit() == 0 && (!tileBelow || tileBelow->getUnit() == 0))
+	if (tile->isVoid() && tile->getUnit() == nullptr && (!tileBelow || tileBelow->getUnit() == nullptr))
 	{
 		return V_EMPTY;
 	}
@@ -2515,7 +2515,7 @@ int TileEngine::voxelCheck(Position voxel, BattleUnit *excludeUnit, bool exclude
 		MapData *mp = tile->getMapData(i);
 		if (((i==1) || (i==2)) && tile->isUfoDoorOpen(i))
 			continue;
-		if (mp != 0)
+		if (mp != nullptr)
 		{
 			int x = 15 - voxel.x%16;
 			int y = voxel.y%16;
@@ -2532,7 +2532,7 @@ int TileEngine::voxelCheck(Position voxel, BattleUnit *excludeUnit, bool exclude
 		BattleUnit *unit = tile->getUnit();
 		// sometimes there is unit on the tile below, but sticks up to this tile with his head,
 		// in this case we couldn't have unit standing at current tile.
-		if (unit == 0 && tile->hasNoFloor(tileBelow))
+		if (unit == nullptr && tile->hasNoFloor(tileBelow))
 		{
 			if (tileBelow)
 			{
@@ -2540,7 +2540,7 @@ int TileEngine::voxelCheck(Position voxel, BattleUnit *excludeUnit, bool exclude
 				unit = tile->getUnit();
 			}
 		}
-		if (unit != 0 && unit != excludeUnit && (!excludeAllBut || unit == excludeAllBut) && (!onlyVisible || unit->getVisible() ) )
+		if (unit != nullptr && unit != excludeUnit && (!excludeAllBut || unit == excludeAllBut) && (!onlyVisible || unit->getVisible() ) )
 		{
 			Position tilepos;
 			Position unitpos = unit->getPosition();
@@ -2581,8 +2581,8 @@ int TileEngine::voxelCheck(Position voxel, BattleUnit *excludeUnit, bool exclude
 void TileEngine::voxelCheckFlush()
 {
 	_cacheTilePos = Position(-1,-1,-1);
-	_cacheTile = 0;
-	_cacheTileBelow = 0;
+	_cacheTile = nullptr;
+	_cacheTileBelow = nullptr;
 }
 
 /**
@@ -2682,7 +2682,7 @@ Tile *TileEngine::applyGravity(Tile *t)
 				{
 					for (int x = occupant->getArmor()->getSize()-1; x >= 0; --x)
 					{
-						_save->getTile(origin + Position(x, y, 0))->setUnit(0);
+						_save->getTile(origin + Position(x, y, 0))->setUnit(nullptr);
 					}
 				}
 				occupant->setPosition(unitpos);
@@ -2730,7 +2730,7 @@ Tile *TileEngine::applyGravity(Tile *t)
  */
 bool TileEngine::validMeleeRange(BattleUnit *attacker, BattleUnit *target, int dir)
 {
-	return validMeleeRange(attacker->getPosition(), dir, attacker, target, 0);
+	return validMeleeRange(attacker->getPosition(), dir, attacker, target, nullptr);
 }
 
 /**
@@ -2749,7 +2749,7 @@ bool TileEngine::validMeleeRange(const Position& pos, int direction, BattleUnit 
 		return false;
 	}
 	std::vector<BattleUnit*> potentialTargets;
-	BattleUnit *chosenTarget = 0;
+	BattleUnit *chosenTarget = nullptr;
 	Position p;
 	int size = attacker->getArmor()->getSize() - 1;
 	Pathfinding::directionToVector(direction, &p);
@@ -2774,7 +2774,7 @@ bool TileEngine::validMeleeRange(const Position& pos, int direction, BattleUnit 
 				}
 				if (targetTile->getUnit())
 				{
-					if (target == 0 || targetTile->getUnit() == target)
+					if (target == nullptr || targetTile->getUnit() == target)
 					{
 						Position originVoxel = Position(origin->getPosition() * Position(16,16,24))
 							+ Position(8,8,attacker->getHeight() + attacker->getFloatHeight() - 4 -origin->getTerrainLevel());
@@ -2785,7 +2785,7 @@ bool TileEngine::validMeleeRange(const Position& pos, int direction, BattleUnit 
 							{
 								*dest = targetTile->getPosition();
 							}
-							if (target != 0)
+							if (target != nullptr)
 							{
 								return true;
 							}
@@ -2822,7 +2822,7 @@ bool TileEngine::validMeleeRange(const Position& pos, int direction, BattleUnit 
 		*dest = chosenTarget->getPosition();
 	}
 
-	return chosenTarget != 0;
+	return chosenTarget != nullptr;
 }
 
 /**
@@ -2929,7 +2929,7 @@ void TileEngine::recalculateFOV()
 {
 	for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
 	{
-		if ((*bu)->getTile() != 0)
+		if ((*bu)->getTile() != nullptr)
 		{
 			calculateFOV(*bu);
 		}
@@ -3024,7 +3024,7 @@ Position TileEngine::getOriginVoxel(BattleAction &action, Tile *tile)
 
 		if (originVoxel.z >= (origin.z + 1)*24)
 		{
-			if (tileAbove && tileAbove->hasNoFloor(0))
+			if (tileAbove && tileAbove->hasNoFloor(nullptr))
 			{
 				origin.z++;
 			}

@@ -92,7 +92,7 @@ char *SaveConverter::binaryBuffer(const std::string &filename, std::vector<char>
  * @param save Number of the save folder GAME_#
  * @param mod Mod to associate with this save.
  */
-SaveConverter::SaveConverter(int save, Mod *mod) : _save(0), _mod(mod), _rules(mod->getConverter()), _year(0), _funds(0)
+SaveConverter::SaveConverter(int save, Mod *mod) : _save(nullptr), _mod(mod), _rules(mod->getConverter()), _year(0), _funds(0)
 {
 	std::ostringstream ssFolder, ssPath;
 	ssFolder << "GAME_" << save;
@@ -606,17 +606,17 @@ void SaveConverter::loadDatLoc()
 		std::bitset<3> visibility(load<int>(tdata + 0x10));
 
 		// can't declare variables in switches :(
-		Target *target = 0;
-		Ufo *ufo = 0;
-		Craft *craft = 0;
-		Base *xbase = 0;
-		AlienBase *abase = 0;
-		Waypoint *waypoint = 0;
-		MissionSite *mission = 0;
+		Target *target = nullptr;
+		Ufo *ufo = nullptr;
+		Craft *craft = nullptr;
+		Base *xbase = nullptr;
+		AlienBase *abase = nullptr;
+		Waypoint *waypoint = nullptr;
+		MissionSite *mission = nullptr;
 		switch (type)
 		{
 		case TARGET_NONE:
-			target = 0;
+			target = nullptr;
 			break;
 		case TARGET_UFO:
 		case TARGET_CRASH:
@@ -630,7 +630,7 @@ void SaveConverter::loadDatLoc()
 			target = ufo;
 			break;
 		case TARGET_CRAFT:
-			craft = new Craft(_mod->getCraft(_rules->getCrafts()[0], true), 0, id);
+			craft = new Craft(_mod->getCraft(_rules->getCrafts()[0], true), nullptr, id);
 			target = craft;
 			break;
 		case TARGET_XBASE:
@@ -667,7 +667,7 @@ void SaveConverter::loadDatLoc()
 			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR", true), _mod->getDeployment("STR_ARTIFACT_SITE_P1", true));
 			break;
 		}
-		if (mission != 0)
+		if (mission != nullptr)
 		{
 			mission->setId(id);
 			mission->setAlienRace(_rules->getCrews()[dat]);
@@ -675,7 +675,7 @@ void SaveConverter::loadDatLoc()
 			_save->getMissionSites()->push_back(mission);
 			target = mission;
 		}
-		if (target != 0)
+		if (target != nullptr)
 		{
 			target->setLongitude(lon);
 			target->setLatitude(lat);
@@ -698,11 +698,11 @@ void SaveConverter::loadDatBase()
 	const size_t BASE_SIZE = 6;
 	const size_t FACILITIES = BASE_SIZE * BASE_SIZE;
 	const size_t ENTRY_SIZE = buffer.size() / BASES;
-	std::vector<Base*> bases(BASES, 0);
+	std::vector<Base*> bases(BASES, nullptr);
 	for (size_t i = 0; i < _targets.size(); ++i)
 	{
 		Base *base = dynamic_cast<Base*>(_targets[i]);
-		if (base != 0)
+		if (base != nullptr)
 		{
 			int j = _targetDat[i];
 			char *bdata = (data + j * ENTRY_SIZE);
@@ -862,7 +862,7 @@ void SaveConverter::loadDatCraft()
 		{
 			YAML::Node node;
 			Craft *craft = dynamic_cast<Craft*>(_targets[i]);
-			if (craft != 0)
+			if (craft != nullptr)
 			{
 				craft->changeRules(_mod->getCraft(_rules->getCrafts()[type], true));
 
@@ -929,7 +929,7 @@ void SaveConverter::loadDatCraft()
 				}
 			}
 			Ufo *ufo = dynamic_cast<Ufo*>(_targets[i]);
-			if (ufo != 0)
+			if (ufo != nullptr)
 			{
 				ufo->changeRules(_mod->getUfo(_rules->getUfos()[type - 5], true));
 				node["damage"] = (int)load<Uint16>(cdata + _rules->getOffset("CRAFT.DAT_DAMAGE"));
@@ -942,7 +942,7 @@ void SaveConverter::loadDatCraft()
 				int region = load<Uint16>(cdata + _rules->getOffset("CRAFT.DAT_REGION"));
 				std::ostringstream trajectory;
 				AlienMission *m = _missions[std::make_pair(mission, region)];
-				if (m == 0)
+				if (m == nullptr)
 				{
 					YAML::Node subnode;
 					m = new AlienMission(*_mod->getAlienMission(_rules->getMissions()[mission], true));
@@ -1055,7 +1055,7 @@ void SaveConverter::loadDatSoldier()
 			node["look"] = (int)load<Uint8>(sdata + _rules->getOffset("SOLDIER.DAT_LOOK"));
 			node["id"] = _save->getId("STR_SOLDIER");
 
-			Soldier *soldier = new Soldier(_mod->getSoldier(_mod->getSoldiersList().front(), true), 0);
+			Soldier *soldier = new Soldier(_mod->getSoldier(_mod->getSoldiersList().front(), true), nullptr);
 			soldier->load(node, _mod, _save);
 			if (base != 0xFFFF)
 			{
@@ -1071,7 +1071,7 @@ void SaveConverter::loadDatSoldier()
 		}
 		else
 		{
-			_soldiers.push_back(0);
+			_soldiers.push_back(nullptr);
 		}
 	}
 }
@@ -1092,13 +1092,13 @@ void SaveConverter::loadDatResearch()
 		if (!_rules->getResearch()[i].empty())
 		{
 			RuleResearch *research = _mod->getResearch(_rules->getResearch()[i]);
-			if (research != 0 && research->getCost() != 0)
+			if (research != nullptr && research->getCost() != 0)
 			{
 				bool discovered = load<Uint8>(rdata + 0x0A) != 0;
 				bool popped = load<Uint8>(rdata + 0x12) != 0;
 				if (discovered)
 				{
-					_save->addFinishedResearch(research, _mod, 0, false);
+					_save->addFinishedResearch(research, _mod, nullptr, false);
 				}
 				else if (popped)
 				{
@@ -1123,7 +1123,7 @@ void SaveConverter::loadDatUp()
 	{
 		char *rdata = (data + i * ENTRY_SIZE);
 		ArticleDefinition *article = _mod->getUfopaediaArticle(_rules->getUfopaedia()[i]);
-		if (article != 0 && article->section != UFOPAEDIA_NOT_AVAILABLE)
+		if (article != nullptr && article->section != UFOPAEDIA_NOT_AVAILABLE)
 		{
 			bool discovered = load<Uint8>(rdata + 0x08) == 2;
 			if (discovered)
@@ -1134,7 +1134,7 @@ void SaveConverter::loadDatUp()
 					RuleResearch *research = _mod->getResearch(*r);
 					if (research && research->getCost() == 0)
 					{
-						_save->addFinishedResearch(research, _mod, 0, false);
+						_save->addFinishedResearch(research, _mod, nullptr, false);
 					}
 				}
 			}
@@ -1167,7 +1167,7 @@ void SaveConverter::loadDatProject()
 			if (remaining != 0 && !_rules->getResearch()[j].empty())
 			{
 				RuleResearch *research = _mod->getResearch(_rules->getResearch()[j]);
-				if (research != 0 && research->getCost() != 0)
+				if (research != nullptr && research->getCost() != 0)
 				{
 					ResearchProject *project = new ResearchProject(research, research->getCost());
 					project->setAssigned(scientists);
@@ -1209,7 +1209,7 @@ void SaveConverter::loadDatBProd()
 			if (remaining != 0 && !_rules->getManufacture()[j].empty())
 			{
 				RuleManufacture *manufacture = _mod->getManufacture(_rules->getManufacture()[j]);
-				if (manufacture != 0)
+				if (manufacture != nullptr)
 				{
 					Production *project = new Production(manufacture, total);
 					project->setAssignedEngineers(engineers);
@@ -1239,7 +1239,7 @@ void SaveConverter::loadDatXBases()
 		{
 			int loc = load<Uint16>(bdata + 0x02);
 			Base *base = dynamic_cast<Base*>(_targets[loc]);
-			if (base != 0)
+			if (base != nullptr)
 			{
 				base->setRetaliationTarget(true);
 			}

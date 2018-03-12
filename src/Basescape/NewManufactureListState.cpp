@@ -134,7 +134,7 @@ void NewManufactureListState::btnOkClick(Action *)
  */
 void NewManufactureListState::lstProdClick(Action *)
 {
-	RuleManufacture *rule = 0;
+	RuleManufacture *rule = nullptr;
 	for (std::vector<RuleManufacture *>::iterator it = _possibleProductions.begin(); it != _possibleProductions.end(); ++it)
 	{
 		if ((*it)->getName() == _displayedStrings[_lstManufacture->getSelectedRow()])

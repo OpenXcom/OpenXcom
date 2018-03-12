@@ -93,7 +93,7 @@ CraftWeaponsState::CraftWeaponsState(Base *base, size_t craft, size_t weapon) : 
 	_lstWeapons->setMargin(8);
 
 	_lstWeapons->addRow(1, tr("STR_NONE_UC").c_str());
-	_weapons.push_back(0);
+	_weapons.push_back(nullptr);
 
 	const std::vector<std::string> &weapons = _game->getMod()->getCraftWeaponsList();
 	for (std::vector<std::string>::const_iterator i = weapons.begin(); i != weapons.end(); ++i)
@@ -143,16 +143,16 @@ void CraftWeaponsState::lstWeaponsClick(Action *)
 {
 	CraftWeapon *current = _base->getCrafts()->at(_craft)->getWeapons()->at(_weapon);
 	// Remove current weapon
-	if (current != 0)
+	if (current != nullptr)
 	{
 		_base->getStorageItems()->addItem(current->getRules()->getLauncherItem());
 		_base->getStorageItems()->addItem(current->getRules()->getClipItem(), current->getClipsLoaded(_game->getMod()));
 		delete current;
-		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = 0;
+		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = nullptr;
 	}
 
 	// Equip new weapon
-	if (_weapons[_lstWeapons->getSelectedRow()] != 0)
+	if (_weapons[_lstWeapons->getSelectedRow()] != nullptr)
 	{
 		CraftWeapon *sel = new CraftWeapon(_weapons[_lstWeapons->getSelectedRow()], 0);
 		sel->setRearming(true);

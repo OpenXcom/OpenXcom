@@ -96,9 +96,9 @@ bool Production::haveEnoughMaterialsForOneMoreUnit(Base * b, const Mod *m) const
 {
 	for (std::map<std::string, int>::const_iterator iter = _rules->getRequiredItems().begin(); iter != _rules->getRequiredItems().end(); ++iter)
 	{
-		if (m->getItem(iter->first) != 0 && b->getStorageItems()->getItem(iter->first) < iter->second)
+		if (m->getItem(iter->first) != nullptr && b->getStorageItems()->getItem(iter->first) < iter->second)
 			return false;
-		else if (m->getCraft(iter->first) != 0 && b->getCraftCount(iter->first) < iter->second)
+		else if (m->getCraft(iter->first) != nullptr && b->getCraftCount(iter->first) < iter->second)
 			return false;
 	}
 	return true;
@@ -187,11 +187,11 @@ void Production::startItem(Base * b, SavedGame * g, const Mod *m) const
 	g->setFunds(g->getFunds() - _rules->getManufactureCost());
 	for (std::map<std::string,int>::const_iterator iter = _rules->getRequiredItems().begin(); iter != _rules->getRequiredItems().end(); ++iter)
 	{
-		if (m->getItem(iter->first) != 0)
+		if (m->getItem(iter->first) != nullptr)
 		{
 			b->getStorageItems()->removeItem(iter->first, iter->second);
 		}
-		else if (m->getCraft(iter->first) != 0)
+		else if (m->getCraft(iter->first) != nullptr)
 		{
 			// Find suitable craft
 			for (std::vector<Craft*>::iterator c = b->getCrafts()->begin(); c != b->getCrafts()->end(); ++c)
@@ -206,7 +206,7 @@ void Production::startItem(Base * b, SavedGame * g, const Mod *m) const
 					{
 						if ((*f)->getCraft() == (*c))
 						{
-							(*f)->setCraft(0);
+							(*f)->setCraft(nullptr);
 							break;
 						}
 					}

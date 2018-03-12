@@ -84,7 +84,7 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 
 	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
 	_btnGotoBase->onMouseClick((ActionHandler)&InterceptState::btnGotoBaseClick);
-	_btnGotoBase->setVisible(_base != 0);
+	_btnGotoBase->setVisible(_base != nullptr);
 
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
@@ -108,7 +108,7 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 	int row = 0;
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
-		if (_base != 0 && (*i) != _base)
+		if (_base != nullptr && (*i) != _base)
 			continue;
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
@@ -187,7 +187,7 @@ void InterceptState::lstCraftsLeftClick(Action *)
 	if (c->getStatus() == "STR_READY" || ((c->getStatus() == "STR_OUT" || Options::craftLaunchAlways) && !c->getLowFuel() && !c->getMissionComplete()))
 	{
 		_game->popState();
-		if (_target == 0)
+		if (_target == nullptr)
 		{
 			_game->pushState(new SelectDestinationState(c, _globe));
 		}

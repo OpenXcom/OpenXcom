@@ -47,7 +47,7 @@ namespace OpenXcom
 /**
  * Initializes a brand new battlescape saved game.
  */
-SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _selectedUnit(0), _lastSelectedUnit(0), _pathfinding(0), _tileEngine(0), _globalShade(0),
+SavedBattleGame::SavedBattleGame() : _battleState(nullptr), _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _selectedUnit(nullptr), _lastSelectedUnit(nullptr), _pathfinding(nullptr), _tileEngine(nullptr), _globalShade(0),
 	_side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0), _objectiveType(-1), _objectivesDestroyed(0), _objectivesNeeded(0), _unitsFalling(false), _cheating(false),
 	_tuReserved(BA_NONE), _kneelReserved(false), _depth(0), _ambience(-1), _ambientVolume(0.5), _turnLimit(0), _cheatTurn(20), _chronoTrigger(FORCE_LOSE), _beforeGame(true)
 {
@@ -217,7 +217,7 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 		_units.push_back(unit);
 		if (faction == FACTION_PLAYER)
 		{
-			if ((unit->getId() == selectedUnit) || (_selectedUnit == 0 && !unit->isOut()))
+			if ((unit->getId() == selectedUnit) || (_selectedUnit == nullptr && !unit->isOut()))
 				_selectedUnit = unit;
 		}
 		if (unit->getStatus() != STATUS_DEAD && unit->getStatus() != STATUS_IGNORE_ME)
@@ -227,7 +227,7 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 				AIModule *aiModule;
 				if (faction != FACTION_PLAYER)
 				{
-					aiModule = new AIModule(this, unit, 0);
+					aiModule = new AIModule(this, unit, nullptr);
 				}
 				else
 				{
@@ -679,13 +679,13 @@ BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect, bool setRe
  */
 BattleUnit *SavedBattleGame::selectPlayerUnit(int dir, bool checkReselect, bool setReselect, bool checkInventory)
 {
-	if (_selectedUnit != 0 && setReselect)
+	if (_selectedUnit != nullptr && setReselect)
 	{
 		_selectedUnit->dontReselect();
 	}
 	if (_units.empty())
 	{
-		return 0;
+		return nullptr;
 	}
 
 	std::vector<BattleUnit*>::iterator begin, end;
@@ -722,10 +722,10 @@ BattleUnit *SavedBattleGame::selectPlayerUnit(int dir, bool checkReselect, bool 
 		if (*i == _selectedUnit)
 		{
 			if (checkReselect && !_selectedUnit->reselectAllowed())
-				_selectedUnit = 0;
+				_selectedUnit = nullptr;
 			return _selectedUnit;
 		}
-		else if (_selectedUnit == 0 && i == begin)
+		else if (_selectedUnit == nullptr && i == begin)
 		{
 			return _selectedUnit;
 		}
@@ -747,7 +747,7 @@ BattleUnit *SavedBattleGame::selectUnit(Position pos)
 
 	if (bu && bu->isOut())
 	{
-		return 0;
+		return nullptr;
 	}
 	else
 	{
@@ -836,14 +836,14 @@ void SavedBattleGame::endTurn()
 	{
 		if (_selectedUnit && _selectedUnit->getOriginalFaction() == FACTION_PLAYER)
 			_lastSelectedUnit = _selectedUnit;
-		_selectedUnit =  0;
+		_selectedUnit =  nullptr;
 		_side = FACTION_HOSTILE;
 	}
 	else if (_side == FACTION_HOSTILE)
 	{
 		_side = FACTION_NEUTRAL;
 		// if there is no neutral team, we skip this and instantly prepare the new turn for the player
-		if (selectNextPlayerUnit() == 0)
+		if (selectNextPlayerUnit() == nullptr)
 		{
 			prepareNewTurn();
 			_turn++;
@@ -978,7 +978,7 @@ void SavedBattleGame::resetUnitTiles()
 				{
 					for (int y = size; y >= 0; y--)
 					{
-						getTile((*i)->getTile()->getPosition() + Position(x,y,0))->setUnit(0);
+						getTile((*i)->getTile()->getPosition() + Position(x,y,0))->setUnit(nullptr);
 					}
 				}
 			}
@@ -1195,7 +1195,7 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 		}
 	}
 
-	if (compliantNodes.empty()) return 0;
+	if (compliantNodes.empty()) return nullptr;
 
 	int n = RNG::generate(0, compliantNodes.size() - 1);
 
@@ -1212,9 +1212,9 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNode)
 {
 	std::vector<Node *> compliantNodes;
-	Node *preferred = 0;
+	Node *preferred = nullptr;
 
-	if (fromNode == 0)
+	if (fromNode == nullptr)
 	{
 		if (Options::traceAI) { Log(LOG_INFO) << "This alien got lost. :("; }
 		fromNode = getNodes()->at(RNG::generate(0, getNodes()->size() - 1));
@@ -1264,7 +1264,7 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 			return getPatrolNode(true, unit, fromNode); // move dammit
 		}
 		else
-			return 0;
+			return nullptr;
 	}
 
 	if (scout)
@@ -1274,7 +1274,7 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 	}
 	else
 	{
-		if (!preferred) return 0;
+		if (!preferred) return nullptr;
 
 		// non-scout patrols to highest value unoccupied node that's not fromNode
 		if (Options::traceAI) { Log(LOG_INFO) << "Choosing node flagged " << preferred->getFlags(); }
@@ -1469,7 +1469,7 @@ void SavedBattleGame::reviveUnconsciousUnits()
 					// recover from unconscious
 					(*i)->turn(false); // makes the unit stand up again
 					(*i)->kneel(false);
-					(*i)->setCache(0);
+					(*i)->setCache(nullptr);
 					getTileEngine()->calculateFOV((*i));
 					getTileEngine()->calculateUnitLighting();
 					removeUnconsciousBodyItem((*i));
@@ -1514,8 +1514,8 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, Position position, bool te
 		{
 			Tile *t = getTile(position + Position(x,y,0) + zOffset);
 			Tile *tb = getTile(position + Position(x,y,-1) + zOffset);
-			if (t == 0 ||
-				(t->getUnit() != 0 && t->getUnit() != bu) ||
+			if (t == nullptr ||
+				(t->getUnit() != nullptr && t->getUnit() != bu) ||
 				t->getTUCost(O_OBJECT, bu->getMovementType()) == 255 ||
 				(t->hasNoFloor(tb) && bu->getMovementType() != MT_FLY) ||
 				(t->getMapData(O_OBJECT) && t->getMapData(O_OBJECT)->getBigWall() && t->getMapData(O_OBJECT)->getBigWall() <= 3))
@@ -1537,7 +1537,7 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, Position position, bool te
 		getPathfinding()->setUnit(bu);
 		for (int dir = 2; dir <= 4; ++dir)
 		{
-			if (getPathfinding()->isBlocked(getTile(position + zOffset), 0, dir, 0))
+			if (getPathfinding()->isBlocked(getTile(position + zOffset), nullptr, dir, nullptr))
 				return false;
 		}
 	}
@@ -1640,12 +1640,12 @@ bool SavedBattleGame::getUnitsFalling() const
  */
 BattleUnit* SavedBattleGame::getHighestRankedXCom()
 {
-	BattleUnit* highest = 0;
+	BattleUnit* highest = nullptr;
 	for (std::vector<BattleUnit*>::iterator j = _units.begin(); j != _units.end(); ++j)
 	{
 		if ((*j)->getOriginalFaction() == FACTION_PLAYER && !(*j)->isOut())
 		{
-			if (highest == 0 || (*j)->getRankInt() > highest->getRankInt())
+			if (highest == nullptr || (*j)->getRankInt() > highest->getRankInt())
 			{
 				highest = *j;
 			}
@@ -1665,7 +1665,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
 {
 	int result = 100;
 
-	if (unit == 0)
+	if (unit == nullptr)
 	{
 		BattleUnit *leader = getHighestRankedXCom();
 		if (leader)
@@ -1725,7 +1725,7 @@ bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, const Position& en
 	{
 		Position offset = Position (xArray[dir], yArray[dir], 0);
 		Tile *t = getTile(entryPoint + offset);
-		if (t && !getPathfinding()->isBlocked(getTile(entryPoint + (offset / 2)), t, dir, 0)
+		if (t && !getPathfinding()->isBlocked(getTile(entryPoint + (offset / 2)), t, dir, nullptr)
 			&& setUnitPosition(unit, entryPoint + offset))
 		{
 			return true;

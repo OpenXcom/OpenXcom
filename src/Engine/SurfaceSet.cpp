@@ -229,7 +229,7 @@ Surface *SurfaceSet::getFrame(int i)
 	{
 		return _frames[i];
 	}
-	return 0;
+	return nullptr;
 }
 
 /**

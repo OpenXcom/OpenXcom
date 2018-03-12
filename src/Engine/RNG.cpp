@@ -41,7 +41,7 @@ See <http://creativecommons.org/publicdomain/zero/1.0/>. */
    rather suggest to use a xorshift128+ (for maximum speed) or
    xorshift1024* (for speed and very long period) generator. */
 
-uint64_t x = time(0); /* The state must be seeded with a nonzero value. */
+uint64_t x = time(nullptr); /* The state must be seeded with a nonzero value. */
 
 uint64_t next()
 {

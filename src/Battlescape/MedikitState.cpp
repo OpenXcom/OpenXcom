@@ -191,7 +191,7 @@ void MedikitState::handle(Action *action)
 	State::handle(action);
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		onEndClick(0);
+		onEndClick(nullptr);
 	}
 }
 
@@ -240,7 +240,7 @@ void MedikitState::onHealClick(Action *)
 			// if the unit has revived and has no more wounds, we quit this screen automatically
 			if (_targetUnit->getFatalWounds() == 0)
 			{
-				onEndClick(0);
+				onEndClick(nullptr);
 			}
 		}
 		_unit->getStatistics()->woundsHealed++;
@@ -248,7 +248,7 @@ void MedikitState::onHealClick(Action *)
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-		onEndClick(0);
+		onEndClick(nullptr);
 	}
 }
 
@@ -276,13 +276,13 @@ void MedikitState::onStimulantClick(Action *)
 		{
 			_targetUnit->setTimeUnits(0);
 			_action->actor->getStatistics()->revivedSoldier++;
-			onEndClick(0);
+			onEndClick(nullptr);
 		}
 	}
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-		onEndClick(0);
+		onEndClick(nullptr);
 	}
 }
 
@@ -307,7 +307,7 @@ void MedikitState::onPainKillerClick(Action *)
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-		onEndClick(0);
+		onEndClick(nullptr);
 	}
 }
 

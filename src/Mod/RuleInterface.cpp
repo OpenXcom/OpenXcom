@@ -85,7 +85,7 @@ void RuleInterface::load(const YAML::Node& node)
 Element *RuleInterface::getElement(const std::string &id)
 {
 	std::map<std::string, Element>::iterator i = _elements.find(id);
-	if (_elements.end() != i) return &i->second; else return 0;
+	if (_elements.end() != i) return &i->second; else return nullptr;
 }
 
 const std::string &RuleInterface::getPalette() const

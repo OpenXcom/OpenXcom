@@ -27,13 +27,13 @@
 namespace OpenXcom
 {
 
-MapData *MapDataSet::_blankTile = 0;
-MapData *MapDataSet::_scorchedTile = 0;
+MapData *MapDataSet::_blankTile = nullptr;
+MapData *MapDataSet::_scorchedTile = nullptr;
 
 /**
  * MapDataSet construction.
  */
-MapDataSet::MapDataSet(const std::string &name) : _name(name), _surfaceSet(0), _loaded(false)
+MapDataSet::MapDataSet(const std::string &name) : _name(name), _surfaceSet(nullptr), _loaded(false)
 {
 }
 

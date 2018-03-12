@@ -39,7 +39,7 @@ namespace OpenXcom
  * @param armor Soldier armor.
  * @param id Unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, int id) : _id(id), _improvement(0), _psiStrImprovement(0), _rules(rules), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _death(0), _diary(new SoldierDiary())
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, int id) : _id(id), _improvement(0), _psiStrImprovement(0), _rules(rules), _rank(RANK_ROOKIE), _craft(nullptr), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _death(nullptr), _diary(new SoldierDiary())
 {
 	if (id != 0)
 	{
@@ -110,7 +110,7 @@ void Soldier::load(const YAML::Node& node, const Mod *mod, SavedGame *save)
 	_kills = node["kills"].as<int>(_kills);
 	_recovery = node["recovery"].as<int>(_recovery);
 	Armor *armor = mod->getArmor(node["armor"].as<std::string>());
-	if (armor == 0)
+	if (armor == nullptr)
 	{
 		armor = mod->getArmor(mod->getSoldier(mod->getSoldiersList().front())->getArmor());
 	}
@@ -159,7 +159,7 @@ YAML::Node Soldier::save() const
 	node["initialStats"] = _initialStats;
 	node["currentStats"] = _currentStats;
 	node["rank"] = (int)_rank;
-	if (_craft != 0)
+	if (_craft != nullptr)
 	{
 		node["craft"] = _craft->saveId();
 	}
@@ -179,7 +179,7 @@ YAML::Node Soldier::save() const
 		for (std::vector<EquipmentLayoutItem*>::const_iterator i = _equipmentLayout.begin(); i != _equipmentLayout.end(); ++i)
 			node["equipmentLayout"].push_back((*i)->save());
 	}
-	if (_death != 0)
+	if (_death != nullptr)
 	{
 		node["death"] = _death->save();
 	}
@@ -257,7 +257,7 @@ std::wstring Soldier::getCraftString(Language *lang) const
 	{
 		s = lang->getString("STR_WOUNDED");
 	}
-	else if (_craft == 0)
+	else if (_craft == nullptr)
 	{
 		s = lang->getString("STR_NONE_UC");
 	}
@@ -464,7 +464,7 @@ void Soldier::setWoundRecovery(int recovery)
 	// dismiss from craft
 	if (_recovery > 0)
 	{
-		_craft = 0;
+		_craft = nullptr;
 	}
 }
 
@@ -614,7 +614,7 @@ void Soldier::die(SoldierDeath *death)
 	_death = death;
 
 	// Clean up associations
-	_craft = 0;
+	_craft = nullptr;
 	_psiTraining = false;
 	_recentlyPromoted = false;
 	_recovery = 0;

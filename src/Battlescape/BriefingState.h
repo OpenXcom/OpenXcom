@@ -41,7 +41,7 @@ private:
 	std::string _cutsceneId, _musicId;
 public:
 	/// Creates the Briefing state.
-	BriefingState(Craft *craft = 0, Base *base = 0);
+	BriefingState(Craft *craft = nullptr, Base *base = nullptr);
 	/// Cleans up the Briefing state.
 	~BriefingState();
 	/// Initialization

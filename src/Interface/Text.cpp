@@ -35,7 +35,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Text::Text(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _big(0), _small(0), _font(0), _lang(0), _wrap(false), _invert(false), _contrast(false), _indent(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0), _color2(0)
+Text::Text(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _big(nullptr), _small(nullptr), _font(nullptr), _lang(nullptr), _wrap(false), _invert(false), _contrast(false), _indent(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0), _color2(0)
 {
 }
 
@@ -360,7 +360,7 @@ int Text::getTextWidth(int line) const
  */
 void Text::processText()
 {
-	if (_font == 0 || _lang == 0)
+	if (_font == nullptr || _lang == nullptr)
 	{
 		return;
 	}
@@ -417,7 +417,7 @@ void Text::processText()
 		// Keep track of the width of the last line and word
 		else if ((*str)[c] != 1)
 		{
-			if (font->getChar((*str)[c]) == 0)
+			if (font->getChar((*str)[c]) == nullptr)
 			{
 				(*str)[c] = L'?';
 			}
@@ -549,7 +549,7 @@ struct PaletteShift
 void Text::draw()
 {
 	Surface::draw();
-	if (_text.empty() || _font == 0)
+	if (_text.empty() || _font == nullptr)
 	{
 		return;
 	}

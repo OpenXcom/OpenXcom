@@ -39,7 +39,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-UnitSprite::UnitSprite(int width, int height, int x, int y, bool helmet) : Surface(width, height, x, y), _unit(0), _itemR(0), _itemL(0), _unitSurface(0), _itemSurfaceR(0), _itemSurfaceL(0), _part(0), _animationFrame(0), _drawingRoutine(0), _helmet(helmet), _color(0), _colorSize(0)
+UnitSprite::UnitSprite(int width, int height, int x, int y, bool helmet) : Surface(width, height, x, y), _unit(nullptr), _itemR(nullptr), _itemL(nullptr), _unitSurface(nullptr), _itemSurfaceR(nullptr), _itemSurfaceL(nullptr), _part(0), _animationFrame(0), _drawingRoutine(0), _helmet(helmet), _color(nullptr), _colorSize(0)
 {
 }
 
@@ -86,19 +86,19 @@ void UnitSprite::setBattleUnit(BattleUnit *unit, int part)
 		}
 		else
 		{
-			_color = 0;
+			_color = nullptr;
 		}
 	}
 
 	_itemR = unit->getItem("STR_RIGHT_HAND");
 	if (_itemR && _itemR->getRules()->isFixed())
 	{
-		_itemR = 0;
+		_itemR = nullptr;
 	}
 	_itemL = unit->getItem("STR_LEFT_HAND");
 	if (_itemL && _itemL->getRules()->isFixed())
 	{
-		_itemL = 0;
+		_itemL = nullptr;
 	}
 }
 
@@ -215,7 +215,7 @@ void UnitSprite::drawRoutine0()
 		return;
 	}
 
-	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0, *itemR = 0, *itemL = 0;
+	Surface *torso = nullptr, *legs = nullptr, *leftArm = nullptr, *rightArm = nullptr, *itemR = nullptr, *itemL = nullptr;
 	// magic numbers
 	const int legsStand = 16, legsKneel = 24;
 	int maleTorso, femaleTorso, die, rarm1H, larm2H, rarm2H, rarmShoot, legsFloat, torsoHandsWeaponY = 0;
@@ -603,7 +603,7 @@ void UnitSprite::drawRoutine1()
 		return;
 	}
 
-	Surface *torso = 0, *leftArm = 0, *rightArm = 0, *itemR = 0, *itemL = 0;
+	Surface *torso = nullptr, *leftArm = nullptr, *rightArm = nullptr, *itemR = nullptr, *itemL = nullptr;
 	// magic numbers
 	const int stand = 16, walk = 24, die = 64;
 	const int larm = 8, rarm = 0, larm2H = 67, rarm2H = 75, rarmShoot = 83, rarm1H= 91; // note that arms are switched vs "normal" sheets
@@ -766,7 +766,7 @@ void UnitSprite::drawRoutine2()
 	const int offy[8] = { -1, -3, -4, -5, -4, -3, -1, -1 }; // hovertank offsets
 	const int offXSprite = 16; // sprites are double width
 
-	Surface *s = 0;
+	Surface *s = nullptr;
 
 	const int hoverTank = _unit->getMovementType() == MT_FLY ? 32 : 0;
 	const int turret = _unit->getTurretType();
@@ -814,7 +814,7 @@ void UnitSprite::drawRoutine3()
 		return;
 	}
 
-	Surface *s = 0;
+	Surface *s = nullptr;
 	const int offXSprite = 16; // sprites are double width
 
 	// draw the animated propulsion below the hwp
@@ -860,7 +860,7 @@ void UnitSprite::drawRoutine4()
 		return;
 	}
 
-	Surface *s = 0, *itemR = 0, *itemL = 0;
+	Surface *s = nullptr, *itemR = nullptr, *itemL = nullptr;
 	int stand = 0, walk = 8, die = 72;
 	const int offX[8] = { 8, 10, 7, 4, -9, -11, -7, -3 }; // for the weapons
 	const int offY[8] = { -6, -3, 0, 2, 0, -4, -7, -9 }; // for the weapons
@@ -1001,7 +1001,7 @@ void UnitSprite::drawRoutine5()
 		return;
 	}
 
-	Surface *s = 0;
+	Surface *s = nullptr;
 	const int offXSprite = 16; // sprites are double width
 
 	if (_unit->getStatus() == STATUS_WALKING)
@@ -1030,7 +1030,7 @@ void UnitSprite::drawRoutine6()
 		return;
 	}
 
-	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0, *itemR = 0, *itemL = 0;
+	Surface *torso = nullptr, *legs = nullptr, *leftArm = nullptr, *rightArm = nullptr, *itemR = nullptr, *itemL = nullptr;
 	// magic numbers
 	const int Torso = 24, legsStand = 16, die = 96;
 	const int larmStand = 0, rarmStand = 8, rarm1H = 99, larm2H = 107, rarm2H = 115, rarmShoot = 123;
@@ -1226,7 +1226,7 @@ void UnitSprite::drawRoutine7()
 		return;
 	}
 
-	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0;
+	Surface *torso = nullptr, *legs = nullptr, *leftArm = nullptr, *rightArm = nullptr;
 	// magic numbers
 	const int Torso = 24, legsStand = 16, die = 224;
 	const int larmStand = 0, rarmStand = 8;
@@ -1300,7 +1300,7 @@ void UnitSprite::drawRoutine8()
 		return;
 	}
 
-	Surface *legs = 0;
+	Surface *legs = nullptr;
 	// magic numbers
 	const int Body = 0, aim = 5, die = 6;
 	const int Pulsate[8] = { 0, 1, 2, 3, 4, 3, 2, 1 };
@@ -1333,7 +1333,7 @@ void UnitSprite::drawRoutine9()
 		return;
 	}
 
-	Surface *torso = 0;
+	Surface *torso = nullptr;
 	// magic numbers
 	const int Body = 0, die = 25;
 	const int offXSprite = 16; // sprites are double width
@@ -1409,7 +1409,7 @@ void UnitSprite::drawRoutine12()
 	const int die = 8;
 	const int offXSprite = 16; // sprites are double width
 
-	Surface *s = 0;
+	Surface *s = nullptr;
 	s = _unitSurface->getFrame((_part * 8) + _animationFrame);
 	_redraw = true;
 
@@ -1433,7 +1433,7 @@ void UnitSprite::drawRoutine19()
 		return;
 	}
 
-	Surface *s = 0;
+	Surface *s = nullptr;
 	// magic numbers
 	const int stand = 0, move = 8, die = 16;
 	const int offXSprite = 16; // sprites are double width
@@ -1465,7 +1465,7 @@ void UnitSprite::drawRoutine20()
 		return;
 	}
 
-	Surface *s = 0;
+	Surface *s = nullptr;
 	const int offXSprite = 16; // sprites are double width
 
 	if (_unit->getStatus() == STATUS_WALKING)
@@ -1491,7 +1491,7 @@ void UnitSprite::drawRoutine21()
 		return;
 	}
 
-	Surface *s = 0;
+	Surface *s = nullptr;
 	const int offXSprite = 16; // sprites are double width
 
 	s = _unitSurface->getFrame((_part * 4) + (_unit->getDirection() * 16) + (_animationFrame % 4));
@@ -1513,18 +1513,18 @@ void UnitSprite::sortRifles()
 			{
 				_itemR = _itemL;
 			}
-			_itemL = 0;
+			_itemL = nullptr;
 		}
 		else if (_unit->getStatus() != STATUS_AIMING)
 		{
-			_itemL = 0;
+			_itemL = nullptr;
 		}
 	}
 	else if (_itemL && _itemL->getRules()->isTwoHanded())
 	{
 		if (_unit->getStatus() != STATUS_AIMING)
 		{
-			_itemR = 0;
+			_itemR = nullptr;
 		}
 	}
 }

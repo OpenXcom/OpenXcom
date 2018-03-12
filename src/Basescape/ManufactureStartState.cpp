@@ -125,12 +125,12 @@ ManufactureStartState::ManufactureStartState(Base *base, RuleManufacture *item) 
 	{
 		std::wostringstream s1, s2;
 		s1 << iter->second;
-		if (_game->getMod()->getItem(iter->first) != 0)
+		if (_game->getMod()->getItem(iter->first) != nullptr)
 		{
 			s2 << base->getStorageItems()->getItem(iter->first);
 			productionPossible &= (base->getStorageItems()->getItem(iter->first) >= iter->second);
 		}
-		else if (_game->getMod()->getCraft(iter->first) != 0)
+		else if (_game->getMod()->getCraft(iter->first) != nullptr)
 		{
 			s2 << base->getCraftCount(iter->first);
 			productionPossible &= (base->getCraftCount(iter->first) >= iter->second);

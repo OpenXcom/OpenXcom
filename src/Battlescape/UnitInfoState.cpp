@@ -165,79 +165,79 @@ UnitInfoState::UnitInfoState(BattleUnit *unit, BattlescapeState *parent, bool fr
 
 	add(_bg);
 	add(_exit);
-	add(_txtName, "textName", "stats", 0);
+	add(_txtName, "textName", "stats", nullptr);
 
 	add(_txtTimeUnits);
 	add(_numTimeUnits);
-	add(_barTimeUnits, "barTUs", "stats", 0);
+	add(_barTimeUnits, "barTUs", "stats", nullptr);
 
 	add(_txtEnergy);
 	add(_numEnergy);
-	add(_barEnergy, "barEnergy", "stats", 0);
+	add(_barEnergy, "barEnergy", "stats", nullptr);
 
 	add(_txtHealth);
 	add(_numHealth);
-	add(_barHealth, "barHealth", "stats", 0);
+	add(_barHealth, "barHealth", "stats", nullptr);
 
 	add(_txtFatalWounds);
 	add(_numFatalWounds);
-	add(_barFatalWounds, "barWounds", "stats", 0);
+	add(_barFatalWounds, "barWounds", "stats", nullptr);
 
 	add(_txtBravery);
 	add(_numBravery);
-	add(_barBravery, "barBravery", "stats", 0);
+	add(_barBravery, "barBravery", "stats", nullptr);
 
 	add(_txtMorale);
 	add(_numMorale);
-	add(_barMorale, "barMorale", "stats", 0);
+	add(_barMorale, "barMorale", "stats", nullptr);
 
 	add(_txtReactions);
 	add(_numReactions);
-	add(_barReactions, "barReactions", "stats", 0);
+	add(_barReactions, "barReactions", "stats", nullptr);
 
 	add(_txtFiring);
 	add(_numFiring);
-	add(_barFiring, "barFiring", "stats", 0);
+	add(_barFiring, "barFiring", "stats", nullptr);
 
 	add(_txtThrowing);
 	add(_numThrowing);
-	add(_barThrowing, "barThrowing", "stats", 0);
+	add(_barThrowing, "barThrowing", "stats", nullptr);
 
 	add(_txtMelee);
 	add(_numMelee);
-	add(_barMelee, "barMelee", "stats", 0);
+	add(_barMelee, "barMelee", "stats", nullptr);
 
 	add(_txtStrength);
 	add(_numStrength);
-	add(_barStrength, "barStrength", "stats", 0);
+	add(_barStrength, "barStrength", "stats", nullptr);
 
 	add(_txtPsiStrength);
 	add(_numPsiStrength);
-	add(_barPsiStrength, "barPsiStrength", "stats", 0);
+	add(_barPsiStrength, "barPsiStrength", "stats", nullptr);
 
 	add(_txtPsiSkill);
 	add(_numPsiSkill);
-	add(_barPsiSkill, "barPsiSkill", "stats", 0);
+	add(_barPsiSkill, "barPsiSkill", "stats", nullptr);
 
 	add(_txtFrontArmor);
 	add(_numFrontArmor);
-	add(_barFrontArmor, "barFrontArmor", "stats", 0);
+	add(_barFrontArmor, "barFrontArmor", "stats", nullptr);
 
 	add(_txtLeftArmor);
 	add(_numLeftArmor);
-	add(_barLeftArmor, "barLeftArmor", "stats", 0);
+	add(_barLeftArmor, "barLeftArmor", "stats", nullptr);
 
 	add(_txtRightArmor);
 	add(_numRightArmor);
-	add(_barRightArmor, "barRightArmor", "stats", 0);
+	add(_barRightArmor, "barRightArmor", "stats", nullptr);
 
 	add(_txtRearArmor);
 	add(_numRearArmor);
-	add(_barRearArmor, "barRearArmor", "stats", 0);
+	add(_barRearArmor, "barRearArmor", "stats", nullptr);
 
 	add(_txtUnderArmor);
 	add(_numUnderArmor);
-	add(_barUnderArmor, "barUnderArmor", "stats", 0);
+	add(_barUnderArmor, "barUnderArmor", "stats", nullptr);
 
 	if (!_mindProbe)
 	{
@@ -637,7 +637,7 @@ void UnitInfoState::btnPrevClick(Action *action)
 		_battleGame->selectPreviousPlayerUnit(false, false, true);
 	}
 	_unit = _battleGame->getSelectedUnit();
-	if (_unit != 0)
+	if (_unit != nullptr)
 	{
 		init();
 	}
@@ -662,7 +662,7 @@ void UnitInfoState::btnNextClick(Action *action)
 		_battleGame->selectNextPlayerUnit(false, false, true);
 	}
 	_unit = _battleGame->getSelectedUnit();
-	if (_unit != 0)
+	if (_unit != nullptr)
 	{
 		init();
 	}

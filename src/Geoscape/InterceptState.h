@@ -49,7 +49,7 @@ private:
 	std::vector<Craft*> _crafts;
 public:
 	/// Creates the Intercept state.
-	InterceptState(Globe *globe, Base *base = 0, Target *target = 0);
+	InterceptState(Globe *globe, Base *base = nullptr, Target *target = nullptr);
 	/// Cleans up the Intercept state.
 	~InterceptState();
 	/// Handler for clicking the Cancel button.

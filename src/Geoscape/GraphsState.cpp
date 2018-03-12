@@ -274,7 +274,7 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 	{
 		(*iter)->setAlign(ALIGN_RIGHT);
 	}
-	btnUfoRegionClick(0);
+	btnUfoRegionClick(nullptr);
 
 	// Set up objects
 	if (_game->getMod()->getSurface("GRAPH.BDY", false))

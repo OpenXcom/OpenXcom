@@ -27,7 +27,7 @@ namespace OpenXcom
 /**
  * Initializes a moving target with blank coordinates.
  */
-MovingTarget::MovingTarget() : Target(), _dest(0), _speedLon(0.0), _speedLat(0.0), _speedRadian(0.0), _meetPointLon(0.0), _meetPointLat(0.0), _speed(0)
+MovingTarget::MovingTarget() : Target(), _dest(nullptr), _speedLon(0.0), _speedLat(0.0), _speedRadian(0.0), _meetPointLon(0.0), _meetPointLat(0.0), _speed(0)
 {
 }
 
@@ -36,7 +36,7 @@ MovingTarget::MovingTarget() : Target(), _dest(0), _speedLon(0.0), _speedLat(0.0
  */
 MovingTarget::~MovingTarget()
 {
-	if (_dest != 0 && !_dest->getFollowers()->empty())
+	if (_dest != nullptr && !_dest->getFollowers()->empty())
 	{
 		for (std::vector<Target*>::iterator i = _dest->getFollowers()->begin(); i != _dest->getFollowers()->end(); ++i)
 		{
@@ -69,7 +69,7 @@ void MovingTarget::load(const YAML::Node &node)
 YAML::Node MovingTarget::save() const
 {
 	YAML::Node node = Target::save();
-	if (_dest != 0)
+	if (_dest != nullptr)
 	{
 		node["dest"] = _dest->saveId();
 	}
@@ -96,7 +96,7 @@ Target *MovingTarget::getDestination() const
 void MovingTarget::setDestination(Target *dest)
 {
 	// Remove moving target from old destination's followers
-	if (_dest != 0)
+	if (_dest != nullptr)
 	{
 		for (std::vector<Target*>::iterator i = _dest->getFollowers()->begin(); i != _dest->getFollowers()->end(); ++i)
 		{
@@ -109,7 +109,7 @@ void MovingTarget::setDestination(Target *dest)
 	}
 	_dest = dest;
 	// Add moving target to new destination's followers
-	if (_dest != 0)
+	if (_dest != nullptr)
 	{
 		_dest->getFollowers()->push_back(this);
 	}
@@ -157,7 +157,7 @@ void MovingTarget::setSpeed(int speed)
 void MovingTarget::calculateSpeed()
 {
 	calculateMeetPoint();
-	if (_dest != 0)
+	if (_dest != nullptr)
 	{
 		double dLon, dLat, length;
 		dLon = sin(_meetPointLon - _lon) * cos(_meetPointLat);
@@ -186,7 +186,7 @@ void MovingTarget::calculateSpeed()
  */
 bool MovingTarget::reachedDestination() const
 {
-	if (_dest == 0)
+	if (_dest == nullptr)
 	{
 		return false;
 	}
@@ -199,7 +199,7 @@ bool MovingTarget::reachedDestination() const
 void MovingTarget::move()
 {
 	calculateSpeed();
-	if (_dest != 0)
+	if (_dest != nullptr)
 	{
 		if (getDistance(_dest) > _speedRadian)
 		{
@@ -220,7 +220,7 @@ void MovingTarget::move()
 void MovingTarget::calculateMeetPoint()
 {
 	// Initialize
-	if (_dest != 0)
+	if (_dest != nullptr)
 	{
 		_meetPointLat = _dest->getLatitude();
 		_meetPointLon = _dest->getLongitude();

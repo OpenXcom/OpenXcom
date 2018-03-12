@@ -60,7 +60,7 @@ namespace OpenXcom
  * Initializes all the elements in the New Battle window.
  * @param game Pointer to the core game.
  */
-NewBattleState::NewBattleState() : _craft(0)
+NewBattleState::NewBattleState() : _craft(nullptr)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
@@ -246,7 +246,7 @@ void NewBattleState::init()
 {
 	State::init();
 
-	if (_craft == 0)
+	if (_craft == nullptr)
 	{
 		load();
 	}
@@ -269,7 +269,7 @@ void NewBattleState::load(const std::string &filename)
 		{
 			YAML::Node doc = YAML::LoadFile(s);
 			_cbxMission->setSelected(std::min(doc["mission"].as<size_t>(0), _missionTypes.size() - 1));
-			cbxMissionChange(0);
+			cbxMissionChange(nullptr);
 			_cbxCraft->setSelected(std::min(doc["craft"].as<size_t>(0), _crafts.size() - 1));
 			_slrDarkness->setValue(doc["darkness"].as<size_t>(0));
 			_cbxTerrain->setSelected(std::min(doc["terrain"].as<size_t>(0), _terrainTypes.size() - 1));
@@ -449,7 +449,7 @@ void NewBattleState::initSave()
 	}
 
 	_game->setSavedGame(save);
-	cbxMissionChange(0);
+	cbxMissionChange(nullptr);
 }
 
 /**
@@ -468,7 +468,7 @@ void NewBattleState::btnOkClick(Action *)
 	_game->getSavedGame()->setBattleGame(bgame);
 	bgame->setMissionType(_missionTypes[_cbxMission->getSelected()]);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-	Base *base = 0;
+	Base *base = nullptr;
 
 	bgen.setTerrain(_game->getMod()->getTerrain(_terrainTypes[_cbxTerrain->getSelected()]));
 
@@ -477,7 +477,7 @@ void NewBattleState::btnOkClick(Action *)
 	{
 		base = _craft->getBase();
 		bgen.setBase(base);
-		_craft = 0;
+		_craft = nullptr;
 	}
 	// alien base
 	else if (_game->getMod()->getDeployment(bgame->getMissionType())->isAlienBase())
@@ -540,7 +540,7 @@ void NewBattleState::btnOkClick(Action *)
 	_game->popState();
 	_game->popState();
 	_game->pushState(new BriefingState(_craft, base));
-	_craft = 0;
+	_craft = nullptr;
 }
 
 /**
@@ -550,7 +550,7 @@ void NewBattleState::btnOkClick(Action *)
 void NewBattleState::btnCancelClick(Action *)
 {
 	save();
-	_game->setSavedGame(0);
+	_game->setSavedGame(nullptr);
 	_game->popState();
 }
 
@@ -563,12 +563,12 @@ void NewBattleState::btnRandomClick(Action *)
 	initSave();
 
 	_cbxMission->setSelected(RNG::generate(0, _missionTypes.size()-1));
-	cbxMissionChange(0);
+	cbxMissionChange(nullptr);
 	_cbxCraft->setSelected(RNG::generate(0, _crafts.size() - 1));
-	cbxCraftChange(0);
+	cbxCraftChange(nullptr);
 	_slrDarkness->setValue(RNG::generate(0, 15));
 	_cbxTerrain->setSelected(RNG::generate(0, _terrainTypes.size() - 1));
-	cbxTerrainChange(0);
+	cbxTerrainChange(nullptr);
 	_cbxAlienRace->setSelected(RNG::generate(0, _alienRaces.size()-1));
 	_cbxDifficulty->setSelected(RNG::generate(0, 4));
 	_slrAlienTech->setValue(RNG::generate(0, _game->getMod()->getAlienItemLevels().size()-1));
@@ -627,7 +627,7 @@ void NewBattleState::cbxMissionChange(Action *)
 	_cbxTerrain->setVisible(_terrainTypes.size() > 1);
 	_cbxTerrain->setOptions(terrainStrings);
 	_cbxTerrain->setSelected(0);
-	cbxTerrainChange(0);
+	cbxTerrainChange(nullptr);
 }
 
 /**
@@ -645,7 +645,7 @@ void NewBattleState::cbxCraftChange(Action *)
 		{
 			if ((*i)->getCraft() == _craft)
 			{
-				(*i)->setCraft(0);
+				(*i)->setCraft(nullptr);
 				current--;
 			}
 		}

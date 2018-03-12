@@ -76,12 +76,12 @@ void exceptionLogger()
 	{
 		error = "Unknown exception";
 	}
-	CrossPlatform::crashDump(0, error);
+	CrossPlatform::crashDump(nullptr, error);
 	abort();
 }
 #endif
 
-Game *game = 0;
+static Game *game = nullptr;
 
 // If you can't tell what the main() is for you should have your
 // programming license revoked...

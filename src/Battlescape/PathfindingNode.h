@@ -61,7 +61,7 @@ public:
 	/// Gets the previous walking direction.
 	int getPrevDir() const;
 	/// Is this node already in a PathfindingOpenSet?
-	bool inOpenSet() const { return (_openentry != 0); }
+	bool inOpenSet() const { return (_openentry != nullptr); }
 	/// Gets the approximate cost to reach the target position.
 	int getTUGuess() const { return _tuGuess; }
 

@@ -26,7 +26,7 @@
 namespace OpenXcom
 {
 
-MapScript::MapScript() : _type(MSC_UNDEFINED), _sizeX(1), _sizeY(1), _sizeZ(0), _executionChances(100), _executions(1), _cumulativeFrequency(0), _label(0), _direction(MD_NONE), _tunnelData(0)
+MapScript::MapScript() : _type(MSC_UNDEFINED), _sizeX(1), _sizeY(1), _sizeZ(0), _executionChances(100), _executions(1), _cumulativeFrequency(0), _label(0), _direction(MD_NONE), _tunnelData(nullptr)
 {
 }
 
@@ -375,7 +375,7 @@ MapBlock *MapScript::getNextBlock(RuleTerrain *terrain)
 	{
 		return terrain->getMapBlocks()->at((size_t)(result));
 	}
-	return 0;
+	return nullptr;
 }
 
 /**

@@ -150,7 +150,7 @@ CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft)
 	// populate sort options
 	std::vector<std::wstring> sortOptions;
 	sortOptions.push_back(tr("STR_ORIGINAL_ORDER"));
-	_sortFunctors.push_back(NULL);
+	_sortFunctors.push_back(nullptr);
 
 #define PUSH_IN(strId, functor) \
 	sortOptions.push_back(tr(strId)); \
@@ -287,7 +287,7 @@ void CraftSoldiersState::initList()
 		{
 			color = _lstSoldiers->getSecondaryColor();
 		}
-		else if ((*i)->getCraft() != 0)
+		else if ((*i)->getCraft() != nullptr)
 		{
 			color = _otherCraftColor;
 		}
@@ -439,7 +439,7 @@ void CraftSoldiersState::lstSoldiersClick(Action *action)
 		Uint8 color = _lstSoldiers->getColor();
 		if (s->getCraft() == c)
 		{
-			s->setCraft(0);
+			s->setCraft(nullptr);
 			_lstSoldiers->setCellText(row, 2, tr("STR_NONE_UC"));
 		}
 		else if (s->getCraft() && s->getCraft()->getStatus() == "STR_OUT")

@@ -173,7 +173,7 @@ OptionInfo *OptionsAdvancedState::getSetting(size_t sel)
 	}
 	else
 	{
-		return 0;
+		return nullptr;
 	}
 }
 

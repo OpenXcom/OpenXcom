@@ -37,7 +37,7 @@ struct TunnelData
 	{
 		if (replacements.find(type) == replacements.end())
 		{
-			return 0;
+			return nullptr;
 		}
 
 		return &replacements[type];

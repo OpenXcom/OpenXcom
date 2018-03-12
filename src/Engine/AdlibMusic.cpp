@@ -39,7 +39,7 @@ std::map<int, int> AdlibMusic::delayRates;
  * Initializes a new music track.
  * @param volume Music volume modifier (1.0 = 100%).
  */
-AdlibMusic::AdlibMusic(float volume) : Music(), _data(0), _size(0), _volume(volume)
+AdlibMusic::AdlibMusic(float volume) : Music(), _data(nullptr), _size(0), _volume(volume)
 {
 	rate = Options::audioSampleRate;
 	if (!opl[0])
@@ -72,12 +72,12 @@ AdlibMusic::~AdlibMusic()
 	{
 		stop();
 		OPLDestroy(opl[0]);
-		opl[0] = 0;
+		opl[0] = nullptr;
 	}
 	if (opl[1])
 	{
 		OPLDestroy(opl[1]);
-		opl[1] = 0;
+		opl[1] = nullptr;
 	}
 	delete[] _data;
 }

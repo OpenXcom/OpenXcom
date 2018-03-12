@@ -32,7 +32,7 @@ namespace OpenXcom
  * Initializes a transfer.
  * @param hours Hours in-transit.
  */
-Transfer::Transfer(int hours) : _hours(hours), _soldier(0), _craft(0), _itemQty(0), _scientists(0), _engineers(0), _delivered(false)
+Transfer::Transfer(int hours) : _hours(hours), _soldier(nullptr), _craft(nullptr), _itemQty(0), _scientists(0), _engineers(0), _delivered(false)
 {
 }
 
@@ -62,9 +62,9 @@ bool Transfer::load(const YAML::Node& node, Base *base, const Mod *mod, SavedGam
 	if (const YAML::Node &soldier = node["soldier"])
 	{
 		std::string type = soldier["type"].as<std::string>(mod->getSoldiersList().front());
-		if (mod->getSoldier(type) != 0)
+		if (mod->getSoldier(type) != nullptr)
 		{
-			_soldier = new Soldier(mod->getSoldier(type), 0);
+			_soldier = new Soldier(mod->getSoldier(type), nullptr);
 			_soldier->load(soldier, mod, save);
 		}
 		else
@@ -77,10 +77,10 @@ bool Transfer::load(const YAML::Node& node, Base *base, const Mod *mod, SavedGam
 	if (const YAML::Node &craft = node["craft"])
 	{
 		std::string type = craft["type"].as<std::string>();
-		if (mod->getCraft(type) != 0)
+		if (mod->getCraft(type) != nullptr)
 		{
 			_craft = new Craft(mod->getCraft(type), base);
-			_craft->load(craft, mod, 0);
+			_craft->load(craft, mod, nullptr);
 		}
 		else
 		{
@@ -93,7 +93,7 @@ bool Transfer::load(const YAML::Node& node, Base *base, const Mod *mod, SavedGam
 	if (const YAML::Node &item = node["itemId"])
 	{
 		_itemId = item.as<std::string>(_itemId);
-		if (mod->getItem(_itemId) == 0)
+		if (mod->getItem(_itemId) == nullptr)
 		{
 			Log(LOG_ERROR) << "Failed to load item " << _itemId;
 			delete this;
@@ -115,11 +115,11 @@ YAML::Node Transfer::save() const
 {
 	YAML::Node node;
 	node["hours"] = _hours;
-	if (_soldier != 0)
+	if (_soldier != nullptr)
 	{
 		node["soldier"] = _soldier->save();
 	}
-	else if (_craft != 0)
+	else if (_craft != nullptr)
 	{
 		node["craft"] = _craft->save();
 	}
@@ -215,11 +215,11 @@ void Transfer::setEngineers(int engineers)
  */
 std::wstring Transfer::getName(Language *lang) const
 {
-	if (_soldier != 0)
+	if (_soldier != nullptr)
 	{
 		return _soldier->getName();
 	}
-	else if (_craft != 0)
+	else if (_craft != nullptr)
 	{
 		return _craft->getName(lang);
 	}
@@ -271,11 +271,11 @@ int Transfer::getQuantity() const
  */
 TransferType Transfer::getType() const
 {
-	if (_soldier != 0)
+	if (_soldier != nullptr)
 	{
 		return TRANSFER_SOLDIER;
 	}
-	else if (_craft != 0)
+	else if (_craft != nullptr)
 	{
 		return TRANSFER_CRAFT;
 	}
@@ -300,11 +300,11 @@ void Transfer::advance(Base *base)
 	_hours--;
 	if (_hours <= 0)
 	{
-		if (_soldier != 0)
+		if (_soldier != nullptr)
 		{
 			base->getSoldiers()->push_back(_soldier);
 		}
-		else if (_craft != 0)
+		else if (_craft != nullptr)
 		{
 			base->getCrafts()->push_back(_craft);
 			_craft->setBase(base);

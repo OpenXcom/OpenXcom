@@ -28,7 +28,7 @@ namespace OpenXcom
 /**
  * Initializes a new sound effect.
  */
-Sound::Sound() : _sound(0)
+Sound::Sound() : _sound(nullptr)
 {
 }
 
@@ -51,7 +51,7 @@ void Sound::load(const std::string &filename)
 	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
 
 	_sound = Mix_LoadWAV(utf8.c_str());
-	if (_sound == 0)
+	if (_sound == nullptr)
 	{
 		std::string err = filename + ":" + Mix_GetError();
 		throw Exception(err);
@@ -67,7 +67,7 @@ void Sound::load(const void *data, unsigned int size)
 {
 	SDL_RWops *rw = SDL_RWFromConstMem(data, size);
 	_sound = Mix_LoadWAV_RW(rw, 1);
-	if (_sound == 0)
+	if (_sound == nullptr)
 	{
 		throw Exception(Mix_GetError());
 	}
@@ -79,7 +79,7 @@ void Sound::load(const void *data, unsigned int size)
  */
 void Sound::play(int channel, int angle, int distance) const
  {
-	if (!Options::mute && _sound != 0)
+	if (!Options::mute && _sound != nullptr)
  	{
 		int chan = Mix_PlayChannel(channel, _sound, 0);
 		if (chan == -1)
@@ -112,7 +112,7 @@ void Sound::stop()
  */
 void Sound::loop()
 {
-	if (!Options::mute && _sound != 0 && Mix_Playing(3) == 0)
+	if (!Options::mute && _sound != nullptr && Mix_Playing(3) == 0)
 	{
 		int chan = Mix_PlayChannel(3, _sound, -1);
 		if (chan == -1)

@@ -60,11 +60,11 @@ public:
 	/// Cleans up the state.
 	virtual ~State();
 	/// Set interface rules.
-	void setInterface(const std::string &s, bool alterPal = false, SavedBattleGame *battleGame = 0);
+	void setInterface(const std::string &s, bool alterPal = false, SavedBattleGame *battleGame = nullptr);
 	/// Adds a child element to the state.
 	void add(Surface *surface);
 	/// Adds a child element to the state.
-	void add(Surface *surface, const std::string &id, const std::string &category, Surface *parent = 0);
+	void add(Surface *surface, const std::string &id, const std::string &category, Surface *parent = nullptr);
 	/// Gets whether the state is a full-screen.
 	bool isScreen() const;
 	/// Toggles whether the state is a full-screen.

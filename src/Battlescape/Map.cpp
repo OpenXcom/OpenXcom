@@ -75,7 +75,7 @@ namespace OpenXcom
  * @param y Y position in pixels.
  * @param visibleMapHeight Current visible map height.
  */
-Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _projectile(0), _projectileInFOV(false), _explosionInFOV(false), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false), _smoothingEngaged(false), _flashScreen(false)
+Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(nullptr), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _projectile(nullptr), _projectileInFOV(false), _explosionInFOV(false), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false), _smoothingEngaged(false), _flashScreen(false)
 {
 	_iconHeight = _game->getMod()->getInterface("battlescape")->getElement("icons")->h;
 	_iconWidth = _game->getMod()->getInterface("battlescape")->getElement("icons")->w;
@@ -153,7 +153,7 @@ void Map::init()
 			_arrow->setPixel(x, y, pixels[x+(y*9)]);
 	_arrow->unlock();
 
-	_projectile = 0;
+	_projectile = nullptr;
 	if (_save->getDepth() == 0)
 	{
 		_projectileSet = _game->getMod()->getSurfaceSet("Projectiles");
@@ -169,8 +169,8 @@ void Map::init()
  */
 void Map::think()
 {
-	_scrollMouseTimer->think(0, this);
-	_scrollKeyTimer->think(0, this);
+	_scrollMouseTimer->think(nullptr, this);
+	_scrollKeyTimer->think(nullptr, this);
 }
 
 /**
@@ -214,7 +214,7 @@ void Map::draw()
 		}
 	}
 
-	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible()) || _unitDying || _save->getSelectedUnit() == 0 || _save->getDebugMode() || _projectileInFOV || _explosionInFOV)
+	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible()) || _unitDying || _save->getSelectedUnit() == nullptr || _save->getDebugMode() || _projectileInFOV || _explosionInFOV)
 	{
 		drawTerrain(this);
 	}
@@ -259,12 +259,12 @@ void Map::drawTerrain(Surface *surface)
 	Position mapPosition, screenPosition, bulletPositionScreen;
 	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
 	int dummy;
-	BattleUnit *unit = 0;
+	BattleUnit *unit = nullptr;
 	bool invalid;
 	int tileShade, wallShade, tileColor;
 	static const int arrowBob[8] = {0,1,2,1,0,1,2,1};
 	
-	NumberText *_numWaypid = 0;
+	NumberText *_numWaypid = nullptr;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
 	if (_projectile && _explosions.empty())
@@ -413,7 +413,7 @@ void Map::drawTerrain(Surface *surface)
 					else
 					{
 						tileShade = 16;
-						unit = 0;
+						unit = nullptr;
 					}
 
 					tileColor = tile->getMarkerColor();
@@ -466,7 +466,7 @@ void Map::drawTerrain(Surface *surface)
 						else
 						{
 							tileNorthShade = 16;
-							bu = 0;
+							bu = nullptr;
 						}
 
 						/*
@@ -584,7 +584,7 @@ void Map::drawTerrain(Surface *surface)
 								else
 								{
 									tileWestShade = 16;
-									westUnit = 0;
+									westUnit = nullptr;
 								}
 								tmpSurface = tileWest->getSprite(O_WESTWALL);
 								if (tmpSurface && bu != unit)
@@ -739,7 +739,7 @@ void Map::drawTerrain(Surface *surface)
 					// check if we got bullet && it is in Field Of View
 					if (_projectile && _projectileInFOV)
 					{
-						tmpSurface = 0;
+						tmpSurface = nullptr;
 						if (_projectile->getItem())
 						{
 							tmpSurface = _projectile->getSprite();
@@ -1356,7 +1356,7 @@ void Map::animate(bool redraw)
 		{
 			if ((*i)->getArmor()->getConstantAnimation())
 			{
-				(*i)->setCache(0);
+				(*i)->setCache(nullptr);
 				cacheUnit(*i);
 			}
 		}
@@ -1470,7 +1470,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 			{
 				for (int z = std::min(_camera->getViewLevel(), _save->getMapSizeZ() - 1); z != unit->getPosition().z; --z)
 				{
-					if (!_save->getTile(Position(unit->getPosition().x, unit->getPosition().y, z))->hasNoFloor(0))
+					if (!_save->getTile(Position(unit->getPosition().x, unit->getPosition().y, z))->hasNoFloor(nullptr))
 					{
 						unit->setFloorAbove(true);
 						break;

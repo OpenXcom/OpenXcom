@@ -106,7 +106,7 @@ void CraftPatrolState::btnOkClick(Action *)
 void CraftPatrolState::btnRedirectClick(Action *)
 {
 	_game->popState();
-	_game->pushState(new GeoscapeCraftState(_craft, _globe, 0));
+	_game->pushState(new GeoscapeCraftState(_craft, _globe, nullptr));
 }
 
 }

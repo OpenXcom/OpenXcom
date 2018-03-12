@@ -73,7 +73,7 @@ namespace OpenXcom
  * Initializes all the elements in the Debriefing screen.
  * @param game Pointer to the core game.
  */
-DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(true), _noContainment(false), _manageContainment(false), _destroyBase(false), _showSoldierStats(false)
+DebriefingState::DebriefingState() : _region(nullptr), _country(nullptr), _positiveScore(true), _noContainment(false), _manageContainment(false), _destroyBase(false), _showSoldierStats(false)
 {
 	_missionStatistics = new MissionStatistics();
 
@@ -553,7 +553,7 @@ DebriefingState::~DebriefingState()
 {
 	if (_game->isQuitting())
 	{
-		_game->getSavedGame()->setBattleGame(0);
+		_game->getSavedGame()->setBattleGame(nullptr);
 	}
 	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 	{
@@ -673,7 +673,7 @@ void DebriefingState::btnOkClick(Action *)
 			participants.push_back((*i)->getGeoscapeSoldier());
 		}
 	}
-	_game->getSavedGame()->setBattleGame(0);
+	_game->getSavedGame()->setBattleGame(nullptr);
 	_game->popState();
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
 	{
@@ -765,7 +765,7 @@ void ClearAlienBase::operator()(AlienMission *am) const
 {
 	if (am->getAlienBase() == _base)
 	{
-		am->setAlienBase(0);
+		am->setAlienBase(nullptr);
 	}
 }
 
@@ -796,9 +796,9 @@ void DebriefingState::prepareDebriefing()
 
 	bool aborted = battle->isAborted();
 	bool success = !aborted || battle->allObjectivesDestroyed();
-	Craft *craft = 0;
+	Craft *craft = nullptr;
 	std::vector<Craft*>::iterator craftIterator;
-	Base *base = 0;
+	Base *base = nullptr;
 	std::string target;
 
 	int playersInExitArea = 0; // if this stays 0 the craft is lost...
@@ -893,15 +893,15 @@ void DebriefingState::prepareDebriefing()
 				craft->setMissionComplete(true);
 				craft->setInBattlescape(false);
 			}
-			else if ((*j)->getDestination() != 0)
+			else if ((*j)->getDestination() != nullptr)
 			{
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
-				if (u != 0 && u->isInBattlescape())
+				if (u != nullptr && u->isInBattlescape())
 				{
 					(*j)->returnToBase();
 				}
 				MissionSite* ms = dynamic_cast<MissionSite*>((*j)->getDestination());
-				if (ms != 0 && ms->isInBattlescape())
+				if (ms != nullptr && ms->isInBattlescape())
 				{
 					(*j)->returnToBase();
 				}
@@ -1154,7 +1154,7 @@ void DebriefingState::prepareDebriefing()
 			}
 			else if (oldFaction == FACTION_PLAYER)
 			{
-				if (soldier != 0)
+				if (soldier != nullptr)
 				{
 					addStat("STR_XCOM_OPERATIVES_KILLED", 1, -value);
 					(*j)->updateGeoscapeStats(soldier);
@@ -1188,7 +1188,7 @@ void DebriefingState::prepareDebriefing()
 
 					recoverItems((*j)->getInventory(), base);
 
-					if (soldier != 0)
+					if (soldier != nullptr)
 					{
 						// calculate new statString
 						soldier->calcStatString(_game->getMod()->getStatStrings(), (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getMod()->getPsiRequirements())));
@@ -1200,7 +1200,7 @@ void DebriefingState::prepareDebriefing()
 						if ((*j)->getItem("STR_RIGHT_HAND"))
 						{
 							BattleItem *ammoItem = (*j)->getItem("STR_RIGHT_HAND")->getAmmoItem();
-							if (!tankRule->getCompatibleAmmo()->empty() && ammoItem != 0 && ammoItem->getAmmoQuantity() > 0)
+							if (!tankRule->getCompatibleAmmo()->empty() && ammoItem != nullptr && ammoItem->getAmmoQuantity() > 0)
 							{
 								int total = ammoItem->getAmmoQuantity();
 
@@ -1216,7 +1216,7 @@ void DebriefingState::prepareDebriefing()
 						{
 							RuleItem *secondaryRule = (*j)->getItem("STR_LEFT_HAND")->getRules();
 							BattleItem *ammoItem = (*j)->getItem("STR_LEFT_HAND")->getAmmoItem();
-							if (!secondaryRule->getCompatibleAmmo()->empty() && ammoItem != 0 && ammoItem->getAmmoQuantity() > 0)
+							if (!secondaryRule->getCompatibleAmmo()->empty() && ammoItem != nullptr && ammoItem->getAmmoQuantity() > 0)
 							{
 								int total = ammoItem->getAmmoQuantity();
 
@@ -1234,7 +1234,7 @@ void DebriefingState::prepareDebriefing()
 				{ // so game is aborted and unit is not on exit area
 					addStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", 1, -value);
 					playersSurvived--;
-					if (soldier != 0)
+					if (soldier != nullptr)
 					{
 						(*j)->updateGeoscapeStats(soldier);
 						(*j)->getStatistics()->MIA = true;
@@ -1272,14 +1272,14 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
-	if (craft != 0 && ((playersInExitArea == 0 && aborted) || (playersSurvived == 0)))
+	if (craft != nullptr && ((playersInExitArea == 0 && aborted) || (playersSurvived == 0)))
 	{
 		addStat("STR_XCOM_CRAFT_LOST", 1, -craft->getRules()->getScore());
 		// Since this is not a base defense mission, we can safely erase the craft,
 		// without worrying it's vehicles' destructor calling double (on base defense missions
 		// all vehicle object in the craft is also referenced by base->getVehicles() !!)
 		delete craft;
-		craft = 0; // To avoid a crash down there!!
+		craft = nullptr; // To avoid a crash down there!!
 		base->getCrafts()->erase(craftIterator);
 		_txtTitle->setText(tr("STR_CRAFT_IS_LOST"));
 		playersSurvived = 0; // assuming you aborted and left everyone behind
@@ -1467,7 +1467,7 @@ void DebriefingState::prepareDebriefing()
 				if ((*i) == base)
 				{
 					delete (*i);
-					base = 0; // To avoid similar (potential) problems as with the deleted craft
+					base = nullptr; // To avoid similar (potential) problems as with the deleted craft
 					_game->getSavedGame()->getBases()->erase(i);
 					break;
 				}
@@ -1728,7 +1728,7 @@ void DebriefingState::recoverAlien(BattleUnit *from, Base *base)
 	else
 	{
 		RuleResearch *research = _game->getMod()->getResearch(type);
-		if (research != 0 && !_game->getSavedGame()->isResearched(type))
+		if (research != nullptr && !_game->getSavedGame()->isResearched(type))
 		{
 			// more points if it's not researched
 			addStat("STR_LIVE_ALIENS_RECOVERED", 1, from->getValue() * 2);

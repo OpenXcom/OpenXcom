@@ -71,13 +71,13 @@ bool BattlescapeGame::_debugPlay = false;
 BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState) : _save(save), _parentState(parentState), _playerPanicHandled(true), _AIActionCounter(0), _AISecondMove(false), _playedAggroSound(false), _endTurnRequested(false), _endTurnProcessed(false)
 {
 	
-	_currentAction.actor = 0;
+	_currentAction.actor = nullptr;
 	_currentAction.targeting = false;
 	_currentAction.type = BA_NONE;
 
 	_debugPlay = false;
 
-	checkForCasualties(0, 0, true);
+	checkForCasualties(nullptr, nullptr, true);
 	cancelCurrentAction();
 }
 
@@ -115,12 +115,12 @@ void BattlescapeGame::think()
 				}
 				else
 				{
-					if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
+					if (_save->selectNextPlayerUnit(true, _AISecondMove) == nullptr)
 					{
 						if (!_save->getDebugMode())
 						{
 							_endTurnRequested = true;
-							statePushBack(0); // end AI turn
+							statePushBack(nullptr); // end AI turn
 						}
 						else
 						{
@@ -174,12 +174,12 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	}
 	if (_AIActionCounter >= 2 || !unit->reselectAllowed())
 	{
-		if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
+		if (_save->selectNextPlayerUnit(true, _AISecondMove) == nullptr)
 		{
 			if (!_save->getDebugMode())
 			{
 				_endTurnRequested = true;
-				statePushBack(0); // end AI turn
+				statePushBack(nullptr); // end AI turn
 			}
 			else
 			{
@@ -211,7 +211,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	if (!ai)
 	{
 		// for some reason the unit had no AI routine assigned..
-		unit->setAIModule(new AIModule(_save, unit, 0));
+		unit->setAIModule(new AIModule(_save, unit, nullptr));
 		ai = unit->getAIModule();
 	}
 	_AIActionCounter++;
@@ -243,7 +243,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		}
 	}
 
-	if (unit->getCharging() != 0)
+	if (unit->getCharging() != nullptr)
 	{
 		if (unit->getAggroSound() != -1 && !_playedAggroSound)
 		{
@@ -295,12 +295,12 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	{
 		_parentState->debug(L"Idle");
 		_AIActionCounter = 0;
-		if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
+		if (_save->selectNextPlayerUnit(true, _AISecondMove) == nullptr)
 		{
 			if (!_save->getDebugMode())
 			{
 				_endTurnRequested = true;
-				statePushBack(0); // end AI turn
+				statePushBack(nullptr); // end AI turn
 			}
 			else
 			{
@@ -383,7 +383,7 @@ void BattlescapeGame::endTurn()
 					p.z = _save->getTiles()[i]->getPosition().z*24 - _save->getTiles()[i]->getTerrainLevel();
 					statePushNext(new ExplosionBState(this, p, (*it), (*it)->getPreviousOwner()));
 					_save->removeItem((*it));
-					statePushBack(0);
+					statePushBack(nullptr);
 					return;
 				}
 				++it;
@@ -395,8 +395,8 @@ void BattlescapeGame::endTurn()
 	if (t)
 	{
 		Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
-		statePushNext(new ExplosionBState(this, p, 0, 0, t));
-		statePushBack(0);
+		statePushNext(new ExplosionBState(this, p, nullptr, nullptr, t));
+		statePushBack(nullptr);
 		return;
 	}
 	
@@ -419,8 +419,8 @@ void BattlescapeGame::endTurn()
 		if (t)
 		{
 			Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
-			statePushNext(new ExplosionBState(this, p, 0, 0, t));
-			statePushBack(0);
+			statePushNext(new ExplosionBState(this, p, nullptr, nullptr, t));
+			statePushBack(nullptr);
 			_endTurnProcessed = true;
 			return;
 		}
@@ -437,7 +437,7 @@ void BattlescapeGame::endTurn()
 		getMap()->setCursorType(CT_NONE);
 	}
 
-	checkForCasualties(0, 0, false, false);
+	checkForCasualties(nullptr, nullptr, false, false);
 
 	// turn off MCed alien lighting.
 	_save->getTileEngine()->calculateUnitLighting();
@@ -898,7 +898,7 @@ void BattlescapeGame::setupCursor()
  */
 bool BattlescapeGame::playableUnitSelected() const
 {
-	return _save->getSelectedUnit() != 0 && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode());
+	return _save->getSelectedUnit() != nullptr && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode());
 }
 
 /**
@@ -909,7 +909,7 @@ void BattlescapeGame::handleState()
 	if (!_states.empty())
 	{
 		// end turn request?
-		if (_states.front() == 0)
+		if (_states.front() == nullptr)
 		{
 			_states.pop_front();
 			endTurn();
@@ -961,7 +961,7 @@ void BattlescapeGame::statePushBack(BattleState *bs)
 	{
 		_states.push_front(bs);
 		// end turn request?
-		if (_states.front() == 0)
+		if (_states.front() == nullptr)
 		{
 			_states.pop_front();
 			endTurn();
@@ -1041,20 +1041,20 @@ void BattlescapeGame::popState()
 			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
 			{
 				// AI does three things per unit, before switching to the next, or it got killed before doing the second thing
-				if (_AIActionCounter > 2 || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
+				if (_AIActionCounter > 2 || _save->getSelectedUnit() == nullptr || _save->getSelectedUnit()->isOut())
 				{
 					if (_save->getSelectedUnit())
 					{
-						_save->getSelectedUnit()->setCache(0);
+						_save->getSelectedUnit()->setCache(nullptr);
 						getMap()->cacheUnit(_save->getSelectedUnit());
 					}
 					_AIActionCounter = 0;
-					if (_states.empty() && _save->selectNextPlayerUnit(true) == 0)
+					if (_states.empty() && _save->selectNextPlayerUnit(true) == nullptr)
 					{
 						if (!_save->getDebugMode())
 						{
 							_endTurnRequested = true;
-							statePushBack(0); // end AI turn
+							statePushBack(nullptr); // end AI turn
 						}
 						else
 						{
@@ -1079,11 +1079,11 @@ void BattlescapeGame::popState()
 	if (!_states.empty())
 	{
 		// end turn request?
-		if (_states.front() == 0)
+		if (_states.front() == nullptr)
 		{
 			while (!_states.empty())
 			{
-				if (_states.front() == 0)
+				if (_states.front() == nullptr)
 					_states.pop_front();
 				else
 					break;
@@ -1095,7 +1095,7 @@ void BattlescapeGame::popState()
 			}
 			else
 			{
-				_states.push_back(0);
+				_states.push_back(nullptr);
 			}
 		}
 		// init the next state in queue
@@ -1103,13 +1103,13 @@ void BattlescapeGame::popState()
 	}
 
 	// the currently selected unit died or became unconscious or disappeared inexplicably
-	if (_save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
+	if (_save->getSelectedUnit() == nullptr || _save->getSelectedUnit()->isOut())
 	{
 		cancelCurrentAction();
 		getMap()->setCursorType(CT_NORMAL, 1);
 		_parentState->getGame()->getCursor()->setVisible(true);
 		if (_save->getSide() == FACTION_PLAYER)
-			_save->setSelectedUnit(0);
+			_save->setSelectedUnit(nullptr);
 		else
 			_save->selectNextPlayerUnit(true, true);
 	}
@@ -1127,7 +1127,7 @@ bool BattlescapeGame::noActionsPending(BattleUnit *bu)
 
 	for (std::list<BattleState*>::iterator i = _states.begin(); i != _states.end(); ++i)
 	{
-		if ((*i) != 0 && (*i)->getAction().actor == bu)
+		if ((*i) != nullptr && (*i)->getAction().actor == bu)
 			return false;
 	}
 
@@ -1291,7 +1291,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 		{
 			dropItem(unit->getPosition(), item, false, true);
 		}
-		unit->setCache(0);
+		unit->setCache(nullptr);
 		// let's try a few times to get a tile to run to.
 		for (int i= 0; i < 20; i++)
 		{
@@ -1367,7 +1367,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 			}
 		}
 	}
-	else if (!_states.empty() && _states.front() != 0)
+	else if (!_states.empty() && _states.front() != nullptr)
 	{
 		_states.front()->cancel();
 		return true;
@@ -1619,7 +1619,7 @@ void BattlescapeGame::requestEndTurn()
 	if (!_endTurnRequested)
 	{
 		_endTurnRequested = true;
-		statePushBack(0);
+		statePushBack(nullptr);
 	}
 }
 
@@ -1645,7 +1645,7 @@ void BattlescapeGame::dropItem(Position position, BattleItem *item, bool newItem
 	const Position& p = position;
 
 	// don't spawn anything outside of bounds
-	if (_save->getTile(p) == 0)
+	if (_save->getTile(p) == nullptr)
 		return;
 
 	// don't ever drop fixed items
@@ -1670,11 +1670,11 @@ void BattlescapeGame::dropItem(Position position, BattleItem *item, bool newItem
 
 	if (removeItem)
 	{
-		item->moveToOwner(0);
+		item->moveToOwner(nullptr);
 	}
 	else if (item->getRules()->getBattleType() != BT_GRENADE && item->getRules()->getBattleType() != BT_PROXIMITYGRENADE)
 	{
-		item->setOwner(0);
+		item->setOwner(nullptr);
 	}
 
 	getTileEngine()->applyGravity(_save->getTile(p));
@@ -1705,15 +1705,15 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit)
 	for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
 	{
 		dropItem(unit->getPosition(), (*i));
-		(*i)->setOwner(0);
+		(*i)->setOwner(nullptr);
 	}
 
 	unit->getInventory()->clear();
 
 	// remove unit-tile link
-	unit->setTile(0);
+	unit->setTile(nullptr);
 
-	getSave()->getTile(unit->getPosition())->setUnit(0);
+	getSave()->getTile(unit->getPosition())->setUnit(nullptr);
 	Unit *newRule = getMod()->getUnit(newType, true);
 	std::string newArmor = newRule->getArmor();
 	std::string terroristWeapon = newRule->getRace().substr(4);
@@ -1730,11 +1730,11 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit)
 	getSave()->getTile(unit->getPosition())->setUnit(newUnit, _save->getTile(unit->getPosition() + Position(0,0,-1)));
 	newUnit->setPosition(unit->getPosition());
 	newUnit->setDirection(unit->getDirection());
-	newUnit->setCache(0);
+	newUnit->setCache(nullptr);
 	newUnit->setTimeUnits(0);
 	newUnit->setSpecialWeapon(getSave(), getMod());
 	getSave()->getUnits()->push_back(newUnit);
-	newUnit->setAIModule(new AIModule(getSave(), newUnit, 0));
+	newUnit->setAIModule(new AIModule(getSave(), newUnit, nullptr));
 	if (newItem)
 	{
 		BattleItem *bi = new BattleItem(newItem, getSave()->getCurrentItemId());
@@ -1853,7 +1853,7 @@ BattleItem *BattlescapeGame::surveyItems(BattleAction *action)
 		}
 	}
 
-	BattleItem *targetItem = 0;
+	BattleItem *targetItem = nullptr;
 	int maxWorth = 0;
 
 	// now select the most suitable candidate depending on attractiveness and distance
@@ -2033,7 +2033,7 @@ bool BattlescapeGame::takeItem(BattleItem* item, BattleAction *action)
 	{
 	case BT_AMMO:
 		// find equipped weapons that can be loaded with this ammo
-		if (action->actor->getItem("STR_RIGHT_HAND") && action->actor->getItem("STR_RIGHT_HAND")->getAmmoItem() == 0)
+		if (action->actor->getItem("STR_RIGHT_HAND") && action->actor->getItem("STR_RIGHT_HAND")->getAmmoItem() == nullptr)
 		{
 			if (action->actor->getItem("STR_RIGHT_HAND")->setAmmoItem(item) == 0)
 			{
@@ -2217,7 +2217,7 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit *unit)
 								p.z = t->getPosition().z*24 + t->getTerrainLevel();
 								statePushNext(new ExplosionBState(this, p, (*i), (*i)->getPreviousOwner()));
 								getSave()->removeItem(*i);
-								unit->setCache(0);
+								unit->setCache(nullptr);
 								getMap()->cacheUnit(unit);
 								return true;
 							}
@@ -2278,7 +2278,7 @@ void BattlescapeGame::autoEndBattle()
 		}
 		if (end)
 		{
-			_save->setSelectedUnit(0);
+			_save->setSelectedUnit(nullptr);
 			cancelCurrentAction(true);
 			requestEndTurn();
 		}

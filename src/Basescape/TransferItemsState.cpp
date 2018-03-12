@@ -141,7 +141,7 @@ TransferItemsState::TransferItemsState(Base *baseFrom, Base *baseTo) : _baseFrom
 
 	for (std::vector<Soldier*>::iterator i = _baseFrom->getSoldiers()->begin(); i != _baseFrom->getSoldiers()->end(); ++i)
 	{
-		if ((*i)->getCraft() == 0)
+		if ((*i)->getCraft() == nullptr)
 		{
 			TransferRow row = { TRANSFER_SOLDIER, (*i), (*i)->getName(true), (int)(5 * _distance), 1, 0, 0 };
 			_items.push_back(row);
@@ -167,7 +167,7 @@ TransferItemsState::TransferItemsState(Base *baseFrom, Base *baseTo) : _baseFrom
 	}
 	if (_baseFrom->getAvailableScientists() > 0)
 	{
-		TransferRow row = { TRANSFER_SCIENTIST, 0, tr("STR_SCIENTIST"), (int)(5 * _distance), _baseFrom->getAvailableScientists(), _baseTo->getAvailableScientists(), 0 };
+		TransferRow row = { TRANSFER_SCIENTIST, nullptr, tr("STR_SCIENTIST"), (int)(5 * _distance), _baseFrom->getAvailableScientists(), _baseTo->getAvailableScientists(), 0 };
 		_items.push_back(row);
 		std::string cat = getCategory(_items.size() - 1);
 		if (std::find(_cats.begin(), _cats.end(), cat) == _cats.end())
@@ -177,7 +177,7 @@ TransferItemsState::TransferItemsState(Base *baseFrom, Base *baseTo) : _baseFrom
 	}
 	if (_baseFrom->getAvailableEngineers() > 0)
 	{
-		TransferRow row = { TRANSFER_ENGINEER, 0, tr("STR_ENGINEER"), (int)(5 * _distance), _baseFrom->getAvailableEngineers(), _baseTo->getAvailableEngineers(), 0 };
+		TransferRow row = { TRANSFER_ENGINEER, nullptr, tr("STR_ENGINEER"), (int)(5 * _distance), _baseFrom->getAvailableEngineers(), _baseTo->getAvailableEngineers(), 0 };
 		_items.push_back(row);
 		std::string cat = getCategory(_items.size() - 1);
 		if (std::find(_cats.begin(), _cats.end(), cat) == _cats.end())
@@ -229,8 +229,8 @@ void TransferItemsState::think()
 {
 	State::think();
 
-	_timerInc->think(this, 0);
-	_timerDec->think(this, 0);
+	_timerInc->think(this, nullptr);
+	_timerDec->think(this, nullptr);
 }
 
 /**
@@ -240,7 +240,7 @@ void TransferItemsState::think()
  */
 std::string TransferItemsState::getCategory(int sel) const
 {
-	RuleItem *rule = 0;
+	RuleItem *rule = nullptr;
 	switch (_items[sel].type)
 	{
 	case TRANSFER_SOLDIER:
@@ -334,8 +334,8 @@ void TransferItemsState::completeTransfer()
 	{
 		if (i->amount > 0)
 		{
-			Transfer *t = 0;
-			Craft *craft = 0;
+			Transfer *t = nullptr;
+			Craft *craft = nullptr;
 			switch (i->type)
 			{
 			case TRANSFER_SOLDIER:
@@ -410,7 +410,7 @@ void TransferItemsState::completeTransfer()
 						{
 							if ((*f)->getCraft() == *c)
 							{
-								(*f)->setCraft(0);
+								(*f)->setCraft(nullptr);
 								break;
 							}
 						}
@@ -576,8 +576,8 @@ void TransferItemsState::increaseByValue(int change)
 {
 	if (0 >= change || getRow().qtySrc <= getRow().amount) return;
 	std::wstring errorMessage;
-	RuleItem *selItem = 0;
-	Craft *craft = 0;
+	RuleItem *selItem = nullptr;
+	Craft *craft = nullptr;
 
 	switch (getRow().type)
 	{
@@ -690,7 +690,7 @@ void TransferItemsState::decrease()
 void TransferItemsState::decreaseByValue(int change)
 {
 	if (0 >= change || 0 >= getRow().amount) return;
-	Craft *craft = 0;
+	Craft *craft = nullptr;
 	change = std::min(getRow().amount, change);
 	
 	switch (getRow().type)
@@ -719,7 +719,7 @@ void TransferItemsState::decreaseByValue(int change)
 		break;
 	}
 	getRow().amount -= change;
-	if (!Options::canTransferCraftsWhileAirborne || 0 == craft || craft->getStatus() != "STR_OUT")
+	if (!Options::canTransferCraftsWhileAirborne || nullptr == craft || craft->getStatus() != "STR_OUT")
 		_total -= getRow().cost * change;
 	updateItemStrings();
 }

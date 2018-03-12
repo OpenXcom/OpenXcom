@@ -130,7 +130,7 @@ public:
 	/// Gets the floor object footstep sound.
 	int getFootstepSound(Tile *tileBelow) const;
 	/// Open a door, returns the ID, 0(normal), 1(ufo) or -1 if no door opened.
-	int openDoor(int part, BattleUnit *Unit = 0, BattleActionType reserve = BA_NONE);
+	int openDoor(int part, BattleUnit *Unit = nullptr, BattleActionType reserve = BA_NONE);
 
 	/**
 	 * Check if the ufo door is open or opening. Used for visibility/light blocking checks.
@@ -170,7 +170,7 @@ public:
 	/// Get object sprites.
 	Surface *getSprite(int part) const;
 	/// Set a unit on this tile.
-	void setUnit(BattleUnit *unit, Tile *tileBelow = 0);
+	void setUnit(BattleUnit *unit, Tile *tileBelow = nullptr);
 	/**
 	 * Get the (alive) unit on this tile.
 	 * @return BattleUnit.

@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param parent Pointer to the Battlescape.
  * @param action Pointer to an action.
  */
-UnitWalkBState::UnitWalkBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _pf(0), _terrain(0), _falling(false), _beforeFirstStep(false), _numUnitsSpotted(0), _preMovementCost(0)
+UnitWalkBState::UnitWalkBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(nullptr), _pf(nullptr), _terrain(nullptr), _falling(false), _beforeFirstStep(false), _numUnitsSpotted(0), _preMovementCost(0)
 {
 
 }
@@ -86,7 +86,7 @@ void UnitWalkBState::think()
 	{
 		if (_parent->kneel(_unit))
 		{
-			_unit->setCache(0);
+			_unit->setCache(nullptr);
 			_terrain->calculateFOV(_unit);
 			_parent->getMap()->cacheUnit(_unit);
 			return;
@@ -110,7 +110,7 @@ void UnitWalkBState::think()
 
 	if (_unit->getStatus() == STATUS_WALKING || _unit->getStatus() == STATUS_FLYING)
 	{
-		if ((_parent->getSave()->getTile(_unit->getDestination())->getUnit() == 0) || // next tile must be not occupied
+		if ((_parent->getSave()->getTile(_unit->getDestination())->getUnit() == nullptr) || // next tile must be not occupied
 			(_parent->getSave()->getTile(_unit->getDestination())->getUnit() == _unit))
 		{
 			bool onScreenBoundary = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true, size, true));
@@ -134,7 +134,7 @@ void UnitWalkBState::think()
 					Tile *otherTileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1));
 					if (!_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))->hasNoFloor(otherTileBelow) || _unit->getMovementType() == MT_FLY)
 						largeCheck = false;
-					_parent->getSave()->getTile(_unit->getLastPosition() + Position(x,y,0))->setUnit(0);
+					_parent->getSave()->getTile(_unit->getLastPosition() + Position(x,y,0))->setUnit(nullptr);
 				}
 			}
 			for (int x = size; x >= 0; x--)
@@ -207,7 +207,7 @@ void UnitWalkBState::think()
 			}
 			if (unitSpotted)
 			{
-				_unit->setCache(0);
+				_unit->setCache(nullptr);
 				_parent->getMap()->cacheUnit(_unit);
 				_pf->abortPath();
 				_parent->popState();
@@ -219,7 +219,7 @@ void UnitWalkBState::think()
 				if (_terrain->checkReactionFire(_unit))
 				{
 					// unit got fired upon - stop walking
-					_unit->setCache(0);
+					_unit->setCache(nullptr);
 					_parent->getMap()->cacheUnit(_unit);
 					_pf->abortPath();
 					_parent->popState();
@@ -249,7 +249,7 @@ void UnitWalkBState::think()
 	if (_unit->getStatus() == STATUS_STANDING || _unit->getStatus() == STATUS_PANICKING)
 	{
 		// check if we did spot new units
-		if (unitSpotted && !_action.desperate && _unit->getCharging() == 0 && !_falling)
+		if (unitSpotted && !_action.desperate && _unit->getCharging() == nullptr && !_falling)
 		{
 			if (Options::traceAI) { Log(LOG_INFO) << "Uh-oh! Company!"; }
 			_unit->setHiding(false); // clearly we're not hidden now
@@ -280,7 +280,7 @@ void UnitWalkBState::think()
 			}
 
 			Position destination;
-			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
+			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, nullptr, false); // gets tu cost, but also gets the destination position.
 			if (_unit->getFaction() != FACTION_PLAYER &&
 				_unit->getSpecialAbility() < SPECAB_BURNFLOOR &&
 				_parent->getSave()->getTile(destination) &&
@@ -309,7 +309,7 @@ void UnitWalkBState::think()
 					_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 				}
 				_pf->abortPath();
-				_unit->setCache(0);
+				_unit->setCache(nullptr);
 				_parent->getMap()->cacheUnit(_unit);
 				_parent->popState();
 				return;
@@ -322,7 +322,7 @@ void UnitWalkBState::think()
 					_action.result = "STR_NOT_ENOUGH_ENERGY";
 				}
 				_pf->abortPath();
-				_unit->setCache(0);
+				_unit->setCache(nullptr);
 				_parent->getMap()->cacheUnit(_unit);
 				_parent->popState();
 				return;
@@ -331,7 +331,7 @@ void UnitWalkBState::think()
 			if (_parent->getPanicHandled() && _parent->checkReservedTU(_unit, tu) == false)
 			{
 				_pf->abortPath();
-				_unit->setCache(0);
+				_unit->setCache(nullptr);
 				_parent->getMap()->cacheUnit(_unit);
 				return;
 			}
@@ -341,7 +341,7 @@ void UnitWalkBState::think()
 			if (dir != _unit->getDirection() && dir < Pathfinding::DIR_UP && !_pf->getStrafeMove())
 			{
 				_unit->lookAt(dir);
-				_unit->setCache(0);
+				_unit->setCache(nullptr);
 				_parent->getMap()->cacheUnit(_unit);
 				return;
 			}
@@ -369,7 +369,7 @@ void UnitWalkBState::think()
 				for (int y = size; y >= 0; --y)
 				{
 					BattleUnit* unitInMyWay = _parent->getSave()->getTile(destination + Position(x,y,0))->getUnit();
-					BattleUnit* unitBelowMyWay = 0;
+					BattleUnit* unitBelowMyWay = nullptr;
 					Tile* belowDest = _parent->getSave()->getTile(destination + Position(x,y,-1));
 					if (belowDest)
 					{
@@ -384,7 +384,7 @@ void UnitWalkBState::think()
 					{
 						_action.TU = 0;
 						_pf->abortPath();
-						_unit->setCache(0);
+						_unit->setCache(nullptr);
 						_parent->getMap()->cacheUnit(_unit);
 						_parent->popState();
 						return;
@@ -448,7 +448,7 @@ void UnitWalkBState::think()
 		unitSpotted = (!_falling && !_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 		// make sure the unit sprites are up to date
-		_unit->setCache(0);
+		_unit->setCache(nullptr);
 		_parent->getMap()->cacheUnit(_unit);
 
 		if (unitSpotted && !_action.desperate && !_unit->getCharging() && !_falling)
@@ -461,7 +461,7 @@ void UnitWalkBState::think()
 			_unit->setHiding(false); // not hidden, are we...
 			_pf->abortPath();
 			_unit->abortTurn(); //revert to a standing state.
-			_unit->setCache(0);
+			_unit->setCache(nullptr);
 			_parent->getMap()->cacheUnit(_unit);
 			_parent->popState();
 		}
@@ -490,7 +490,7 @@ void UnitWalkBState::postPathProcedures()
 		{
 			_unit->dontReselect();
 		}
-		if (_unit->getCharging() != 0)
+		if (_unit->getCharging() != nullptr)
 		{
 			dir = _parent->getTileEngine()->getDirectionTo(_unit->getPosition(), _unit->getCharging()->getPosition());
 			if (_parent->getTileEngine()->validMeleeRange(_unit, _action.actor->getCharging(), dir))
@@ -502,7 +502,7 @@ void UnitWalkBState::postPathProcedures()
 				action.type = BA_HIT;
 				action.TU = _unit->getActionTUs(action.type, action.weapon);
 				action.targeting = true;
-				_unit->setCharging(0);
+				_unit->setCharging(nullptr);
 				_parent->statePushBack(new MeleeAttackBState(_parent, action));
 			}
 		}
@@ -532,7 +532,7 @@ void UnitWalkBState::postPathProcedures()
 		_unit->setTimeUnits(0);
 	}
 
-	_unit->setCache(0);
+	_unit->setCache(nullptr);
 	_terrain->calculateUnitLighting();
 	_terrain->calculateFOV(_unit);
 	_parent->getMap()->cacheUnit(_unit);

@@ -131,7 +131,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 	bgen.setWorldTexture(_texture);
 	bgen.setWorldShade(_shade);
 	bgen.setCraft(_craft);
-	if (u != 0)
+	if (u != nullptr)
 	{
 		if (u->getStatus() == Ufo::CRASHED)
 			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
@@ -140,18 +140,18 @@ void ConfirmLandingState::btnYesClick(Action *)
 		bgen.setUfo(u);
 		bgen.setAlienRace(u->getAlienRace());
 	}
-	else if (m != 0)
+	else if (m != nullptr)
 	{
 		bgame->setMissionType(m->getDeployment()->getType());
 		bgen.setMissionSite(m);
 		bgen.setAlienRace(m->getAlienRace());
 	}
-	else if (b != 0)
+	else if (b != nullptr)
 	{
 		bgame->setMissionType(b->getDeployment()->getType());
 		bgen.setAlienBase(b);
 		bgen.setAlienRace(b->getAlienRace());
-		bgen.setWorldTexture(0);
+		bgen.setWorldTexture(nullptr);
 	}
 	else
 	{

@@ -129,7 +129,7 @@ void SoldiersState::init()
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		_lstSoldiers->addRow(3, (*i)->getName(true).c_str(), tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
-		if ((*i)->getCraft() == 0)
+		if ((*i)->getCraft() == nullptr)
 		{
 			_lstSoldiers->setRowColor(row, _lstSoldiers->getSecondaryColor());
 		}

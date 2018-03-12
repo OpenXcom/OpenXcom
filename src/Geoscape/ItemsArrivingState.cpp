@@ -47,7 +47,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param state Pointer to the Geoscape state.
  */
-ItemsArrivingState::ItemsArrivingState(GeoscapeState *state) : _state(state), _base(0)
+ItemsArrivingState::ItemsArrivingState(GeoscapeState *state) : _state(state), _base(nullptr)
 {
 	_screen = false;
 

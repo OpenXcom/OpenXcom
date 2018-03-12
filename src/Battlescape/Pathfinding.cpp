@@ -38,7 +38,7 @@ int Pathfinding::green = 4;
  * Sets up a Pathfinding.
  * @param save pointer to SavedBattleGame object.
  */
-Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _unit(0), _pathPreviewed(false), _strafeMove(false), _totalTUCost(0), _modifierUsed(false), _movementType(MT_WALK)
+Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _unit(nullptr), _pathPreviewed(false), _strafeMove(false), _totalTUCost(0), _modifierUsed(false), _movementType(MT_WALK)
 {
 	_size = _save->getMapSizeXYZ();
 	// Initialize one node per tile
@@ -88,7 +88,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 
 	Position startPosition = unit->getPosition();
 	_movementType = unit->getMovementType();
-	if (target != 0 && maxTUCost == -1)  // pathfinding for missile
+	if (target != nullptr && maxTUCost == -1)  // pathfinding for missile
 	{
 		_movementType = MT_FLY;
 		maxTUCost = 10000;
@@ -197,7 +197,7 @@ bool Pathfinding::aStarPath(Position startPosition, Position endPosition, Battle
 
 	// start position is the first one in our "open" list
 	PathfindingNode *start = getNode(startPosition);
-	start->connect(0, 0, 0, endPosition);
+	start->connect(0, nullptr, 0, endPosition);
 	PathfindingOpenSet openList;
 	openList.push(start);
 	bool missile = (target && maxTUCost == 10000);
@@ -280,7 +280,7 @@ int Pathfinding::getTUCost(Position startPosition, int direction, Position *endP
 			Tile *aboveDestination = _save->getTile(*endPosition + offset + Position(0,0,1));
 
 			// this means the destination is probably outside the map
-			if (startTile == 0 || destinationTile == 0)
+			if (startTile == nullptr || destinationTile == nullptr)
 				return 255;
 			if (!x && !y && _movementType != MT_FLY && canFallDown(startTile, size+1))
 			{
@@ -414,7 +414,7 @@ int Pathfinding::getTUCost(Position startPosition, int direction, Position *endP
 			}
 
 			// if we don't want to fall down and there is no floor, we can't know the TUs so it's default to 4
-			if (direction < DIR_UP && !fellDown && destinationTile->hasNoFloor(0))
+			if (direction < DIR_UP && !fellDown && destinationTile->hasNoFloor(nullptr))
 			{
 				cost = 4;
 			}
@@ -583,7 +583,7 @@ void Pathfinding::abortPath()
  */
 bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarget, int bigWallExclusion) const
 {
-	if (tile == 0) return true; // probably outside the map here
+	if (tile == nullptr) return true; // probably outside the map here
 
 	if (part == O_BIGWALL)
 	{
@@ -624,7 +624,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	if (part == O_FLOOR)
 	{
 		BattleUnit *unit = tile->getUnit();
-		if (unit != 0)
+		if (unit != nullptr)
 		{
 			if (unit == _unit || unit == missileTarget || unit->isOut()) return false;
 			if (missileTarget && unit != missileTarget && unit->getFaction() == FACTION_HOSTILE) 
@@ -637,7 +637,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 					std::find(_unit->getUnitsSpottedThisTurn().begin(), _unit->getUnitsSpottedThisTurn().end(), unit) != _unit->getUnitsSpottedThisTurn().end()) return true;
 			}
 		}
-		else if (tile->hasNoFloor(0) && _movementType != MT_FLY) // this whole section is devoted to making large units not take part in any kind of falling behaviour
+		else if (tile->hasNoFloor(nullptr) && _movementType != MT_FLY) // this whole section is devoted to making large units not take part in any kind of falling behaviour
 		{
 			Position pos = tile->getPosition();
 			while (pos.z >= 0)
@@ -645,7 +645,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 				Tile *t = _save->getTile(pos);
 				BattleUnit *unit = t->getUnit();
 
-				if (unit != 0 && unit != _unit)
+				if (unit != nullptr && unit != _unit)
 				{
 					// don't let large units fall on other units
 					if (_unit && _unit->getArmor()->getSize() > 1)
@@ -659,7 +659,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 					}
 				}
 				// not gonna fall any further, so we can stop checking.
-				if (!t->hasNoFloor(0))
+				if (!t->hasNoFloor(nullptr))
 				{
 					break;
 				}
@@ -668,7 +668,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 		}
 	}
 	// missiles can't pathfind through closed doors.
-	if (missileTarget != 0 && tile->getMapData(part) &&
+	if (missileTarget != nullptr && tile->getMapData(part) &&
 		(tile->getMapData(part)->isDoor() ||
 		(tile->getMapData(part)->isUFODoor() &&
 		!tile->isUfoDoorOpen(part))))
@@ -943,7 +943,7 @@ bool Pathfinding::previewPath(bool bRemove)
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
 	{
 		int dir = *i;
-		int tu = getTUCost(pos, dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
+		int tu = getTUCost(pos, dir, &destination, _unit, nullptr, false); // gets tu cost, but also gets the destination position.
 		int energyUse = tu;
 		if (dir >= Pathfinding::DIR_UP)
 		{
@@ -1116,7 +1116,7 @@ bool Pathfinding::bresenhamPath(Position origin, Position target, BattleUnit *ta
 			{
 				return false;
 			}
-			if (targetUnit == 0 && tuCost != 255)
+			if (targetUnit == nullptr && tuCost != 255)
 			{
 				lastTUCost = tuCost;
 				_totalTUCost += tuCost;
@@ -1161,7 +1161,7 @@ std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 		it->reset();
 	}
 	PathfindingNode *startNode = getNode(start);
-	startNode->connect(0, 0, 0);
+	startNode->connect(0, nullptr, 0);
 	PathfindingOpenSet unvisited;
 	unvisited.push(startNode);
 	std::vector<PathfindingNode*> reachable;
@@ -1174,7 +1174,7 @@ std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 		for (int direction = 0; direction < 10; direction++)
 		{
 			Position nextPos;
-			int tuCost = getTUCost(currentPos, direction, &nextPos, unit, 0, false);
+			int tuCost = getTUCost(currentPos, direction, &nextPos, unit, nullptr, false);
 			if (tuCost == 255) // Skip unreachable / blocked
 				continue;
 			if (currentNode->getTUCost(false) + tuCost > tuMax ||
@@ -1229,7 +1229,7 @@ bool Pathfinding::isPathPreviewed() const
 void Pathfinding::setUnit(BattleUnit* unit)
 {
 	_unit = unit;
-	if (unit != 0)
+	if (unit != nullptr)
 	{
 		_movementType = unit->getMovementType();
 	}

@@ -63,13 +63,13 @@ void CutsceneState::init()
 		}
 		else
 		{
-			_game->setSavedGame(0);
+			_game->setSavedGame(nullptr);
 			_game->setState(new GoToMainMenuState);
 		}
 	}
 
 	const RuleVideo *videoRule = _game->getMod()->getVideo(_cutsceneId);
-	if (videoRule == 0)
+	if (videoRule == nullptr)
 	{
 		return;
 	}

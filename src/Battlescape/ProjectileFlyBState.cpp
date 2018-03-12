@@ -44,11 +44,11 @@ namespace OpenXcom
 /**
  * Sets up an ProjectileFlyBState.
  */
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, Position origin) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(origin), _originVoxel(-1,-1,-1), _projectileImpact(0), _initialized(false), _targetFloor(false)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, Position origin) : BattleState(parent, action), _unit(nullptr), _ammo(nullptr), _projectileItem(nullptr), _origin(origin), _originVoxel(-1,-1,-1), _projectileImpact(0), _initialized(false), _targetFloor(false)
 {
 }
 
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(action.actor->getPosition()), _originVoxel(-1,-1,-1), _projectileImpact(0), _initialized(false), _targetFloor(false)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(nullptr), _ammo(nullptr), _projectileItem(nullptr), _origin(action.actor->getPosition()), _originVoxel(-1,-1,-1), _projectileImpact(0), _initialized(false), _targetFloor(false)
 {
 }
 
@@ -70,7 +70,7 @@ void ProjectileFlyBState::init()
 	_initialized = true;
 
 	BattleItem *weapon = _action.weapon;
-	_projectileItem = 0;
+	_projectileItem = nullptr;
 
 	if (!weapon) // can't shoot without weapon
 	{
@@ -107,7 +107,7 @@ void ProjectileFlyBState::init()
 	if (_unit->getFaction() != _parent->getSave()->getSide())
 	{
 		// no ammo or target is dead: give the time units back and cancel the shot.
-		if (_ammo == 0
+		if (_ammo == nullptr
 			|| !_parent->getSave()->getTile(_action.target)->getUnit()
 			|| _parent->getSave()->getTile(_action.target)->getUnit()->isOut()
 			|| _parent->getSave()->getTile(_action.target)->getUnit() != _parent->getSave()->getSelectedUnit())
@@ -131,7 +131,7 @@ void ProjectileFlyBState::init()
 	case BA_AIMEDSHOT:
 	case BA_AUTOSHOT:
 	case BA_LAUNCH:
-		if (_ammo == 0)
+		if (_ammo == nullptr)
 		{
 			_action.result = "STR_NO_AMMUNITION_LOADED";
 			_parent->popState();
@@ -169,7 +169,7 @@ void ProjectileFlyBState::init()
 		}
 		break;
 	case BA_THROW:
-		if (!validThrowRange(&_action, _parent->getTileEngine()->getOriginVoxel(_action, 0), _parent->getSave()->getTile(_action.target)))
+		if (!validThrowRange(&_action, _parent->getTileEngine()->getOriginVoxel(_action, nullptr), _parent->getSave()->getTile(_action.target)))
 		{
 			// out of range
 			_action.result = "STR_OUT_OF_RANGE";
@@ -233,28 +233,28 @@ void ProjectileFlyBState::init()
 				}
 			}
 		}
-		else if (targetTile->getMapData(O_OBJECT) != 0)
+		else if (targetTile->getMapData(O_OBJECT) != nullptr)
 		{
 			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, O_OBJECT, &_targetVoxel, _unit))
 			{
 				_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
 			}
 		}
-		else if (targetTile->getMapData(O_NORTHWALL) != 0)
+		else if (targetTile->getMapData(O_NORTHWALL) != nullptr)
 		{
 			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, O_NORTHWALL, &_targetVoxel, _unit))
 			{
 				_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16, _action.target.z*24 + 9);
 			}
 		}
-		else if (targetTile->getMapData(O_WESTWALL) != 0)
+		else if (targetTile->getMapData(O_WESTWALL) != nullptr)
 		{
 			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, O_WESTWALL, &_targetVoxel, _unit))
 			{
 				_targetVoxel = Position(_action.target.x*16, _action.target.y*16 + 8, _action.target.z*24 + 9);
 			}
 		}
-		else if (targetTile->getMapData(O_FLOOR) != 0)
+		else if (targetTile->getMapData(O_FLOOR) != nullptr)
 		{
 			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, O_FLOOR, &_targetVoxel, _unit))
 			{
@@ -311,8 +311,8 @@ bool ProjectileFlyBState::createNewProjectile()
 			{
 				_projectileItem->setFuseTimer(0);
 			}
-			_projectileItem->moveToOwner(0);
-			_unit->setCache(0);
+			_projectileItem->moveToOwner(nullptr);
+			_unit->setCache(nullptr);
 			_parent->getMap()->cacheUnit(_unit);
 			_parent->getMod()->getSoundByDepth(_parent->getDepth(), Mod::ITEM_THROW)->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 			_unit->addThrowingExp();
@@ -321,7 +321,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		{
 			// unable to throw here
 			delete projectile;
-			_parent->getMap()->setProjectile(0);
+			_parent->getMap()->setProjectile(nullptr);
 			_action.result = "STR_UNABLE_TO_THROW_HERE";
 			_action.TU = 0;
 			_parent->popState();
@@ -335,7 +335,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		{
 			// set the soldier in an aiming position
 			_unit->aim(true);
-			_unit->setCache(0);
+			_unit->setCache(nullptr);
 			_parent->getMap()->cacheUnit(_unit);
 			// and we have a lift-off
 			if (_ammo->getRules()->getFireSound() != -1)
@@ -349,14 +349,14 @@ bool ProjectileFlyBState::createNewProjectile()
 			if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
 			{
 				_parent->getSave()->removeItem(_ammo);
-				_action.weapon->setAmmoItem(0);
+				_action.weapon->setAmmoItem(nullptr);
 			}
 		}
 		else
 		{
 			// no line of fire
 			delete projectile;
-			_parent->getMap()->setProjectile(0);
+			_parent->getMap()->setProjectile(nullptr);
 			if (_parent->getPanicHandled())
 			{
 				_action.result = "STR_NO_LINE_OF_FIRE";
@@ -384,7 +384,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		{
 			// set the soldier in an aiming position
 			_unit->aim(true);
-			_unit->setCache(0);
+			_unit->setCache(nullptr);
 			_parent->getMap()->cacheUnit(_unit);
 			// and we have a lift-off
 			if (_ammo->getRules()->getFireSound() != -1)
@@ -398,14 +398,14 @@ bool ProjectileFlyBState::createNewProjectile()
 			if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
 			{
 				_parent->getSave()->removeItem(_ammo);
-				_action.weapon->setAmmoItem(0);
+				_action.weapon->setAmmoItem(nullptr);
 			}
 		}
 		else
 		{
 			// no line of fire
 			delete projectile;
-			_parent->getMap()->setProjectile(0);
+			_parent->getMap()->setProjectile(nullptr);
 			if (_parent->getPanicHandled())
 			{
 				_action.result = "STR_NO_LINE_OF_FIRE";
@@ -435,7 +435,7 @@ void ProjectileFlyBState::think()
 {
 	_parent->getSave()->getBattleState()->clearMouseScrollingState();
 	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
-	if (_parent->getMap()->getProjectile() == 0)
+	if (_parent->getMap()->getProjectile() == nullptr)
 	{
 		Tile *t = _parent->getSave()->getTile(_action.actor->getPosition());
 		Tile *bt = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0,0,-1));
@@ -546,7 +546,7 @@ void ProjectileFlyBState::think()
 				if (_ammo && _action.type == BA_LAUNCH && _ammo->spendBullet() == false)
 				{
 					_parent->getSave()->removeItem(_ammo);
-					_action.weapon->setAmmoItem(0);
+					_action.weapon->setAmmoItem(nullptr);
 				}
 
 				if (_projectileImpact != V_OUTOFBOUNDS)
@@ -558,7 +558,7 @@ void ProjectileFlyBState::think()
 						offset = -2;
 					}
 
-					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == _action.weapon->getRules()->getAutoShots() || !_action.weapon->getAmmoItem())));
+					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, nullptr, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == _action.weapon->getRules()->getAutoShots() || !_action.weapon->getAmmoItem())));
 
 					if (_projectileImpact == V_UNIT)
 					{
@@ -612,13 +612,13 @@ void ProjectileFlyBState::think()
 				else if (_action.type != BA_AUTOSHOT || _action.autoShotCounter == _action.weapon->getRules()->getAutoShots() || !_action.weapon->getAmmoItem())
 				{
 					_unit->aim(false);
-					_unit->setCache(0);
+					_unit->setCache(nullptr);
 					_parent->getMap()->cacheUnits();
 				}
 			}
 
 			delete _parent->getMap()->getProjectile();
-			_parent->getMap()->setProjectile(0);
+			_parent->getMap()->setProjectile(nullptr);
 		}
 	}
 }
@@ -745,7 +745,7 @@ void ProjectileFlyBState::projectileHitUnit(Position pos)
 		if (victim->getFaction() == FACTION_HOSTILE)
 		{
 			AIModule *ai = victim->getAIModule();
-			if (ai != 0)
+			if (ai != nullptr)
 			{
 				ai->setWasHitBy(_unit);
 				_unit->setTurnsSinceSpotted(0);
@@ -754,9 +754,9 @@ void ProjectileFlyBState::projectileHitUnit(Position pos)
 		// Record the last unit to hit our victim. If a victim dies without warning*, this unit gets the credit.
 		// *Because the unit died in a fire or bled out.
 		victim->setMurdererId(_unit->getId());
-		if (_action.weapon != 0)
+		if (_action.weapon != nullptr)
 			victim->setMurdererWeapon(_action.weapon->getRules()->getName());
-		if (_ammo != 0)
+		if (_ammo != nullptr)
 			victim->setMurdererWeaponAmmo(_ammo->getRules()->getName());
 	}
 }

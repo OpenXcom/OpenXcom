@@ -668,7 +668,7 @@ void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, int topBlackBand, in
 #ifndef __NO_OPENGL
 		if (glOut->buffer_surface)
 		{
-			SDL_BlitSurface(src, 0, glOut->buffer_surface->getSurface(), 0); // TODO; this is less than ideal...
+			SDL_BlitSurface(src, nullptr, glOut->buffer_surface->getSurface(), nullptr); // TODO; this is less than ideal...
 
 			glOut->refresh(glOut->linear, glOut->iwidth, glOut->iheight, dst->w, dst->h, topBlackBand, bottomBlackBand, leftBlackBand, rightBlackBand);
 			SDL_GL_SwapBuffers();
@@ -682,18 +682,18 @@ void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, int topBlackBand, in
 	else if (dstWidth == src->w && dstHeight == src->h)
 	{
 		SDL_Rect dstrect = {(Sint16)leftBlackBand, (Sint16)topBlackBand, (Uint16)src->w, (Uint16)src->h};
-		SDL_BlitSurface(src, NULL, dst, &dstrect);
+		SDL_BlitSurface(src, nullptr, dst, &dstrect);
 	}
 	else
 	{
 		SDL_Surface *tmp = SDL_CreateRGBSurface(dst->flags, dstWidth, dstHeight, dst->format->BitsPerPixel, 0, 0, 0, 0);
 		_zoomSurfaceY(src, tmp, 0, 0);
-		if (src->format->palette != NULL)
+		if (src->format->palette != nullptr)
 		{
 			SDL_SetPalette(tmp, SDL_LOGPAL|SDL_PHYSPAL, src->format->palette->colors, 0, src->format->palette->ncolors);
 		}
 		SDL_Rect dstrect = {(Sint16)leftBlackBand, (Sint16)topBlackBand, (Uint16)tmp->w, (Uint16)tmp->h};
-		SDL_BlitSurface(tmp, NULL, dst, &dstrect);
+		SDL_BlitSurface(tmp, nullptr, dst, &dstrect);
 		SDL_FreeSurface(tmp);
 	}
 }
@@ -840,12 +840,12 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 	/*
 	* Allocate memory for row increments
 	*/
-	if ((sax = (Uint32 *) realloc(sax, (dst->w + 1) * sizeof(Uint32))) == NULL) {
-		sax = 0;
+	if ((sax = (Uint32 *) realloc(sax, (dst->w + 1) * sizeof(Uint32))) == nullptr) {
+		sax = nullptr;
 		return (-1);
 	}
-	if ((say = (Uint32 *) realloc(say, (dst->h + 1) * sizeof(Uint32))) == NULL) {
-		say = 0;
+	if ((say = (Uint32 *) realloc(say, (dst->h + 1) * sizeof(Uint32))) == nullptr) {
+		say = nullptr;
 		//free(sax);
 		return (-1);
 	}
