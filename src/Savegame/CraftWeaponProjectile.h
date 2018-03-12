@@ -22,9 +22,9 @@ namespace OpenXcom {
 class Surface;
 
 // Do not change the order of these enums because they are related to blob order.
-enum CraftWeaponProjectileType { CWPT_STINGRAY_MISSILE, CWPT_AVALANCHE_MISSILE, CWPT_CANNON_ROUND, CWPT_FUSION_BALL, CWPT_LASER_BEAM, CWPT_PLASMA_BEAM };
-enum CraftWeaponProjectileGlobalType { CWPGT_MISSILE, CWPGT_BEAM };
-enum Directions { D_NONE, D_UP, D_DOWN };
+enum class CraftWeaponProjectileType { STINGRAY_MISSILE = 0, AVALANCHE_MISSILE, CANNON_ROUND, FUSION_BALL, LASER_BEAM, PLASMA_BEAM };
+enum class CraftWeaponProjectileKind { MISSILE, BEAM };
+enum class Direction { NONE, UP, DOWN };
 const int HP_LEFT = -1;
 const int HP_CENTER = 0;
 const int HP_RIGHT = 1;
@@ -33,9 +33,9 @@ class CraftWeaponProjectile
 {
 private:
 	CraftWeaponProjectileType _type;
-	CraftWeaponProjectileGlobalType _globalType;
+	CraftWeaponProjectileKind _kind;
 	int _speed;
-	int _direction;
+	Direction _direction;
 	int _currentPosition; // relative to interceptor, apparently, which is a problem when the interceptor disengages while projectile is in flight
 	int _horizontalPosition;
 	int _state;
@@ -56,11 +56,11 @@ public:
 	/// Returns projectile type.
 	CraftWeaponProjectileType getType() const;
 	/// Returns projectile global type.
-	CraftWeaponProjectileGlobalType getGlobalType() const;
+	CraftWeaponProjectileKind getGlobalType() const;
 	/// Sets projectile direction. This determines it's initial position.
-	void setDirection(const int &directon);
+	void setDirection(const Direction &directon);
 	/// Gets projectile direction.
-	int getDirection() const;
+	Direction getDirection() const;
 	/// Moves projectile in _direction with _speed.
 	void move();
 	/// Gets projectile position.

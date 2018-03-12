@@ -808,7 +808,7 @@ void DogfightState::update()
 			// don't let the interceptor mystically push or pull its fired projectiles
 			for (std::vector<CraftWeaponProjectile*>::iterator it = _projectiles.begin(); it != _projectiles.end(); ++it)
 			{
-				if ((*it)->getGlobalType() != CWPGT_BEAM && (*it)->getDirection() == D_UP) (*it)->setPosition((*it)->getPosition() + distanceChange);
+				if ((*it)->getGlobalType() != CraftWeaponProjectileKind::BEAM && (*it)->getDirection() == Direction::UP) (*it)->setPosition((*it)->getPosition() + distanceChange);
 			}
 		}
 		else
@@ -831,10 +831,10 @@ void DogfightState::update()
 			CraftWeaponProjectile *p = (*it);
 			p->move();
 			// Projectiles fired by interceptor.
-			if (p->getDirection() == D_UP)
+			if (p->getDirection() == Direction::UP)
 			{
 				// Projectile reached the UFO - determine if it's been hit.
-				if (((p->getPosition() >= _currentDist) || (p->getGlobalType() == CWPGT_BEAM && p->toBeRemoved())) && !_ufo->isCrashed() && !p->getMissed())
+				if (((p->getPosition() >= _currentDist) || (p->getGlobalType() == CraftWeaponProjectileKind::BEAM && p->toBeRemoved())) && !_ufo->isCrashed() && !p->getMissed())
 				{
 					// UFO hit.
 					if (RNG::percent((p->getAccuracy() * (100 + 300 / (5 - _ufoSize)) + 100) / 200))
@@ -864,7 +864,7 @@ void DogfightState::update()
 					// Missed.
 					else
 					{
-						if (p->getGlobalType() == CWPGT_BEAM)
+						if (p->getGlobalType() == CraftWeaponProjectileKind::BEAM)
 						{
 							p->remove();
 						}
@@ -875,7 +875,7 @@ void DogfightState::update()
 					}
 				}
 				// Check if projectile passed it's maximum range.
-				if (p->getGlobalType() == CWPGT_MISSILE)
+				if (p->getGlobalType() == CraftWeaponProjectileKind::MISSILE)
 				{
 					if (p->getPosition() / 8 >= p->getRange())
 					{
@@ -888,9 +888,9 @@ void DogfightState::update()
 				}
 			}
 			// Projectiles fired by UFO.
-			else if (p->getDirection() == D_DOWN)
+			else if (p->getDirection() == Direction::DOWN)
 			{
-				if (p->getGlobalType() == CWPGT_MISSILE || (p->getGlobalType() == CWPGT_BEAM && p->toBeRemoved()))
+				if (p->getGlobalType() == CraftWeaponProjectileKind::MISSILE || (p->getGlobalType() == CraftWeaponProjectileKind::BEAM && p->toBeRemoved()))
 				{
 					if (RNG::percent(p->getAccuracy()))
 					{
@@ -1198,7 +1198,7 @@ void DogfightState::fireWeapon1()
 			_txtAmmo1->setText(ss.str());
 
 			CraftWeaponProjectile *p = w1->fire();
-			p->setDirection(D_UP);
+			p->setDirection(Direction::UP);
 			p->setHorizontalPosition(HP_LEFT);
 			_projectiles.push_back(p);
 
@@ -1225,7 +1225,7 @@ void DogfightState::fireWeapon2()
 			_txtAmmo2->setText(ss.str());
 
 			CraftWeaponProjectile *p = w2->fire();
-			p->setDirection(D_UP);
+			p->setDirection(Direction::UP);
 			p->setHorizontalPosition(HP_RIGHT);
 			_projectiles.push_back(p);
 
@@ -1246,10 +1246,10 @@ void DogfightState::ufoFireWeapon()
 
 	setStatus("STR_UFO_RETURN_FIRE");
 	CraftWeaponProjectile *p = new CraftWeaponProjectile();
-	p->setType(CWPT_PLASMA_BEAM);
+	p->setType(CraftWeaponProjectileType::PLASMA_BEAM);
 	p->setAccuracy(60);
 	p->setDamage(_ufo->getRules()->getWeaponPower());
-	p->setDirection(D_DOWN);
+	p->setDirection(Direction::DOWN);
 	p->setHorizontalPosition(HP_CENTER);
 	p->setPosition(_currentDist - (_ufo->getRules()->getRadius() / 2));
 	_projectiles.push_back(p);
@@ -1520,7 +1520,7 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 {
 	int xPos = _battle->getWidth() / 2 + p->getHorizontalPosition();
 	// Draw missiles.
-	if (p->getGlobalType() == CWPGT_MISSILE)
+	if (p->getGlobalType() == CraftWeaponProjectileKind::MISSILE)
 	{
 		xPos -= 1;
 		int yPos = _battle->getHeight() - p->getPosition() / 8;
@@ -1528,7 +1528,7 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 		{
 			for (int y = 0; y < 6; ++y)
 			{
-				int pixelOffset = _projectileBlobs[p->getType()][y][x];
+				int pixelOffset = _projectileBlobs[(size_t)p->getType()][y][x];
 				if (pixelOffset == 0)
 				{
 					continue;
@@ -1547,7 +1547,7 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 		}
 	}
 	// Draw beams.
-	else if (p->getGlobalType() == CWPGT_BEAM)
+	else if (p->getGlobalType() == CraftWeaponProjectileKind::BEAM)
 	{
 		int yStart = _battle->getHeight() - 2;
 		int yEnd = _battle->getHeight() - (_currentDist / 8);

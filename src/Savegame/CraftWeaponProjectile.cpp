@@ -20,7 +20,7 @@
 
 namespace OpenXcom {
 
-CraftWeaponProjectile::CraftWeaponProjectile() : _type(CWPT_CANNON_ROUND), _globalType(CWPGT_MISSILE), _speed(0), _direction(D_NONE), _currentPosition(0), _horizontalPosition(0), _state(0), _accuracy(0), _damage(0), _range(0), _toBeRemoved(false), _missed(false), _distanceCovered(0)
+CraftWeaponProjectile::CraftWeaponProjectile() : _type(CraftWeaponProjectileType::CANNON_ROUND), _kind(CraftWeaponProjectileKind::MISSILE), _speed(0), _direction(Direction::NONE), _currentPosition(0), _horizontalPosition(0), _state(0), _accuracy(0), _damage(0), _range(0), _toBeRemoved(false), _missed(false), _distanceCovered(0)
 {
 }
 
@@ -37,9 +37,9 @@ CraftWeaponProjectile::~CraftWeaponProjectile(void)
 void CraftWeaponProjectile::setType(CraftWeaponProjectileType type)
 {
 	_type = type;
-	if (type >= CWPT_LASER_BEAM)
+	if (type >= CraftWeaponProjectileType::LASER_BEAM)
 	{
-		_globalType = CWPGT_BEAM;
+		_kind = CraftWeaponProjectileKind::BEAM;
 		_state = 8;
 	}
 }
@@ -57,18 +57,18 @@ CraftWeaponProjectileType CraftWeaponProjectile::getType() const
  * Returns the global type of projectile.
  * @return 0 - if it's a missile, 1 if beam.
  */
-CraftWeaponProjectileGlobalType CraftWeaponProjectile::getGlobalType() const
+CraftWeaponProjectileKind CraftWeaponProjectile::getGlobalType() const
 {
-	return _globalType;
+	return _kind;
 }
 
 /*
  * Sets the direction of the projectile.
  */
-void CraftWeaponProjectile::setDirection(const int &directon)
+void CraftWeaponProjectile::setDirection(const Direction &directon)
 {
 	_direction = directon;
-	if (_direction == D_UP)
+	if (_direction == Direction::UP)
 	{
 		_currentPosition = 0;
 	}
@@ -77,7 +77,7 @@ void CraftWeaponProjectile::setDirection(const int &directon)
 /*
  * Gets the direction of the projectile.
  */
-int CraftWeaponProjectile::getDirection() const
+Direction CraftWeaponProjectile::getDirection() const
 {
 	return _direction;
 }
@@ -88,7 +88,7 @@ int CraftWeaponProjectile::getDirection() const
  */
 void CraftWeaponProjectile::move()
 {
-	if (_globalType == CWPGT_MISSILE)
+	if (_kind == CraftWeaponProjectileKind::MISSILE)
 	{
 		int positionChange = _speed;
 
@@ -100,18 +100,18 @@ void CraftWeaponProjectile::move()
 		if ((_distanceCovered / 8) >= getRange())
 			setMissed(true);
 		
-		if (_direction == D_UP)
+		if (_direction == Direction::UP)
 		{
 			_currentPosition += positionChange;
 		}
-		else if (_direction == D_DOWN)
+		else if (_direction == Direction::DOWN)
 		{
 			_currentPosition -= positionChange;
 		}
 		
 		_distanceCovered += positionChange;
 	}
-	else if (_globalType == CWPGT_BEAM)
+	else if (_kind == CraftWeaponProjectileKind::BEAM)
 	{
 		_state /= 2;
 		if (_state == 1)
