@@ -30,6 +30,7 @@
 #include "../Engine/Options.h"
 #include "../Mod/AlienDeployment.h"
 #include "../Mod/MapScript.h"
+#include "../Mod/MapData.h"
 #include "../Savegame/Tile.h"
 
 namespace OpenXcom
@@ -90,7 +91,7 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 		for (int i = 0; i < _battleGame->getMapSizeXYZ(); ++i)
 		{
 			Tile *tile = _battleGame->getTiles()[i];
-			if (tile && tile->getMapData(O_FLOOR) && tile->getMapData(O_FLOOR)->getSpecialType() == SpecialTile::END_POINT)
+			if (tile && tile->getMapData(TilePart::FLOOR) && tile->getMapData(TilePart::FLOOR)->getSpecialType() == SpecialTile::END_POINT)
 			{
 				exit = true;
 				break;

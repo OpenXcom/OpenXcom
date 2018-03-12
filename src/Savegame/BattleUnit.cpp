@@ -2085,7 +2085,7 @@ bool BattleUnit::checkAmmo()
  */
 bool BattleUnit::isInExitArea(SpecialTile st) const
 {
-	return _tile && _tile->getMapData(O_FLOOR) && (_tile->getMapData(O_FLOOR)->getSpecialType() == st);
+	return _tile && _tile->getMapData(TilePart::FLOOR) && (_tile->getMapData(TilePart::FLOOR)->getSpecialType() == st);
 }
 
 /**

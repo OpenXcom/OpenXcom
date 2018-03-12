@@ -98,19 +98,19 @@ public:
 	 * @param part the part 0-3.
 	 * @return pointer to mapdata
 	 */
-	MapData *getMapData(int part) const
+	MapData *getMapData(TilePart part) const
 	{
-		return _objects[part];
+		return _objects[(size_t)part];
 	}
 
 	/// Sets the pointer to the mapdata for a specific part of the tile
-	void setMapData(MapData *dat, int mapDataID, int mapDataSetID, int part);
+	void setMapData(MapData *dat, int mapDataID, int mapDataSetID, TilePart part);
 	/// Gets the IDs to the mapdata for a specific part of the tile
-	void getMapData(int *mapDataID, int *mapDataSetID, int part) const;
+	void getMapData(int *mapDataID, int *mapDataSetID, TilePart part) const;
 	/// Gets whether this tile has no objects
 	bool isVoid() const;
 	/// Get the TU cost to walk over a certain part of the tile.
-	int getTUCost(int part, MovementType movementType) const;
+	int getTUCost(TilePart part, MovementType movementType) const;
 	/// Checks if this tile has a floor.
 	bool hasNoFloor(Tile *tileBelow) const;
 	/// Checks if this tile is a big wall.
@@ -130,7 +130,7 @@ public:
 	/// Gets the floor object footstep sound.
 	int getFootstepSound(Tile *tileBelow) const;
 	/// Open a door, returns the ID, 0(normal), 1(ufo) or -1 if no door opened.
-	int openDoor(int part, BattleUnit *Unit = nullptr, BattleActionType reserve = BA_NONE);
+	int openDoor(TilePart part, BattleUnit *Unit = nullptr, BattleActionType reserve = BA_NONE);
 
 	/**
 	 * Check if the ufo door is open or opening. Used for visibility/light blocking checks.
@@ -138,9 +138,9 @@ public:
 	 * @param part
 	 * @return bool
 	 */
-	bool isUfoDoorOpen(int part) const
+	bool isUfoDoorOpen(TilePart part) const
 	{
-		return (_objects[part] && _objects[part]->isUFODoor() && _currentFrame[part] != 0);
+		return (_objects[(size_t)part] && _objects[(size_t)part]->isUFODoor() && _currentFrame[(size_t)part] != 0);
 	}
 
 	/// Close ufo door.
@@ -156,9 +156,9 @@ public:
 	/// Get the shade amount.
 	int getShade() const;
 	/// Destroy a tile part.
-	bool destroy(int part, SpecialTile type);
+	bool destroy(TilePart part, SpecialTile type);
 	/// Damage a tile part.
-	bool damage(int part, int power, SpecialTile type);
+	bool damage(TilePart part, int power, SpecialTile type);
 	/// Set a "virtual" explosive on this tile, to detonate later.
 	void setExplosive(int power, int damageType, bool force = false);
 	/// Get explosive power of this tile.
@@ -168,7 +168,7 @@ public:
 	/// Animated the tile parts.
 	void animate();
 	/// Get object sprites.
-	Surface *getSprite(int part) const;
+	Surface *getSprite(TilePart part) const;
 	/// Set a unit on this tile.
 	void setUnit(BattleUnit *unit, Tile *tileBelow = nullptr);
 	/**
@@ -194,9 +194,9 @@ public:
 	/// Get turns to burn
 	int getFuel() const;
 	/// Get flammability of part.
-	int getFlammability(int part) const;
+	int getFlammability(TilePart part) const;
 	/// Get turns to burn of part
-	int getFuel(int part) const;
+	int getFuel(TilePart part) const;
 	/// attempt to set the tile on fire, sets overlaps to one if successful.
 	void ignite(int power);
 	/// Get fire and smoke animation offset.

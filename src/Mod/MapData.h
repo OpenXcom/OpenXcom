@@ -42,7 +42,7 @@ enum class SpecialTile{TILE=0,
 
 enum MovementType{ MT_WALK, MT_FLY, MT_SLIDE, MT_FLOAT, MT_SINK};
 enum VoxelType{ V_EMPTY = -1, V_FLOOR, V_WESTWALL, V_NORTHWALL, V_OBJECT, V_UNIT, V_OUTOFBOUNDS };
-enum MapDataType { O_FLOOR, O_WESTWALL, O_NORTHWALL, O_OBJECT };
+enum class TilePart:int { FLOOR = 0, WESTWALL, NORTHWALL, OBJECT };
 
 /**
  * MapData is the smallest piece of a Battlescape terrain, holding info about a certain object, wall, floor, ...
@@ -54,7 +54,9 @@ private:
 	MapDataSet *_dataset;
 	SpecialTile _specialType;
 	bool _isUfoDoor, _stopLOS, _isNoFloor, _isGravLift, _isDoor, _blockFire, _blockSmoke, _baseModule;
-	int _yOffset, _TUWalk, _TUFly, _TUSlide, _terrainLevel, _footstepSound, _dieMCD, _altMCD, _objectType, _lightSource;
+	int _yOffset, _TUWalk, _TUFly, _TUSlide, _terrainLevel, _footstepSound, _dieMCD, _altMCD;
+    TilePart _objectType;
+    int _lightSource;
 	int _armor, _flammable, _fuel, _explosive, _explosiveType, _bigWall;
 	int _sprite[8];
 	int _block[6];
@@ -92,13 +94,13 @@ public:
 	/// Sets the offset on the Y axis for drawing this object.
 	void setYOffset(int value);
 	/// Set the type of tile.
-	void setObjectType(int type);
+	void setObjectType(TilePart type);
 	/// Get the type of tile.
-	int getObjectType() const;
+	TilePart getObjectType() const;
 	/// Gets info about special tile types
 	SpecialTile getSpecialType() const;
 	/// Sets a special tile type and object type.
-	void setSpecialType(SpecialTile value, int otype);
+	void setSpecialType(SpecialTile value, TilePart otype);
 	/// Gets the TU cost to move over the object.
 	int getTUCost(MovementType movementType) const;
 	/// Sets the TU cost to move over the object.

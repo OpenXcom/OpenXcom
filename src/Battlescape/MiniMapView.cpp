@@ -88,7 +88,8 @@ void MiniMapView::draw()
 				}
 				for (int i = 0; i < 4; i++)
 				{
-					data = t->getMapData(i);
+                    //TODO: Deal with cast to enum
+					data = t->getMapData((TilePart)i);
 
 					if (data && data->getMiniMapIndex())
 					{

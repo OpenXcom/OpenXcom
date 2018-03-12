@@ -361,10 +361,11 @@ void SavedBattleGame::loadMapResources(Mod *mod)
 	{
 		for (int part = 0; part < 4; ++part)
 		{
-			_tiles[i]->getMapData(&mdID, &mdsID, part);
+            //TODO: Fix casting
+			_tiles[i]->getMapData(&mdID, &mdsID, (TilePart)part);
 			if (mdID != -1 && mdsID != -1)
 			{
-				_tiles[i]->setMapData(_mapDataSets[mdsID]->getObjects()->at(mdID), mdID, mdsID, part);
+				_tiles[i]->setMapData(_mapDataSets[mdsID]->getObjects()->at(mdID), mdID, mdsID, (TilePart)part);
 			}
 		}
 	}
@@ -1330,25 +1331,25 @@ void SavedBattleGame::prepareNewTurn()
 			{
 				(*i)->setSmoke(0);
 				// burn this tile, and any object in it, if it's not fireproof/indestructible.
-				if ((*i)->getMapData(O_OBJECT))
+				if ((*i)->getMapData(TilePart::OBJECT))
 				{
-					if ((*i)->getMapData(O_OBJECT)->getFlammable() != 255 && (*i)->getMapData(O_OBJECT)->getArmor() != 255)
+					if ((*i)->getMapData(TilePart::OBJECT)->getFlammable() != 255 && (*i)->getMapData(TilePart::OBJECT)->getArmor() != 255)
 					{
-						if ((*i)->destroy(O_OBJECT, getObjectiveType()))
+						if ((*i)->destroy(TilePart::OBJECT, getObjectiveType()))
 						{
 							addDestroyedObjective();
 						}
-						if ((*i)->destroy(O_FLOOR, getObjectiveType()))
+						if ((*i)->destroy(TilePart::FLOOR, getObjectiveType()))
 						{
 							addDestroyedObjective();
 						}
 					}
 				}
-				else if ((*i)->getMapData(O_FLOOR))
+				else if ((*i)->getMapData(TilePart::FLOOR))
 				{
-					if ((*i)->getMapData(O_FLOOR)->getFlammable() != 255 && (*i)->getMapData(O_FLOOR)->getArmor() != 255)
+					if ((*i)->getMapData(TilePart::FLOOR)->getFlammable() != 255 && (*i)->getMapData(TilePart::FLOOR)->getArmor() != 255)
 					{
-						if ((*i)->destroy(O_FLOOR, getObjectiveType()))
+						if ((*i)->destroy(TilePart::FLOOR, getObjectiveType()))
 						{
 							addDestroyedObjective();
 						}
@@ -1516,9 +1517,9 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, Position position, bool te
 			Tile *tb = getTile(position + Position(x,y,-1) + zOffset);
 			if (t == nullptr ||
 				(t->getUnit() != nullptr && t->getUnit() != bu) ||
-				t->getTUCost(O_OBJECT, bu->getMovementType()) == 255 ||
+				t->getTUCost(TilePart::OBJECT, bu->getMovementType()) == 255 ||
 				(t->hasNoFloor(tb) && bu->getMovementType() != MT_FLY) ||
-				(t->getMapData(O_OBJECT) && t->getMapData(O_OBJECT)->getBigWall() && t->getMapData(O_OBJECT)->getBigWall() <= 3))
+				(t->getMapData(TilePart::OBJECT) && t->getMapData(TilePart::OBJECT)->getBigWall() && t->getMapData(TilePart::OBJECT)->getBigWall() <= 3))
 			{
 				return false;
 			}
@@ -1848,7 +1849,7 @@ void SavedBattleGame::calculateModuleMap()
 			for (int z = 0; z != _mapsize_z; ++z)
 			{
 				Tile *tile = getTile(Position(x,y,z));
-				if (tile && tile->getMapData(O_OBJECT) && tile->getMapData(O_OBJECT)->isBaseModule())
+				if (tile && tile->getMapData(TilePart::OBJECT) && tile->getMapData(TilePart::OBJECT)->isBaseModule())
 				{
 					_baseModules[x/10][y/10].first += _baseModules[x/10][y/10].first > 0 ? 1 : 2;
 					_baseModules[x/10][y/10].second = _baseModules[x/10][y/10].first;

@@ -247,7 +247,7 @@ int Projectile::calculateThrow(double accuracy)
 			targets.push_back(targetVoxel + Position(0, 0, 2));
 			targets.push_back(targetVoxel + Position(0, 0, tu->getHeight() - 1));
 		}
-		else if (targetTile->getMapData(O_OBJECT) != nullptr)
+		else if (targetTile->getMapData(TilePart::OBJECT) != nullptr)
 		{
 			targetVoxel = _action.target * Position(16,16,24) + Position(8,8,0);
 			targets.push_back(targetVoxel + Position(0, 0, 13));
@@ -255,7 +255,7 @@ int Projectile::calculateThrow(double accuracy)
 			targets.push_back(targetVoxel + Position(0, 0, 23));
 			targets.push_back(targetVoxel + Position(0, 0, 2));
 		}
-		else if (targetTile->getMapData(O_NORTHWALL) != nullptr)
+		else if (targetTile->getMapData(TilePart::NORTHWALL) != nullptr)
 		{
 			targetVoxel = _action.target * Position(16,16,24) + Position(8,0,0);
 			targets.push_back(targetVoxel + Position(0, 0, 13));
@@ -263,7 +263,7 @@ int Projectile::calculateThrow(double accuracy)
 			targets.push_back(targetVoxel + Position(0, 0, 20));
 			targets.push_back(targetVoxel + Position(0, 0, 3));
 		}
-		else if (targetTile->getMapData(O_WESTWALL) != nullptr)
+		else if (targetTile->getMapData(TilePart::WESTWALL) != nullptr)
  		{
 			targetVoxel = _action.target * Position(16,16,24) + Position(0,8,0);
 			targets.push_back(targetVoxel + Position(0, 0, 13));
@@ -271,7 +271,7 @@ int Projectile::calculateThrow(double accuracy)
 			targets.push_back(targetVoxel + Position(0, 0, 20));
 			targets.push_back(targetVoxel + Position(0, 0, 2));
 		}
-		else if (targetTile->getMapData(O_FLOOR) != nullptr)
+		else if (targetTile->getMapData(TilePart::FLOOR) != nullptr)
 		{
 			targets.push_back(targetVoxel);
 		}
@@ -306,15 +306,15 @@ int Projectile::calculateThrow(double accuracy)
 			deltas = Position(0,0,0);
 		}
 		test = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, _action.actor, curvature, deltas);
-		if (forced) return O_OBJECT; //fake hit
+		if (forced) return V_OBJECT; //fake hit
 		Position endPoint = _trajectory.back() / Position (16, 16, 24);
 		Tile *endTile = _save->getTile(endPoint);
 		// check if the item would land on a tile with a blocking object
 		if (_action.type == BA_THROW
 			&& endTile
-			&& endTile->getMapData(O_OBJECT)
-			&& endTile->getMapData(O_OBJECT)->getTUCost(MT_WALK) == 255
-			&& !(endTile->isBigWall() && (endTile->getMapData(O_OBJECT)->getBigWall()<1 || endTile->getMapData(O_OBJECT)->getBigWall()>3)))
+			&& endTile->getMapData(TilePart::OBJECT)
+			&& endTile->getMapData(TilePart::OBJECT)->getTUCost(MT_WALK) == 255
+			&& !(endTile->isBigWall() && (endTile->getMapData(TilePart::OBJECT)->getBigWall()<1 || endTile->getMapData(TilePart::OBJECT)->getBigWall()>3)))
 		{
 			test = V_OUTOFBOUNDS; 
 		}

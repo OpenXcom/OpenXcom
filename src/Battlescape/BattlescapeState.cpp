@@ -1686,7 +1686,7 @@ void BattlescapeState::saveAIMap()
 			r.x = x * r.w;
 			r.y = y * r.h;
 
-			if (t->getTUCost(O_FLOOR, MT_FLY) != 255 && t->getTUCost(O_OBJECT, MT_FLY) != 255)
+			if (t->getTUCost(TilePart::FLOOR, MT_FLY) != 255 && t->getTUCost(TilePart::OBJECT, MT_FLY) != 255)
 			{
 				SDL_FillRect(img, &r, SDL_MapRGB(img->format, 255, 0, 0x20));
 				characterRGBA(img, r.x, r.y,'*' , 0x7f, 0x7f, 0x7f, 0x7f);
@@ -1721,12 +1721,12 @@ void BattlescapeState::saveAIMap()
 				if (z > 0 && !t->hasNoFloor(_save->getTile(pos))) break; // no seeing through floors
 			}
 
-			if (t->getMapData(O_NORTHWALL) && t->getMapData(O_NORTHWALL)->getTUCost(MT_FLY) == 255)
+			if (t->getMapData(TilePart::NORTHWALL) && t->getMapData(TilePart::NORTHWALL)->getTUCost(MT_FLY) == 255)
 			{
 				lineRGBA(img, r.x, r.y, r.x+r.w, r.y, 0x50, 0x50, 0x50, 255);
 			}
 
-			if (t->getMapData(O_WESTWALL) && t->getMapData(O_WESTWALL)->getTUCost(MT_FLY) == 255)
+			if (t->getMapData(TilePart::WESTWALL) && t->getMapData(TilePart::WESTWALL)->getTUCost(MT_FLY) == 255)
 			{
 				lineRGBA(img, r.x, r.y, r.x, r.y+r.h, 0x50, 0x50, 0x50, 255);
 			}
