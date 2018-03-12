@@ -34,7 +34,7 @@ private:
 	GameTime _time;
 	BattleUnitKills *_cause;
 public:
-	SoldierDeath() : _time(0, 0, 0, 0, 0, 0, 0), _cause(0) {}
+	SoldierDeath() : _time(0, 0, 0, 0, 0, 0, 0), _cause(nullptr) {}
 	/// Creates a death.
 	SoldierDeath(GameTime time, BattleUnitKills *cause);
 	/// Cleans up the death.

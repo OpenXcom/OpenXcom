@@ -226,7 +226,7 @@ void ExplosionBState::explode()
 			_unit = _item->getPreviousOwner();
 		}
 
-		BattleUnit *victim = 0;
+		BattleUnit *victim = nullptr;
 
 		if (_areaOfEffect)
 		{
@@ -297,7 +297,7 @@ void ExplosionBState::explode()
 	if (_unit && !_unit->isOut() && _lowerWeapon)
 	{
 		_unit->aim(false);
-		_unit->setCache(0);
+		_unit->setCache(nullptr);
 	}
 	_parent->getMap()->cacheUnits();
 	_parent->popState();
@@ -308,7 +308,7 @@ void ExplosionBState::explode()
 	{
 		Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
 		p += Position(8,8,0);
-		_parent->statePushFront(new ExplosionBState(_parent, p, 0, _unit, t));
+		_parent->statePushFront(new ExplosionBState(_parent, p, nullptr, _unit, t));
 	}
 
 	if (_item && (_item->getRules()->getBattleType() == BT_GRENADE || _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))

@@ -57,7 +57,7 @@ ListLoadOriginalState::ListLoadOriginalState(OptionsOrigin origin) : _origin(ori
 	_txtDate = new Text(90, 9, 225, 24);
 
 	// Set palette
-	setInterface("geoscape", true, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : 0);
+	setInterface("geoscape", true, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : nullptr);
 
 	add(_window, "window", "saveMenus");
 	add(_btnNew, "button", "saveMenus");
@@ -194,7 +194,7 @@ void ListLoadOriginalState::btnSlotClick(Action *action)
 			Options::baseYResolution = Options::baseYGeoscape;
 			_game->getScreen()->resetDisplay(false);
 			_game->setState(new GeoscapeState);
-			if (_game->getSavedGame()->getSavedBattle() != 0)
+			if (_game->getSavedGame()->getSavedBattle() != nullptr)
 			{
 				_game->getSavedGame()->getSavedBattle()->loadMapResources(_game->getMod());
 				Options::baseXResolution = Options::baseXBattlescape;

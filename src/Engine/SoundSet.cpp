@@ -70,7 +70,7 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 
 		// If there's no WAV header (44 bytes), add it
 		// Assuming sounds are 8-bit 8000Hz (DOS version)
-		unsigned char *newsound = 0;
+		unsigned char *newsound = nullptr;
 		if (!wav)
 		{
 			if (size != 0)
@@ -166,7 +166,7 @@ Sound *SoundSet::getSound(unsigned int i)
 	{
 		return _sounds[i];
 	}
-	return 0;
+	return nullptr;
 }
 
 
@@ -221,7 +221,7 @@ void SoundSet::loadCatbyIndex(const std::string &filename, int index)
 
 	// there's no WAV header (44 bytes), add it
 	// sounds are 8-bit 11025Hz, signed
-	unsigned char *newsound = 0;
+	unsigned char *newsound = nullptr;
 
 	if (size != 0)
 	{

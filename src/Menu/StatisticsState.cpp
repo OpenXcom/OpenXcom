@@ -192,7 +192,7 @@ void StatisticsState::listStats()
 			}
 		}
 
-		if ((*i)->getDeath() != 0 && (*i)->getDeath()->getCause() != 0)
+		if ((*i)->getDeath() != nullptr && (*i)->getDeath()->getCause() != nullptr)
 		{
 			const BattleUnitKills *kills = (*i)->getDeath()->getCause();
 			if (kills->faction == FACTION_PLAYER)
@@ -319,7 +319,7 @@ void StatisticsState::btnOkClick(Action *)
 	}
 	else
 	{
-		_game->setSavedGame(0);
+		_game->setSavedGame(nullptr);
 		_game->setState(new GoToMainMenuState);
 	}
 }

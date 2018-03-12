@@ -70,7 +70,7 @@ inline void* NewAligned(int bpp, int width, int height)
 {
 	const int pitch = GetPitch(bpp, width);
 	const int total = pitch * height;
-	void* buffer = 0;
+	void* buffer = nullptr;
 
 #ifndef _WIN32
 
@@ -135,12 +135,12 @@ inline void DeleteAligned(void* buffer)
  * @param y Y position in pixels.
  * @param bpp Bits-per-pixel depth.
  */
-Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _tftdMode(false), _alignedBuffer(0)
+Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _tftdMode(false), _alignedBuffer(nullptr)
 {
 	_alignedBuffer = NewAligned(bpp, width, height);
 	_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, GetPitch(bpp, width), 0, 0, 0, 0);
 
-	if (_surface == 0)
+	if (_surface == nullptr)
 	{
 		throw Exception(SDL_GetError());
 	}
@@ -180,10 +180,10 @@ Surface::Surface(const Surface& other)
 	else
 	{
 		_surface = SDL_ConvertSurface(other._surface, other._surface->format, other._surface->flags);
-		_alignedBuffer = 0;
+		_alignedBuffer = nullptr;
 	}
 
-	if (_surface == 0)
+	if (_surface == nullptr)
 	{
 		throw Exception(SDL_GetError());
 	}
@@ -253,8 +253,8 @@ void Surface::loadImage(const std::string &filename)
 	// Destroy current surface (will be replaced)
 	DeleteAligned(_alignedBuffer);
 	SDL_FreeSurface(_surface);
-	_alignedBuffer = 0;
-	_surface = 0;
+	_alignedBuffer = nullptr;
+	_surface = nullptr;
 
 	Log(LOG_VERBOSE) << "Loading image: " << filename;
 
@@ -610,7 +610,7 @@ void Surface::blit(Surface *surface)
 		SDL_Rect target;
 		if (_crop.w == 0 && _crop.h == 0)
 		{
-			cropper = 0;
+			cropper = nullptr;
 		}
 		else
 		{
@@ -986,7 +986,7 @@ void Surface::resize(int width, int height)
 	void *alignedBuffer = NewAligned(bpp, width, height);
 	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom(alignedBuffer, width, height, bpp, pitch, 0, 0, 0, 0);
 	
-	if (surface == 0)
+	if (surface == nullptr)
 	{
 		throw Exception(SDL_GetError());
 	}
@@ -994,7 +994,7 @@ void Surface::resize(int width, int height)
 	// Copy old contents
 	SDL_SetColorKey(surface, SDL_SRCCOLORKEY, 0);
 	SDL_SetColors(surface, getPalette(), 0, 256);
-	SDL_BlitSurface(_surface, 0, surface, 0);
+	SDL_BlitSurface(_surface, nullptr, surface, nullptr);
 
 	// Delete old surface
 	DeleteAligned(_alignedBuffer);

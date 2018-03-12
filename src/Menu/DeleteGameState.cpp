@@ -50,7 +50,7 @@ DeleteGameState::DeleteGameState(OptionsOrigin origin, const std::string &save) 
 	_txtMessage = new Text(246, 32, 37, 70);
 
 	// Set palette
-	setInterface("saveMenus", false, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : 0);
+	setInterface("saveMenus", false, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : nullptr);
 
 	add(_window, "confirmDelete", "saveMenus");
 	add(_btnYes, "confirmDelete", "saveMenus");

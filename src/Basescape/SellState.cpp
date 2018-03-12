@@ -163,7 +163,7 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
-		if ((*i)->getCraft() == 0)
+		if ((*i)->getCraft() == nullptr)
 		{
 			TransferRow row = { TRANSFER_SOLDIER, (*i), (*i)->getName(true), 0, 1, 0, 0 };
 			_items.push_back(row);
@@ -189,7 +189,7 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 	}
 	if (_base->getAvailableScientists() > 0)
 	{
-		TransferRow row = { TRANSFER_SCIENTIST, 0, tr("STR_SCIENTIST"), 0, _base->getAvailableScientists(), 0, 0 };
+		TransferRow row = { TRANSFER_SCIENTIST, nullptr, tr("STR_SCIENTIST"), 0, _base->getAvailableScientists(), 0, 0 };
 		_items.push_back(row);
 		std::string cat = getCategory(_items.size() - 1);
 		if (std::find(_cats.begin(), _cats.end(), cat) == _cats.end())
@@ -199,7 +199,7 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 	}
 	if (_base->getAvailableEngineers() > 0)
 	{
-		TransferRow row = { TRANSFER_ENGINEER, 0, tr("STR_ENGINEER"), 0, _base->getAvailableEngineers(), 0, 0 };
+		TransferRow row = { TRANSFER_ENGINEER, nullptr, tr("STR_ENGINEER"), 0, _base->getAvailableEngineers(), 0, 0 };
 		_items.push_back(row);
 		std::string cat = getCategory(_items.size() - 1);
 		if (std::find(_cats.begin(), _cats.end(), cat) == _cats.end())
@@ -265,8 +265,8 @@ void SellState::think()
 {
 	State::think();
 
-	_timerInc->think(this, 0);
-	_timerDec->think(this, 0);
+	_timerInc->think(this, nullptr);
+	_timerDec->think(this, nullptr);
 }
 
 /**
@@ -276,7 +276,7 @@ void SellState::think()
  */
 std::string SellState::getCategory(int sel) const
 {
-	RuleItem *rule = 0;
+	RuleItem *rule = nullptr;
 	switch (_items[sel].type)
 	{
 	case TRANSFER_SOLDIER:
@@ -391,7 +391,7 @@ void SellState::btnOkClick(Action *)
 				{
 					if ((*f)->getCraft() == craft)
 					{
-						(*f)->setCraft(0);
+						(*f)->setCraft(nullptr);
 						break;
 					}
 				}

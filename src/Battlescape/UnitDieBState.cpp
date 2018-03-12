@@ -184,7 +184,7 @@ void UnitDieBState::think()
 				{
 					game->pushState(new InfoboxOKState(game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 				}
-				else if (Options::battleNotifyDeath && _unit->getGeoscapeSoldier() != 0)
+				else if (Options::battleNotifyDeath && _unit->getGeoscapeSoldier() != nullptr)
 				{
 					game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 				}
@@ -230,7 +230,7 @@ void UnitDieBState::think()
 		}
 		if (_unit == _parent->getSave()->getSelectedUnit())
 		{
-			_parent->getSave()->setSelectedUnit(0);
+			_parent->getSave()->setSelectedUnit(nullptr);
 		}
 	}
 	
@@ -274,7 +274,7 @@ void UnitDieBState::convertUnitToCorpse()
 			_parent->dropItem(lastPosition, (*i));
 			if (!(*i)->getRules()->isFixed())
 			{
-				(*i)->setOwner(0);
+				(*i)->setOwner(nullptr);
 			}
 			else
 			{
@@ -291,7 +291,7 @@ void UnitDieBState::convertUnitToCorpse()
 	}
 
 	// remove unit-tile link
-	_unit->setTile(0);
+	_unit->setTile(nullptr);
 
 	if (lastPosition == Position(-1,-1,-1)) // we're being carried
 	{
@@ -318,7 +318,7 @@ void UnitDieBState::convertUnitToCorpse()
 				corpse->setUnit(_unit);
 				if (_parent->getSave()->getTile(lastPosition + Position(x,y,0))->getUnit() == _unit) // check in case unit was displaced by another unit
 				{
-					_parent->getSave()->getTile(lastPosition + Position(x,y,0))->setUnit(0);
+					_parent->getSave()->getTile(lastPosition + Position(x,y,0))->setUnit(nullptr);
 				}
 				_parent->dropItem(lastPosition + Position(x,y,0), corpse, true);
 				--i;

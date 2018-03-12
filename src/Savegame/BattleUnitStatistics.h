@@ -215,7 +215,7 @@ struct BattleUnitKills
 				{
 					rank = "STR_SOLDIER";
 				}
-				if (unit->getUnitRules() != 0 && !unit->getUnitRules()->getRace().empty())
+				if (unit->getUnitRules() != nullptr && !unit->getUnitRules()->getRace().empty())
 				{
 					race = unit->getUnitRules()->getRace();
 				}
@@ -227,7 +227,7 @@ struct BattleUnitKills
 			// HWPs
 			else
 			{
-				if (unit->getUnitRules() != 0 && !unit->getUnitRules()->getRank().empty())
+				if (unit->getUnitRules() != nullptr && !unit->getUnitRules()->getRank().empty())
 				{
 					rank = unit->getUnitRules()->getRank();
 				}
@@ -235,7 +235,7 @@ struct BattleUnitKills
 				{
 					rank = "STR_HWPS";
 				}
-				if (unit->getUnitRules() != 0 && !unit->getUnitRules()->getRace().empty())
+				if (unit->getUnitRules() != nullptr && !unit->getUnitRules()->getRace().empty())
 				{
 					race = unit->getUnitRules()->getRace();
 				}
@@ -248,7 +248,7 @@ struct BattleUnitKills
 		// Aliens
 		else if (unit->getOriginalFaction() == FACTION_HOSTILE)
 		{
-			if (unit->getUnitRules() != 0 && !unit->getUnitRules()->getRank().empty())
+			if (unit->getUnitRules() != nullptr && !unit->getUnitRules()->getRank().empty())
 			{
 				rank = unit->getUnitRules()->getRank();
 			}
@@ -256,7 +256,7 @@ struct BattleUnitKills
 			{
 				rank = "STR_LIVE_SOLDIER";
 			}
-			if (unit->getUnitRules() != 0 && !unit->getUnitRules()->getRace().empty())
+			if (unit->getUnitRules() != nullptr && !unit->getUnitRules()->getRace().empty())
 			{
 				race = unit->getUnitRules()->getRace();
 			}
@@ -268,7 +268,7 @@ struct BattleUnitKills
 		// Civilians
 		else if (unit->getOriginalFaction() == FACTION_NEUTRAL)
 		{
-			if (unit->getUnitRules() != 0 && !unit->getUnitRules()->getRank().empty())
+			if (unit->getUnitRules() != nullptr && !unit->getUnitRules()->getRank().empty())
 			{
 				rank = unit->getUnitRules()->getRank();
 			}
@@ -276,7 +276,7 @@ struct BattleUnitKills
 			{
 				rank = "STR_CIVILIAN";
 			}
-			if (unit->getUnitRules() != 0 && !unit->getUnitRules()->getRace().empty())
+			if (unit->getUnitRules() != nullptr && !unit->getUnitRules()->getRace().empty())
 			{
 				race = unit->getUnitRules()->getRace();
 			}

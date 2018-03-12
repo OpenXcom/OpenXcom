@@ -154,7 +154,7 @@ bool adl_gv_music_playing = false;
 int adl_gv_tempo = 120;
 int adl_gv_tempo_run = 60;
 int adl_gv_tempo_inc = 70;
-unsigned char* adl_gv_samples_addr = 0;
+unsigned char* adl_gv_samples_addr = nullptr;
 unsigned char* adl_gv_subtracks[128];
 unsigned int adl_gv_instruments_count = 0;
 unsigned int adl_gv_subtracks_count = 0;
@@ -167,7 +167,7 @@ UINT8 iCurrentTweakedBlock[12];
 UINT8 iCurrentFNum[12];
 struc_instruments saved_instruments[2][16];
 
-FM_OPL* opl[2] = {0, 0};
+FM_OPL* opl[2] = {nullptr, nullptr};
 
 #define NEWBLOCK_LIMIT  32
 #define FREQ_OFFSET 128.0//128.0//96.0
@@ -308,7 +308,7 @@ void adlib_reg(int i, int v)
 
 void adlib_reg(int i, int v)
 {
-	if (opl[0]==0) return;
+	if (opl[0]==nullptr) return;
 	int v2, i3, v3;
 	i3 = -1;
 	Transpose(i, v, &v2, &i3, &v3);
@@ -583,7 +583,7 @@ int decode_op(int instrument, bool* another_loop)
 		}
 		else if (opcode == 0xfd) //return from subtrack
 		{
-			if (instr1->return_address == 0)
+			if (instr1->return_address == nullptr)
 			{
 				//printf("Return from subtrack [%d] -> DOUBLE RETURN - ERROR\n",instrument);
 			}
@@ -591,7 +591,7 @@ int decode_op(int instrument, bool* another_loop)
 			{
 				music_ptr = instr1->return_address;
 					//printf("Return from subtrack [%d] -> %x\n",instrument,instr1->return_address);
-				instr1->return_address = 0;
+				instr1->return_address = nullptr;
 			}
 		}
 		else if (opcode == 0xff) //finishing track
@@ -714,7 +714,7 @@ void init_music_data(unsigned char* music_ptr,int length)
 	unsigned char* start=music_ptr;
 	for (i=0; i<16; ++i)
 	{
-		instruments[i].start_address = 0;
+		instruments[i].start_address = nullptr;
 	}
 	adl_gv_subtracks_count = 0;
 
@@ -765,14 +765,14 @@ void init_music()
 	{
 		instruments[i].cur_pitchbend = 0;
 		adl_gv_chorus_instruments[i] = 0;
-		if (instruments[i].start_address != 0)
+		if (instruments[i].start_address != nullptr)
 		{
 			instruments[i].cur_address = instruments[i].start_address;
 			instruments[i].cur_delay = get_numseq(&instruments[i].cur_address);
 		}
 		else
 		{
-			instruments[i].cur_address = 0;
+			instruments[i].cur_address = nullptr;
 			instruments[i].cur_delay = 0;
 		}
 	}
@@ -808,7 +808,7 @@ void func_play_tick()
 		{
 			int instr = adl_gv_instr_order[i];
 //			if (instr!=10) continue;
-			if (instruments[instr].cur_address == 0) continue;
+			if (instruments[instr].cur_address == nullptr) continue;
 			if (instruments[instr].cur_delay == 0)
 			{
 				instruments[instr].cur_delay = decode_op(instr,&another_loop);

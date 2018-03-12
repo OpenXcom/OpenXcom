@@ -49,7 +49,7 @@ const double Game::VOLUME_GRADIENT = 10.0;
  * creates the display screen and sets up the cursor.
  * @param title Title of the game window.
  */
-Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _save(0), _mod(0), _quit(false), _init(false), _mouseActive(true), _timeUntilNextFrame(0)
+Game::Game(const std::string &title) : _screen(nullptr), _cursor(nullptr), _lang(nullptr), _save(nullptr), _mod(nullptr), _quit(false), _init(false), _mouseActive(true), _timeUntilNextFrame(0)
 {
 	Options::reload = false;
 	Options::mute = false;
@@ -80,7 +80,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _save(0
 	CrossPlatform::setWindowIcon(103, FileMap::getFilePath("openxcom.png"));
 
 	// Set the window caption
-	SDL_WM_SetCaption(title.c_str(), 0);
+	SDL_WM_SetCaption(title.c_str(), nullptr);
 
 	SDL_EnableUNICODE(1);
 
@@ -319,7 +319,7 @@ void Game::run()
 void Game::quit()
 {
 	// Always save ironman
-	if (_save != 0 && _save->isIronman() && !_save->getName().empty())
+	if (_save != nullptr && _save->isIronman() && !_save->getName().empty())
 	{
 		std::string filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_save->getName())) + ".sav";
 		_save->save(filename);

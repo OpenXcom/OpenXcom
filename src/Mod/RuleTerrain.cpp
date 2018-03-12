@@ -146,7 +146,7 @@ MapBlock* RuleTerrain::getRandomMapBlock(int maxSizeX, int maxSizeY, int group, 
 		}
 	}
 
-	if (compliantMapBlocks.empty()) return 0;
+	if (compliantMapBlocks.empty()) return nullptr;
 
 	size_t n = RNG::generate(0, compliantMapBlocks.size() - 1);
 
@@ -165,7 +165,7 @@ MapBlock* RuleTerrain::getMapBlock(const std::string &name)
 		if ((*i)->getName() == name)
 			return (*i);
 	}
-	return 0;
+	return nullptr;
 }
 
 /**
@@ -176,7 +176,7 @@ MapBlock* RuleTerrain::getMapBlock(const std::string &name)
  */
 MapData *RuleTerrain::getMapData(unsigned int *id, int *mapDataSetID) const
 {
-	MapDataSet* mdf = 0;
+	MapDataSet* mdf = nullptr;
 	std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin();
 	for (; i != _mapDataSets.end(); ++i)
 	{

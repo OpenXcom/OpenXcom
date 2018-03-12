@@ -78,31 +78,31 @@ inline static GenericFunctionPointer glGetProcAddress(const char *name)
 }
 
 #ifndef __APPLE__
-PFNGLCREATEPROGRAMPROC glCreateProgram = 0;
-PFNGLDELETEPROGRAMPROC glDeleteProgram = 0;
-PFNGLUSEPROGRAMPROC glUseProgram = 0;
-PFNGLISPROGRAMPROC glIsProgram = 0;
-PFNGLISSHADERPROC glIsShader = 0;
-PFNGLCREATESHADERPROC glCreateShader = 0;
-PFNGLDELETESHADERPROC glDeleteShader = 0;
-PFNGLSHADERSOURCEPROC glShaderSource = 0;
-PFNGLCOMPILESHADERPROC glCompileShader = 0;
-PFNGLATTACHSHADERPROC glAttachShader = 0;
-PFNGLDETACHSHADERPROC glDetachShader = 0;
-PFNGLGETATTACHEDSHADERSPROC glGetAttachedShaders = 0;
-PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog = 0;
-PFNGLGETPROGRAMIVPROC glGetProgramiv = 0;
-PFNGLGETSHADERINFOLOGPROC glGetShaderInfoLog = 0;
-PFNGLGETSHADERIVPROC glGetShaderiv = 0;
-PFNGLLINKPROGRAMPROC glLinkProgram = 0;
-PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation = 0;
-PFNGLUNIFORM1IPROC glUniform1i = 0;
-PFNGLUNIFORM2FVPROC glUniform2fv = 0;
-PFNGLUNIFORM4FVPROC glUniform4fv = 0;
+PFNGLCREATEPROGRAMPROC glCreateProgram = nullptr;
+PFNGLDELETEPROGRAMPROC glDeleteProgram = nullptr;
+PFNGLUSEPROGRAMPROC glUseProgram = nullptr;
+PFNGLISPROGRAMPROC glIsProgram = nullptr;
+PFNGLISSHADERPROC glIsShader = nullptr;
+PFNGLCREATESHADERPROC glCreateShader = nullptr;
+PFNGLDELETESHADERPROC glDeleteShader = nullptr;
+PFNGLSHADERSOURCEPROC glShaderSource = nullptr;
+PFNGLCOMPILESHADERPROC glCompileShader = nullptr;
+PFNGLATTACHSHADERPROC glAttachShader = nullptr;
+PFNGLDETACHSHADERPROC glDetachShader = nullptr;
+PFNGLGETATTACHEDSHADERSPROC glGetAttachedShaders = nullptr;
+PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog = nullptr;
+PFNGLGETPROGRAMIVPROC glGetProgramiv = nullptr;
+PFNGLGETSHADERINFOLOGPROC glGetShaderInfoLog = nullptr;
+PFNGLGETSHADERIVPROC glGetShaderiv = nullptr;
+PFNGLLINKPROGRAMPROC glLinkProgram = nullptr;
+PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation = nullptr;
+PFNGLUNIFORM1IPROC glUniform1i = nullptr;
+PFNGLUNIFORM2FVPROC glUniform2fv = nullptr;
+PFNGLUNIFORM4FVPROC glUniform4fv = nullptr;
 #endif
 
-void * (APIENTRYP glXGetCurrentDisplay)() = 0;
-Uint32 (APIENTRYP glXGetCurrentDrawable)() = 0;
+void * (APIENTRYP glXGetCurrentDisplay)() = nullptr;
+Uint32 (APIENTRYP glXGetCurrentDrawable)() = nullptr;
 void (APIENTRYP glXSwapIntervalEXT)(void *display, Uint32 GLXDrawable, int interval);
 
 Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
@@ -310,7 +310,7 @@ bool OpenGL::set_shader(const char *source_yaml_filename)
 			else
 			{
 				GLchar *infoLog = new GLchar[infoLogLength];
-				glGetProgramInfoLog(glprogram, infoLogLength, NULL, infoLog);
+				glGetProgramInfoLog(glprogram, infoLogLength, nullptr, infoLog);
 				glErrorCheck();
 
 				Log(LOG_ERROR) << "OpenGL shader link failed \"" << infoLog << "\"";
@@ -329,7 +329,7 @@ static GLuint createShader(GLenum type, const char *source)
 {
 	GLuint shader = glCreateShader(type);
 	glErrorCheck();
-	glShaderSource(shader, 1, &source, 0);
+	glShaderSource(shader, 1, &source, nullptr);
 	glErrorCheck();
 	glCompileShader(shader);
 	glErrorCheck();
@@ -349,7 +349,7 @@ static GLuint createShader(GLenum type, const char *source)
 		else
 		{
 			GLchar *infoLog = new GLchar[infoLogLength];
-			glGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
+			glGetShaderInfoLog(shader, infoLogLength, nullptr, infoLog);
 			glErrorCheck();
 
 			Log(LOG_ERROR) << "OpenGL shader compilation failed: \"" << infoLog << "\"";
@@ -493,7 +493,7 @@ void OpenGL::term()
 	}
 
 	if (buffer) {
-		buffer = 0;
+		buffer = nullptr;
 		iwidth = 0;
 		iheight = 0;
 	}
@@ -502,7 +502,7 @@ void OpenGL::term()
 }
 
   OpenGL::OpenGL() : gltexture(0), glprogram(0), linear(false),
-                     buffer(NULL), buffer_surface(NULL), iwidth(0), iheight(0),
+                     buffer(nullptr), buffer_surface(nullptr), iwidth(0), iheight(0),
                      iformat(GL_UNSIGNED_INT_8_8_8_8_REV), // this didn't seem to be set anywhere before...
                      ibpp(32)                              // ...nor this
   { }

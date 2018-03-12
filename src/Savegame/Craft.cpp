@@ -56,9 +56,9 @@ Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rule
 	}
 	for (unsigned int i = 0; i < _rules->getWeapons(); ++i)
 	{
-		_weapons.push_back(0);
+		_weapons.push_back(nullptr);
 	}
-	if (base != 0)
+	if (base != nullptr)
 	{
 		setBase(base);
 	}
@@ -107,7 +107,7 @@ void Craft::load(const YAML::Node &node, const Mod *mod, SavedGame *save)
 			}
 			else
 			{
-				_weapons[j] = 0;
+				_weapons[j] = nullptr;
 				if (type != "0")
 				{
 					Log(LOG_ERROR) << "Failed to load craft weapon " << type;
@@ -121,7 +121,7 @@ void Craft::load(const YAML::Node &node, const Mod *mod, SavedGame *save)
 	// Some old saves have bad items, better get rid of them to avoid further bugs
 	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end();)
 	{
-		if (mod->getItem(i->first) == 0)
+		if (mod->getItem(i->first) == nullptr)
 		{
 			Log(LOG_ERROR) << "Failed to load item " << i->first;
 			_items->getContents()->erase(i++);
@@ -223,7 +223,7 @@ YAML::Node Craft::save() const
 	for (std::vector<CraftWeapon*>::const_iterator i = _weapons.begin(); i != _weapons.end(); ++i)
 	{
 		YAML::Node subnode;
-		if (*i != 0)
+		if (*i != nullptr)
 		{
 			subnode = (*i)->save();
 		}
@@ -295,7 +295,7 @@ void Craft::changeRules(RuleCraft *rules)
 	_weapons.clear();
 	for (unsigned int i = 0; i < _rules->getWeapons(); ++i)
 	{
-		_weapons.push_back(0);
+		_weapons.push_back(nullptr);
 	}
 }
 
@@ -402,7 +402,7 @@ void Craft::setDestination(Target *dest)
 	{
 		_takeoff = 60;
 	}
-	if (dest == 0)
+	if (dest == nullptr)
 		setSpeed(_rules->getMaxSpeed()/2);
 	else
 		setSpeed(_rules->getMaxSpeed());
@@ -425,7 +425,7 @@ int Craft::getNumWeapons() const
 
 	for (std::vector<CraftWeapon*>::const_iterator i = _weapons.begin(); i != _weapons.end(); ++i)
 	{
-		if ((*i) != 0)
+		if ((*i) != nullptr)
 		{
 			total++;
 		}
@@ -683,7 +683,7 @@ void Craft::think()
 	{
 		setInterceptionOrder(0); // just to be sure
 		checkup();
-		setDestination(0);
+		setDestination(nullptr);
 		setSpeed(0);
 		_lowFuel = false;
 		_mission = false;
@@ -1007,7 +1007,7 @@ void Craft::unload(const Mod *mod)
 	{
 		if ((*s)->getCraft() == this)
 		{
-			(*s)->setCraft(0);
+			(*s)->setCraft(nullptr);
 		}
 	}
 }

@@ -59,7 +59,7 @@ YAML::Node SoldierDeath::save() const
 {
 	YAML::Node node;
 	node["time"] = _time.save();
-	if (_cause != 0)
+	if (_cause != nullptr)
 	{
 		node["cause"] = _cause->save();
 	}

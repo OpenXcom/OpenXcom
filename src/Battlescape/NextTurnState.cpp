@@ -41,7 +41,7 @@ namespace OpenXcom
  * @param battleGame Pointer to the saved game.
  * @param state Pointer to the Battlescape state.
  */
-NextTurnState::NextTurnState(SavedBattleGame *battleGame, BattlescapeState *state) : _battleGame(battleGame), _state(state), _timer(0)
+NextTurnState::NextTurnState(SavedBattleGame *battleGame, BattlescapeState *state) : _battleGame(battleGame), _state(state), _timer(nullptr)
 {
 	// Create objects
 	int y = state->getMap()->getMessageY();
@@ -159,7 +159,7 @@ void NextTurnState::think()
 {
 	if (_timer)
 	{
-		_timer->think(this, 0);
+		_timer->think(this, nullptr);
 	}
 }
 
@@ -175,13 +175,13 @@ void NextTurnState::close()
 	int liveSoldiers = 0;
 	_state->getBattleGame()->tallyUnits(liveAliens, liveSoldiers);
 
-	if ((_battleGame->getObjectiveType() != MUST_DESTROY && liveAliens == 0) || liveSoldiers == 0)		// not the final mission and all aliens dead.
+	if ((_battleGame->getObjectiveType() != SpecialTile::MUST_DESTROY && liveAliens == 0) || liveSoldiers == 0)		// not the final mission and all aliens dead.
 	{
 		_state->finishBattle(false, liveSoldiers);
 	}
 	else
 	{
-		_state->btnCenterClick(0);
+		_state->btnCenterClick(nullptr);
 
 		// Autosave every set amount of turns
 		if ((_battleGame->getTurn() == 1 || _battleGame->getTurn() % Options::autosaveFrequency == 0) && _battleGame->getSide() == FACTION_PLAYER)

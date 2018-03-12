@@ -34,7 +34,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextEdit::TextEdit(State *state, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _blink(true), _modal(true), _ascii(L'A'), _caretPos(0), _textEditConstraint(TEC_NONE), _change(0), _state(state)
+TextEdit::TextEdit(State *state, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _blink(true), _modal(true), _ascii(L'A'), _caretPos(0), _textEditConstraint(TEC_NONE), _change(nullptr), _state(state)
 {
 	_isFocused = false;
 	_text = new Text(width, height, 0, 0);
@@ -54,7 +54,7 @@ TextEdit::~TextEdit()
 	delete _timer;
 	// In case it was left focused
 	SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
-	_state->setModal(0);
+	_state->setModal(nullptr);
 }
 
 /**
@@ -101,7 +101,7 @@ void TextEdit::setFocus(bool focus, bool modal)
 			_timer->stop();
 			SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
 			if (_modal)
-				_state->setModal(0);
+				_state->setModal(nullptr);
 		}
 	}
 }
@@ -279,7 +279,7 @@ void TextEdit::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
  */
 void TextEdit::think()
 {
-	_timer->think(0, this);
+	_timer->think(nullptr, this);
 }
 
 /**

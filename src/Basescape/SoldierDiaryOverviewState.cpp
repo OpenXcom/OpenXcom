@@ -46,7 +46,7 @@ namespace OpenXcom
  */
 SoldierDiaryOverviewState::SoldierDiaryOverviewState(Base *base, size_t soldierId, SoldierInfoState *soldierInfoState) : _base(base), _soldierId(soldierId), _soldierInfoState(soldierInfoState)
 {
-	if (_base == 0)
+	if (_base == nullptr)
 	{
 		_list = _game->getSavedGame()->getDeadSoldiers();
 	}
@@ -105,7 +105,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(Base *base, size_t soldierI
 	_btnCommendations->setVisible(!_game->getMod()->getCommendation().empty());
 
 	_btnPrev->setText(L"<<");
-	if (_base == 0)
+	if (_base == nullptr)
 	{
 		_btnPrev->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnNextClick);
 		_btnPrev->onKeyboardPress((ActionHandler)&SoldierDiaryOverviewState::btnNextClick, Options::keyBattlePrevUnit);
@@ -117,7 +117,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(Base *base, size_t soldierI
 	}
 
 	_btnNext->setText(L">>");
-	if (_base == 0)
+	if (_base == nullptr)
 	{
 		_btnNext->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnPrevClick);
 		_btnNext->onKeyboardPress((ActionHandler)&SoldierDiaryOverviewState::btnPrevClick, Options::keyBattleNextUnit);

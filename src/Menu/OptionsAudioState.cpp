@@ -144,7 +144,7 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	_cbxMusicFormat->onMouseIn((ActionHandler)&OptionsAudioState::txtTooltipIn);
 	_cbxMusicFormat->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
 
-	std::wstring curMusic = musFormats[Mix_GetMusicType(0)];
+	std::wstring curMusic = musFormats[Mix_GetMusicType(nullptr)];
 	_txtCurrentMusic->setText(tr("STR_CURRENT_FORMAT").arg(curMusic));
 
 	_txtSoundFormat->setText(tr("STR_PREFERRED_SFX_FORMAT"));

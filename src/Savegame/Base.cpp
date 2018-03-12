@@ -145,9 +145,9 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 		std::string type = (*i)["type"].as<std::string>(_mod->getSoldiersList().front());
 		if (_mod->getSoldier(type))
 		{
-			Soldier *s = new Soldier(_mod->getSoldier(type), 0);
+			Soldier *s = new Soldier(_mod->getSoldier(type), nullptr);
 			s->load(*i, _mod, save);
-			s->setCraft(0);
+			s->setCraft(nullptr);
 			if (const YAML::Node &craft = (*i)["craft"])
 			{
 				CraftId craftId = Craft::loadId(craft);
@@ -172,7 +172,7 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 	// Some old saves have bad items, better get rid of them to avoid further bugs
 	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end();)
 	{
-		if (_mod->getItem(i->first) == 0)
+		if (_mod->getItem(i->first) == nullptr)
 		{
 			Log(LOG_ERROR) << "Failed to load item " << i->first;
 			_items->getContents()->erase(i++);
@@ -421,7 +421,7 @@ int Base::detect(Target *target) const
 	if (chance == 0) return 0;
 
 	Ufo *u = dynamic_cast<Ufo*>(target);
-	if (u != 0)
+	if (u != nullptr)
 	{
 		chance = chance * (100 + u->getVisibility()) / 100;
 	}
@@ -465,12 +465,12 @@ int Base::getAvailableSoldiers(bool checkCombatReadiness) const
 	int total = 0;
 	for (std::vector<Soldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
 	{
-		if (!checkCombatReadiness && (*i)->getCraft() == 0)
+		if (!checkCombatReadiness && (*i)->getCraft() == nullptr)
 		{
 			total++;
 		}
-		else if (checkCombatReadiness && (((*i)->getCraft() != 0 && (*i)->getCraft()->getStatus() != "STR_OUT") ||
-			((*i)->getCraft() == 0 && (*i)->getWoundRecovery() == 0)))
+		else if (checkCombatReadiness && (((*i)->getCraft() != nullptr && (*i)->getCraft()->getStatus() != "STR_OUT") ||
+			((*i)->getCraft() == nullptr && (*i)->getWoundRecovery() == 0)))
 		{
 			total++;
 		}
@@ -1451,7 +1451,7 @@ std::vector<Vehicle*> *Base::getVehicles()
  */
 void Base::destroyDisconnectedFacilities()
 {
-	std::list<std::vector<BaseFacility*>::iterator> disFacs = getDisconnectedFacilities(0);
+	std::list<std::vector<BaseFacility*>::iterator> disFacs = getDisconnectedFacilities(nullptr);
 	for (std::list<std::vector<BaseFacility*>::iterator>::reverse_iterator i = disFacs.rbegin(); i != disFacs.rend(); ++i)
 	{
 		destroyFacility(*i);
@@ -1467,7 +1467,7 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 {
 	std::list<std::vector<BaseFacility*>::iterator> result;
 
-	if (remove != 0 && remove->getRules()->isLift())
+	if (remove != nullptr && remove->getRules()->isLift())
 	{ // Theoretically this is impossible, but sanity check is good :)
 		for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 		{
@@ -1478,13 +1478,13 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 
 	std::vector<std::pair<std::vector<BaseFacility*>::iterator, bool>*> facilitiesConnStates;
 	std::pair<std::vector<BaseFacility*>::iterator, bool> *grid[BASE_SIZE][BASE_SIZE];
-	BaseFacility *lift = 0;
+	BaseFacility *lift = nullptr;
 
 	for (int x = 0; x < BASE_SIZE; ++x)
 	{
 		for (int y = 0; y < BASE_SIZE; ++y)
 		{
-			grid[x][y] = 0;
+			grid[x][y] = nullptr;
 		}
 	}
 
@@ -1507,7 +1507,7 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 	}
 
 	// we're in real trouble if this happens...
-	if (lift == 0)
+	if (lift == nullptr)
 	{
 		//TODO: something clever.
 		return result;
@@ -1520,22 +1520,22 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 	{
 		int x = stack.top().first, y = stack.top().second;
 		stack.pop();
-		if (x >= 0 && x < BASE_SIZE && y >= 0 && y < BASE_SIZE && grid[x][y] != 0 && !grid[x][y]->second)
+		if (x >= 0 && x < BASE_SIZE && y >= 0 && y < BASE_SIZE && grid[x][y] != nullptr && !grid[x][y]->second)
 		{
 			grid[x][y]->second = true;
 			BaseFacility *fac = *(grid[x][y]->first);
-			BaseFacility *neighborLeft = (x-1 >= 0 && grid[x-1][y] != 0) ? *(grid[x-1][y]->first) : 0;
-			BaseFacility *neighborRight = (x+1 < BASE_SIZE && grid[x+1][y] != 0) ? *(grid[x+1][y]->first) : 0;
-			BaseFacility *neighborTop = (y-1 >= 0 && grid[x][y-1] != 0) ? *(grid[x][y-1]->first) : 0;
-			BaseFacility *neighborBottom= (y+1 < BASE_SIZE && grid[x][y+1] != 0) ? *(grid[x][y+1]->first) : 0;
-			if ((fac->getBuildTime() == 0) || (neighborLeft != 0 && (neighborLeft == fac || neighborLeft->getBuildTime() > neighborLeft->getRules()->getBuildTime()))) stack.push(std::make_pair(x-1,y));
-			if ((fac->getBuildTime() == 0) || (neighborRight != 0 && (neighborRight == fac || neighborRight->getBuildTime() > neighborRight->getRules()->getBuildTime()))) stack.push(std::make_pair(x+1,y));
-			if ((fac->getBuildTime() == 0) || (neighborTop != 0 && (neighborTop == fac || neighborTop->getBuildTime() > neighborTop->getRules()->getBuildTime()))) stack.push(std::make_pair(x,y-1));
-			if ((fac->getBuildTime() == 0) || (neighborBottom != 0 && (neighborBottom == fac || neighborBottom->getBuildTime() > neighborBottom->getRules()->getBuildTime()))) stack.push(std::make_pair(x,y+1));
+			BaseFacility *neighborLeft = (x-1 >= 0 && grid[x-1][y] != nullptr) ? *(grid[x-1][y]->first) : 0;
+			BaseFacility *neighborRight = (x+1 < BASE_SIZE && grid[x+1][y] != nullptr) ? *(grid[x+1][y]->first) : 0;
+			BaseFacility *neighborTop = (y-1 >= 0 && grid[x][y-1] != nullptr) ? *(grid[x][y-1]->first) : 0;
+			BaseFacility *neighborBottom= (y+1 < BASE_SIZE && grid[x][y+1] != nullptr) ? *(grid[x][y+1]->first) : 0;
+			if ((fac->getBuildTime() == 0) || (neighborLeft != nullptr && (neighborLeft == fac || neighborLeft->getBuildTime() > neighborLeft->getRules()->getBuildTime()))) stack.push(std::make_pair(x-1,y));
+			if ((fac->getBuildTime() == 0) || (neighborRight != nullptr && (neighborRight == fac || neighborRight->getBuildTime() > neighborRight->getRules()->getBuildTime()))) stack.push(std::make_pair(x+1,y));
+			if ((fac->getBuildTime() == 0) || (neighborTop != nullptr && (neighborTop == fac || neighborTop->getBuildTime() > neighborTop->getRules()->getBuildTime()))) stack.push(std::make_pair(x,y-1));
+			if ((fac->getBuildTime() == 0) || (neighborBottom != nullptr && (neighborBottom == fac || neighborBottom->getBuildTime() > neighborBottom->getRules()->getBuildTime()))) stack.push(std::make_pair(x,y+1));
 		}
 	}
 
-	BaseFacility *lastFacility = 0;
+	BaseFacility *lastFacility = nullptr;
 	for (std::vector<std::pair<std::vector<BaseFacility*>::iterator, bool>*>::iterator i = facilitiesConnStates.begin(); i != facilitiesConnStates.end(); ++i)
 	{
 		// Not a connected fac.? -> push its iterator into the list!
@@ -1567,7 +1567,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 				{
 					if ((*i)->getCraft() == (*facility)->getCraft())
 					{
-						(*i)->setCraft(0);
+						(*i)->setCraft(nullptr);
 					}
 				}
 			}

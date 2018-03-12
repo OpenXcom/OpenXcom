@@ -49,7 +49,7 @@ const char *Ufo::ALTITUDE_STRING[] = {
 Ufo::Ufo(const RuleUfo *rules)
   : MovingTarget(), _rules(rules), _id(0), _crashId(0), _landId(0), _damage(0), _direction("STR_NORTH")
   , _altitude("STR_HIGH_UC"), _status(FLYING), _secondsRemaining(0)
-  , _inBattlescape(false), _mission(0), _trajectory(0)
+  , _inBattlescape(false), _mission(nullptr), _trajectory(nullptr)
   , _trajectoryPoint(0), _detected(false), _hyperDetected(false), _processedIntercept(false), _shootingAt(0), _hitFrame(0)
   , _fireCountdown(0), _escapeCountdown(0)
 {
@@ -81,10 +81,10 @@ Ufo::~Ufo()
 	if (_dest)
 	{
 		Waypoint *wp = dynamic_cast<Waypoint*>(_dest);
-		if (wp != 0)
+		if (wp != nullptr)
 		{
 			delete _dest;
-			_dest = 0;
+			_dest = nullptr;
 		}
 	}
 }
@@ -168,7 +168,7 @@ void Ufo::load(const YAML::Node &node, const Mod &mod, SavedGame &game)
 
 		std::string tid = node["trajectory"].as<std::string>();
 		_trajectory = mod.getUfoTrajectory(tid);
-		if (_trajectory == 0)
+		if (_trajectory == nullptr)
 		{
 			// Corrupt save file.
 			throw Exception("Unknown UFO trajectory, save file is corrupt.");

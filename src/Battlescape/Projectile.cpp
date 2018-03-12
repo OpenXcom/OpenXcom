@@ -129,7 +129,7 @@ int Projectile::calculateTrajectory(double accuracy, const Position& originVoxel
 	}
 	else
 	{
-		test = _save->getTileEngine()->calculateLine(originVoxel, _targetVoxel, false, &_trajectory, 0);
+		test = _save->getTileEngine()->calculateLine(originVoxel, _targetVoxel, false, &_trajectory, nullptr);
 	}
 
 	if (test != V_EMPTY &&
@@ -141,7 +141,7 @@ int Projectile::calculateTrajectory(double accuracy, const Position& originVoxel
 		_action.type != BA_LAUNCH)
 	{
 		Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
-		if (test == V_UNIT && _save->getTile(hitPos) && _save->getTile(hitPos)->getUnit() == 0) //no unit? must be lower
+		if (test == V_UNIT && _save->getTile(hitPos) && _save->getTile(hitPos)->getUnit() == nullptr) //no unit? must be lower
 		{
 			hitPos = Position(hitPos.x, hitPos.y, hitPos.z-1);
 		}
@@ -217,7 +217,7 @@ int Projectile::calculateThrow(double accuracy)
 {
 	Tile *targetTile = _save->getTile(_action.target);
 		
-	Position originVoxel = _save->getTileEngine()->getOriginVoxel(_action, 0);
+	Position originVoxel = _save->getTileEngine()->getOriginVoxel(_action, nullptr);
 	Position targetVoxel;
 	std::vector<Position> targets;
 	double curvature;
@@ -232,7 +232,7 @@ int Projectile::calculateThrow(double accuracy)
 	else 
 	{
 		BattleUnit *tu = targetTile->getUnit();
-		if (!tu && _action.target.z > 0 && targetTile->hasNoFloor(0))
+		if (!tu && _action.target.z > 0 && targetTile->hasNoFloor(nullptr))
 			tu = _save->getTile(_action.target - Position(0, 0, 1))->getUnit();
 		if (Options::forceFire && (SDL_GetModState() & KMOD_CTRL) != 0 && _save->getSide() == FACTION_PLAYER)
 		{
@@ -247,7 +247,7 @@ int Projectile::calculateThrow(double accuracy)
 			targets.push_back(targetVoxel + Position(0, 0, 2));
 			targets.push_back(targetVoxel + Position(0, 0, tu->getHeight() - 1));
 		}
-		else if (targetTile->getMapData(O_OBJECT) != 0)
+		else if (targetTile->getMapData(TilePart::OBJECT) != nullptr)
 		{
 			targetVoxel = _action.target * Position(16,16,24) + Position(8,8,0);
 			targets.push_back(targetVoxel + Position(0, 0, 13));
@@ -255,7 +255,7 @@ int Projectile::calculateThrow(double accuracy)
 			targets.push_back(targetVoxel + Position(0, 0, 23));
 			targets.push_back(targetVoxel + Position(0, 0, 2));
 		}
-		else if (targetTile->getMapData(O_NORTHWALL) != 0)
+		else if (targetTile->getMapData(TilePart::NORTHWALL) != nullptr)
 		{
 			targetVoxel = _action.target * Position(16,16,24) + Position(8,0,0);
 			targets.push_back(targetVoxel + Position(0, 0, 13));
@@ -263,7 +263,7 @@ int Projectile::calculateThrow(double accuracy)
 			targets.push_back(targetVoxel + Position(0, 0, 20));
 			targets.push_back(targetVoxel + Position(0, 0, 3));
 		}
-		else if (targetTile->getMapData(O_WESTWALL) != 0)
+		else if (targetTile->getMapData(TilePart::WESTWALL) != nullptr)
  		{
 			targetVoxel = _action.target * Position(16,16,24) + Position(0,8,0);
 			targets.push_back(targetVoxel + Position(0, 0, 13));
@@ -271,7 +271,7 @@ int Projectile::calculateThrow(double accuracy)
 			targets.push_back(targetVoxel + Position(0, 0, 20));
 			targets.push_back(targetVoxel + Position(0, 0, 2));
 		}
-		else if (targetTile->getMapData(O_FLOOR) != 0)
+		else if (targetTile->getMapData(TilePart::FLOOR) != nullptr)
 		{
 			targets.push_back(targetVoxel);
 		}
@@ -306,15 +306,15 @@ int Projectile::calculateThrow(double accuracy)
 			deltas = Position(0,0,0);
 		}
 		test = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, _action.actor, curvature, deltas);
-		if (forced) return O_OBJECT; //fake hit
+		if (forced) return V_OBJECT; //fake hit
 		Position endPoint = _trajectory.back() / Position (16, 16, 24);
 		Tile *endTile = _save->getTile(endPoint);
 		// check if the item would land on a tile with a blocking object
 		if (_action.type == BA_THROW
 			&& endTile
-			&& endTile->getMapData(O_OBJECT)
-			&& endTile->getMapData(O_OBJECT)->getTUCost(MT_WALK) == 255
-			&& !(endTile->isBigWall() && (endTile->getMapData(O_OBJECT)->getBigWall()<1 || endTile->getMapData(O_OBJECT)->getBigWall()>3)))
+			&& endTile->getMapData(TilePart::OBJECT)
+			&& endTile->getMapData(TilePart::OBJECT)->getTUCost(MT_WALK) == 255
+			&& !(endTile->isBigWall() && (endTile->getMapData(TilePart::OBJECT)->getBigWall()<1 || endTile->getMapData(TilePart::OBJECT)->getBigWall()>3)))
 		{
 			test = V_OUTOFBOUNDS; 
 		}
@@ -472,7 +472,7 @@ BattleItem *Projectile::getItem() const
 	if (_action.type == BA_THROW)
 		return _action.weapon;
 	else
-		return 0;
+		return nullptr;
 }
 
 /**

@@ -60,7 +60,7 @@ StartState::StartState() : _anim(0)
 	_game->getScreen()->resetDisplay(false);
 
 	// Create objects
-	_thread = 0;
+	_thread = nullptr;
 	loading = LOADING_STARTED;
 	error = "";
 
@@ -109,7 +109,7 @@ StartState::StartState() : _anim(0)
  */
 StartState::~StartState()
 {
-	if (_thread != 0)
+	if (_thread != nullptr)
 	{
 		SDL_KillThread(_thread);
 	}
@@ -136,7 +136,7 @@ void StartState::init()
 
 	// Load the game data in a separate thread
 	_thread = SDL_CreateThread(load, (void*)_game);
-	if (_thread == 0)
+	if (_thread == nullptr)
 	{
 		// If we can't create the thread, just load it as usual
 		load((void*)_game);
@@ -149,7 +149,7 @@ void StartState::init()
 void StartState::think()
 {
 	State::think();
-	_timer->think(this, 0);
+	_timer->think(this, nullptr);
 
 	switch (loading)
 	{

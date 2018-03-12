@@ -60,7 +60,7 @@ BriefingState::BriefingState(Craft *craft, Base *base)
 
 	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
 	AlienDeployment *deployment = _game->getMod()->getDeployment(mission);
-	Ufo * ufo = 0;
+	Ufo * ufo = nullptr;
 	if (!deployment && craft)
 	{
 		ufo = dynamic_cast <Ufo*> (craft->getDestination());

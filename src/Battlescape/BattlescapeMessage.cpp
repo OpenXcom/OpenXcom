@@ -33,7 +33,7 @@ namespace OpenXcom
  */
 BattlescapeMessage::BattlescapeMessage(int width, int height, int x, int y) : Surface(width, height, x, y)
 {
-	_window = new Window(0, width, height, x, y, POPUP_NONE);
+	_window = new Window(nullptr, width, height, x, y, POPUP_NONE);
 	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast(true);
 

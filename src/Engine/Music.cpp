@@ -30,7 +30,7 @@ namespace OpenXcom
 /**
  * Initializes a new music track.
  */
-Music::Music() : _music(0)
+Music::Music() : _music(nullptr)
 {
 }
 
@@ -57,7 +57,7 @@ void Music::load(const std::string &filename)
 	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
 
 	_music = Mix_LoadMUS(utf8.c_str());
-	if (_music == 0)
+	if (_music == nullptr)
 	{
 		throw Exception(Mix_GetError());
 	}
@@ -75,7 +75,7 @@ void Music::load(const void *data, int size)
 	SDL_RWops *rwops = SDL_RWFromConstMem(data, size);
 	_music = Mix_LoadMUS_RW(rwops);
 	SDL_FreeRW(rwops);
-	if (_music == 0)
+	if (_music == nullptr)
 	{
 		throw Exception(Mix_GetError());
 	}
@@ -91,7 +91,7 @@ void Music::play(int loop) const
 #ifndef __NO_MUSIC
 	if (!Options::mute)
 	{
-		if (_music != 0)
+		if (_music != nullptr)
 		{
 			stop();
 			if (Mix_PlayMusic(_music, loop) == -1)
@@ -112,7 +112,7 @@ void Music::stop()
 	if (!Options::mute)
 	{
 		func_mute();
-		Mix_HookMusic(NULL, NULL);
+		Mix_HookMusic(nullptr, nullptr);
 		Mix_HaltMusic();
 	}
 #endif
@@ -127,8 +127,8 @@ void Music::pause()
 	if (!Options::mute)
 	{
 		Mix_PauseMusic();
-		if (Mix_GetMusicType(0) == MUS_NONE)
-			Mix_HookMusic(NULL, NULL);
+		if (Mix_GetMusicType(nullptr) == MUS_NONE)
+			Mix_HookMusic(nullptr, nullptr);
 	}
 #endif
 }
@@ -142,8 +142,8 @@ void Music::resume()
 	if (!Options::mute)
 	{
 		Mix_ResumeMusic();
-		if (Mix_GetMusicType(0) == MUS_NONE)
-			Mix_HookMusic(AdlibMusic::player, NULL);
+		if (Mix_GetMusicType(nullptr) == MUS_NONE)
+			Mix_HookMusic(AdlibMusic::player, nullptr);
 	}
 #endif
 }

@@ -72,7 +72,7 @@ OptionsBaseState::OptionsBaseState(OptionsOrigin origin) : _origin(origin)
 	_txtTooltip = new Text(305, 25, 8, 148);
 
 	// Set palette
-	setInterface("optionsMenu", false, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : 0);
+	setInterface("optionsMenu", false, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : nullptr);
 
 	add(_window, "window", "optionsMenu");
 

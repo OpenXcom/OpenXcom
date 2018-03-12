@@ -79,9 +79,9 @@ namespace OpenXcom
  * Initializes all the elements in the Battlescape screen.
  * @param game Pointer to the core game.
  */
-BattlescapeState::BattlescapeState() : _reserve(0), _firstInit(true), _isMouseScrolling(false), _isMouseScrolled(false), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(0), _mouseOverIcons(false), _autosave(false)
+BattlescapeState::BattlescapeState() : _reserve(nullptr), _firstInit(true), _isMouseScrolling(false), _isMouseScrolled(false), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(0), _mouseOverIcons(false), _autosave(false)
 {
-	std::fill_n(_visibleUnit, 10, (BattleUnit*)(0));
+	std::fill_n(_visibleUnit, 10, (BattleUnit*)nullptr);
 
 	const int screenWidth = Options::baseXResolution;
 	const int screenHeight = Options::baseYResolution;
@@ -568,8 +568,8 @@ void BattlescapeState::think()
 		{
 			State::think();
 			_battleGame->think();
-			_animTimer->think(this, 0);
-			_gameTimer->think(this, 0);
+			_animTimer->think(this, nullptr);
+			_gameTimer->think(this, nullptr);
 			if (popped)
 			{
 				_battleGame->handleNonTargetAction();
@@ -599,7 +599,7 @@ void BattlescapeState::mapOver(Action *action)
 		// the mouse-release event is missed for any reason.
 		// (checking: is the dragScroll-mouse-button still pressed?)
 		// However if the SDL is also missed the release event, then it is to no avail :(
-		if ((SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+		if ((SDL_GetMouseState(nullptr,nullptr)&SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 		{ // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if ((!_mouseMovedOverThreshold) && ((int)(SDL_GetTicks() - _mouseScrollingStartTime) <= (Options::dragScrollTimeTolerance)))
@@ -732,7 +732,7 @@ void BattlescapeState::mapClick(Action *action)
 	if (_isMouseScrolling)
 	{
 		if (action->getDetails()->button.button != Options::battleDragScrollButton
-		&& (SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+		&& (SDL_GetMouseState(nullptr,nullptr)&SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 		{   // so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if ((!_mouseMovedOverThreshold) && ((int)(SDL_GetTicks() - _mouseScrollingStartTime) <= (Options::dragScrollTimeTolerance)))
@@ -792,7 +792,7 @@ void BattlescapeState::mapClick(Action *action)
 		debug(ss.str());
 	}
 
-	if (_save->getTile(pos) != 0) // don't allow to click into void
+	if (_save->getTile(pos) != nullptr) // don't allow to click into void
 	{
 		if ((action->getDetails()->button.button == SDL_BUTTON_RIGHT || (action->getDetails()->button.button == SDL_BUTTON_LEFT && (SDL_GetModState() & KMOD_ALT) != 0)) && playableUnitSelected())
 		{
@@ -1270,7 +1270,7 @@ void BattlescapeState::btnPersonalLightingClick(Action *)
  */
 bool BattlescapeState::playableUnitSelected()
 {
-	return _save->getSelectedUnit() != 0 && allowButtons();
+	return _save->getSelectedUnit() != nullptr && allowButtons();
 }
 
 /**
@@ -1284,7 +1284,7 @@ void BattlescapeState::updateSoldierInfo()
 	{
 		_btnVisibleUnit[i]->setVisible(false);
 		_numVisibleUnit[i]->setVisible(false);
-		_visibleUnit[i] = 0;
+		_visibleUnit[i] = nullptr;
 	}
 
 	bool playableUnit = playableUnitSelected();
@@ -1309,13 +1309,13 @@ void BattlescapeState::updateSoldierInfo()
 	{
 		_txtName->setText(L"");
 		showPsiButton(false);
-		toggleKneelButton(0);
+		toggleKneelButton(nullptr);
 		return;
 	}
 
 	_txtName->setText(battleUnit->getName(_game->getLanguage(), false));
 	Soldier *soldier = battleUnit->getGeoscapeSoldier();
-	if (soldier != 0)
+	if (soldier != nullptr)
 	{
 		SurfaceSet *texture = _game->getMod()->getSurfaceSet("SMOKE.PCK");
 		texture->getFrame(20 + soldier->getRank())->blit(_rank);
@@ -1381,7 +1381,7 @@ void BattlescapeState::updateSoldierInfo()
 		++j;
 	}
 
-	showPsiButton(battleUnit->getSpecialWeapon(BT_PSIAMP) != 0);
+	showPsiButton(battleUnit->getSpecialWeapon(BT_PSIAMP) != nullptr);
 }
 
 /**
@@ -1415,7 +1415,7 @@ void BattlescapeState::blinkHealthBar()
 
 	step = 1 - step;	// 1, 0, 1, 0, ...
 	BattleUnit *bu = _save->getSelectedUnit();
-	if (step == 0 || bu == 0 || !_barHealth->getVisible()) return;
+	if (step == 0 || bu == nullptr || !_barHealth->getVisible()) return;
 
 	if (++color > maxcolor) color = maxcolor - 3;
 
@@ -1568,7 +1568,7 @@ inline void BattlescapeState::handle(Action *action)
 							{
 								(*i)->damage(Position(0,0,0), 1000, DT_AP, true);
 							}
-							_save->getBattleGame()->checkForCasualties(0, 0, true, false);
+							_save->getBattleGame()->checkForCasualties(nullptr, nullptr, true, false);
 							_save->getBattleGame()->handleState();
 						}
 					}
@@ -1583,7 +1583,7 @@ inline void BattlescapeState::handle(Action *action)
 								(*i)->damage(Position(0,0,0), 1000, DT_STUN, true);
 							}
 						}
-						_save->getBattleGame()->checkForCasualties(0, 0, true, false);
+						_save->getBattleGame()->checkForCasualties(nullptr, nullptr, true, false);
 						_save->getBattleGame()->handleState();
 					}
 					// "ctrl-w" - warp unit
@@ -1593,9 +1593,9 @@ inline void BattlescapeState::handle(Action *action)
 						BattleUnit *unit = _save->getSelectedUnit();
 						Position newPos;
 						_map->getSelectorPosition(&newPos);
-						if (unit != 0 && newPos.x >= 0)
+						if (unit != nullptr && newPos.x >= 0)
 						{
-							unit->getTile()->setUnit(0);
+							unit->getTile()->setUnit(nullptr);
 							unit->setPosition(newPos);
 							_save->getTile(newPos)->setUnit(unit);
 							_save->getTileEngine()->calculateUnitLighting();
@@ -1686,7 +1686,7 @@ void BattlescapeState::saveAIMap()
 			r.x = x * r.w;
 			r.y = y * r.h;
 
-			if (t->getTUCost(O_FLOOR, MT_FLY) != 255 && t->getTUCost(O_OBJECT, MT_FLY) != 255)
+			if (t->getTUCost(TilePart::FLOOR, MT_FLY) != 255 && t->getTUCost(TilePart::OBJECT, MT_FLY) != 255)
 			{
 				SDL_FillRect(img, &r, SDL_MapRGB(img->format, 255, 0, 0x20));
 				characterRGBA(img, r.x, r.y,'*' , 0x7f, 0x7f, 0x7f, 0x7f);
@@ -1721,12 +1721,12 @@ void BattlescapeState::saveAIMap()
 				if (z > 0 && !t->hasNoFloor(_save->getTile(pos))) break; // no seeing through floors
 			}
 
-			if (t->getMapData(O_NORTHWALL) && t->getMapData(O_NORTHWALL)->getTUCost(MT_FLY) == 255)
+			if (t->getMapData(TilePart::NORTHWALL) && t->getMapData(TilePart::NORTHWALL)->getTUCost(MT_FLY) == 255)
 			{
 				lineRGBA(img, r.x, r.y, r.x+r.w, r.y, 0x50, 0x50, 0x50, 255);
 			}
 
-			if (t->getMapData(O_WESTWALL) && t->getMapData(O_WESTWALL)->getTUCost(MT_FLY) == 255)
+			if (t->getMapData(TilePart::WESTWALL) && t->getMapData(TilePart::WESTWALL)->getTUCost(MT_FLY) == 255)
 			{
 				lineRGBA(img, r.x, r.y, r.x, r.y+r.h, 0x50, 0x50, 0x50, 255);
 			}
@@ -1770,12 +1770,12 @@ void BattlescapeState::saveVoxelView()
 	{0,0,0, 224,224,224,  192,224,255,  255,224,192, 128,255,128, 192,0,255,  0,0,0, 255,255,255,  224,192,0,  255,64,128 };
 
 	BattleUnit * bu = _save->getSelectedUnit();
-	if (bu==0) return; //no unit selected
+	if (bu==nullptr) return; //no unit selected
 	std::vector<Position> _trajectory;
 
 	double ang_x,ang_y;
 	bool black;
-	Tile *tile = 0;
+	Tile *tile = nullptr;
 	std::ostringstream ss;
 	std::vector<unsigned char> image;
 	int test;
@@ -1908,7 +1908,7 @@ void BattlescapeState::saveVoxelMap()
 		{
 			for (int x = 0; x < _save->getMapSizeX()*16; ++x)
 			{
-				int test = _save->getTileEngine()->voxelCheck(Position(x,y,z*2),0,0) +1;
+				int test = _save->getTileEngine()->voxelCheck(Position(x,y,z*2),nullptr,0) +1;
 				float dist=1;
 				if (x%16==15)
 				{
@@ -2011,7 +2011,7 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 		bgen.nextStage();
 		_game->popState();
-		_game->pushState(new BriefingState(0, 0));
+		_game->pushState(new BriefingState(nullptr, nullptr));
 	}
 	else
 	{
@@ -2134,7 +2134,7 @@ bool BattlescapeState::allowButtons(bool allowSaving) const
 {
 	return ((allowSaving || _save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		&& (_battleGame->getPanicHandled() || _firstInit )
-		&& (_map->getProjectile() == 0));
+		&& (_map->getProjectile() == nullptr));
 }
 
 /**
@@ -2280,7 +2280,7 @@ void BattlescapeState::stopScrolling(Action *action)
 		SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
 		action->setMouseAction(_xBeforeMouseScrolling, _yBeforeMouseScrolling, _map->getX(), _map->getY());
 		_battleGame->setupCursor();
-		if (_battleGame->getCurrentAction()->actor == 0 && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()))
+		if (_battleGame->getCurrentAction()->actor == nullptr && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()))
 		{
 			getMap()->setCursorType(CT_NORMAL);
 		}

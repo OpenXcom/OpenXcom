@@ -120,7 +120,7 @@ GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *way
 
 	_txtStatus->setWordWrap(true);
 	std::wstring status;
-	if (_waypoint != 0)
+	if (_waypoint != nullptr)
 	{
 		status = tr("STR_INTERCEPTING_UFO").arg(_waypoint->getId());
 	}
@@ -132,7 +132,7 @@ GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *way
 	{
 		status = tr("STR_MISSION_COMPLETE_RETURNING_TO_BASE");
 	}
-	else if (_craft->getDestination() == 0)
+	else if (_craft->getDestination() == nullptr)
 	{
 		status = tr("STR_PATROLLING");
 	}
@@ -143,7 +143,7 @@ GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *way
 	else
 	{
 		Ufo *u = dynamic_cast<Ufo*>(_craft->getDestination());
-		if (u != 0)
+		if (u != nullptr)
 		{
 			if (_craft->isInDogfight())
 			{
@@ -191,7 +191,7 @@ GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *way
 
 	_txtDamage->setText(tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage())));
 
-	if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
+	if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != nullptr)
 	{
 		CraftWeapon *w1 = _craft->getWeapons()->at(0);
 		_txtW1Name->setText(tr("STR_WEAPON_ONE").arg(tr(w1->getRules()->getType())));
@@ -203,7 +203,7 @@ GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *way
 		_txtW1Ammo->setVisible(false);
 	}
 
-	if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
+	if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != nullptr)
 	{
 		CraftWeapon *w2 = _craft->getWeapons()->at(1);
 		_txtW2Name->setText(tr("STR_WEAPON_TWO").arg(tr(w2->getRules()->getType())));
@@ -227,7 +227,7 @@ GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *way
 	ss12 << tr("STR_HWPS") << ">" << L'\x01' << _craft->getNumVehicles();
 	_txtHWP->setText(ss12.str());
 
-	if (_waypoint == 0)
+	if (_waypoint == nullptr)
 	{
 		_txtRedirect->setVisible(false);
 	}
@@ -286,7 +286,7 @@ void GeoscapeCraftState::btnTargetClick(Action *)
 void GeoscapeCraftState::btnPatrolClick(Action *)
 {
 	_game->popState();
-	_craft->setDestination(0);
+	_craft->setDestination(nullptr);
 	delete _waypoint;
 }
 
@@ -297,7 +297,7 @@ void GeoscapeCraftState::btnPatrolClick(Action *)
 void GeoscapeCraftState::btnCancelClick(Action *)
 {
 	// Go to the last known UFO position
-	if (_waypoint != 0)
+	if (_waypoint != nullptr)
 	{
 		_waypoint->setId(_game->getSavedGame()->getId("STR_WAYPOINT"));
 		_game->getSavedGame()->getWaypoints()->push_back(_waypoint);

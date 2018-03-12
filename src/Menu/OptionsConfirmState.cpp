@@ -51,7 +51,7 @@ OptionsConfirmState::OptionsConfirmState(OptionsOrigin origin) : _origin(origin)
 	_timer = new Timer(1000);
 
 	// Set palette
-	setInterface("mainMenu", false, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : 0);
+	setInterface("mainMenu", false, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : nullptr);
 
 	add(_window, "confirmVideo", "mainMenu");
 	add(_btnYes, "confirmVideo", "mainMenu");
@@ -103,7 +103,7 @@ void OptionsConfirmState::think()
 {
 	State::think();
 
-	_timer->think(this, 0);
+	_timer->think(this, nullptr);
 }
 
 /**
@@ -117,7 +117,7 @@ void OptionsConfirmState::countdown()
 	_txtTimer->setText(tr("STR_DISPLAY_OPTIONS_REVERT").arg(ss.str()));
 	if (_countdown == 0)
 	{
-		btnNoClick(0);
+		btnNoClick(nullptr);
 	}
 }
 

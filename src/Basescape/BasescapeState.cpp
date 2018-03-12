@@ -349,7 +349,7 @@ void BasescapeState::btnGeoscapeClick(Action *)
 void BasescapeState::viewLeftClick(Action *)
 {
 	BaseFacility *fac = _view->getSelectedFacility();
-	if (fac != 0)
+	if (fac != nullptr)
 	{
 		// Is facility in use?
 		if (fac->inUse())
@@ -375,13 +375,13 @@ void BasescapeState::viewLeftClick(Action *)
 void BasescapeState::viewRightClick(Action *)
 {
 	BaseFacility *f = _view->getSelectedFacility();
-	if (f == 0)
+	if (f == nullptr)
 	{
 		_game->pushState(new BaseInfoState(_base, this));
 	}
 	else if (f->getRules()->getCrafts() > 0)
 	{
-		if (f->getCraft() == 0)
+		if (f->getCraft() == nullptr)
 		{
 			_game->pushState(new CraftsState(_base));
 		}
@@ -433,7 +433,7 @@ void BasescapeState::viewMouseOver(Action *)
 {
 	BaseFacility *f = _view->getSelectedFacility();
 	std::wostringstream ss;
-	if (f != 0)
+	if (f != nullptr)
 	{
 		if (f->getRules()->getCrafts() == 0 || f->getBuildTime() > 0)
 		{
@@ -442,7 +442,7 @@ void BasescapeState::viewMouseOver(Action *)
 		else
 		{
 			ss << tr(f->getRules()->getType());
-			if (f->getCraft() != 0)
+			if (f->getCraft() != nullptr)
 			{
 				ss << L" " << tr("STR_CRAFT_").arg(f->getCraft()->getName(_game->getLanguage()));
 			}

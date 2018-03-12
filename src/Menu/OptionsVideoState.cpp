@@ -78,8 +78,8 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_btnRootWindowedMode = new ToggleTextButton(104, 16, 206, 128);
 
 	// Get available fullscreen modes
-	_res = SDL_ListModes(NULL, SDL_FULLSCREEN);
-	if (_res != (SDL_Rect**)-1 && _res != (SDL_Rect**)0)
+	_res = SDL_ListModes(nullptr, SDL_FULLSCREEN);
+	if (_res != (SDL_Rect**)-1 && _res != (SDL_Rect**)nullptr)
 	{
 		int i;
 		_resCurrent = -1;
@@ -414,7 +414,7 @@ void OptionsVideoState::txtDisplayWidthChange(Action *)
 	ss >> std::dec >> width;
 	Options::newDisplayWidth = width;
 	// Update resolution mode
-	if (_res != (SDL_Rect**)-1 && _res != (SDL_Rect**)0)
+	if (_res != (SDL_Rect**)-1 && _res != (SDL_Rect**)nullptr)
 	{
 		int i;
 		_resCurrent = -1;
@@ -441,7 +441,7 @@ void OptionsVideoState::txtDisplayHeightChange(Action *)
 	ss >> std::dec >> height;
 	Options::newDisplayHeight = height;
 	// Update resolution mode
-	if (_res != (SDL_Rect**)-1 && _res != (SDL_Rect**)0)
+	if (_res != (SDL_Rect**)-1 && _res != (SDL_Rect**)nullptr)
 	{
 		int i;
 		_resCurrent = -1;

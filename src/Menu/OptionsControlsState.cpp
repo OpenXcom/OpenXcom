@@ -33,7 +33,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsControlsState::OptionsControlsState(OptionsOrigin origin) : OptionsBaseState(origin), _selected(-1), _selKey(0)
+OptionsControlsState::OptionsControlsState(OptionsOrigin origin) : OptionsBaseState(origin), _selected(-1), _selKey(nullptr)
 {
 	setCategory(_btnControls);
 
@@ -177,7 +177,7 @@ OptionInfo *OptionsControlsState::getControl(size_t sel)
 	}
 	else
 	{
-		return 0;
+		return nullptr;
 	}
 }
 
@@ -197,7 +197,7 @@ void OptionsControlsState::lstControlsClick(Action *action)
 		_lstControls->setCellColor(_selected, 0, _colorNormal);
 		_lstControls->setCellColor(_selected, 1, _colorNormal);
 		_selected = -1;
-		_selKey = 0;
+		_selKey = nullptr;
 		if (selected == _lstControls->getSelectedRow())
 			return;
 	}
@@ -219,7 +219,7 @@ void OptionsControlsState::lstControlsClick(Action *action)
 		_lstControls->setCellText(_selected, 1, L"");
 		*_selKey->asKey() = SDLK_UNKNOWN;
 		_selected = -1;
-		_selKey = 0;
+		_selKey = nullptr;
 	}
 }
 
@@ -241,7 +241,7 @@ void OptionsControlsState::lstControlsKeyPress(Action *action)
 		_lstControls->setCellColor(_selected, 0, _colorNormal);
 		_lstControls->setCellColor(_selected, 1, _colorNormal);
 		_selected = -1;
-		_selKey = 0;
+		_selKey = nullptr;
 	}
 }
 

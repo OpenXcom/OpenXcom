@@ -237,12 +237,12 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			}
 			else
 			{
-				_game->pushState(new PrimeGrenadeState(_action, false, 0));
+				_game->pushState(new PrimeGrenadeState(_action, false, nullptr));
 			}
 		}
 		else if (_action->type == BA_USE && weapon->getBattleType() == BT_MEDIKIT)
 		{
-			BattleUnit *targetUnit = NULL;
+			BattleUnit *targetUnit = nullptr;
 			std::vector<BattleUnit*> *const units (_game->getSavedGame()->getSavedBattle()->getUnits());
 			for (std::vector<BattleUnit*>::const_iterator i = units->begin(); i != units->end() && !targetUnit; ++i)
 			{
@@ -258,10 +258,10 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 					_action->actor->getPosition(),
 					_action->actor->getDirection(),
 					_action->actor,
-					0, &_action->target, false))
+					nullptr, &_action->target, false))
 				{
 					Tile * tile (_game->getSavedGame()->getSavedBattle()->getTile(_action->target));
-					if (tile != 0 && tile->getUnit() && tile->getUnit()->isWoundable())
+					if (tile != nullptr && tile->getUnit() && tile->getUnit()->isWoundable())
 					{
 						targetUnit = tile->getUnit();
 					}
@@ -299,7 +299,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			{
 				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
 			}
-			else if (_action->weapon->getAmmoItem() ==0 || (_action->weapon->getAmmoItem() && _action->weapon->getAmmoItem()->getAmmoQuantity() == 0))
+			else if (_action->weapon->getAmmoItem() ==nullptr || (_action->weapon->getAmmoItem() && _action->weapon->getAmmoItem()->getAmmoQuantity() == 0))
 			{
 				_action->result = "STR_NO_AMMUNITION_LOADED";
 			}
@@ -320,7 +320,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 				_action->actor->getPosition(),
 				_action->actor->getDirection(),
 				_action->actor,
-				0, &_action->target))
+				nullptr, &_action->target))
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
 			}

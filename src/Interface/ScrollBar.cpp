@@ -33,7 +33,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-ScrollBar::ScrollBar(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _list(0), _color(0), _pressed(false), _contrast(false), _offset(0), _bg(0)
+ScrollBar::ScrollBar(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _list(nullptr), _color(0), _pressed(false), _contrast(false), _offset(0), _bg(nullptr)
 {
 	_track = new Surface(width-2, height, x+1, y);
 	_thumb = new Surface(width, height, x, y);

@@ -104,7 +104,7 @@ void Screen::makeVideoFlags()
  * Initializes a new display screen for the game to render contents to.
  * The screen is set up based on the current options.
  */
-Screen::Screen() : _baseWidth(ORIGINAL_WIDTH), _baseHeight(ORIGINAL_HEIGHT), _scaleX(1.0), _scaleY(1.0), _flags(0), _numColors(0), _firstColor(0), _pushPalette(false), _surface(0)
+Screen::Screen() : _baseWidth(ORIGINAL_WIDTH), _baseHeight(ORIGINAL_HEIGHT), _scaleX(1.0), _scaleY(1.0), _flags(0), _numColors(0), _firstColor(0), _pushPalette(false), _surface(nullptr)
 {
 	resetDisplay();
 	memset(deferredPalette, 0, 256*sizeof(SDL_Color));
@@ -186,7 +186,7 @@ void Screen::flip()
 	}
 	else
 	{
-		SDL_BlitSurface(_surface->getSurface(), 0, _screen, 0);
+		SDL_BlitSurface(_surface->getSurface(), nullptr, _screen, nullptr);
 	}
 
 	// perform any requested palette update
@@ -325,25 +325,25 @@ void Screen::resetDisplay(bool resetVideo)
 		if (!(oldFlags & SDL_OPENGL) && (_flags & SDL_OPENGL))
 		{
 			Uint8 cursor = 0;
-			char *_oldtitle = 0;
-			SDL_WM_GetCaption(&_oldtitle, NULL);
+			char *_oldtitle = nullptr;
+			SDL_WM_GetCaption(&_oldtitle, nullptr);
 			std::string title(_oldtitle);
 			SDL_QuitSubSystem(SDL_INIT_VIDEO);
 			SDL_InitSubSystem(SDL_INIT_VIDEO);
 			SDL_ShowCursor(SDL_ENABLE);
 			SDL_EnableUNICODE(1);
-			SDL_WM_SetCaption(title.c_str(), 0);
+			SDL_WM_SetCaption(title.c_str(), nullptr);
 			SDL_SetCursor(SDL_CreateCursor(&cursor, &cursor, 1,1,0,0));
 		}
 #endif
 		Log(LOG_INFO) << "Attempting to set display to " << width << "x" << height << "x" << _bpp << "...";
 		_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
-		if (_screen == 0)
+		if (_screen == nullptr)
 		{
 			Log(LOG_ERROR) << SDL_GetError();
 			Log(LOG_INFO) << "Attempting to set display to default resolution...";
 			_screen = SDL_SetVideoMode(640, 400, _bpp, _flags);
-			if (_screen == 0)
+			if (_screen == nullptr)
 			{
 				if (_flags & SDL_OPENGL)
 				{
@@ -525,7 +525,7 @@ void Screen::screenshot(const std::string &filename) const
 	}
 	else
 	{
-		SDL_BlitSurface(_screen, 0, screenshot, 0);
+		SDL_BlitSurface(_screen, nullptr, screenshot, nullptr);
 	}
 
 	unsigned error = lodepng::encode(filename, (const unsigned char *)(screenshot->pixels), getWidth() - getWidth()%4, getHeight(), LCT_RGB);

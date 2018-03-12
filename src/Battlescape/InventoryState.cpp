@@ -97,7 +97,7 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	_btnCreateTemplate = new BattlescapeButton(32, 22, _templateBtnX, _createTemplateBtnY);
 	_btnApplyTemplate = new BattlescapeButton(32, 22, _templateBtnX, _applyTemplateBtnY);
 	_selAmmo = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, 272, 88);
-	_inv = new Inventory(_game, 320, 200, 0, 0, _parent == 0);
+	_inv = new Inventory(_game, 320, 200, 0, 0, _parent == nullptr);
 
 	// Set palette
 	setPalette("PAL_BATTLESCAPE");
@@ -278,9 +278,9 @@ void InventoryState::init()
 	BattleUnit *unit = _battleGame->getSelectedUnit();
 
 	// no selected unit, close inventory
-	if (unit == 0)
+	if (unit == nullptr)
 	{
-		btnOkClick(0);
+		btnOkClick(nullptr);
 		return;
 	}
 	// skip to the first unit with inventory
@@ -295,10 +295,10 @@ void InventoryState::init()
 			_battleGame->selectNextPlayerUnit(false, false, true);
 		}
 		// no available unit, close inventory
-		if (_battleGame->getSelectedUnit() == 0 || !_battleGame->getSelectedUnit()->hasInventory())
+		if (_battleGame->getSelectedUnit() == nullptr || !_battleGame->getSelectedUnit()->hasInventory())
 		{
 			// starting a mission with just vehicles
-			btnOkClick(0);
+			btnOkClick(nullptr);
 			return;
 		}
 		else
@@ -307,7 +307,7 @@ void InventoryState::init()
 		}
 	}
 
-	unit->setCache(0);
+	unit->setCache(nullptr);
 	_soldier->clear();
 	_btnRank->clear();
 
@@ -409,7 +409,7 @@ void InventoryState::saveEquipmentLayout()
 	for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
 	{
 		// we need X-Com soldiers only
-		if ((*i)->getGeoscapeSoldier() == 0) continue;
+		if ((*i)->getGeoscapeSoldier() == nullptr) continue;
 
 		std::vector<EquipmentLayoutItem*> *layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
 
@@ -426,7 +426,7 @@ void InventoryState::saveEquipmentLayout()
 		for (std::vector<BattleItem*>::iterator j = (*i)->getInventory()->begin(); j != (*i)->getInventory()->end(); ++j)
 		{
 			std::string ammo;
-			if ((*j)->needsAmmo() && 0 != (*j)->getAmmoItem()) ammo = (*j)->getAmmoItem()->getRules()->getType();
+			if ((*j)->needsAmmo() && nullptr != (*j)->getAmmoItem()) ammo = (*j)->getAmmoItem()->getRules()->getType();
 			else ammo = "NONE";
 			layoutItems->push_back(new EquipmentLayoutItem(
 				(*j)->getRules()->getType(),
@@ -446,7 +446,7 @@ void InventoryState::saveEquipmentLayout()
  */
 void InventoryState::btnOkClick(Action *)
 {
-	if (_inv->getSelectedItem() != 0)
+	if (_inv->getSelectedItem() != nullptr)
 		return;
 	_game->popState();
 	Tile *inventoryTile = _battleGame->getSelectedUnit()->getTile();
@@ -483,7 +483,7 @@ void InventoryState::btnOkClick(Action *)
  */
 void InventoryState::btnPrevClick(Action *)
 {
-	if (_inv->getSelectedItem() != 0)
+	if (_inv->getSelectedItem() != nullptr)
 	{
 		return;
 	}
@@ -505,7 +505,7 @@ void InventoryState::btnPrevClick(Action *)
  */
 void InventoryState::btnNextClick(Action *)
 {
-	if (_inv->getSelectedItem() != 0)
+	if (_inv->getSelectedItem() != nullptr)
 	{
 		return;
 	}
@@ -557,7 +557,7 @@ void InventoryState::btnRankClick(Action *)
 void InventoryState::btnCreateTemplateClick(Action *)
 {
 	// don't accept clicks when moving items
-	if (_inv->getSelectedItem() != 0)
+	if (_inv->getSelectedItem() != nullptr)
 	{
 		return;
 	}
@@ -613,7 +613,7 @@ static void _clearInventory(Game *game, std::vector<BattleItem*> *unitInv, Tile 
 			continue;
 		}
 
-		(*i)->setOwner(NULL);
+		(*i)->setOwner(nullptr);
 		groundTile->addItem(*i, groundRuleInv);
 		i = unitInv->erase(i);
 	}
@@ -624,7 +624,7 @@ void InventoryState::btnApplyTemplateClick(Action *)
 	// don't accept clicks when moving items
 	// it's ok if the template is empty -- it will just result in clearing the
 	// unit's inventory
-	if (_inv->getSelectedItem() != 0)
+	if (_inv->getSelectedItem() != nullptr)
 	{
 		return;
 	}
@@ -654,8 +654,8 @@ void InventoryState::btnApplyTemplateClick(Action *)
 			rescan = false;
 
 			const std::string targetAmmo = (*templateIt)->getAmmoItem();
-			BattleItem *matchedWeapon = NULL;
-			BattleItem *matchedAmmo   = NULL;
+			BattleItem *matchedWeapon = nullptr;
+			BattleItem *matchedAmmo   = nullptr;
 			for (groundItem = groundInv->begin(); groundItem != groundInv->end(); ++groundItem)
 			{
 				// if we find the appropriate ammo, remember it for later for if we find
@@ -694,7 +694,7 @@ void InventoryState::btnApplyTemplateClick(Action *)
 
 					// move matched item from ground to the appropriate inv slot
 					(*groundItem)->setOwner(unit);
-					(*groundItem)->setTile(0);
+					(*groundItem)->setTile(nullptr);
 					(*groundItem)->setSlot(_game->getMod()->getInventory((*templateIt)->getSlot(), true));
 					(*groundItem)->setSlotX((*templateIt)->getSlotX());
 					(*groundItem)->setSlotY((*templateIt)->getSlotY());
@@ -715,7 +715,7 @@ void InventoryState::btnApplyTemplateClick(Action *)
 				if (loadedAmmo)
 				{
 					groundTile->addItem(loadedAmmo, groundRuleInv);
-					matchedWeapon->setAmmoItem(NULL);
+					matchedWeapon->setAmmoItem(nullptr);
 				}
 
 				// load the correct ammo into the weapon
@@ -764,7 +764,7 @@ void InventoryState::_refreshMouse()
 void InventoryState::onClearInventory(Action *)
 {
 	// don't act when moving items
-	if (_inv->getSelectedItem() != 0)
+	if (_inv->getSelectedItem() != nullptr)
 	{
 		return;
 	}
@@ -787,7 +787,7 @@ void InventoryState::onClearInventory(Action *)
 void InventoryState::onAutoequip(Action *)
 {
 	// don't act when moving items
-	if (_inv->getSelectedItem() != 0)
+	if (_inv->getSelectedItem() != nullptr)
 	{
 		return;
 	}
@@ -801,7 +801,7 @@ void InventoryState::onAutoequip(Action *)
 
 	std::vector<BattleUnit*> units;
 	units.push_back(unit);
-	BattlescapeGenerator::autoEquip(units, mod, NULL, groundInv, groundRuleInv, worldShade, true, true);
+	BattlescapeGenerator::autoEquip(units, mod, nullptr, groundInv, groundRuleInv, worldShade, true, true);
 
 	// refresh ui
 	_inv->arrangeGround(false);
@@ -827,13 +827,13 @@ void InventoryState::invClick(Action *)
  */
 void InventoryState::invMouseOver(Action *)
 {
-	if (_inv->getSelectedItem() != 0)
+	if (_inv->getSelectedItem() != nullptr)
 	{
 		return;
 	}
 
 	BattleItem *item = _inv->getMouseOverItem();
-	if (item != 0)
+	if (item != nullptr)
 	{
 		if (item->getUnit() && item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 		{
@@ -851,7 +851,7 @@ void InventoryState::invMouseOver(Action *)
 			}
 		}
 		std::wstring s;
-		if (item->getAmmoItem() != 0 && item->needsAmmo())
+		if (item->getAmmoItem() != nullptr && item->needsAmmo())
 		{
 			s = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoItem()->getAmmoQuantity());
 			SDL_Rect r;
@@ -937,7 +937,7 @@ void InventoryState::handle(Action *action)
  */
 void InventoryState::txtTooltipIn(Action *action)
 {
-	if (_inv->getSelectedItem() == 0 && Options::battleTooltips)
+	if (_inv->getSelectedItem() == nullptr && Options::battleTooltips)
 	{
 		_currentTooltip = action->getSender()->getTooltip();
 		_txtItem->setText(tr(_currentTooltip));
@@ -950,7 +950,7 @@ void InventoryState::txtTooltipIn(Action *action)
  */
 void InventoryState::txtTooltipOut(Action *action)
 {
-	if (_inv->getSelectedItem() == 0 && Options::battleTooltips)
+	if (_inv->getSelectedItem() == nullptr && Options::battleTooltips)
 	{
 		if (_currentTooltip == action->getSender()->getTooltip())
 		{

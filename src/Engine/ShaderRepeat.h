@@ -97,8 +97,8 @@ struct controler<ShaderRepeat<Pixel> >
 		_curr_x(0),
 		_curr_y(0),
 		_pitch(f.pitch()),
-		_ptr_curr_x(0),
-		_ptr_curr_y(0)
+		_ptr_curr_x(nullptr),
+		_ptr_curr_y(nullptr)
 	{
 		
 	}

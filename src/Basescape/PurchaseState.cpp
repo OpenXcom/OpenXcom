@@ -161,7 +161,7 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 		}
 	}
 	{
-		TransferRow row = { TRANSFER_SCIENTIST, 0, tr("STR_SCIENTIST"), _game->getMod()->getScientistCost() * 2, _base->getTotalScientists(), 0, 0 };
+		TransferRow row = { TRANSFER_SCIENTIST, nullptr, tr("STR_SCIENTIST"), _game->getMod()->getScientistCost() * 2, _base->getTotalScientists(), 0, 0 };
 		_items.push_back(row);
 		std::string cat = getCategory(_items.size() - 1);
 		if (std::find(_cats.begin(), _cats.end(), cat) == _cats.end())
@@ -170,7 +170,7 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 		}
 	}
 	{
-		TransferRow row = { TRANSFER_ENGINEER, 0, tr("STR_ENGINEER"), _game->getMod()->getEngineerCost() * 2, _base->getTotalEngineers(), 0, 0 };
+		TransferRow row = { TRANSFER_ENGINEER, nullptr, tr("STR_ENGINEER"), _game->getMod()->getEngineerCost() * 2, _base->getTotalEngineers(), 0, 0 };
 		_items.push_back(row);
 		std::string cat = getCategory(_items.size() - 1);
 		if (std::find(_cats.begin(), _cats.end(), cat) == _cats.end())
@@ -236,8 +236,8 @@ void PurchaseState::think()
 {
 	State::think();
 
-	_timerInc->think(this, 0);
-	_timerDec->think(this, 0);
+	_timerInc->think(this, nullptr);
+	_timerDec->think(this, nullptr);
 }
 
 /**
@@ -247,7 +247,7 @@ void PurchaseState::think()
  */
 std::string PurchaseState::getCategory(int sel) const
 {
-	RuleItem *rule = 0;
+	RuleItem *rule = nullptr;
 	switch (_items[sel].type)
 	{
 	case TRANSFER_SOLDIER:
@@ -331,7 +331,7 @@ void PurchaseState::btnOkClick(Action *)
 	{
 		if (i->amount > 0)
 		{
-			Transfer *t = 0;
+			Transfer *t = nullptr;
 			switch (i->type)
 			{
 			case TRANSFER_SOLDIER:

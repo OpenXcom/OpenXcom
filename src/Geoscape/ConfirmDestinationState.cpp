@@ -51,7 +51,7 @@ ConfirmDestinationState::ConfirmDestinationState(Craft *craft, Target *target) :
 	_txtTarget = new Text(232, 32, 12, 72);
 
 	// Set palette
-	setInterface("confirmDestination", w != 0 && w->getId() == 0);
+	setInterface("confirmDestination", w != nullptr && w->getId() == 0);
 
 	add(_window, "window", "confirmDestination");
 	add(_btnOk, "button", "confirmDestination");
@@ -75,7 +75,7 @@ ConfirmDestinationState::ConfirmDestinationState(Craft *craft, Target *target) :
 	_txtTarget->setAlign(ALIGN_CENTER);
 	_txtTarget->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTarget->setWordWrap(true);
-	if (w != 0 && w->getId() == 0)
+	if (w != nullptr && w->getId() == 0)
 	{
 		_txtTarget->setText(tr("STR_TARGET").arg(tr("STR_WAY_POINT")));
 	}
@@ -100,7 +100,7 @@ ConfirmDestinationState::~ConfirmDestinationState()
 void ConfirmDestinationState::btnOkClick(Action *)
 {
 	Waypoint *w = dynamic_cast<Waypoint*>(_target);
-	if (w != 0 && w->getId() == 0)
+	if (w != nullptr && w->getId() == 0)
 	{
 		w->setId(_game->getSavedGame()->getId("STR_WAYPOINT"));
 		_game->getSavedGame()->getWaypoints()->push_back(w);
@@ -118,7 +118,7 @@ void ConfirmDestinationState::btnOkClick(Action *)
 void ConfirmDestinationState::btnCancelClick(Action *)
 {
 	Waypoint *w = dynamic_cast<Waypoint*>(_target);
-	if (w != 0 && w->getId() == 0)
+	if (w != nullptr && w->getId() == 0)
 	{
 		delete w;
 	}

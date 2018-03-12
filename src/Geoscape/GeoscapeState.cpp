@@ -501,7 +501,7 @@ void GeoscapeState::init()
 	timeDisplay();
 
 	_globe->onMouseClick((ActionHandler)&GeoscapeState::globeClick);
-	_globe->onMouseOver(0);
+	_globe->onMouseOver(nullptr);
 	_globe->rotateStop();
 	_globe->setFocus(true);
 	_globe->draw();
@@ -550,14 +550,14 @@ void GeoscapeState::think()
 {
 	State::think();
 
-	_zoomInEffectTimer->think(this, 0);
-	_zoomOutEffectTimer->think(this, 0);
-	_dogfightStartTimer->think(this, 0);
+	_zoomInEffectTimer->think(this, nullptr);
+	_zoomOutEffectTimer->think(this, nullptr);
+	_dogfightStartTimer->think(this, nullptr);
 
 	if (_popups.empty() && _dogfights.empty() && (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone) && (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
 	{
 		// Handle timers
-		_gameTimer->think(this, 0);
+		_gameTimer->think(this, nullptr);
 	}
 	else
 	{
@@ -567,9 +567,9 @@ void GeoscapeState::think()
 			if (_dogfights.size() == _minimizedDogfights)
 			{
 				_pause = false;
-				_gameTimer->think(this, 0);
+				_gameTimer->think(this, nullptr);
 			}
-			_dogfightTimer->think(this, 0);
+			_dogfightTimer->think(this, nullptr);
 		}
 		if (!_popups.empty())
 		{
@@ -734,7 +734,7 @@ void GeoscapeState::time5Seconds()
 				if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
 				{
 					mission->setWaveCountdown(30 * (RNG::generate(0, 400) + 48));
-					(*i)->setDestination(0);
+					(*i)->setDestination(nullptr);
 					base->setupDefenses();
 					timerReset();
 					if (!base->getDefenses()->empty())
@@ -818,10 +818,10 @@ void GeoscapeState::time5Seconds()
 				j = (*i)->getCrafts()->erase(j);
 				continue;
 			}
-			if ((*j)->getDestination() != 0)
+			if ((*j)->getDestination() != nullptr)
 			{
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
-				if (u != 0)
+				if (u != nullptr)
 				{
 					if (!u->getDetected())
 					{
@@ -835,7 +835,7 @@ void GeoscapeState::time5Seconds()
 							w->setLongitude(u->getLongitude());
 							w->setLatitude(u->getLatitude());
 							w->setId(u->getId());
-							(*j)->setDestination(0);
+							(*j)->setDestination(nullptr);
 							popup(new GeoscapeCraftState((*j), _globe, w));
 						}
 					}
@@ -865,7 +865,7 @@ void GeoscapeState::time5Seconds()
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
 				MissionSite* m = dynamic_cast<MissionSite*>((*j)->getDestination());
 				AlienBase* b = dynamic_cast<AlienBase*>((*j)->getDestination());
-				if (u != 0)
+				if (u != nullptr)
 				{
 					switch (u->getStatus())
 					{
@@ -924,12 +924,12 @@ void GeoscapeState::time5Seconds()
 						break;
 					}
 				}
-				else if (w != 0)
+				else if (w != nullptr)
 				{
 					popup(new CraftPatrolState((*j), _globe));
-					(*j)->setDestination(0);
+					(*j)->setDestination(nullptr);
 				}
-				else if (m != 0)
+				else if (m != nullptr)
 				{
 					if ((*j)->getNumSoldiers() > 0 || (*j)->getNumVehicles() > 0)
 					{
@@ -945,7 +945,7 @@ void GeoscapeState::time5Seconds()
 						(*j)->returnToBase();
 					}
 				}
-				else if (b != 0)
+				else if (b != nullptr)
 				{
 					if (b->isDiscovered())
 					{
@@ -1089,7 +1089,7 @@ void GeoscapeState::time10Minutes()
 					popup(new LowFuelState((*j), this));
 				}
 
-				if ((*j)->getDestination() == 0)
+				if ((*j)->getDestination() == nullptr)
 				{
 					double range = ((*j)->getRules()->getSightRange() * (1 / 60.0) * (M_PI / 180));
 					for (std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
@@ -1570,7 +1570,7 @@ void GeoscapeState::time1Day()
 			// 3a. remove finished research from the base where it was researched
 			(*i)->removeResearch(*iter);
 			// 3b. handle interrogations
-			RuleResearch * bonus = 0;
+			RuleResearch * bonus = nullptr;
 			const RuleResearch * research = (*iter)->getRules();
 			if (Options::retainCorpses && research->destroyItem() && _game->getMod()->getUnit(research->getName()))
 			{
@@ -1605,7 +1605,7 @@ void GeoscapeState::time1Day()
 			std::string name = research->getLookup().empty() ? research->getName() : research->getLookup();
 			if (_game->getSavedGame()->isResearched(name, false))
 			{
-				newResearch = 0;
+				newResearch = nullptr;
 			}
 			// 3e. handle core research (topic+lookup)
 			_game->getSavedGame()->addFinishedResearch(research, _game->getMod(), (*i));
@@ -1845,7 +1845,7 @@ void GeoscapeState::globeClick(Action *action)
 		std::vector<Target*> v = _globe->getTargets(mouseX, mouseY, false);
 		if (!v.empty())
 		{
-			_game->pushState(new MultipleTargetsState(v, 0, this));
+			_game->pushState(new MultipleTargetsState(v, nullptr, this));
 		}
 	}
 
@@ -1895,7 +1895,7 @@ void GeoscapeState::btnBasesClick(Action *)
 	}
 	else
 	{
-		_game->pushState(new BasescapeState(0, _globe));
+		_game->pushState(new BasescapeState(nullptr, _globe));
 	}
 }
 
@@ -2232,7 +2232,7 @@ void GeoscapeState::handleBaseDefense(Base *base, Ufo *ufo)
 		bgen.setAlienRace(ufo->getAlienRace());
 		bgen.run();
 		_pause = true;
-		_game->pushState(new BriefingState(0, base));
+		_game->pushState(new BriefingState(nullptr, base));
 	}
 	else
 	{
@@ -2575,7 +2575,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 
 	// we're bound to end up with typos, so let's throw an exception instead of simply returning false
 	// that way, the modder can fix their mistake
-	if (mod->getRegion(targetRegion) == 0)
+	if (mod->getRegion(targetRegion) == nullptr)
 	{
 		throw Exception("Error proccessing mission script named: " + command->getType() + ", region named: " + targetRegion + " is not defined");
 	}
@@ -2604,7 +2604,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 
 	// we're bound to end up with typos, so let's throw an exception instead of simply returning false
 	// that way, the modder can fix their mistake
-	if (missionRules == 0)
+	if (missionRules == nullptr)
 	{
 		throw Exception("Error proccessing mission script named: " + command->getType() + ", mission type: " + missionType + " is not defined");
 	}
@@ -2621,7 +2621,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 
 	// we're bound to end up with typos, so let's throw an exception instead of simply returning false
 	// that way, the modder can fix their mistake
-	if (mod->getAlienRace(missionRace) == 0)
+	if (mod->getAlienRace(missionRace) == nullptr)
 	{
 		throw Exception("Error proccessing mission script named: " + command->getType() + ", race: " + missionRace + " is not defined");
 	}

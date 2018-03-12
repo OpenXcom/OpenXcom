@@ -117,7 +117,7 @@ void WarningMessage::showMessage(const std::wstring &msg)
  */
 void WarningMessage::think()
 {
-	_timer->think(0, this);
+	_timer->think(nullptr, this);
 }
 
 /**

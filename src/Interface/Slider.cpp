@@ -34,7 +34,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Slider::Slider(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _pos(0.0), _min(0), _max(100), _pressed(false), _change(0), _offsetX(0)
+Slider::Slider(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _pos(0.0), _min(0), _max(100), _pressed(false), _change(nullptr), _offsetX(0)
 {
 	_thickness = 5;
 	_textness = 8;

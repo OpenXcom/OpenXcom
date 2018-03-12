@@ -86,7 +86,7 @@ namespace CrossPlatform
 void getErrorDialog()
 {
 #ifndef _WIN32
-	if (system(NULL))
+	if (system(nullptr))
 	{
 		if (getenv("KDE_SESSION_UID") && system("which kdialog 2>&1 > /dev/null") == 0)
 			errorDlg = "kdialog --error ";
@@ -208,11 +208,11 @@ std::vector<std::string> findDataFolders()
 	if (char *xdg_data_dirs = getenv("XDG_DATA_DIRS"))
 	{
 		char *dir = strtok(xdg_data_dirs, ":");
-		while (dir != 0)
+		while (dir != nullptr)
 		{
 			snprintf(path, MAXPATHLEN, "%s/openxcom/", dir);
 			list.push_back(path);
-			dir = strtok(0, ":");
+			dir = strtok(nullptr, ":");
 		}
 	}
 #ifdef __APPLE__
@@ -452,7 +452,7 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 	std::transform(extl.begin(), extl.end(), extl.begin(), ::tolower);
 
 	DIR *dp = opendir(path.c_str());
-	if (dp == 0)
+	if (dp == nullptr)
 	{
 	#ifdef __MORPHOS__
 		return files;
@@ -463,7 +463,7 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 	}
 
 	struct dirent *dirp;
-	while ((dirp = readdir(dp)) != 0)
+	while ((dirp = readdir(dp)) != nullptr)
 	{
 		std::string file = dirp->d_name;
 
@@ -889,9 +889,9 @@ void setWindowIcon(int winResource, const std::string &unixPath)
 	// so here's an ugly hack to match this ugly reasoning
 	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(unixPath));
 	SDL_Surface *icon = IMG_Load(utf8.c_str());
-	if (icon != 0)
+	if (icon != nullptr)
 	{
-		SDL_WM_SetIcon(icon, NULL);
+		SDL_WM_SetIcon(icon, nullptr);
 		SDL_FreeSurface(icon);
 	}
 #endif
@@ -1079,7 +1079,7 @@ void crashDump(void *ex, const std::string &err)
 		Log(LOG_FATAL) << "No crash dump generated: " << GetLastError();
 	}
 #else
-	if (ex == 0)
+	if (ex == nullptr)
 	{
 		error << err;
 	}
@@ -1097,7 +1097,7 @@ void crashDump(void *ex, const std::string &err)
 		}
 	}
 	Log(LOG_FATAL) << "A fatal error has occurred: " << error.str();
-	stackTrace(0);
+	stackTrace(nullptr);
 #endif
 	std::ostringstream msg;
 	msg << "OpenXcom has crashed: " << error.str() << std::endl;

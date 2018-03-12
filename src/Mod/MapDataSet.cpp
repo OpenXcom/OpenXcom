@@ -27,13 +27,13 @@
 namespace OpenXcom
 {
 
-MapData *MapDataSet::_blankTile = 0;
-MapData *MapDataSet::_scorchedTile = 0;
+MapData *MapDataSet::_blankTile = nullptr;
+MapData *MapDataSet::_scorchedTile = nullptr;
 
 /**
  * MapDataSet construction.
  */
-MapDataSet::MapDataSet(const std::string &name) : _name(name), _surfaceSet(0), _loaded(false)
+MapDataSet::MapDataSet(const std::string &name) : _name(name), _surfaceSet(nullptr), _loaded(false)
 {
 }
 
@@ -176,7 +176,8 @@ void MapDataSet::loadData()
 			to->setSprite(frame,(int)mcd.Frame[frame]);
 		}
 		to->setYOffset((int)mcd.P_Level);
-		to->setSpecialType((int)mcd.Target_Type, (int)mcd.Tile_Type);
+        //TODO: Ugly cast, lots.
+		to->setSpecialType((SpecialTile)mcd.Target_Type, (TilePart)mcd.Tile_Type);
 		to->setTUCosts((int)mcd.TU_Walk, (int)mcd.TU_Fly, (int)mcd.TU_Slide);
 		to->setFlags(mcd.UFO_Door != 0, mcd.Stop_LOS != 0, mcd.No_Floor != 0, (int)mcd.Big_Wall, mcd.Gravlift != 0, mcd.Door != 0, mcd.Block_Fire != 0, mcd.Block_Smoke != 0, mcd.Xcom_Base != 0);
 		to->setTerrainLevel((int)mcd.T_Level);

@@ -80,7 +80,7 @@ enum PlayingState
 	SKIPPED
 };
 
-FlcPlayer::FlcPlayer() : _fileBuf(0), _mainScreen(0), _realScreen(0), _game(0)
+FlcPlayer::FlcPlayer() : _fileBuf(nullptr), _mainScreen(nullptr), _realScreen(nullptr), _game(nullptr)
 {
 	_volume = Game::volumeExponent(Options::musicVolume);
 }
@@ -100,7 +100,7 @@ FlcPlayer::~FlcPlayer()
  */
 bool FlcPlayer::init(const char *filename, void(*frameCallBack)(), Game *game, bool useInternalAudio, int dx, int dy)
 {
-	if (_fileBuf != 0)
+	if (_fileBuf != nullptr)
 	{
 		Log(LOG_ERROR) << "Trying to init a video player that is already initialized";
 		return false;
@@ -116,10 +116,10 @@ bool FlcPlayer::init(const char *filename, void(*frameCallBack)(), Game *game, b
 	
 	_fileSize = 0;
 	_frameCount = 0;
-	_audioFrameData = 0;
+	_audioFrameData = nullptr;
 	_hasAudio = false;
-	_audioData.loadingBuffer = 0;
-	_audioData.playingBuffer = 0;
+	_audioData.loadingBuffer = nullptr;
+	_audioData.playingBuffer = nullptr;
 
 	std::ifstream file;
 	file.open(filename, std::ifstream::in | std::ifstream::binary | std::ifstream::ate);
@@ -173,16 +173,16 @@ bool FlcPlayer::init(const char *filename, void(*frameCallBack)(), Game *game, b
 
 void FlcPlayer::deInit()
 {
-	if (_mainScreen != 0 && _realScreen != 0)
+	if (_mainScreen != nullptr && _realScreen != nullptr)
 	{
 		if (_mainScreen != _realScreen->getSurface()->getSurface())
 			SDL_FreeSurface(_mainScreen);
 
-		_mainScreen = 0;
+		_mainScreen = nullptr;
 	}
 
 	delete[] _fileBuf;
-	_fileBuf = 0;
+	_fileBuf = nullptr;
 
 	deInitAudio();
 }
@@ -431,7 +431,7 @@ void FlcPlayer::playVideoFrame()
 	/* TODO: Track which rectangles have really changed */
 	//SDL_UpdateRect(_mainScreen, 0, 0, 0, 0);
 	if (_mainScreen != _realScreen->getSurface()->getSurface())
-		SDL_BlitSurface(_mainScreen, 0, _realScreen->getSurface()->getSurface(), 0);
+		SDL_BlitSurface(_mainScreen, nullptr, _realScreen->getSurface()->getSurface(), nullptr);
 
 	_realScreen->flip();
 }
@@ -837,7 +837,7 @@ void FlcPlayer::deInitAudio()
 {
 	if (_game)
 	{
-		Mix_HookMusic(NULL, NULL);
+		Mix_HookMusic(nullptr, nullptr);
 		Mix_CloseAudio();
 		_game->initAudio();
 	}
@@ -848,14 +848,14 @@ void FlcPlayer::deInitAudio()
 	{
 		free(_audioData.loadingBuffer->samples);
 		delete _audioData.loadingBuffer;
-		_audioData.loadingBuffer = 0;
+		_audioData.loadingBuffer = nullptr;
 	}
 
 	if (_audioData.playingBuffer)
 	{
 		free(_audioData.playingBuffer->samples);
 		delete _audioData.playingBuffer;
-		_audioData.playingBuffer = 0;
+		_audioData.playingBuffer = nullptr;
 	}
 	
 }

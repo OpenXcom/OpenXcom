@@ -98,7 +98,7 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _end(END_NONE), _ironman(false), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _monthsPassed(-1), _selectedBase(0)
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _end(END_NONE), _ironman(false), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(nullptr), _debug(false), _warned(false), _monthsPassed(-1), _selectedBase(0)
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	_alienStrategy = new AlienStrategy();
@@ -538,7 +538,7 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 		std::string type = (*i)["type"].as<std::string>(mod->getSoldiersList().front());
 		if (mod->getSoldier(type))
 		{
-			Soldier *soldier = new Soldier(mod->getSoldier(type), 0);
+			Soldier *soldier = new Soldier(mod->getSoldier(type), nullptr);
 			soldier->load(*i, mod, this);
 			_deadSoldiers.push_back(soldier);
 		}
@@ -588,7 +588,7 @@ void SavedGame::save(const std::string &filename) const
 	}
 	brief["build"] = git_sha;
 	brief["time"] = _time->save();
-	if (_battleGame != 0)
+	if (_battleGame != nullptr)
 	{
 		brief["mission"] = _battleGame->getMissionType();
 		brief["turn"] = _battleGame->getTurn();
@@ -680,7 +680,7 @@ void SavedGame::save(const std::string &filename) const
 			node["missionStatistics"].push_back((*i)->save());
 		}
 	}
-	if (_battleGame != 0)
+	if (_battleGame != nullptr)
 	{
 		node["battleGame"] = _battleGame->save();
 	}
@@ -1154,7 +1154,7 @@ void SavedGame::addFinishedResearch(const RuleResearch * research, const Mod * m
 			else
 			{
 				// Used in vanilla save converter only
-				getAvailableResearchProjects(availableResearch, mod, 0);
+				getAvailableResearchProjects(availableResearch, mod, nullptr);
 			}
 
 			// 3b. Iterate through all available projects and add zero-cost projects to the processing queue
@@ -1478,7 +1478,7 @@ Soldier *SavedGame::getSoldier(int id) const
 			return (*j);
 		}
 	}
-	return 0;
+	return nullptr;
 }
 
 /**
@@ -1489,7 +1489,7 @@ Soldier *SavedGame::getSoldier(int id) const
 bool SavedGame::handlePromotions(std::vector<Soldier*> &participants)
 {
 	int soldiersPromoted = 0;
-	Soldier *highestRanked = 0;
+	Soldier *highestRanked = nullptr;
 	PromotionInfo soldierData;
 	std::vector<Soldier*> soldiers;
 	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
@@ -1622,7 +1622,7 @@ void SavedGame::processSoldier(Soldier *soldier, PromotionInfo &soldierData)
 Soldier *SavedGame::inspectSoldiers(std::vector<Soldier*> &soldiers, std::vector<Soldier*> &participants, int rank)
 {
 	int highestScore = 0;
-	Soldier *highestRanked = 0;
+	Soldier *highestRanked = nullptr;
 	for (std::vector<Soldier*>::iterator i = soldiers.begin(); i != soldiers.end(); ++i)
 	{
 		if ((*i)->getRank() == rank)
@@ -1708,7 +1708,7 @@ AlienMission *SavedGame::findAlienMission(const std::string &region, MissionObje
 {
 	std::vector<AlienMission*>::const_iterator ii = std::find_if(_activeMissions.begin(), _activeMissions.end(), matchRegionAndType(region, objective));
 	if (ii == _activeMissions.end())
-		return 0;
+		return nullptr;
 	return *ii;
 }
 
@@ -1803,7 +1803,7 @@ Region *SavedGame::locateRegion(double lon, double lat) const
 	{
 		return *found;
 	}
-	return 0;
+	return nullptr;
 }
 
 /**
@@ -1960,7 +1960,7 @@ Craft *SavedGame::findCraftByUniqueId(const CraftId& craftId) const
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 /**

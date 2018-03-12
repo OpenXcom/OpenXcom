@@ -30,6 +30,7 @@
 #include "../Engine/Options.h"
 #include "../Mod/AlienDeployment.h"
 #include "../Mod/MapScript.h"
+#include "../Mod/MapData.h"
 #include "../Savegame/Tile.h"
 
 namespace OpenXcom
@@ -67,11 +68,11 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 	// Check available areas (maybe should be cached somewhere)
 	bool exit = false, craft = true;
 	AlienDeployment *deployment = _game->getMod()->getDeployment(_battleGame->getMissionType());
-	if (deployment != 0)
+	if (deployment != nullptr)
 	{
 		exit = !deployment->getNextStage().empty() || deployment->getEscapeType() == ESCAPE_EXIT || deployment->getEscapeType() == ESCAPE_EITHER;
 		const std::vector<MapScript*> *scripts = _game->getMod()->getMapScript(deployment->getScript());
-		if (scripts != 0)
+		if (scripts != nullptr)
 		{
 			craft = false;
 			for (std::vector<MapScript*>::const_iterator i = scripts->begin(); i != scripts->end(); ++i)
@@ -90,7 +91,7 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 		for (int i = 0; i < _battleGame->getMapSizeXYZ(); ++i)
 		{
 			Tile *tile = _battleGame->getTiles()[i];
-			if (tile && tile->getMapData(O_FLOOR) && tile->getMapData(O_FLOOR)->getSpecialType() == END_POINT)
+			if (tile && tile->getMapData(TilePart::FLOOR) && tile->getMapData(TilePart::FLOOR)->getSpecialType() == SpecialTile::END_POINT)
 			{
 				exit = true;
 				break;
@@ -103,11 +104,11 @@ AbortMissionState::AbortMissionState(SavedBattleGame *battleGame, BattlescapeSta
 	{
 		if ((*i)->getOriginalFaction() == FACTION_PLAYER && !(*i)->isOut())
 		{
-			if ((*i)->isInExitArea(START_POINT))
+			if ((*i)->isInExitArea(SpecialTile::START_POINT))
 			{
 				_inEntrance++;
 			}
-			else if ((*i)->isInExitArea(END_POINT))
+			else if ((*i)->isInExitArea(SpecialTile::END_POINT))
 			{
 				_inExit++;
 			}

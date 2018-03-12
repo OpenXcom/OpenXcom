@@ -217,7 +217,7 @@ void CraftEquipmentState::init()
 {
 	State::init();
 
-	_game->getSavedGame()->setBattleGame(0);
+	_game->getSavedGame()->setBattleGame(nullptr);
 
 	Craft *c = _base->getCrafts()->at(_craft);
 	c->setInBattlescape(false);
@@ -230,8 +230,8 @@ void CraftEquipmentState::think()
 {
 	State::think();
 
-	_timerLeft->think(this, 0);
-	_timerRight->think(this, 0);
+	_timerLeft->think(this, nullptr);
+	_timerRight->think(this, nullptr);
 }
 
 
@@ -628,7 +628,7 @@ void CraftEquipmentState::btnInventoryClick(Action *)
 		bgen.runInventory(craft);
 
 		_game->getScreen()->clear();
-		_game->pushState(new InventoryState(false, 0));
+		_game->pushState(new InventoryState(false, nullptr));
 	}
 }
 

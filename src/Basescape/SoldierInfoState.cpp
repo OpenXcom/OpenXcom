@@ -56,7 +56,7 @@ namespace OpenXcom
  */
 SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), _soldierId(soldierId)
 {
-	if (_base == 0)
+	if (_base == nullptr)
 	{
 		_list = _game->getSavedGame()->getDeadSoldiers();
 		if (_soldierId >= _list->size())
@@ -222,7 +222,7 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	_btnOk->onKeyboardPress((ActionHandler)&SoldierInfoState::btnOkClick, Options::keyCancel);
 
 	_btnPrev->setText(L"<<");
-	if (_base == 0)
+	if (_base == nullptr)
 	{
 		_btnPrev->onMouseClick((ActionHandler)&SoldierInfoState::btnNextClick);
 		_btnPrev->onKeyboardPress((ActionHandler)&SoldierInfoState::btnNextClick, Options::keyBattlePrevUnit);
@@ -234,7 +234,7 @@ SoldierInfoState::SoldierInfoState(Base *base, size_t soldierId) : _base(base), 
 	}
 
 	_btnNext->setText(L">>");
-	if (_base == 0)
+	if (_base == nullptr)
 	{
 		_btnNext->onMouseClick((ActionHandler)&SoldierInfoState::btnPrevClick);
 		_btnNext->onKeyboardPress((ActionHandler)&SoldierInfoState::btnPrevClick, Options::keyBattleNextUnit);
@@ -428,7 +428,7 @@ void SoldierInfoState::init()
 	_txtKills->setText(tr("STR_KILLS").arg(_soldier->getKills()));
 
 	std::wstring craft;
-	if (_soldier->getCraft() == 0)
+	if (_soldier->getCraft() == nullptr)
 	{
 		craft = tr("STR_NONE_UC");
 	}
@@ -490,7 +490,7 @@ void SoldierInfoState::init()
 	}
 
 	// Dead can't talk
-	if (_base == 0)
+	if (_base == nullptr)
 	{
 		_btnArmor->setVisible(false);
 		_btnSack->setVisible(false);
@@ -517,7 +517,7 @@ void SoldierInfoState::init()
  */
 void SoldierInfoState::edtSoldierPress(Action *)
 {
-	if (_base == 0)
+	if (_base == nullptr)
 	{
 		_edtSoldier->setFocus(false);
 	}
@@ -548,7 +548,7 @@ void SoldierInfoState::btnOkClick(Action *)
 {
 	
 	_game->popState();
-	if (_game->getSavedGame()->getMonthsPassed() > -1 && Options::storageLimitsEnforced && _base != 0 && _base->storesOverfull())
+	if (_game->getSavedGame()->getMonthsPassed() > -1 && Options::storageLimitsEnforced && _base != nullptr && _base->storesOverfull())
 	{
 		_game->pushState(new SellState(_base));
 		_game->pushState(new ErrorMessageState(tr("STR_STORAGE_EXCEEDED").arg(_base->getName()), _palette, _game->getMod()->getInterface("soldierInfo")->getElement("errorMessage")->color, "BACK01.SCR", _game->getMod()->getInterface("soldierInfo")->getElement("errorPalette")->color));

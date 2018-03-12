@@ -43,14 +43,14 @@ namespace OpenXcom
 {
 
 /// Initializes static member
-Game* State::_game = 0;
+Game* State::_game = nullptr;
 
 /**
  * Initializes a brand new state with no child elements.
  * By default states are full-screen.
  * @param game Pointer to the core game.
  */
-State::State() : _screen(true), _modal(0), _ruleInterface(0), _ruleInterfaceParent(0)
+State::State() : _screen(true), _modal(nullptr), _ruleInterface(nullptr), _ruleInterfaceParent(nullptr)
 {
 	// initialize palette to all black
 	memset(_palette, 0, sizeof(_palette));
@@ -248,7 +248,7 @@ void State::init()
 	_game->getFpsCounter()->setPalette(_palette);
 	_game->getFpsCounter()->setColor(_cursorColor);
 	_game->getFpsCounter()->draw();
-	if (_game->getMod() != 0)
+	if (_game->getMod() != nullptr)
 	{
 		_game->getMod()->setPalette(_palette);
 	}
@@ -260,7 +260,7 @@ void State::init()
 			window->invalidate();
 		}
 	}
-	if (_ruleInterface != 0 && !_ruleInterface->getMusic().empty())
+	if (_ruleInterface != nullptr && !_ruleInterface->getMusic().empty())
 	{
 		_game->getMod()->playMusic(_ruleInterface->getMusic());
 	}
@@ -288,7 +288,7 @@ void State::handle(Action *action)
 		for (std::vector<Surface*>::reverse_iterator i = _surfaces.rbegin(); i != _surfaces.rend(); ++i)
 		{
 			InteractiveSurface* j = dynamic_cast<InteractiveSurface*>(*i);
-			if (j != 0)
+			if (j != nullptr)
 				j->handle(action, this);
 		}
 	}
@@ -335,7 +335,7 @@ void State::resetAll()
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
 		InteractiveSurface *s = dynamic_cast<InteractiveSurface*>(*i);
-		if (s != 0)
+		if (s != nullptr)
 		{
 			s->unpress(this);
 			//s->setFocus(false);
@@ -466,7 +466,7 @@ void State::setPalette(SDL_Color *colors, int firstcolor, int ncolors, bool imme
 		_game->getCursor()->draw();
 		_game->getFpsCounter()->setPalette(_palette);
 		_game->getFpsCounter()->draw();
-		if (_game->getMod() != 0)
+		if (_game->getMod() != nullptr)
 		{
 			_game->getMod()->setPalette(_palette);
 		}
@@ -503,7 +503,7 @@ void State::setPalette(const std::string &palette, int backpals)
 	}
 	if (backpals != -1)
 		setPalette(_game->getMod()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(backpals)), Palette::backPos, 16, false);
-	setPalette(NULL); // delay actual update to the end
+	setPalette(nullptr); // delay actual update to the end
 }
 
 /**

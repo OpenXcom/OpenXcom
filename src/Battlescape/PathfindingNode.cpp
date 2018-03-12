@@ -26,7 +26,7 @@ namespace OpenXcom
  * Sets up a PathfindingNode.
  * @param pos Position.
  */
-PathfindingNode::PathfindingNode(Position pos) : _pos(pos), _checked(0), _tuCost(0), _prevNode(0), _prevDir(0), _tuGuess(0), _openentry(0)
+PathfindingNode::PathfindingNode(Position pos) : _pos(pos), _checked(0), _tuCost(0), _prevNode(nullptr), _prevDir(0), _tuGuess(0), _openentry(nullptr)
 {
 
 }
@@ -54,7 +54,7 @@ Position PathfindingNode::getPosition() const
 void PathfindingNode::reset()
 {
 	_checked = false;
-	_openentry = 0;
+	_openentry = nullptr;
 }
 
 /**

@@ -30,7 +30,7 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param id The id of the item.
  */
-BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _unit(0), _tile(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _fuseTimer(-1), _ammoQuantity(0), _painKiller(0), _heal(0), _stimulant(0), _XCOMProperty(false), _droppedOnAlienTurn(false), _isAmmo(false)
+BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(nullptr), _previousOwner(nullptr), _unit(nullptr), _tile(nullptr), _inventorySlot(nullptr), _inventoryX(0), _inventoryY(0), _ammoItem(nullptr), _fuseTimer(-1), _ammoQuantity(0), _painKiller(0), _heal(0), _stimulant(0), _XCOMProperty(false), _droppedOnAlienTurn(false), _isAmmo(false)
 {
 	(*id)++;
 	if (_rules)
@@ -256,7 +256,7 @@ void BattleItem::moveToOwner(BattleUnit *owner)
 {
 	_previousOwner = _owner ? _owner:owner;
 	_owner = owner;
-	if (_previousOwner != 0)
+	if (_previousOwner != nullptr)
 	{
 		for (std::vector<BattleItem*>::iterator i = _previousOwner->getInventory()->begin(); i != _previousOwner->getInventory()->end(); ++i)
 		{
@@ -267,7 +267,7 @@ void BattleItem::moveToOwner(BattleUnit *owner)
 			}
 		}
 	}
-	if (_owner != 0)
+	if (_owner != nullptr)
 	{
 		_owner->getInventory()->push_back(this);
 	}
@@ -340,7 +340,7 @@ bool BattleItem::occupiesSlot(int x, int y, BattleItem *item) const
 		return false;
 	if (_inventorySlot->getType() == INV_HAND)
 		return true;
-	if (item == 0)
+	if (item == nullptr)
 	{
 		return (x >= _inventoryX && x < _inventoryX + _rules->getInventoryWidth() &&
 				y >= _inventoryY && y < _inventoryY + _rules->getInventoryHeight());
@@ -381,13 +381,13 @@ int BattleItem::setAmmoItem(BattleItem *item)
 {
 	if (!needsAmmo()) return -2;
 
-	if (item == 0)
+	if (item == nullptr)
 	{
 		if (_ammoItem)
 		{
 			_ammoItem->setIsAmmo(false);
 		}
-		_ammoItem = 0;
+		_ammoItem = nullptr;
 		return 0;
 	}
 

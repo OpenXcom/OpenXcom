@@ -26,7 +26,7 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain type of craft weapon.
  * @param type String defining the type.
  */
-RuleCraftWeapon::RuleCraftWeapon(const std::string &type) : _type(type), _sprite(-1), _sound(-1), _damage(0), _range(0), _accuracy(0), _reloadCautious(0), _reloadStandard(0), _reloadAggressive(0), _ammoMax(0), _rearmRate(1), _projectileSpeed(0), _projectileType(CWPT_CANNON_ROUND), _underwaterOnly(false)
+RuleCraftWeapon::RuleCraftWeapon(const std::string &type) : _type(type), _sprite(-1), _sound(-1), _damage(0), _range(0), _accuracy(0), _reloadCautious(0), _reloadStandard(0), _reloadAggressive(0), _ammoMax(0), _rearmRate(1), _projectileSpeed(0), _projectileType(CraftWeaponProjectileType::CANNON_ROUND), _underwaterOnly(false)
 {
 }
 
@@ -64,7 +64,7 @@ void RuleCraftWeapon::load(const YAML::Node &node, Mod *mod)
 	_reloadAggressive = node["reloadAggressive"].as<int>(_reloadAggressive);
 	_ammoMax = node["ammoMax"].as<int>(_ammoMax);
 	_rearmRate = node["rearmRate"].as<int>(_rearmRate);
-	_projectileType = (CraftWeaponProjectileType)node["projectileType"].as<int>(_projectileType);
+	_projectileType = (CraftWeaponProjectileType)node["projectileType"].as<int>((int)_projectileType);
 	_projectileSpeed = node["projectileSpeed"].as<int>(_projectileSpeed);
 	_launcher = node["launcher"].as<std::string>(_launcher);
 	_clip = node["clip"].as<std::string>(_clip);

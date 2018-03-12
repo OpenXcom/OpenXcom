@@ -32,7 +32,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-ArrowButton::ArrowButton(ArrowShape shape, int width, int height, int x, int y) : ImageButton(width, height, x, y), _shape(shape), _list(0)
+ArrowButton::ArrowButton(ArrowShape shape, int width, int height, int x, int y) : ImageButton(width, height, x, y), _shape(shape), _list(nullptr)
 {
 	_timer = new Timer(50);
 	_timer->onTimer((SurfaceHandler)&ArrowButton::scroll);
@@ -48,7 +48,7 @@ ArrowButton::~ArrowButton()
 
 bool ArrowButton::isButtonHandled(Uint8 button)
 {
-	if (_list != 0)
+	if (_list != nullptr)
 	{
 		return (button == SDL_BUTTON_LEFT || button == SDL_BUTTON_RIGHT);
 	}
@@ -307,7 +307,7 @@ void ArrowButton::draw()
  */
 void ArrowButton::think()
 {
-	_timer->think(0, this);
+	_timer->think(nullptr, this);
 }
 
 /**
@@ -333,7 +333,7 @@ void ArrowButton::scroll()
 void ArrowButton::mousePress(Action *action, State *state)
 {
 	ImageButton::mousePress(action, state);
-	if (_list != 0)
+	if (_list != nullptr)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
@@ -352,7 +352,7 @@ void ArrowButton::mousePress(Action *action, State *state)
 void ArrowButton::mouseRelease(Action *action, State *state)
 {
 	ImageButton::mouseRelease(action, state);
-	if (_list != 0 && action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (_list != nullptr && action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		_timer->stop();
 	}
@@ -366,7 +366,7 @@ void ArrowButton::mouseRelease(Action *action, State *state)
 void ArrowButton::mouseClick(Action *action, State *state)
 {
 	ImageButton::mouseClick(action, state);
-	if (_list != 0 && SDL_BUTTON_RIGHT == action->getDetails()->button.button) {
+	if (_list != nullptr && SDL_BUTTON_RIGHT == action->getDetails()->button.button) {
 		if (_shape == ARROW_BIG_UP) _list->scrollUp(true);
 		else if (_shape == ARROW_BIG_DOWN) _list->scrollDown(true);
 	}

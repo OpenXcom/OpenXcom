@@ -29,7 +29,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-ImageButton::ImageButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0), _inverted(false)
+ImageButton::ImageButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(nullptr), _inverted(false)
 {
 }
 
@@ -67,7 +67,7 @@ Uint8 ImageButton::getColor() const
 void ImageButton::setGroup(ImageButton **group)
 {
 	_group = group;
-	if (_group != 0 && *_group == this)
+	if (_group != nullptr && *_group == this)
 		invert(_color + 3);
 }
 
@@ -79,7 +79,7 @@ void ImageButton::setGroup(ImageButton **group)
  */
 void ImageButton::mousePress(Action *action, State *state)
 {
-	if (_group != 0)
+	if (_group != nullptr)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{

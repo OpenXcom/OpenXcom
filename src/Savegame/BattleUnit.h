@@ -253,7 +253,7 @@ public:
 	/// Calculate firing accuracy.
 	int getFiringAccuracy(BattleActionType actionType, BattleItem *item);
 	/// Calculate accuracy modifier.
-	int getAccuracyModifier(BattleItem *item = 0);
+	int getAccuracyModifier(BattleItem *item = nullptr);
 	/// Calculate throwing accuracy.
 	double getThrowingAccuracy();
 	/// Set armor value.
@@ -293,7 +293,7 @@ public:
 	/// Get whether this unit is visible
 	bool getVisible() const;
 	/// Sets the unit's tile it's standing on
-	void setTile(Tile *tile, Tile *tileBelow = 0);
+	void setTile(Tile *tile, Tile *tileBelow = nullptr);
 	/// Gets the unit's tile.
 	Tile *getTile() const;
 	/// Gets the item in the specified slot.
@@ -307,7 +307,7 @@ public:
 	/// Reloads righthand weapon if needed.
 	bool checkAmmo();
 	/// Check if this unit is in the exit area
-	bool isInExitArea(SpecialTileType stt = START_POINT) const;
+	bool isInExitArea(SpecialTile stt = SpecialTile::START_POINT) const;
 	/// Gets the unit height taking into account kneeling/standing.
 	int getHeight() const;
 	/// Gets the unit floating elevation.
@@ -411,7 +411,7 @@ public:
 	/// Get the units we are charging towards.
 	BattleUnit *getCharging();
 	/// Get the carried weight in strength units.
-	int getCarriedWeight(BattleItem *draggingItem = 0) const;
+	int getCarriedWeight(BattleItem *draggingItem = nullptr) const;
 	/// Set how many turns this unit will be exposed for.
 	void setTurnsSinceSpotted (int turns);
 	/// Set how many turns this unit will be exposed for.

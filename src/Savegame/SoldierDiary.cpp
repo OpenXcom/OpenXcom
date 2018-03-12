@@ -464,7 +464,7 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 								// See if we find _no_ matches with any criteria. If so, break and try the next kill.
 								RuleItem *weapon = mod->getItem((*singleKill)->weapon);
 								RuleItem *weaponAmmo = mod->getItem((*singleKill)->weaponAmmo);
-								if (weapon == 0 || weaponAmmo == 0 ||
+								if (weapon == nullptr || weaponAmmo == nullptr ||
 									((*singleKill)->rank != (*detail) && (*singleKill)->race != (*detail) &&
 									 (*singleKill)->weapon != (*detail) && (*singleKill)->weaponAmmo != (*detail) &&
 									 (*singleKill)->getUnitStatusString() != (*detail) && (*singleKill)->getUnitFactionString() != (*detail) &&
@@ -939,7 +939,7 @@ int SoldierDiary::getTrapKillTotal(Mod *mod) const
 	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
 	{
 		RuleItem *item = mod->getItem((*i)->weapon);
-		if ((*i)->hostileTurn() && (item == 0 || item->getBattleType() == BT_GRENADE || item->getBattleType() == BT_PROXIMITYGRENADE))
+		if ((*i)->hostileTurn() && (item == nullptr || item->getBattleType() == BT_GRENADE || item->getBattleType() == BT_PROXIMITYGRENADE))
 		{
 			trapKillTotal++;
 		}
@@ -958,7 +958,7 @@ int SoldierDiary::getTrapKillTotal(Mod *mod) const
 	for (std::vector<BattleUnitKills*>::const_iterator i = _killList.begin(); i != _killList.end(); ++i)
 	{
 		RuleItem *item = mod->getItem((*i)->weapon);
-		if ((*i)->hostileTurn() && item != 0 && item->getBattleType() != BT_GRENADE && item->getBattleType() != BT_PROXIMITYGRENADE)
+		if ((*i)->hostileTurn() && item != nullptr && item->getBattleType() != BT_GRENADE && item->getBattleType() != BT_PROXIMITYGRENADE)
 		{
 			reactionFireKillTotal++;
 		}

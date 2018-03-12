@@ -39,7 +39,7 @@ namespace OpenXcom
 /**
  * Sets up a MeleeAttackBState.
  */
-MeleeAttackBState::MeleeAttackBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _target(0), _weapon(0), _ammo(0), _initialized(false)
+MeleeAttackBState::MeleeAttackBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(nullptr), _target(nullptr), _weapon(nullptr), _ammo(nullptr), _initialized(false)
 {
 }
 
@@ -90,7 +90,7 @@ void MeleeAttackBState::init()
 	if (_unit->getFaction() != _parent->getSave()->getSide())
 	{
 		// no ammo or target is dead: give the time units back and cancel the shot.
-		if (_ammo == 0
+		if (_ammo == nullptr
 			|| !_parent->getSave()->getTile(_action.target)->getUnit()
 			|| _parent->getSave()->getTile(_action.target)->getUnit()->isOut()
 			|| _parent->getSave()->getTile(_action.target)->getUnit() != _parent->getSave()->getSelectedUnit())
@@ -189,7 +189,7 @@ void MeleeAttackBState::performMeleeAttack()
 {
 	// set the soldier in an aiming position
 	_unit->aim(true);
-	_unit->setCache(0);
+	_unit->setCache(nullptr);
 	_parent->getMap()->cacheUnit(_unit);
 	// make some noise
 	if (_ammo && _ammo->getRules()->getMeleeAttackSound() != -1)
@@ -204,12 +204,12 @@ void MeleeAttackBState::performMeleeAttack()
 	if (!_parent->getSave()->getDebugMode() && _weapon->getRules()->getBattleType() == BT_MELEE && _ammo && _ammo->spendBullet() == false)
 	{
 		_parent->getSave()->removeItem(_ammo);
-		_action.weapon->setAmmoItem(0);
+		_action.weapon->setAmmoItem(nullptr);
 	}
 	_parent->getMap()->setCursorType(CT_NONE);
 	
 	// make an explosion animation
-	_parent->statePushFront(new ExplosionBState(_parent, _voxel, _action.weapon, _action.actor, 0, true, true));
+	_parent->statePushFront(new ExplosionBState(_parent, _voxel, _action.weapon, _action.actor, nullptr, true, true));
 }
 
 /**

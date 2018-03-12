@@ -31,7 +31,7 @@ const SDLKey InteractiveSurface::SDLK_ANY = (SDLKey)-1; // using an unused keyco
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _buttonsPressed(0), _in(0), _over(0), _out(0), _isHovered(false), _isFocused(true), _listButton(false)
+InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _buttonsPressed(0), _in(nullptr), _over(nullptr), _out(nullptr), _isHovered(false), _isFocused(true), _listButton(false)
 {
 }
 
@@ -91,7 +91,7 @@ void InteractiveSurface::setVisible(bool visible)
 	// Unpress button if it was hidden
 	if (!_visible)
 	{
-		unpress(0);
+		unpress(nullptr);
 	}
 }
 
@@ -131,7 +131,7 @@ void InteractiveSurface::handle(Action *action, State *state)
 			}
 			if (_listButton && action->getDetails()->type == SDL_MOUSEMOTION)
 			{
-				_buttonsPressed = SDL_GetMouseState(0, 0);
+				_buttonsPressed = SDL_GetMouseState(nullptr, nullptr);
 				for (Uint8 i = 1; i <= NUM_BUTTONS; ++i)
 				{
 					if (isButtonPressed(i))
@@ -315,7 +315,7 @@ void InteractiveSurface::mouseClick(Action *action, State *state)
  */
 void InteractiveSurface::mouseIn(Action *action, State *state)
 {
-	if (_in != 0)
+	if (_in != nullptr)
 	{
 		(state->*_in)(action);
 	}
@@ -330,7 +330,7 @@ void InteractiveSurface::mouseIn(Action *action, State *state)
  */
 void InteractiveSurface::mouseOver(Action *action, State *state)
 {
-	if (_over != 0)
+	if (_over != nullptr)
 	{
 		(state->*_over)(action);
 	}
@@ -345,7 +345,7 @@ void InteractiveSurface::mouseOver(Action *action, State *state)
  */
 void InteractiveSurface::mouseOut(Action *action, State *state)
 {
-	if (_out != 0)
+	if (_out != nullptr)
 	{
 		(state->*_out)(action);
 	}
@@ -408,7 +408,7 @@ void InteractiveSurface::keyboardRelease(Action *action, State *state)
  */
 void InteractiveSurface::onMouseClick(ActionHandler handler, Uint8 button)
 {
-	if (handler != 0)
+	if (handler != nullptr)
 	{
 		_click[button] = handler;
 	}
@@ -425,7 +425,7 @@ void InteractiveSurface::onMouseClick(ActionHandler handler, Uint8 button)
  */
 void InteractiveSurface::onMousePress(ActionHandler handler, Uint8 button)
 {
-	if (handler != 0)
+	if (handler != nullptr)
 	{
 		_press[button] = handler;
 	}
@@ -442,7 +442,7 @@ void InteractiveSurface::onMousePress(ActionHandler handler, Uint8 button)
  */
 void InteractiveSurface::onMouseRelease(ActionHandler handler, Uint8 button)
 {
-	if (handler != 0)
+	if (handler != nullptr)
 	{
 		_release[button] = handler;
 	}
@@ -486,7 +486,7 @@ void InteractiveSurface::onMouseOut(ActionHandler handler)
  */
 void InteractiveSurface::onKeyboardPress(ActionHandler handler, SDLKey key)
 {
-	if (handler != 0)
+	if (handler != nullptr)
 	{
 		_keyPress[key] = handler;
 	}
@@ -503,7 +503,7 @@ void InteractiveSurface::onKeyboardPress(ActionHandler handler, SDLKey key)
  */
 void InteractiveSurface::onKeyboardRelease(ActionHandler handler, SDLKey key)
 {
-	if (handler != 0)
+	if (handler != nullptr)
 	{
 		_keyRelease[key] = handler;
 	}

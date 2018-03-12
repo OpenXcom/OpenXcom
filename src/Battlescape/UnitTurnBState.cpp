@@ -34,7 +34,7 @@ namespace OpenXcom
  * @param parent Pointer to the Battlescape.
  * @param action Pointer to an action.
  */
-UnitTurnBState::UnitTurnBState(BattlescapeGame *parent, BattleAction action, bool chargeTUs) : BattleState(parent, action), _unit(0), _turret(false), _chargeTUs(chargeTUs)
+UnitTurnBState::UnitTurnBState(BattlescapeGame *parent, BattleAction action, bool chargeTUs) : BattleState(parent, action), _unit(nullptr), _turret(false), _chargeTUs(chargeTUs)
 {
 
 }
@@ -111,7 +111,7 @@ void UnitTurnBState::think()
 		size_t unitSpotted = _unit->getUnitsSpottedThisTurn().size();
 		_unit->turn(_turret);
 		_parent->getTileEngine()->calculateFOV(_unit);
-		_unit->setCache(0);
+		_unit->setCache(nullptr);
 		_parent->getMap()->cacheUnit(_unit);
 		if (_chargeTUs && _unit->getFaction() == _parent->getSave()->getSide() && _parent->getPanicHandled() && _action.type == BA_NONE && _unit->getUnitsSpottedThisTurn().size() > unitSpotted)
 		{

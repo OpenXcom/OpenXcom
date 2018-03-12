@@ -152,7 +152,7 @@ SDL_Surface *TestState::testSurface()
 	// Create surface
 	surface = SDL_CreateRGBSurface(SDL_HWSURFACE, 256, 25, 8, 0, 0, 0, 0);
 
-	if (surface == 0)
+	if (surface == nullptr)
 	{
 		throw Exception(SDL_GetError());
 	}

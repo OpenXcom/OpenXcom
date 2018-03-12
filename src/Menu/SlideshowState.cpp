@@ -74,7 +74,7 @@ SlideshowState::SlideshowState(const SlideshowHeader &slideshowHeader,
 
 	_game->getMod()->playMusic(_slideshowHeader.musicId);
 	_game->getCursor()->setVisible(false);
-	screenClick(0);
+	screenClick(nullptr);
 }
 
 SlideshowState::~SlideshowState()
@@ -87,7 +87,7 @@ SlideshowState::~SlideshowState()
  */
 void SlideshowState::screenTimer()
 {
-	screenClick(0);
+	screenClick(nullptr);
 }
 
 /**
@@ -95,7 +95,7 @@ void SlideshowState::screenTimer()
  */
 void SlideshowState::think()
 {
-	_transitionTimer->think(this, 0);
+	_transitionTimer->think(this, nullptr);
 }
 
 /**

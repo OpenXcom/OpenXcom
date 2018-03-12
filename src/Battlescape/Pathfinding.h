@@ -47,7 +47,7 @@ private:
 	/// Gets the node at certain position.
 	PathfindingNode *getNode(Position pos);
 	/// Determines whether a tile blocks a certain movementType.
-	bool isBlocked(Tile *tile, const int part, BattleUnit *missileTarget, int bigWallExclusion = -1) const;
+	bool isBlocked(Tile *tile, TilePart part, BattleUnit *missileTarget, int bigWallExclusion = -1) const;
 	/// Tries to find a straight line path between two positions.
 	bool bresenhamPath(Position origin, Position target, BattleUnit *missileTarget, bool sneak = false, int maxTUCost = 1000);
 	/// Tries to find a path between two positions.
@@ -65,6 +65,7 @@ public:
 	static const int DIR_UP = 8;
 	static const int DIR_DOWN = 9;
 	enum bigWallTypes{ BLOCK = 1, BIGWALLNESW, BIGWALLNWSE, BIGWALLWEST, BIGWALLNORTH, BIGWALLEAST, BIGWALLSOUTH, BIGWALLEASTANDSOUTH, BIGWALLWESTANDNORTH};
+    //TODO: Deal with BIGWALL as kind of TilePart
 	static const int O_BIGWALL = -1;
 	static int red;
 	static int green;
@@ -74,7 +75,7 @@ public:
 	/// Cleans up the Pathfinding.
 	~Pathfinding();
 	/// Calculates the shortest path.
-	void calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget = 0, int maxTUCost = 1000);
+	void calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget = nullptr, int maxTUCost = 1000);
 	/// Converts direction to a vector.
 	static void directionToVector(int direction, Position *vector);
 	/// Converts a vector to a direction.

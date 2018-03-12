@@ -26,7 +26,7 @@ namespace OpenXcom
 /**
  * Initializes a brand new palette.
  */
-Palette::Palette() : _colors(0), _count(0)
+Palette::Palette() : _colors(nullptr), _count(0)
 {
 }
 
@@ -49,7 +49,7 @@ Palette::~Palette()
  */
 void Palette::loadDat(const std::string &filename, int ncolors, int offset)
 {
-	if (_colors != 0)
+	if (_colors != nullptr)
 		throw Exception("loadDat can be run only once");
 	_count = ncolors;
 	_colors = new SDL_Color[_count];
@@ -137,7 +137,7 @@ void Palette::savePal(const std::string &file) const
 
 void Palette::setColors(SDL_Color* pal, int ncolors)
 {
-	if (_colors != 0)
+	if (_colors != nullptr)
 		throw Exception("setColors can be run only once");
 	_count = ncolors;
 	_colors = new SDL_Color[_count];

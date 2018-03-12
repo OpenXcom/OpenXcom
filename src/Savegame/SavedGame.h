@@ -317,7 +317,7 @@ public:
 	/// Gets the list of missions statistics
 	std::vector<MissionStatistics*> *getMissionStatistics();
 	/// Handles a soldier's death.
-	std::vector<Soldier*>::iterator killSoldier(Soldier *soldier, BattleUnitKills *cause = 0);
+	std::vector<Soldier*>::iterator killSoldier(Soldier *soldier, BattleUnitKills *cause = nullptr);
 };
 
 }

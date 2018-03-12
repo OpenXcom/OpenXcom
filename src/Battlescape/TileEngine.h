@@ -20,6 +20,7 @@
 #include <vector>
 #include "Position.h"
 #include "../Mod/RuleItem.h"
+#include "../Mod/MapData.h"
 #include <SDL.h>
 
 namespace OpenXcom
@@ -45,7 +46,7 @@ private:
 	std::vector<Uint16> *_voxelData;
 	static const int heightFromCenter[11];
 	void addLight(Position center, int power, int layer);
-	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1, bool checkingFromOrigin = false);
+	int blockage(Tile *tile, TilePart part, ItemDamageType type, int direction = -1, bool checkingFromOrigin = false);
 	bool _personalLighting;
 	Tile *_cacheTile;
 	Tile *_cacheTileBelow;
@@ -72,7 +73,7 @@ public:
 	/// Handles bullet/weapon hits.
 	BattleUnit *hit(Position center, int power, ItemDamageType type, BattleUnit *unit);
 	/// Handles explosions.
-	void explode(Position center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit = 0);
+	void explode(Position center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit = nullptr);
 	/// Checks if a destroyed tile starts an explosion.
 	Tile *checkForTerrainExplosions();
 	/// Unit opens door?
@@ -80,7 +81,7 @@ public:
 	/// Closes ufo doors.
 	int closeUfoDoors();
 	/// Calculates a line trajectory.
-	int calculateLine(Position origin, Position target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
+	int calculateLine(Position origin, Position target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit *excludeAllBut = nullptr);
 	/// Calculates a parabola trajectory.
 	int calculateParabola(Position origin, Position target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, const Position delta);
 	/// Gets the origin voxel of a unit's eyesight.
@@ -108,23 +109,23 @@ public:
 	/// Checks a unit's % exposure on a tile.
 	int checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit, BattleUnit *excludeAllBut);
 	/// Checks validity for targetting a unit.
-	bool canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit, BattleUnit *potentialUnit = 0);
+	bool canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit, BattleUnit *potentialUnit = nullptr);
 	/// Check validity for targetting a tile.
-	bool canTargetTile(Position *originVoxel, Tile *tile, int part, Position *scanVoxel, BattleUnit *excludeUnit);
+	bool canTargetTile(Position *originVoxel, Tile *tile, TilePart part, Position *scanVoxel, BattleUnit *excludeUnit);
 	/// Calculates the z voxel for shadows.
 	int castedShade(Position voxel);
 	/// Checks the visibility of a given voxel.
 	bool isVoxelVisible(Position voxel);
 	/// Checks what type of voxel occupies this space.
-	int voxelCheck(Position voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
+	int voxelCheck(Position voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit *excludeAllBut = nullptr);
 	/// Flushes cache of voxel check
 	void voxelCheckFlush();
 	/// Blows this tile up.
 	bool detonate(Tile* tile);
 	/// Validates a throwing action.
-	bool validateThrow(BattleAction &action, Position originVoxel, Position targetVoxel, double *curve = 0, int *voxelType = 0, bool forced = false);
+	bool validateThrow(BattleAction &action, Position originVoxel, Position targetVoxel, double *curve = nullptr, int *voxelType = nullptr, bool forced = false);
 	/// Opens any doors this door is connected to.
-	void checkAdjacentDoors(const Position& pos, int part);
+	void checkAdjacentDoors(const Position& pos, TilePart part);
 	/// Creates a vector of units that can spot this unit.
 	std::vector<std::pair<BattleUnit *, int> > getSpottingUnits(BattleUnit* unit);
 	/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.

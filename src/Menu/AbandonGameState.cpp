@@ -60,7 +60,7 @@ AbandonGameState::AbandonGameState(OptionsOrigin origin) : _origin(origin)
 	_txtTitle = new Text(206, 17, x+5, 70);
 
 	// Set palette
-	setInterface("geoscape", false, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : 0);
+	setInterface("geoscape", false, _game->getSavedGame() ? _game->getSavedGame()->getSavedBattle() : nullptr);
 
 	add(_window, "genericWindow", "geoscape");
 	add(_btnYes, "genericButton2", "geoscape");
@@ -112,7 +112,7 @@ void AbandonGameState::btnYesClick(Action *)
 		_game->getScreen()->resetDisplay(false);
 
 		_game->setState(new MainMenuState);
-		_game->setSavedGame(0);
+		_game->setSavedGame(nullptr);
 	}
 	else
 	{
