@@ -629,10 +629,10 @@ void Map::drawTerrain(Surface *surface)
 								if (westUnit && (!tileWest->getMapData(O_OBJECT) || tileWest->getMapData(O_OBJECT)->getBigWall() < 6 || tileWest->getMapData(O_OBJECT)->getBigWall() == 9) && (westUnit->getVisible() || _save->getDebugMode()))
 								{
 									// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
-									int part = 0;
-									part += tileWest->getPosition().x - westUnit->getPosition().x;
-									part += (tileWest->getPosition().y - westUnit->getPosition().y)*2;
-									tmpSurface = westUnit->getCache(&invalid, part);
+									int unitPart = 0;
+									unitPart += tileWest->getPosition().x - westUnit->getPosition().x;
+									unitPart += (tileWest->getPosition().y - westUnit->getPosition().y)*2;
+									tmpSurface = westUnit->getCache(&invalid, unitPart);
 									if (tmpSurface)
 									{
 										Position offset;

@@ -323,7 +323,7 @@ static struct AudioSequence
 	int trackPosition;
 	FlcPlayer *_flcPlayer;
 
-	AudioSequence(Mod *mod, FlcPlayer *flcPlayer) : mod(mod), m(0), s(0), trackPosition(0), _flcPlayer(flcPlayer)
+	AudioSequence(Mod *_mod, FlcPlayer *flcPlayer) : mod(_mod), m(0), s(0), trackPosition(0), _flcPlayer(flcPlayer)
 	{ }
 
 	void operator()()

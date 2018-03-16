@@ -878,10 +878,10 @@ BattleUnit *BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 				RuleItem *ruleItem = _game->getMod()->getItem(*i);
 				if (ruleItem)
 				{
-					BattleItem *item = new BattleItem(ruleItem, _save->getCurrentItemId());
-					if (!addItem(item, unit))
+					BattleItem *weapon = new BattleItem(ruleItem, _save->getCurrentItemId());
+					if (!addItem(weapon, unit))
 					{
-						delete item;
+						delete weapon;
 					}
 				}
 			}
@@ -1587,7 +1587,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
-		for (TilePart part = O_FLOOR; part <= O_OBJECT; part = (TilePart)((int)part + 1))
+		for (int part = O_FLOOR; part <= O_OBJECT; ++part)
 		{
 			terrainObjectID = ((unsigned char)value[part]);
 			if (terrainObjectID>0)
@@ -1599,7 +1599,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 				{
 					_save->getTile(Position(x, y, z))->setMapData(0, -1, -1, O_OBJECT);
 				}
-				_save->getTile(Position(x, y, z))->setMapData(md, mapDataID, mapDataSetID, part);
+				_save->getTile(Position(x, y, z))->setMapData(md, mapDataID, mapDataSetID, (TilePart)part);
 			}
 		}
 
@@ -2759,7 +2759,7 @@ void BattlescapeGenerator::drillModules(TunnelData* data, const std::vector<SDL_
 		{
 			if (_blocks[i][j] == 0)
 				continue;
-			Tile *tile;
+			
 			MapData *md;
 
 			if (dir != MD_VERTICAL)
@@ -2767,6 +2767,7 @@ void BattlescapeGenerator::drillModules(TunnelData* data, const std::vector<SDL_
 				// drill east
 				if (i < (_mapsize_x / 10)-1 && (_drillMap[i][j] == MD_HORIZONTAL || _drillMap[i][j] == MD_BOTH) && _blocks[i+1][j] != 0)
 				{
+					Tile *tile;
 					// remove stuff
 					for (int k = rect.y; k != rect.y + rect.h; ++k)
 					{
@@ -2842,7 +2843,7 @@ void BattlescapeGenerator::drillModules(TunnelData* data, const std::vector<SDL_
 					if (wWall)
 					{
 						md = _terrain->getMapDataSets()->at(wWall->set)->getObjects()->at(wWall->entry);
-						tile = _save->getTile(Position((i*10)+rect.x, (j*10)+9, data->level));
+						Tile *tile = _save->getTile(Position((i*10)+rect.x, (j*10)+9, data->level));
 						tile->setMapData(md, wWall->entry, wWall->set, O_WESTWALL);
 						tile = _save->getTile(Position((i*10)+rect.x+rect.w, (j*10)+9, data->level));
 						tile->setMapData(md, wWall->entry, wWall->set, O_WESTWALL);
@@ -2851,7 +2852,7 @@ void BattlescapeGenerator::drillModules(TunnelData* data, const std::vector<SDL_
 					if (corner)
 					{
 						md = _terrain->getMapDataSets()->at(corner->set)->getObjects()->at(corner->entry);
-						tile = _save->getTile(Position((i*10)+rect.x, (j+1)*10, data->level));
+						Tile *tile = _save->getTile(Position((i*10)+rect.x, (j+1)*10, data->level));
 						if (tile->getMapData(O_WESTWALL) == 0)
 							tile->setMapData(md, corner->entry, corner->set, O_WESTWALL);
 					}

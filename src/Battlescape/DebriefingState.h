@@ -39,7 +39,14 @@ class RuleItem;
 class BattleUnit;
 struct UnitStats;
 
-struct DebriefingStat { DebriefingStat(const std::string &_item, bool recovery) : item(_item), qty(0), score(0), recovery(recovery) {}; std::string item; int qty; int score; bool recovery; };
+struct DebriefingStat { 
+	std::string item;
+	int qty;
+	int score;
+	bool recovery;
+
+	DebriefingStat(const std::string &_item, bool _recovery) : item(_item), qty(0), score(0), recovery(_recovery) {};
+	};
 
 struct ReequipStat { std::string item; int qty; std::wstring craft; };
 

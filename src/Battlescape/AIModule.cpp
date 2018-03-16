@@ -573,7 +573,6 @@ void AIModule::setupAmbush()
 
 	if (selectClosestKnownEnemy())
 	{
-		Position target;
 		const int BASE_SYSTEMATIC_SUCCESS = 100;
 		const int COVER_BONUS = 25;
 		const int FAST_PASS_THRESHOLD = 80;
@@ -600,6 +599,7 @@ void AIModule::setupAmbush()
 			}
 
 			// make sure we can't be seen here.
+			Position target;
 			if (!_save->getTileEngine()->canTargetUnit(&origin, tile, &target, _aggroTarget, _unit) && !getSpottingUnits(pos))
 			{
 				_save->getPathfinding()->calculate(_unit, pos);

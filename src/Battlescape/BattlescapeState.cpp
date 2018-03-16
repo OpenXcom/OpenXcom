@@ -1647,13 +1647,12 @@ void BattlescapeState::saveAIMap()
 
 	int w = _save->getMapSizeX();
 	int h = _save->getMapSizeY();
-	Position pos(unit->getPosition());
 
 	SDL_Surface *img = SDL_AllocSurface(0, w * 8, h * 8, 24, 0xff, 0xff00, 0xff0000, 0);
 	Log(LOG_INFO) << "unit = " << unit->getId();
 	memset(img->pixels, 0, img->pitch * img->h);
 
-	Position tilePos(pos);
+	Position tilePos(unit->getPosition());
 	SDL_Rect r;
 	r.h = 8;
 	r.w = 8;

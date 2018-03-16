@@ -1008,10 +1008,10 @@ void Mod::loadFile(const std::string &filename)
 		else if ((*i)["delete"])
 		{
 			std::string type = (*i)["delete"].as<std::string>();
-			std::map<std::string, ArticleDefinition*>::iterator i = _ufopaediaArticles.find(type);
-			if (i != _ufopaediaArticles.end())
+			std::map<std::string, ArticleDefinition*>::iterator j = _ufopaediaArticles.find(type);
+			if (j != _ufopaediaArticles.end())
 			{
-				_ufopaediaArticles.erase(i);
+				_ufopaediaArticles.erase(j);
 			}
 			std::vector<std::string>::iterator idx = std::find(_ufopaediaIndex.begin(), _ufopaediaIndex.end(), type);
 			if (idx != _ufopaediaIndex.end())
@@ -2191,7 +2191,7 @@ Soldier *Mod::genSoldier(SavedGame *save, std::string type) const
 	// Check for duplicates
 	// Original X-COM gives up after 10 tries so might as well do the same here
 	bool duplicate = true;
-	for (int i = 0; i < 10 && duplicate; ++i)
+	for (int tries = 0; tries < 10 && duplicate; ++tries)
 	{
 		delete soldier;
 		soldier = new Soldier(getSoldier(type, true), getArmor(getSoldier(type, true)->getArmor(), true), newId);

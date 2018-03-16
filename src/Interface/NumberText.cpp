@@ -183,11 +183,11 @@ NumberText::NumberText(int width, int height, int x, int y) : Surface(width, hei
 		_borderedChars[i] = new Surface(5, 7);
 		// give it a border
 		// this is the "darker" shade that goes in the corners.
-		for (int x = 0; x <= 2; x += 2)
+		for (int j = 0; j <= 2; j += 2)
 		{
-			for (int y = 0; y <= 2; y += 2)
+			for (int k = 0; k <= 2; k += 2)
 			{
-				_chars[i]->blitNShade(_borderedChars[i], x, y, 11);
+				_chars[i]->blitNShade(_borderedChars[i], j, k, 11);
 			}
 		}
 		// this is the "slightly darker" version that goes in four cardinals.

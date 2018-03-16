@@ -354,9 +354,6 @@ bool BattlescapeGame::kneel(BattleUnit *bu)
  */
 void BattlescapeGame::endTurn()
 {
-
-	Position p;
-
 	_debugPlay = false;
 	_currentAction.type = BA_NONE;
 	getMap()->getWaypoints()->clear();
@@ -371,6 +368,8 @@ void BattlescapeGame::endTurn()
 		{
 			getMod()->getSoundByDepth(_save->getDepth(), Mod::SLIDING_DOOR_CLOSE)->play(); // ufo door closed
 		}
+		
+		Position p;
 
 		// check for hot grenades on the ground
 		for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
