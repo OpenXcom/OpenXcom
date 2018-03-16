@@ -212,9 +212,9 @@ void Tile::saveBinary(Uint8** buffer) const
  * @param dat pointer to the data object
  * @param mapDataID
  * @param mapDataSetID
- * @param part the part number
+ * @param part Part of the tile to set data of
  */
-void Tile::setMapData(MapData *dat, int mapDataID, int mapDataSetID, int part)
+void Tile::setMapData(MapData *dat, int mapDataID, int mapDataSetID, TilePart part)
 {
 	_objects[part] = dat;
 	_mapDataID[part] = mapDataID;
@@ -225,10 +225,10 @@ void Tile::setMapData(MapData *dat, int mapDataID, int mapDataSetID, int part)
  * get the MapData references of part 0 to 3.
  * @param mapDataID
  * @param mapDataSetID
- * @param part the part number
+ * @param part is part of the tile to get data from
  * @return the object ID
  */
-void Tile::getMapData(int *mapDataID, int *mapDataSetID, int part) const
+void Tile::getMapData(int *mapDataID, int *mapDataSetID, TilePart part) const
 {
 	*mapDataID = _mapDataID[part];
 	*mapDataSetID = _mapDataSetID[part];
@@ -334,7 +334,7 @@ int Tile::getFootstepSound(Tile *tileBelow) const
  * @param reserve
  * @return a value: 0(normal door), 1(ufo door) or -1 if no door opened or 3 if ufo door(=animated) is still opening 4 if not enough TUs
  */
-int Tile::openDoor(int part, BattleUnit *unit, BattleActionType reserve)
+int Tile::openDoor(TilePart part, BattleUnit *unit, BattleActionType reserve)
 {
 	if (!_objects[part]) return -1;
 
@@ -460,7 +460,7 @@ int Tile::getShade() const
  * @param type the objective type for this mission we are checking against.
  * @return bool Return true objective was destroyed.
  */
-bool Tile::destroy(int part, SpecialTileType type)
+bool Tile::destroy(TilePart part, SpecialTileType type)
 {
 	bool _objective = false;
 	if (_objects[part])
@@ -497,7 +497,7 @@ bool Tile::destroy(int part, SpecialTileType type)
  * @param type the objective type for this mission we are checking against.
  * @return bool Return true objective was destroyed
  */
-bool Tile::damage(int part, int power, SpecialTileType type)
+bool Tile::damage(TilePart part, int power, SpecialTileType type)
 {
 	bool objective = false;
 	if (power >= _objects[part]->getArmor())

@@ -20,6 +20,7 @@
 #include <vector>
 #include "Position.h"
 #include "../Mod/RuleItem.h"
+#include "../Mod/MapData.h"
 #include <SDL.h>
 
 namespace OpenXcom
@@ -124,7 +125,7 @@ public:
 	/// Validates a throwing action.
 	bool validateThrow(BattleAction &action, Position originVoxel, Position targetVoxel, double *curve = 0, int *voxelType = 0, bool forced = false);
 	/// Opens any doors this door is connected to.
-	void checkAdjacentDoors(const Position& pos, int part);
+	void checkAdjacentDoors(const Position& pos, TilePart part);
 	/// Creates a vector of units that can spot this unit.
 	std::vector<std::pair<BattleUnit *, int> > getSpottingUnits(BattleUnit* unit);
 	/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.

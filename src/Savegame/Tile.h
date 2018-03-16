@@ -104,9 +104,9 @@ public:
 	}
 
 	/// Sets the pointer to the mapdata for a specific part of the tile
-	void setMapData(MapData *dat, int mapDataID, int mapDataSetID, int part);
+	void setMapData(MapData *dat, int mapDataID, int mapDataSetID, TilePart part);
 	/// Gets the IDs to the mapdata for a specific part of the tile
-	void getMapData(int *mapDataID, int *mapDataSetID, int part) const;
+	void getMapData(int *mapDataID, int *mapDataSetID, TilePart part) const;
 	/// Gets whether this tile has no objects
 	bool isVoid() const;
 	/// Get the TU cost to walk over a certain part of the tile.
@@ -130,7 +130,7 @@ public:
 	/// Gets the floor object footstep sound.
 	int getFootstepSound(Tile *tileBelow) const;
 	/// Open a door, returns the ID, 0(normal), 1(ufo) or -1 if no door opened.
-	int openDoor(int part, BattleUnit *Unit = 0, BattleActionType reserve = BA_NONE);
+	int openDoor(TilePart part, BattleUnit *Unit = 0, BattleActionType reserve = BA_NONE);
 
 	/**
 	 * Check if the ufo door is open or opening. Used for visibility/light blocking checks.
@@ -156,9 +156,9 @@ public:
 	/// Get the shade amount.
 	int getShade() const;
 	/// Destroy a tile part.
-	bool destroy(int part, SpecialTileType type);
+	bool destroy(TilePart part, SpecialTileType type);
 	/// Damage a tile part.
-	bool damage(int part, int power, SpecialTileType type);
+	bool damage(TilePart part, int power, SpecialTileType type);
 	/// Set a "virtual" explosive on this tile, to detonate later.
 	void setExplosive(int power, int damageType, bool force = false);
 	/// Get explosive power of this tile.

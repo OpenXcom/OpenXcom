@@ -359,7 +359,7 @@ void SavedBattleGame::loadMapResources(Mod *mod)
 
 	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
-		for (int part = 0; part < 4; ++part)
+		for (TilePart part = O_FLOOR; part <= O_OBJECT; part = (TilePart)((int)part + 1))
 		{
 			_tiles[i]->getMapData(&mdID, &mdsID, part);
 			if (mdID != -1 && mdsID != -1)

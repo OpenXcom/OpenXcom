@@ -33,7 +33,6 @@
 #include "../Engine/RNG.h"
 #include "BattlescapeState.h"
 #include "../Mod/MapDataSet.h"
-#include "../Mod/MapData.h"
 #include "../Mod/Unit.h"
 #include "../Mod/Mod.h"
 #include "../Mod/Armor.h"
@@ -1077,7 +1076,7 @@ BattleUnit *TileEngine::hit(Position center, int power, ItemDamageType type, Bat
 		{
 			_save->getModuleMap()[(center.x/16)/10][(center.y/16)/10].second--;
 		}
-		if (tile->damage(part, rndPower, _save->getObjectiveType()))
+		if (tile->damage((TilePart)part, rndPower, _save->getObjectiveType()))
 		{
 			_save->addDestroyedObjective();
 		}
@@ -1451,7 +1450,7 @@ bool TileEngine::detonate(Tile* tile)
 	tile->setExplosive(0,0,true);
 	bool objective = false;
 	Tile* tiles[9];
-	static const int parts[9]={0,1,2,0,1,2,3,3,3}; //6th is the object of current
+	static const TilePart parts[9]={O_FLOOR,O_WESTWALL,O_NORTHWALL,O_FLOOR,O_WESTWALL,O_NORTHWALL,O_OBJECT,O_OBJECT,O_OBJECT}; //6th is the object of current
 	Position pos = tile->getPosition();
 
 	tiles[0] = _save->getTile(Position(pos.x, pos.y, pos.z+1)); //ceiling
@@ -1477,7 +1476,8 @@ bool TileEngine::detonate(Tile* tile)
 		remainingPower = explosive;
 		destroyed = false;
 		int volume = 0;
-		int currentpart = parts[i], currentpart2, diemcd;
+		TilePart currentpart = parts[i], currentpart2; 
+		int diemcd;
 		fireProof = tiles[i]->getFlammability(currentpart);
 		fuel = tiles[i]->getFuel(currentpart) + 1;
 		// get the volume of the object by checking it's loftemps objects.
@@ -1970,7 +1970,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 	{
 		for (int y = 0; y < size && door == -1; y++)
 		{
-			std::vector<std::pair<Position, int> > checkPositions;
+			std::vector<std::pair<Position, TilePart> > checkPositions;
 			tile = _save->getTile(unit->getPosition() + Position(x,y,z));
 			if (!tile) continue;
 
@@ -2046,8 +2046,8 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 				break;
 			}
 
-			int part = 0;
-			for (std::vector<std::pair<Position, int> >::const_iterator i = checkPositions.begin(); i != checkPositions.end() && door == -1; ++i)
+			TilePart part = O_FLOOR;
+			for (std::vector<std::pair<Position, TilePart> >::const_iterator i = checkPositions.begin(); i != checkPositions.end() && door == -1; ++i)
 			{
 				tile = _save->getTile(unit->getPosition() + Position(x,y,z) + i->first);
 				if (tile)
@@ -2110,10 +2110,10 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
  * @param pos The starting position
  * @param part The part to open, defines which direction to check.
  */
-void TileEngine::checkAdjacentDoors(const Position& pos, int part)
+void TileEngine::checkAdjacentDoors(const Position& pos, TilePart part)
 {
 	Position offset;
-	bool westSide = (part == 1);
+	bool westSide = (part == O_WESTWALL);
 	for (int i = 1;; ++i)
 	{
 		offset = westSide ? Position(0,i,0):Position(i,0,0);

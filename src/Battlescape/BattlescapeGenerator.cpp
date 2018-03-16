@@ -1587,7 +1587,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
-		for (int part = 0; part < 4; ++part)
+		for (TilePart part = O_FLOOR; part <= O_OBJECT; part = (TilePart)((int)part + 1))
 		{
 			terrainObjectID = ((unsigned char)value[part]);
 			if (terrainObjectID>0)
@@ -1597,7 +1597,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 				MapData *md = terrain->getMapData(&mapDataID, &mapDataSetID);
 				if (mapDataSetOffset > 0) // ie: ufo or craft.
 				{
-					_save->getTile(Position(x, y, z))->setMapData(0, -1, -1, 3);
+					_save->getTile(Position(x, y, z))->setMapData(0, -1, -1, O_OBJECT);
 				}
 				_save->getTile(Position(x, y, z))->setMapData(md, mapDataID, mapDataSetID, part);
 			}
@@ -2410,7 +2410,7 @@ void BattlescapeGenerator::clearModule(int x, int y, int sizeX, int sizeY)
 			for (int dy = y; dy != y + sizeY; ++dy)
 			{
 				Tile *tile = _save->getTile(Position(dx,dy,z));
-				for (int i = 0; i < 4; ++i)
+				for (TilePart i = O_FLOOR; i <= O_OBJECT; i = (TilePart)((int)i + 1))
 					tile->setMapData(0, -1, -1, i);
 			}
 		}
@@ -2969,7 +2969,7 @@ void BattlescapeGenerator::setupObjectives(AlienDeployment *ruleDeploy)
 
 		for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 		{
-			for (int j = 0; j != 4; ++j)
+			for (int j = O_FLOOR; j <= O_OBJECT; ++j)
 			{
 				if (_save->getTiles()[i]->getMapData(j) && _save->getTiles()[i]->getMapData(j)->getSpecialType() == targetType)
 				{
