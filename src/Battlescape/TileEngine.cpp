@@ -1599,34 +1599,37 @@ int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType 
 
 	if (direction < 0) // down
 	{
-		block += blockage(_save->getTile(Position(x, y, z)), O_FLOOR, type);
+		block += blockage(startTile, O_FLOOR, type);
 		if (!skipObject)
-			block += blockage(_save->getTile(Position(x, y, z)), O_OBJECT, type, Pathfinding::DIR_DOWN);
+			block += blockage(startTile, O_OBJECT, type, Pathfinding::DIR_DOWN);
 		if (x != endTile->getPosition().x || y != endTile->getPosition().y)
 		{
 			x = endTile->getPosition().x;
 			y = endTile->getPosition().y;
-			int z = startTile->getPosition().z;
-			block += horizontalBlockage(startTile, _save->getTile(Position(x, y, z)), type, skipObject);
-			block += blockage(_save->getTile(Position(x, y, z)), O_FLOOR, type);
+			// z remains same as startTile
+			Tile *currTile = _save->getTile(Position(x, y, z));
+			block += horizontalBlockage(startTile, currTile, type, skipObject);
+			block += blockage(currTile, O_FLOOR, type);
 			if (!skipObject)
-				block += blockage(_save->getTile(Position(x, y, z)), O_OBJECT, type, Pathfinding::DIR_DOWN);
+				block += blockage(currTile, O_OBJECT, type, Pathfinding::DIR_DOWN);
 		}
 	}
 	else if (direction > 0) // up
 	{
-		block += blockage(_save->getTile(Position(x, y, z+1)), O_FLOOR, type);
+		z += 1;
+		Tile *currTile = _save->getTile(Position(x, y, z));
+		block += blockage(currTile, O_FLOOR, type);
 		if (!skipObject)
-			block += blockage(_save->getTile(Position(x, y, z+1)), O_OBJECT, type, Pathfinding::DIR_UP);
+			block += blockage(currTile, O_OBJECT, type, Pathfinding::DIR_UP);
 		if (x != endTile->getPosition().x || y != endTile->getPosition().y)
 		{
 			x = endTile->getPosition().x;
 			y = endTile->getPosition().y;
-			int z = startTile->getPosition().z+1;
-			block += horizontalBlockage(startTile, _save->getTile(Position(x, y, z)), type, skipObject);
-			block += blockage(_save->getTile(Position(x, y, z)), O_FLOOR, type);
+			currTile = _save->getTile(Position(x, y, z));
+			block += horizontalBlockage(startTile, currTile, type, skipObject);
+			block += blockage(currTile, O_FLOOR, type);
 			if (!skipObject)
-				block += blockage(_save->getTile(Position(x, y, z)), O_OBJECT, type, Pathfinding::DIR_UP);
+				block += blockage(currTile, O_OBJECT, type, Pathfinding::DIR_UP);
 		}
 	}
 
