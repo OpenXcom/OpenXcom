@@ -957,6 +957,7 @@ void DogfightState::update()
 				{
 					fireWeapon2();
 				}
+				projectileInFlight = true;
 			}
 			else if (wTimer > 0)
 			{
