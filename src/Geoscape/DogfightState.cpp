@@ -875,16 +875,13 @@ void DogfightState::update()
 					}
 				}
 				// Check if projectile passed it's maximum range.
-				if (p->getGlobalType() == CWPGT_MISSILE)
+				if (p->getGlobalType() == CWPGT_MISSILE && p->getPosition() / 8 >= p->getRange())
 				{
-					if (p->getPosition() / 8 >= p->getRange())
-					{
-						p->remove();
-					}
-					else if (!_ufo->isCrashed())
-					{
-						projectileInFlight = true;
-					}
+					p->remove();
+				}
+				else if (!_ufo->isCrashed())
+				{
+					projectileInFlight = true;
 				}
 			}
 			// Projectiles fired by UFO.
@@ -951,13 +948,20 @@ void DogfightState::update()
 			{
 				if (i == 0)
 				{
-					fireWeapon1();
+					if (_weapon1Enabled)
+					{
+						fireWeapon1();
+						projectileInFlight = true;
+					}
 				}
 				else
 				{
-					fireWeapon2();
+					if (_weapon2Enabled)
+					{
+						fireWeapon2();
+						projectileInFlight = true;
+					}
 				}
-				projectileInFlight = true;
 			}
 			else if (wTimer > 0)
 			{
@@ -1187,24 +1191,21 @@ void DogfightState::update()
  */
 void DogfightState::fireWeapon1()
 {
-	if (_weapon1Enabled)
+	CraftWeapon *w1 = _craft->getWeapons()->at(0);
+	if (w1->setAmmo(w1->getAmmo() - 1))
 	{
-		CraftWeapon *w1 = _craft->getWeapons()->at(0);
-		if (w1->setAmmo(w1->getAmmo() - 1))
-		{
-			_w1FireCountdown = _w1FireInterval;
+		_w1FireCountdown = _w1FireInterval;
 
-			std::wostringstream ss;
-			ss << w1->getAmmo();
-			_txtAmmo1->setText(ss.str());
+		std::wostringstream ss;
+		ss << w1->getAmmo();
+		_txtAmmo1->setText(ss.str());
 
-			CraftWeaponProjectile *p = w1->fire();
-			p->setDirection(D_UP);
-			p->setHorizontalPosition(HP_LEFT);
-			_projectiles.push_back(p);
+		CraftWeaponProjectile *p = w1->fire();
+		p->setDirection(D_UP);
+		p->setHorizontalPosition(HP_LEFT);
+		_projectiles.push_back(p);
 
-			_game->getMod()->getSound("GEO.CAT", w1->getRules()->getSound())->play();
-		}
+		_game->getMod()->getSound("GEO.CAT", w1->getRules()->getSound())->play();
 	}
 }
 
@@ -1214,24 +1215,21 @@ void DogfightState::fireWeapon1()
  */
 void DogfightState::fireWeapon2()
 {
-	if (_weapon2Enabled)
+	CraftWeapon *w2 = _craft->getWeapons()->at(1);
+	if (w2->setAmmo(w2->getAmmo() - 1))
 	{
-		CraftWeapon *w2 = _craft->getWeapons()->at(1);
-		if (w2->setAmmo(w2->getAmmo() - 1))
-		{
-			_w2FireCountdown = _w2FireInterval;
+		_w2FireCountdown = _w2FireInterval;
 
-			std::wostringstream ss;
-			ss << w2->getAmmo();
-			_txtAmmo2->setText(ss.str());
+		std::wostringstream ss;
+		ss << w2->getAmmo();
+		_txtAmmo2->setText(ss.str());
 
-			CraftWeaponProjectile *p = w2->fire();
-			p->setDirection(D_UP);
-			p->setHorizontalPosition(HP_RIGHT);
-			_projectiles.push_back(p);
+		CraftWeaponProjectile *p = w2->fire();
+		p->setDirection(D_UP);
+		p->setHorizontalPosition(HP_RIGHT);
+		_projectiles.push_back(p);
 
-			_game->getMod()->getSound("GEO.CAT", w2->getRules()->getSound())->play();
-		}
+		_game->getMod()->getSound("GEO.CAT", w2->getRules()->getSound())->play();
 	}
 }
 
