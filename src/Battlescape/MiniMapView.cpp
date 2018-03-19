@@ -86,9 +86,9 @@ void MiniMapView::draw()
 					px++;
 					continue;
 				}
-				for (int i = 0; i < 4; i++)
+				for (int i = O_FLOOR; i <= O_OBJECT; i++)
 				{
-					data = t->getMapData(i);
+					data = t->getMapData((TilePart)i);
 
 					if (data && data->getMiniMapIndex())
 					{

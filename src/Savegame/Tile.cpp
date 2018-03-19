@@ -165,18 +165,18 @@ YAML::Node Tile::save() const
 		node["smoke"] = _smoke;
 	if (_fire)
 		node["fire"] = _fire;
-	if (_discovered[0] || _discovered[1] || _discovered[2])
+	if (_discovered[O_FLOOR] || _discovered[O_WESTWALL] || _discovered[O_NORTHWALL])
 	{
-		for (int i = 0; i < 3; i++)
+		for (int i = O_FLOOR; i <= O_NORTHWALL; i++)
 		{
 			node["discovered"].push_back(_discovered[i]);
 		}
 	}
-	if (isUfoDoorOpen(1))
+	if (isUfoDoorOpen(O_WESTWALL))
 	{
 		node["openDoorWest"] = true;
 	}
-	if (isUfoDoorOpen(2))
+	if (isUfoDoorOpen(O_NORTHWALL))
 	{
 		node["openDoorNorth"] = true;
 	}
@@ -202,8 +202,8 @@ void Tile::saveBinary(Uint8** buffer) const
 	serializeInt(buffer, serializationKey._fire, _fire);
 
 	Uint8 boolFields = (_discovered[0]?1:0) + (_discovered[1]?2:0) + (_discovered[2]?4:0);
-	boolFields |= isUfoDoorOpen(1) ? 8 : 0; // west
-	boolFields |= isUfoDoorOpen(2) ? 0x10 : 0; // north?
+	boolFields |= isUfoDoorOpen(O_WESTWALL) ? 8 : 0; // west
+	boolFields |= isUfoDoorOpen(O_NORTHWALL) ? 0x10 : 0; // north?
 	serializeInt(buffer, serializationKey.boolFields, boolFields);
 }
 
@@ -367,9 +367,9 @@ int Tile::closeUfoDoor()
 {
 	int retval = 0;
 
-	for (int part = 0; part < 4; ++part)
+	for (int part = O_FLOOR; part <= O_NORTHWALL; ++part)
 	{
-		if (isUfoDoorOpen(part))
+		if (isUfoDoorOpen((TilePart)part))
 		{
 			_currentFrame[part] = 0;
 			retval = 1;

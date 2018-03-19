@@ -235,7 +235,7 @@ SpecialTileType MapData::getSpecialType() const
 
 /**
  * Sets the type of object.
- * @param type The object type (0-3).
+ * @param type New type of the object.
  */
 void MapData::setObjectType(TilePart type)
 {
@@ -244,7 +244,7 @@ void MapData::setObjectType(TilePart type)
 
 /**
  * Gets the type of object.
- * @return The object type (0-3).
+ * @return Type of the part of the tile.
  */
 TilePart MapData::getObjectType() const
 {

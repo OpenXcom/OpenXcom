@@ -1072,7 +1072,7 @@ BattleUnit *TileEngine::hit(Position center, int power, ItemDamageType type, Bat
 		// power 25% to 75%
 		const int rndPower = RNG::generate(power/4, (power*3)/4); //RNG::boxMuller(power, power/6)
 		if (part == V_OBJECT && rndPower >= tile->getMapData(O_OBJECT)->getArmor() &&
-			_save->getMissionType() == "STR_BASE_DEFENSE" && tile->getMapData(V_OBJECT)->isBaseModule())
+			_save->getMissionType() == "STR_BASE_DEFENSE" && tile->getMapData(O_OBJECT)->isBaseModule())
 		{
 			_save->getModuleMap()[(center.x/16)/10][(center.y/16)/10].second--;
 		}
@@ -1812,7 +1812,7 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
  * @param direction Direction the power travels.
  * @return Amount of blockage.
  */
-int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type, int direction, bool checkingFromOrigin)
+int TileEngine::blockage(Tile *tile, const TilePart part, ItemDamageType type, int direction, bool checkingFromOrigin)
 {
 	int blockage = 0;
 
@@ -2473,7 +2473,7 @@ bool TileEngine::isVoxelVisible(Position voxel)
  * @param excludeAllBut If set, the only unit to be considered for ray hits.
  * @return The objectnumber(0-3) or unit(4) or out of map (5) or -1 (hit nothing).
  */
-int TileEngine::voxelCheck(Position voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit *excludeAllBut)
+VoxelType TileEngine::voxelCheck(Position voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit *excludeAllBut)
 {
 	if (voxel.x < 0 || voxel.y < 0 || voxel.z < 0) //preliminary out of map
 	{
@@ -2513,10 +2513,11 @@ int TileEngine::voxelCheck(Position voxel, BattleUnit *excludeUnit, bool exclude
 	}
 
 	// first we check terrain voxel data, not to allow 2x2 units stick through walls
-	for (int i=0; i< 4; ++i)
+	for (int i = V_FLOOR; i <= V_OBJECT; ++i)
 	{
-		MapData *mp = tile->getMapData(i);
-		if (((i==1) || (i==2)) && tile->isUfoDoorOpen(i))
+		TilePart tp = (TilePart)i;
+		MapData *mp = tile->getMapData(tp);
+		if (((tp == O_WESTWALL) || (tp == O_NORTHWALL)) && tile->isUfoDoorOpen(tp))
 			continue;
 		if (mp != 0)
 		{
@@ -2525,7 +2526,7 @@ int TileEngine::voxelCheck(Position voxel, BattleUnit *excludeUnit, bool exclude
 			int idx = (mp->getLoftID((voxel.z%24)/2)*16) + y;
 			if (_voxelData->at(idx) & (1 << x))
 			{
-				return i;
+				return (VoxelType)i;
 			}
 		}
 	}

@@ -95,10 +95,10 @@ public:
 
 	/**
 	 * Get the MapData pointer of a part of the tile.
-	 * @param part the part 0-3.
+	 * @param part TilePart whose data is needed.
 	 * @return pointer to mapdata
 	 */
-	MapData *getMapData(int part) const
+	MapData *getMapData(TilePart part) const
 	{
 		return _objects[part];
 	}
@@ -135,11 +135,12 @@ public:
 	/**
 	 * Check if the ufo door is open or opening. Used for visibility/light blocking checks.
 	 * This function assumes that there never are 2 doors on 1 tile or a door and another wall on 1 tile.
-	 * @param part
+	 * @param part Tile part to look for door
 	 * @return bool
 	 */
-	bool isUfoDoorOpen(int part) const
+	bool isUfoDoorOpen(TilePart tp) const
 	{
+		int part = (int)tp;
 		return (_objects[part] && _objects[part]->isUFODoor() && _currentFrame[part] != 0);
 	}
 
