@@ -575,7 +575,7 @@ int Tile::getFuel() const
  * Flammability of the particular part of the tile
  * @return Flammability : the lower the value, the higher the chance the tile/object catches fire.
  */
-int Tile::getFlammability(int part) const
+int Tile::getFlammability(TilePart part) const
 {
 	return _objects[part]->getFlammable();
 }
@@ -584,7 +584,7 @@ int Tile::getFlammability(int part) const
  * Fuel of particular part of the tile
  * @return how long to burn.
  */
-int Tile::getFuel(int part) const
+int Tile::getFuel(TilePart part) const
 {
 	return _objects[part]->getFuel();
 }

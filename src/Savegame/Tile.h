@@ -195,9 +195,9 @@ public:
 	/// Get turns to burn
 	int getFuel() const;
 	/// Get flammability of part.
-	int getFlammability(int part) const;
+	int getFlammability(TilePart part) const;
 	/// Get turns to burn of part
-	int getFuel(int part) const;
+	int getFuel(TilePart part) const;
 	/// attempt to set the tile on fire, sets overlaps to one if successful.
 	void ignite(int power);
 	/// Get fire and smoke animation offset.
