@@ -19,6 +19,7 @@
  */
 #include "../Engine/State.h"
 #include "OptionsBaseState.h"
+
 namespace OpenXcom
 {
 
@@ -27,7 +28,6 @@ class Window;
 class Text;
 class TextEdit;
 class OptionsVideoState;
-enum OptionsOrigin;
 
 /**
  * Asks user new coordinates when he pushes Fixed Borderless Pos button.
