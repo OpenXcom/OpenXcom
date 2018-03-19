@@ -157,6 +157,7 @@ void SoldierDiaryMissionState::init()
 		{
 		case STATUS_DEAD:
 			kills++;
+		//Fall-through
 		case STATUS_UNCONSCIOUS:
 		case STATUS_PANICKING:
 		case STATUS_TURNING:

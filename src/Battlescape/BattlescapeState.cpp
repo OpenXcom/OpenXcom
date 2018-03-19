@@ -1783,7 +1783,7 @@ void BattlescapeState::saveVoxelView()
 	Position targetVoxel,hitPos;
 	double dist = 0;
 	bool _debug = _save->getDebugMode();
-	double dir = ((float)bu->getDirection()+4)/4*M_PI;
+	double dir = ((double)bu->getDirection()+4)/4*M_PI;
 	image.clear();
 	for (int y = -256+32; y < 256+32; ++y)
 	{
@@ -1859,12 +1859,12 @@ void BattlescapeState::saveVoxelView()
 					dist*=0.9;
 				}
 				if (dist > 1) dist = 1;
-				if (tile) dist *= (16 - (float)tile->getShade())/16;
+				if (tile) dist *= (16 - (double)tile->getShade())/16;
 			}
 
-			image.push_back((int)((float)(pal[test*3+0])*dist));
-			image.push_back((int)((float)(pal[test*3+1])*dist));
-			image.push_back((int)((float)(pal[test*3+2])*dist));
+			image.push_back((int)((double)(pal[test*3+0])*dist));
+			image.push_back((int)((double)(pal[test*3+1])*dist));
+			image.push_back((int)((double)(pal[test*3+2])*dist));
 		}
 	}
 
