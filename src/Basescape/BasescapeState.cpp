@@ -50,7 +50,10 @@
 #include "CraftInfoState.h"
 #include "../Geoscape/AllocatePsiTrainingState.h"
 #include "../Mod/RuleInterface.h"
-
+#include "../Savegame/ResearchProject.h"
+#include "../Mod/RuleResearch.h"
+#include "../Savegame/Production.h"
+#include "../Mod/RuleManufacture.h"
 namespace OpenXcom
 {
 
@@ -435,16 +438,49 @@ void BasescapeState::viewMouseOver(Action *)
 	std::wostringstream ss;
 	if (f != 0)
 	{
-		if (f->getRules()->getCrafts() == 0 || f->getBuildTime() > 0)
+		if ((f->getRules()->getCrafts() == 0 && f->getRules()->getWorkshops() == 0 && f->getRules()->getLaboratories() == 0 ) || f->getBuildTime() > 0)
 		{
 			ss << tr(f->getRules()->getType());
 		}
 		else
 		{
 			ss << tr(f->getRules()->getType());
+			//append the craft if any
 			if (f->getCraft() != 0)
 			{
 				ss << L" " << tr("STR_CRAFT_").arg(f->getCraft()->getName(_game->getLanguage()));
+			}
+			//append the researched items if any
+			if (f->getRules()->getLaboratories() != 0 && !_base->getResearch().empty())
+			{
+				for (std::vector<ResearchProject*>::const_iterator iter = _base->getResearch().begin(); iter != _base->getResearch().end(); ++iter)
+				{
+					if (iter == _base->getResearch().begin())
+					{
+						ss << L" " << tr("STR_RESEARCH") << L"> ";
+					}
+					else
+					{
+						ss << L", ";
+					}
+					ss << tr((*iter)->getRules()->getName());
+				}
+			}
+			//append the manufactured items if any
+			if (f->getRules()->getWorkshops() != 0 && !_base->getProductions().empty())
+			{
+				for (std::vector<Production *>::const_iterator iter = _base->getProductions().begin(); iter != _base->getProductions().end(); ++iter)
+				{
+					if (iter == _base->getProductions().begin())
+					{
+						ss << L" " << tr("STR_MANUFACTURE") << L"> ";
+					}
+					else
+					{
+						ss << L", ";
+					}
+					ss << tr((*iter)->getRules()->getName()) << ((*iter)->getSellItems() ? L"$" : L"");
+				}
 			}
 		}
 	}
