@@ -87,7 +87,7 @@ void AIModule::load(const YAML::Node &node)
 	int fromNodeID, toNodeID;
 	fromNodeID = node["fromNode"].as<int>(-1);
 	toNodeID = node["toNode"].as<int>(-1);
-	_AIMode = node["AIMode"].as<int>(0);
+	_AIMode = node["AIMode"].as<int>(AI_PATROL);
 	_wasHitBy = node["wasHitBy"].as<std::vector<int> >(_wasHitBy);
 	if (fromNodeID != -1)
 	{
@@ -136,7 +136,7 @@ void AIModule::think(BattleAction *action)
 	_knownEnemies = countKnownTargets();
 	_visibleEnemies = selectNearestTarget();
 	_spottingEnemies = getSpottingUnits(_unit->getPosition());
-	_melee = _unit->getMeleeWeapon() != 0;
+	_melee = (_unit->getMeleeWeapon() != 0);
 	_rifle = false;
 	_blaster = false;
 	_reachable = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits());
@@ -160,16 +160,16 @@ void AIModule::think(BattleAction *action)
 		std::string AIMode;
 		switch (_AIMode)
 		{
-		case 0:
+		case AI_PATROL:
 			AIMode = "Patrol";
 			break;
-		case 1:
+		case AI_AMBUSH:
 			AIMode = "Ambush";
 			break;
-		case 2:
+		case AI_COMBAT:
 			AIMode = "Combat";
 			break;
-		case 3:
+		case AI_ESCAPE:
 			AIMode = "Escape";
 			break;
 		}
@@ -235,35 +235,22 @@ void AIModule::think(BattleAction *action)
 
 	bool evaluate = false;
 
-	if (_AIMode == AI_ESCAPE)
-	{
-		if (!_spottingEnemies || !_knownEnemies)
+	switch (_AIMode)
 		{
-			evaluate = true;
-		}
-	}
-	else if (_AIMode == AI_PATROL)
-	{
-		if (_spottingEnemies || _visibleEnemies || _knownEnemies || RNG::percent(10))
-		{
-			evaluate = true;
-		}
-	}
-	else if (_AIMode == AI_AMBUSH)
-	{
-		if (!_rifle || !_ambushTUs || _visibleEnemies)
-		{
-			evaluate = true;
-		}
-	}
+		case AI_PATROL:
+			evaluate = (bool)(_spottingEnemies || _visibleEnemies || _knownEnemies || RNG::percent(10));
+			break;
+		case AI_AMBUSH:
+			evaluate = (!_rifle || !_ambushTUs || _visibleEnemies);
+			break;
+		case AI_COMBAT:
+			evaluate = (_attackAction->type == BA_RETHINK);
+			break;
+		case AI_ESCAPE:
+			evaluate = (!_spottingEnemies || !_knownEnemies);
+			break;
+			}
 
-	if (_AIMode == AI_COMBAT)
-	{
-		if (_attackAction->type == BA_RETHINK)
-		{
-			evaluate = true;
-		}
-	}
 	if (_spottingEnemies > 2
 		|| _unit->getHealth() < 2 * _unit->getBaseStats()->health / 3
 		|| (_aggroTarget && _aggroTarget->getTurnsSinceSpotted() > _intelligence))
@@ -285,16 +272,16 @@ void AIModule::think(BattleAction *action)
 			std::string AIMode;
 			switch (_AIMode)
 			{
-			case 0:
+			case AI_PATROL:
 				AIMode = "Patrol";
 				break;
-			case 1:
+			case AI_AMBUSH:
 				AIMode = "Ambush";
 				break;
-			case 2:
+			case AI_COMBAT:
 				AIMode = "Combat";
 				break;
-			case 3:
+			case AI_ESCAPE:
 				AIMode = "Escape";
 				break;
 			}
@@ -331,6 +318,7 @@ void AIModule::think(BattleAction *action)
 				break;
 			case 2:
 				_reserve = BA_SNAPSHOT;
+				break;
 			default:
 				break;
 			}
@@ -586,7 +574,6 @@ void AIModule::setupAmbush()
 
 	if (selectClosestKnownEnemy())
 	{
-		Position target;
 		const int BASE_SYSTEMATIC_SUCCESS = 100;
 		const int COVER_BONUS = 25;
 		const int FAST_PASS_THRESHOLD = 80;
@@ -613,6 +600,7 @@ void AIModule::setupAmbush()
 			}
 
 			// make sure we can't be seen here.
+			Position target;
 			if (!_save->getTileEngine()->canTargetUnit(&origin, tile, &target, _aggroTarget, _unit) && !getSpottingUnits(pos))
 			{
 				_save->getPathfinding()->calculate(_unit, pos);

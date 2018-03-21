@@ -2352,9 +2352,9 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 		// we know for a fact that this command has mission weights defined, otherwise this flag could not be set.
 		missionType = command->generate(month, GEN_MISSION);
 		std::vector<std::string> missions = command->getMissionTypes(month);
-		int max = missions.size();
+		int maxMissions = missions.size();
 		int currPos = 0;
-		for (; currPos != max; ++currPos)
+		for (; currPos != maxMissions; ++currPos)
 		{
 			if (missions[currPos] == missionType)
 			{
@@ -2366,7 +2366,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 		std::vector<std::pair<std::string, int> > validAreas;
 
 		// this is actually a bit of a cheat, we ARE using the mission weights as defined, but we'll try them all if the one we pick first isn't valid.
-		for (int h = 0; h != max; ++h)
+		for (int h = 0; h != maxMissions; ++h)
 		{
 			// we'll use the regions listed in the command, if any, otherwise check all the regions in the ruleset looking for matches
 			std::vector<std::string> regions = (command->hasRegionWeights()) ? command->getRegions(month) : mod->getRegionsList();
@@ -2414,7 +2414,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 			// oh bother, we couldn't find anything valid, this mission won't run this month.
 			if (validAreas.empty())
 			{
-				if (max > 1 && ++currPos == max)
+				if (maxMissions > 1 && ++currPos == maxMissions)
 				{
 					currPos = 0;
 				}

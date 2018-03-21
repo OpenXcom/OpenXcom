@@ -196,7 +196,7 @@ void MCDPatch::modifyData(MapDataSet *dataSet) const
 	}
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _objectTypes.begin(); i != _objectTypes.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setObjectType(i->second);
+		dataSet->getObjects()->at(i->first)->setObjectType((TilePart)i->second);
 	}
 	for (std::vector<std::pair<size_t, bool> >::const_iterator i = _noFloors.begin(); i != _noFloors.end(); ++i)
 	{

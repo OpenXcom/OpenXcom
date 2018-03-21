@@ -650,6 +650,7 @@ void SellState::changeByValue(int change, int dir)
 		_spaceChange -= dir * change * item->getSize();
 		break;
 	default:
+		//TRANSFER_SCIENTIST and TRANSFER_ENGINEER do not own anything that takes storage
 		break;
 	}
 

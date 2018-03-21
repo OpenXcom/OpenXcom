@@ -20,6 +20,7 @@
 #include <vector>
 #include "Position.h"
 #include "../Mod/RuleItem.h"
+#include "../Mod/MapData.h"
 #include <SDL.h>
 
 namespace OpenXcom
@@ -45,7 +46,7 @@ private:
 	std::vector<Uint16> *_voxelData;
 	static const int heightFromCenter[11];
 	void addLight(Position center, int power, int layer);
-	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1, bool checkingFromOrigin = false);
+	int blockage(Tile *tile, const TilePart part, ItemDamageType type, int direction = -1, bool checkingFromOrigin = false);
 	bool _personalLighting;
 	Tile *_cacheTile;
 	Tile *_cacheTileBelow;
@@ -116,7 +117,7 @@ public:
 	/// Checks the visibility of a given voxel.
 	bool isVoxelVisible(Position voxel);
 	/// Checks what type of voxel occupies this space.
-	int voxelCheck(Position voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
+	VoxelType voxelCheck(Position voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
 	/// Flushes cache of voxel check
 	void voxelCheckFlush();
 	/// Blows this tile up.
@@ -124,7 +125,7 @@ public:
 	/// Validates a throwing action.
 	bool validateThrow(BattleAction &action, Position originVoxel, Position targetVoxel, double *curve = 0, int *voxelType = 0, bool forced = false);
 	/// Opens any doors this door is connected to.
-	void checkAdjacentDoors(const Position& pos, int part);
+	void checkAdjacentDoors(const Position& pos, TilePart part);
 	/// Creates a vector of units that can spot this unit.
 	std::vector<std::pair<BattleUnit *, int> > getSpottingUnits(BattleUnit* unit);
 	/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.

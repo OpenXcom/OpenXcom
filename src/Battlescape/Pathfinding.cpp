@@ -623,9 +623,9 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	}
 	if (part == O_FLOOR)
 	{
-		BattleUnit *unit = tile->getUnit();
-		if (unit != 0)
+		if (tile->getUnit())
 		{
+			BattleUnit *unit = tile->getUnit();
 			if (unit == _unit || unit == missileTarget || unit->isOut()) return false;
 			if (missileTarget && unit != missileTarget && unit->getFaction() == FACTION_HOSTILE) 
 				return true;			// AI pathfinding with missiles shouldn't path through their own units
@@ -668,13 +668,14 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 		}
 	}
 	// missiles can't pathfind through closed doors.
-	if (missileTarget != 0 && tile->getMapData(part) &&
-		(tile->getMapData(part)->isDoor() ||
-		(tile->getMapData(part)->isUFODoor() &&
-		!tile->isUfoDoorOpen(part))))
+	{ TilePart tp = (TilePart)part;
+	if (missileTarget != 0 && tile->getMapData(tp) &&
+		(tile->getMapData(tp)->isDoor() ||
+		(tile->getMapData(tp)->isUFODoor() &&
+		!tile->isUfoDoorOpen(tp))))
 	{
 		return true;
-	}
+	}}
 	if (tile->getTUCost(part, _movementType) == 255) return true; // blocking part
 	return false;
 }

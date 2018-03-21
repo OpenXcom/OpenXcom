@@ -876,8 +876,8 @@ void userSplitMasters()
 			{
 				std::string srcFile = _userFolder + (*j);
 				YAML::Node doc = YAML::LoadFile(srcFile);
-				std::vector<std::string> mods = doc["mods"].as<std::vector< std::string> >(std::vector<std::string>());
-				if (std::find(mods.begin(), mods.end(), (*i)) != mods.end())
+				std::vector<std::string> srcMods = doc["mods"].as<std::vector< std::string> >(std::vector<std::string>());
+				if (std::find(srcMods.begin(), srcMods.end(), (*i)) != srcMods.end())
 				{
 					std::string dstFile = masterFolder + CrossPlatform::PATH_SEPARATOR + (*j);
 					CrossPlatform::moveFile(srcFile, dstFile);
