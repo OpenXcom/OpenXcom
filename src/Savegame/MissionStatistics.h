@@ -27,11 +27,11 @@ namespace OpenXcom
 {
 
 /**
-* Container for mission statistics.
-*/
+ * Container for mission statistics.
+ */
 struct MissionStatistics
 {
-	/// Variables
+	// Variables
 	int id;
 	std::string markerName;
 	int markerId;
@@ -46,7 +46,7 @@ struct MissionStatistics
 	bool valiantCrux;
 	int lootValue;
 
-	// Load
+	/// Load
 	void load(const YAML::Node &node)
 	{
 		id = node["id"].as<int>(id);
@@ -67,7 +67,7 @@ struct MissionStatistics
 		lootValue = node["lootValue"].as<int>(lootValue);
 	}
 
-	// Save
+	/// Save
 	YAML::Node save() const
 	{
 		YAML::Node node;

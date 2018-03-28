@@ -26,11 +26,11 @@ namespace OpenXcom
 {
 
 /**
-* Container for battle unit kills statistics.
-*/
+ * Container for battle unit kills statistics.
+ */
 struct BattleUnitKills
 {
-	/// Variables
+	// Variables
 	std::wstring name;
 	std::string type, rank, race, weapon, weaponAmmo;
 	UnitFaction faction;
@@ -39,27 +39,27 @@ struct BattleUnitKills
 	UnitSide side;
 	UnitBodyPart bodypart;
 
-	/// Functions
-	// Make turn unique across all kills
+	// Functions
+	/// Make turn unique across all kills
 	int makeTurnUnique()
 	{
 		return turn += mission * 300; // Maintains divisibility by 3 as well
 	}
 
-	// Check to see if turn was on HOSTILE side
+	/// Check to see if turn was on HOSTILE side
 	bool hostileTurn() const
 	{
 		if ((turn - 1) % 3 == 0) return true;
 		return false;
 	}
 
-	// Make turn unique across mission
+	/// Make turn unique across mission
 	void setTurn(int unitTurn, UnitFaction unitFaction)
 	{
 		turn = unitTurn * 3 + (int)unitFaction;
 	}
 
-	// Load
+	/// Load
 	void load(const YAML::Node &node)
 	{
 		if (const YAML::Node n = node["name"])
@@ -80,7 +80,7 @@ struct BattleUnitKills
 		id = node["id"].as<int>(id);
 	}
 
-	// Save
+	/// Save
 	YAML::Node save() const
 	{
 		YAML::Node node;
@@ -102,7 +102,7 @@ struct BattleUnitKills
 		return node;
 	}
 
-	// Convert kill Status to string.
+	/// Convert kill Status to string.
 	std::string getKillStatusString() const
 	{
 		switch (status)
@@ -115,7 +115,7 @@ struct BattleUnitKills
 		}
 	}
 
-	// Convert victim Status to string.
+	/// Convert victim Status to string.
 	std::string getUnitStatusString() const
 	{
 		switch (status)
@@ -128,7 +128,7 @@ struct BattleUnitKills
 		}
 	}
 
-	// Convert victim Faction to string.
+	/// Convert victim Faction to string.
 	std::string getUnitFactionString() const
 	{
 		switch (faction)
@@ -140,7 +140,7 @@ struct BattleUnitKills
 		}
 	}
 
-	// Convert victim Side to string.
+	/// Convert victim Side to string.
 	std::string getUnitSideString() const
 	{
 		switch (side)
@@ -154,7 +154,7 @@ struct BattleUnitKills
 		}
 	}
 
-	// Convert victim Body part to string.
+	/// Convert victim Body part to string.
 	std::string getUnitBodyPartString() const
 	{
 		switch (bodypart)
@@ -169,7 +169,7 @@ struct BattleUnitKills
 		}
 	}
 
-	// Get human-readable victim name.
+	/// Get human-readable victim name.
 	std::wstring getUnitName(Language *lang) const
 	{
 		if (!name.empty())
@@ -188,7 +188,7 @@ struct BattleUnitKills
 		}
 	}
 
-	// Decide victim name, race and rank.
+	/// Decide victim name, race and rank.
 	void setUnitStats(BattleUnit *unit)
 	{
 		name = L"";
@@ -299,38 +299,38 @@ struct BattleUnitKills
 };
 
 /**
-* Container for battle unit statistics.
-*/
+ * Container for battle unit statistics.
+ */
 struct BattleUnitStatistics
 {
-	/// Variables
-	bool wasUnconcious;						// Tracks if the soldier fell unconcious
-	int shotAtCounter;                      // Tracks how many times the unit was shot at
-	int hitCounter;							// Tracks how many times the unit was hit
-	int shotByFriendlyCounter;				// Tracks how many times the unit was hit by a friendly
-	int shotFriendlyCounter;				// Tracks how many times the unit was hit a friendly
-	bool loneSurvivor;						// Tracks if the soldier was the only survivor
-	bool ironMan;							// Tracks if the soldier was the only soldier on the mission
-	int longDistanceHitCounter;				// Tracks how many long distance shots were landed
-	int lowAccuracyHitCounter;				// Tracks how many times the unit landed a low probability shot
-	int shotsFiredCounter;					// Tracks how many times a unit has shot
-	int shotsLandedCounter;					// Tracks how many times a unit has hit his target
-	std::vector<BattleUnitKills*> kills;	// Tracks kills
-	int daysWounded;                        // Tracks how many days the unit was wounded for
-	bool KIA;								// Tracks if the soldier was killed in battle
-	bool nikeCross;							// Tracks if a soldier killed every alien
-	bool mercyCross;                        // Tracks if a soldier stunned every alien
-	int woundsHealed;                       // Tracks how many times a fatal wound was healed by this unit
-	UnitStats delta;                        // Tracks the increase in unit stats (is not saved, only used during debriefing)
-	int appliedStimulant;                   // Tracks how many times this soldier applied stimulant
-	int appliedPainKill;                    // Tracks how many times this soldier applied pain killers
-	int revivedSoldier;                     // Tracks how many times this soldier revived another unit
-	bool MIA;								// Tracks if the soldier was left behind :(
-	int martyr;								// Tracks how many kills the soldier landed on the turn of his death
-	int slaveKills;                         // Tracks how many kills the soldier landed thanks to a mind controlled unit.
+	// Variables
+	bool wasUnconcious;                  ///< Tracks if the soldier fell unconcious
+	int shotAtCounter;                   ///< Tracks how many times the unit was shot at
+	int hitCounter;                      ///< Tracks how many times the unit was hit
+	int shotByFriendlyCounter;           ///< Tracks how many times the unit was hit by a friendly
+	int shotFriendlyCounter;             ///< Tracks how many times the unit was hit a friendly
+	bool loneSurvivor;                   ///< Tracks if the soldier was the only survivor
+	bool ironMan;                        ///< Tracks if the soldier was the only soldier on the mission
+	int longDistanceHitCounter;          ///< Tracks how many long distance shots were landed
+	int lowAccuracyHitCounter;           ///< Tracks how many times the unit landed a low probability shot
+	int shotsFiredCounter;               ///< Tracks how many times a unit has shot
+	int shotsLandedCounter;              ///< Tracks how many times a unit has hit his target
+	std::vector<BattleUnitKills*> kills; ///< Tracks kills
+	int daysWounded;                     ///< Tracks how many days the unit was wounded for
+	bool KIA;                            ///< Tracks if the soldier was killed in battle
+	bool nikeCross;                      ///< Tracks if a soldier killed every alien
+	bool mercyCross;                     ///< Tracks if a soldier stunned every alien
+	int woundsHealed;                    ///< Tracks how many times a fatal wound was healed by this unit
+	UnitStats delta;                     ///< Tracks the increase in unit stats (is not saved, only used during debriefing)
+	int appliedStimulant;                ///< Tracks how many times this soldier applied stimulant
+	int appliedPainKill;                 ///< Tracks how many times this soldier applied pain killers
+	int revivedSoldier;                  ///< Tracks how many times this soldier revived another unit
+	bool MIA;                            ///< Tracks if the soldier was left behind :(
+	int martyr;                          ///< Tracks how many kills the soldier landed on the turn of his death
+	int slaveKills;                      ///< Tracks how many kills the soldier landed thanks to a mind controlled unit.
 
-	/// Functions
-	// Duplicate entry check
+	// Functions
+	/// Duplicate entry check
 	bool duplicateEntry(UnitStatus status, int id) const
 	{
 		for (std::vector<BattleUnitKills*>::const_iterator i = kills.begin(); i != kills.end(); ++i)
@@ -343,7 +343,7 @@ struct BattleUnitStatistics
 		return false;
 	}
 
-	// Friendly fire check
+	/// Friendly fire check
 	bool hasFriendlyFired() const
 	{
 		for (std::vector<BattleUnitKills*>::const_iterator i = kills.begin(); i != kills.end(); ++i)
@@ -354,7 +354,7 @@ struct BattleUnitStatistics
 		return false;
 	}
 
-	// Load function
+	/// Load function
 	void load(const YAML::Node& node)
 	{
 		wasUnconcious = node["wasUnconcious"].as<bool>(wasUnconcious);
@@ -383,7 +383,7 @@ struct BattleUnitStatistics
 		slaveKills = node["slaveKills"].as<int>(slaveKills);
 	}
 
-	// Save function
+	/// Save function
 	YAML::Node save() const
 	{
 		YAML::Node node;
