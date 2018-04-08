@@ -486,11 +486,11 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 					soldierAlienStuns++;
 				}
 			}
-			if (aliensKilled && aliensKilled == soldierAlienKills && _missionStatistics->success == true)
+			if (aliensKilled && aliensKilled == soldierAlienKills && _missionStatistics->success == true && aliensStunned == 0)
 			{
 				(*j)->getStatistics()->nikeCross = true;
 			}
-			if (aliensStunned && aliensStunned == soldierAlienStuns && _missionStatistics->success == true)
+			if (aliensStunned && aliensStunned == soldierAlienStuns && _missionStatistics->success == true && aliensKilled == 0)
 			{
 				(*j)->getStatistics()->mercyCross = true;
 			}
