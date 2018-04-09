@@ -318,7 +318,7 @@ struct BattleUnitStatistics
 	std::vector<BattleUnitKills*> kills; ///< Tracks kills
 	int daysWounded;                     ///< Tracks how many days the unit was wounded for
 	bool KIA;                            ///< Tracks if the soldier was killed in battle
-	bool nikeCross;                      ///< Tracks if a soldier killed every alien
+	bool nikeCross;                      ///< Tracks if a soldier killed every alien or killed and stunned every alien
 	bool mercyCross;                     ///< Tracks if a soldier stunned every alien
 	int woundsHealed;                    ///< Tracks how many times a fatal wound was healed by this unit
 	UnitStats delta;                     ///< Tracks the increase in unit stats (is not saved, only used during debriefing)
