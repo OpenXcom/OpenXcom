@@ -423,7 +423,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 
 		SoldierRank rank = (*deadUnit)->getGeoscapeSoldier()->getRank();
 		// Rookies don't get this next award. No one likes them.
-		if (rank == 0) 
+		if (rank == RANK_ROOKIE) 
 		{
 			continue;
 		}
@@ -486,11 +486,12 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 					soldierAlienStuns++;
 				}
 			}
-			if (aliensKilled && aliensKilled == soldierAlienKills && _missionStatistics->success == true)
+
+			if (aliensKilled != 0 && aliensKilled == soldierAlienKills && _missionStatistics->success == true && aliensStunned == soldierAlienStuns)
 			{
 				(*j)->getStatistics()->nikeCross = true;
 			}
-			if (aliensStunned && aliensStunned == soldierAlienStuns && _missionStatistics->success == true)
+			if (aliensStunned != 0 && aliensStunned == soldierAlienStuns && _missionStatistics->success == true && aliensKilled == 0)
 			{
 				(*j)->getStatistics()->mercyCross = true;
 			}
