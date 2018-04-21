@@ -324,7 +324,9 @@ struct BattleUnitStatistics
 	UnitStats delta;                     ///< Tracks the increase in unit stats (is not saved, only used during debriefing)
 	int appliedStimulant;                ///< Tracks how many times this soldier applied stimulant
 	int appliedPainKill;                 ///< Tracks how many times this soldier applied pain killers
-	int revivedSoldier;                  ///< Tracks how many times this soldier revived another unit
+	int revivedSoldier;                  ///< Tracks how many times this soldier revived another soldier
+	int revivedHostile;                  ///< Tracks how many times this soldier revived another hostile
+	int revivedNeutral;                  ///< Tracks how many times this soldier revived another civilian
 	bool MIA;                            ///< Tracks if the soldier was left behind :(
 	int martyr;                          ///< Tracks how many kills the soldier landed on the turn of his death
 	int slaveKills;                      ///< Tracks how many kills the soldier landed thanks to a mind controlled unit.
@@ -379,6 +381,8 @@ struct BattleUnitStatistics
 		appliedStimulant = node["appliedStimulant"].as<int>(appliedStimulant);
 		appliedPainKill = node["appliedPainKill"].as<int>(appliedPainKill);
 		revivedSoldier = node["revivedSoldier"].as<int>(revivedSoldier);
+		revivedHostile = node["revivedHostile"].as<int>(revivedHostile);
+		revivedNeutral = node["revivedNeutral"].as<int>(revivedNeutral);
 		martyr = node["martyr"].as<int>(martyr);
 		slaveKills = node["slaveKills"].as<int>(slaveKills);
 	}
@@ -409,13 +413,15 @@ struct BattleUnitStatistics
 		if (appliedStimulant) node["appliedStimulant"] = appliedStimulant;
 		if (appliedPainKill) node["appliedPainKill"] = appliedPainKill;
 		if (revivedSoldier) node["revivedSoldier"] = revivedSoldier;
+		if (revivedHostile) node["revivedHostile"] = revivedHostile;
+		if (revivedNeutral) node["revivedNeutral"] = revivedNeutral;
 		if (martyr) node["martyr"] = martyr;
 		if (slaveKills) node["slaveKills"] = slaveKills;
 		return node;
 	}
 
 	BattleUnitStatistics(const YAML::Node& node) { load(node); }
-	BattleUnitStatistics() : wasUnconcious(false), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0), kills(), daysWounded(0), KIA(false), nikeCross(false), mercyCross(false), woundsHealed(0), appliedStimulant(0), appliedPainKill(0), revivedSoldier(0), MIA(false), martyr(0), slaveKills(0) { }
+	BattleUnitStatistics() : wasUnconcious(false), shotAtCounter(0), hitCounter(0), shotByFriendlyCounter(0), shotFriendlyCounter(0), loneSurvivor(false), ironMan(false), longDistanceHitCounter(0), lowAccuracyHitCounter(0), shotsFiredCounter(0), shotsLandedCounter(0), kills(), daysWounded(0), KIA(false), nikeCross(false), mercyCross(false), woundsHealed(0), appliedStimulant(0), appliedPainKill(0), revivedSoldier(0), revivedHostile(0), revivedNeutral(0), MIA(false), martyr(0), slaveKills(0) { }
 	~BattleUnitStatistics() { }
 };
 
