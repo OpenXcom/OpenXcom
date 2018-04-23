@@ -234,18 +234,18 @@ void MedikitState::onHealClick(Action *)
 			if (!_revivedTarget)
 			{
 				_targetUnit->setTimeUnits(0);
-                if(_targetUnit->getOriginalFaction() == FACTION_PLAYER)
-                {
-                    _action->actor->getStatistics()->revivedSoldier++;
-                }
-                else if(_targetUnit->getOriginalFaction() == FACTION_HOSTILE)
-                {
-                    _action->actor->getStatistics()->revivedHostile++;
-                }
-                else
-                {
-                    _action->actor->getStatistics()->revivedNeutral++;
-                }
+				if(_targetUnit->getOriginalFaction() == FACTION_PLAYER)
+				{
+					_action->actor->getStatistics()->revivedSoldier++;
+				}
+				else if(_targetUnit->getOriginalFaction() == FACTION_HOSTILE)
+				{
+					_action->actor->getStatistics()->revivedHostile++;
+				}
+				else
+				{
+					_action->actor->getStatistics()->revivedNeutral++;
+				}
 				_revivedTarget = true;
 			}
 			// if the unit has revived and has no more wounds, we quit this screen automatically
@@ -286,18 +286,18 @@ void MedikitState::onStimulantClick(Action *)
 		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS && _targetUnit->getStunlevel() < _targetUnit->getHealth() && _targetUnit->getHealth() > 0)
 		{
 			_targetUnit->setTimeUnits(0);
-            if(_targetUnit->getOriginalFaction() == FACTION_PLAYER)
-            {
-                _action->actor->getStatistics()->revivedSoldier++;
-            }
-            else if(_targetUnit->getOriginalFaction() == FACTION_HOSTILE)
-            {
-                _action->actor->getStatistics()->revivedHostile++;
-            }
-            else
-            {
-                _action->actor->getStatistics()->revivedNeutral++;
-            }
+			if(_targetUnit->getOriginalFaction() == FACTION_PLAYER)
+			{
+				_action->actor->getStatistics()->revivedSoldier++;
+			}
+			else if(_targetUnit->getOriginalFaction() == FACTION_HOSTILE)
+			{
+				_action->actor->getStatistics()->revivedHostile++;
+			}
+			else
+			{
+				_action->actor->getStatistics()->revivedNeutral++;
+			}
 			onEndClick(0);
 		}
 	}
