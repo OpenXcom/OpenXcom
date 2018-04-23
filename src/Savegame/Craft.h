@@ -53,6 +53,7 @@ private:
 	std::vector<Vehicle*> _vehicles;
 	std::string _status;
 	bool _lowFuel, _mission, _inBattlescape, _inDogfight;
+	double _speedMaxRadian;
 
 	using MovingTarget::load;
 public:
@@ -128,6 +129,8 @@ public:
 	double getDistanceFromBase() const;
 	/// Gets the craft's fuel consumption.
 	int getFuelConsumption() const;
+	/// Gets the craft's fuel consumption at a certain speed.
+	int getFuelConsumption(int speed) const;
 	/// Gets the craft's minimum fuel limit.
 	int getFuelLimit() const;
 	/// Gets the craft's minimum fuel limit to go to a base.

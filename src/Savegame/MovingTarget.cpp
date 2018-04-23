@@ -135,6 +135,18 @@ double MovingTarget::getSpeedRadian() const
 }
 
 /**
+ * Converts a speed in degrees to a speed in radians.
+ * Each nautical mile is 1/60th of a degree.
+ * Each hour contains 720 5-seconds.
+ * @param speed Speed in degrees.
+ * @return Speed in radians.
+ */
+double MovingTarget::calculateRadianSpeed(int speed)
+{
+	return speed * (1 / 60.0) * (M_PI / 180.0) / 720.0;
+}
+
+/**
  * Changes the speed of the moving target
  * and converts it from standard knots (nautical miles per hour)
  * into radians per 5 in-game seconds.
@@ -143,9 +155,7 @@ double MovingTarget::getSpeedRadian() const
 void MovingTarget::setSpeed(int speed)
 {
 	_speed = speed;
-	// Each nautical mile is 1/60th of a degree.
-	// Each hour contains 720 5-seconds.
-	_speedRadian = _speed * (1 / 60.0) * (M_PI / 180) / 720.0;
+	_speedRadian = calculateRadianSpeed(_speed);
 	calculateSpeed();
 }
 
