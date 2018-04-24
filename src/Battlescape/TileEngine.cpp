@@ -1084,8 +1084,13 @@ BattleUnit *TileEngine::hit(Position center, int power, ItemDamageType type, Bat
 	else if (part == V_UNIT)
 	{
 		int dmgRng = type == DT_HE ? Mod::EXPLOSIVE_DAMAGE_RANGE : Mod::DAMAGE_RANGE;
-		int min = power * (100 - dmgRng) / 100;
-		int max = power * (100 + dmgRng) / 100;
+
+		//int min = power * (100 - dmgRng) / 100;
+		//int max = power * (100 + dmgRng) / 100;
+
+		int min = Mod::DAMAGE_RANGE_MIN;
+		int max = Mod::DAMAGE_RANGE_MAX;
+
 		const int rndPower = RNG::generate(min, max);
 		int verticaloffset = 0;
 		if (!bu)
