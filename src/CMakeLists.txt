@@ -3,6 +3,10 @@ set ( root_src
   main.cpp
 )
 
+if ( WIN32 )
+  set ( root_src ${root_src} OpenXcom.rc )
+endif ()
+
 set ( basescape_src
   Basescape/BaseInfoState.cpp
   Basescape/BaseView.cpp
