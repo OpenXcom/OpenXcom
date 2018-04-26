@@ -42,7 +42,8 @@ SoldierDiary::SoldierDiary() : _daysWoundedTotal(0), _totalShotByFriendlyCounter
 	_lowAccuracyHitCounterTotal(0), _shotsFiredCounterTotal(0), _shotsLandedCounterTotal(0), _shotAtCounter10in1Mission(0), _hitCounter5in1Mission(0),
 	_timesWoundedTotal(0), _KIA(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0), _woundsHealedTotal(0), _allUFOs(0), _allMissionTypes(0),
 	_statGainTotal(0), _revivedUnitTotal(0), _wholeMedikitTotal(0), _braveryGainTotal(0), _bestOfRank(0),
-	_MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _slaveKillsTotal(0), _bestSoldier(false), _globeTrotter(false)
+	_MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _slaveKillsTotal(0), _bestSoldier(false),
+    _revivedSoldierTotal(0), _revivedHostileTotal(0), _revivedNeutralTotal(0), _globeTrotter(false)
 {
 }
 
@@ -101,6 +102,9 @@ void SoldierDiary::load(const YAML::Node& node)
 	_allMissionTypes = node["allMissionTypes"].as<int>(_allMissionTypes);
 	_statGainTotal = node["statGainTotal"].as<int>(_statGainTotal);
 	_revivedUnitTotal = node["revivedUnitTotal"].as<int>(_revivedUnitTotal);
+	_revivedSoldierTotal = node["revivedSoldierTotal"].as<int>(_revivedSoldierTotal);
+	_revivedHostileTotal = node["revivedHostileTotal"].as<int>(_revivedHostileTotal);
+	_revivedNeutralTotal = node["revivedNeutralTotal"].as<int>(_revivedNeutralTotal);
 	_wholeMedikitTotal = node["wholeMedikitTotal"].as<int>(_wholeMedikitTotal);
 	_braveryGainTotal = node["braveryGainTotal"].as<int>(_braveryGainTotal);
 	_bestOfRank = node["bestOfRank"].as<int>(_bestOfRank);
@@ -146,6 +150,9 @@ YAML::Node SoldierDiary::save() const
 	if (_allMissionTypes) node["allMissionTypes"] = _allMissionTypes;
 	if (_statGainTotal) node["statGainTotal"] =_statGainTotal;
 	if (_revivedUnitTotal) node["revivedUnitTotal"] = _revivedUnitTotal;
+	if (_revivedSoldierTotal) node["revivedSoldierTotal"] = _revivedSoldierTotal;
+	if (_revivedHostileTotal) node["revivedHostileTotal"] = _revivedHostileTotal;
+	if (_revivedNeutralTotal) node["revivedNeutralTotal"] = _revivedNeutralTotal;
 	if (_wholeMedikitTotal) node["wholeMedikitTotal"] = _wholeMedikitTotal;
 	if (_braveryGainTotal) node["braveryGainTotal"] = _braveryGainTotal;
 	if (_bestOfRank) node["bestOfRank"] = _bestOfRank;
@@ -229,7 +236,10 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, std::vector
 	_statGainTotal += unitStatistics->delta.psiSkill;
 	
 	_braveryGainTotal = unitStatistics->delta.bravery;
-	_revivedUnitTotal += unitStatistics->revivedSoldier;
+	_revivedUnitTotal += (unitStatistics->revivedSoldier + unitStatistics->revivedHostile + unitStatistics->revivedNeutral);
+	_revivedSoldierTotal += unitStatistics->revivedSoldier;
+	_revivedNeutralTotal += unitStatistics->revivedNeutral;
+	_revivedHostileTotal += unitStatistics->revivedHostile;
 	_wholeMedikitTotal += std::min( std::min(unitStatistics->woundsHealed, unitStatistics->appliedStimulant), unitStatistics->appliedPainKill);
 	_missionIdList.push_back(missionStatistics->id);
 }
@@ -322,6 +332,9 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 					((*j).first == "totalAllMissionTypes" && _allMissionTypes < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalStatGain" && _statGainTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalRevives" && _revivedUnitTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalSoldierRevives" && _revivedSoldierTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalHostileRevives" && _revivedHostileTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
+					((*j).first == "totalNeutralRevives" && _revivedNeutralTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalWholeMedikit" && _wholeMedikitTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "totalBraveryGain" && _braveryGainTotal < (*j).second.at(nextCommendationLevel["noNoun"])) ||
 					((*j).first == "bestOfRank" && _bestOfRank < (*j).second.at(nextCommendationLevel["noNoun"])) ||
