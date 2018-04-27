@@ -179,11 +179,6 @@ void ResearchInfoState::btnOkClick(Action *)
  */
 void ResearchInfoState::btnCancelClick(Action *)
 {
-	const RuleResearch *ruleResearch = _rule ? _rule : _project->getRules();
-	if (ruleResearch->needItem() && ruleResearch->destroyItem())
-	{
-		_base->getStorageItems()->addItem(ruleResearch->getName(), 1);
-	}
 	_base->removeResearch(_project);
 	_game->popState();
 }

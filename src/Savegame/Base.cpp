@@ -1095,6 +1095,15 @@ void Base::removeResearch(ResearchProject * project)
 	{
 		_research.erase(iter);
 	}
+
+	const RuleResearch *ruleResearch = project->getRules();
+	if (!project->isFinished())
+	{
+		if (ruleResearch->needItem() && ruleResearch->destroyItem())
+		{
+			getStorageItems()->addItem(ruleResearch->getName(), 1);
+		}
+	}
 	delete project;
 }
 
