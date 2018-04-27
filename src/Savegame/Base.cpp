@@ -1095,13 +1095,14 @@ void Base::removeResearch(ResearchProject * project)
 	{
 		_research.erase(iter);
 	}
+	delete project;
 }
 
 /**
  * Remove a Production from the Base
  * @param p A pointer to a Production
  */
-void Base::removeProduction (Production * p)
+void Base::removeProduction(Production * p)
 {
 	_engineers += p->getAssignedEngineers();
 	std::vector<Production *>::iterator iter = std::find (_productions.begin(), _productions.end(), p);
@@ -1109,6 +1110,7 @@ void Base::removeProduction (Production * p)
 	{
 		_productions.erase(iter);
 	}
+	delete p;
 }
 
 /**
