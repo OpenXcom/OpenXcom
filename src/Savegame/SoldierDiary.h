@@ -82,14 +82,12 @@ private:
 	void manageModularCommendations(std::map<std::string, int> &nextCommendationLevel, std::map<std::string, int> &modularCommendations, std::pair<std::string, int> statTotal, int criteria);
 	void awardCommendation(const std::string& type, const std::string& noun = "noNoun");
 public:
-	/// Creates a new soldier diary and loads its contents from YAML.
-	SoldierDiary(const YAML::Node& node);
 	/// Construct a diary.
 	SoldierDiary();
 	/// Deconstruct a diary.
 	~SoldierDiary();
 	/// Load a diary.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, const Mod *mod);
 	/// Save a diary.
 	YAML::Node save() const;
 	/// Update the diary statistics.

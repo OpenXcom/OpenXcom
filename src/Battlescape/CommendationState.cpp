@@ -74,7 +74,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 
 	int row = 0;
 	int titleRow = 0;
-	std::map<std::string, RuleCommendations *> commendationsList = _game->getMod()->getCommendation();
+	const std::map<std::string, RuleCommendations *> commendationsList = _game->getMod()->getCommendationsList();
 	bool modularCommendation;
 	std::string noun;
 	bool titleChosen = true;
