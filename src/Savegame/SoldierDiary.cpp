@@ -25,14 +25,6 @@
 
 namespace OpenXcom
 {
-/**
- * Initializes a new diary entry from YAML.
- * @param node YAML node.
- */
-SoldierDiary::SoldierDiary(const YAML::Node &node)
-{
-	load(node);
-}
 
 /**
  * Initializes a new blank diary.
@@ -66,12 +58,24 @@ SoldierDiary::~SoldierDiary()
  * Loads the diary from a YAML file.
  * @param node YAML node.
  */
-void SoldierDiary::load(const YAML::Node& node)
+void SoldierDiary::load(const YAML::Node& node, const Mod *mod)
 {
 	if (const YAML::Node &commendations = node["commendations"])
 	{
 		for (YAML::const_iterator i = commendations.begin(); i != commendations.end(); ++i)
-			_commendations.push_back(new SoldierCommendations(*i));
+		{
+			SoldierCommendations *sc = new SoldierCommendations(*i);
+			RuleCommendations *commendation = mod->getCommendation(sc->getType());
+			if (commendation)
+			{
+				_commendations.push_back(sc);
+			}
+			else
+			{
+				// obsolete commendation, ignore it... otherwise it would cause a crash later
+				delete sc;
+			}
+		}
 	}
 	if (const YAML::Node &killList = node["killList"])
 	{
@@ -265,13 +269,13 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 	const std::string battleTypeArray[BATTLE_TYPES] = { "BT_NONE", "BT_FIREARM", "BT_AMMO", "BT_MELEE", "BT_GRENADE",	"BT_PROXIMITYGRENADE", "BT_MEDIKIT", "BT_SCANNER", "BT_MINDPROBE", "BT_PSIAMP", "BT_FLARE", "BT_CORPSE", "BT_END" };
 	const std::string damageTypeArray[DAMAGE_TYPES] = { "DT_NONE", "DT_AP", "DT_IN", "DT_HE", "DT_LASER", "DT_PLASMA", "DT_STUN", "DT_MELEE", "DT_ACID", "DT_SMOKE", "DT_END"};
 	
-	std::map<std::string, RuleCommendations *> commendationsList = mod->getCommendation();
+	const std::map<std::string, RuleCommendations *> commendationsList = mod->getCommendationsList();
 	bool awardedCommendation = false;                   // This value is returned if at least one commendation was given.
 	std::map<std::string, int> nextCommendationLevel;   // Noun, threshold.
 	std::vector<std::string> modularCommendations;      // Commendation name.
 	bool awardCommendationBool = false;                 // This value determines if a commendation will be given.
 	// Loop over all possible commendations
-	for (std::map<std::string, RuleCommendations *>::iterator i = commendationsList.begin(); i != commendationsList.end(); )
+	for (std::map<std::string, RuleCommendations *>::const_iterator i = commendationsList.begin(); i != commendationsList.end(); )
 	{
 		awardCommendationBool = true;
 		nextCommendationLevel.clear();

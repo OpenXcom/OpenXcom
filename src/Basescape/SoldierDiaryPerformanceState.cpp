@@ -223,7 +223,7 @@ void SoldierDiaryPerformanceState::init()
 	_txtMedalLevel->setVisible(_display == DIARY_COMMENDATIONS);
 	_txtMedalInfo->setVisible(_display == DIARY_COMMENDATIONS);
 	_lstCommendations->setVisible(_display == DIARY_COMMENDATIONS);
-	_btnCommendations->setVisible(!_game->getMod()->getCommendation().empty());
+	_btnCommendations->setVisible(!_game->getMod()->getCommendationsList().empty());
 
 	if (_list->empty())
 	{
@@ -304,11 +304,11 @@ void SoldierDiaryPerformanceState::init()
 									tr("STR_SCORE_VALUE").arg(_soldier->getDiary()->getScoreTotal(_game->getSavedGame()->getMissionStatistics())).c_str(),
 									tr("STR_DAYS_WOUNDED").arg(_soldier->getDiary()->getDaysWoundedTotal()).c_str());
 	}
-	else if (_display == DIARY_COMMENDATIONS && !_game->getMod()->getCommendation().empty())
+	else if (_display == DIARY_COMMENDATIONS && !_game->getMod()->getCommendationsList().empty())
 	{
 		for (std::vector<SoldierCommendations*>::const_iterator i = _soldier->getDiary()->getSoldierCommendations()->begin(); i != _soldier->getDiary()->getSoldierCommendations()->end(); ++i)
 		{
-			RuleCommendations* commendation = _game->getMod()->getCommendation()[(*i)->getType()];
+			RuleCommendations *commendation = _game->getMod()->getCommendation((*i)->getType());
 			if ((*i)->getNoun() != "noNoun")
 			{
 				_lstCommendations->addRow(2, tr((*i)->getType()).arg(tr((*i)->getNoun())).c_str(), tr((*i)->getDecorationDescription()).c_str());
@@ -348,7 +348,7 @@ void SoldierDiaryPerformanceState::drawSprites()
 
 	for (std::vector<SoldierCommendations*>::const_iterator i = _list->at(_soldierId)->getDiary()->getSoldierCommendations()->begin() ; i != _list->at(_soldierId)->getDiary()->getSoldierCommendations()->end() ; ++i)
 	{
-		RuleCommendations* commendation = _game->getMod()->getCommendation()[(*i)->getType()];
+		RuleCommendations *commendation = _game->getMod()->getCommendation((*i)->getType());
 		// Skip commendations that are not visible in the textlist
 		if ( vectorIterator < scrollDepth || vectorIterator - scrollDepth >= (int)_commendations.size())
 		{

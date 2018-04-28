@@ -1672,10 +1672,20 @@ const std::vector<std::string> &Mod::getSoldiersList() const
 }
 
 /**
- * Gets the list of commendations
+ * Returns the rules for the specified commendation.
+ * @param id Commendation type.
+ * @return Rules for the commendation.
+ */
+RuleCommendations *Mod::getCommendation(const std::string &id, bool error) const
+{
+	return getRule(id, "Commendation", _commendations, error);
+}
+
+/**
+ * Gets the list of commendations provided by the mod.
  * @return The list of commendations.
  */
-std::map<std::string, RuleCommendations *> Mod::getCommendation() const
+const std::map<std::string, RuleCommendations *> &Mod::getCommendationsList() const
 {
 	return _commendations;
 }

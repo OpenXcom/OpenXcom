@@ -296,7 +296,9 @@ public:
 	/// Gets the available soldiers.
 	const std::vector<std::string> &getSoldiersList() const;
 	/// Gets commendation rules.
-	std::map<std::string, RuleCommendations *> getCommendation() const;
+	RuleCommendations *getCommendation(const std::string &id, bool error = false) const;
+	/// Gets the available commendations.
+	const std::map<std::string, RuleCommendations *> &getCommendationsList() const;
 	/// Gets generated unit rules.
 	Unit *getUnit(const std::string &name, bool error = false) const;
 	/// Gets alien race rules.
