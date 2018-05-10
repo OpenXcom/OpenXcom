@@ -1461,8 +1461,8 @@ void GeoscapeState::time1Hour()
 		{
 			if (j->second > PROGRESS_NOT_COMPLETE)
 			{
-				(*i)->removeProduction (j->first);
 				popup(new ProductionCompleteState((*i),  tr(j->first->getRules()->getName()), this, j->second));
+				(*i)->removeProduction(j->first);
 			}
 		}
 
@@ -1565,19 +1565,22 @@ void GeoscapeState::time1Day()
 			_game->getSavedGame()->getAvailableResearchProjects(before, _game->getMod(), *i);
 		}
 		// 3. add finished research, including lookups and getonefrees (up to 4x)
-		for (std::vector<ResearchProject*>::const_iterator iter = finished.begin(); iter != finished.end(); ++iter)
+		for (std::vector<ResearchProject*>::iterator iter = finished.begin(); iter != finished.end(); ++iter)
 		{
+			const RuleResearch *bonus = 0;
+			const RuleResearch *research = (*iter)->getRules();
+
 			// 3a. remove finished research from the base where it was researched
 			(*i)->removeResearch(*iter);
-			// 3b. handle interrogations
-			RuleResearch * bonus = 0;
-			const RuleResearch * research = (*iter)->getRules();
+			(*iter) = 0;
+
+			// 3b. handle interrogation
 			if (Options::retainCorpses && research->destroyItem() && _game->getMod()->getUnit(research->getName()))
 			{
 				(*i)->getStorageItems()->addItem(_game->getMod()->getArmor(_game->getMod()->getUnit(research->getName())->getArmor(), true)->getCorpseGeoscape());
 			}
 			// 3c. handle getonefrees (topic+lookup)
-			if (!(*iter)->getRules()->getGetOneFree().empty())
+			if (!research->getGetOneFree().empty())
 			{
 				std::vector<std::string> possibilities;
 				for (std::vector<std::string>::const_iterator f = research->getGetOneFree().begin(); f != research->getGetOneFree().end(); ++f)
@@ -1681,8 +1684,6 @@ void GeoscapeState::time1Day()
 					}
 				}
 			}
-			// 3k. remove processed item from the list (and continue with the next item)
-			delete(*iter);
 		}
 
 		// Handle soldier wounds

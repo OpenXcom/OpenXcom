@@ -37,11 +37,15 @@ ResearchProject::ResearchProject(RuleResearch * p, int c) : _project(p), _assign
 bool ResearchProject::step()
 {
 	_spent += _assigned;
-	if (_spent >= getCost())
-	{
-		return true;
-	}
-	return false;
+	return isFinished();
+}
+
+/**
+ * gets state of project.
+ */
+bool ResearchProject::isFinished()
+{
+	return _spent >= getCost();
 }
 
 /**

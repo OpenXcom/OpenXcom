@@ -517,7 +517,7 @@ void PurchaseState::increaseByValue(int change)
 	}
 	else
 	{
-		RuleItem *rule = (RuleItem*)getRow().rule;
+		RuleItem *rule = 0;
 		switch (getRow().type)
 		{
 		case TRANSFER_SOLDIER:
@@ -535,6 +535,7 @@ void PurchaseState::increaseByValue(int change)
 			}
 			break;
 		case TRANSFER_ITEM:
+			rule = (RuleItem*)getRow().rule;
 			if (_iQty + rule->getSize() > _base->getAvailableStores() - _base->getUsedStores())
 			{
 				errorMessage = tr("STR_NOT_ENOUGH_STORE_SPACE");
@@ -612,7 +613,7 @@ void PurchaseState::decreaseByValue(int change)
 	if (0 >= change || 0 >= getRow().amount) return;
 	change = std::min(getRow().amount, change);
 
-	RuleItem *rule = (RuleItem*)getRow().rule;
+	RuleItem *rule = 0;
 	switch (getRow().type)
 	{
 	case TRANSFER_SOLDIER:
@@ -624,6 +625,7 @@ void PurchaseState::decreaseByValue(int change)
 		_cQty -= change;
 		break;
 	case TRANSFER_ITEM:
+		rule = (RuleItem*)getRow().rule;
 		_iQty -= rule->getSize() * change;
 		break;
 	}

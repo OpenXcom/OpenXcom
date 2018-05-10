@@ -100,7 +100,6 @@ ResearchState::ResearchState(Base *base) : _base(base)
 	_lstResearch->setMargin(2);
 	_lstResearch->setWordWrap(true);
 	_lstResearch->onMouseClick((ActionHandler)&ResearchState::onSelectProject);
-	fillProjectList();
 }
 
 /**

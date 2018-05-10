@@ -1095,13 +1095,23 @@ void Base::removeResearch(ResearchProject * project)
 	{
 		_research.erase(iter);
 	}
+
+	const RuleResearch *ruleResearch = project->getRules();
+	if (!project->isFinished())
+	{
+		if (ruleResearch->needItem() && ruleResearch->destroyItem())
+		{
+			getStorageItems()->addItem(ruleResearch->getName(), 1);
+		}
+	}
+	delete project;
 }
 
 /**
  * Remove a Production from the Base
  * @param p A pointer to a Production
  */
-void Base::removeProduction (Production * p)
+void Base::removeProduction(Production * p)
 {
 	_engineers += p->getAssignedEngineers();
 	std::vector<Production *>::iterator iter = std::find (_productions.begin(), _productions.end(), p);
@@ -1109,6 +1119,7 @@ void Base::removeProduction (Production * p)
 	{
 		_productions.erase(iter);
 	}
+	delete p;
 }
 
 /**
@@ -1618,7 +1629,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 			}
 		}
 	}
-	else if ((*facility)->getRules()->getPsiLaboratories() > 0)
+	if ((*facility)->getRules()->getPsiLaboratories() > 0)
 	{
 		// psi lab destruction: remove any soldiers over the maximum allowable from psi training.
 		int toRemove = (*facility)->getRules()->getPsiLaboratories() - getFreePsiLabs();
@@ -1631,7 +1642,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 			}
 		}
 	}
-	else if ((*facility)->getRules()->getLaboratories())
+	if ((*facility)->getRules()->getLaboratories())
 	{
 		// lab destruction: enforce lab space limits. take scientists off projects until
 		// it all evens out. research is not cancelled.
@@ -1653,7 +1664,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 			}
 		}
 	}
-	else if ((*facility)->getRules()->getWorkshops())
+	if ((*facility)->getRules()->getWorkshops())
 	{
 		// workshop destruction: similar to lab destruction, but we'll lay off engineers instead
 		// in this case, however, production IS cancelled, as it takes up space in the workshop.
@@ -1675,7 +1686,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 			}
 		}
 	}
-	else if ((*facility)->getRules()->getStorage())
+	if ((*facility)->getRules()->getStorage())
 	{
 		// we won't destroy the items physically AT the base,
 		// but any items in transit will end up at the dead letter office.
@@ -1695,7 +1706,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 			}
 		}
 	}
-	else if ((*facility)->getRules()->getPersonnel())
+	if ((*facility)->getRules()->getPersonnel())
 	{
 		// as above, we won't actually fire people, but we'll block any new ones coming in.
 		if ((getAvailableQuarters() - getUsedQuarters()) - (*facility)->getRules()->getPersonnel() < 0 && !_transfers.empty())
