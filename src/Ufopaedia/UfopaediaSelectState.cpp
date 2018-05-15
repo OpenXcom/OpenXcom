@@ -77,7 +77,7 @@ namespace OpenXcom
 
 	UfopaediaSelectState::~UfopaediaSelectState()
 	{}
-	
+
 	/**
 	 * Initializes the state.
 	 */

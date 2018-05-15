@@ -1,7 +1,7 @@
 # <?xml version="1.0" encoding="UTF-8"?>
 # <!--
     # Hyllian's 5xBR v3.7b (semi-rounded) Shader
-   
+
    # Copyright (C) 2011, 2012 Hyllian/Jararaca - sergiogdb@gmail.com
    # Copyright (C) 2012 crazy46guy (GLSL conversion)
 
@@ -44,7 +44,7 @@ vertex: |
       gl_TexCoord[4] = gl_MultiTexCoord0.xxxy + vec4(    -dx,   0,  dx,      dy);  //   G  H  I
       gl_TexCoord[5] = gl_MultiTexCoord0.xxxy + vec4(    -dx,   0,  dx,  2.0*dy);  //  G5 H5 I5
       gl_TexCoord[6] = gl_MultiTexCoord0.xyyy + vec4(-2.0*dx, -dy,   0,      dy);  //  A0 D0 G0
-      gl_TexCoord[7] = gl_MultiTexCoord0.xyyy + vec4( 2.0*dx, -dy,   0,      dy);  //  C4 F4 I4 
+      gl_TexCoord[7] = gl_MultiTexCoord0.xyyy + vec4( 2.0*dx, -dy,   0,      dy);  //  C4 F4 I4
     }
 fragment: |
     uniform sampler2D rubyTexture;
@@ -76,7 +76,7 @@ fragment: |
 
     bvec4 _or_(bvec4 A, bvec4 B) {
       return bvec4(A.x || B.x, A.y || B.y, A.z || B.z, A.w || B.w);
-    } 
+    }
 
     vec4 df(vec4 A, vec4 B) {
       return vec4(abs(A - B));
@@ -146,7 +146,7 @@ fragment: |
       vec4 Cy = vec4( 2.0,  0.0, -1.0,  0.5 );
 
       // These inequations define the line below which interpolation occurs
-      bvec4 fx      = greaterThan(Ao * fp.y + Bo * fp.x, Co); 
+      bvec4 fx      = greaterThan(Ao * fp.y + Bo * fp.x, Co);
       bvec4 fx_left = greaterThan(Ax * fp.y + Bx * fp.x, Cx);
       bvec4 fx_up   = greaterThan(Ay * fp.y + By * fp.x, Cy);
 
@@ -159,7 +159,7 @@ fragment: |
       bvec4 interp_restriction_lv2_left = _and_( notEqual(e, g), notEqual(d, g) );
       bvec4 interp_restriction_lv2_up   = _and_( notEqual(e, c), notEqual(b, c) );
 
-      bvec4 edr      = _and_( lessThan(weighted_distance(e, c, g, i, h5, f4, h, f), 
+      bvec4 edr      = _and_( lessThan(weighted_distance(e, c, g, i, h5, f4, h, f),
                                        weighted_distance(h, d, i5, f, i4, b, e, i)), interp_restriction_lv1 );
       bvec4 edr_left = _and_( lessThanEqual(coef * df(f, g), df(h, c)), interp_restriction_lv2_left );
       bvec4 edr_up   = _and_( greaterThanEqual(df(f, g), coef * df(h, c)), interp_restriction_lv2_up );

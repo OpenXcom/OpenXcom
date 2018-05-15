@@ -831,7 +831,7 @@ std::vector<std::pair<BattleUnit *, int> > TileEngine::getSpottingUnits(BattleUn
 {
 	std::vector<std::pair<BattleUnit *, int> > spotters;
 	Tile *tile = unit->getTile();
-	
+
 	// no reaction on civilian turn.
 	if (_save->getSide() != FACTION_NEUTRAL)
 	{
@@ -1476,7 +1476,7 @@ bool TileEngine::detonate(Tile* tile)
 		remainingPower = explosive;
 		destroyed = false;
 		int volume = 0;
-		TilePart currentpart = parts[i], currentpart2; 
+		TilePart currentpart = parts[i], currentpart2;
 		int diemcd;
 		fireProof = tiles[i]->getFlammability(currentpart);
 		fuel = tiles[i]->getFuel(currentpart) + 1;
@@ -1514,7 +1514,7 @@ bool TileEngine::detonate(Tile* tile)
 			}
 			//this trick is to follow transformed object parts (object can become a ground)
 			diemcd = tiles[i]->getMapData(currentpart)->getDieMCD();
-			if (diemcd!=0) 
+			if (diemcd!=0)
 				currentpart2 = tiles[i]->getMapData(currentpart)->getDataset()->getObjects()->at(diemcd)->getObjectType();
 			else
 				currentpart2 = currentpart;
@@ -2803,7 +2803,7 @@ bool TileEngine::validMeleeRange(const Position& pos, int direction, BattleUnit 
 			}
 		}
 	}
-	
+
 	for (std::vector<BattleUnit*>::const_iterator i = potentialTargets.begin(); i != potentialTargets.end(); ++i)
 	{
 		// if there's actually something THERE, we'll chalk this up as a success.
@@ -2820,7 +2820,7 @@ bool TileEngine::validMeleeRange(const Position& pos, int direction, BattleUnit 
 			chosenTarget = *i;
 		}
 	}
-	
+
 	if (dest && chosenTarget)
 	{
 		*dest = chosenTarget->getPosition();

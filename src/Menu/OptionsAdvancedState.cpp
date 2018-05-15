@@ -42,7 +42,7 @@ OptionsAdvancedState::OptionsAdvancedState(OptionsOrigin origin) : OptionsBaseSt
 
 	// Create objects
 	_lstOptions = new TextList(200, 136, 94, 8);
-	
+
 	if (origin != OPT_BATTLESCAPE)
 	{
 		add(_lstOptions, "optionLists", "advancedMenu");
@@ -102,7 +102,7 @@ OptionsAdvancedState::OptionsAdvancedState(OptionsOrigin origin) : OptionsBaseSt
  */
 OptionsAdvancedState::~OptionsAdvancedState()
 {
-	
+
 }
 
 /**

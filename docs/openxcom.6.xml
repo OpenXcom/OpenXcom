@@ -24,28 +24,28 @@
 		</copyright>
 		&dhdate;
 	</refentryinfo>
-	
+
 	<refmeta>
 		<refentrytitle>&dhpackage;</refentrytitle>
 		<manvolnum>&dhsection;</manvolnum>
 		<refmiscinfo class="manual">User's Manual</refmiscinfo>
 		<refmiscinfo class="version">&dhversion;</refmiscinfo>
 	</refmeta>
-	
+
 	<refnamediv>
 		<refname>&dhpackage;</refname>
 		<refpurpose>
 			An open-source clone of the original "UFO: Enemy Unknown"
 		</refpurpose>
 	</refnamediv>
-	
+
 	<refsynopsisdiv>
 		<cmdsynopsis>
 			<command>&dhpackage;</command>
 			<arg><replaceable>OPTIONS</replaceable></arg>
 		</cmdsynopsis>
 	</refsynopsisdiv>
-	
+
 	<refsect1>
 		<title>DESCRIPTION</title>
 		<para>
@@ -55,7 +55,7 @@
 			licensed under the GPL and written in C++ / SDL.
 		</para>
 	</refsect1>
-	
+
 	<refsect1>
 		<title>OPTIONS</title>
 		<variablelist>

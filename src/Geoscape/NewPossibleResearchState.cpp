@@ -76,7 +76,7 @@ NewPossibleResearchState::NewPossibleResearchState(Base * base, const std::vecto
 	_lstPossibilities->setBig();
 	_lstPossibilities->setAlign(ALIGN_CENTER);
 	_lstPossibilities->setScrolling(true, 0);
-	
+
 	bool foundNew = false;
 	for (std::vector<RuleResearch *>::const_iterator iter = possibilities.begin(); iter != possibilities.end(); ++iter)
 	{

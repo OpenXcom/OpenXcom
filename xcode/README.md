@@ -5,9 +5,9 @@ The dependencies you require are following:
 - SDL_mixer (libsdl-mixer1.2)
 - SDL_gfx (libsdl-gfx1.2), version 2.0.22 or later
 - SDL_image (libsdl-image1.2)
-- yaml-cpp, version 0.5 or later 
+- yaml-cpp, version 0.5 or later
 
-If you want to save yourself the trouble - don’t do it manually, use Homebrew package manager - http://mxcl.github.com/homebrew/ or MacPorts - https://www.macports.org/ instead. 
+If you want to save yourself the trouble - don’t do it manually, use Homebrew package manager - http://mxcl.github.com/homebrew/ or MacPorts - https://www.macports.org/ instead.
 
 This guide assumes you listened to the previous recommendation and had your dependencies installed with brew terminal command (for Homebrew), like this:
 ```
@@ -28,7 +28,7 @@ If you want to use the portable bundle, then:
 
 1. Copy the relevant original game data files you possess into the ‘UFO’ (for UFO: Enemy Unknown) and/or ‘TFTD’ (for XCOM: Terror from the Deep) folder within the bundle respectively. If asked by the system what to do with the files and folders already present there, select ‘Merge’.
 
-Or, if you prefer to keep your build always separate from the game data files for various reasons: 
+Or, if you prefer to keep your build always separate from the game data files for various reasons:
 
 1. Create the directory `/Users/Shared/OpenXcom/` and move your original xcom data files (UFO and TFTD directories) there.
 

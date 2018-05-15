@@ -23,7 +23,7 @@ namespace OpenXcom
 {
 
 enum InversionType {INVERT_NONE, INVERT_CLICK, INVERT_TOGGLE};
-	
+
 /**
  * Regular image that works like a button.
  * Unlike the TextButton, this button doesn't draw

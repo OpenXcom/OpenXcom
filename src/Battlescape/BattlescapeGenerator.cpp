@@ -246,7 +246,7 @@ void BattlescapeGenerator::nextStage()
 		(*i)->setTile(0);
 		(*i)->setPosition(Position(-1,-1,-1), false);
 	}
-	
+
 	// remove all items not belonging to our soldiers from the map.
 	// sort items into two categories:
 	// the ones that we are guaranteed to be able to take home, barring complete failure (ie: stuff on the ship)
@@ -757,7 +757,7 @@ void BattlescapeGenerator::deployXCOM()
 			continue;
 		placeItemByLayout(*i);
 	}
-	
+
 	// auto-equip soldiers (only soldiers without layout) and clean up moved items
 	autoEquip(*_save->getUnits(), _game->getMod(), _save, _craftInventoryTile->getInventory(), ground, _worldShade, _allowAutoLoadout, false);
 }
@@ -2244,7 +2244,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*> *script)
 			_save->getMapDataSets()->push_back(*i);
 			craftDataSetIDOffset++;
 		}
-		
+
 		for (size_t i = 0; i < ufoMaps.size(); ++i)
 		{
 			loadMAP(ufoMaps[i], _ufoPos[i].x * 10, _ufoPos[i].y * 10, ufoTerrain, mapDataSetIDOffset);
@@ -2760,7 +2760,7 @@ void BattlescapeGenerator::drillModules(TunnelData* data, const std::vector<SDL_
 		{
 			if (_blocks[i][j] == 0)
 				continue;
-			
+
 			MapData *md;
 
 			if (dir != MD_VERTICAL)

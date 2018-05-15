@@ -546,7 +546,7 @@ void SoldierInfoState::edtSoldierChange(Action *)
  */
 void SoldierInfoState::btnOkClick(Action *)
 {
-	
+
 	_game->popState();
 	if (_game->getSavedGame()->getMonthsPassed() > -1 && Options::storageLimitsEnforced && _base != 0 && _base->storesOverfull())
 	{

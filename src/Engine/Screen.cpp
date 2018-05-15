@@ -64,7 +64,7 @@ void Screen::makeVideoFlags()
 	{
 		_flags |= SDL_RESIZABLE;
 	}
-	
+
 	// Handle window positioning
 	if (!Options::fullscreen && Options::rootWindowedMode)
 	{
@@ -148,7 +148,7 @@ void Screen::handle(Action *action)
 			}
 		}
 	}
-	
+
 	if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == SDLK_RETURN && (SDL_GetModState() & KMOD_ALT) != 0)
 	{
 		Options::fullscreen = !Options::fullscreen;
@@ -201,7 +201,7 @@ void Screen::flip()
 	}
 
 
-	
+
 	if (SDL_Flip(_screen) == -1)
 	{
 		throw Exception(SDL_GetError());
@@ -316,7 +316,7 @@ void Screen::resetDisplay(bool resetVideo)
 		_surface = new Surface(_baseWidth, _baseHeight, 0, 0, Screen::use32bitScaler() ? 32 : 8); // only HQX/XBRZ needs 32bpp for this surface; the OpenGL class has its own 32bpp buffer
 		if (_surface->getSurface()->format->BitsPerPixel == 8) _surface->setPalette(deferredPalette);
 	}
-	SDL_SetColorKey(_surface->getSurface(), 0, 0); // turn off color key! 
+	SDL_SetColorKey(_surface->getSurface(), 0, 0); // turn off color key!
 
 	if (resetVideo || _screen->format->BitsPerPixel != _bpp)
 	{
@@ -444,7 +444,7 @@ void Screen::resetDisplay(bool resetVideo)
 		_topBlackBand = _bottomBlackBand = _leftBlackBand = _rightBlackBand = _cursorTopBlackBand = _cursorLeftBlackBand = 0;
 	}
 
-	if (useOpenGL()) 
+	if (useOpenGL())
 	{
 #ifndef __NO_OPENGL
 		OpenGL::checkErrors = Options::checkOpenGLErrors;
@@ -510,7 +510,7 @@ int Screen::getCursorLeftBlackBand() const
 void Screen::screenshot(const std::string &filename) const
 {
 	SDL_Surface *screenshot = SDL_AllocSurface(0, getWidth() - getWidth()%4, getHeight(), 24, 0xff, 0xff00, 0xff0000, 0);
-	
+
 	if (useOpenGL())
 	{
 #ifndef __NO_OPENGL

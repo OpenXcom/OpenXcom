@@ -627,7 +627,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 		{
 			BattleUnit *unit = tile->getUnit();
 			if (unit == _unit || unit == missileTarget || unit->isOut()) return false;
-			if (missileTarget && unit != missileTarget && unit->getFaction() == FACTION_HOSTILE) 
+			if (missileTarget && unit != missileTarget && unit->getFaction() == FACTION_HOSTILE)
 				return true;			// AI pathfinding with missiles shouldn't path through their own units
 			if (_unit)
 			{

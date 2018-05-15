@@ -113,7 +113,7 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 
 	_btnKills->setText(tr("STR_COMBAT"));
 	_btnKills->onMouseClick((ActionHandler)&SoldierDiaryPerformanceState::btnKillsToggle);
-	
+
 	_btnMissions->setText(tr("STR_PERFORMANCE"));
 	_btnMissions->onMouseClick((ActionHandler)&SoldierDiaryPerformanceState::btnMissionsToggle);
 
@@ -154,7 +154,7 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 	_lstKillTotals->setColumns(4, 74, 74, 74, 80);
 
 	_lstMissionTotals->setColumns(4, 74, 74, 74, 80);
-	
+
 	_txtMedalName->setText(tr("STR_MEDAL_NAME"));
 
 	_txtMedalLevel->setText(tr("STR_MEDAL_DECOR_LEVEL"));
@@ -275,7 +275,7 @@ void SoldierDiaryPerformanceState::init()
 										tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str(),
 										tr("STR_DIARY_ACCURACY").arg(_soldier->getDiary()->getAccuracy()).c_str());
 		}
-		
+
 	}
 	else if (_display == DIARY_MISSIONS)
 	{

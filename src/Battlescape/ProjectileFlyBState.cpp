@@ -122,7 +122,7 @@ void ProjectileFlyBState::init()
 			_unit->turn();
 		}
 	}
-	
+
 	Tile *endTile = _parent->getSave()->getTile(_action.target);
 	int distance = _parent->getTileEngine()->distance(_action.actor->getPosition(), _action.target);
 	switch (_action.type)
@@ -188,7 +188,7 @@ void ProjectileFlyBState::init()
 		_parent->popState();
 		return;
 	}
-	
+
 	if (_action.type == BA_LAUNCH || (Options::forceFire && (SDL_GetModState() & KMOD_CTRL) != 0 && _parent->getSave()->getSide() == FACTION_PLAYER) || !_parent->getPanicHandled())
 	{
 		// target nothing, targets the middle of the tile
@@ -419,7 +419,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			return false;
 		}
 	}
-	
+
 	if (_action.type != BA_THROW && _action.type != BA_LAUNCH)
 		_unit->getStatistics()->shotsFiredCounter++;
 
@@ -725,7 +725,7 @@ void ProjectileFlyBState::projectileHitUnit(Position pos)
 	if (victim && !victim->isOut())
 	{
 		victim->getStatistics()->hitCounter++;
-		if (_unit->getOriginalFaction() == FACTION_PLAYER && victim->getOriginalFaction() == FACTION_PLAYER) 
+		if (_unit->getOriginalFaction() == FACTION_PLAYER && victim->getOriginalFaction() == FACTION_PLAYER)
 		{
 			victim->getStatistics()->shotByFriendlyCounter++;
 			_unit->getStatistics()->shotFriendlyCounter++;

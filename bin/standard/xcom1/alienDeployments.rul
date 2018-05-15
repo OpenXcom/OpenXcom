@@ -587,7 +587,7 @@ alienDeployments:
           -
             []
           -
-            []            
+            []
       - alienRank: 7
         lowQty: 0
         highQty: 2
@@ -836,7 +836,7 @@ alienDeployments:
     alertBackground: BACK03.SCR
     briefing:
       palette: 2
-      music: GMENBASE    
+      music: GMENBASE
     markerName: STR_TERROR_SITE
     duration: [4, 10]
     despawnPenalty: 1000

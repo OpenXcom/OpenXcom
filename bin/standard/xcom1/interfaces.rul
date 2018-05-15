@@ -649,7 +649,7 @@ interfaces:
       - id: errorPalette
         color: 0     # brown
       - id: errorMessage
-        color: 133   # minty green  
+        color: 133   # minty green
   - type: commendations
     elements:
       - id: palette

@@ -55,14 +55,14 @@ soundDefs: #done: double check explosions.
       - 27
       - 28
       - 31
-      - 37 
+      - 37
     # craft weapon sounds: ajax, dup, cannon, pwt, gauss, plasma
       - 14
       - 15
       - 33
       - 97
       - 37
-      - 18 
+      - 18
     # base defenses: torpedo, gauss, sonic, pwt
       - 13
       - 14
@@ -82,7 +82,7 @@ soundDefs: #done: double check explosions.
     sounds: [48]
 
 transparencyLUTs: #done
-  - colors: 
+  - colors:
       - [  8,  8, 12, 2 ] # "white"
       - [ 16,  8,  0, 2 ] # orange
       - [  0, 12, 12, 2 ] # cyan

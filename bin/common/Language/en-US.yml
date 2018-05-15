@@ -308,7 +308,7 @@ en-US:
   STR_MOUSEWHEEL_SPEED_DESC: "Adjusts the number of lines scrolled in lists with each increment of the mouse wheel."
   STR_DISABLED: "Disabled"
   STR_MAXIMIZE_INFO_SCREENS: "Maximize info screens"
-  STR_MAXIMIZE_INFO_SCREENS_DESC: "Inventory and various other screens will be displayed at full screen, regardless of scale settings."  
+  STR_MAXIMIZE_INFO_SCREENS_DESC: "Inventory and various other screens will be displayed at full screen, regardless of scale settings."
   STR_DIARY: "DIARY"
   STR_KILLED: "KILLED"
   STR_STUNNED: "STUNNED"

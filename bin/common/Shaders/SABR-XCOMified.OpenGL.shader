@@ -70,7 +70,7 @@ vertex: |
         +----+----+----+----+----+----+----+----+----+
              |    |    |    |    |    |    |    |    |  4y
         +----+----+----+----+----+----+----+----+----+
-      */      
+      */
 
       tc = gl_MultiTexCoord0.xy;
 
@@ -79,7 +79,7 @@ vertex: |
       xyp_f1_f2_f3 = tc.xyyy + vec4( 3.0 * x,  -y, 0.0,        y);
       xyp_g1_g2_g3 = tc.xxxy + vec4(      -x, 0.0,   x,  3.0 * y);
       xyp_h1_h2_h3 = tc.xyyy + vec4(-3.0 * x,  -y, 0.0,        y);
-      xyp_a_b_c_d  = tc.xxyy + vec4(-2.0 * x, 2.0  * x, -2.0 * y, 2.0 * y);  
+      xyp_a_b_c_d  = tc.xxyy + vec4(-2.0 * x, 2.0  * x, -2.0 * y, 2.0 * y);
       */
       xyp_1_2_3    = tc.xxxy + vec4(      -x, 0.0,   x, -2.0 * y);
       xyp_6_7_8    = tc.xxxy + vec4(      -x, 0.0,   x,       -y);
@@ -102,8 +102,8 @@ fragment: |
       - tc: coordinate of the texel being processed
       - xyp_[]_[]_[]: a packed coordinate for 3 or 4 areas within the texture
     */
-   
-   
+
+
     varying vec2 tc;
     /*
     varying vec4 xyp_e1_e2_e3;
@@ -120,22 +120,22 @@ fragment: |
     varying vec4 xyp_16_17_18;
     varying vec4 xyp_21_22_23;
 
-    /* Constants 
+    /* Constants
     */
-    
-    // Pallete colors used in exclusion rules    
+
+    // Pallete colors used in exclusion rules
      const vec3 ex1_Yellow = vec3(252.0, 252.0,   0.0) / 255.0;
      const vec3 ex1_Red1   = vec3(192.0,   0.0,   0.0) / 255.0;
      const vec3 ex1_Red2   = vec3(252.0,   0.0,   0.0) / 255.0;
      const vec3 ex1_Cyan1  = vec3(0.0  , 192.0, 192.0) / 255.0;
      const vec3 ex1_Cyan2  = vec3(0.0  , 252.0, 252.0) / 255.0;
      const vec3 ex_Pink1   = vec3(252.0, 164.0, 212.0) / 255.0;
-     const vec3 ex_Pink2   = vec3(192.0, 112.0, 152.0) / 255.0;     
-    
+     const vec3 ex_Pink2   = vec3(192.0, 112.0, 152.0) / 255.0;
+
     // Inequation coefficients for interpolation
     //    Equations are in the form: Ay + Bx = C
     //    45, 30, and 60 denote the angle from x each line the cooeficient variable set builds
-    
+
     const vec4 Ai  = vec4(1.0, -1.0, -1.0,  1.0);
     const vec4 B45 = vec4(1.0,  1.0, -1.0, -1.0);
     const vec4 C45 = vec4(1.5,  0.5, -0.5,  0.5);
@@ -143,45 +143,45 @@ fragment: |
     const vec4 C30 = vec4(1.0,  1.0, -0.5,  0.0);
     const vec4 B60 = vec4(2.0,  0.5, -2.0, -0.5);
     const vec4 C60 = vec4(2.0,  0.0, -1.0,  0.5);
-    
+
     const vec4 M45 = vec4(0.4,  0.4,  0.4,  0.4);
     const vec4 M30 = vec4(0.2,  0.4,  0.2,  0.4);
     const vec4 M60 = M30.yxwz;
     const vec4 Mshift = vec4(0.2);
-    
-    const float coef = 2.0; // Coefficient for weighted edge detection 
-    
+
+    const float coef = 2.0; // Coefficient for weighted edge detection
+
     const vec4 threshold = vec4(43.34); // Threshold for if luminance values are "equal"
-    
+
     const float colorMax = 255.0; // pallete colors only seem to have an effective RGB range of [0 - 252.0], should we use 252 or 255 as mult for lum?
     // Conversion from RGB to Luminance (most accurate way I found so far)
     const vec3 lum = vec3(0.241, 0.691, 0.068) * colorMax * colorMax; // openxcom uses original color pallete converted to RGB color, which is then converted to percentage [0.0 - 1.0]
-    
+
     /* Helper functions
     */
-    
-    
+
+
     bvec4 _and_(bvec4 A, bvec4 B) { // Performs same logic operation as && for vectors
       return bvec4(A.x && B.x, A.y && B.y, A.z && B.z, A.w && B.w);
     }
-    
+
     bvec4 _or_(bvec4 A, bvec4 B) { // Performs same logic operation as || for vectors
       return bvec4(A.x || B.x, A.y || B.y, A.z || B.z, A.w || B.w);
     }
 
-    float get_lum(vec3 v) { // returns approximated luminance value of a color      
+    float get_lum(vec3 v) { // returns approximated luminance value of a color
       vec3 temp = vec3(v.x * v.x * lum.x, v.y * v.y * lum.y, v.z * v.z * lum.z);
-      return sqrt(temp.x + temp.y + temp.z);      
+      return sqrt(temp.x + temp.y + temp.z);
     }
-        
+
     vec4 RGBtoLum4(vec3 v0, vec3 v1, vec3 v2, vec3 v3) { // returns approximated luminance value of 4 colors
       return vec4(get_lum(v0), get_lum(v1), get_lum(v2), get_lum(v3));
-    }   
+    }
 
     vec4 getLumDifference(vec4 A, vec4 B) { // Gets the difference between 2 4-value luminance vectors
       return abs(A - B);
     }
-    
+
     bvec4 lumClose2(vec4 A, vec4 B) { // Determines if 2 4-value luminance vectors are "equal" based on threshold
       return lessThan(getLumDifference(A, B), threshold);
     }
@@ -189,19 +189,19 @@ fragment: |
     vec4 lum_wd(vec4 a, vec4 b, vec4 c, vec4 d, vec4 e, vec4 f, vec4 g, vec4 h) {
       return getLumDifference(a, b) + getLumDifference(a, c) + getLumDifference(d, e) + getLumDifference(d, f) + 4.0 * getLumDifference(g, h);
     }
-        
+
     bool colorsEqual2(vec3 A, vec3 B) { //returns true if the two RGB color vectors are equal
          return all(equal(A, B));
     }
-  
+
     bool colors3_eq(vec3 A, vec3 B, vec3 C) { //returns true if the four RGB color vectors are equal
         return colorsEqual2(A, B) && colorsEqual2(B, C);
     }
-    
+
     bool colorsEqual4(vec3 A, vec3 B, vec3 C, vec3 D) {  //returns true if the four RGB color vectors are equal
         return colors3_eq(A, B, C) && colorsEqual2(C, D);
     }
-    
+
     //bool colorsEqual5(vec3 A, vec3 B, vec3 C, vec3 D, vec3 E) { //returns true if the four RGB color vectors are equal
     //    return colors3_eq(A, B, C) && colors3_eq(C, D, E);
     //}
@@ -213,28 +213,28 @@ fragment: |
 
     void main() {
       // Get mask values by performing texture lookup with the uniform sampler
-    
+
       /*
       vec3 Ph1 = texture2D(rubyTexture, xyp_h1_h2_h3.xy).rgb;
       vec3 Ph2 = texture2D(rubyTexture, xyp_h1_h2_h3.xz).rgb;
       vec3 Ph3 = texture2D(rubyTexture, xyp_h1_h2_h3.xw).rgb;
-      
+
       vec3 Pg1 = texture2D(rubyTexture, xyp_g1_g2_g3.xw).rgb;
       vec3 Pg2 = texture2D(rubyTexture, xyp_g1_g2_g3.yw).rgb;
       vec3 Pg3 = texture2D(rubyTexture, xyp_g1_g2_g3.zw).rgb;
-      
+
       vec3 Pf1 = texture2D(rubyTexture, xyp_f1_f2_f3.xy).rgb;
       vec3 Pf2 = texture2D(rubyTexture, xyp_f1_f2_f3.xz).rgb;
       vec3 Pf3 = texture2D(rubyTexture, xyp_f1_f2_f3.xw).rgb;
-      
+
       vec3 Pe1 = texture2D(rubyTexture, xyp_e1_e2_e3.xw).rgb;
       vec3 Pe2 = texture2D(rubyTexture, xyp_e1_e2_e3.yw).rgb;
       vec3 Pe3 = texture2D(rubyTexture, xyp_e1_e2_e3.zw).rgb;
-      
-      vec3 Pa  = texture2D(rubyTexture, xyp_a_b_c_d.xz ).rgb; 
+
+      vec3 Pa  = texture2D(rubyTexture, xyp_a_b_c_d.xz ).rgb;
       vec3 Pb  = texture2D(rubyTexture, xyp_a_b_c_d.yz ).rgb;
       vec3 Pc  = texture2D(rubyTexture, xyp_a_b_c_d.xw ).rgb;
-      vec3 Pd  = texture2D(rubyTexture, xyp_a_b_c_d.yw ).rgb;   
+      vec3 Pd  = texture2D(rubyTexture, xyp_a_b_c_d.yw ).rgb;
       */
       vec3 P1  = texture2D(rubyTexture, xyp_1_2_3.xw   ).rgb;
       vec3 P2  = texture2D(rubyTexture, xyp_1_2_3.yw   ).rgb;
@@ -251,19 +251,19 @@ fragment: |
       vec3 P16 = texture2D(rubyTexture, xyp_16_17_18.xw).rgb;
       vec3 P17 = texture2D(rubyTexture, xyp_16_17_18.yw).rgb;
       vec3 P18 = texture2D(rubyTexture, xyp_16_17_18.zw).rgb;
-      
+
       vec3 P21 = texture2D(rubyTexture, xyp_21_22_23.xw).rgb;
       vec3 P22 = texture2D(rubyTexture, xyp_21_22_23.yw).rgb;
       vec3 P23 = texture2D(rubyTexture, xyp_21_22_23.zw).rgb;
-      
+
       vec3 P5  = texture2D(rubyTexture, xyp_5_10_15.xy ).rgb;
       vec3 P10 = texture2D(rubyTexture, xyp_5_10_15.xz ).rgb;
       vec3 P15 = texture2D(rubyTexture, xyp_5_10_15.xw ).rgb;
 
       vec3 P9  = texture2D(rubyTexture, xyp_9_14_9.xy  ).rgb;
       vec3 P14 = texture2D(rubyTexture, xyp_9_14_9.xz  ).rgb;
-      vec3 P19 = texture2D(rubyTexture, xyp_9_14_9.xw  ).rgb;      
-      
+      vec3 P19 = texture2D(rubyTexture, xyp_9_14_9.xw  ).rgb;
+
       /* Mask for algorhithm
          -4x  -3x  -2x   -x    0    x   2x   3x   4x
         +----+----+----+----+----+----+----+----+----+
@@ -286,7 +286,7 @@ fragment: |
              |    |    |    |    |    |    |    |    |  4y
         +----+----+----+----+----+----+----+----+----+
       */
-      
+
       // Store luminance values of each point in groups of 4
       // so that we may operate on all four corners at once
       vec4 p7  = RGBtoLum4(P7,  P11, P17, P13);   // 45 - tight - 7 11 17 13
@@ -298,7 +298,7 @@ fragment: |
       vec4 p16 = p8.zwxy;                      // 90 - tight - 16 18 8  6 - duplicate
       vec4 p17 = p7.zwxy;                      // 45 - tight - 17 13 7 11 - duplicate
       vec4 p18 = p8.wxyz;                      // 90 - tight - 18  8 6 16 - duplicate
-      vec4 p19 = RGBtoLum4(P19, P3,  P5,  P21);   // 36 - wide  - 19  3 5 21 
+      vec4 p19 = RGBtoLum4(P19, P3,  P5,  P21);   // 36 - wide  - 19  3 5 21
       vec4 p22 = p14.wxyz;                     // 45 - wide  - 22 14 2 10 - duplicate
       vec4 p23 = RGBtoLum4(P23, P9,  P1,  P15);   // 36 - wide  - 23 9  1 15
 
@@ -366,22 +366,22 @@ fragment: |
         +----+----+----+----+----+----+----+----+----+
              |    |    |    |    |    |    |    |    |  4y
         +----+----+----+----+----+----+----+----+----+
-      */      
-      
+      */
+
       // XCom Excuclsion Rule 1 = Geoscape: cities, bases, terror sites, ufos
- 
+
       bool exclusionRule = !(((all(equal(P6 , ex1_Cyan1))  || all(equal(P6 , ex1_Cyan2))) && any(notEqual(P12, P6)) && (colorsEqual4(P6, P8, P16, P18))) || // Gooey base center
-                              (all(equal(P12, ex1_Yellow)) && all(equal(P7, ex1_Red1))    &&  all(equal(P7, P17)))  || // juicy yellow center      
-                              (all(equal(P12, ex1_Red1))   || all(equal(P12, ex1_Red2)))  ||   // all red (cities, terror sites, ufos)                           
-                              (all(equal(P17, ex1_Red1))   || all(equal(P17, ex1_Red2)))  || // above red top                                                
+                              (all(equal(P12, ex1_Yellow)) && all(equal(P7, ex1_Red1))    &&  all(equal(P7, P17)))  || // juicy yellow center
+                              (all(equal(P12, ex1_Red1))   || all(equal(P12, ex1_Red2)))  ||   // all red (cities, terror sites, ufos)
+                              (all(equal(P17, ex1_Red1))   || all(equal(P17, ex1_Red2)))  || // above red top
                               (all(equal(P7 , ex1_Red1))   || all(equal(P7, ex1_Red2)))   || // below red bottom (
-                              (all(equal(P13, ex1_Red1))   || all(equal(P13, ex1_Red2)))  || // left of red 
-                              (all(equal(P11, ex1_Red1))   || all(equal(P11, ex1_Red2)))  || // right of red 
-                              (all(equal(P12, ex1_Cyan1))  || all(equal(P12, ex1_Cyan2))) || // base 
+                              (all(equal(P13, ex1_Red1))   || all(equal(P13, ex1_Red2)))  || // left of red
+                              (all(equal(P11, ex1_Red1))   || all(equal(P11, ex1_Red2)))  || // right of red
+                              (all(equal(P12, ex1_Cyan1))  || all(equal(P12, ex1_Cyan2))) || // base
                               (all(equal(P11, ex_Pink1))   || all(equal(P11, ex_Pink2))   || all(equal(P13 , ex_Pink1)) || all(equal(P13, ex_Pink2))) || // terror site pink (all around)
-                              (all(equal(P7 , ex_Pink1))   || all(equal(P7 , ex_Pink2))   || all(equal(P17 , ex_Pink1)) || all(equal(P17, ex_Pink2))) 
+                              (all(equal(P7 , ex_Pink1))   || all(equal(P7 , ex_Pink2))   || all(equal(P17 , ex_Pink1)) || all(equal(P17, ex_Pink2)))
                             );
-                            
+
       // Determine the mix amounts by combining the final rule result and correspondingix amount for the rule in each corner
       vec4 mac = (final36 * max(ma30, ma60) + final30 * ma30 + final60 * ma60 + final45 * ma45 + finalrn * marn) * float(exclusionRule);
 
@@ -392,7 +392,7 @@ fragment: |
       res1 = mix(res1, mix(P13, P17, px.x), mac.x);
       res1 = mix(res1, mix(P7, P13, px.y), mac.y);
       res1 = mix(res1, mix(P11, P7, px.z), mac.z);
-      res1 = mix(res1, mix(P17, P11, px.w), mac.w);    
+      res1 = mix(res1, mix(P17, P11, px.w), mac.w);
 
       vec3 res2 = P12;
       res2 = mix(res2, mix(P17, P11, px.w), mac.w);

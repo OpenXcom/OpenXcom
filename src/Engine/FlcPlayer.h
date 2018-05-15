@@ -86,7 +86,7 @@ private:
 		AudioBuffer *loadingBuffer;
 		AudioBuffer *playingBuffer;
 		SDL_sem *sharedLock;
-		
+
 	}AudioData;
 
 	AudioData _audioData;

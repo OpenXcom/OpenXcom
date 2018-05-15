@@ -1,6 +1,6 @@
 #<!--
 #   4xGLSLHqFilter shader
-#   
+#
 #   Copyright (C) 2005 guest(r) - guest.r@gmail.com
 #
 #   This program is free software; you can redistribute it and/or
@@ -92,9 +92,9 @@ fragment: |
                 w3 = k*dot(abs(s1-c)+abs(s3-c),dt)/(0.125*dot(s1+s3,dt)+lum_add);
                 w4 = k*dot(abs(s2-c)+abs(s4-c),dt)/(0.125*dot(s2+s4,dt)+lum_add);
 
-                w1 = clamp(w1+mx,min_w,max_w); 
+                w1 = clamp(w1+mx,min_w,max_w);
                 w2 = clamp(w2+mx,min_w,max_w);
-                w3 = clamp(w3+mx,min_w,max_w); 
+                w3 = clamp(w3+mx,min_w,max_w);
                 w4 = clamp(w4+mx,min_w,max_w);
 
                 gl_FragColor.xyz=(w1*(i1+i3)+w2*(i2+i4)+w3*(s1+s3)+w4*(s2+s4)+c)/(2.0*(w1+w2+w3+w4)+1.0);

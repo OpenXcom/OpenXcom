@@ -265,7 +265,7 @@ void ScrollBar::drawThumb()
 	_thumbRect.y = (int)floor(_list->getScroll() * scale);
 	_thumbRect.w = _thumb->getWidth();
 	_thumbRect.h = (int)ceil(_list->getVisibleRows() * scale);
-	
+
 	// Draw base button
 	_thumb->clear();
 	_thumb->lock();

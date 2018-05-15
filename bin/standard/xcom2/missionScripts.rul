@@ -40,8 +40,8 @@ missionScripts: #done
       0:
         STR_AQUATOID: 100
     startDelay: 120
-    
-    
+
+
   - type: artifacts
     label: 1
     missionWeights:
@@ -58,9 +58,9 @@ missionScripts: #done
     firstMonth: 6
     executionOdds: 50
     startDelay: 0
-    
-    
-    
+
+
+
   - type: shipTerror
     conditionals: [-1]
     label: 2
@@ -77,8 +77,8 @@ missionScripts: #done
     firstMonth: 3
     executionOdds: 60
     startDelay: 0
-    
-    
+
+
   - type: recurringTerror
     conditionals: [-1, -2]
     missionWeights:
@@ -98,10 +98,10 @@ missionScripts: #done
         STR_CARRIBEAN: 10
     useTable: false
     startDelay: 150
-    
-    
-    
-    
+
+
+
+
 
 
   - type: recon
@@ -171,4 +171,3 @@ missionScripts: #done
     useTable: false
     conditionals: [-3, -4, -5, -6, -7]
     startDelay: 150
-    

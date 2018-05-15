@@ -67,7 +67,7 @@ void UnitPanicBState::think()
 			BattleAction ba;
 			ba.actor = _unit;
 			ba.weapon = _unit->getMainHandWeapon();
-			if (ba.weapon && (ba.weapon->getRules()->getTUSnap() || ba.weapon->getRules()->getTUAuto()) 
+			if (ba.weapon && (ba.weapon->getRules()->getTUSnap() || ba.weapon->getRules()->getTUAuto())
 				&& _parent->getSave()->isItemUsable(ba.weapon->getRules()))
 			{
 				// make autoshots if possible.
@@ -75,7 +75,7 @@ void UnitPanicBState::think()
 					ba.type = BA_AUTOSHOT;
 				else
 					ba.type = BA_SNAPSHOT;
-				
+
 				ba.TU = _unit->getActionTUs(ba.type, ba.weapon);
 
 				if (_unit->getTimeUnits() >= ba.TU)

@@ -96,10 +96,10 @@ void CraftWeaponProjectile::move()
 		if ((_distanceCovered / 8) < getRange() && ((_distanceCovered + _speed)/ 8) >= getRange())
 			positionChange = getRange() * 8 - _distanceCovered;
 
-		// Check if projectile passed its maximum range on previous tick. 
+		// Check if projectile passed its maximum range on previous tick.
 		if ((_distanceCovered / 8) >= getRange())
 			setMissed(true);
-		
+
 		if (_direction == D_UP)
 		{
 			_currentPosition += positionChange;
@@ -108,7 +108,7 @@ void CraftWeaponProjectile::move()
 		{
 			_currentPosition -= positionChange;
 		}
-		
+
 		_distanceCovered += positionChange;
 	}
 	else if (_globalType == CWPGT_BEAM)
