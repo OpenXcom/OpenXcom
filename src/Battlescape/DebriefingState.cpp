@@ -1010,7 +1010,12 @@ void DebriefingState::prepareDebriefing()
 	{
 		if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getStatus() != STATUS_DEAD)
 		{
-			if ((*j)->getStatus() == STATUS_UNCONSCIOUS || (*j)->getFaction() == FACTION_HOSTILE)
+			if ((*j)->getStatus() == STATUS_UNCONSCIOUS)
+			{
+				playersUnconscious++;
+				battle->removeUnconsciousBodyItem(*j);
+			}
+			else if ((*j)->getFaction() == FACTION_HOSTILE)
 			{
 				playersUnconscious++;
 			}
