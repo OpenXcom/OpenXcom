@@ -19,8 +19,10 @@ endif
 
 icondir = $(datadir)/pixmaps
 icon_DATA = \
-	res/openxcom.svg \
-	res/openxcom.png
+	res/openxcom_wide.svg \
+	res/openxcom_wide.png \
+	res/openxcom_block.svg \
+	res/openxcom_block.png
 
 desktopdir = $(datadir)/applications
 desktop_DATA = res/linux/openxcom.desktop

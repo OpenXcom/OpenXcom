@@ -51,7 +51,7 @@ PROJECT_BRIEF          = "Open-source clone of the original X-Com"
 # and the maximum width should not exceed 200 pixels. Doxygen will copy the logo
 # to the output directory.
 
-PROJECT_LOGO           = @top_srcdir@/res/openxcom.png
+PROJECT_LOGO           = @top_srcdir@/res/openxcom_wide.png
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) path
 # into which the generated documentation will be written. If a relative path is
