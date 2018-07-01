@@ -118,7 +118,7 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	_slrUiVolume->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
 
 	std::vector<std::wstring> musicText, soundText, videoText;
-	/* MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI */
+	/* MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_GM, MUSIC_MIDI */
 	musicText.push_back(tr("STR_PREFERRED_FORMAT_AUTO"));
 	musicText.push_back(L"FLAC");
 	musicText.push_back(L"OGG");
@@ -126,7 +126,8 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	musicText.push_back(L"MOD");
 	musicText.push_back(L"WAV");
 	musicText.push_back(L"Adlib");
-	musicText.push_back(L"MIDI");
+	musicText.push_back(L"MIDI (GM.CAT)");
+	musicText.push_back(L"MIDI (MID files)");
 
 	soundText.push_back(tr("STR_PREFERRED_FORMAT_AUTO"));
 	soundText.push_back(L"1.4");

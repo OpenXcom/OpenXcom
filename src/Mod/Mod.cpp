@@ -3011,7 +3011,7 @@ void Mod::loadExtraResources()
 		}
 
 		// Try the preferred format first, otherwise use the default priority
-		MusicFormat priority[] = { Options::preferredMusic, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI };
+		MusicFormat priority[] = { Options::preferredMusic, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_GM, MUSIC_MIDI };
 		for (std::map<std::string, RuleMusic *>::const_iterator i = _musicDefs.begin(); i != _musicDefs.end(); ++i)
 		{
 			Music *music = 0;
@@ -3376,8 +3376,8 @@ bool Mod::isImageFile(std::string extension) const
  */
 Music *Mod::loadMusic(MusicFormat fmt, const std::string &file, int track, float volume, CatFile *adlibcat, CatFile *aintrocat, GMCatFile *gmcat) const
 {
-	/* MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI */
-	static const std::string exts[] = { "", ".flac", ".ogg", ".mp3", ".mod", ".wav", "", ".mid" };
+	/* MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_GM, MUSIC_MIDI */
+	static const std::string exts[] = { "", ".flac", ".ogg", ".mp3", ".mod", ".wav", "", "", ".mid" };
 	Music *music = 0;
 	std::set<std::string> soundContents = FileMap::getVFolderContents("SOUND");
 	try
@@ -3411,23 +3411,14 @@ Music *Mod::loadMusic(MusicFormat fmt, const std::string &file, int track, float
 				}
 			}
 		}
-		// Try MIDI music
-		else if (fmt == MUSIC_MIDI)
+		// Try MIDI music (from GM.CAT)
+		else if (fmt == MUSIC_GM)
 		{
 			// DOS MIDI
 			if (gmcat && track < gmcat->getAmount())
 			{
 				music = gmcat->loadMIDI(track);
-			}
-			// Windows MIDI
-			else
-			{
-				if (soundContents.find(fname) != soundContents.end())
-				{
-					music = new Music();
-					music->load(FileMap::getFilePath("SOUND/" + fname));
-				}
-			}
+			}			
 		}
 		// Try digital tracks
 		else
