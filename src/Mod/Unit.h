@@ -24,6 +24,7 @@
 namespace OpenXcom
 {
 enum SpecialAbility { SPECAB_NONE, SPECAB_EXPLODEONDEATH, SPECAB_BURNFLOOR, SPECAB_BURN_AND_EXPLODE };
+enum Capturability { CAP_NOT_CAPTURABLE, CAP_ALWAYS_CAPTURABLE, CAP_DEFAULT };
 /**
  * This struct holds some plain unit attribute data together.
  */
@@ -71,6 +72,7 @@ private:
 	bool _livingWeapon;
 	std::string _meleeWeapon, _psiWeapon;
 	std::vector<std::vector<std::string> > _builtInWeapons;
+	Capturability _capturable;
 public:
 	/// Creates a blank unit ruleset.
 	Unit(const std::string &type);
@@ -120,6 +122,8 @@ public:
 	std::string getPsiWeapon() const;
 	/// Gets a vector of integrated items this unit has available.
 	const std::vector<std::vector<std::string> > &getBuiltInWeapons() const;
+	/// Gets whether the alien can be captured alive.
+	Capturability getCapturable() const;
 };
 
 }
