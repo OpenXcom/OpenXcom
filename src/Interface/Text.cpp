@@ -398,7 +398,7 @@ void Text::processText()
 			if (c == str->size())
 				break;
 			// \x02 marks start of small text
-			else if ((*str)[c] == 2)
+			else if ((*str)[c] == Font::TOK_BREAK_SMALLLINE)
 				font = _small;
 		}
 		// Keep track of spaces for wordwrapping
@@ -415,7 +415,7 @@ void Text::processText()
 			start = false;
 		}
 		// Keep track of the width of the last line and word
-		else if ((*str)[c] != 1)
+		else if ((*str)[c] != Font::TOK_FLIP_COLORS)
 		{
 			if (font->getChar((*str)[c]) == 0)
 			{
@@ -463,7 +463,7 @@ void Text::processText()
 				if (_indent)
 				{
 					str->insert(indentLocation+1, L" \xA0");
-					width += font->getCharSize(L' ').w + font->getCharSize(L'\xA0').w;
+					width += font->getCharSize(L' ').w + font->getCharSize(Font::TOK_NBSP).w;
 				}
 
 				_lineWidth.push_back(width);
@@ -629,12 +629,12 @@ void Text::draw()
 			line++;
 			y += font->getCharSize(*c).h;
 			x = getLineX(line);
-			if (*c == L'\x02')
+			if (*c == Font::TOK_BREAK_SMALLLINE)
 			{
 				font = _small;
 			}
 		}
-		else if (*c == L'\x01')
+		else if (*c == Font::TOK_FLIP_COLORS)
 		{
 			color = (color == _color ? _color2 : _color);
 		}

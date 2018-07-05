@@ -51,18 +51,23 @@ private:
 	/// Determines the size and position of each character in the font.
 	void init(size_t index, const std::wstring &str);
 public:
+	/* Special text tokens */
+	static const wchar_t TOK_BREAK_SMALLLINE = 2;		// line break and change to small font
+	static const wchar_t TOK_FLIP_COLORS = 1;			// flip color scheme
+	static const wchar_t TOK_NBSP = 0xA0;				// non-breaking space
+
 	/// Creates a blank font.
 	Font();
 	/// Cleans up the font.
 	~Font();
 	/// Checks if a character is a linebreak.
-	static inline bool isLinebreak(wchar_t c) { return (c == L'\n' || c == L'\x02'); }
+	static inline bool isLinebreak(wchar_t c) { return (c == L'\n' || c == TOK_BREAK_SMALLLINE); }
 	/// Checks if a character is a blank space (includes non-breaking spaces).
-	static inline bool isSpace(wchar_t c) { return (c == L' ' || c == L'\xA0'); }
+	static inline bool isSpace(wchar_t c) { return (c == L' ' || c == TOK_NBSP); }
 	/// Checks if a character is a word separator.
 	static inline bool isSeparator(wchar_t c) { return (c == L'-' || c == '/'); }
 	/// Checks if a character is a non-breaking space.
-	static inline bool isNonBreakableSpace(wchar_t c) { return (c == L'\xA0'); }
+	static inline bool isNonBreakableSpace(wchar_t c) { return (c == TOK_NBSP); }
 	/// Loads the font from YAML.
 	void load(const YAML::Node& node);
 	/// Generate the terminal font.
