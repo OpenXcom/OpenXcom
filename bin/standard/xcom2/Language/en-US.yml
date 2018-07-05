@@ -180,7 +180,7 @@ en-US:
   STR_INTRO_15: "The Aliens are ruthless in their efficiency...."
   STR_INTRO_16: "...unerring in their accuracy"
   STR_INTRO_17: "'Barracuda Zero One to base' - 'approaching what's left of the Hyperion'."
-  STR_INTRO_18: "'Decelerating'.{NEWLINE}'Two meters’{NEWLINE}'One meter'{NEWLINE}'All aquanauts prepare for immediate deployment'."
+  STR_INTRO_18: "'Decelerating'.{NEWLINE}'Two meters'{NEWLINE}'One meter'{NEWLINE}'All aquanauts prepare for immediate deployment'."
   STR_INTRO_19: "...........'Airlock cleared'...'approaching wreckage'.{NEWLINE}'Holy!'{NEWLINE}'Are you picking up those creatures on my suit cam?'"
 
   STR_GAMEOVER_1: "We have failed, the Aliens have annihilated our last hopes of salvation.{NEWLINE}X-Com is destroyed and the Earth is laid at the feet of the ancient enemy."
