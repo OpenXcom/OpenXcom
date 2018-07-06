@@ -126,8 +126,8 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	musicText.push_back(L"MOD");
 	musicText.push_back(L"WAV");
 	musicText.push_back(L"Adlib");
-	musicText.push_back(L"MIDI (GM.CAT)");
-	musicText.push_back(L"MIDI (MID files)");
+	musicText.push_back(L"GM");
+	musicText.push_back(L"MIDI");
 
 	soundText.push_back(tr("STR_PREFERRED_FORMAT_AUTO"));
 	soundText.push_back(L"1.4");
