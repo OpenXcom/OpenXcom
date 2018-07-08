@@ -27,7 +27,7 @@ namespace OpenXcom
  * Creates a certain type of unit.
  * @param type String defining the type.
  */
-Unit::Unit(const std::string &type) : _type(type), _standHeight(0), _kneelHeight(0), _floatHeight(0), _value(0), _aggroSound(-1), _moveSound(-1), _intelligence(0), _aggression(0), _energyRecovery(30), _specab(SPECAB_NONE), _livingWeapon(false), _psiWeapon("ALIEN_PSI_WEAPON")
+Unit::Unit(const std::string &type) : _type(type), _standHeight(0), _kneelHeight(0), _floatHeight(0), _value(0), _aggroSound(-1), _moveSound(-1), _intelligence(0), _aggression(0), _energyRecovery(30), _specab(SPECAB_NONE), _livingWeapon(false), _psiWeapon("ALIEN_PSI_WEAPON"), _capturable(true)
 {
 }
 
@@ -67,6 +67,7 @@ void Unit::load(const YAML::Node &node, Mod *mod)
 	_livingWeapon = node["livingWeapon"].as<bool>(_livingWeapon);
 	_meleeWeapon = node["meleeWeapon"].as<std::string>(_meleeWeapon);
 	_psiWeapon = node["psiWeapon"].as<std::string>(_psiWeapon);
+	_capturable = node["capturable"].as<bool>(_capturable);
 	_builtInWeapons = node["builtInWeaponSets"].as<std::vector<std::vector<std::string> > >(_builtInWeapons);
 	if (node["builtInWeapons"])
 	{
@@ -291,6 +292,15 @@ std::string Unit::getPsiWeapon() const
 const std::vector<std::vector<std::string> > &Unit::getBuiltInWeapons() const
 {
 	return _builtInWeapons;
+}
+
+/**
+* Gets whether the alien can be captured alive.
+* @return a value determining whether the alien can be captured alive.
+*/
+bool Unit::getCapturable() const
+{
+	return _capturable;
 }
 
 }

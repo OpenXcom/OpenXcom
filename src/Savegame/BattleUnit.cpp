@@ -54,7 +54,7 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) :
 	_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0),
 	_motionPoints(0), _kills(0), _hitByFire(false), _hitByAnything(false), _moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
 	_statistics(), _murdererId(0), _mindControllerID(0), _fatalShotSide(SIDE_FRONT), _fatalShotBodyPart(BODYPART_HEAD),
-	_geoscapeSoldier(soldier), _unitRules(0), _rankInt(0), _turretType(-1), _hidingForTurn(false), _respawn(false)
+	_geoscapeSoldier(soldier), _unitRules(0), _rankInt(0), _turretType(-1), _hidingForTurn(false), _respawn(false), _capturable(true)
 {
 	_name = soldier->getName(true);
 	_id = soldier->getId();
@@ -187,6 +187,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, St
 	_spawnUnit = unit->getSpawnUnit();
 	_value = unit->getValue();
 	_faceDirection = -1;
+	_capturable = unit->getCapturable();
 
 	_movementType = _armor->getMovementType();
 	if (_movementType == MT_FLOAT)
@@ -3285,6 +3286,14 @@ bool BattleUnit::getHitState()
 void BattleUnit::resetHitState()
 {
 	_hitByAnything = false;
+}
+
+/**
+ * Gets whether this unit can be captured alive (applies to aliens).
+ */
+bool BattleUnit::getCapturable() const
+{
+	return _capturable;
 }
 
 }
