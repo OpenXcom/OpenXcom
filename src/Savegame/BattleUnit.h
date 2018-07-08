@@ -128,7 +128,7 @@ private:
 	bool _hidingForTurn, _floorAbove, _respawn;
 	MovementType _movementType;
 	std::vector<std::pair<Uint8, Uint8> > _recolor;
-	Capturability _capturable;
+	bool _capturable;
 
 	/// Helper function initing recolor vector.
 	void setRecolor(int basicLook, int utileLook, int rankLook);
@@ -504,7 +504,7 @@ public:
 	/// reset the unit hit state.
 	void resetHitState();
 	/// Gets whether this unit can be captured alive (applies to aliens).
-	bool isCapturable() const;
+	bool getCapturable() const;
 };
 
 }

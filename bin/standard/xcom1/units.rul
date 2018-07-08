@@ -307,6 +307,7 @@ units:
     energyRecovery: 50
     specab: 1
     livingWeapon: true
+    capturable: false
   - type: STR_FLOATER_SOLDIER
     race: STR_FLOATER
     rank: STR_LIVE_SOLDIER
@@ -829,6 +830,7 @@ units:
     aggression: 1
     energyRecovery: 50
     livingWeapon: true
+    capturable: false
   - type: STR_ZOMBIE
     race: STR_ZOMBIE
     rank: STR_LIVE_TERRORIST

@@ -211,7 +211,7 @@ void UnitDieBState::think()
 		{
 			playDeathSound();
 		}
-		if (_unit->getStatus() == STATUS_UNCONSCIOUS && !_unit->isCapturable())
+		if (_unit->getStatus() == STATUS_UNCONSCIOUS && !_unit->getCapturable())
 		{
 			_unit->instaKill();
 		}
