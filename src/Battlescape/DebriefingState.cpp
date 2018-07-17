@@ -1273,6 +1273,7 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
+	bool lostCraft = false;
 	if (craft != 0 && ((playersInExitArea == 0 && aborted) || (playersSurvived == 0)))
 	{
 		addStat("STR_XCOM_CRAFT_LOST", 1, -craft->getRules()->getScore());
@@ -1281,8 +1282,8 @@ void DebriefingState::prepareDebriefing()
 		// all vehicle object in the craft is also referenced by base->getVehicles() !!)
 		delete craft;
 		craft = 0; // To avoid a crash down there!!
+		lostCraft = true;
 		base->getCrafts()->erase(craftIterator);
-		_txtTitle->setText(tr("STR_CRAFT_IS_LOST"));
 		playersSurvived = 0; // assuming you aborted and left everyone behind
 		success = false;
 	}
@@ -1375,7 +1376,11 @@ void DebriefingState::prepareDebriefing()
 	}
 	else
 	{
-		if (target == "STR_BASE")
+		if (lostCraft)
+		{
+			_txtTitle->setText(tr("STR_CRAFT_IS_LOST"));
+		}
+		else if (target == "STR_BASE")
 		{
 			_txtTitle->setText(tr("STR_BASE_IS_LOST"));
 			_destroyBase = true;
