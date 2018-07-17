@@ -93,9 +93,9 @@ CraftInfoState::CraftInfoState(Base *base, size_t craftId) : _base(base), _craft
 	add(_txtDamage, "text1", "craftInfo");
 	add(_txtFuel, "text1", "craftInfo");
 	add(_txtW1Name, "text2", "craftInfo");
-	add(_txtW1Ammo, "text2", "craftInfo");
+	add(_txtW1Ammo, "text3", "craftInfo");
 	add(_txtW2Name, "text2", "craftInfo");
-	add(_txtW2Ammo, "text2", "craftInfo");
+	add(_txtW2Ammo, "text3", "craftInfo");
 	add(_sprite);
 	add(_weapon1);
 	add(_weapon2);

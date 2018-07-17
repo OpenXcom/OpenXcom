@@ -1231,6 +1231,8 @@ interfaces:
         color: 218   # blue
         color2: 208  # white
       - id: text2
+        color: 213   # gold
+      - id: text3
         color: 218   # blue
         color2: 213  # gold
       - id: button
