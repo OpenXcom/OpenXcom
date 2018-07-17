@@ -489,7 +489,6 @@ void BattlescapeGenerator::nextStage()
 	_save->getTileEngine()->calculateSunShading();
 	_save->getTileEngine()->calculateTerrainLighting();
 	_save->getTileEngine()->calculateUnitLighting();
-	_save->getTileEngine()->recalculateFOV();
 }
 
 /**
@@ -601,7 +600,6 @@ void BattlescapeGenerator::run()
 	_save->getTileEngine()->calculateSunShading();
 	_save->getTileEngine()->calculateTerrainLighting();
 	_save->getTileEngine()->calculateUnitLighting();
-	_save->getTileEngine()->recalculateFOV();
 }
 
 /**
