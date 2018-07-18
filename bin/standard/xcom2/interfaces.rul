@@ -1262,7 +1262,7 @@ interfaces: #done
         color: 1
         color2: 244
       - id: text2
-        color: 244
+        color: 1
       - id: text3
         color: 1
         color2: 244
