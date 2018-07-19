@@ -144,7 +144,7 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 	_lstItems->onRightArrowRelease((ActionHandler)&SellState::lstItemsRightArrowRelease);
 	_lstItems->onRightArrowClick((ActionHandler)&SellState::lstItemsRightArrowClick);
 	_lstItems->onMousePress((ActionHandler)&SellState::lstItemsMousePress);
-	
+
 	_cats.push_back("STR_ALL_ITEMS");
 
 	const std::vector<std::string> &cw = _game->getMod()->getCraftWeaponsList();

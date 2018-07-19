@@ -2880,7 +2880,7 @@ void BattleUnit::adjustStats(const StatAdjustment &adjustment)
 	_stats.psiStrength += adjustment.statGrowth.psiStrength * adjustment.growthMultiplier * _stats.psiStrength / 100;
 	_stats.psiSkill += adjustment.statGrowth.psiSkill * adjustment.growthMultiplier * _stats.psiSkill / 100;
 	_stats.melee += adjustment.statGrowth.melee * adjustment.growthMultiplier * _stats.melee / 100;
-	
+
 	_stats.firing *= adjustment.aimAndArmorMultiplier;
 	_maxArmor[0] *= adjustment.aimAndArmorMultiplier;
 	_maxArmor[1] *= adjustment.aimAndArmorMultiplier;

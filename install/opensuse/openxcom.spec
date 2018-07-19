@@ -14,15 +14,15 @@
 Name:           openxcom
 Version:        1.0.0
 Release:        0
-Group:          Amusements/Games/Strategy/Turn Based 
+Group:          Amusements/Games/Strategy/Turn Based
 License:        GPL-3.0
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 URL:            https://openxcom.org/
 Source0:        %{name}-%{version}.tar.gz
 Summary:        Open-source clone of UFO: Enemy Unknown
-BuildRequires:  cmake 
-BuildRequires:  gcc-c++ 
-BuildRequires:  gcc 
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  gcc
 BuildRequires:  fdupes
 BuildRequires:	pkg-config
 BuildRequires:	libSDL-devel

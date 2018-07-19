@@ -1644,7 +1644,7 @@ void DogfightState::setMinimized(const bool minimized)
 	_minimized = minimized;
 	_btnMinimizedIcon->setVisible(minimized);
 	_txtInterceptionNumber->setVisible(minimized);
-	
+
 	// set these to the opposite of the incoming minimized state
 	_window->setVisible(!minimized);
 	_btnStandoff->setVisible(!minimized);

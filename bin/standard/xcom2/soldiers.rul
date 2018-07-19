@@ -48,7 +48,7 @@ soldiers: #done
     armor: STR_NONE_UC
     standHeight: 22
     kneelHeight: 14
-    femaleFrequency: 25    
+    femaleFrequency: 25
     soldierNames:
       - SoldierName/
     deathMale: 48

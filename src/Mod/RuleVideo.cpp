@@ -59,7 +59,7 @@ void RuleVideo::load(const YAML::Node &node)
 		for (YAML::const_iterator i = videos.begin(); i != videos.end(); ++i)
 			_videos.push_back((*i).as<std::string>());
 	}
-	
+
 	if (const YAML::Node &tracks = node["audioTracks"])
 	{
 		for (YAML::const_iterator i = tracks.begin(); i != tracks.end(); ++i)

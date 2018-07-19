@@ -43,7 +43,7 @@ ListLoadState::ListLoadState(OptionsOrigin origin) : ListGamesState(origin, 0, t
 	_btnCancel->setX(180);
 
 	add(_btnOld, "button", "saveMenus");
-	
+
 	// Set up objects
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
 

@@ -20,7 +20,7 @@
 
 namespace OpenXcom
 {
-	
+
 SoundDefinition::SoundDefinition(const std::string &type) : _type(type)
 {
 }

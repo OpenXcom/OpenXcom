@@ -54,9 +54,9 @@ vertex: |
                 //      br = bottom-right vertex                //
                 //      bl = bottom-left vertex                 //
                 //////////////////////////////////////////////////
-                const vec2 tr = vec2(x_value,y_value); 
+                const vec2 tr = vec2(x_value,y_value);
                 const vec2 tl = vec2(-x_value,y_value);
-                const vec2 br = vec2(x_value,0.0); 
+                const vec2 br = vec2(x_value,0.0);
                 const vec2 bl = vec2(-x_value,0.0);
 
                 ////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@ vertex: |
                 ////////////////////////////////////////////////////////
                 gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
                 gl_TexCoord[0] = gl_MultiTexCoord0;
-                
+
                 //////////////////////////////////////////////////////
                 //Defines the x-y section of the texture coordinate.//
                 //////////////////////////////////////////////////////
@@ -74,7 +74,7 @@ vertex: |
                 gl_TexCoord[4].xy = gl_TexCoord[0].xy + (tl * 0.55);
                 gl_TexCoord[5].xy = gl_TexCoord[0].xy - tr;
                 gl_TexCoord[6].xy = gl_TexCoord[0].xy + tr;
-                
+
                 //////////////////////////////////////////////////////
                 //Defines the z-w section of the texture coordinate.//
                 //////////////////////////////////////////////////////
@@ -110,8 +110,8 @@ fragment: |
         //        min_weight = minimum filter weight                //
         //////////////////////////////////////////////////////////////
         const float start_weight =  1.04;
-        const float k            = -1.07;      
-        const float max_weight   =  0.73;   
+        const float k            = -1.07;
+        const float max_weight   =  0.73;
         const float min_weight   =  0.05;
 
         ////////////////////////////////////////////////////////////////////
@@ -142,10 +142,10 @@ fragment: |
               //FILTER WEIGHTS: These are the weights which will be used//
               //by the filter to produce the intended result.           //
               ////////////////////////////////////////////////////////////
-              float w1 = min(dot(abs(i2-i4),ref), max(dp(o2),dp(o4))); 
-              float w2 = min(dot(abs(i1-i3),ref), max(dp(o1),dp(o3))); 
-              float w3 = min(dot(abs(i2-i4),ref), max(dp(o2),dp(o4))); 
-              float w4 = min(dot(abs(i1-i3),ref), max(dp(o1),dp(o3))); 
+              float w1 = min(dot(abs(i2-i4),ref), max(dp(o2),dp(o4)));
+              float w2 = min(dot(abs(i1-i3),ref), max(dp(o1),dp(o3)));
+              float w3 = min(dot(abs(i2-i4),ref), max(dp(o2),dp(o4)));
+              float w4 = min(dot(abs(i1-i3),ref), max(dp(o1),dp(o3)));
 
               //////////////////////////////////////////////////////////////////
               //Adjusts the weight values, based on the previous dot-products.//
@@ -173,9 +173,9 @@ fragment: |
               //Weights w1 to w4 are clamped between the min and the max weight,//
               //preventing them from aversely being too high or too low.        //
               ////////////////////////////////////////////////////////////////////
-              w1 = clamp(w1+start_weight, min_weight, max_weight); 
+              w1 = clamp(w1+start_weight, min_weight, max_weight);
               w2 = clamp(w2+start_weight, min_weight, max_weight);
-              w3 = clamp(w3+start_weight, min_weight, max_weight); 
+              w3 = clamp(w3+start_weight, min_weight, max_weight);
               w4 = clamp(w4+start_weight, min_weight, max_weight);
 
               ///////////////////////////////////////////////////////////////////////////

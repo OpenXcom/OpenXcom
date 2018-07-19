@@ -56,7 +56,7 @@ namespace OpenXcom
 			_lstInfo->addRow(2, tr("STR_HIT_RATIO").c_str(), ss.str().c_str());
 			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
 		}
-		
+
 		ss.str(L"");ss.clear();
 		_lstInfo->addRow(2, tr("STR_CONSTRUCTION_TIME").c_str(), tr("STR_DAY", facility->getBuildTime()).c_str());
 		_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);

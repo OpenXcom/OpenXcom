@@ -214,7 +214,7 @@ void Country::newMonth(int xcomTotal, int alienTotal, int pactScore)
 		_funding.push_back(funding + newFunding);
 	else
 		_funding.push_back(funding);
-	
+
 	_activityAlien.push_back(0);
 	_activityXcom.push_back(0);
 	if (_activityAlien.size() > 12)

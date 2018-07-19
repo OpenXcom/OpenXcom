@@ -985,7 +985,7 @@ void Surface::resize(int width, int height)
 	int pitch = GetPitch(bpp, width);
 	void *alignedBuffer = NewAligned(bpp, width, height);
 	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom(alignedBuffer, width, height, bpp, pitch, 0, 0, 0, 0);
-	
+
 	if (surface == 0)
 	{
 		throw Exception(SDL_GetError());

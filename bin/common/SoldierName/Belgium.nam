@@ -1,7 +1,7 @@
 # Simplified: Belgium has two main languages regions, the
 # Flemish(Dutch) speaking part and the Walloon(French) speaking region.
 # This difference is reflected in the names. I used the 60% Flemish vs 40% French
-# ratio 
+# ratio
 # Distribution of lastNames can be visualised at http://www.familienaam.be
 # 12 Flemish/8 French (names from statbel.fgov.be)
 lookWeights:

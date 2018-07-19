@@ -996,7 +996,7 @@ void GeoscapeState::time5Seconds()
 			++i;
 		}
 	}
-	
+
 	// Check any dogfights waiting to open
 	for (std::list<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
 	{

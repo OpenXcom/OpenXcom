@@ -23,7 +23,7 @@
 
 namespace OpenXcom
 {
-	
+
 class TextButton;
 class Window;
 class Text;

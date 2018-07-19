@@ -32,15 +32,15 @@ fragment: |
   const float lum_add = 0.25;  // effects smoothing
 
   void main() {
-    vec3 c00 = texture2D(rubyTexture, gl_TexCoord[1].xy).xyz; 
-    vec3 c10 = texture2D(rubyTexture, gl_TexCoord[1].zw).xyz; 
-    vec3 c20 = texture2D(rubyTexture, gl_TexCoord[2].xy).xyz; 
-    vec3 c01 = texture2D(rubyTexture, gl_TexCoord[4].zw).xyz; 
-    vec3 c11 = texture2D(rubyTexture, gl_TexCoord[0].xy).xyz; 
-    vec3 c21 = texture2D(rubyTexture, gl_TexCoord[2].zw).xyz; 
-    vec3 c02 = texture2D(rubyTexture, gl_TexCoord[4].xy).xyz; 
-    vec3 c12 = texture2D(rubyTexture, gl_TexCoord[3].zw).xyz; 
-    vec3 c22 = texture2D(rubyTexture, gl_TexCoord[3].xy).xyz; 
+    vec3 c00 = texture2D(rubyTexture, gl_TexCoord[1].xy).xyz;
+    vec3 c10 = texture2D(rubyTexture, gl_TexCoord[1].zw).xyz;
+    vec3 c20 = texture2D(rubyTexture, gl_TexCoord[2].xy).xyz;
+    vec3 c01 = texture2D(rubyTexture, gl_TexCoord[4].zw).xyz;
+    vec3 c11 = texture2D(rubyTexture, gl_TexCoord[0].xy).xyz;
+    vec3 c21 = texture2D(rubyTexture, gl_TexCoord[2].zw).xyz;
+    vec3 c02 = texture2D(rubyTexture, gl_TexCoord[4].xy).xyz;
+    vec3 c12 = texture2D(rubyTexture, gl_TexCoord[3].zw).xyz;
+    vec3 c22 = texture2D(rubyTexture, gl_TexCoord[3].xy).xyz;
     vec3 dt = vec3(1.0, 1.0, 1.0);
 
     float md1 = dot(abs(c00 - c22), dt);

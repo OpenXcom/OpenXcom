@@ -39,7 +39,7 @@ class RuleItem;
 class BattleUnit;
 struct UnitStats;
 
-struct DebriefingStat { 
+struct DebriefingStat {
 	std::string item;
 	int qty;
 	int score;

@@ -55,13 +55,13 @@ const std::string &getFilePath(const std::string &relativeFilePath)
 const std::set<std::string> &getVFolderContents(const std::string &relativePath)
 {
 	std::string canonicalRelativePath = _canonicalize(relativePath);
-	
+
 	// trim of trailing '/' characters
 	while (!canonicalRelativePath.empty() && '/' == canonicalRelativePath.at(canonicalRelativePath.length() - 1))
 	{
 		canonicalRelativePath.resize(canonicalRelativePath.length() - 1);
 	}
-	
+
 	if (_vdirs.find(canonicalRelativePath) == _vdirs.end())
 	{
 		return _emptySet;
@@ -128,7 +128,7 @@ static void _mapFiles(const std::string &modId, const std::string &basePath,
 	for (std::vector<std::string>::iterator i = files.begin(); i != files.end(); ++i)
 	{
 		std::string fullpath = fullDir + "/" + *i;
-		
+
 		if (_canonicalize(*i) == "metadata.yml" || rulesetFiles.find(*i) != rulesetFiles.end())
 		{
 			// no need to map mod metadata files or ruleset files

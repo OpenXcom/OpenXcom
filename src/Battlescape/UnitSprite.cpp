@@ -535,7 +535,7 @@ void UnitSprite::drawRoutine0()
 		itemR->setX(itemR->getX() + offXSprite);
 	if (itemL)
 		itemL->setX(itemL->getX() + offXSprite);
-	
+
 	// fix the errant muton arm.
 	if (!itemR && _drawingRoutine == 10 && _unit->getStatus() == STATUS_WALKING && unitDir == 2)
 	{
@@ -719,7 +719,7 @@ void UnitSprite::drawRoutine1()
 		rightArm->setY(0);
 		torso->setY(0);
 	}
-	
+
 	// offset everything to the left by 16 pixels.
 	// this is because we draw the sprites double wide, to accomodate weapons in-hand
 	torso->setX(offXSprite);
@@ -828,7 +828,7 @@ void UnitSprite::drawRoutine3()
 		}
 	}
 	s = _unitSurface->getFrame((_part * 8) + _unit->getDirection());
-	
+
 	// offset everything to the left by 16 pixels.
 	// this is because we draw the sprites double wide, to accomodate weapons in-hand
 	s->setX(offXSprite);
@@ -963,7 +963,7 @@ void UnitSprite::drawRoutine4()
 			itemL->setY(offY3[unitDir]);
 		}
 	}
-	
+
 	// offset everything to the right by 16 pixels.
 	// this is because we draw the sprites double wide, to accomodate weapons in-hand
 	s->setX(offXSprite);
@@ -1012,7 +1012,7 @@ void UnitSprite::drawRoutine5()
 	{
 		s = _unitSurface->getFrame((_part * 8) + _unit->getDirection());
 	}
-	
+
 	// offset everything to the right by 16 pixels.
 	// this is because we draw the sprites double wide, to accomodate weapons in-hand
 	s->setX(offXSprite);
@@ -1314,7 +1314,7 @@ void UnitSprite::drawRoutine8()
 
 	else if (_unit->getStatus() == STATUS_AIMING)
 		legs = _unitSurface->getFrame(aim);
-	
+
 	// offset everything to the right by 16 pixels.
 	// this is because we draw the sprites double wide, to accomodate weapons in-hand
 	legs->setX(offXSprite);
@@ -1343,7 +1343,7 @@ void UnitSprite::drawRoutine9()
 
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
-	
+
 	// offset everything to the right by 16 pixels.
 	// this is because we draw the sprites double wide, to accomodate weapons in-hand
 	torso->setX(offXSprite);

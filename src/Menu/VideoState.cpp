@@ -177,7 +177,7 @@ typedef struct
 	int sound;
 } introSoundEffect;
 
-static introSoundEffect introSoundTrack[] = 
+static introSoundEffect introSoundTrack[] =
 {
 {0, 0x200}, // inserting this to keep the code simple
 {149, 0x11},

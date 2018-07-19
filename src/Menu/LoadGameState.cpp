@@ -74,7 +74,7 @@ LoadGameState::LoadGameState(OptionsOrigin origin, SaveType type, SDL_Color *pal
 		// can't auto-load ironman games
 		break;
 	}
-	
+
 	buildUi(palette);
 }
 

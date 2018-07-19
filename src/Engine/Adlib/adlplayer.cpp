@@ -395,7 +395,7 @@ void adlib_set_instrument_pitch(int instrument, int pitch)
 	for (int i=0; i<12; ++i) //search through active adlib channels
 	{
 		int note = adlib_channels[i].cur_note;
-		if (note != 0 && adlib_channels[i].cur_instrument == instrument) 
+		if (note != 0 && adlib_channels[i].cur_instrument == instrument)
 		{
 			int freq = get_pitched_freq_instr(note, instrument);
 			adlib_channels[i].cur_freq = freq;
@@ -489,7 +489,7 @@ void adlib_play_note(int note, int volume, int instrument)
 		ampl = cur_sample->reg40_op1;
 		adlib_reg(0x40+op1, ((~ampl) & 0x3f) | (ampl & 0xc0)); // amplitude op1
 	}
-	
+
 	adlib_reg(0xB0+channel, adlib_channels[channel].hifreq);  // reinit note
 	adlib_reg(0x43+op1, (~((adl_gv_tmp_music_volume*volume)>>8))&0x3f); //amplitude op2
 
@@ -503,7 +503,7 @@ void adlib_play_note(int note, int volume, int instrument)
 		adlib_reg(0xE3+op1, cur_sample->regE0_op2);
 		adlib_reg(0xC0+channel, cur_sample->regC0 ^ 0x01); //feedback strength / connection type
 	}
-	
+
 	int freq = get_pitched_freq_instr(note, instrument);
 	adlib_channels[channel].cur_freq = freq;
 	adlib_reg(0xA0+channel, freq & 0xff);
@@ -556,7 +556,7 @@ bool free_channel_available()
 
 	for (int i=0; i<12; ++i)
 	{
-		if (adlib_channels[i].cur_note==0) 
+		if (adlib_channels[i].cur_note==0)
 			return true;
 	}
 	return false;
@@ -736,7 +736,7 @@ void init_music_data(unsigned char* music_ptr,int length)
 	for (i=0; i<adl_gv_instruments_count; ++i)
 	{
 		to_add = peek_u16(music_ptr); //reading 16bit length
-		if (adl_gv_FORMAT==1) 
+		if (adl_gv_FORMAT==1)
 		{
 			j = *(music_ptr+4);
 			if (j>15) j=15;
@@ -795,13 +795,13 @@ void func_load_music_state(int i)
 void func_play_tick()
 {
 	bool another_loop;
-	
+
 	if (!adl_gv_music_playing) return;
 	fade_volume_if_need();
 	adl_gv_tempo_run -= adl_gv_tempo;
 	if (adl_gv_tempo_run>0) return;
 	adl_gv_tempo_run += adl_gv_tempo_inc;
-	
+
 	do {
 		another_loop = false;
 		for (int i=0; i<16; ++i)

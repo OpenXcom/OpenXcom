@@ -71,7 +71,7 @@ StartState::StartState() : _anim(0)
 	_text = new Text(Options::baseXResolution, Options::baseYResolution, 0, 0);
 	_cursor = new Text(_font->getWidth(), _font->getHeight(), 0, 0);
 	_timer = new Timer(150);
-	
+
 	setPalette(_font->getPalette(), 0, 2);
 
 	add(_text);

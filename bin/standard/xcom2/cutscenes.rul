@@ -2,7 +2,7 @@ cutscenes: #done
   - type: intro
     videos:
       - ANIMS/LOGO.VID
-      - ANIMS/INTRO.VID    
+      - ANIMS/INTRO.VID
     slideshow:
       musicId: GMNEWINT
       slides:

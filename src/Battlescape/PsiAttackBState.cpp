@@ -141,7 +141,7 @@ void PsiAttackBState::psiAttack()
 	{
 		defenseStrength += 20;
 	}
-	
+
 	_unit->addPsiSkillExp();
 	if (Options::allowPsiStrengthImprovement) _target->addPsiStrengthExp();
 	if (attackStrength > defenseStrength)

@@ -194,7 +194,7 @@ namespace OpenXcom
 		text = node["text"].as<std::string>(text);
 		text_width = node["text_width"].as<int>(text_width);
 	}
-	
+
 	/**
 	 * Constructor (only setting type of base class).
 	 */

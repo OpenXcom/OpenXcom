@@ -99,7 +99,7 @@ void UnitWalkBState::think()
 			return;
 		}
 	}
-	
+
 
 	if (_unit->isOut())
 	{
@@ -184,7 +184,7 @@ void UnitWalkBState::think()
 				Position posHere = _unit->getPosition();
 				Position voxelHere = (posHere * Position(16,16,24)) + Position(8,8,-(_unit->getTile()->getTerrainLevel()));
 				_parent->getTileEngine()->hit(voxelHere, _unit->getBaseStats()->strength, DT_IN, _unit);
-				
+
 				if (_unit->getStatus() != STATUS_STANDING) // ie: we burned a hole in the floor and fell through it
 				{
 					_pf->abortPath();

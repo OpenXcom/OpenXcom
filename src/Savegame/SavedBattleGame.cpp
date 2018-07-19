@@ -259,13 +259,13 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 					if (mod->getInventory(type))
 					{
 						item->setSlot(mod->getInventory(type));
-						
+
 					}
 					else
 					{
 						item->setSlot(mod->getInventory("STR_GROUND"));
 					}
-				}				
+				}
 				int owner = (*i)["owner"].as<int>();
 				int prevOwner = (*i)["previousOwner"].as<int>(-1);
 				int unit = (*i)["unit"].as<int>();
@@ -1717,7 +1717,7 @@ bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, const Position& en
 	{
 		return true;
 	}
-	
+
 	int me = 0 - unit->getArmor()->getSize();
 	int you = largeFriend ? 2 : 1;
 	int xArray[8] = {0, you, you, you, 0, me, me, me};

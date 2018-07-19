@@ -532,7 +532,7 @@ void TextEdit::keyboardPress(Action *action, State *state)
 			}
 			break;
 		default:
-			Uint16 key = action->getDetails()->key.keysym.unicode;			
+			Uint16 key = action->getDetails()->key.keysym.unicode;
 			if (isValidChar(key) && !exceedsMaxWidth((wchar_t)key))
 			{
 				_value.insert(_caretPos, 1, (wchar_t)action->getDetails()->key.keysym.unicode);

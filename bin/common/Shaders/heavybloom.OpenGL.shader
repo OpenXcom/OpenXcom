@@ -46,7 +46,7 @@ fragment: |
             for (j = -1; j < 1; j++)
             {
                sum += texture2D(texture, texcoord + vec2(-i, j)*glaresize) * power;
-               bum += texture2D(texture, texcoord + vec2(j, i)*glaresize) * power;            
+               bum += texture2D(texture, texcoord + vec2(j, i)*glaresize) * power;
             }
          }
 

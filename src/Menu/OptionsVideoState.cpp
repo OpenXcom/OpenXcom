@@ -65,10 +65,10 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 
 	_txtMode = new Text(114, 9, 206, 22);
 	_cbxDisplayMode = new ComboBox(this, 104, 16, 206, 32);
-	
+
 	_txtGeoScale = new Text(114, 9, 94, 82);
 	_cbxGeoScale = new ComboBox(this, 104, 16, 94, 92);
-	
+
 	_txtBattleScale = new Text(114, 9, 94, 112);
 	_cbxBattleScale = new ComboBox(this, 104, 16, 94, 122);
 
@@ -122,7 +122,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 
 	add(_cbxFilter, "button", "videoMenu");
 	add(_cbxDisplayMode, "button", "videoMenu");
-	
+
 	add(_txtBattleScale, "text", "videoMenu");
 	add(_cbxBattleScale, "button", "videoMenu");
 
@@ -172,7 +172,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_btnLetterbox->setTooltip("STR_LETTERBOXED_DESC");
 	_btnLetterbox->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_btnLetterbox->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-	
+
 	_btnLockMouse->setText(tr("STR_LOCK_MOUSE"));
 	_btnLockMouse->setPressed(Options::captureMouse == SDL_GRAB_ON);
 	_btnLockMouse->onMouseClick((ActionHandler)&OptionsVideoState::btnLockMouseClick);
@@ -186,9 +186,9 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_btnRootWindowedMode->setTooltip("STR_FIXED_WINDOW_POSITION_DESC");
 	_btnRootWindowedMode->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_btnRootWindowedMode->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-	
+
 	_txtLanguage->setText(tr("STR_DISPLAY_LANGUAGE"));
-	
+
 	std::vector<std::wstring> names;
 	Language::getList(_langs, names);
 	_cbxLanguage->setOptions(names);
@@ -214,7 +214,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_filters.push_back("");
 	_filters.push_back("");
 	_filters.push_back("");
-	
+
 #ifndef __NO_OPENGL
 	std::set<std::string> filters = FileMap::filterFiles(FileMap::getVFolderContents(GL_FOLDER), GL_EXT);
 	for (std::set<std::string>::iterator i = filters.begin(); i != filters.end(); ++i)
@@ -226,7 +226,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 		_filters.push_back(path);
 	}
 #endif
-	
+
 	size_t selFilter = 0;
 	if (Screen::useOpenGL())
 	{
@@ -263,8 +263,8 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_cbxFilter->setTooltip("STR_DISPLAY_FILTER_DESC");
 	_cbxFilter->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_cbxFilter->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-	
-	
+
+
 	std::vector<std::string> displayModes;
 	displayModes.push_back("STR_WINDOWED");
 	displayModes.push_back("STR_FULLSCREEN");
@@ -291,9 +291,9 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_cbxDisplayMode->setTooltip("STR_DISPLAY_MODE_DESC");
 	_cbxDisplayMode->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_cbxDisplayMode->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-	
+
 	_txtGeoScale->setText(tr("STR_GEOSCAPE_SCALE"));
-	
+
 	std::vector<std::string> scales;
 	scales.push_back("STR_ORIGINAL");
 	scales.push_back("STR_1_5X");
@@ -308,9 +308,9 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_cbxGeoScale->setTooltip("STR_GEOSCAPESCALE_SCALE_DESC");
 	_cbxGeoScale->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_cbxGeoScale->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-	
+
 	_txtBattleScale->setText(tr("STR_BATTLESCAPE_SCALE"));
-	
+
 	_cbxBattleScale->setOptions(scales);
 	_cbxBattleScale->setSelected(Options::battlescapeScale);
 	_cbxBattleScale->onChange((ActionHandler)&OptionsVideoState::updateBattlescapeScale);
@@ -397,7 +397,7 @@ void OptionsVideoState::updateDisplayResolution()
 	ssH << (int)_res[_resCurrent]->h;
 	_txtDisplayWidth->setText(ssW.str());
 	_txtDisplayHeight->setText(ssH.str());
-	
+
 	Options::newDisplayWidth = _res[_resCurrent]->w;
 	Options::newDisplayHeight = _res[_resCurrent]->h;
 }

@@ -3418,7 +3418,7 @@ Music *Mod::loadMusic(MusicFormat fmt, const std::string &file, int track, float
 			if (gmcat && track < gmcat->getAmount())
 			{
 				music = gmcat->loadMIDI(track);
-			}			
+			}
 		}
 		// Try digital tracks
 		else

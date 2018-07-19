@@ -33,7 +33,7 @@ class City : public Target
 {
 private:
 	std::string _name;
-	
+
 	/// Gets the city's default name (unused).
 	std::wstring getDefaultName(Language *) const { return L""; }
 public:

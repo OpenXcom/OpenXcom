@@ -23,17 +23,17 @@
 namespace OpenXcom
 {
 
-	
+
 template<typename Pixel>
 class ShaderRepeat : public helper::ShaderBase<const Pixel>
 {
 	int _off_x;
 	int _off_y;
-	
+
 public:
 	typedef helper::ShaderBase<const Pixel> _base;
 	friend struct helper::controler<ShaderRepeat<Pixel> >;
-	
+
 	inline ShaderRepeat(const Surface* s):
 		_base(s)
 	{
@@ -44,7 +44,7 @@ public:
 	{
 		setOffset(0, 0);
 	}
-	
+
 	inline void setOffset(int x, int y)
 	{
 		_off_x = x;
@@ -66,27 +66,27 @@ struct controler<ShaderRepeat<Pixel> >
 {
 	typedef typename ShaderRepeat<Pixel>::PixelPtr PixelPtr;
 	typedef typename ShaderRepeat<Pixel>::PixelRef PixelRef;
-	
+
 	const PixelPtr _base;
-	
+
 	const GraphSubset _range_domain;
 	GraphSubset _range_image;
-	
+
 	const int _off_x;
 	const int _off_y;
 	const int _size_x;
 	const int _size_y;
-	
-	
+
+
 	int _curr_x;
 	int _curr_y;
-	
+
 	const int _pitch;
-	
+
 	PixelPtr _ptr_curr_x;
 	PixelPtr _ptr_curr_y;
-	
-	controler(const ShaderRepeat<Pixel>& f) : 
+
+	controler(const ShaderRepeat<Pixel>& f) :
 		_base(f.ptr()),
 		_range_domain(f.getDomain()),
 		_range_image(0,0),
@@ -100,12 +100,12 @@ struct controler<ShaderRepeat<Pixel> >
 		_ptr_curr_x(0),
 		_ptr_curr_y(0)
 	{
-		
+
 	}
-	
+
 	//not used
 	//inline const GraphSubset& get_range()
-	
+
 	inline void mod_range(GraphSubset&)
 	{
 		//nothing
@@ -114,7 +114,7 @@ struct controler<ShaderRepeat<Pixel> >
 	{
 		_range_image = g;
 	}
-	
+
 	inline void mod_y(int&, int&)
 	{
 		_curr_y = ( _range_image.beg_y - _off_y)%_size_y;
@@ -137,8 +137,8 @@ struct controler<ShaderRepeat<Pixel> >
 			_ptr_curr_y -= _size_y*_pitch;
 		}
 	}
-	
-	
+
+
 	inline void mod_x(int&, int&)
 	{
 		_curr_x = ( _range_image.beg_x - _off_x)%_size_x;
@@ -161,13 +161,13 @@ struct controler<ShaderRepeat<Pixel> >
 			_ptr_curr_x -= _size_x;
 		}
 	}
-	
+
 	inline PixelRef get_ref()
 	{
 		return *_ptr_curr_x;
 	}
 };
-	
+
 }//namespace helper
 
 }//namespace OpenXcom

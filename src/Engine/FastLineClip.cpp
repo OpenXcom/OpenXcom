@@ -322,7 +322,7 @@ int FastLineClip::LineClip(double *x0, double *y0, double *x1, double *y1)
 				Clip1_Right();
 				if (FC_yk < Wytop) Clip1_Top();
 				++visible;
-	 case 0x88:                                 
+	 case 0x88:
 	 case 0x89:
 	 case 0x8A: break;
 
@@ -355,7 +355,7 @@ int FastLineClip::LineClip(double *x0, double *y0, double *x1, double *y1)
 				if (FC_yn > Wybot) Clip0_Bottom();
 				if (FC_yk < Wytop) Clip1_Top();
 				++visible;
-	 case 0x98:                                 
+	 case 0x98:
 	 case 0x99:
 	 case 0x9A: break;
 
@@ -388,7 +388,7 @@ int FastLineClip::LineClip(double *x0, double *y0, double *x1, double *y1)
 				if (FC_yk < Wytop) Clip1_Top();
 				if (FC_yn > Wybot) Clip0_Bottom();
 				++visible;
-	 case 0xA6:                                 
+	 case 0xA6:
 	 case 0xA8:
 	 case 0xA9:
 	 case 0xAA: break;

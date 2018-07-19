@@ -28,7 +28,7 @@ vertex: |
 fragment: |
     uniform sampler2D rubyTexture;
 
-    void main(void) {   
+    void main(void) {
       vec4 rgb = texture2D(rubyTexture, gl_TexCoord[0].xy);
       vec4 intens ;
       if (fract(gl_FragCoord.y * (0.5*4.0/3.0)) > 0.5)
