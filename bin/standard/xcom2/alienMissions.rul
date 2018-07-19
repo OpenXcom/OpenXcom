@@ -13,12 +13,12 @@ alienMissions: #done
           STR_AQUATOID: 30
           STR_GILLMAN: 40
           STR_LOBSTERMAN: 30
-      5:
+      6:
           STR_AQUATOID: 20
           STR_GILLMAN: 10
           STR_LOBSTERMAN: 40
           STR_TASOTH: 30
-      7:
+      9:
           STR_AQUATOID: 20
           STR_GILLMAN: 20
           STR_LOBSTERMAN: 20
@@ -49,11 +49,11 @@ alienMissions: #done
           STR_AQUATOID: 30
           STR_GILLMAN: 50
           STR_LOBSTERMAN: 20
-      5:
+      6:
           STR_AQUATOID: 10
           STR_LOBSTERMAN: 40
           STR_TASOTH: 50
-      7:
+      9:
           STR_AQUATOID: 30
           STR_LOBSTERMAN: 30
           STR_TASOTH: 40
@@ -102,10 +102,10 @@ alienMissions: #done
       3:
           STR_AQUATOID: 50
           STR_GILLMAN: 50
-      5:
+      6:
           STR_AQUATOID: 30
           STR_TASOTH: 70
-      7:
+      9:
           STR_AQUATOID: 50
           STR_TASOTH: 50
     waves:
@@ -146,12 +146,12 @@ alienMissions: #done
           STR_AQUATOID: 20
           STR_GILLMAN: 50
           STR_LOBSTERMAN: 30
-      5:
+      6:
           STR_AQUATOID: 10
           STR_GILLMAN: 30
           STR_LOBSTERMAN: 20
           STR_TASOTH: 40
-      7:
+      9:
           STR_AQUATOID: 30
           STR_GILLMAN: 10
           STR_LOBSTERMAN: 50
@@ -206,12 +206,12 @@ alienMissions: #done
           STR_AQUATOID: 10
           STR_GILLMAN: 30
           STR_LOBSTERMAN: 60
-      5:
+      6:
           STR_AQUATOID: 10
           STR_GILLMAN: 40
           STR_LOBSTERMAN: 30
           STR_TASOTH: 20
-      7:
+      9:
           STR_AQUATOID: 10
           STR_GILLMAN: 20
           STR_LOBSTERMAN: 60
@@ -251,13 +251,13 @@ alienMissions: #done
           STR_AQUATOID: 20
           STR_GILLMAN: 30
           STR_LOBSTERMAN: 50
-      5:
+      6:
           STR_AQUATOID: 10
           STR_GILLMAN: 30
           STR_LOBSTERMAN: 20
           STR_TASOTH: 20
           STR_MIXED_CREW: 20
-      7:
+      9:
           STR_AQUATOID: 20
           STR_GILLMAN: 20
           STR_LOBSTERMAN: 20
