@@ -395,7 +395,7 @@ items:
     floorSprite: 10
     hitSound: 0
     hitAnimation: 0
-    power: 42
+    power: 48
     damageType: 2
     clipSize: 14
     battleType: 2
