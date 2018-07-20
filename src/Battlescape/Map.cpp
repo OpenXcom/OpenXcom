@@ -251,14 +251,14 @@ static bool positionHaveSameXY(Position a, Position b)
 	return a.x == b.x && a.y == b.y;
 }
 
-
 /**
  * Draw part of unit graphic that overlap current tile.
  * @param surface
- * @param bu
- * @param tileNorth
- * @param tileScreenPosition
+ * @param unitTile
+ * @param currTile
+ * @param currTileScreenPosition
  * @param shade
+ * @param topLayer
  */
 void Map::drawUnit(Surface *surface, Tile *unitTile, Tile *currTile, Position currTileScreenPosition, int shade, bool topLayer)
 {
@@ -663,7 +663,8 @@ void Map::drawTerrain(Surface *surface)
 									frameNumber = (_animFrame % 2); // yellow box
 								else
 									frameNumber = 0; // red box
-							}else
+							}
+							else
 							{
 								if (unit && (unit->getVisible() || _save->getDebugMode()))
 									frameNumber = 7 + (_animFrame / 2); // yellow animated crosshairs
