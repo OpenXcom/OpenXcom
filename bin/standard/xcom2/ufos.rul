@@ -79,7 +79,7 @@ ufos: #done
               - [10, 3, 0]
   - type: STR_HEAVY_CRUISER
     size: STR_MEDIUM_UC
-    sprite: 4
+    sprite: 3
     damageMax: 450
     speedMax: 3800
     accel: 8
@@ -107,7 +107,7 @@ ufos: #done
               - [3, 8, 0]
   - type: STR_HUNTER
     size: STR_MEDIUM_UC
-    sprite: 3
+    sprite: 4
     damageMax: 500
     speedMax: 4500
     accel: 8

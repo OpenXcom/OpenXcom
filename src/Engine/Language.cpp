@@ -414,7 +414,7 @@ void Language::load(const std::string &filename)
 				if (!value.empty())
 				{
 					std::string key = i->first.as<std::string>() + "_" + j->first.as<std::string>();
-					_strings[key] = loadString(j->second.as<std::string>());
+					_strings[key] = loadString(value);
 				}
 			}
 		}
