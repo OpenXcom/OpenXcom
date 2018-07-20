@@ -985,6 +985,11 @@ void BattleUnit::aim(bool aiming)
 
 /**
  * Returns the direction from this unit to a given point.
+ * 0 <-> y = -1, x = 0
+ * 1 <-> y = -1, x = 1
+ * 3 <-> y = 1, x = 1
+ * 5 <-> y = 1, x = -1
+ * 7 <-> y = -1, x = -1
  * @param point given position.
  * @return direction.
  */
