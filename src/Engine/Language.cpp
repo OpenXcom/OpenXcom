@@ -398,15 +398,24 @@ void Language::load(const std::string &filename)
 		// Regular strings
 		if (i->second.IsScalar())
 		{
-			_strings[i->first.as<std::string>()] = loadString(i->second.as<std::string>());
+			std::string value = i->second.as<std::string>();
+			if (!value.empty())
+			{
+				std::string key = i->first.as<std::string>();
+				_strings[key] = loadString(value);
+			}
 		}
 		// Strings with plurality
 		else if (i->second.IsMap())
 		{
 			for (YAML::const_iterator j = i->second.begin(); j != i->second.end(); ++j)
 			{
-				std::string s = i->first.as<std::string>() + "_" + j->first.as<std::string>();
-				_strings[s] = loadString(j->second.as<std::string>());
+				std::string value = j->second.as<std::string>();
+				if (!value.empty())
+				{
+					std::string key = i->first.as<std::string>() + "_" + j->first.as<std::string>();
+					_strings[key] = loadString(j->second.as<std::string>());
+				}
 			}
 		}
 	}
