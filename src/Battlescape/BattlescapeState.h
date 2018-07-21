@@ -91,7 +91,7 @@ private:
 	void toggleKneelButton(BattleUnit* unit);
 public:
 	/// Selects the next soldier.
-	void selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
+	void selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false, bool checkFOV = true);
 	/// Selects the previous soldier.
 	void selectPreviousPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 	static const int DEFAULT_ANIM_SPEED = 100;
@@ -162,7 +162,7 @@ public:
 	/// Determines whether a playable unit is selected.
 	bool playableUnitSelected();
 	/// Updates soldier name/rank/tu/energy/health/morale.
-	void updateSoldierInfo();
+	void updateSoldierInfo(bool checkFOV = true);
 	/// Animates map objects on the map, also smoke,fire, ...
 	void animate();
 	/// Handles the battle game state.
