@@ -1,4 +1,4 @@
-# Locate SDL_mixer library
+# Locate yaml-cpp library
 # This module defines
 # YAMLCPP_LIBRARY, the name of the library to link against
 # YAMLCPP_FOUND, if false, do not try to link to SDL

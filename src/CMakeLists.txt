@@ -483,8 +483,13 @@ if ( WIN32 )
 endif ()
 
 if ( APPLE AND CREATE_BUNDLE )
-  include ( BundleUtilities )
-  fixup_bundle ( ${EXECUTABLE_OUTPUT_PATH}/openxcom.app "" "" )
+  include ( PostprocessBundle )
+  if ( "${CMAKE_GENERATOR}" STREQUAL "Xcode" )
+    postprocess_bundle ( openxcom ${EXECUTABLE_OUTPUT_PATH}/Debug/openxcom.app )
+	postprocess_bundle ( openxcom ${EXECUTABLE_OUTPUT_PATH}/Release/openxcom.app )
+  else ()
+    postprocess_bundle ( openxcom ${EXECUTABLE_OUTPUT_PATH}/openxcom.app )
+  endif ()
 endif ()
 
 #Setup source groups for IDE
