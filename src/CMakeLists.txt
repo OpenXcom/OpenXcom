@@ -483,30 +483,9 @@ if ( WIN32 )
 endif ()
 
 if ( APPLE AND CREATE_BUNDLE )
-  list ( APPEND frameworks "${SDLGFX_LIBRARY}" )
-  list ( APPEND frameworks "${SDLMIXER_LIBRARY}" )
-  list ( APPEND frameworks "${SDLIMAGE_LIBRARY}" )
-  list ( APPEND frameworks "${SDL_LIBRARY}" )
-  list ( APPEND frameworks "${YAMLCPP_LIBRARY}" )
-
-  foreach ( framework ${frameworks} )
-    get_filename_component ( framework_name ${framework} NAME )
-    if ( EXISTS "${framework}" )
-      if ( "${CMAKE_GENERATOR}" STREQUAL "Xcode" )
-	add_custom_command ( TARGET openxcom
-	  POST_BUILD
-	  COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/Debug/openxcom.app/Contents/Frameworks/${framework_name}
-	  COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/Debug/openxcom.app/Contents/Frameworks/${framework_name}
-	  COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/Release/openxcom.app/Contents/Frameworks/${framework_name}
-	  COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/Release/openxcom.app/Contents/Frameworks/${framework_name} )
-      else ()
-	add_custom_command ( TARGET openxcom
-	  POST_BUILD
-	  COMMAND ${CMAKE_COMMAND} -E make_directory ${EXECUTABLE_OUTPUT_PATH}/openxcom.app/Contents/Frameworks/${framework_name}
-	  COMMAND ${CMAKE_COMMAND} -E copy_directory ${framework} ${EXECUTABLE_OUTPUT_PATH}/openxcom.app/Contents/Frameworks/${framework_name} )
-      endif ()
-    endif ()
-  endforeach ()
+  set ( CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR} )
+  include ( BundleUtilities )
+  fixup_bundle ( ${CMAKE_INSTALL_PREFIX}/openxcom.app "" "" )
 endif ()
 
 #Setup source groups for IDE
