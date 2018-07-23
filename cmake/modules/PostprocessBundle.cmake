@@ -13,10 +13,12 @@
 
 if(CMAKE_GENERATOR)
 	# Being called as include(PostprocessBundle), so define a helper function.
+	set(POSTPROCESS_BUNDLE_MODULE_LOCATION "${CMAKE_CURRENT_LIST_FILE}")
 	function(postprocess_bundle target path)
 		add_custom_command(TARGET ${target}
 			POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -DBUNDLE_PATH="${path}" -P "${CMAKE_CURRENT_LIST_FILE}"
+			COMMAND ${CMAKE_COMMAND} -DBUNDLE_PATH="${path}"
+				-P "${POSTPROCESS_BUNDLE_MODULE_LOCATION}"
 		)
 	endfunction()
 	return()
