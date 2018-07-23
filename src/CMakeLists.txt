@@ -483,9 +483,8 @@ if ( WIN32 )
 endif ()
 
 if ( APPLE AND CREATE_BUNDLE )
-  set ( CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR} )
   include ( BundleUtilities )
-  fixup_bundle ( ${CMAKE_INSTALL_PREFIX}/openxcom.app "" "" )
+  fixup_bundle ( ${EXECUTABLE_OUTPUT_PATH}/openxcom.app "" "" )
 endif ()
 
 #Setup source groups for IDE
