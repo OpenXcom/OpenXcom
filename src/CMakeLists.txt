@@ -345,10 +345,11 @@ set ( ufopedia_src
 )
 
 set ( data_install_dir bin )
-if ( CMAKE_COMPILER_IS_GNUCXX AND "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" )
+if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" )
   add_definitions ( -D_DEBUG )
 endif ()
-if ( ( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" ) AND ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR ENABLE_WARNING ) )
+if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+  if ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR ENABLE_WARNING )
     # Enable more GCC warnings if requested or we are doing a Debug build.
     add_definitions ( -Wall
       -Winit-self
@@ -362,22 +363,39 @@ if ( ( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" ) AND (
       -Wuninitialized
       -Wignored-qualifiers
 # These warning options actually generate way too many warnings. Should be enabled later.
-      -Wno-unused-function
 #      -Weffc++
 #      -Winline
 #      -Wshadow
       )
-    if ( CMAKE_COMPILER_IS_GNUCXX )
+    if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" )
       # add warning flags recognized by g++ but not by clang
       add_definitions ( -Wclobbered -Wlogical-op )
-    endif ()
-    if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+    elseif ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
       # add warning flags recognized by clang but not by g++
-      add_definitions ( -Wno-overloaded-virtual )
     endif ()
     if ( FATAL_WARNING )
       add_definitions ( -Werror )
     endif ()
+  endif ()
+  
+# These warnings aren't worth polluting the code for
+  add_definitions (
+    -Wno-unused-function              # cross-platform functions
+    )  
+  if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" )
+    # add warning flags recognized by g++ but not by clang
+    add_definitions (
+      -Wno-address                    # opengl
+      -Wno-missing-field-initializers # xbrz
+      )
+  elseif ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+    # add warning flags recognized by clang but not by g++
+    add_definitions (
+      -Wno-overloaded-virtual         # overloads with different parameters
+      -Wno-pointer-bool-conversion    # opengl
+      -Wno-shift-negative-value       # opl
+      )
+  endif ()
 endif ()
 
 if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )

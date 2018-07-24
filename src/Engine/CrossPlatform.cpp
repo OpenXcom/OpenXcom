@@ -623,12 +623,6 @@ std::string getLocale()
 	std::ostringstream locale;
 	locale << language << "-" << country;
 	return locale.str();
-	/*
-	wchar_t locale[LOCALE_NAME_MAX_LENGTH];
-	LCIDToLocaleName(GetUserDefaultUILanguage(), locale, LOCALE_NAME_MAX_LENGTH, 0);
-
-	return Language::wstrToUtf8(locale);
-	*/
 #else
 	std::locale l;
 	try
@@ -894,6 +888,7 @@ void setWindowIcon(int winResource, const std::string &unixPath)
 		SDL_WM_SetIcon(icon, NULL);
 		SDL_FreeSurface(icon);
 	}
+	winResource = 0;
 #endif
 }
 
@@ -990,6 +985,7 @@ void stackTrace(void *ctx)
 	}
 	SymCleanup(process);
 #else
+	ctx = 0;
 #ifdef _WIN32
 	// TODO: Figure out stack trace on MinGW, use dbg
 	Log(LOG_FATAL) << "Unfortunately, no stack trace information is available";
