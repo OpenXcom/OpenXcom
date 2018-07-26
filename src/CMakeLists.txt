@@ -3,10 +3,6 @@ set ( root_src
   main.cpp
 )
 
-if ( WIN32 )
-  set ( root_src ${root_src} OpenXcom.rc )
-endif ()
-
 set ( basescape_src
   Basescape/BaseInfoState.cpp
   Basescape/BaseView.cpp
@@ -420,6 +416,7 @@ endif ()
 
 if ( WIN32 )
   set ( application_type WIN32 )
+  set ( openxcom_icon OpenXcom.rc )
 endif ()
 
 set ( openxcom_src ${root_src} ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${mod_src} ${savegame_src} ${ufopedia_src} )
@@ -443,6 +440,11 @@ if ( APPLE )
     set ( set_exec_path OFF )
     set ( install_dest_dir "" )
     set ( data_install_dir bin )
+    if ( "${CMAKE_GENERATOR}" STREQUAL "Xcode" )
+      set ( bundle_path "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/openxcom.app" )
+    else ()
+      set ( bundle_path "${EXECUTABLE_OUTPUT_PATH}/openxcom.app" )
+    endif ()
   else ()
     set ( data_install_dir "${CMAKE_INSTALL_FULL_DATADIR}/openxcom" )
     add_definitions( -DDATADIR="${data_install_dir}/" )
@@ -480,11 +482,23 @@ endif ()
 
 target_link_libraries ( openxcom ${system_libs} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${SDL_LIBRARY} ${OPENGL_gl_LIBRARY} debug ${YAMLCPP_LIBRARY_DEBUG} optimized ${YAMLCPP_LIBRARY} )
 
+# Pack libraries into bundle and link executable appropriately
+if ( APPLE AND CREATE_BUNDLE )
+  include ( PostprocessBundle )
+  postprocess_bundle ( openxcom ${bundle_path} )
+endif ()
+
 set ( bin_data_dirs TFTD UFO common standard )
 foreach ( binpath ${bin_data_dirs} )
-  add_custom_command ( TARGET openxcom
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/${binpath} ${EXECUTABLE_OUTPUT_PATH}/${binpath} )
+  if ( APPLE AND CREATE_BUNDLE )
+    add_custom_command ( TARGET openxcom
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/${binpath} ${bundle_path}/Contents/Resources/${binpath} )
+  else ()
+    add_custom_command ( TARGET openxcom
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/${binpath} ${EXECUTABLE_OUTPUT_PATH}/${binpath} )
+  endif ()
   install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${binpath} DESTINATION ${data_install_dir} )
 endforeach()
 
@@ -501,16 +515,6 @@ if ( WIN32 )
       COMMAND ${CMAKE_COMMAND} -E copy ${dll} ${EXECUTABLE_OUTPUT_PATH} )
     install ( FILES ${dll} DESTINATION bin)
   endforeach()
-endif ()
-
-if ( APPLE AND CREATE_BUNDLE )
-  include ( PostprocessBundle )
-  if ( "${CMAKE_GENERATOR}" STREQUAL "Xcode" )
-    postprocess_bundle ( openxcom ${EXECUTABLE_OUTPUT_PATH}/Debug/openxcom.app )
-	postprocess_bundle ( openxcom ${EXECUTABLE_OUTPUT_PATH}/Release/openxcom.app )
-  else ()
-    postprocess_bundle ( openxcom ${EXECUTABLE_OUTPUT_PATH}/openxcom.app )
-  endif ()
 endif ()
 
 #Setup source groups for IDE
