@@ -373,11 +373,11 @@ if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES 
       add_definitions ( -Werror )
     endif ()
   endif ()
-  
+
 # These warnings aren't worth polluting the code for
   add_definitions (
     -Wno-unused-function              # cross-platform functions
-    )  
+    )
   if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" )
     # add warning flags recognized by g++ but not by clang
     add_definitions (
@@ -435,6 +435,11 @@ if ( APPLE )
     set ( application_type MACOSX_BUNDLE )
     set_source_files_properties( ${openxcom_icon} PROPERTIES MACOSX_PACKAGE_LOCATION Resources )
     set ( MACOSX_BUNDLE_ICON_FILE "AppIcon.icns" )
+    set ( MACOSX_BUNDLE_INFO_STRING ${CPACK_PACKAGE_VENDOR} )
+    set ( MACOSX_BUNDLE_GUI_IDENTIFIER "SupSuper.openxcom" )
+    set ( MACOSX_BUNDLE_LONG_VERSION_STRING ${CPACK_PACKAGE_VERSION} )
+    set ( MACOSX_BUNDLE_SHORT_VERSION_STRING "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}" )
+    set ( MACOSX_BUNDLE_COPYRIGHT "Copyright © 2018 OpenXcom Developers. All rights reserved." )
     set ( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR} )
     set ( install_dest BUNDLE )
     set ( set_exec_path OFF )
