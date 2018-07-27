@@ -78,7 +78,3 @@ Dependencies/
 nbproject/
 .tx/
 /makefile
-openxcom.app/
-CMakeFiles/
-CMakeCache.txt
-git_version.h
