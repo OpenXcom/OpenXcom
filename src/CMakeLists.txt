@@ -523,7 +523,7 @@ if ( WIN32 )
 endif ()
 
 #Setup source groups for IDE
-if ( MSVC )
+if ( MSVC OR "${CMAKE_GENERATOR}" STREQUAL "Xcode" )
   source_group ( "Basescape" FILES ${basescape_src} )
   source_group ( "Battlescape" FILES ${battlescape_src} )
   source_group ( "Engine" FILES ${engine_src} )
