@@ -373,11 +373,11 @@ if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES 
       add_definitions ( -Werror )
     endif ()
   endif ()
-  
+
 # These warnings aren't worth polluting the code for
   add_definitions (
     -Wno-unused-function              # cross-platform functions
-    )  
+    )
   if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" )
     # add warning flags recognized by g++ but not by clang
     add_definitions (
@@ -429,12 +429,18 @@ if ( UNIX AND NOT APPLE )
   add_definitions( -DDATADIR="${data_install_dir}/" )
 endif ()
 if ( APPLE )
-  set ( openxcom_src ${openxcom_src} ${MACOS_SDLMAIN_M_PATH} )
+  set ( sdl_src "${MACOS_SDLMAIN_M_PATH}" )
+  set ( openxcom_src ${openxcom_src} ${sdl_src} )
   set ( openxcom_icon "${PROJECT_SOURCE_DIR}/res/mac/AppIcon.icns" )
   if ( CREATE_BUNDLE )
     set ( application_type MACOSX_BUNDLE )
     set_source_files_properties( ${openxcom_icon} PROPERTIES MACOSX_PACKAGE_LOCATION Resources )
     set ( MACOSX_BUNDLE_ICON_FILE "AppIcon.icns" )
+    set ( MACOSX_BUNDLE_INFO_STRING ${CPACK_PACKAGE_VENDOR} )
+    set ( MACOSX_BUNDLE_GUI_IDENTIFIER "SupSuper.openxcom" )
+    set ( MACOSX_BUNDLE_LONG_VERSION_STRING ${CPACK_PACKAGE_VERSION} )
+    set ( MACOSX_BUNDLE_SHORT_VERSION_STRING "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}" )
+    set ( MACOSX_BUNDLE_COPYRIGHT "Copyright © 2018 OpenXcom Developers. All rights reserved." )
     set ( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR} )
     set ( install_dest BUNDLE )
     set ( set_exec_path OFF )
@@ -518,7 +524,7 @@ if ( WIN32 )
 endif ()
 
 #Setup source groups for IDE
-if ( MSVC )
+if ( MSVC OR "${CMAKE_GENERATOR}" STREQUAL "Xcode" )
   source_group ( "Basescape" FILES ${basescape_src} )
   source_group ( "Battlescape" FILES ${battlescape_src} )
   source_group ( "Engine" FILES ${engine_src} )
@@ -528,4 +534,7 @@ if ( MSVC )
   source_group ( "Mod" FILES ${mod_src} )
   source_group ( "Savegame" FILES ${savegame_src} )
   source_group ( "Ufopedia" FILES ${ufopedia_src} )
+  if ( APPLE )
+    source_group ( "SDL" FILES ${sdl_src} )
+  endif ()
 endif ()
