@@ -1,7 +1,7 @@
 # Building for MacOS
 
 ## Dependencies
-To successfully build an OpenXcom OSX bundle you will need to ensure s all the relevant dependencies installed in /usr/local/.
+To successfully build an OpenXcom OSX bundle you will need to ensure all the relevant dependencies installed in /usr/local/.
 
 The dependencies you require are following:
 - cmake, version 3.12.0 or later
@@ -25,6 +25,7 @@ This project has two ways to build: one with make and the other with Xcode.  The
 ```
 cmake . -DCMAKE_BUILD_TYPE="Debug"
 ```
+1. Copy the vanilla game assets (UFO/TFTD) into the repository's `bin/` directory.
 1. Build the project (2 being the number of threads to run):
 ```
 make -j2
@@ -39,8 +40,8 @@ make -j2
 cmake . -DCMAKE_BUILD_TYPE="Debug" -G Xcode
 ```
 1. Open the `OpenXcom.xcodeproj` in Xcode.
+1. Copy the vanilla game assets (UFO/TFTD) into the repository's `bin/` directory.
 1. Build with cmd-B
-1. Make sure that you set up your [Data directory](https://github.com/SupSuper/OpenXcom#directory-locations) properly.
 1. Your artifact will be named `openxcom.app` in the build target directory (Debug or Release) from the root of the repository.
 
 ## Additional Help
