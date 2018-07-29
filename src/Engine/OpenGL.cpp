@@ -433,11 +433,11 @@ void OpenGL::init(int w, int h)
 
 
 
-	shader_support = &glCreateProgram && &glDeleteProgram && &glUseProgram && &glCreateShader
-	&& &glDeleteShader && &glShaderSource && &glCompileShader && &glAttachShader
-	&& &glDetachShader && &glLinkProgram && &glGetUniformLocation && &glIsProgram && &glIsShader
-	&& &glUniform1i && &glUniform2fv && &glUniform4fv && &glGetAttachedShaders
-	&& &glGetShaderiv && &glGetShaderInfoLog && &glGetProgramiv && &glGetProgramInfoLog;
+	shader_support = glCreateProgram && glDeleteProgram && glUseProgram && glCreateShader
+	&& glDeleteShader && glShaderSource && glCompileShader && glAttachShader
+	&& glDetachShader && glLinkProgram && glGetUniformLocation && glIsProgram && glIsShader
+	&& glUniform1i && glUniform2fv && glUniform4fv && glGetAttachedShaders
+	&& glGetShaderiv && glGetShaderInfoLog && glGetProgramiv && glGetProgramInfoLog;
 
 	if (shader_support)
 	{
