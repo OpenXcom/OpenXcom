@@ -424,20 +424,20 @@ void OpenGL::init(int w, int h)
 	glUniform1i = (PFNGLUNIFORM1IPROC)glGetProcAddress("glUniform1i");
 	glUniform2fv = (PFNGLUNIFORM2FVPROC)glGetProcAddress("glUniform2fv");
 	glUniform4fv = (PFNGLUNIFORM4FVPROC)glGetProcAddress("glUniform4fv");
+	
+	shader_support = glCreateProgram && glDeleteProgram && glUseProgram && glCreateShader
+	&& glDeleteShader && glShaderSource && glCompileShader && glAttachShader
+	&& glDetachShader && glLinkProgram && glGetUniformLocation && glIsProgram && glIsShader
+	&& glUniform1i && glUniform2fv && glUniform4fv && glGetAttachedShaders
+	&& glGetShaderiv && glGetShaderInfoLog && glGetProgramiv && glGetProgramInfoLog;
+#else
+	shader_support = true;
 #endif
 	glXGetCurrentDisplay = (void* (APIENTRYP)())glGetProcAddress("glXGetCurrentDisplay");
 	glXGetCurrentDrawable = (Uint32 (APIENTRYP)())glGetProcAddress("glXGetCurrentDrawable");
 	glXSwapIntervalEXT = (void (APIENTRYP)(void*, Uint32, int))glGetProcAddress("glXSwapIntervalEXT");
 
 	wglSwapIntervalEXT = (Uint32 (APIENTRYP)(int))glGetProcAddress("wglSwapIntervalEXT");
-
-
-
-	shader_support = glCreateProgram && glDeleteProgram && glUseProgram && glCreateShader
-	&& glDeleteShader && glShaderSource && glCompileShader && glAttachShader
-	&& glDetachShader && glLinkProgram && glGetUniformLocation && glIsProgram && glIsShader
-	&& glUniform1i && glUniform2fv && glUniform4fv && glGetAttachedShaders
-	&& glGetShaderiv && glGetShaderInfoLog && glGetProgramiv && glGetProgramInfoLog;
 
 	if (shader_support)
 	{

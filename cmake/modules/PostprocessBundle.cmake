@@ -19,6 +19,7 @@ if(CMAKE_GENERATOR)
 			POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -DBUNDLE_PATH="${path}"
 				-P "${POSTPROCESS_BUNDLE_MODULE_LOCATION}"
+				VERBATIM
 		)
 	endfunction()
 	return()

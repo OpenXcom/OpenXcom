@@ -381,14 +381,12 @@ if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES 
   if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" )
     # add warning flags recognized by g++ but not by clang
     add_definitions (
-      -Wno-address                    # opengl
       -Wno-missing-field-initializers # xbrz
       )
   elseif ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     # add warning flags recognized by clang but not by g++
     add_definitions (
       -Wno-overloaded-virtual         # overloads with different parameters
-      -Wno-pointer-bool-conversion    # opengl
       -Wno-shift-negative-value       # opl
       )
   endif ()
@@ -499,11 +497,13 @@ foreach ( binpath ${bin_data_dirs} )
   if ( APPLE AND CREATE_BUNDLE )
     add_custom_command ( TARGET openxcom
       POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/${binpath} ${bundle_path}/Contents/Resources/${binpath} )
+      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/${binpath} ${bundle_path}/Contents/Resources/${binpath}
+	  VERBATIM )
   else ()
     add_custom_command ( TARGET openxcom
       POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/${binpath} ${EXECUTABLE_OUTPUT_PATH}/${binpath} )
+      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/${binpath} ${EXECUTABLE_OUTPUT_PATH}/${binpath}
+	  VERBATIM )
   endif ()
   install ( DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${binpath} DESTINATION ${data_install_dir} )
 endforeach()
@@ -518,7 +518,8 @@ if ( WIN32 )
   foreach ( dll ${Windows_dll} )
     add_custom_command ( TARGET openxcom
       POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy ${dll} ${EXECUTABLE_OUTPUT_PATH} )
+      COMMAND ${CMAKE_COMMAND} -E copy ${dll} ${EXECUTABLE_OUTPUT_PATH}
+	  VERBATIM )
     install ( FILES ${dll} DESTINATION bin)
   endforeach()
 endif ()

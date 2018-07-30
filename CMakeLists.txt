@@ -33,7 +33,7 @@ if ( WIN32 )
 endif ()
 
 if ( APPLE )
-  set ( MACOS_SDLMAIN_M_PATH "${CMAKE_SOURCE_DIR}/src/SDL/SDLMain.m" CACHE STRING "Path to SDLMain.m file" )
+  set ( MACOS_SDLMAIN_M_PATH "${CMAKE_SOURCE_DIR}/src/apple/SDLMain.m" CACHE STRING "Path to SDLMain.m file" )
   option ( CREATE_BUNDLE "Create a Mac OS application bundle" ON )
   if ( NOT EXISTS "${MACOS_SDLMAIN_M_PATH}" )
     message ( FATAL_ERROR "On Mac OS, SDLMain.m is required. Please set the MACOS_SDLMAIN_M_PATH variable" )
