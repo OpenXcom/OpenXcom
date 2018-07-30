@@ -17,7 +17,7 @@ if(CMAKE_GENERATOR)
 	function(postprocess_bundle target path)
 		add_custom_command(TARGET ${target}
 			POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -DBUNDLE_PATH="${path}"
+			COMMAND ${CMAKE_COMMAND} -D "BUNDLE_PATH=${path}"
 				-P "${POSTPROCESS_BUNDLE_MODULE_LOCATION}"
 				VERBATIM
 		)
