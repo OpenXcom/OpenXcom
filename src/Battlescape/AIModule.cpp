@@ -602,7 +602,7 @@ void AIModule::setupAmbush()
 
 			// make sure we can't be seen here.
 			Position target;
-			if (!_save->getTileEngine()->canTargetUnit(&origin, tile, &target, _aggroTarget, _unit) && !getSpottingUnits(pos))
+			if (!_save->getTileEngine()->canTargetUnit(&origin, tile, &target, _aggroTarget, false, _unit) && !getSpottingUnits(pos))
 			{
 				_save->getPathfinding()->calculate(_unit, pos);
 				int ambushTUs = _save->getPathfinding()->getTotalTUCost();
@@ -658,7 +658,7 @@ void AIModule::setupAmbush()
 				Tile *tile = _save->getTile(currentPos);
 				Position target;
 				// do a virtual fire calculation
-				if (_save->getTileEngine()->canTargetUnit(&origin, tile, &target, _unit, _aggroTarget))
+				if (_save->getTileEngine()->canTargetUnit(&origin, tile, &target, _unit, false, _aggroTarget))
 				{
 					// if we can virtually fire at the hypothetical target, we know which way to face.
 					_ambushAction->finalFacing = _save->getTileEngine()->getDirectionTo(_ambushAction->target, currentPos);
@@ -1003,14 +1003,14 @@ int AIModule::getSpottingUnits(const Position& pos) const
 			Position targetVoxel;
 			if (checking)
 			{
-				if (_save->getTileEngine()->canTargetUnit(&originVoxel, _save->getTile(pos), &targetVoxel, *i, _unit))
+				if (_save->getTileEngine()->canTargetUnit(&originVoxel, _save->getTile(pos), &targetVoxel, *i, false, _unit))
 				{
 					tally++;
 				}
 			}
 			else
 			{
-				if (_save->getTileEngine()->canTargetUnit(&originVoxel, _save->getTile(pos), &targetVoxel, *i))
+				if (_save->getTileEngine()->canTargetUnit(&originVoxel, _save->getTile(pos), &targetVoxel, *i, false))
 				{
 					tally++;
 				}
@@ -1048,7 +1048,7 @@ int AIModule::selectNearestTarget()
 					action.weapon = _attackAction->weapon;
 					action.target = (*i)->getPosition();
 					Position origin = _save->getTileEngine()->getOriginVoxel(action, 0);
-					valid = _save->getTileEngine()->canTargetUnit(&origin, (*i)->getTile(), &target, _unit);
+					valid = _save->getTileEngine()->canTargetUnit(&origin, (*i)->getTile(), &target, _unit, false);
 				}
 				else
 				{
@@ -1443,7 +1443,7 @@ bool AIModule::findFirePoint()
 			// 4 because -2 is eyes and 2 below that is the rifle (or at least that's my understanding)
 			Position(8,8, _unit->getHeight() + _unit->getFloatHeight() - tile->getTerrainLevel() - 4);
 
-		if (_save->getTileEngine()->canTargetUnit(&origin, _aggroTarget->getTile(), &target, _unit))
+		if (_save->getTileEngine()->canTargetUnit(&origin, _aggroTarget->getTile(), &target, _unit, false))
 		{
 			_save->getPathfinding()->calculate(_unit, pos);
 			// can move here
@@ -2098,7 +2098,7 @@ bool AIModule::getNodeOfBestEfficacy(BattleAction *action)
 		}
 		int dist = _save->getTileEngine()->distance((*i)->getPosition(), _unit->getPosition());
 		if (dist <= 20 && dist > action->weapon->getRules()->getExplosionRadius() &&
-			_save->getTileEngine()->canTargetTile(&originVoxel, _save->getTile((*i)->getPosition()), O_FLOOR, &targetVoxel, _unit))
+			_save->getTileEngine()->canTargetTile(&originVoxel, _save->getTile((*i)->getPosition()), O_FLOOR, &targetVoxel, _unit, false))
 		{
 			int nodePoints = 0;
 			for (std::vector<BattleUnit*>::const_iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
@@ -2107,7 +2107,7 @@ bool AIModule::getNodeOfBestEfficacy(BattleAction *action)
 				if (!(*j)->isOut() && dist < action->weapon->getRules()->getExplosionRadius())
 				{
 					Position targetOriginVoxel = _save->getTileEngine()->getSightOriginVoxel(*j);
-					if (_save->getTileEngine()->canTargetTile(&targetOriginVoxel, _save->getTile((*i)->getPosition()), O_FLOOR, &targetVoxel, *j))
+					if (_save->getTileEngine()->canTargetTile(&targetOriginVoxel, _save->getTile((*i)->getPosition()), O_FLOOR, &targetVoxel, *j, false))
 					{
 						if ((_unit->getFaction() == FACTION_HOSTILE && (*j)->getFaction() != FACTION_HOSTILE) ||
 							(_unit->getFaction() == FACTION_NEUTRAL && (*j)->getFaction() == FACTION_HOSTILE))

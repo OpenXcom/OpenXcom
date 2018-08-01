@@ -49,7 +49,7 @@ Tile::SerializationKey Tile::serializationKey =
  * constructor
  * @param pos Position.
  */
-Tile::Tile(Position pos): _smoke(0), _fire(0), _explosive(0), _explosiveType(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(-1), _overlaps(0), _danger(false)
+Tile::Tile(Position pos): _smoke(0), _fire(0), _explosive(0), _explosiveType(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(-1), _overlaps(0), _danger(false), _obstacle(0)
 {
 	for (int i = 0; i < 4; ++i)
 	{
@@ -990,6 +990,22 @@ void Tile::addParticle(Particle *particle)
 std::list<Particle *> *Tile::getParticleCloud()
 {
 	return &_particles;
+}
+
+/**
+ * sets the flag of an obstacle for single part.
+ */
+void Tile::setObstacle(int part)
+{
+	_obstacle |= (1 << part);
+}
+
+/**
+ * resets obstacle flag for all parts of the tile.
+ */
+void Tile::resetObstacle(void)
+{
+	_obstacle = 0;
 }
 
 }
