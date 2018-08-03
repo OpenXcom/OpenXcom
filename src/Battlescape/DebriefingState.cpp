@@ -964,30 +964,6 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	// UFO crash/landing site disappears
-	for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
-	{
-		if ((*i)->isInBattlescape())
-		{
-			_missionStatistics->ufo = (*i)->getRules()->getType();
-			if (save->getMonthsPassed() != -1)
-			{
-				_missionStatistics->alienRace = (*i)->getAlienRace();
-			}
-			_txtRecovery->setText(tr("STR_UFO_RECOVERY"));
-			(*i)->setInBattlescape(false);
-			if ((*i)->getStatus() == Ufo::LANDED && aborted)
-			{
-				 (*i)->setSecondsRemaining(5);
-			}
-			else if ((*i)->getStatus() == Ufo::CRASHED || !aborted)
-			{
-				delete *i;
-				save->getUfos()->erase(i);
-				break;
-			}
-		}
-	}
 
 	// mission site disappears (even when you abort)
 	for (std::vector<MissionSite*>::iterator i = save->getMissionSites()->begin(); i != save->getMissionSites()->end(); ++i)
@@ -1040,6 +1016,34 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 	
+	// if it's a UFO, let's see what happens to it
+	for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
+	{
+		if ((*i)->isInBattlescape())
+		{
+			_missionStatistics->ufo = (*i)->getRules()->getType();
+			if (save->getMonthsPassed() != -1)
+			{
+				_missionStatistics->alienRace = (*i)->getAlienRace();
+			}
+			_txtRecovery->setText(tr("STR_UFO_RECOVERY"));
+			(*i)->setInBattlescape(false);
+			// if XCom failed to secure the landing zone, the UFO
+			// takes off immediately and proceeds according to its mission directive
+			if ((*i)->getStatus() == Ufo::LANDED && (aborted || playersSurvived == 0))
+			{
+				 (*i)->setSecondsRemaining(5);
+			}
+			// if XCom succeeds, or it's a crash site, the UFO disappears
+			else
+			{
+				delete *i;
+				save->getUfos()->erase(i);
+			}
+			break;
+		}
+	}
+
 	if (ruleDeploy && ruleDeploy->getEscapeType() != ESCAPE_NONE)
 	{
 		if (ruleDeploy->getEscapeType() != ESCAPE_EXIT)
