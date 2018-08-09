@@ -157,8 +157,9 @@ void StartState::think()
 		CrossPlatform::flashWindow();
 		addLine(L"");
 		addLine(L"ERROR: " + Language::utf8ToWstr(error));
-		addLine(L"Make sure you installed OpenXcom correctly.");
-		addLine(L"Check the wiki documentation for more details.");
+		addLine(L"");
+		addLine(L"Make sure OpenXcom and any mods are installed correctly.");
+		addLine(L"For more details see: " + Language::utf8ToWstr(Logger::logFile()));
 		addLine(L"");
 		addLine(L"Press any key to continue.");
 		loading = LOADING_DONE;
