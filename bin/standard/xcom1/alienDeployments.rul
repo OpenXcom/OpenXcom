@@ -997,7 +997,7 @@ alienDeployments:
       background: BACK01.SCR
       showTarget: false
     objectiveType: 3
-    markerName: STR_ALIEN_BASE
+    markerName: STR_ALIEN_BASE_
     markerIcon: 7
     genMission:
       STR_ALIEN_SUPPLY: 100
