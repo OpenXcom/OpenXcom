@@ -132,6 +132,10 @@ private:
 	void drillModules(TunnelData* data, const std::vector<SDL_Rect *> *rects, MapDirection dir);
 	/// Clears all modules in a rect from a command.
 	bool removeBlocks(MapScript *command);
+	/// Sets the depth based on the terrain or the provided AlienDeployment rule.
+	void setDepth(AlienDeployment* ruleDeploy, bool nextStage);
+	/// Sets the background music based on the terrain or the provided AlienDeployment rule.
+	void setMusic(AlienDeployment* ruleDeploy, bool nextStage);
 public:
 	/// Creates a new BattlescapeGenerator class
 	BattlescapeGenerator(Game* game);
