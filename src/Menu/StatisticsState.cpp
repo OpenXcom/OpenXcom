@@ -298,9 +298,11 @@ void StatisticsState::listStats()
 	_lstStats->addRow(2, tr("STR_TOTAL_DAYS_WOUNDED").c_str(), Text::formatNumber(daysWounded).c_str());
 	_lstStats->addRow(2, tr("STR_TOTAL_UFOS").c_str(), Text::formatNumber(ufosDetected).c_str());
 	_lstStats->addRow(2, tr("STR_TOTAL_ALIEN_BASES").c_str(), Text::formatNumber(alienBases).c_str());
+	_lstStats->addRow(2, tr("STR_ALIEN_BASES_DESTROYED").c_str(), Text::formatNumber(alienBasesDestroyed).c_str());
 	_lstStats->addRow(2, tr("STR_COUNTRIES_LOST").c_str(), Text::formatNumber(countriesLost).c_str());
 	_lstStats->addRow(2, tr("STR_TOTAL_TERROR_SITES").c_str(), Text::formatNumber(terrorSites).c_str());
 	_lstStats->addRow(2, tr("STR_TOTAL_BASES").c_str(), Text::formatNumber(xcomBases).c_str());
+	_lstStats->addRow(2, tr("STR_BASES_LOST").c_str(), Text::formatNumber(xcomBasesLost).c_str());
 	_lstStats->addRow(2, tr("STR_TOTAL_CRAFT").c_str(), Text::formatNumber(totalCrafts).c_str());
 	_lstStats->addRow(2, tr("STR_TOTAL_SCIENTISTS").c_str(), Text::formatNumber(currentScientists).c_str());
 	_lstStats->addRow(2, tr("STR_TOTAL_ENGINEERS").c_str(), Text::formatNumber(currentEngineers).c_str());

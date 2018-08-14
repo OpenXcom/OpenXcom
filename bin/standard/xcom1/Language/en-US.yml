@@ -1076,6 +1076,8 @@ en-US:
   STR_SOLDIERS_LOST: "Soldiers lost"
   STR_TOTAL_UFOS: "UFOs detected"
   STR_TOTAL_ALIEN_BASES: "Alien bases discovered"
+  STR_ALIEN_BASES_DESTROYED: "Alien bases destroyed"
+  STR_BASES_LOST: "Bases lost"
   STR_PSIONIC_STRENGTH_ABBREVIATION: "PST"
   STR_PSIONIC_SKILL_ABBREVIATION: "PSK"
   FEMALE_CIVILIAN: "Civilian, Female"

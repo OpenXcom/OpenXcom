@@ -1212,6 +1212,8 @@ en-US:
   STR_SOLDIERS_LOST: "Aquanauts lost"
   STR_TOTAL_UFOS: "Flying subs detected"
   STR_TOTAL_ALIEN_BASES: "Alien colonies discovered"
+  STR_ALIEN_BASES_DESTROYED: "Alien colonies destroyed"
+  STR_BASES_LOST: "Bases lost"
   STR_PSIONIC_STRENGTH_ABBREVIATION: "MST"
   STR_PSIONIC_SKILL_ABBREVIATION: "MSK"
   FEMALE_CIVILIAN: "Civilian, Female"
