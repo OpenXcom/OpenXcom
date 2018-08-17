@@ -849,7 +849,8 @@ terrains: #done
         groups: 10
   - name: GRUNGE
     music:
-      - GMTACDRY
+      - GMTACWET
+    depth: [3, 3]
     ambience: 67
     ambientVolume: 0.25
     mapDataSets:
