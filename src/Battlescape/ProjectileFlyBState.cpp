@@ -191,6 +191,7 @@ void ProjectileFlyBState::init()
 		return;
 	}
 	
+	bool forceEnableObstacles = false;
 	if (_action.type == BA_LAUNCH || (Options::forceFire && (SDL_GetModState() & KMOD_CTRL) != 0 && isPlayer) || !_parent->getPanicHandled())
 	{
 		// target nothing, targets the middle of the tile
@@ -232,6 +233,10 @@ void ProjectileFlyBState::init()
 				if (!_parent->getTileEngine()->canTargetUnit(&originVoxel, targetTile, &_targetVoxel, _unit, isPlayer))
 				{
 					_targetVoxel = Position(-16,-16,-24); // out of bounds, even after voxel to tile calculation.
+					if (isPlayer)
+					{
+						forceEnableObstacles = true;
+					}
 				}
 			}
 		}
@@ -279,7 +284,7 @@ void ProjectileFlyBState::init()
 		_parent->getMap()->getCamera()->stopMouseScrolling();
 		_parent->getMap()->disableObstacles();
 	}
-	else if (isPlayer && _targetVoxel.z >= 0)
+	else if (isPlayer && (_targetVoxel.z >= 0 || forceEnableObstacles))
 	{
 		_parent->getMap()->enableObstacles();
 	}
