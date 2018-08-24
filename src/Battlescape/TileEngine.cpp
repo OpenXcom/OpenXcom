@@ -2951,7 +2951,10 @@ bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Posit
 			if (test != V_OUTOFBOUNDS && action.actor->getFaction() == FACTION_PLAYER) //obstacle indicator is only for player
 			{
 				Tile* hitTile = _save->getTile(tilePos);
-				hitTile->setObstacle(test);
+				if (hitTile)
+				{
+					hitTile->setObstacle(test);
+				}
 			}
 		}
 	}
