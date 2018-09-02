@@ -294,14 +294,12 @@ int Ufo::getMarker() const
 		return -1;
 	switch (_status)
 	{
-	case Ufo::FLYING:
-		return _rules->getMarker() == -1 ? 2 : _rules->getMarker();
-	case Ufo::LANDED:
-		return 3;
-	case Ufo::CRASHED:
-		return 4;
+	case LANDED:
+		return _rules->getLandMarker() == -1 ? 3 : _rules->getLandMarker();
+	case CRASHED:
+		return _rules->getCrashMarker() == -1 ? 4 : _rules->getCrashMarker();
 	default:
-		return _rules->getMarker();
+		return _rules->getMarker() == -1 ? 2 : _rules->getMarker();
 	}
 }
 
