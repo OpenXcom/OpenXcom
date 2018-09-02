@@ -35,7 +35,6 @@ class Target
 protected:
 	double _lon, _lat;
 	std::wstring _name;
-	int _depth;
 	std::vector<Target*> _followers;
 	/// Creates a target.
 	Target();

@@ -226,15 +226,15 @@ void MapScript::load(const YAML::Node& node)
 		if (dir.length())
 		{
 			std::transform(dir.begin(), dir.end(), dir.begin(), ::toupper);
-			if (dir.substr(0,1) == "V")
+			if (dir[0] == 'V')
 			{
 				_direction = MD_VERTICAL;
 			}
-			else if (dir.substr(0,1) == "H")
+			else if (dir[0] == 'H')
 			{
 				_direction = MD_HORIZONTAL;
 			}
-			else if (dir.substr(0,1) == "B")
+			else if (dir[0] == 'B')
 			{
 				_direction = MD_BOTH;
 			}

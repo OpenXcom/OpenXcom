@@ -28,7 +28,7 @@ namespace OpenXcom
 /**
  * Initializes a target with blank coordinates.
  */
-Target::Target() : _lon(0.0), _lat(0.0), _depth(0)
+Target::Target() : _lon(0.0), _lat(0.0)
 {
 }
 
@@ -60,7 +60,6 @@ void Target::load(const YAML::Node &node)
 	{
 		_name = Language::utf8ToWstr(name.as<std::string>());
 	}
-	_depth = node["depth"].as<int>(_depth);
 }
 
 /**
@@ -74,8 +73,6 @@ YAML::Node Target::save() const
 	node["lat"] = serializeDouble(_lat);
 	if (!_name.empty())
 		node["name"] = Language::wstrToUtf8(_name);
-	if (_depth)
-		node["depth"] = _depth;
 	return node;
 }
 
