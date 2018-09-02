@@ -2347,8 +2347,115 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 	std::string missionRace;
 	int targetZone = -1;
 
+	if (RNG::percent(command->getTargetBaseOdds()))
+	{
+		// build a list of the mission types we're dealing with, if any
+		std::vector<std::string> types = command->getMissionTypes(month);
+		// now build a list of regions with bases in.
+		std::vector<std::string> regionsMaster;
+		for (std::vector<Base*>::const_iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
+		{
+			regionsMaster.push_back(save->locateRegion(*(*i))->getRules()->getType());
+		}
+		// no defined mission types? then we'll prune the region list to ensure we only have a region that can generate a mission.
+		if (types.empty())
+		{
+			for (std::vector<std::string>::iterator i = regionsMaster.begin(); i != regionsMaster.end();)
+			{
+				if (!strategy.validMissionRegion(*i))
+				{
+					i = regionsMaster.erase(i);
+					continue;
+				}
+				++i;
+			}
+			// no valid missions in any base regions? oh dear, i guess we failed.
+			if (regionsMaster.empty())
+			{
+				return false;
+			}
+			// pick a random region from our list
+			targetRegion = regionsMaster[RNG::generate(0, regionsMaster.size()-1)];
+		}
+		else
+		{
+			// we don't care about regional mission distributions, we're targetting a base with whatever mission we pick, so let's pick now
+			// we'll iterate the mission list, starting at a random point, and wrapping around to the beginning
+			int max = types.size();
+			int entry = RNG::generate(0,  max - 1);
+			std::vector<std::string> regions;
+
+			for (int i = 0; i != max; ++i)
+			{
+				regions = regionsMaster;
+				for (std::vector<AlienMission*>::const_iterator j = save->getAlienMissions().begin(); j != save->getAlienMissions().end(); ++j)
+				{
+					// if the mission types match
+					if (types[entry] == (*j)->getRules().getType())
+					{
+						for (std::vector<std::string>::iterator k = regions.begin(); k != regions.end();)
+						{
+							// and the regions match
+							if ((*k) == (*j)->getRegion())
+							{
+								// prune the entry from the list
+								k = regions.erase(k);
+								continue;
+							}
+							++k;
+						}
+					}
+				}
+				// if this is a terror type mission, we need to prune the list of regions to only those that can support it
+				if (command->getSiteType())
+				{
+					missionRules = mod->getAlienMission(types[entry], true);
+					targetZone = missionRules->getSpawnZone();
+					for (std::vector<std::string>::iterator j = regions.begin(); j != regions.end();)
+					{
+						RuleRegion* region = mod->getRegion(*j);
+						if ((int)(region->getMissionZones().size()) > targetZone)
+						{
+							std::vector<MissionArea> areas = region->getMissionZones()[targetZone].areas;
+							int counter = 0;
+							bool valid = false;
+							for (std::vector<MissionArea>::const_iterator k = areas.begin(); k != areas.end(); ++k)
+							{
+								// validMissionLocation checks to make sure this city/whatever hasn't been used by the last n missions using this varName
+								// this prevents the same location getting hit more than once every n missions.
+								if ((*k).isPoint() && strategy.validMissionLocation(command->getVarName(), region->getType(), counter))
+								{
+									valid = true;
+									break;
+								}
+								counter++;
+							}
+							if (valid)
+							{
+								++j;
+								continue;
+							}
+						}
+						j = regions.erase(j);
+					}
+				}
+				// we have a valid list of regions containing bases, pick one.
+				if (!regions.empty())
+				{
+					missionType = types[entry];
+					targetRegion = regions[RNG::generate(0, regions.size()-1)];
+					break;
+				}
+				// otherwise, try the next mission in the list.
+				if (max > 1 && ++entry == max)
+				{
+					entry = 0;
+				}
+			}
+		}
+	}
 	// terror mission type deal? this will require special handling.
-	if (command->getSiteType())
+	else if (command->getSiteType())
 	{
 		// we know for a fact that this command has mission weights defined, otherwise this flag could not be set.
 		missionType = command->generate(month, GEN_MISSION);
@@ -2480,81 +2587,6 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 		}
 		// now add that city to the list of sites we've hit, store the array, etc.
 		strategy.addMissionLocation(command->getVarName(), targetRegion, targetZone, command->getRepeatAvoidance());
-	}
-	else if (RNG::percent(command->getTargetBaseOdds()))
-	{
-		// build a list of the mission types we're dealing with, if any
-		std::vector<std::string> types = command->getMissionTypes(month);
-		// now build a list of regions with bases in.
-		std::vector<std::string> regionsMaster;
-		for (std::vector<Base*>::const_iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
-		{
-			regionsMaster.push_back(save->locateRegion(*(*i))->getRules()->getType());
-		}
-		// no defined mission types? then we'll prune the region list to ensure we only have a region that can generate a mission.
-		if (types.empty())
-		{
-			for (std::vector<std::string>::iterator i = regionsMaster.begin(); i != regionsMaster.end();)
-			{
-				if (!strategy.validMissionRegion(*i))
-				{
-					i = regionsMaster.erase(i);
-					continue;
-				}
-				++i;
-			}
-			// no valid missions in any base regions? oh dear, i guess we failed.
-			if (regionsMaster.empty())
-			{
-				return false;
-			}
-			// pick a random region from our list
-			targetRegion = regionsMaster[RNG::generate(0, regionsMaster.size()-1)];
-		}
-		else
-		{
-			// we don't care about regional mission distributions, we're targetting a base with whatever mission we pick, so let's pick now
-			// we'll iterate the mission list, starting at a random point, and wrapping around to the beginning
-			int max = types.size();
-			int entry = RNG::generate(0,  max - 1);
-			std::vector<std::string> regions;
-
-			for (int i = 0; i != max; ++i)
-			{
-				regions = regionsMaster;
-				for (std::vector<AlienMission*>::const_iterator j = save->getAlienMissions().begin(); j != save->getAlienMissions().end(); ++j)
-				{
-					// if the mission types match
-					if (types[entry] == (*j)->getRules().getType())
-					{
-						for (std::vector<std::string>::iterator k = regions.begin(); k != regions.end();)
-						{
-							// and the regions match
-							if ((*k) == (*j)->getRegion())
-							{
-								// prune the entry from the list
-								k = regions.erase(k);
-								continue;
-							}
-							++k;
-						}
-					}
-				}
-
-				// we have a valid list of regions containing bases, pick one.
-				if (!regions.empty())
-				{
-					missionType = types[entry];
-					targetRegion = regions[RNG::generate(0, regions.size()-1)];
-					break;
-				}
-				// otherwise, try the next mission in the list.
-				if (max > 1 && ++entry == max)
-				{
-					entry = 0;
-				}
-			}
-		}
 	}
 	// now the easy stuff
 	else if (!command->hasRegionWeights())
