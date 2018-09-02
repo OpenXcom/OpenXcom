@@ -2354,6 +2354,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 		missionType = command->generate(month, GEN_MISSION);
 		std::vector<std::string> missions = command->getMissionTypes(month);
 		int maxMissions = missions.size();
+		bool targetBase = RNG::percent(command->getTargetBaseOdds());
 		int currPos = 0;
 		for (; currPos != maxMissions; ++currPos)
 		{
@@ -2373,6 +2374,27 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 			std::vector<std::string> regions = (command->hasRegionWeights()) ? command->getRegions(month) : mod->getRegionsList();
 			missionRules = mod->getAlienMission(missionType, true);
 			targetZone = missionRules->getSpawnZone();
+
+			if (targetBase)
+			{
+				std::vector<std::string> regionsToKeep;
+				//if we're targetting a base, we ignore regions that don't contain bases, simple.
+				for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
+				{
+					regionsToKeep.push_back(save->locateRegion((*i)->getLongitude(), (*i)->getLatitude())->getRules()->getType());
+				}
+				for (std::vector<std::string>::iterator i = regions.begin(); i != regions.end();)
+				{
+					if (std::find(regionsToKeep.begin(), regionsToKeep.end(), *i) == regionsToKeep.end())
+					{
+						i = regions.erase(i);
+					}
+					else
+					{
+						++i;
+					}
+				}
+			}
 
 			for (std::vector<std::string>::iterator i = regions.begin(); i != regions.end();)
 			{
