@@ -872,23 +872,17 @@ void DebriefingState::prepareDebriefing()
 				craft = (*j);
 				base = (*i);
 				craftIterator = j;
-				if (Ufo *u = dynamic_cast<Ufo*>(craft->getDestination()))
-				{
-					target = "STR_UFO";
-					_missionStatistics->markerName = "STR_UFO_";
-					_missionStatistics->markerId = u->getId();
-				}
-				else if (AlienBase *b = dynamic_cast<AlienBase*>(craft->getDestination()))
+				_missionStatistics->markerName = craft->getDestination()->getMarkerName();
+				_missionStatistics->markerId = craft->getDestination()->getId();
+				target = craft->getDestination()->getType();
+				// Ignore custom mission names
+				if (AlienBase *b = dynamic_cast<AlienBase*>(craft->getDestination()))
 				{
 					target = "STR_ALIEN_BASE";
-					_missionStatistics->markerName = ruleDeploy->getMarkerName();
-					_missionStatistics->markerId = b->getId();
 				}
 				else if (MissionSite *ms = dynamic_cast<MissionSite*>(craft->getDestination()))
 				{
 					target = "STR_MISSION_SITE";
-					_missionStatistics->markerName = ruleDeploy->getMarkerName();
-					_missionStatistics->markerId = ms->getId();
 				}
 				craft->returnToBase();
 				craft->setMissionComplete(true);
@@ -912,7 +906,7 @@ void DebriefingState::prepareDebriefing()
 		if ((*i)->isInBattlescape())
 		{
 			base = (*i);
-			target = "STR_BASE";
+			target = base->getType();
 			base->setInBattlescape(false);
 			base->cleanupDefenses(false);
 			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
