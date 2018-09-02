@@ -103,7 +103,7 @@ void AlienBase::setId(int id)
  */
 std::wstring AlienBase::getDefaultName(Language *lang) const
 {
-	return lang->getString(_deployment->getMarkerName() + "_").arg(_id);
+	return lang->getString(_deployment->getMarkerName()).arg(_id);
 }
 
 /**
