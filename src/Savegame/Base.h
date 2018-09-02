@@ -62,8 +62,6 @@ private:
 
 	/// Determines space taken up by ammo clips about to rearm craft.
 	double getIgnoredStores();
-	/// Gets the base's default name (unused).
-	std::wstring getDefaultName(Language *) const { return L""; }
 
 	using Target::load;
 public:
@@ -75,11 +73,11 @@ public:
 	void load(const YAML::Node& node, SavedGame *save, bool newGame, bool newBattleGame = false);
 	/// Saves the base to YAML.
 	YAML::Node save() const;
-	/// Saves the base's ID to YAML.
-	YAML::Node saveId() const;
+	/// Gets the base's type.
+	std::string getType() const;
 	/// Gets the base's name.
 	std::wstring getName(Language *lang = 0) const;
-	/// Gets the base's marker.
+	/// Gets the base's marker sprite.
 	int getMarker() const;
 	/// Gets the base's facilities.
 	std::vector<BaseFacility*> *getFacilities();

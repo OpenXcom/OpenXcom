@@ -47,7 +47,7 @@ class Craft : public MovingTarget
 private:
 	RuleCraft *_rules;
 	Base *_base;
-	int _id, _fuel, _damage, _interceptionOrder, _takeoff;
+	int _fuel, _damage, _interceptionOrder, _takeoff;
 	std::vector<CraftWeapon*> _weapons;
 	ItemContainer *_items;
 	std::vector<Vehicle*> _vehicles;
@@ -65,19 +65,17 @@ public:
 	void load(const YAML::Node& node, const Mod *mod, SavedGame *save);
 	/// Saves the craft to YAML.
 	YAML::Node save() const;
-	/// Saves the craft's ID to YAML.
-	YAML::Node saveId() const;
 	/// Loads a craft ID from YAML.
 	static CraftId loadId(const YAML::Node &node);
+	/// Gets the craft's type.
+	std::string getType() const;
 	/// Gets the craft's ruleset.
 	RuleCraft *getRules() const;
 	/// Sets the craft's ruleset.
 	void changeRules(RuleCraft *rules);
-	/// Gets the craft's ID.
-	int getId() const;
 	/// Gets the craft's default name.
 	std::wstring getDefaultName(Language *lang) const;
-	/// Gets the craft's marker.
+	/// Gets the craft's marker sprite.
 	int getMarker() const;
 	/// Gets the craft's base.
 	Base *getBase() const;

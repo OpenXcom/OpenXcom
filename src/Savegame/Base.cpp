@@ -274,20 +274,18 @@ YAML::Node Base::save() const
 }
 
 /**
- * Saves the base's unique identifiers to a YAML file.
- * @return YAML node.
+ * Returns the base's unique type used for
+ * savegame purposes.
+ * @return ID.
  */
-YAML::Node Base::saveId() const
+std::string Base::getType() const
 {
-	YAML::Node node = Target::saveId();
-	node["type"] = "STR_BASE";
-	node["id"] = 0;
-	return node;
+	return "STR_BASE";
 }
 
 /**
  * Returns the custom name for the base.
- * @param lang Language to get strings from.
+ * @param lang Language to get strings from (unused).
  * @return Name.
  */
 std::wstring Base::getName(Language *) const

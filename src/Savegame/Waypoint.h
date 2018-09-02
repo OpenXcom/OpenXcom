@@ -29,26 +29,14 @@ namespace OpenXcom
  */
 class Waypoint : public Target
 {
-private:
-	int _id;
 public:
 	/// Creates a waypoint.
 	Waypoint();
 	/// Cleans up the waypoint.
 	~Waypoint();
-	/// Loads the waypoint from YAML.
-	void load(const YAML::Node& node);
-	/// Saves the waypoint to YAML.
-	YAML::Node save() const;
-	/// Saves the waypoint's ID to YAML.
-	YAML::Node saveId() const;
-	/// Gets the waypoint's ID.
-	int getId() const;
-	/// Sets the waypoint's ID.
-	void setId(int id);
-	/// Gets the waypoint's default name.
-	std::wstring getDefaultName(Language *lang) const;
-	/// Gets the waypoint's marker.
+	/// Gets the waypoint's type.
+	std::string getType() const;
+	/// Gets the waypoint's marker sprite.
 	int getMarker() const;
 };
 

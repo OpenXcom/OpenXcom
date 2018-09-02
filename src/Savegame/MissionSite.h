@@ -35,7 +35,7 @@ class MissionSite : public Target
 private:
 	const RuleAlienMission *_rules;
 	const AlienDeployment *_deployment;
-	int _id, _texture;
+	int _texture;
 	size_t _secondsRemaining;
 	std::string _race, _city;
 	bool _inBattlescape, _detected;
@@ -48,19 +48,15 @@ public:
 	void load(const YAML::Node& node);
 	/// Saves the mission site to YAML.
 	YAML::Node save() const;
-	/// Saves the mission site's ID to YAML.
-	YAML::Node saveId() const;
+	/// Gets the waypoint's type.
+	std::string getType() const;
 	/// Gets the mission site's ruleset.
 	const RuleAlienMission *getRules() const;
 	/// Gets the mission site's deployment.
 	const AlienDeployment *getDeployment() const;
-	/// Gets the mission site's ID.
-	int getId() const;
-	/// Sets the mission site's ID.
-	void setId(int id);
-	/// Gets the mission site's default name.
-	std::wstring getDefaultName(Language *lang) const;
-	/// Gets the mission site's marker.
+	/// Gets the mission site's marker name.
+	std::string getMarkerName() const;
+	/// Gets the mission site's marker sprite.
 	int getMarker() const;
 	/// Gets the seconds until this mission site expires.
 	size_t getSecondsRemaining() const;

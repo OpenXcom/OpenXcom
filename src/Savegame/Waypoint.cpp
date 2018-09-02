@@ -25,7 +25,7 @@ namespace OpenXcom
 /**
  * Initializes a waypoint.
  */
-Waypoint::Waypoint() : Target(), _id(0)
+Waypoint::Waypoint() : Target()
 {
 }
 
@@ -37,64 +37,13 @@ Waypoint::~Waypoint()
 }
 
 /**
- * Loads the waypoint from a YAML file.
- * @param node YAML node.
+ * Returns the waypoint's unique type used for
+ * savegame purposes.
+ * @return ID.
  */
-void Waypoint::load(const YAML::Node &node)
+std::string Waypoint::getType() const
 {
-	Target::load(node);
-	_id = node["id"].as<int>(_id);
-}
-
-/**
- * Saves the waypoint to a YAML file.
- * @return YAML node.
- */
-YAML::Node Waypoint::save() const
-{
-	YAML::Node node = Target::save();
-	node["id"] = _id;
-	return node;
-}
-
-/**
- * Saves the waypoint's unique identifiers to a YAML file.
- * @return YAML node.
- */
-YAML::Node Waypoint::saveId() const
-{
-	YAML::Node node = Target::saveId();
-	node["type"] = "STR_WAYPOINT";
-	node["id"] = _id;
-	return node;
-}
-
-/**
- * Returns the waypoint's unique ID.
- * @return Unique ID.
- */
-int Waypoint::getId() const
-{
-	return _id;
-}
-
-/**
- * Changes the waypoint's unique ID.
- * @param id Unique ID.
- */
-void Waypoint::setId(int id)
-{
-	_id = id;
-}
-
-/**
- * Returns the waypoint's unique default name.
- * @param lang Language to get strings from.
- * @return Full name.
- */
-std::wstring Waypoint::getDefaultName(Language *lang) const
-{
-	return lang->getString("STR_WAY_POINT_").arg(_id);
+	return "STR_WAY_POINT";
 }
 
 /**

@@ -47,7 +47,7 @@ const char *Ufo::ALTITUDE_STRING[] = {
  * @param rules Pointer to ruleset.
  */
 Ufo::Ufo(const RuleUfo *rules)
-  : MovingTarget(), _rules(rules), _id(0), _crashId(0), _landId(0), _damage(0), _direction("STR_NORTH")
+  : MovingTarget(), _rules(rules), _crashId(0), _landId(0), _damage(0), _direction("STR_NORTH")
   , _altitude("STR_HIGH_UC"), _status(FLYING), _secondsRemaining(0)
   , _inBattlescape(false), _mission(0), _trajectory(0)
   , _trajectoryPoint(0), _detected(false), _hyperDetected(false), _processedIntercept(false), _shootingAt(0), _hitFrame(0)
@@ -112,7 +112,6 @@ private:
 void Ufo::load(const YAML::Node &node, const Mod &mod, SavedGame &game)
 {
 	MovingTarget::load(node);
-	_id = node["id"].as<int>(_id);
 	_crashId = node["crashId"].as<int>(_crashId);
 	_landId = node["landId"].as<int>(_landId);
 	_damage = node["damage"].as<int>(_damage);
@@ -189,7 +188,6 @@ YAML::Node Ufo::save(bool newBattle) const
 {
 	YAML::Node node = MovingTarget::save();
 	node["type"] = _rules->getType();
-	node["id"] = _id;
 	if (_crashId)
 	{
 		node["crashId"] = _crashId;
@@ -223,15 +221,13 @@ YAML::Node Ufo::save(bool newBattle) const
 }
 
 /**
- * Saves the UFO's unique identifiers to a YAML file.
- * @return YAML node.
+ * Returns the UFO's unique type used for
+ * savegame purposes.
+ * @return ID.
  */
-YAML::Node Ufo::saveId() const
+std::string Ufo::getType() const
 {
-	YAML::Node node = MovingTarget::saveId();
-	node["type"] = "STR_UFO";
-	node["id"] = _id;
-	return node;
+	return "STR_UFO";
 }
 
 /**
@@ -254,25 +250,6 @@ void Ufo::changeRules(const RuleUfo *rules)
 }
 
 /**
- * Returns the UFO's unique ID. If it's 0,
- * this UFO has never been detected.
- * @return Unique ID.
- */
-int Ufo::getId() const
-{
-	return _id;
-}
-
-/**
- * Changes the UFO's unique ID.
- * @param id Unique ID.
- */
-void Ufo::setId(int id)
-{
-	_id = id;
-}
-
-/**
  * Returns the UFO's unique default name.
  * @param lang Language to get strings from.
  * @return Full name.
@@ -281,15 +258,29 @@ std::wstring Ufo::getDefaultName(Language *lang) const
 {
 	switch (_status)
 	{
-	case FLYING:
-	case DESTROYED: // Destroyed also means leaving Earth.
-		return lang->getString("STR_UFO_").arg(_id);
 	case LANDED:
-		return lang->getString("STR_LANDING_SITE_").arg(_landId);
+		return lang->getString(getMarkerName()).arg(_landId);
 	case CRASHED:
-		return lang->getString("STR_CRASH_SITE_").arg(_crashId);
+		return lang->getString(getMarkerName()).arg(_crashId);
 	default:
-		return L"";
+		return lang->getString(getMarkerName()).arg(_id);
+	}
+}
+
+/**
+ * Returns the name on the globe for the UFO.
+ * @return String ID.
+ */
+std::string Ufo::getMarkerName() const
+{
+	switch (_status)
+	{
+	case LANDED:
+		return "STR_LANDING_SITE_";
+	case CRASHED:
+		return "STR_CRASH_SITE_";
+	default:
+		return "STR_UFO_";
 	}
 }
 

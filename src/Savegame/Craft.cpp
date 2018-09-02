@@ -47,7 +47,7 @@ namespace OpenXcom
  * @param base Pointer to base of origin.
  * @param id ID to assign to the craft (0 to not assign).
  */
-Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _interceptionOrder(0), _takeoff(0), _status("STR_READY"), _lowFuel(false), _mission(false), _inBattlescape(false), _inDogfight(false)
+Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _fuel(0), _damage(0), _interceptionOrder(0), _takeoff(0), _status("STR_READY"), _lowFuel(false), _mission(false), _inBattlescape(false), _inDogfight(false)
 {
 	_items = new ItemContainer();
 	if (id != 0)
@@ -90,7 +90,6 @@ Craft::~Craft()
 void Craft::load(const YAML::Node &node, const Mod *mod, SavedGame *save)
 {
 	MovingTarget::load(node);
-	_id = node["id"].as<int>(_id);
 	_fuel = node["fuel"].as<int>(_fuel);
 	_damage = node["damage"].as<int>(_damage);
 
@@ -218,7 +217,6 @@ YAML::Node Craft::save() const
 {
 	YAML::Node node = MovingTarget::save();
 	node["type"] = _rules->getType();
-	node["id"] = _id;
 	node["fuel"] = _fuel;
 	node["damage"] = _damage;
 	for (std::vector<CraftWeapon*>::const_iterator i = _weapons.begin(); i != _weapons.end(); ++i)
@@ -264,16 +262,13 @@ CraftId Craft::loadId(const YAML::Node &node)
 }
 
 /**
- * Saves the craft's unique identifiers to a YAML file.
- * @return YAML node.
+ * Returns the craft's unique type used for
+ * savegame purposes.
+ * @return ID.
  */
-YAML::Node Craft::saveId() const
+std::string Craft::getType() const
 {
-	YAML::Node node = MovingTarget::saveId();
-	CraftId uniqueId = getUniqueId();
-	node["type"] = uniqueId.first;
-	node["id"] = uniqueId.second;
-	return node;
+	return _rules->getType();
 }
 
 /**
@@ -301,23 +296,13 @@ void Craft::changeRules(RuleCraft *rules)
 }
 
 /**
- * Returns the craft's unique ID. Each craft
- * can be identified by its type and ID.
- * @return Unique ID.
- */
-int Craft::getId() const
-{
-	return _id;
-}
-
-/**
  * Returns the craft's unique default name.
  * @param lang Language to get strings from.
  * @return Full name.
  */
 std::wstring Craft::getDefaultName(Language *lang) const
 {
-	return lang->getString("STR_CRAFTNAME").arg(lang->getString(_rules->getType())).arg(_id);
+	return lang->getString("STR_CRAFTNAME").arg(lang->getString(getType())).arg(_id);
 }
 
 /**
