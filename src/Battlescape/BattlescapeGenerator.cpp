@@ -243,6 +243,7 @@ void BattlescapeGenerator::nextStage()
 				}
 			}
 		}
+		(*i)->setFire(0);
 		(*i)->setTile(0);
 		(*i)->setPosition(Position(-1,-1,-1), false);
 	}
