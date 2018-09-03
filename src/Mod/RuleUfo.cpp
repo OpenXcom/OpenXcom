@@ -53,21 +53,15 @@ void RuleUfo::load(const YAML::Node &node, Mod *mod)
 	_sprite = node["sprite"].as<int>(_sprite);
 	if (node["marker"])
 	{
-		_marker = node["marker"].as<int>(_marker);
-		if (_marker > 8)
-			_marker += mod->getModOffset();
+		_marker = mod->getOffset(node["marker"].as<int>(_marker), 8);
 	}
 	if (node["markerLand"])
 	{
-		_markerLand = node["markerLand"].as<int>(_markerLand);
-		if (_markerLand > 8)
-			_markerLand += mod->getModOffset();
+		_markerLand = mod->getOffset(node["markerLand"].as<int>(_markerLand), 8);
 	}
 	if (node["markerCrash"])
 	{
-		_marker = node["markerCrash"].as<int>(_markerCrash);
-		if (_markerCrash > 8)
-			_markerCrash += mod->getModOffset();
+		_marker = mod->getOffset(node["markerCrash"].as<int>(_markerCrash), 8);
 	}
 	_damageMax = node["damageMax"].as<int>(_damageMax);
 	_speedMax = node["speedMax"].as<int>(_speedMax);

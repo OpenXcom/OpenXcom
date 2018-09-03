@@ -158,8 +158,8 @@ void StartState::think()
 		addLine(L"");
 		addLine(L"ERROR: " + Language::utf8ToWstr(error));
 		addLine(L"");
+		addLine(L"More details here: " + Language::utf8ToWstr(Logger::logFile()));
 		addLine(L"Make sure OpenXcom and any mods are installed correctly.");
-		addLine(L"For more details see: " + Language::utf8ToWstr(Logger::logFile()));
 		addLine(L"");
 		addLine(L"Press any key to continue.");
 		loading = LOADING_DONE;

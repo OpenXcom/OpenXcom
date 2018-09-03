@@ -153,9 +153,7 @@ void AlienDeployment::load(const YAML::Node &node, Mod *mod)
 	_markerName = node["markerName"].as<std::string>(_markerName);
 	if (node["markerIcon"])
 	{
-		_markerIcon = node["markerIcon"].as<int>(_markerIcon);
-		if (_markerIcon > 8)
-			_markerIcon += mod->getModOffset();
+		_markerIcon = mod->getOffset(node["markerIcon"].as<int>(_markerIcon), 8);
 	}
 	if (node["depth"])
 	{

@@ -633,8 +633,8 @@ int Mod::getModOffset() const
 /**
  * Returns the appropriate mod-based offset for a sprite.
  * If the ID is bigger than the surfaceset contents, the mod offset is applied.
- * @param id Numeric ID of the sprite.
- * @param resource Name of the surfaceset to lookup.
+ * @param sprite Numeric ID of the sprite.
+ * @param set Name of the surfaceset to lookup.
  */
 int Mod::getSpriteOffset(int sprite, const std::string& set) const
 {
@@ -648,8 +648,8 @@ int Mod::getSpriteOffset(int sprite, const std::string& set) const
 /**
  * Returns the appropriate mod-based offset for a sound.
  * If the ID is bigger than the soundset contents, the mod offset is applied.
- * @param id Numeric ID of the sound.
- * @param resource Name of the soundset to lookup.
+ * @param sound Numeric ID of the sound.
+ * @param set Name of the soundset to lookup.
  */
 int Mod::getSoundOffset(int sound, const std::string& set) const
 {
@@ -658,6 +658,20 @@ int Mod::getSoundOffset(int sound, const std::string& set) const
 		return sound + _modOffset;
 	else
 		return sound;
+}
+
+/**
+ * Returns the appropriate mod-based offset for a generic ID.
+ * If the ID is bigger than the max, the mod offset is applied.
+ * @param id Numeric ID.
+ * @param max Maximum vanilla value.
+ */
+int Mod::getOffset(int id, int max) const
+{
+	if (id > max)
+		return id + _modOffset;
+	else
+		return id;
 }
 
 /**
@@ -3084,7 +3098,7 @@ void Mod::loadExtraResources()
 			{
 				int startFrame = j->first;
 				std::string fileName = j->second;
-				if (fileName.substr(fileName.length() - 1, 1) == "/")
+				if (fileName[fileName.length() - 1] == '/')
 				{
 					Log(LOG_VERBOSE) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
 					int offset = startFrame;
@@ -3194,7 +3208,7 @@ void Mod::loadExtraResources()
 		{
 			int startSound = j->first;
 			std::string fileName = j->second;
-			if (fileName.substr(fileName.length() - 1, 1) == "/")
+			if (fileName[fileName.length() - 1] == '/')
 			{
 				Log(LOG_VERBOSE) << "Loading sound set from folder: " << fileName << " starting at index: " << startSound;
 				int offset = startSound;

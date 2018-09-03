@@ -93,7 +93,8 @@ void Armor::load(const YAML::Node &node)
 	_deathFrames = node["deathFrames"].as<int>(_deathFrames);
 	_constantAnimation = node["constantAnimation"].as<bool>(_constantAnimation);
 	_forcedTorso = (ForcedTorso)node["forcedTorso"].as<int>(_forcedTorso);
-	if (_drawingRoutine == 0 ||
+	_canHoldWeapon =
+		(_drawingRoutine == 0 ||
 		_drawingRoutine == 1 ||
 		_drawingRoutine == 4 ||
 		_drawingRoutine == 6 ||
@@ -102,14 +103,7 @@ void Armor::load(const YAML::Node &node)
 		_drawingRoutine == 14 ||
 		_drawingRoutine == 15 ||
 		_drawingRoutine == 17 ||
-		_drawingRoutine == 18)
-	{
-		_canHoldWeapon = true;
-	}
-	else
-	{
-		_canHoldWeapon = false;
-	}
+		_drawingRoutine == 18);
 
 	_faceColorGroup = node["spriteFaceGroup"].as<int>(_faceColorGroup);
 	_hairColorGroup = node["spriteHairGroup"].as<int>(_hairColorGroup);

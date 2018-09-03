@@ -75,10 +75,8 @@ void RuleItem::load(const YAML::Node &node, Mod *mod, int listOrder)
 	}
 	if (node["bulletSprite"])
 	{
-		// Projectiles: 385 entries ((105*33) / (3*3)) (35 sprites per projectile(0-34), 11 projectiles (0-10))
-		_bulletSprite = node["bulletSprite"].as<int>(_bulletSprite) * 35;
-		if (_bulletSprite >= 385)
-			_bulletSprite += mod->getModOffset();
+		// Projectiles: 0-384 entries ((105*33) / (3*3)) (35 sprites per projectile(0-34), 11 projectiles (0-10))
+		_bulletSprite = mod->getOffset(node["bulletSprite"].as<int>(_bulletSprite) * 35, 384);
 	}
 	if (node["fireSound"])
 	{

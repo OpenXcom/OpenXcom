@@ -72,7 +72,7 @@ YAML::Node MissionSite::save() const
 }
 
 /**
- * Returns the mission site's unique type used for
+ * Returns the mission's unique type used for
  * savegame purposes.
  * @return ID.
  */
@@ -100,7 +100,7 @@ const AlienDeployment *MissionSite::getDeployment() const
 }
 
 /**
- * Returns the name on the globe for the target.
+ * Returns the name on the globe for the mission.
  * @return String ID.
  */
 std::string MissionSite::getMarkerName() const

@@ -252,6 +252,8 @@ public:
 	int getSpriteOffset(int sprite, const std::string &set) const;
 	/// Gets the mod offset for a certain sound.
 	int getSoundOffset(int sound, const std::string &set) const;
+	/// Gets the mod offset for a generic value.
+	int getOffset(int id, int max) const;
 
 	/// Loads a list of mods.
 	void loadAll(const std::vector< std::pair< std::string, std::vector<std::string> > > &mods);

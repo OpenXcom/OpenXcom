@@ -47,10 +47,8 @@ void RuleCraftWeapon::load(const YAML::Node &node, Mod *mod)
 	_type = node["type"].as<std::string>(_type);
 	if (node["sprite"])
 	{
-		_sprite = node["sprite"].as<int>(_sprite);
 		// this one is an offset within INTICONS.PCK
-		if (_sprite > 5)
-			_sprite += mod->getModOffset();
+		_sprite = mod->getOffset(node["sprite"].as<int>(_sprite), 5);
 	}
 	if (node["sound"])
 	{

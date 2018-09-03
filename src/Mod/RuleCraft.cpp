@@ -54,16 +54,12 @@ void RuleCraft::load(const YAML::Node &node, Mod *mod, int listOrder)
 	_requires = node["requires"].as< std::vector<std::string> >(_requires);
 	if (node["sprite"])
 	{
-		_sprite = node["sprite"].as<int>(_sprite);
 		// this is an offset in BASEBITS.PCK, and two in INTICONS.PCK
-		if (_sprite > 4)
-			_sprite += mod->getModOffset();
+		_sprite = mod->getOffset(node["sprite"].as<int>(_sprite), 4);
 	}
 	if (node["marker"])
 	{
-		_marker = node["marker"].as<int>(_marker);
-		if (_marker > 8)
-			_marker += mod->getModOffset();
+		_marker = mod->getOffset(node["marker"].as<int>(_marker), 8);
 	}
 	_fuelMax = node["fuelMax"].as<int>(_fuelMax);
 	_damageMax = node["damageMax"].as<int>(_damageMax);

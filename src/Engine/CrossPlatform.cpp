@@ -1097,7 +1097,7 @@ void crashDump(void *ex, const std::string &err)
 #endif
 	std::ostringstream msg;
 	msg << "OpenXcom has crashed: " << error.str() << std::endl;
-	msg << "For more details see: " << Logger::logFile() << std::endl;
+	msg << "More details here: " << Logger::logFile() << std::endl;
 	msg << "If this error was unexpected, please report it to the developers.";
 	showError(msg.str());
 }
