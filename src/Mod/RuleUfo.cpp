@@ -61,7 +61,7 @@ void RuleUfo::load(const YAML::Node &node, Mod *mod)
 	}
 	if (node["markerCrash"])
 	{
-		_marker = mod->getOffset(node["markerCrash"].as<int>(_markerCrash), 8);
+		_markerCrash = mod->getOffset(node["markerCrash"].as<int>(_markerCrash), 8);
 	}
 	_damageMax = node["damageMax"].as<int>(_damageMax);
 	_speedMax = node["speedMax"].as<int>(_speedMax);
