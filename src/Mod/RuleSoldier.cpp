@@ -29,7 +29,7 @@ namespace OpenXcom
  * type of soldier.
  * @param type String defining the type.
  */
-RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _costBuy(0), _costSalary(0), _standHeight(0), _kneelHeight(0), _floatHeight(0), _femaleFrequency(50)
+RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _costBuy(0), _costSalary(0), _standHeight(0), _kneelHeight(0), _floatHeight(0), _femaleFrequency(50), _value(20)
 {
 }
 
@@ -66,6 +66,7 @@ void RuleSoldier::load(const YAML::Node &node, Mod *mod)
 	_kneelHeight = node["kneelHeight"].as<int>(_kneelHeight);
 	_floatHeight = node["floatHeight"].as<int>(_floatHeight);
 	_femaleFrequency = node["femaleFrequency"].as<int>(_femaleFrequency);
+	_value = node["value"].as<int>(_value);
 
 	if (node["deathMale"])
 	{
@@ -265,12 +266,21 @@ const std::vector<int> &RuleSoldier::getFemaleDeathSounds() const
 }
 
 /**
-* Returns the list of soldier name pools.
-* @return Pointer to soldier name pool list.
-*/
+ * Returns the list of soldier name pools.
+ * @return Pointer to soldier name pool list.
+ */
 const std::vector<SoldierNamePool*> &RuleSoldier::getNames() const
 {
 	return _names;
+}
+
+/**
+ * Gets the soldier's base value, without experience modifiers.
+ * @return The soldier's value.
+ */
+int RuleSoldier::getValue() const
+{
+	return _value;
 }
 
 }
