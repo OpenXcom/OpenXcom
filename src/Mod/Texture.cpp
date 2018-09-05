@@ -79,12 +79,15 @@ std::string Texture::getRandomTerrain(Target *target) const
 			possibilities[totalWeight] = i->name;
 		}
 	}
-	int pick = RNG::generate(1, totalWeight);
-	for (std::map<int, std::string>::const_iterator i = possibilities.begin(); i != possibilities.end(); ++i)
+	if (totalWeight > 0)
 	{
-		if (pick <= i->first)
+		int pick = RNG::generate(1, totalWeight);
+		for (std::map<int, std::string>::const_iterator i = possibilities.begin(); i != possibilities.end(); ++i)
 		{
-			return i->second;
+			if (pick <= i->first)
+			{
+				return i->second;
+			}
 		}
 	}
 	return "";

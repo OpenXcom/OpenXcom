@@ -171,7 +171,7 @@ GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomO
 	_dogfightStartTimer = new Timer(Options::dogfightSpeed);
 	_dogfightTimer = new Timer(Options::dogfightSpeed);
 
-	_txtDebug = new Text(200, 18, 0, 0);
+	_txtDebug = new Text(200, 32, 0, 0);
 
 	// Set palette
 	setInterface("geoscape");

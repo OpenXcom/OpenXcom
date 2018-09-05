@@ -529,6 +529,11 @@ void BattlescapeGenerator::run()
 			_terrain = _game->getMod()->getTerrain(_worldTexture->getRandomTerrain(target), true);
 		}
 	}
+
+	if (_terrain == 0)
+	{
+		throw Exception("Map generator encountered an error: No valid terrain found.");
+	}
 	
 	setDepth(ruleDeploy, false);
 
