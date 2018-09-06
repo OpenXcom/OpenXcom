@@ -283,7 +283,7 @@ void UnitFallBState::think()
 
 							Tile *bu = _parent->getSave()->getTile(originalPosition + Position(0,0,-1));
 							unitBelow->startWalking(dir, unitBelow->getPosition() + offset, bu, 
-								(unitBelow->getVisible() && _parent->getMap()->getCamera()->isOnScreen(unitBelow->getPosition(), true, unitBelow->getArmor()->getSize(), false)));
+								(unitBelow->getVisible() && _parent->getMap()->getCamera()->isOnScreen(unitBelow->getPosition(), true, unitBelow->getArmor()->getSize() - 1, false)));
 							ub = unitsToMove.erase(ub);
 						}
 					}
