@@ -872,17 +872,20 @@ void DebriefingState::prepareDebriefing()
 				craft = (*j);
 				base = (*i);
 				craftIterator = j;
-				_missionStatistics->markerName = craft->getDestination()->getMarkerName();
-				_missionStatistics->markerId = craft->getDestination()->getId();
-				target = craft->getDestination()->getType();
-				// Ignore custom mission names
-				if (dynamic_cast<AlienBase*>(craft->getDestination()))
+				if (craft->getDestination() != 0)
 				{
-					target = "STR_ALIEN_BASE";
-				}
-				else if (dynamic_cast<MissionSite*>(craft->getDestination()))
-				{
-					target = "STR_MISSION_SITE";
+					_missionStatistics->markerName = craft->getDestination()->getMarkerName();
+					_missionStatistics->markerId = craft->getDestination()->getId();
+					target = craft->getDestination()->getType();
+					// Ignore custom mission names
+					if (dynamic_cast<AlienBase*>(craft->getDestination()))
+					{
+						target = "STR_ALIEN_BASE";
+					}
+					else if (dynamic_cast<MissionSite*>(craft->getDestination()))
+					{
+						target = "STR_MISSION_SITE";
+					}
 				}
 				craft->returnToBase();
 				craft->setMissionComplete(true);
