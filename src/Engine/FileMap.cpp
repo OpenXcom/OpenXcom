@@ -128,23 +128,19 @@ static void _mapFiles(const std::string &modId, const std::string &basePath,
 	for (std::vector<std::string>::iterator i = files.begin(); i != files.end(); ++i)
 	{
 		std::string fullpath = fullDir + "/" + *i;
-		
-		if (_canonicalize(*i) == "metadata.yml" || rulesetFiles.find(*i) != rulesetFiles.end())
-		{
-			// no need to map mod metadata files or ruleset files
-			Log(LOG_VERBOSE) << "  ignoring non-resource file: " << fullpath;
-			continue;
-		}
 
 		if (CrossPlatform::folderExists(fullpath))
 		{
 			Log(LOG_VERBOSE) << "  recursing into: " << fullpath;
-			// allow old mod directory format -- if the top-level subdir
-			// is named "Mod" and no top-level ruleset files were found,
-			// record ruleset files in that subdirectory, otherwise ignore them
-			bool ignoreModsRecurse = ignoreMods ||
-				!rulesetFiles.empty() || !relPath.empty() || _canonicalize(*i) != "ruleset";
-			_mapFiles(modId, basePath, _combinePath(relPath, *i), ignoreModsRecurse);
+			_mapFiles(modId, basePath, _combinePath(relPath, *i), ignoreMods);
+			continue;
+		}
+
+		std::string canonicalFile = _canonicalize(*i);
+		if (canonicalFile == "metadata.yml" || rulesetFiles.find(*i) != rulesetFiles.end())
+		{
+			// no need to map mod metadata files or ruleset files
+			Log(LOG_VERBOSE) << "  ignoring non-resource file: " << fullpath;
 			continue;
 		}
 
@@ -161,7 +157,6 @@ static void _mapFiles(const std::string &modId, const std::string &basePath,
 
 		// populate vdir map
 		std::string canonicalRelativePath = _canonicalize(relPath);
-		std::string canonicalFile = _canonicalize(*i);
 		if (_vdirs.find(canonicalRelativePath) == _vdirs.end())
 		{
 			_vdirs.insert(std::pair< std::string, std::set<std::string> >(canonicalRelativePath, std::set<std::string>()));
