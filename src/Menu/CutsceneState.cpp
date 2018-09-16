@@ -113,7 +113,7 @@ bool CutsceneState::initDisplay()
 void CutsceneState::resetDisplay(bool wasLetterboxed)
 {
 	Options::keepAspectRatio = wasLetterboxed;
-	Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+	Screen::updateScale(Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 	_game->getScreen()->resetDisplay(false);
 }
 

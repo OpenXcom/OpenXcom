@@ -72,7 +72,7 @@ InventoryState::InventoryState(bool tu, BattlescapeState *parent) : _tu(tu), _pa
 	}
 	else if (!_battleGame->getTileEngine())
 	{
-		Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
+		Screen::updateScale(Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
 		_game->getScreen()->resetDisplay(false);
 	}
 
@@ -254,7 +254,7 @@ InventoryState::~InventoryState()
 	{
 		if (Options::maximizeInfoScreens)
 		{
-			Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
+			Screen::updateScale(Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
 			_game->getScreen()->resetDisplay(false);
 		}
 		Tile *inventoryTile = _battleGame->getSelectedUnit()->getTile();
@@ -264,7 +264,7 @@ InventoryState::~InventoryState()
 	}
 	else
 	{
-		Screen::updateScale(Options::geoscapeScale, Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
+		Screen::updateScale(Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);
 		_game->getScreen()->resetDisplay(false);
 	}
 }

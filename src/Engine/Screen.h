@@ -97,7 +97,7 @@ public:
 	/// Checks whether OpenGL output is requested
 	static bool useOpenGL();
 	/// update the game scale as required.
-	static void updateScale(int &type, int selection, int &x, int &y, bool change);
+	static void updateScale(int type, int &width, int &height, bool change);
 };
 
 }
