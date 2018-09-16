@@ -3257,28 +3257,32 @@ void Mod::loadExtraResources()
  */
 void Mod::modResources()
 {
-	// bigger geoscape background
-	int newWidth = 320 - 64, newHeight = 200;
-	Surface *newGeo = new Surface(newWidth * 3, newHeight * 3);
-	Surface *oldGeo = _surfaces["GEOBORD.SCR"];
-	for (int x = 0; x < newWidth; ++x)
+	// embiggen the geoscape background by mirroring the contents
+	// modders can provide their own backgrounds via ALTGEOBORD.SCR
+	if (_surfaces.find("ALTGEOBORD.SCR") == _surfaces.end())
 	{
-		for (int y = 0; y < newHeight; ++y)
+		int newWidth = 320 - 64, newHeight = 200;
+		Surface *newGeo = new Surface(newWidth * 3, newHeight * 3);
+		Surface *oldGeo = _surfaces["GEOBORD.SCR"];
+		for (int x = 0; x < newWidth; ++x)
 		{
-			newGeo->setPixel(newWidth + x, newHeight + y, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth - x - 1, newHeight + y, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth * 3 - x - 1, newHeight + y, oldGeo->getPixel(x, y));
+			for (int y = 0; y < newHeight; ++y)
+			{
+				newGeo->setPixel(newWidth + x, newHeight + y, oldGeo->getPixel(x, y));
+				newGeo->setPixel(newWidth - x - 1, newHeight + y, oldGeo->getPixel(x, y));
+				newGeo->setPixel(newWidth * 3 - x - 1, newHeight + y, oldGeo->getPixel(x, y));
 
-			newGeo->setPixel(newWidth + x, newHeight - y - 1, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth - x - 1, newHeight - y - 1, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth * 3 - x - 1, newHeight - y - 1, oldGeo->getPixel(x, y));
+				newGeo->setPixel(newWidth + x, newHeight - y - 1, oldGeo->getPixel(x, y));
+				newGeo->setPixel(newWidth - x - 1, newHeight - y - 1, oldGeo->getPixel(x, y));
+				newGeo->setPixel(newWidth * 3 - x - 1, newHeight - y - 1, oldGeo->getPixel(x, y));
 
-			newGeo->setPixel(newWidth + x, newHeight * 3 - y - 1, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth - x - 1, newHeight * 3 - y - 1, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth * 3 - x - 1, newHeight * 3 - y - 1, oldGeo->getPixel(x, y));
+				newGeo->setPixel(newWidth + x, newHeight * 3 - y - 1, oldGeo->getPixel(x, y));
+				newGeo->setPixel(newWidth - x - 1, newHeight * 3 - y - 1, oldGeo->getPixel(x, y));
+				newGeo->setPixel(newWidth * 3 - x - 1, newHeight * 3 - y - 1, oldGeo->getPixel(x, y));
+			}
 		}
+		_surfaces["ALTGEOBORD.SCR"] = newGeo;
 	}
-	_surfaces["ALTGEOBORD.SCR"] = newGeo;
 
 	// here we create an "alternate" background surface for the base info screen.
 	_surfaces["ALTBACK07.SCR"] = new Surface(320, 200);
@@ -3294,7 +3298,6 @@ void Mod::modResources()
 			_surfaces["ALTBACK07.SCR"]->setPixel(x, y + 10, _surfaces["ALTBACK07.SCR"]->getPixel(x, y));
 
 	// we create extra rows on the soldier stat screens by shrinking them all down one pixel.
-	// this is done after loading them, but BEFORE loading the extraSprites, in case a modder wants to replace them.
 
 	// first, let's do the base info screen
 	// erase the old lines, copying from a +2 offset to account for the dithering
