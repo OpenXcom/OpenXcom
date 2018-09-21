@@ -641,7 +641,6 @@ endif()
 # TODO: Can't deactivate on FreeBSD? w/o LIBC, SDL_stdinc.h can't define
 # anything.
 if(LIBC)
-message("sadfasfasdfasdfasdfasdfsfsadfasfdfs")
   if(WINDOWS AND NOT MINGW)
     set(HAVE_LIBC TRUE)
     foreach(_HEADER stdio.h string.h wchar.h ctype.h math.h limits.h)
