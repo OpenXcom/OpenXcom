@@ -309,7 +309,7 @@ void MiniMapView::mouseOver(Action *action, State *state)
 		{
 			// Set the mouse cursor back
 			SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-			SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
+			SDL_WarpMouseInWindow(_game->getScreen()->getWindow(), _xBeforeMouseScrolling, _yBeforeMouseScrolling);
 			SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
 		}
 
@@ -410,7 +410,7 @@ void MiniMapView::stopScrolling(Action *action)
 {
 	if (!Options::battleDragScrollInvert)
 	{
-		SDL_WarpMouse(_cursorPosition.x, _cursorPosition.y);
+		SDL_WarpMouseInWindow(_game->getScreen()->getWindow(), _cursorPosition.x, _cursorPosition.y);
 		action->setMouseAction(_cursorPosition.x/action->getXScale(), _cursorPosition.y/action->getYScale(), _game->getScreen()->getSurface()->getX(), _game->getScreen()->getSurface()->getY());
 	}
 	// reset our "mouse position stored" flag

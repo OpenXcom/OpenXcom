@@ -35,7 +35,10 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Text::Text(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _big(0), _small(0), _font(0), _lang(0), _wrap(false), _invert(false), _contrast(false), _indent(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0), _color2(0)
+Text::Text(int width, int height, int x, int y)
+	: InteractiveSurface(width, height, x, y), _big(0), _small(0), _font(0)
+	, _lang(0), _wrap(false), _invert(false), _contrast(false), _indent(false)
+	, _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(1), _color2(0)
 {
 }
 
@@ -645,11 +648,13 @@ void Text::draw()
 			Surface* chr = font->getChar(*c);
 			chr->setX(x);
 			chr->setY(y);
+			//SDL_SaveBMP(chr->getSurface(), "c.bmp");
 			ShaderDraw<PaletteShift>(ShaderSurface(this, 0, 0), ShaderCrop(chr), ShaderScalar(color), ShaderScalar(mul), ShaderScalar(mid));
 			if (dir > 0)
 				x += dir * font->getCharSize(*c).w;
 		}
 	}
+	//SDL_SaveBMP(_surface, "texttest.bmp");
 }
 
 }

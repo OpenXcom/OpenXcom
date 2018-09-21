@@ -46,7 +46,7 @@ private:
 	// for use by RuleInterface
 	void setSecondaryColor(Uint8 color) { setTextColor(color); }
 protected:
-	bool isButtonHandled(Uint8 button = 0);
+	bool isButtonHandled(SDL_Event* event, Uint8 button = 0);
 public:
 	static Sound *soundPress;
 	/// Creates a new text button with the specified size and position.

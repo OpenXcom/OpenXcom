@@ -201,13 +201,16 @@ void ScrollBar::mousePress(Action *action, State *state)
 		}
 		_pressed = true;
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	else if (action->getDetails()->type == SDL_MOUSEWHEEL)
 	{
-		_list->scrollUp(false, true);
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-	{
-		_list->scrollDown(false, true);
+		if (action->getDetails()->button.x > 0)
+		{
+			_list->scrollUp(false, true);
+		}
+		else if (action->getDetails()->button.x < 0)
+		{
+			_list->scrollDown(false, true);
+		}
 	}
 }
 

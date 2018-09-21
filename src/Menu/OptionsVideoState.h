@@ -52,8 +52,8 @@ private:
 	Text *_txtOptions;
 	ToggleTextButton *_btnLetterbox, *_btnLockMouse, *_btnRootWindowedMode;
 
-	SDL_Rect** _res;
-	int _resAmount, _resCurrent;
+	std::vector<SDL_DisplayMode> _dsyModes;
+	int _resCurrent;
 	std::vector<std::string> _langs, _filters;
 
 	std::string ucWords(std::string str);

@@ -39,6 +39,8 @@
 
 using namespace OpenXcom;
 
+extern "C" { FILE __iob_func[3] = { *stdin,*stdout,*stderr }; }
+
 // Crash handling routines
 #ifdef _MSC_VER
 #include <windows.h>

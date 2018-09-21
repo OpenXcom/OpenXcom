@@ -145,7 +145,7 @@ void OptionsControlsState::addControls(const std::vector<OptionInfo> &keys)
 	for (std::vector<OptionInfo>::const_iterator i = keys.begin(); i != keys.end(); ++i)
 	{
 		std::wstring name = tr(i->description());
-		SDLKey *key = i->asKey();
+		SDL_Keycode *key = i->asKey();
 		std::wstring keyName = Language::utf8ToWstr(ucWords(SDL_GetKeyName(*key)));
 		if (*key == SDLK_UNKNOWN)
 			keyName = L"";
@@ -231,7 +231,7 @@ void OptionsControlsState::lstControlsKeyPress(Action *action)
 {
 	if (_selected != -1)
 	{
-		SDLKey key = action->getDetails()->key.keysym.sym;
+		SDL_Keycode key = action->getDetails()->key.keysym.sym;
 		if (key != 0)
 		{
 			*_selKey->asKey() = key;

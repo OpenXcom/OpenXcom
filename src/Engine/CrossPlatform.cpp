@@ -802,14 +802,14 @@ bool moveFile(const std::string &src, const std::string &dest)
 /**
  * Notifies the user that maybe he should have a look.
  */
-void flashWindow()
+void flashWindow(SDL_Window* wnd)
 {
 #ifdef _WIN32
 	SDL_SysWMinfo wminfo;
 	SDL_VERSION(&wminfo.version)
-	if (SDL_GetWMInfo(&wminfo))
+	if (SDL_GetWindowWMInfo(wnd, &wminfo))
 	{
-		HWND hwnd = wminfo.window;
+		HWND hwnd = wminfo.info.win.window;
 		FlashWindow(hwnd, true);
 	}
 #endif
@@ -868,7 +868,7 @@ std::string getDosPath()
  * @param winResource ID for Windows icon.
  * @param unixPath Path to PNG icon for Unix.
  */
-void setWindowIcon(int winResource, const std::string &unixPath)
+void setWindowIcon(SDL_Window* wnd, int winResource, const std::string &unixPath)
 {
 #ifdef _WIN32
 	HINSTANCE handle = GetModuleHandle(NULL);
@@ -876,9 +876,9 @@ void setWindowIcon(int winResource, const std::string &unixPath)
 
 	SDL_SysWMinfo wminfo;
 	SDL_VERSION(&wminfo.version)
-	if (SDL_GetWMInfo(&wminfo))
+	if (SDL_GetWindowWMInfo(wnd, &wminfo))
 	{
-		HWND hwnd = wminfo.window;
+		HWND hwnd = wminfo.info.win.window;
 		SetClassLongPtr(hwnd, GCLP_HICON, (LONG_PTR)icon);
 	}
 #else

@@ -462,9 +462,23 @@ if ( FORCE_INSTALL_DATA_TO_BIN )
   set ( data_install_dir bin )
 endif ()
 
+include_directories(
+  ${SDL2_SOURCE_DIR}/include
+  ${CMAKE_SOURCE_DIR}/dep/SDL_GFX
+  #${CMAKE_SOURCE_DIR}/dep/SDL2_gfx
+  ${CMAKE_SOURCE_DIR}/dep/SDL2_image
+  ${CMAKE_SOURCE_DIR}/dep/SDL2_mixer
+  ${YAML_CPP_SOURCE_DIR}/include
+)
+
 add_executable ( openxcom  ${application_type} ${openxcom_src} ${openxcom_icon} )
 install ( TARGETS openxcom ${install_dest} DESTINATION ${CMAKE_INSTALL_BINDIR} )
-# Extra link flags for Windows. They need to be set before the SDL/YAML link flags, otherwise you will get strange link errors ('Undefined reference to WinMain@16')
+
+if ( MSVC )
+  set_target_properties(openxcom PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$(OutDir)")
+endif()
+
+## Extra link flags for Windows. They need to be set before the SDL/YAML link flags, otherwise you will get strange link errors ('Undefined reference to WinMain@16')
 if ( WIN32 )
   set ( basic_windows_libs advapi32.lib shell32.lib shlwapi.lib )
   if ( MINGW )
@@ -476,7 +490,7 @@ if ( WIN32 )
     set_target_properties ( openxcom
       PROPERTIES PREFIX ../ )
   endif ()
-  set ( system_libs ${basic_windows_libs} SDLmain ${static_flags} )
+  set ( system_libs ${basic_windows_libs} ${static_flags} )
 endif ()
 
 # backtrace(3) requires libexecinfo on some *BSD systems
@@ -484,7 +498,18 @@ if (${CMAKE_SYSTEM_NAME} MATCHES FreeBSD OR ${CMAKE_SYSTEM_NAME} MATCHES NetBSD 
   set ( system_libs -lexecinfo )
 endif ()
 
-target_link_libraries ( openxcom ${system_libs} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${SDL_LIBRARY} ${OPENGL_gl_LIBRARY} debug ${YAMLCPP_LIBRARY_DEBUG} optimized ${YAMLCPP_LIBRARY} )
+target_link_libraries ( openxcom
+        ${OPENGL_gl_LIBRARY}
+        tiff
+        ZLIB
+        libjpeg
+        libpng
+        SDL2
+        SDL2main
+        SDL2Gfx
+        SDL2Image
+        SDL2Mixer
+        yaml-cpp)
 
 # Pack libraries into bundle and link executable appropriately
 if ( APPLE AND CREATE_BUNDLE )

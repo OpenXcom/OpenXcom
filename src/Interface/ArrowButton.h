@@ -39,7 +39,7 @@ private:
 	TextList *_list;
 	Timer *_timer;
 protected:
-	bool isButtonHandled(Uint8 button = 0);
+	bool isButtonHandled(SDL_Event* event, Uint8 button = 0);
 public:
 	/// Creates a new arrow button with the specified size and position.
 	ArrowButton(ArrowShape shape, int width, int height, int x = 0, int y = 0);

@@ -88,7 +88,7 @@ void BattlescapeButton::mousePress(Action *action, State *state)
 			_inverted = true;
 		}
 	}
-	else if ((_tftdMode || _toggleMode == INVERT_CLICK ) && !_inverted && isButtonPressed() && isButtonHandled(action->getDetails()->button.button))
+	else if ((_tftdMode || _toggleMode == INVERT_CLICK ) && !_inverted && isButtonPressed() && isButtonHandled(action->getDetails(), action->getDetails()->button.button))
 	{
 		_inverted = true;
 	}
@@ -102,7 +102,7 @@ void BattlescapeButton::mousePress(Action *action, State *state)
  */
 void BattlescapeButton::mouseRelease(Action *action, State *state)
 {
-	if (_inverted && isButtonHandled(action->getDetails()->button.button))
+	if (_inverted && isButtonHandled(action->getDetails(), action->getDetails()->button.button))
 	{
 		_inverted = false;
 	}

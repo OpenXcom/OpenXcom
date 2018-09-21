@@ -38,7 +38,11 @@ class Action;
 class Screen
 {
 private:
-	SDL_Surface *_screen;
+	SDL_Window*	_screen;
+	SDL_Surface* _backbuffer;
+	SDL_Renderer* _renderer;
+	SDL_Texture * _texture;
+	int _displayIndex;
 	int _bpp;
 	int _baseWidth, _baseHeight;
 	double _scaleX, _scaleY;
@@ -66,6 +70,10 @@ public:
 	int getDY() const;
 	/// Gets the internal buffer.
 	Surface *getSurface();
+	/// Gets the internal window.
+	SDL_Window*	getWindow() const;
+	/// Gets the internal renderer.
+	SDL_Renderer* getRenderer() const;
 	/// Handles keyboard events.
 	void handle(Action *action);
 	/// Renders the screen onto the game window.

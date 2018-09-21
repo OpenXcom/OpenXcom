@@ -21,6 +21,7 @@
 #include <climits>
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
+#include "../Engine/Screen.h"
 #include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
@@ -357,7 +358,7 @@ void CraftSoldiersState::moveSoldierUp(Action *action, unsigned int row, bool ma
 		_base->getSoldiers()->at(row - 1) = s;
 		if (row != _lstSoldiers->getScroll())
 		{
-			SDL_WarpMouse(action->getLeftBlackBand() + action->getXMouse(), action->getTopBlackBand() + action->getYMouse() - static_cast<Uint16>(8 * action->getYScale()));
+			SDL_WarpMouseInWindow(_game->getScreen()->getWindow(), action->getLeftBlackBand() + action->getXMouse(), action->getTopBlackBand() + action->getYMouse() - static_cast<Uint16>(8 * action->getYScale()));
 		}
 		else
 		{
@@ -410,7 +411,7 @@ void CraftSoldiersState::moveSoldierDown(Action *action, unsigned int row, bool 
 		_base->getSoldiers()->at(row + 1) = s;
 		if (row != _lstSoldiers->getVisibleRows() - 1 + _lstSoldiers->getScroll())
 		{
-			SDL_WarpMouse(action->getLeftBlackBand() + action->getXMouse(), action->getTopBlackBand() + action->getYMouse() + static_cast<Uint16>(8 * action->getYScale()));
+			SDL_WarpMouseInWindow(_game->getScreen()->getWindow(), action->getLeftBlackBand() + action->getXMouse(), action->getTopBlackBand() + action->getYMouse() + static_cast<Uint16>(8 * action->getYScale()));
 		}
 		else
 		{
@@ -473,22 +474,25 @@ void CraftSoldiersState::lstSoldiersMousePress(Action *action)
 		return;
 	unsigned int row = _lstSoldiers->getSelectedRow();
 	size_t numSoldiers = _base->getSoldiers()->size();
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP &&
-		row > 0)
+	if (action->getDetails()->type == SDL_MOUSEWHEEL)
 	{
-		if (action->getAbsoluteXMouse() >= _lstSoldiers->getArrowsLeftEdge() &&
-			action->getAbsoluteXMouse() <= _lstSoldiers->getArrowsRightEdge())
+		if (action->getDetails()->button.x > 0 &&
+			row > 0)
 		{
-			moveSoldierUp(action, row);
+			if (action->getAbsoluteXMouse() >= _lstSoldiers->getArrowsLeftEdge() &&
+				action->getAbsoluteXMouse() <= _lstSoldiers->getArrowsRightEdge())
+			{
+				moveSoldierUp(action, row);
+			}
 		}
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN &&
-			 0 < numSoldiers && INT_MAX >= numSoldiers && row < numSoldiers - 1)
-	{
-		if (action->getAbsoluteXMouse() >= _lstSoldiers->getArrowsLeftEdge() &&
-			action->getAbsoluteXMouse() <= _lstSoldiers->getArrowsRightEdge())
+		else if (action->getDetails()->button.x < 0 &&
+			0 < numSoldiers && INT_MAX >= numSoldiers && row < numSoldiers - 1)
 		{
-			moveSoldierDown(action, row);
+			if (action->getAbsoluteXMouse() >= _lstSoldiers->getArrowsLeftEdge() &&
+				action->getAbsoluteXMouse() <= _lstSoldiers->getArrowsRightEdge())
+			{
+				moveSoldierDown(action, row);
+			}
 		}
 	}
 }
