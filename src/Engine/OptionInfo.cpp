@@ -59,11 +59,11 @@ OptionInfo::OptionInfo(const std::string &id, int *option, int def, const std::s
  * @param desc Language ID for the option description (if any).
  * @param cat Language ID for the option category (if any).
  */
-//OptionInfo::OptionInfo(const std::string &id, SDL_Keycode *option, SDL_Keycode def, const std::string &desc, const std::string &cat) : _id(id), _desc(desc), _cat(cat), _type(OPTION_KEY)
-//{
-//	_ref.k = option;
-//	_def.k = def;
-//}
+OptionInfo::OptionInfo(const std::string &id, SDL_Keycode& option, SDL_Keycode def, const std::string &desc, const std::string &cat) : _id(id), _desc(desc), _cat(cat), _type(OPTION_KEY)
+{
+	_ref.k = &option;
+	_def.k = def;
+}
 
 /**
  * Creates info for a string option.
