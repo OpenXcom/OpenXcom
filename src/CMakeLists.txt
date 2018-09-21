@@ -500,15 +500,15 @@ endif ()
 
 target_link_libraries ( openxcom
         ${OPENGL_gl_LIBRARY}
-        tiff
         ZLIB
-        libjpeg
-        libpng
         SDL2
         SDL2main
         SDL2Gfx
-        SDL2Image
         SDL2Mixer
+        SDL2Image
+        tiff
+        libjpeg
+        libpng
         yaml-cpp)
 
 # Pack libraries into bundle and link executable appropriately

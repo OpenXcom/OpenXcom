@@ -18,6 +18,7 @@
  */
 #include "VideoState.h"
 #include <algorithm>
+#include <cstring>
 #include <SDL_mixer.h>
 #include "../Engine/Adlib/adlplayer.h"
 #include "../Engine/Logger.h"

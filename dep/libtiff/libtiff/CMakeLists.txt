@@ -142,13 +142,13 @@ target_link_libraries(tiff ${TIFF_LIBRARY_DEPS})
 #                        "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/libtiff.map")
 #endif()
 
-install(TARGETS tiff
-        RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
-        LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
-
-install(FILES ${tiff_HEADERS} ${nodist_tiff_HEADERS}
-        DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
+#install(TARGETS tiff
+#        RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
+#        LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
+#        ARCHIVE DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
+#
+#install(FILES ${tiff_HEADERS} ${nodist_tiff_HEADERS}
+#        DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
 
 set_target_properties(tiff
     PROPERTIES
@@ -171,13 +171,13 @@ if(CXX_SUPPORT)
                           "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/libtiffxx.map")
   endif()
 
-  install(TARGETS tiffxx
-          RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
-          LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
-          ARCHIVE DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
-
-  install(FILES ${tiffxx_HEADERS}
-          DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
+  #install(TARGETS tiffxx
+  #        RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
+  #        LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
+  #        ARCHIVE DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
+  #
+  #install(FILES ${tiffxx_HEADERS}
+  #        DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
 
   set_target_properties(tiffxx
       PROPERTIES

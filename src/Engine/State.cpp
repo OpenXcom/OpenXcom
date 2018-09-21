@@ -18,6 +18,7 @@
  */
 #include "State.h"
 #include <climits>
+#include <cstring>
 #include "InteractiveSurface.h"
 #include "Game.h"
 #include "Screen.h"

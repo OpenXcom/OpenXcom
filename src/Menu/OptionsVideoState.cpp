@@ -44,7 +44,9 @@ const std::string OptionsVideoState::GL_STRING = "*";
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(origin)
+OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
+ : OptionsBaseState(origin)
+ , _resCurrent(-1)
 {
 	setCategory(_btnVideo);
 

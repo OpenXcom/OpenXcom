@@ -2,6 +2,7 @@ project ( OpenXcom CXX C)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "CMake")
+set( CMAKE_CODELITE_USE_TARGETS on )
 
 cmake_minimum_required ( VERSION 3.1 )
 set ( CMAKE_MODULE_PATH

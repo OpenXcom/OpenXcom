@@ -467,6 +467,8 @@ void FlcPlayer::playAudioFrame(Uint16 sampleRate)
 
 		SDL_SemWait(_audioData.sharedLock);
 		AudioBuffer *loadingBuff = _audioData.loadingBuffer;
+        if (!loadingBuff)
+            return;
 		assert(loadingBuff->currSamplePos == 0);
 		int newSize = (_audioFrameSize + loadingBuff->sampleCount )*2;
 		if (newSize > loadingBuff->sampleBufSize)

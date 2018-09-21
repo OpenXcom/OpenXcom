@@ -19,6 +19,7 @@
 #include "Palette.h"
 #include <fstream>
 #include "Exception.h"
+#include <cstring>
 
 namespace OpenXcom
 {

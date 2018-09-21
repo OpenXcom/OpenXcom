@@ -422,6 +422,7 @@ if (UNIX OR MINGW)
   # AC_SYS_LARGEFILE.
   add_definitions(-D_FILE_OFFSET_BITS=64)
   set(FILE_OFFSET_BITS 64)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -Wno-attributes")
 endif()
 
 # Documentation install directory (default to cmake project docdir)
@@ -637,8 +638,8 @@ set(libdir "${CMAKE_INSTALL_FULL_LIBDIR}")
 set(includedir "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libtiff-4.pc.in
                ${CMAKE_CURRENT_BINARY_DIR}/libtiff-4.pc)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libtiff-4.pc
-        DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig")
+#install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libtiff-4.pc
+#        DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig")
 
 # Includes used by libtiff (and tests)
 if(ZLIB_INCLUDE_DIRS)

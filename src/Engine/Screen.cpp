@@ -386,22 +386,22 @@ void Screen::resetDisplay(bool resetVideo)
 
 	if (resetVideo)
 	{
-#ifdef __linux__
-		// Workaround for segfault when switching to opengl
-		if (!(oldFlags & SDL_OPENGL) && (_flags & SDL_OPENGL))
-		{
-			Uint8 cursor = 0;
-			char *_oldtitle = 0;
-			SDL_WM_GetCaption(&_oldtitle, NULL);
-			std::string title(_oldtitle);
-			SDL_QuitSubSystem(SDL_INIT_VIDEO);
-			SDL_InitSubSystem(SDL_INIT_VIDEO);
-			SDL_ShowCursor(SDL_ENABLE);
-			SDL_EnableUNICODE(1);
-			SDL_WM_SetCaption(title.c_str(), 0);
-			SDL_SetCursor(SDL_CreateCursor(&cursor, &cursor, 1,1,0,0));
-		}
-#endif
+//#ifdef __linux__
+//		// Workaround for segfault when switching to opengl
+//		if (!(oldFlags & SDL_OPENGL) && (_flags & SDL_OPENGL))
+//		{
+//			Uint8 cursor = 0;
+//			char *_oldtitle = 0;
+//			SDL_WM_GetCaption(&_oldtitle, NULL);
+//			std::string title(_oldtitle);
+//			SDL_QuitSubSystem(SDL_INIT_VIDEO);
+//			SDL_InitSubSystem(SDL_INIT_VIDEO);
+//			SDL_ShowCursor(SDL_ENABLE);
+//			SDL_EnableUNICODE(1);
+//			SDL_WM_SetCaption(title.c_str(), 0);
+//			SDL_SetCursor(SDL_CreateCursor(&cursor, &cursor, 1,1,0,0));
+//		}
+//#endif
 		if (_screen)
 		{
 			if (_backbuffer)
