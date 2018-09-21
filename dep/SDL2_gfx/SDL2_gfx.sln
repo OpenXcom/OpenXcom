@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDL2_gfx", "SDL2_gfx.vcxproj", "{AE22EFD3-6E6D-48C0-AF3D-EF190406BEDC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestGfx", "test\TestGfx.vcxproj", "{AE22EFD3-6F6D-48C0-AF3D-EF190406BEDC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestImageFilter", "test\TestImageFilter.vcxproj", "{AE22EFD3-6F6D-48C0-CCCA-EF190406BEDC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestRotozoom", "test\TestRotozoom.vcxproj", "{AE22EFD3-CCCA-48C0-AF3D-EF190406BEDC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestFramerate", "test\TestFramerate.vcxproj", "{AE22EFD3-6F6D-21C0-AF2D-EF190406BEDC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE22EFD3-6E6D-48C0-AF3D-EF190406BEDC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AE22EFD3-6E6D-48C0-AF3D-EF190406BEDC}.Debug|Win32.Build.0 = Debug|Win32
+		{AE22EFD3-6E6D-48C0-AF3D-EF190406BEDC}.Release|Win32.ActiveCfg = Release|Win32
+		{AE22EFD3-6E6D-48C0-AF3D-EF190406BEDC}.Release|Win32.Build.0 = Release|Win32
+		{AE22EFD3-6F6D-48C0-AF3D-EF190406BEDC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AE22EFD3-6F6D-48C0-AF3D-EF190406BEDC}.Debug|Win32.Build.0 = Debug|Win32
+		{AE22EFD3-6F6D-48C0-AF3D-EF190406BEDC}.Release|Win32.ActiveCfg = Release|Win32
+		{AE22EFD3-6F6D-48C0-AF3D-EF190406BEDC}.Release|Win32.Build.0 = Release|Win32
+		{AE22EFD3-6F6D-48C0-CCCA-EF190406BEDC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AE22EFD3-6F6D-48C0-CCCA-EF190406BEDC}.Debug|Win32.Build.0 = Debug|Win32
+		{AE22EFD3-6F6D-48C0-CCCA-EF190406BEDC}.Release|Win32.ActiveCfg = Release|Win32
+		{AE22EFD3-6F6D-48C0-CCCA-EF190406BEDC}.Release|Win32.Build.0 = Release|Win32
+		{AE22EFD3-CCCA-48C0-AF3D-EF190406BEDC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AE22EFD3-CCCA-48C0-AF3D-EF190406BEDC}.Debug|Win32.Build.0 = Debug|Win32
+		{AE22EFD3-CCCA-48C0-AF3D-EF190406BEDC}.Release|Win32.ActiveCfg = Release|Win32
+		{AE22EFD3-CCCA-48C0-AF3D-EF190406BEDC}.Release|Win32.Build.0 = Release|Win32
+		{AE22EFD3-6F6D-21C0-AF2D-EF190406BEDC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AE22EFD3-6F6D-21C0-AF2D-EF190406BEDC}.Debug|Win32.Build.0 = Debug|Win32
+		{AE22EFD3-6F6D-21C0-AF2D-EF190406BEDC}.Release|Win32.ActiveCfg = Release|Win32
+		{AE22EFD3-6F6D-21C0-AF2D-EF190406BEDC}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
