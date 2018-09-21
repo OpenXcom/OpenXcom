@@ -882,15 +882,6 @@ void setWindowIcon(SDL_Window* wnd, int winResource, const std::string &unixPath
 		SetClassLongPtr(hwnd, GCLP_HICON, (LONG_PTR)icon);
 	}
 #else
-	// SDL only takes UTF-8 filenames
-	// so here's an ugly hack to match this ugly reasoning
-	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(unixPath));
-	SDL_Surface *icon = IMG_Load(utf8.c_str());
-	if (icon != 0)
-	{
-		SDL_WM_SetIcon(icon, NULL);
-		SDL_FreeSurface(icon);
-	}
 	winResource = winResource;
 #endif
 }
