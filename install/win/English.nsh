@@ -11,6 +11,11 @@ ${LangFileString} SETUP_XCOM_FOLDER "${GAME_NAME} ${GAME_VERSION} requires a cop
 ${LangFileString} SETUP_UFO_FOLDER "UFO: Enemy Unknown / X-COM: UFO Defense"
 ${LangFileString} SETUP_TFTD_FOLDER "X-COM: Terror From The Deep"
 
+${LangFileString} SETUP_EXTRA_OPTIONS_TITLE "Choose Options"
+${LangFileString} SETUP_EXTRA_OPTIONS_SUBTITLE "Choose which additional options of $(^NameDA) you want to install."
+${LangFileString} SETUP_PORTABLE "Portable Installation"
+${LangFileString} SETUP_PORTABLE_DESC "${GAME_NAME} will store user data in the installation folder. The folder must be user-writable."
+
 ;--------------------------------
 ;Installer Sections
 
@@ -18,8 +23,6 @@ ${LangFileString} SETUP_GAME "Game Files"
 ${LangFileString} SETUP_GAME_DESC "Files required to run ${GAME_NAME}."
 ${LangFileString} SETUP_PATCH "Data Patch"
 ${LangFileString} SETUP_PATCH_DESC "Fixes errors in the original X-COM data. Recommended for first installations. (requires an internet connection)"
-${LangFileString} SETUP_PORTABLE "Portable Installation"
-${LangFileString} SETUP_PORTABLE_DESC "Puts all ${GAME_NAME} files in the same folder, making a portable installation."
 ${LangFileString} SETUP_DESKTOP "Desktop Shortcut"
 ${LangFileString} SETUP_DESKTOP_DESC "Creates a shortcut in the desktop to play ${GAME_NAME}."
 
@@ -27,7 +30,7 @@ ${LangFileString} SETUP_DESKTOP_DESC "Creates a shortcut in the desktop to play 
 ;Uninstaller Descriptions
 
 ${LangFileString} SETUP_UNDATA "Delete X-COM Data"
-${LangFileString} SETUP_UNDATA_DESC "Deletes all ${GAME_NAME} data, including X-COM resources. Recommended for a clean reinstall."
+${LangFileString} SETUP_UNDATA_DESC "Deletes all ${GAME_NAME} install data, including X-COM resources. Recommended for a clean reinstall."
 ${LangFileString} SETUP_UNUSER "Delete User Data"
 ${LangFileString} SETUP_UNUSER_DESC "Deletes all ${GAME_NAME} user data, including mods, savegames, screenshots and options. Only use this for a complete wipe."
 
