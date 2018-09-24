@@ -273,9 +273,10 @@ ${EndIf}
 	File "..\..\CHANGELOG.txt"
 	File /oname=README.txt "..\..\README.md"
 	
-	;Copy UFO files	
+	;Copy UFO files
 	SetOutPath "$INSTDIR\UFO"
 	
+	StrCmp $UFO_DIR "" install_ufo_no 0
 	IfFileExists "$UFO_DIR\*.*" 0 install_ufo_no
 	
 	CreateDirectory "$INSTDIR\UFO\GEODATA"
@@ -300,9 +301,10 @@ ${EndIf}
 	install_ufo_no:
 	File "..\..\bin\UFO\README.txt"
 	
-	;Copy TFTD files	
+	;Copy TFTD files
 	SetOutPath "$INSTDIR\TFTD"
 	
+	StrCmp $TFTD_DIR "" install_tftd_no 0
 	IfFileExists "$TFTD_DIR\*.*" 0 install_tftd_no
 	
 	CreateDirectory "$INSTDIR\TFTD\ANIMS"
@@ -377,24 +379,57 @@ SectionEnd
 
 Section "$(SETUP_PATCH)" SecPatch
 
+	;Patch UFO files
+	SetOutPath "$INSTDIR\UFO"
+	
+	StrCmp $UFO_DIR "" patch_ufo_no 0
+	IfFileExists "$UFO_DIR\*.*" 0 patch_ufo_no
+	
 	;(uses inetc.dll)
-	inetc::get "https://openxcom.org/download/extras/universal-patch.zip" "$TEMP\universal-patch.zip" /end
+	inetc::get "https://openxcom.org/download/extras/universal-patch-ufo.zip" "$TEMP\universal-patch-ufo.zip" /end
 	Pop $0
-	StrCmp $0 "OK" patch_ok1 patch_fail1
-		
-	patch_ok1:	
+	StrCmp $0 "OK" 0 patch_ufo_fail1
+	
 	;(uses nsisunz.dll)
-	nsisunz::UnzipToLog "$TEMP\universal-patch.zip" "$INSTDIR\UFO"
+	nsisunz::UnzipToLog "$TEMP\universal-patch-ufo.zip" "$INSTDIR\UFO"
 	Pop $0
-	StrCmp $0 "success" patch_ok2 patch_fail1
-		
-	patch_fail1:
-	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(SETUP_WARNING_PATCH) /SD IDYES IDYES patch_ok2 IDNO patch_fail2
-	patch_fail2:
+	StrCmp $0 "success" patch_ufo_yes patch_ufo_fail1
+	
+	patch_ufo_fail1:
+	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(SETUP_WARNING_PATCH) /SD IDYES IDYES patch_ufo_yes IDNO patch_ufo_fail2
+	patch_ufo_fail2:
 	Abort "Error"
-		
-	patch_ok2:	
-	Delete "$TEMP\universal-patch.zip"
+	
+	patch_ufo_yes:	
+	Delete "$TEMP\universal-patch-ufo.zip"
+	
+	patch_ufo_no:
+	
+	;Patch TFTD files
+	SetOutPath "$INSTDIR\TFTD"
+	
+	StrCmp $TFTD_DIR "" patch_tftd_no 0
+	IfFileExists "$TFTD_DIR\*.*" 0 patch_tftd_no
+	
+	;(uses inetc.dll)
+	inetc::get "https://openxcom.org/download/extras/universal-patch-tftd.zip" "$TEMP\universal-patch-tftd.zip" /end
+	Pop $0
+	StrCmp $0 "OK" 0 patch_tftd_fail1
+	
+	;(uses nsisunz.dll)
+	nsisunz::UnzipToLog "$TEMP\universal-patch-tftd.zip" "$INSTDIR\TFTD"
+	Pop $0
+	StrCmp $0 "success" patch_tftd_yes patch_tftd_fail1
+	
+	patch_tftd_fail1:
+	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(SETUP_WARNING_PATCH) /SD IDYES IDYES patch_tftd_yes IDNO patch_tftd_fail2
+	patch_tftd_fail2:
+	Abort "Error"
+	
+	patch_tftd_yes:	
+	Delete "$TEMP\universal-patch-tftd.zip"
+	
+	patch_tftd_no:
 
 SectionEnd
 
