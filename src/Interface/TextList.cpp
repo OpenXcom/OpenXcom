@@ -1080,8 +1080,11 @@ void TextList::mousePress(Action *action, State *state)
 	}
 	if (allowScroll)
 	{
-		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) scrollUp(false, true);
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) scrollDown(false, true);
+		if (action->getDetails()->type == SDL_MOUSEWHEEL)
+		{
+			if (action->getDetails()->button.x > 0) scrollUp(false, true);
+			else if (action->getDetails()->button.x < 0) scrollDown(false, true);
+		}
 	}
 	if (_selectable)
 	{

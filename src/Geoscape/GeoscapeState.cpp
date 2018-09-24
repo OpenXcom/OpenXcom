@@ -2287,6 +2287,10 @@ void GeoscapeState::determineAlienMissions()
 	for (std::vector<RuleMissionScript*>::const_iterator i = availableMissions.begin(); i != availableMissions.end(); ++i)
 	{
 		RuleMissionScript *command = *i;
+
+		//if (command->getType() != "recurringTerror")
+		//	continue;
+
 		bool process = true;
 		bool success = false;
 		// level three condition check: make sure our conditionals are met, if any. this list is dynamic, and must be checked here.
@@ -2346,6 +2350,9 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 	std::string missionType;
 	std::string missionRace;
 	int targetZone = -1;
+
+	//if (command->getType() != "recurringTerror")
+	//	return false;
 
 	// terror mission type deal? this will require special handling.
 	if (command->getSiteType())

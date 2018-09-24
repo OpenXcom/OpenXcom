@@ -325,24 +325,27 @@ void CraftEquipmentState::lstEquipmentRightArrowClick(Action *action)
 void CraftEquipmentState::lstEquipmentMousePress(Action *action)
 {
 	_sel = _lstEquipment->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	if (action->getDetails()->type == SDL_MOUSEWHEEL)
 	{
-		_timerRight->stop();
-		_timerLeft->stop();
-		if (action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge() &&
-			action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
+		if (action->getDetails()->button.x > 0)  // scroll up
 		{
-			moveRightByValue(Options::changeValueByMouseWheel);
+			_timerRight->stop();
+			_timerLeft->stop();
+			if (action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge() &&
+				action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
+			{
+				moveRightByValue(Options::changeValueByMouseWheel);
+			}
 		}
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-	{
-		_timerRight->stop();
-		_timerLeft->stop();
-		if (action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge() &&
-			action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
+		else if (action->getDetails()->button.x < 0) // scroll down
 		{
-			moveLeftByValue(Options::changeValueByMouseWheel);
+			_timerRight->stop();
+			_timerLeft->stop();
+			if (action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge() &&
+				action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
+			{
+				moveLeftByValue(Options::changeValueByMouseWheel);
+			}
 		}
 	}
 }

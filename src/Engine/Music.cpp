@@ -73,7 +73,7 @@ void Music::load(const void *data, int size)
 {
 #ifndef __NO_MUSIC
 	SDL_RWops *rwops = SDL_RWFromConstMem(data, size);
-	_music = Mix_LoadMUS_RW(rwops);
+	_music = Mix_LoadMUS_RW(rwops, 0);
 	SDL_FreeRW(rwops);
 	if (_music == 0)
 	{

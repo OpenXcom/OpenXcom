@@ -88,7 +88,7 @@ void ImageButton::mousePress(Action *action, State *state)
 			invert(_color + 3);
 		}
 	}
-	else if (!_inverted && isButtonPressed() && isButtonHandled(action->getDetails()->button.button))
+	else if (!_inverted && isButtonPressed() && isButtonHandled(action->getDetails(), action->getDetails()->button.button))
 	{
 		_inverted = true;
 		invert(_color + 3);
@@ -103,7 +103,7 @@ void ImageButton::mousePress(Action *action, State *state)
  */
 void ImageButton::mouseRelease(Action *action, State *state)
 {
-	if (_inverted && isButtonHandled(action->getDetails()->button.button))
+	if (_inverted && isButtonHandled(action->getDetails(), action->getDetails()->button.button))
 	{
 		_inverted = false;
 		invert(_color + 3);

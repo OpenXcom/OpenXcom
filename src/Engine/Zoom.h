@@ -29,13 +29,15 @@ class Zoom
 
 	public:
 	/// Flip screen given src and dst; might use software or OpenGL.
-	static void flipWithZoom(SDL_Surface *src, SDL_Surface *dst, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand, OpenGL *glOut);
+	static void flipWithZoom(SDL_Window* wnd, SDL_Surface *src, SDL_Surface *dst, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand, OpenGL *glOut);
 	/// Copy src to dst, resizing as needed. Please don't use flipx or flipy as the optimized functions ignore these parameters.
-	static int _zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int flipy);
+	static int _zoomSurfaceY(SDL_Window* wnd, SDL_Surface * src, SDL_Surface * dst, int flipx, int flipy);
 	/// Check for SSE2 instructions using CPUID.
 	static bool haveSSE2();
 
 private:
+
+	static SDL_Surface *_scaleTmpSurface;
 
 };
 

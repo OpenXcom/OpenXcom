@@ -54,7 +54,7 @@ TextButton::~TextButton()
 	delete _text;
 }
 
-bool TextButton::isButtonHandled(Uint8 button)
+bool TextButton::isButtonHandled(SDL_Event* event, Uint8 button)
 {
 	if (_comboBox != 0)
 	{
@@ -62,7 +62,7 @@ bool TextButton::isButtonHandled(Uint8 button)
 	}
 	else
 	{
-		return InteractiveSurface::isButtonHandled(button);
+		return InteractiveSurface::isButtonHandled(event, button);
 	}
 }
 
@@ -290,10 +290,10 @@ void TextButton::mousePress(Action *action, State *state)
 		draw();
 	}
 
-	if (isButtonHandled(action->getDetails()->button.button))
+	if (isButtonHandled(action->getDetails(), action->getDetails()->button.button))
 	{
 		if (soundPress != 0 && _group == 0 &&
-			action->getDetails()->button.button != SDL_BUTTON_WHEELUP && action->getDetails()->button.button != SDL_BUTTON_WHEELDOWN)
+			action->getDetails()->type != SDL_MOUSEWHEEL)
 		{
 			soundPress->play(Mix_GroupAvailable(0));
 		}
@@ -316,7 +316,7 @@ void TextButton::mousePress(Action *action, State *state)
  */
 void TextButton::mouseRelease(Action *action, State *state)
 {
-	if (isButtonHandled(action->getDetails()->button.button))
+	if (isButtonHandled(action->getDetails(), action->getDetails()->button.button))
 	{
 		draw();
 		//_redraw = true;

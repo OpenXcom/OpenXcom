@@ -1603,7 +1603,7 @@ void Globe::mouseOver(Action *action, State *state)
 		{
 			// Set the mouse cursor back
 			SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-			SDL_WarpMouse((_game->getScreen()->getWidth() - 100) / 2 , _game->getScreen()->getHeight() / 2);
+			SDL_WarpMouseInWindow(_game->getScreen()->getWindow(), (_game->getScreen()->getWidth() - 100) / 2 , _game->getScreen()->getHeight() / 2);
 			SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
 		}
 
@@ -1709,13 +1709,16 @@ void Globe::mouseRelease(Action *action, State *state)
  */
 void Globe::mouseClick(Action *action, State *state)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	if (action->getDetails()->type == SDL_MOUSEWHEEL)
 	{
-		zoomIn();
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-	{
-		zoomOut();
+		if (action->getDetails()->button.x > 0)
+		{
+			zoomIn();
+		}
+		else if (action->getDetails()->button.x < 0)
+		{
+			zoomOut();
+		}
 	}
 
 	double lon, lat;
@@ -1892,7 +1895,7 @@ void Globe::setupRadii(int width, int height)
  */
 void Globe::stopScrolling(Action *action)
 {
-	SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
+	SDL_WarpMouseInWindow(_game->getScreen()->getWindow(), _xBeforeMouseScrolling, _yBeforeMouseScrolling);
 	action->setMouseAction(_xBeforeMouseScrolling, _yBeforeMouseScrolling, getX(), getY());
 }
 

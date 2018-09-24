@@ -44,7 +44,9 @@ const std::string OptionsVideoState::GL_STRING = "*";
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(origin)
+OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
+ : OptionsBaseState(origin)
+ , _resCurrent(-1)
 {
 	setCategory(_btnVideo);
 
@@ -78,25 +80,30 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_btnRootWindowedMode = new ToggleTextButton(104, 16, 206, 128);
 
 	// Get available fullscreen modes
-	_res = SDL_ListModes(NULL, SDL_FULLSCREEN);
-	if (_res != (SDL_Rect**)-1 && _res != (SDL_Rect**)0)
+	int modes_count = SDL_GetNumDisplayModes(0);
+
+	for (int mode_index = 0; mode_index <= modes_count; mode_index++)
 	{
-		int i;
-		_resCurrent = -1;
-		for (i = 0; _res[i]; ++i)
+		SDL_DisplayMode mode = { SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0 };
+
+		if (SDL_GetDisplayMode(0, mode_index, &mode) == 0)
 		{
+			SDL_Log(" %i bpp\t%i x %i @ %iHz",
+				SDL_BITSPERPIXEL(mode.format), mode.w, mode.h, mode.refresh_rate);
+
 			if (_resCurrent == -1 &&
-				((_res[i]->w == Options::displayWidth && _res[i]->h <= Options::displayHeight) || _res[i]->w < Options::displayWidth))
+				((mode.w == Options::displayWidth && mode.h <= Options::displayHeight) || mode.w < Options::displayWidth))
 			{
-				_resCurrent = i;
+				_resCurrent = _dsyModes.size();
 			}
+
+			_dsyModes.push_back(mode);
 		}
-		_resAmount = i;
 	}
-	else
+
+	if (_dsyModes.empty())
 	{
 		_resCurrent = -1;
-		_resAmount = 0;
 		_btnDisplayResolutionDown->setVisible(false);
 		_btnDisplayResolutionUp->setVisible(false);
 		Log(LOG_WARNING) << "Couldn't get display resolutions";
@@ -174,7 +181,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_btnLetterbox->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
 	
 	_btnLockMouse->setText(tr("STR_LOCK_MOUSE"));
-	_btnLockMouse->setPressed(Options::captureMouse == SDL_GRAB_ON);
+	_btnLockMouse->setPressed(Options::captureMouse);
 	_btnLockMouse->onMouseClick((ActionHandler)&OptionsVideoState::btnLockMouseClick);
 	_btnLockMouse->setTooltip("STR_LOCK_MOUSE_DESC");
 	_btnLockMouse->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
@@ -355,11 +362,11 @@ std::string OptionsVideoState::ucWords(std::string str)
  */
 void OptionsVideoState::btnDisplayResolutionUpClick(Action *)
 {
-	if (_resAmount == 0)
+	if (_dsyModes.empty())
 		return;
 	if (_resCurrent <= 0)
 	{
-		_resCurrent = _resAmount-1;
+		_resCurrent = _dsyModes.size()-1;
 	}
 	else
 	{
@@ -374,9 +381,9 @@ void OptionsVideoState::btnDisplayResolutionUpClick(Action *)
  */
 void OptionsVideoState::btnDisplayResolutionDownClick(Action *)
 {
-	if (_resAmount == 0)
+	if (_dsyModes.empty() == 0)
 		return;
-	if (_resCurrent >= _resAmount-1)
+	if (_resCurrent >= _dsyModes.size()-1)
 	{
 		_resCurrent = 0;
 	}
@@ -393,13 +400,13 @@ void OptionsVideoState::btnDisplayResolutionDownClick(Action *)
 void OptionsVideoState::updateDisplayResolution()
 {
 	std::wostringstream ssW, ssH;
-	ssW << (int)_res[_resCurrent]->w;
-	ssH << (int)_res[_resCurrent]->h;
+	ssW << (int)_dsyModes[_resCurrent].w;
+	ssH << (int)_dsyModes[_resCurrent].h;
 	_txtDisplayWidth->setText(ssW.str());
 	_txtDisplayHeight->setText(ssH.str());
 	
-	Options::newDisplayWidth = _res[_resCurrent]->w;
-	Options::newDisplayHeight = _res[_resCurrent]->h;
+	Options::newDisplayWidth = _dsyModes[_resCurrent].w;
+	Options::newDisplayHeight = _dsyModes[_resCurrent].h;
 }
 
 /**
@@ -414,14 +421,13 @@ void OptionsVideoState::txtDisplayWidthChange(Action *)
 	ss >> std::dec >> width;
 	Options::newDisplayWidth = width;
 	// Update resolution mode
-	if (_res != (SDL_Rect**)-1 && _res != (SDL_Rect**)0)
 	{
 		int i;
 		_resCurrent = -1;
-		for (i = 0; _res[i]; ++i)
+		for (const SDL_DisplayMode& mode : _dsyModes)
 		{
 			if (_resCurrent == -1 &&
-				((_res[i]->w == Options::newDisplayWidth && _res[i]->h <= Options::newDisplayHeight) || _res[i]->w < Options::newDisplayWidth))
+				((mode.w == Options::newDisplayWidth && mode.h <= Options::newDisplayHeight) || mode.w < Options::newDisplayWidth))
 			{
 				_resCurrent = i;
 			}
@@ -441,14 +447,13 @@ void OptionsVideoState::txtDisplayHeightChange(Action *)
 	ss >> std::dec >> height;
 	Options::newDisplayHeight = height;
 	// Update resolution mode
-	if (_res != (SDL_Rect**)-1 && _res != (SDL_Rect**)0)
 	{
 		int i;
 		_resCurrent = -1;
-		for (i = 0; _res[i]; ++i)
+		for (const SDL_DisplayMode& mode : _dsyModes)
 		{
 			if (_resCurrent == -1 &&
-				((_res[i]->w == Options::newDisplayWidth && _res[i]->h <= Options::newDisplayHeight) || _res[i]->w < Options::newDisplayWidth))
+				((mode.w == Options::newDisplayWidth && mode.h <= Options::newDisplayHeight) || mode.w < Options::newDisplayWidth))
 			{
 				_resCurrent = i;
 			}
@@ -555,8 +560,8 @@ void OptionsVideoState::btnLetterboxClick(Action *)
  */
 void OptionsVideoState::btnLockMouseClick(Action *)
 {
-	Options::captureMouse = (SDL_GrabMode)_btnLockMouse->getPressed();
-	SDL_WM_GrabInput(Options::captureMouse);
+	Options::captureMouse = _btnLockMouse->getPressed();
+	SDL_SetWindowGrab(_game->getScreen()->getWindow(), Options::captureMouse ? SDL_TRUE : SDL_FALSE);
 }
 
 /**
@@ -618,7 +623,7 @@ void OptionsVideoState::handle(Action *action)
 	State::handle(action);
 	if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == SDLK_g && (SDL_GetModState() & KMOD_CTRL) != 0)
 	{
-		_btnLockMouse->setPressed(Options::captureMouse == SDL_GRAB_ON);
+		_btnLockMouse->setPressed(Options::captureMouse);
 	}
 }
 

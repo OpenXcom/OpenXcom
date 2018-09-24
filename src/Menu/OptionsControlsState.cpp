@@ -142,11 +142,14 @@ std::string OptionsControlsState::ucWords(std::string str)
  */
 void OptionsControlsState::addControls(const std::vector<OptionInfo> &keys)
 {
+	std::wstring keyName;
 	for (std::vector<OptionInfo>::const_iterator i = keys.begin(); i != keys.end(); ++i)
 	{
 		std::wstring name = tr(i->description());
-		SDLKey *key = i->asKey();
-		std::wstring keyName = Language::utf8ToWstr(ucWords(SDL_GetKeyName(*key)));
+		SDL_Keycode *key = i->asKey();
+
+		keyName = Language::utf8ToWstr(ucWords(SDL_GetKeyName(*key)));
+
 		if (*key == SDLK_UNKNOWN)
 			keyName = L"";
 		_lstControls->addRow(2, name.c_str(), keyName.c_str());
@@ -231,7 +234,7 @@ void OptionsControlsState::lstControlsKeyPress(Action *action)
 {
 	if (_selected != -1)
 	{
-		SDLKey key = action->getDetails()->key.keysym.sym;
+		SDL_Keycode key = action->getDetails()->key.keysym.sym;
 		if (key != 0)
 		{
 			*_selKey->asKey() = key;

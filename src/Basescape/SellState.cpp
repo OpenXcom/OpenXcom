@@ -563,24 +563,27 @@ void SellState::lstItemsRightArrowClick(Action *action)
 void SellState::lstItemsMousePress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	if (action->getDetails()->type == SDL_MOUSEWHEEL)
 	{
-		_timerInc->stop();
-		_timerDec->stop();
-		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge() &&
-			action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+		if (action->getDetails()->button.x > 0)
 		{
-			changeByValue(Options::changeValueByMouseWheel, 1);
+			_timerInc->stop();
+			_timerDec->stop();
+			if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge() &&
+				action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+			{
+				changeByValue(Options::changeValueByMouseWheel, 1);
+			}
 		}
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-	{
-		_timerInc->stop();
-		_timerDec->stop();
-		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge() &&
-			action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+		else if (action->getDetails()->button.x < 0)
 		{
-			changeByValue(Options::changeValueByMouseWheel, -1);
+			_timerInc->stop();
+			_timerDec->stop();
+			if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge() &&
+				action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+			{
+				changeByValue(Options::changeValueByMouseWheel, -1);
+			}
 		}
 	}
 }

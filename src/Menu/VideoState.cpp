@@ -18,6 +18,7 @@
  */
 #include "VideoState.h"
 #include <algorithm>
+#include <cstring>
 #include <SDL_mixer.h>
 #include "../Engine/Adlib/adlplayer.h"
 #include "../Engine/Logger.h"
@@ -519,7 +520,7 @@ void VideoState::init()
 				pal2[color].r = (((int)pal[color].r) * i) / 20;
 				pal2[color].g = (((int)pal[color].g) * i) / 20;
 				pal2[color].b = (((int)pal[color].b) * i) / 20;
-				pal2[color].unused = pal[color].unused;
+				pal2[color].a = pal[color].a;
 			}
 			_game->getScreen()->setPalette(pal2, 0, 256, true);
 			_game->getScreen()->flip();

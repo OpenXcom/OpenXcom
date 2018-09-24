@@ -74,18 +74,18 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _save(0
 	}
 
 	// trap the mouse inside the window
-	SDL_WM_GrabInput(Options::captureMouse);
-	
-	// Set the window icon
-	CrossPlatform::setWindowIcon(103, FileMap::getFilePath("openxcom.png"));
+	SDL_SetRelativeMouseMode(Options::captureMouse ? SDL_TRUE : SDL_FALSE);
 
-	// Set the window caption
-	SDL_WM_SetCaption(title.c_str(), 0);
-
-	SDL_EnableUNICODE(1);
+	//SDL_EnableUNICODE(1);
 
 	// Create display
 	_screen = new Screen();
+
+	// Set the window icon
+	CrossPlatform::setWindowIcon(getScreen()->getWindow(), 103, FileMap::getFilePath("openxcom.png"));
+
+	// Set the window caption
+	SDL_SetWindowTitle(getScreen()->getWindow(), title.c_str());
 
 	// Create cursor
 	_cursor = new Cursor(9, 13);
@@ -182,45 +182,47 @@ void Game::run()
 				case SDL_QUIT:
 					quit();
 					break;
-				case SDL_ACTIVEEVENT:
-					switch (reinterpret_cast<SDL_ActiveEvent*>(&_event)->state)
+				case SDL_WINDOWEVENT:
+					switch (_event.window.event)
 					{
-						case SDL_APPACTIVE:
-							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : stateRun[Options::pauseMode];
+						case SDL_WINDOWEVENT_SHOWN:
+						case SDL_WINDOWEVENT_ENTER:
+						case SDL_WINDOWEVENT_RESTORED:
+						case SDL_WINDOWEVENT_FOCUS_GAINED:
+							runningState = RUNNING;
 							break;
-						case SDL_APPMOUSEFOCUS:
-							// We consciously ignore it.
+						case SDL_WINDOWEVENT_FOCUS_LOST:
+						case SDL_WINDOWEVENT_HIDDEN:
+							runningState = stateRun[Options::pauseMode];
 							break;
-						case SDL_APPINPUTFOCUS:
-							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : kbFocusRun[Options::pauseMode];
-							break;
-					}
-					break;
-				case SDL_VIDEORESIZE:
-					if (Options::allowResize)
-					{
-						if (!startupEvent)
-						{
-							Options::newDisplayWidth = Options::displayWidth = std::max(Screen::ORIGINAL_WIDTH, _event.resize.w);
-							Options::newDisplayHeight = Options::displayHeight = std::max(Screen::ORIGINAL_HEIGHT, _event.resize.h);
-							int dX = 0, dY = 0;
-							Screen::updateScale(Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, false);
-							Screen::updateScale(Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, false);
-							for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
+						case SDL_WINDOWEVENT_RESIZED:
+							if (Options::allowResize)
 							{
-								(*i)->resize(dX, dY);
+								if (!startupEvent)
+								{
+									Options::newDisplayWidth = Options::displayWidth = std::max(Screen::ORIGINAL_WIDTH, _event.window.data1);
+									Options::newDisplayHeight = Options::displayHeight = std::max(Screen::ORIGINAL_HEIGHT, _event.window.data2);
+									int dX = 0, dY = 0;
+									Screen::updateScale(Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, false);
+									Screen::updateScale(Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, false);
+									for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
+									{
+										(*i)->resize(dX, dY);
+									}
+									_screen->resetDisplay();
+								}
+								else
+								{
+									startupEvent = false;
+								}
 							}
-							_screen->resetDisplay();
-						}
-						else
-						{
-							startupEvent = false;
-						}
+							break;
 					}
 					break;
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
 				case SDL_MOUSEBUTTONUP:
+				case SDL_MOUSEWHEEL:
 					// Skip mouse events if they're disabled
 					if (!_mouseActive) continue;
 					// re-gain focus on mouse-over or keypress.
@@ -236,8 +238,8 @@ void Game::run()
 						// "ctrl-g" grab input
 						if (action.getDetails()->key.keysym.sym == SDLK_g && (SDL_GetModState() & KMOD_CTRL) != 0)
 						{
-							Options::captureMouse = (SDL_GrabMode)(!Options::captureMouse);
-							SDL_WM_GrabInput(Options::captureMouse);
+							Options::captureMouse = !Options::captureMouse;
+							SDL_SetRelativeMouseMode(Options::captureMouse ? SDL_TRUE : SDL_FALSE);
 						}
 						else if (Options::debug)
 						{
@@ -267,7 +269,7 @@ void Game::run()
 			if (Options::FPS > 0 && !(Options::useOpenGL && Options::vSyncForOpenGL))
 			{
 				// Update our FPS delay time based on the time of the last draw.
-				int fps = SDL_GetAppState() & SDL_APPINPUTFOCUS ? Options::FPS : Options::FPSInactive;
+				int fps = runningState == RUNNING ? Options::FPS : Options::FPSInactive;
 
 				_timeUntilNextFrame = (1000.0f / fps) - (SDL_GetTicks() - _timeOfLastFrame);
 			}

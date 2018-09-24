@@ -18,6 +18,7 @@
  */
 #include <assert.h>
 #include <vector>
+#include <cstring>
 #include "BattleItem.h"
 #include "SavedBattleGame.h"
 #include "SavedGame.h"

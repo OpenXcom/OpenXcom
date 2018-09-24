@@ -79,11 +79,11 @@ StartState::StartState() : _anim(0)
 
 	// Set up objects
 	_text->initText(_font, _font, _lang);
-	_text->setColor(0);
+	_text->setColor(0xFFFFFFFF);
 	_text->setWordWrap(true);
 
 	_cursor->initText(_font, _font, _lang);
-	_cursor->setColor(0);
+	_cursor->setColor(0xFFFFFFFF);
 	_cursor->setText(L"_");
 
 	_timer->onTimer((StateHandler)&StartState::animate);
@@ -111,7 +111,7 @@ StartState::~StartState()
 {
 	if (_thread != 0)
 	{
-		SDL_KillThread(_thread);
+		SDL_WaitThread(_thread, nullptr);
 	}
 	delete _font;
 	delete _timer;
@@ -135,7 +135,7 @@ void StartState::init()
 	}
 
 	// Load the game data in a separate thread
-	_thread = SDL_CreateThread(load, (void*)_game);
+	_thread = SDL_CreateThread(load, "", (void*)_game);
 	if (_thread == 0)
 	{
 		// If we can't create the thread, just load it as usual
@@ -154,7 +154,8 @@ void StartState::think()
 	switch (loading)
 	{
 	case LOADING_FAILED:
-		CrossPlatform::flashWindow();
+		CrossPlatform::flashWindow(_game->getScreen()->getWindow()
+		);
 		addLine(L"");
 		addLine(L"ERROR: " + Language::utf8ToWstr(error));
 		addLine(L"");
@@ -165,7 +166,7 @@ void StartState::think()
 		loading = LOADING_DONE;
 		break;
 	case LOADING_SUCCESSFUL:
-		CrossPlatform::flashWindow();
+		CrossPlatform::flashWindow(_game->getScreen()->getWindow());
 		Log(LOG_INFO) << "OpenXcom started successfully!";
 		_game->setState(new GoToMainMenuState);
 		if (!Options::reload && Options::playIntro)

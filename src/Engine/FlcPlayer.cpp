@@ -165,7 +165,7 @@ bool FlcPlayer::init(const char *filename, void(*frameCallBack)(), Game *game, b
 	}
 	else // Otherwise create a new one
 	{
-		_mainScreen = SDL_AllocSurface(SDL_SWSURFACE, _realScreen->getSurface()->getWidth(), _realScreen->getSurface()->getHeight(), 8, 0, 0, 0, 0);
+		_mainScreen = SDL_CreateRGBSurface(0, _realScreen->getSurface()->getWidth(), _realScreen->getSurface()->getHeight(), 8, 0, 0, 0, 0);
 	}
 
 	return true;
@@ -238,20 +238,25 @@ void FlcPlayer::SDLPolling()
 		case SDL_KEYDOWN:
 			_playingState = SKIPPED;
 			break;
-		case SDL_VIDEORESIZE:
-			if (Options::allowResize)
+		case SDL_WINDOWEVENT:
+			switch (event.window.event)
 			{
-				Options::newDisplayWidth = Options::displayWidth = std::max(Screen::ORIGINAL_WIDTH, event.resize.w);
-				Options::newDisplayHeight = Options::displayHeight = std::max(Screen::ORIGINAL_HEIGHT, event.resize.h);
-				if (_mainScreen != _realScreen->getSurface()->getSurface())
-				{
-					_realScreen->resetDisplay();
-				}
-				else
-				{
-					_realScreen->resetDisplay();
-					_mainScreen = _realScreen->getSurface()->getSurface();
-				}
+				case SDL_WINDOWEVENT_RESIZED:
+					if (Options::allowResize)
+					{
+						Options::newDisplayWidth = Options::displayWidth = std::max(Screen::ORIGINAL_WIDTH, event.window.data1);
+						Options::newDisplayHeight = Options::displayHeight = std::max(Screen::ORIGINAL_HEIGHT, event.window.data2);
+						if (_mainScreen != _realScreen->getSurface()->getSurface())
+						{
+							_realScreen->resetDisplay();
+						}
+						else
+						{
+							_realScreen->resetDisplay();
+							_mainScreen = _realScreen->getSurface()->getSurface();
+						}
+					}
+					break;
 			}
 			break;
 		case SDL_QUIT:
@@ -462,6 +467,8 @@ void FlcPlayer::playAudioFrame(Uint16 sampleRate)
 
 		SDL_SemWait(_audioData.sharedLock);
 		AudioBuffer *loadingBuff = _audioData.loadingBuffer;
+        if (!loadingBuff)
+            return;
 		assert(loadingBuff->currSamplePos == 0);
 		int newSize = (_audioFrameSize + loadingBuff->sampleCount )*2;
 		if (newSize > loadingBuff->sampleBufSize)
@@ -514,7 +521,7 @@ void FlcPlayer::color256()
 		}
 
 		if (_mainScreen != _realScreen->getSurface()->getSurface())
-			SDL_SetColors(_mainScreen, _colors, numColorsSkip, numColors);
+			SDL_SetPaletteColors(_mainScreen->format->palette, _colors, numColorsSkip, numColors);
 		_realScreen->setPalette(_colors, numColorsSkip, numColors, true);
 
 		if (numColorPackets >= 1)
@@ -729,7 +736,7 @@ void FlcPlayer::color64()
 		}
 
 		if (_mainScreen != _realScreen->getSurface()->getSurface())
-			SDL_SetColors(_mainScreen, _colors, NumColorsSkip, NumColors);
+			SDL_SetPaletteColors(_mainScreen->format->palette, _colors, NumColorsSkip, NumColors);
 		_realScreen->setPalette(_colors, NumColorsSkip, NumColors, true);
 	}
 }

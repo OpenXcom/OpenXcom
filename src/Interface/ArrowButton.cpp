@@ -46,7 +46,7 @@ ArrowButton::~ArrowButton()
 	delete _timer;
 }
 
-bool ArrowButton::isButtonHandled(Uint8 button)
+bool ArrowButton::isButtonHandled(SDL_Event* event, Uint8 button)
 {
 	if (_list != 0)
 	{
@@ -54,7 +54,7 @@ bool ArrowButton::isButtonHandled(Uint8 button)
 	}
 	else
 	{
-		return ImageButton::isButtonHandled(button);
+		return ImageButton::isButtonHandled(event, button);
 	}
 }
 
@@ -339,8 +339,11 @@ void ArrowButton::mousePress(Action *action, State *state)
 		{
 			_timer->start();
 		}
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) _list->scrollUp(false, true);
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) _list->scrollDown(false, true);
+		else if (action->getDetails()->type == SDL_MOUSEWHEEL)
+		{
+			if (action->getDetails()->button.x > 0) _list->scrollUp(false, true);
+			else if (action->getDetails()->button.x > 0) _list->scrollDown(false, true);
+		}
 	}
 }
 

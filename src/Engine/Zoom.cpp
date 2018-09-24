@@ -61,6 +61,7 @@
 namespace OpenXcom
 {
 
+SDL_Surface *Zoom::_scaleTmpSurface = nullptr;
 
 /**
  * Optimized 8-bit zoomer for resizing by a factor of 2. Doesn't flip.
@@ -659,7 +660,7 @@ bool Zoom::haveSSE2()
  * @param rightBlackBand Size of right black band in pixels (letterboxing).
  * @param glOut OpenGL output.
  */
-void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand, OpenGL *glOut)
+void Zoom::flipWithZoom(SDL_Window* wnd, SDL_Surface *src, SDL_Surface *dst, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand, OpenGL *glOut)
 {
 	int dstWidth = dst->w - leftBlackBand - rightBlackBand;
 	int dstHeight = dst->h - topBlackBand - bottomBlackBand;
@@ -671,13 +672,13 @@ void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, int topBlackBand, in
 			SDL_BlitSurface(src, 0, glOut->buffer_surface->getSurface(), 0); // TODO; this is less than ideal...
 
 			glOut->refresh(glOut->linear, glOut->iwidth, glOut->iheight, dst->w, dst->h, topBlackBand, bottomBlackBand, leftBlackBand, rightBlackBand);
-			SDL_GL_SwapBuffers();
+			SDL_GL_SwapWindow(wnd);
 		}
 #endif
 	}
 	else if (topBlackBand <= 0 && bottomBlackBand <= 0 && leftBlackBand <= 0 && rightBlackBand <= 0)
 	{
-		_zoomSurfaceY(src, dst, 0, 0);
+		_zoomSurfaceY(wnd, src, dst, 0, 0);
 	}
 	else if (dstWidth == src->w && dstHeight == src->h)
 	{
@@ -686,15 +687,15 @@ void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, int topBlackBand, in
 	}
 	else
 	{
-		SDL_Surface *tmp = SDL_CreateRGBSurface(dst->flags, dstWidth, dstHeight, dst->format->BitsPerPixel, 0, 0, 0, 0);
-		_zoomSurfaceY(src, tmp, 0, 0);
+		if (!_scaleTmpSurface || _scaleTmpSurface->w != dstWidth || _scaleTmpSurface->h != dstHeight || _scaleTmpSurface->format->BitsPerPixel != src->format->BitsPerPixel) // ToDo: cleanup zoom cache
+			_scaleTmpSurface = SDL_CreateRGBSurface(src->flags, dstWidth, dstHeight, src->format->BitsPerPixel, 0, 0, 0, 0);
+		_zoomSurfaceY(wnd, src, _scaleTmpSurface, 0, 0);
 		if (src->format->palette != NULL)
 		{
-			SDL_SetPalette(tmp, SDL_LOGPAL|SDL_PHYSPAL, src->format->palette->colors, 0, src->format->palette->ncolors);
+			SDL_SetPaletteColors(_scaleTmpSurface->format->palette, src->format->palette->colors, 0, src->format->palette->ncolors);
 		}
-		SDL_Rect dstrect = {(Sint16)leftBlackBand, (Sint16)topBlackBand, (Uint16)tmp->w, (Uint16)tmp->h};
-		SDL_BlitSurface(tmp, NULL, dst, &dstrect);
-		SDL_FreeSurface(tmp);
+		SDL_Rect dstrect = {(Sint16)leftBlackBand, (Sint16)topBlackBand, (Uint16)_scaleTmpSurface->w, (Uint16)_scaleTmpSurface->h};
+		SDL_BlitSurface(_scaleTmpSurface, NULL, dst, &dstrect);
 	}
 }
 
@@ -713,7 +714,7 @@ void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, int topBlackBand, in
  * @param flipy Flag indicating if the image should be vertically flipped.
  * @return 0 for success or -1 for error.
  */
-int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int flipy)
+int Zoom::_zoomSurfaceY(SDL_Window* wnd, SDL_Surface * src, SDL_Surface * dst, int flipx, int flipy)
 {
 	int x, y;
 	static Uint32 *sax, *say;

@@ -38,18 +38,18 @@ class InteractiveSurface : public Surface
 {
 private:
 	static const int NUM_BUTTONS = 7;
-	static const SDLKey SDLK_ANY;
+	static const SDL_Keycode SDLK_ANY;
 	Uint8 _buttonsPressed;
 protected:
 	std::map<Uint8, ActionHandler> _click, _press, _release;
 	ActionHandler _in, _over, _out;
-	std::map<SDLKey, ActionHandler> _keyPress, _keyRelease;
+	std::map<SDL_Keycode, ActionHandler> _keyPress, _keyRelease;
 	bool _isHovered, _isFocused, _listButton;
 
 	/// Is this mouse button pressed?
 	bool isButtonPressed(Uint8 button = 0) const;
 	/// Is this mouse button event handled?
-	virtual bool isButtonHandled(Uint8 button = 0);
+	virtual bool isButtonHandled(SDL_Event* event, Uint8 button = 0);
 	/// Set a mouse button's internal state.
 	void setButtonPressed(Uint8 button, bool pressed);
 public:
@@ -80,9 +80,9 @@ public:
 	/// Hooks an action handler to moving the mouse out of the surface.
 	void onMouseOut(ActionHandler handler);
 	/// Hooks an action handler to pressing a key when the surface is focused.
-	void onKeyboardPress(ActionHandler handler, SDLKey key = SDLK_ANY);
+	void onKeyboardPress(ActionHandler handler, SDL_Keycode key = SDLK_ANY);
 	/// Hooks an action handler to releasing a key when the surface is focused.
-	void onKeyboardRelease(ActionHandler handler, SDLKey key = SDLK_ANY);
+	void onKeyboardRelease(ActionHandler handler, SDL_Keycode key = SDLK_ANY);
 	/// Processes a mouse button press event.
 	virtual void mousePress(Action *action, State *state);
 	/// Processes a mouse button release event.
