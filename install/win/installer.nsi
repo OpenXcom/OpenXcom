@@ -430,6 +430,8 @@ Section "$(SETUP_PATCH)" SecPatch
 	Delete "$TEMP\universal-patch-tftd.zip"
 	
 	patch_tftd_no:
+	
+	SetOutPath "$INSTDIR"
 
 SectionEnd
 
