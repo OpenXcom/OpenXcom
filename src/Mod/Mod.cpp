@@ -188,7 +188,7 @@ void Mod::resetGlobalStatics()
  * Creates an empty mod.
  */
 Mod::Mod() : _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _turnAIUseGrenade(3), _turnAIUseBlaster(3), _defeatScore(0), _defeatFunds(0), _startingTime(6, 1, 1, 1999, 12, 0, 0),
-			 _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0), _modOffset(0)
+			 _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0), _modOffset(0), _statePalette(0)
 {
 	_muteMusic = new Music();
 	_muteSound = new Sound();
@@ -320,9 +320,12 @@ Mod::~Mod()
 	{
 		delete i->second;
 	}
-	for (std::vector< std::pair<std::string, ExtraSprites *> >::const_iterator i = _extraSprites.begin(); i != _extraSprites.end(); ++i)
+	for (std::map<std::string, std::vector<ExtraSprites*> >::iterator i = _extraSprites.begin(); i != _extraSprites.end(); ++i)
 	{
-		delete i->second;
+		for (std::vector<ExtraSprites*>::iterator j = i->second.begin(); j != i->second.end(); ++j)
+		{
+			delete *j;
+		}
 	}
 	for (std::vector< std::pair<std::string, ExtraSounds *> >::const_iterator i = _extraSounds.begin(); i != _extraSounds.end(); ++i)
 	{
@@ -409,13 +412,26 @@ Font *Mod::getFont(const std::string &name, bool error) const
 	return getRule(name, "Font", _fonts, error);
 }
 
+void Mod::lazyLoadSurface(const std::string &name)
+{
+	std::map<std::string, std::vector<ExtraSprites *> >::const_iterator i = _extraSprites.find(name);
+	if (i != _extraSprites.end())
+	{
+		for (std::vector<ExtraSprites*>::const_iterator j = i->second.begin(); j != i->second.end(); ++j)
+		{
+			loadExtraSprite(name, *j);
+		}
+	}
+}
+
 /**
  * Returns a specific surface from the mod.
  * @param name Name of the surface.
  * @return Pointer to the surface.
  */
-Surface *Mod::getSurface(const std::string &name, bool error) const
+Surface *Mod::getSurface(const std::string &name, bool error)
 {
+	lazyLoadSurface(name);
 	return getRule(name, "Sprite", _surfaces, error);
 }
 
@@ -424,8 +440,9 @@ Surface *Mod::getSurface(const std::string &name, bool error) const
  * @param name Name of the surface set.
  * @return Pointer to the surface set.
  */
-SurfaceSet *Mod::getSurfaceSet(const std::string &name, bool error) const
+SurfaceSet *Mod::getSurfaceSet(const std::string &name, bool error)
 {
+	lazyLoadSurface(name);
 	return getRule(name, "Sprite Set", _sets, error);
 }
 
@@ -574,10 +591,11 @@ Palette *Mod::getPalette(const std::string &name, bool error) const
  */
 void Mod::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
+	_statePalette = colors;
 	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); ++i)
 	{
 		i->second->setPalette(colors, firstcolor, ncolors);
-	}
+	}	
 	for (std::map<std::string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
 		if (i->first.substr(i->first.length() - 3, i->first.length()) != "LBM")
@@ -586,7 +604,7 @@ void Mod::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	for (std::map<std::string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); ++i)
 	{
 		i->second->setPalette(colors, firstcolor, ncolors);
-	}
+	}	
 }
 
 /**
@@ -1108,7 +1126,7 @@ void Mod::loadFile(const std::string &filename)
 			extraSprites->load(*i, _modOffset);
 		else
 			extraSprites->load(*i, 0);
-		_extraSprites.push_back(std::make_pair(type, extraSprites));
+		_extraSprites[type].push_back(extraSprites);
 		_extraSpritesIndex.push_back(type);
 	}
 	for (YAML::const_iterator i = doc["extraSounds"].begin(); i != doc["extraSounds"].end(); ++i)
@@ -2024,7 +2042,7 @@ MCDPatch *Mod::getMCDPatch(const std::string &id) const
  * Gets the list of external sprites.
  * @return The list of external sprites.
  */
-const std::vector<std::pair<std::string, ExtraSprites *> > &Mod::getExtraSprites() const
+const std::map<std::string, std::vector<ExtraSprites *> > &Mod::getExtraSprites() const
 {
 	return _extraSprites;
 }
@@ -3045,154 +3063,16 @@ void Mod::loadExtraResources()
 		delete aintrocat;
 	}
 #endif
-
+	/*
 	Log(LOG_INFO) << "Loading extra resources from ruleset...";
-	for (std::vector< std::pair<std::string, ExtraSprites *> >::const_iterator i = _extraSprites.begin(); i != _extraSprites.end(); ++i)
+	for (std::map<std::string, std::vector<ExtraSprites *> >::const_iterator i = _extraSprites.begin(); i != _extraSprites.end(); ++i)
 	{
-		std::string sheetName = i->first;
-		ExtraSprites *spritePack = i->second;
-		bool subdivision = (spritePack->getSubX() != 0 && spritePack->getSubY() != 0);
-		if (spritePack->getSingleImage())
+		for (std::vector<ExtraSprites*>::const_iterator j = i->second.begin(); j != i->second.end(); ++j)
 		{
-			if (_surfaces.find(sheetName) == _surfaces.end())
-			{
-				Log(LOG_VERBOSE) << "Creating new single image: " << sheetName;
-				_surfaces[sheetName] = new Surface(spritePack->getWidth(), spritePack->getHeight());
-			}
-			else
-			{
-				Log(LOG_VERBOSE) << "Adding/Replacing single image: " << sheetName;
-				delete _surfaces[sheetName];
-				_surfaces[sheetName] = new Surface(spritePack->getWidth(), spritePack->getHeight());
-			}
-			_surfaces[sheetName]->loadImage(FileMap::getFilePath((*spritePack->getSprites())[0]));
-		}
-		else
-		{
-			bool adding = false;
-			if (_sets.find(sheetName) == _sets.end())
-			{
-				Log(LOG_VERBOSE) << "Creating new surface set: " << sheetName;
-				adding = true;
-				if (subdivision)
-				{
-					_sets[sheetName] = new SurfaceSet(spritePack->getSubX(), spritePack->getSubY());
-				}
-				else
-				{
-					_sets[sheetName] = new SurfaceSet(spritePack->getWidth(), spritePack->getHeight());
-				}
-			}
-			else
-			{
-				Log(LOG_VERBOSE) << "Adding/Replacing items in surface set: " << sheetName;
-			}
-
-			if (subdivision)
-			{
-				int frames = (spritePack->getWidth() / spritePack->getSubX())*(spritePack->getHeight() / spritePack->getSubY());
-				Log(LOG_VERBOSE) << "Subdividing into " << frames << " frames.";
-			}
-
-			for (std::map<int, std::string>::iterator j = spritePack->getSprites()->begin(); j != spritePack->getSprites()->end(); ++j)
-			{
-				int startFrame = j->first;
-				std::string fileName = j->second;
-				if (fileName[fileName.length() - 1] == '/')
-				{
-					Log(LOG_VERBOSE) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
-					int offset = startFrame;
-					const std::set<std::string>& contents = FileMap::getVFolderContents(fileName);
-					for (std::set<std::string>::iterator k = contents.begin(); k != contents.end(); ++k)
-					{
-						if (!isImageFile((*k).substr((*k).length() - 4, (*k).length())))
-							continue;
-						try
-						{
-							std::string fullPath = FileMap::getFilePath(fileName + *k);
-							if (_sets[sheetName]->getFrame(offset))
-							{
-								Log(LOG_VERBOSE) << "Replacing frame: " << offset;
-								_sets[sheetName]->getFrame(offset)->loadImage(fullPath);
-							}
-							else
-							{
-								if (adding)
-								{
-									_sets[sheetName]->addFrame(offset)->loadImage(fullPath);
-								}
-								else
-								{
-									Log(LOG_VERBOSE) << "Adding frame: " << offset + spritePack->getModIndex();
-									_sets[sheetName]->addFrame(offset + spritePack->getModIndex())->loadImage(fullPath);
-								}
-							}
-							offset++;
-						}
-						catch (Exception &e)
-						{
-							Log(LOG_WARNING) << e.what();
-						}
-					}
-				}
-				else
-				{
-					if (spritePack->getSubX() == 0 && spritePack->getSubY() == 0)
-					{
-						const std::string& fullPath = FileMap::getFilePath(fileName);
-						if (_sets[sheetName]->getFrame(startFrame))
-						{
-							Log(LOG_VERBOSE) << "Replacing frame: " << startFrame;
-							_sets[sheetName]->getFrame(startFrame)->loadImage(fullPath);
-						}
-						else
-						{
-							Log(LOG_VERBOSE) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
-							_sets[sheetName]->addFrame(startFrame + spritePack->getModIndex())->loadImage(fullPath);
-						}
-					}
-					else
-					{
-						Surface *temp = new Surface(spritePack->getWidth(), spritePack->getHeight());
-						temp->loadImage(FileMap::getFilePath((*spritePack->getSprites())[startFrame]));
-						int xDivision = spritePack->getWidth() / spritePack->getSubX();
-						int yDivision = spritePack->getHeight() / spritePack->getSubY();
-						int offset = startFrame;
-
-						for (int y = 0; y != yDivision; ++y)
-						{
-							for (int x = 0; x != xDivision; ++x)
-							{
-								if (_sets[sheetName]->getFrame(offset))
-								{
-									Log(LOG_VERBOSE) << "Replacing frame: " << offset;
-									_sets[sheetName]->getFrame(offset)->clear();
-									// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
-									temp->blitNShade(_sets[sheetName]->getFrame(offset), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
-								}
-								else
-								{
-									if (adding)
-									{
-										// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
-										temp->blitNShade(_sets[sheetName]->addFrame(offset), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
-									}
-									else
-									{
-										Log(LOG_VERBOSE) << "Adding frame: " << offset + spritePack->getModIndex();
-										// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
-										temp->blitNShade(_sets[sheetName]->addFrame(offset + spritePack->getModIndex()), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
-									}
-								}
-								++offset;
-							}
-						}
-						delete temp;
-					}
-				}
-			}
+			loadExtraSprite(i->first, *j);
 		}
 	}
+	*/
 
 	for (std::vector< std::pair<std::string, ExtraSounds *> >::const_iterator i = _extraSounds.begin(); i != _extraSounds.end(); ++i)
 	{
@@ -3252,11 +3132,171 @@ void Mod::loadExtraResources()
 	}
 }
 
+void Mod::loadExtraSprite(const std::string &sheetName, ExtraSprites *spritePack)
+{
+	if (spritePack->lazyLoad())
+		return;
+	bool subdivision = (spritePack->getSubX() != 0 && spritePack->getSubY() != 0);
+	if (spritePack->getSingleImage())
+	{
+		if (_surfaces.find(sheetName) == _surfaces.end())
+		{
+			Log(LOG_VERBOSE) << "Creating new single image: " << sheetName;
+			_surfaces[sheetName] = new Surface(spritePack->getWidth(), spritePack->getHeight());
+		}
+		else
+		{
+			Log(LOG_VERBOSE) << "Adding/Replacing single image: " << sheetName;
+			delete _surfaces[sheetName];
+			_surfaces[sheetName] = new Surface(spritePack->getWidth(), spritePack->getHeight());
+		}
+		_surfaces[sheetName]->loadImage(FileMap::getFilePath((*spritePack->getSprites())[0]));
+		if (_statePalette)
+			_surfaces[sheetName]->setPalette(_statePalette);
+	}
+	else
+	{
+		bool adding = false;
+		if (_sets.find(sheetName) == _sets.end())
+		{
+			Log(LOG_VERBOSE) << "Creating new surface set: " << sheetName;
+			adding = true;
+			if (subdivision)
+			{
+				_sets[sheetName] = new SurfaceSet(spritePack->getSubX(), spritePack->getSubY());
+			}
+			else
+			{
+				_sets[sheetName] = new SurfaceSet(spritePack->getWidth(), spritePack->getHeight());
+			}
+		}
+		else
+		{
+			Log(LOG_VERBOSE) << "Adding/Replacing items in surface set: " << sheetName;
+		}
+
+		if (subdivision)
+		{
+			int frames = (spritePack->getWidth() / spritePack->getSubX()) * (spritePack->getHeight() / spritePack->getSubY());
+			Log(LOG_VERBOSE) << "Subdividing into " << frames << " frames.";
+		}
+
+		for (std::map<int, std::string>::iterator j = spritePack->getSprites()->begin(); j != spritePack->getSprites()->end(); ++j)
+		{
+			int startFrame = j->first;
+			std::string fileName = j->second;
+			if (fileName[fileName.length() - 1] == '/')
+			{
+				Log(LOG_VERBOSE) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
+				int offset = startFrame;
+				const std::set<std::string>& contents = FileMap::getVFolderContents(fileName);
+				for (std::set<std::string>::iterator k = contents.begin(); k != contents.end(); ++k)
+				{
+					if (!isImageFile((*k).substr((*k).length() - 4, (*k).length())))
+						continue;
+					try
+					{
+						std::string fullPath = FileMap::getFilePath(fileName + *k);
+						if (_sets[sheetName]->getFrame(offset))
+						{
+							Log(LOG_VERBOSE) << "Replacing frame: " << offset;
+							_sets[sheetName]->getFrame(offset)->loadImage(fullPath);
+						}
+						else
+						{
+							if (adding)
+							{
+								_sets[sheetName]->addFrame(offset)->loadImage(fullPath);
+							}
+							else
+							{
+								Log(LOG_VERBOSE) << "Adding frame: " << offset + spritePack->getModIndex();
+								_sets[sheetName]->addFrame(offset + spritePack->getModIndex())->loadImage(fullPath);
+							}
+						}
+						offset++;
+					}
+					catch (Exception &e)
+					{
+						Log(LOG_WARNING) << e.what();
+					}
+				}
+			}
+			else
+			{
+				if (spritePack->getSubX() == 0 && spritePack->getSubY() == 0)
+				{
+					const std::string& fullPath = FileMap::getFilePath(fileName);
+					if (_sets[sheetName]->getFrame(startFrame))
+					{
+						Log(LOG_VERBOSE) << "Replacing frame: " << startFrame;
+						_sets[sheetName]->getFrame(startFrame)->loadImage(fullPath);
+					}
+					else
+					{
+						Log(LOG_VERBOSE) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
+						_sets[sheetName]->addFrame(startFrame + spritePack->getModIndex())->loadImage(fullPath);
+					}
+				}
+				else
+				{
+					Surface *temp = new Surface(spritePack->getWidth(), spritePack->getHeight());
+					temp->loadImage(FileMap::getFilePath((*spritePack->getSprites())[startFrame]));
+					int xDivision = spritePack->getWidth() / spritePack->getSubX();
+					int yDivision = spritePack->getHeight() / spritePack->getSubY();
+					int offset = startFrame;
+
+					for (int y = 0; y != yDivision; ++y)
+					{
+						for (int x = 0; x != xDivision; ++x)
+						{
+							if (_sets[sheetName]->getFrame(offset))
+							{
+								Log(LOG_VERBOSE) << "Replacing frame: " << offset;
+								_sets[sheetName]->getFrame(offset)->clear();
+								// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
+								temp->blitNShade(_sets[sheetName]->getFrame(offset), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
+							}
+							else
+							{
+								if (adding)
+								{
+									// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
+									temp->blitNShade(_sets[sheetName]->addFrame(offset), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
+								}
+								else
+								{
+									Log(LOG_VERBOSE) << "Adding frame: " << offset + spritePack->getModIndex();
+									// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
+									temp->blitNShade(_sets[sheetName]->addFrame(offset + spritePack->getModIndex()), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
+								}
+							}
+							++offset;
+						}
+					}
+					delete temp;
+				}
+			}
+		}
+		if (_statePalette)
+			_sets[sheetName]->setPalette(_statePalette);
+	}
+}
+
 /**
  * Applies necessary modifications to vanilla resources.
  */
 void Mod::modResources()
 {
+	// we're gonna need these
+	getSurface("GEOBORD.SCR");
+	getSurface("ALTGEOBORD.SCR", false);
+	getSurface("BACK07.SCR");
+	getSurface("ALTBACK07.SCR", false);
+	getSurface("BACK06.SCR");
+	getSurface("UNIBORD.PCK");
+	getSurfaceSet("HANDOB.PCK");
+
 	// embiggen the geoscape background by mirroring the contents
 	// modders can provide their own backgrounds via ALTGEOBORD.SCR
 	if (_surfaces.find("ALTGEOBORD.SCR") == _surfaces.end())
@@ -3285,17 +3325,20 @@ void Mod::modResources()
 	}
 
 	// here we create an "alternate" background surface for the base info screen.
-	_surfaces["ALTBACK07.SCR"] = new Surface(320, 200);
-	_surfaces["ALTBACK07.SCR"]->loadScr(FileMap::getFilePath("GEOGRAPH/BACK07.SCR"));
-	for (int y = 172; y >= 152; --y)
-		for (int x = 5; x <= 314; ++x)
-			_surfaces["ALTBACK07.SCR"]->setPixel(x, y + 4, _surfaces["ALTBACK07.SCR"]->getPixel(x, y));
-	for (int y = 147; y >= 134; --y)
-		for (int x = 5; x <= 314; ++x)
-			_surfaces["ALTBACK07.SCR"]->setPixel(x, y + 9, _surfaces["ALTBACK07.SCR"]->getPixel(x, y));
-	for (int y = 132; y >= 109; --y)
-		for (int x = 5; x <= 314; ++x)
-			_surfaces["ALTBACK07.SCR"]->setPixel(x, y + 10, _surfaces["ALTBACK07.SCR"]->getPixel(x, y));
+	if (_surfaces.find("ALTBACK07.SCR") == _surfaces.end())
+	{
+		_surfaces["ALTBACK07.SCR"] = new Surface(320, 200);
+		_surfaces["ALTBACK07.SCR"]->loadScr(FileMap::getFilePath("GEOGRAPH/BACK07.SCR"));
+		for (int y = 172; y >= 152; --y)
+			for (int x = 5; x <= 314; ++x)
+				_surfaces["ALTBACK07.SCR"]->setPixel(x, y + 4, _surfaces["ALTBACK07.SCR"]->getPixel(x, y));
+		for (int y = 147; y >= 134; --y)
+			for (int x = 5; x <= 314; ++x)
+				_surfaces["ALTBACK07.SCR"]->setPixel(x, y + 9, _surfaces["ALTBACK07.SCR"]->getPixel(x, y));
+		for (int y = 132; y >= 109; --y)
+			for (int x = 5; x <= 314; ++x)
+				_surfaces["ALTBACK07.SCR"]->setPixel(x, y + 10, _surfaces["ALTBACK07.SCR"]->getPixel(x, y));
+	}
 
 	// we create extra rows on the soldier stat screens by shrinking them all down one pixel.
 

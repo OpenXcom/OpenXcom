@@ -32,6 +32,7 @@ private:
 	int _width, _height;
 	bool _singleImage;
 	int _modIndex, _subX, _subY;
+	bool _loaded;
 public:
 	/// Creates a blank external sprite set.
 	ExtraSprites();
@@ -54,6 +55,7 @@ public:
 	/// Gets the y subdivision.
 	int getSubY() const;
 
+	bool lazyLoad();
 };
 
 }

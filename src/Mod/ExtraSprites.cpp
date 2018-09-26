@@ -25,7 +25,7 @@ namespace OpenXcom
 /**
  * Creates a blank set of extra sprite data.
  */
-ExtraSprites::ExtraSprites() : _width(320), _height(200), _singleImage(false), _modIndex(0), _subX(0), _subY(0)
+ExtraSprites::ExtraSprites() : _width(320), _height(200), _singleImage(false), _modIndex(0), _subX(0), _subY(0), _loaded(false)
 {
 }
 
@@ -113,6 +113,19 @@ int ExtraSprites::getSubX() const
 int ExtraSprites::getSubY() const
 {
 	return _subY;
+}
+
+bool ExtraSprites::lazyLoad()
+{
+	if (_loaded)
+	{
+		return true;
+	}
+	else
+	{
+		_loaded = true;
+		return false;
+	}
 }
 
 }
