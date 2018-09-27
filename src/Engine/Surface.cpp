@@ -20,6 +20,7 @@
 #include "ShaderDraw.h"
 #include <vector>
 #include <fstream>
+#include <algorithm>
 #include <SDL_gfxPrimitives.h>
 #include <SDL_image.h>
 #include <SDL_endian.h>
@@ -212,6 +213,56 @@ Surface::~Surface()
 }
 
 /**
+ * Performs a fast copy of a pixel array, accounting for pitch.
+ * @param src Source array.
+ */
+template <typename T>
+void Surface::rawCopy(const std::vector<T> &src)
+{
+	// Copy whole thing
+	if (_surface->pitch == _surface->w)
+	{
+		std::copy(src.begin(), src.end(), (T*)_surface->pixels);
+	}
+	// Copy row by row
+	else
+	{
+		for (int y = 0; y < _surface->h; ++y)
+		{
+			size_t begin = y * _surface->w;
+			size_t end = std::min(begin + _surface->w, src.size());
+			if (begin >= src.size())
+				break;
+			std::copy(src.begin() + begin, src.begin() + end, (T*)getRaw(0, y));
+		}
+	}
+}
+
+/**
+ * Loads a raw array of pixels into the surface. The pixels must be
+ * in the same BPP as the surface.
+ * @param bytes Pixel array.
+ */
+void Surface::loadRaw(const std::vector<unsigned char> &bytes)
+{
+	lock();
+	rawCopy(bytes);
+	unlock();
+}
+
+/**
+ * Loads a raw array of pixels into the surface. The pixels must be
+ * in the same BPP as the surface.
+ * @param bytes Pixel array.
+ */
+void Surface::loadRaw(const std::vector<char> &bytes)
+{
+	lock();
+	rawCopy(bytes);
+	unlock();
+}
+
+/**
  * Loads the contents of an X-Com SCR image file into
  * the surface. SCR files are simply uncompressed images
  * containing the palette offset of each pixel.
@@ -228,19 +279,7 @@ void Surface::loadScr(const std::string &filename)
 	}
 
 	std::vector<char> buffer((std::istreambuf_iterator<char>(imgFile)), (std::istreambuf_iterator<char>()));
-
-	// Lock the surface
-	lock();
-
-	int x = 0, y = 0;
-
-	for (std::vector<char>::iterator i = buffer.begin(); i != buffer.end(); ++i)
-	{
-		setPixelIterative(&x, &y, *i);
-	}
-
-	// Unlock the surface
-	unlock();
+	loadRaw(buffer);
 }
 
 /**
@@ -280,11 +319,7 @@ void Surface::loadImage(const std::string &filename)
 					_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, GetPitch(bpp, width), 0, 0, 0, 0);
 					if (_surface)
 					{
-						int x = 0, y = 0;
-						for (std::vector<unsigned char>::const_iterator i = image.begin(); i != image.end(); ++i)
-						{
-							setPixelIterative(&x, &y, *i);
-						}
+						loadRaw(image);
 						setPalette((SDL_Color*)color->palette, 0, color->palettesize);
 						int transparent = 0;
 						for (int c = 0; c < _surface->format->palette->ncolors; ++c)
@@ -406,8 +441,9 @@ void Surface::loadBdy(const std::string &filename)
 			currentRow = y;
 			for (int i = 0; i < pixelCnt; ++i)
 			{
-				if (currentRow == y) // avoid overscan into next row
-					setPixelIterative(&x, &y, dataByte);
+				setPixelIterative(&x, &y, dataByte);
+				if (currentRow != y) // avoid overscan into next row
+					break;
 			}
 		}
 		else
@@ -428,7 +464,6 @@ void Surface::loadBdy(const std::string &filename)
 
 	imgFile.close();
 }
-
 
 /**
  * Clears the entire contents of the surface, resulting

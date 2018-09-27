@@ -19,6 +19,7 @@
  */
 #include <SDL.h>
 #include <string>
+#include <vector>
 #include "GraphSubset.h"
 
 namespace OpenXcom
@@ -44,6 +45,10 @@ protected:
 	void *_alignedBuffer;
 	std::string _tooltip;
 
+	/// Copies raw pixels.
+	template <typename T>
+	void rawCopy(const std::vector<T> &bytes);
+	/// Resizes the surface.
 	void resize(int width, int height);
 public:
 	/// Creates a new surface with the specified size and position.
@@ -52,6 +57,10 @@ public:
 	Surface(const Surface& other);
 	/// Cleans up the surface.
 	virtual ~Surface();
+	/// Loads a raw pixel array.
+	void loadRaw(const std::vector<unsigned char> &bytes);
+	/// Loads a raw pixel array.
+	void loadRaw(const std::vector<char> &bytes);
 	/// Loads an X-Com SCR graphic.
 	void loadScr(const std::string &filename);
 	/// Loads an X-Com SPK graphic.
@@ -143,12 +152,12 @@ public:
 		{
 			return;
 		}
-		((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel] = pixel;
+		*getRaw(x, y) = pixel;
 	}
 	/**
 	 * Changes the color of a pixel in the surface and returns the
 	 * next pixel position. Useful when changing a lot of pixels in
-	 * a row, eg. loading images.
+	 * a row, eg. manipulating images.
 	 * @param x Pointer to the X position of the pixel. Changed to the next X position in the sequence.
 	 * @param y Pointer to the Y position of the pixel. Changed to the next Y position in the sequence.
 	 * @param pixel New color for the pixel.
@@ -175,7 +184,21 @@ public:
 		{
 			return 0;
 		}
-		return ((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel];
+		return *getRaw(x, y);
+	}
+	/**
+	 * Returns the pointer to a specified pixel in the surface.
+	 * @param x X position of the pixel.
+	 * @param y Y position of the pixel.
+	 * @return Pointer to the pixel.
+	 */
+	Uint8 *getRaw(int x, int y) const
+	{
+		if (x < 0 || x >= getWidth() || y < 0 || y >= getHeight())
+		{
+			return 0;
+		}
+		return (Uint8 *)_surface->pixels + (y * _surface->pitch + x * _surface->format->BytesPerPixel);
 	}
 	/**
 	 * Returns the internal SDL_Surface for SDL calls.
