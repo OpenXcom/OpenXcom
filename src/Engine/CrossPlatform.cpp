@@ -451,8 +451,6 @@ std::string endPath(const std::string &path)
 std::vector<std::string> getFolderContents(const std::string &path, const std::string &ext)
 {
 	std::vector<std::string> files;
-	std::string extl = ext;
-	std::transform(extl.begin(), extl.end(), extl.begin(), ::tolower);
 
 	DIR *dp = opendir(path.c_str());
 	if (dp == 0)
@@ -474,21 +472,9 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 		{
 			continue;
 		}
-		if (!extl.empty())
+		if (!compareExt(file, ext))
 		{
-			if (file.length() >= extl.length() + 1)
-			{
-				std::string end = file.substr(file.length() - extl.length() - 1);
-				std::transform(end.begin(), end.end(), end.begin(), ::tolower);
-				if (end != "." + extl)
-				{
-					continue;
-				}
-			}
-			else
-			{
-				continue;
-			}
+			continue;
 		}
 
 		files.push_back(file);
@@ -558,6 +544,11 @@ bool deleteFile(const std::string &path)
 #endif
 }
 
+/**
+ * Returns only the filename from a specified path.
+ * @param path Full path.
+ * @return Filename component.
+ */
 std::string baseFilename(const std::string &path)
 {
 	size_t sep = path.find_last_of("/\\");
@@ -580,7 +571,7 @@ std::string baseFilename(const std::string &path)
 /**
  * Replaces invalid filesystem characters with _.
  * @param filename Original filename.
- * @return Filename without invalid characters
+ * @return Filename without invalid characters.
  */
 std::string sanitizeFilename(const std::string &filename)
 {
@@ -601,6 +592,12 @@ std::string sanitizeFilename(const std::string &filename)
 	return newFilename;
 }
 
+/**
+ * Removes the extension from a filename. Only the
+ * last dot is considered.
+ * @param filename Original filename.
+ * @return Filename without the extension.
+ */
 std::string noExt(const std::string &filename)
 {
 	size_t dot = filename.find_last_of('.');
@@ -609,6 +606,45 @@ std::string noExt(const std::string &filename)
 		return filename;
 	}
 	return filename.substr(0, dot);
+}
+
+/**
+ * Returns the extension from a filename. Only the
+ * last dot is considered.
+ * @param filename Original filename.
+ * @return Extension component, includes dot.
+ */
+std::string getExt(const std::string &filename)
+{
+	size_t dot = filename.find_last_of('.');
+	if (dot == std::string::npos)
+	{
+		return "";
+	}
+	return filename.substr(dot);
+}
+
+/**
+ * Compares the extension in a filename (case-insensitive).
+ * @param filename Filename to compare.
+ * @param extension Extension to compare to.
+ * @return If the extensions match.
+ */
+bool compareExt(const std::string &filename, const std::string &extension)
+{
+	if (extension.empty())
+		return true;
+	int j = filename.length() - extension.length();
+	if (j <= 0)
+		return false;
+	if (filename[j - 1] != '.')
+		return false;
+	for (int i = 0; i < extension.length(); ++i)
+	{
+		if (::tolower(filename[j + i]) != ::tolower(extension[i]))
+			return false;
+	}
+	return true;
 }
 
 /**
@@ -882,9 +918,7 @@ void setWindowIcon(int winResource, const std::string &unixPath)
 		SetClassLongPtr(hwnd, GCLP_HICON, (LONG_PTR)icon);
 	}
 #else
-	// SDL only takes UTF-8 filenames
-	// so here's an ugly hack to match this ugly reasoning
-	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(unixPath));
+	std::string utf8 = Language::fsToUtf8(unixPath);
 	SDL_Surface *icon = IMG_Load(utf8.c_str());
 	if (icon != 0)
 	{

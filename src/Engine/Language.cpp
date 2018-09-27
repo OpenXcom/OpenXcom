@@ -115,7 +115,7 @@ Language::~Language()
  * @param src Wide-character string.
  * @return UTF-8 string.
  */
-std::string Language::wstrToUtf8(const std::wstring& src)
+std::string Language::wstrToUtf8(const std::wstring &src)
 {
 	if (src.empty())
 		return "";
@@ -172,7 +172,7 @@ std::string Language::wstrToUtf8(const std::wstring& src)
  * @param src Wide-character string.
  * @return Codepage string.
  */
-std::string Language::wstrToCp(const std::wstring& src)
+std::string Language::wstrToCp(const std::wstring &src)
 {
 	if (src.empty())
 		return "";
@@ -198,7 +198,7 @@ std::string Language::wstrToCp(const std::wstring& src)
  * @param src Wide-character string.
  * @return Filesystem string.
  */
-std::string Language::wstrToFs(const std::wstring& src)
+std::string Language::wstrToFs(const std::wstring &src)
 {
 #ifdef _WIN32
 	return Language::wstrToCp(src);
@@ -214,7 +214,7 @@ std::string Language::wstrToFs(const std::wstring& src)
  * @param src UTF-8 string.
  * @return Wide-character string.
  */
-std::wstring Language::utf8ToWstr(const std::string& src)
+std::wstring Language::utf8ToWstr(const std::string &src)
 {
 	if (src.empty())
 		return L"";
@@ -280,7 +280,7 @@ std::wstring Language::utf8ToWstr(const std::string& src)
  * @param src Codepage string.
  * @return Wide-character string.
  */
-std::wstring Language::cpToWstr(const std::string& src)
+std::wstring Language::cpToWstr(const std::string &src)
 {
 	if (src.empty())
 		return L"";
@@ -307,13 +307,24 @@ std::wstring Language::cpToWstr(const std::string& src)
  * @param src Filesystem string.
  * @return Wide-character string.
  */
-std::wstring Language::fsToWstr(const std::string& src)
+std::wstring Language::fsToWstr(const std::string &src)
 {
 #ifdef _WIN32
 	return Language::cpToWstr(src);
 #else
 	return Language::utf8ToWstr(src);
 #endif
+}
+
+/**
+ * Takes an 8-bit string with the filesystem encoding
+ * and converts it to a UTF-8 string. Required for SDL.
+ * @param src Filesystem string.
+ * @return Wide-character string.
+ */
+std::string Language::fsToUtf8(const std::string &src)
+{
+	return Language::wstrToUtf8(Language::fsToWstr(src));
 }
 
 /**

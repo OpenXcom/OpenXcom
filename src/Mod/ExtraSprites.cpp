@@ -18,6 +18,11 @@
  */
 
 #include "ExtraSprites.h"
+#include "../Engine/Surface.h"
+#include "../Engine/SurfaceSet.h"
+#include "../Engine/FileMap.h"
+#include "../Engine/Logger.h"
+#include "../Engine/Exception.h"
 
 namespace OpenXcom
 {
@@ -43,6 +48,7 @@ ExtraSprites::~ExtraSprites()
  */
 void ExtraSprites::load(const YAML::Node &node, int modIndex)
 {
+	_type = node["type"].as<std::string>(_type);
 	_sprites = node["files"].as< std::map<int, std::string> >(_sprites);
 	_width = node["width"].as<int>(_width);
 	_height = node["height"].as<int>(_height);
@@ -50,6 +56,15 @@ void ExtraSprites::load(const YAML::Node &node, int modIndex)
 	_subX = node["subX"].as<int>(_subX);
 	_subY = node["subY"].as<int>(_subY);
 	_modIndex = modIndex;
+}
+
+/**
+ * Gets the filename that this sprite represents.
+ * @return The sprite name.
+ */
+std::string ExtraSprites::getType() const
+{
+	return _type;
 }
 
 /**
@@ -115,17 +130,174 @@ int ExtraSprites::getSubY() const
 	return _subY;
 }
 
-bool ExtraSprites::lazyLoad()
+/**
+ * Returns if the sprite is loaded.
+ * @return True/false
+ */
+bool ExtraSprites::isLoaded() const
 {
-	if (_loaded)
+	return _loaded;
+}
+
+/**
+ * Determines if an image file is an acceptable format for the game.
+ * @param filename Image filename.
+ * @return True/false
+ */
+bool ExtraSprites::isImageFile(const std::string &filename)
+{
+	static const std::string exts[] = { "PNG", "GIF", "BMP", "LBM", "IFF", "PCX", "TGA", "TIF", "TIFF" };
+
+	for (size_t i = 0; i < sizeof(exts) / sizeof(exts[0]); ++i)
 	{
-		return true;
+		if (CrossPlatform::compareExt(filename, exts[i]))
+			return true;
+	}
+	return false;
+}
+
+/**
+ * Loads the external sprite into a new or existing surface.
+ * @param surface Existing surface.
+ * @return New surface.
+ */
+Surface *ExtraSprites::loadSurface(Surface *surface)
+{
+	if (!_singleImage)
+		return surface;
+	_loaded = true;
+
+	if (surface == 0)
+	{
+		Log(LOG_VERBOSE) << "Creating new single image: " << _type;
 	}
 	else
 	{
-		_loaded = true;
-		return false;
+		Log(LOG_VERBOSE) << "Adding/Replacing single image: " << _type;
+		delete surface;
 	}
+	surface = new Surface(_width, _height);
+	surface->loadImage(FileMap::getFilePath(_sprites.begin()->second));
+	return surface;
+}
+
+/**
+ * Loads the external sprite into a new or existing surface set.
+ * @param set Existing surface set.
+ * @return New surface set.
+ */
+SurfaceSet *ExtraSprites::loadSurfaceSet(SurfaceSet *set)
+{
+	if (_singleImage)
+		return set;
+	_loaded = true;
+
+	bool subdivision = (_subX != 0 && _subY != 0);
+	bool adding = false;
+	if (set == 0)
+	{
+		Log(LOG_VERBOSE) << "Creating new surface set: " << _type;
+		adding = true;
+		if (subdivision)
+		{
+			set = new SurfaceSet(_subX, _subY);
+		}
+		else
+		{
+			set = new SurfaceSet(_width, _height);
+		}
+	}
+	else
+	{
+		Log(LOG_VERBOSE) << "Adding/Replacing items in surface set: " << _type;
+	}
+
+	for (std::map<int, std::string>::const_iterator j = _sprites.begin(); j != _sprites.end(); ++j)
+	{
+		int startFrame = j->first;
+		std::string fileName = j->second;
+		if (fileName[fileName.length() - 1] == '/')
+		{
+			Log(LOG_VERBOSE) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
+			int offset = startFrame;
+			const std::set<std::string> &contents = FileMap::getVFolderContents(fileName);
+			for (std::set<std::string>::iterator k = contents.begin(); k != contents.end(); ++k)
+			{
+				if (!isImageFile(*k))
+					continue;
+				try
+				{
+					const std::string &fullPath = FileMap::getFilePath(fileName + *k);
+					getFrame(set, offset, adding)->loadImage(fullPath);
+					offset++;
+				}
+				catch (Exception &e)
+				{
+					Log(LOG_WARNING) << e.what();
+				}
+			}
+		}
+		else
+		{
+			const std::string &fullPath = FileMap::getFilePath(fileName);
+			if (!subdivision)
+			{
+				// TODO: Should we be passing "adding" here?
+				getFrame(set, startFrame, false)->loadImage(fullPath);
+			}
+			else
+			{
+				Surface *temp = new Surface(_width, _height);
+				temp->loadImage(fullPath);
+				int xDivision = _width / _subX;
+				int yDivision = _height / _subY;
+				int frames = xDivision * yDivision;
+				Log(LOG_VERBOSE) << "Subdividing into " << frames << " frames.";
+				int offset = startFrame;
+
+				for (int y = 0; y != yDivision; ++y)
+				{
+					for (int x = 0; x != xDivision; ++x)
+					{
+						Surface *frame = set->getFrame(offset);
+						if (frame)
+						{
+							frame->clear();
+						}
+						frame = getFrame(set, offset, adding);
+						// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
+						temp->blitNShade(frame, 0 - (x * _subX), 0 - (y * _subY), 0);
+						++offset;
+					}
+				}
+				delete temp;
+			}
+		}
+	}
+	return set;
+}
+
+Surface *ExtraSprites::getFrame(SurfaceSet *set, int index, bool adding) const
+{
+	Surface *frame = set->getFrame(index);
+	if (frame)
+	{
+		Log(LOG_VERBOSE) << "Replacing frame: " << index;
+	}
+	else
+	{
+		if (adding)
+		{
+			Log(LOG_VERBOSE) << "Adding frame: " << index;
+			frame = set->addFrame(index);
+		}
+		else
+		{
+			Log(LOG_VERBOSE) << "Adding frame: " << index << ", using index: " << index + _modIndex;
+			frame = set->addFrame(index + _modIndex);
+		}
+	}
+	return frame;
 }
 
 }

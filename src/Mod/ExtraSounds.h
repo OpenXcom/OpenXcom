@@ -18,9 +18,13 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <yaml-cpp/yaml.h>
+#include <string>
+#include <map>
 
 namespace OpenXcom
 {
+
+class SoundSet;
 
 /**
  * For adding a set of extra sound data to the game.
@@ -28,8 +32,11 @@ namespace OpenXcom
 class ExtraSounds
 {
 private:
+	std::string _type;
 	std::map<int, std::string> _sounds;
 	int _modIndex;
+
+	void loadSound(SoundSet *set, int index, const std::string &fileName) const;
 public:
 	/// Creates a blank external sound set.
 	ExtraSounds();
@@ -37,10 +44,14 @@ public:
 	virtual ~ExtraSounds();
 	/// Loads the data from yaml
 	void load(const YAML::Node &node, int modIndex);
+	/// Gets the sound's type.
+	std::string getType() const;
 	/// Gets the list of sounds defined by this mod
 	std::map<int, std::string> *getSounds();
-	/// get the mod index for this external sound set.
+	/// Gets the mod index for this external sound set.
 	int getModIndex() const;
+	/// Load the external sound into a set.
+	SoundSet *loadSoundSet(SoundSet *set) const;
 };
 
 }

@@ -52,10 +52,7 @@ Music::~Music()
 void Music::load(const std::string &filename)
 {
 #ifndef __NO_MUSIC
-	// SDL only takes UTF-8 filenames
-	// so here's an ugly hack to match this ugly reasoning
-	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
-
+	std::string utf8 = Language::fsToUtf8(filename);
 	_music = Mix_LoadMUS(utf8.c_str());
 	if (_music == 0)
 	{

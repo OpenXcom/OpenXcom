@@ -141,6 +141,7 @@ void create()
 	_info.push_back(OptionInfo("musicAlwaysLoop", &musicAlwaysLoop, false));
 	_info.push_back(OptionInfo("touchEnabled", &touchEnabled, false));
 	_info.push_back(OptionInfo("rootWindowedMode", &rootWindowedMode, false));
+	_info.push_back(OptionInfo("lazyLoadResources", &lazyLoadResources, true));
 
 	// advanced options
 	_info.push_back(OptionInfo("playIntro", &playIntro, true, "STR_PLAYINTRO", "STR_GENERAL"));
@@ -298,10 +299,8 @@ static bool _gameIsInstalled(const std::string &gameName)
 	// look for game data in either the data or user directories
 	std::string dataGameFolder = CrossPlatform::searchDataFolder(gameName);
 	std::string userGameFolder = _userFolder + gameName;
-	return (CrossPlatform::folderExists(dataGameFolder)
-		&& CrossPlatform::getFolderContents(dataGameFolder).size() > 8)
-	    || (CrossPlatform::folderExists(userGameFolder)
-		&& CrossPlatform::getFolderContents(userGameFolder).size() > 8);
+	return (CrossPlatform::folderExists(dataGameFolder)	&& CrossPlatform::getFolderContents(dataGameFolder).size() > 8)
+	    || (CrossPlatform::folderExists(userGameFolder)	&& CrossPlatform::getFolderContents(userGameFolder).size() > 8);
 }
 
 static bool _ufoIsInstalled()

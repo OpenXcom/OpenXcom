@@ -56,17 +56,19 @@ public:
 	/// Cleans up the language.
 	~Language();
 	/// Converts a wide-string to UTF-8.
-	static std::string wstrToUtf8(const std::wstring& src);
+	static std::string wstrToUtf8(const std::wstring &src);
 	/// Converts a wide-string to local-codepage string.
 	static std::string wstrToCp(const std::wstring &src);
 	/// Converts a wide-string to filesystem string.
 	static std::string wstrToFs(const std::wstring &src);
 	/// Converts a UTF-8 string to wide-string.
-	static std::wstring utf8ToWstr(const std::string& src);
+	static std::wstring utf8ToWstr(const std::string &src);
 	/// Converts a local-codepage string to wide-string.
-	static std::wstring cpToWstr(const std::string& src);
+	static std::wstring cpToWstr(const std::string &src);
 	/// Converts a filesystem string to wide-string.
 	static std::wstring fsToWstr(const std::string &src);
+	/// Converts a filesystem string to UTF-8.
+	static std::string fsToUtf8(const std::string &src);
 	/// Replaces a substring.
 	static void replace(std::string &str, const std::string &find, const std::string &replace);
 	/// Replaces a substring.

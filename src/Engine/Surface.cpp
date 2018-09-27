@@ -259,42 +259,45 @@ void Surface::loadImage(const std::string &filename)
 	Log(LOG_VERBOSE) << "Loading image: " << filename;
 
 	// Try loading with LodePNG first
-	std::vector<unsigned char> png;
-	unsigned error = lodepng::load_file(png, filename);
-	if (!error)
+	if (CrossPlatform::compareExt(filename, "png"))
 	{
-		std::vector<unsigned char> image;
-		unsigned width, height;
-		lodepng::State state;
-		state.decoder.color_convert = 0;
-		error = lodepng::decode(image, width, height, state, png);
+		std::vector<unsigned char> png;
+		unsigned error = lodepng::load_file(png, filename);
 		if (!error)
 		{
-			LodePNGColorMode *color = &state.info_png.color;
-			unsigned bpp = lodepng_get_bpp(color);
-			if (bpp == 8)
+			std::vector<unsigned char> image;
+			unsigned width, height;
+			lodepng::State state;
+			state.decoder.color_convert = 0;
+			error = lodepng::decode(image, width, height, state, png);
+			if (!error)
 			{
-				_alignedBuffer = NewAligned(bpp, width, height);
-				_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, GetPitch(bpp, width), 0, 0, 0, 0);
-				if (_surface)
+				LodePNGColorMode *color = &state.info_png.color;
+				unsigned bpp = lodepng_get_bpp(color);
+				if (bpp == 8)
 				{
-					int x = 0, y = 0;
-					for (std::vector<unsigned char>::const_iterator i = image.begin(); i != image.end(); ++i)
+					_alignedBuffer = NewAligned(bpp, width, height);
+					_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, GetPitch(bpp, width), 0, 0, 0, 0);
+					if (_surface)
 					{
-						setPixelIterative(&x, &y, *i);
-					}
-					setPalette((SDL_Color*)color->palette, 0, color->palettesize);
-					int transparent = 0;
-					for (int c = 0; c < _surface->format->palette->ncolors; ++c)
-					{
-						SDL_Color *palColor = _surface->format->palette->colors + c;
-						if (palColor->unused == 0)
+						int x = 0, y = 0;
+						for (std::vector<unsigned char>::const_iterator i = image.begin(); i != image.end(); ++i)
 						{
-							transparent = c;
-							break;
+							setPixelIterative(&x, &y, *i);
 						}
+						setPalette((SDL_Color*)color->palette, 0, color->palettesize);
+						int transparent = 0;
+						for (int c = 0; c < _surface->format->palette->ncolors; ++c)
+						{
+							SDL_Color *palColor = _surface->format->palette->colors + c;
+							if (palColor->unused == 0)
+							{
+								transparent = c;
+								break;
+							}
+						}
+						SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, transparent);
 					}
-					SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, transparent);
 				}
 			}
 		}
@@ -303,9 +306,7 @@ void Surface::loadImage(const std::string &filename)
 	// Otherwise default to SDL_Image
 	if (!_surface)
 	{
-		// SDL only takes UTF-8 filenames
-		// so here's an ugly hack to match this ugly reasoning
-		std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
+		std::string utf8 = Language::fsToUtf8(filename);
 		_surface = IMG_Load(utf8.c_str());
 	}
 

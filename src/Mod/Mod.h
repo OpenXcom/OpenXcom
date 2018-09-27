@@ -143,8 +143,8 @@ private:
 
 	std::map<std::string, int> _ufopaediaSections;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _invsIndex, _ufosIndex;
-	std::vector<std::string> _soldiersIndex, _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _ufopaediaCatIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
-	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex, _missionScriptIndex;
+	std::vector<std::string> _soldiersIndex, _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _ufopaediaCatIndex, _researchIndex, _manufactureIndex;
+	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _missionScriptIndex;
 	std::vector<std::vector<int> > _alienItemLevels;
 	std::vector<SDL_Color> _transparencies;
 	int _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder, _invListOrder;
@@ -166,8 +166,6 @@ private:
 	SoundSet *getSoundSet(const std::string &name, bool error = true) const;
 	/// Loads battlescape specific resources.
 	void loadBattlescapeResources();
-	/// Checks if an extension is a valid image file.
-	bool isImageFile(std::string extension) const;
 	/// Loads a specified music file.
 	Music *loadMusic(MusicFormat fmt, const std::string &file, int track, float volume, CatFile *adlibcat, CatFile *aintrocat, GMCatFile *gmcat) const;
 	/// Creates a transparency lookup table for a given palette.
@@ -178,10 +176,10 @@ private:
 	void loadVanillaResources();
 	/// Loads resources from extra rulesets.
 	void loadExtraResources();
-
+	/// Loads surfaces on demand.
 	void lazyLoadSurface(const std::string &name);
-
-	void loadExtraSprite(const std::string &sheetName, ExtraSprites *spritePack);
+	/// Loads an external sprite.
+	void loadExtraSprite(ExtraSprites *spritePack);
 	/// Applies mods to vanilla resources.
 	void modResources();
 	/// Sorts all our lists according to their weight.
