@@ -472,7 +472,7 @@ void InventoryState::btnOkClick(Action *)
 				continue;
 			}
 
-			(*j)->prepareNewTurn();
+			(*j)->prepareNewTurn(false);
 		}
 	}
 }
