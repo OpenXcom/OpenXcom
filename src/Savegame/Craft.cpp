@@ -168,7 +168,7 @@ void Craft::load(const YAML::Node &node, const Mod *mod, SavedGame *save)
 				}
 			}
 		}
-		else if (type == "STR_WAYPOINT")
+		else if (type == "STR_WAY_POINT")
 		{
 			for (std::vector<Waypoint*>::iterator i = save->getWaypoints()->begin(); i != save->getWaypoints()->end(); ++i)
 			{

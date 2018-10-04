@@ -102,7 +102,7 @@ void ConfirmDestinationState::btnOkClick(Action *)
 	Waypoint *w = dynamic_cast<Waypoint*>(_target);
 	if (w != 0 && w->getId() == 0)
 	{
-		w->setId(_game->getSavedGame()->getId("STR_WAYPOINT"));
+		w->setId(_game->getSavedGame()->getId("STR_WAY_POINT"));
 		_game->getSavedGame()->getWaypoints()->push_back(w);
 	}
 	_craft->setDestination(_target);
