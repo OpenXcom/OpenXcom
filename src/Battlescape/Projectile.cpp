@@ -403,10 +403,10 @@ void Projectile::applyAccuracy(Position origin, Position *target, double accurac
 			sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;
 		// calculate new target
 		// this new target can be very far out of the map, but we don't care about that right now
-		double cos_fi = cos(tilt * M_PI / 180.0);
-		double sin_fi = sin(tilt * M_PI / 180.0);
-		double cos_te = cos(rotation * M_PI / 180.0);
-		double sin_te = sin(rotation * M_PI / 180.0);
+		double cos_fi = cos(Deg2Rad(tilt));
+		double sin_fi = sin(Deg2Rad(tilt));
+		double cos_te = cos(Deg2Rad(rotation));
+		double sin_te = sin(Deg2Rad(rotation));
 		target->x = (int)(origin.x + maxRange * cos_te * cos_fi);
 		target->y = (int)(origin.y + maxRange * sin_te * cos_fi);
 		target->z = (int)(origin.z + maxRange * sin_fi);

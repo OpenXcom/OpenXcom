@@ -675,8 +675,8 @@ void BattlescapeState::mapOver(Action *action)
 			int barHeight = _game->getScreen()->getCursorTopBlackBand();
 			int cursorX = _cursorPosition.x + Round(delta.x * action->getXScale());
 			int cursorY = _cursorPosition.y + Round(delta.y * action->getYScale());
-			_cursorPosition.x = std::min(_game->getScreen()->getWidth() - barWidth - (int)(Round(action->getXScale())), std::max(barWidth, cursorX));
-			_cursorPosition.y = std::min(_game->getScreen()->getHeight() - barHeight - (int)(Round(action->getYScale())), std::max(barHeight, cursorY));
+			_cursorPosition.x = Clamp(cursorX, barWidth, _game->getScreen()->getWidth() - barWidth - (int)(Round(action->getXScale())));
+			_cursorPosition.y = Clamp(cursorY, barHeight, _game->getScreen()->getHeight() - barHeight - (int)(Round(action->getYScale())));
 			
 			if (Options::touchEnabled == false)
 			{

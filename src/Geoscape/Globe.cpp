@@ -1085,8 +1085,7 @@ void Globe::drawRadars()
 		const std::vector<std::string> &facilities = _game->getMod()->getBaseFacilitiesList();
 		for (std::vector<std::string>::const_iterator i = facilities.begin(); i != facilities.end(); ++i)
 		{
-			range=_game->getMod()->getBaseFacility(*i)->getRadarRange();
-			range = range * (1 / 60.0) * (M_PI / 180);
+			range = Nautical(_game->getMod()->getBaseFacility(*i)->getRadarRange());
 			drawGlobeCircle(_hoverLat,_hoverLon,range,48);
 			if (Options::globeAllRadarsOnBaseBuild) ranges.push_back(range);
 		}
@@ -1116,7 +1115,7 @@ void Globe::drawRadars()
 						if (tr > range) range = tr;
 					}
 				}
-				range = range * (1 / 60.0) * (M_PI / 180);
+				range = Nautical(range);
 
 				if (range>0) drawGlobeCircle(lat,lon,range,48);
 			}
@@ -1129,8 +1128,7 @@ void Globe::drawRadars()
 				continue;
 			lat=(*j)->getLatitude();
 			lon=(*j)->getLongitude();
-			range = (*j)->getRules()->getRadarRange();
-			range = range * (1 / 60.0) * (M_PI / 180);
+			range = Nautical((*j)->getRules()->getRadarRange());
 
 			if (range>0) drawGlobeCircle(lat,lon,range,24);
 		}

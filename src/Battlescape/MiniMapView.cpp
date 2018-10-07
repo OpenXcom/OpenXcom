@@ -369,8 +369,8 @@ void MiniMapView::mouseOver(Action *action, State *state)
 				int barHeight = _game->getScreen()->getCursorTopBlackBand();
 				int cursorX = _cursorPosition.x + delta.x;
 				int cursorY =_cursorPosition.y + delta.y;
-				_cursorPosition.x = std::min((int)Round((getX() + getWidth()) * action->getXScale()) + barWidth, std::max((int)Round(getX() * action->getXScale()) + barWidth, cursorX));
-				_cursorPosition.y = std::min((int)Round((getY() + getHeight()) * action->getYScale()) + barHeight, std::max((int)Round(getY() * action->getYScale()) + barHeight, cursorY));
+				_cursorPosition.x = Clamp(cursorX, (int)Round(getX() * action->getXScale()) + barWidth, (int)Round((getX() + getWidth()) * action->getXScale()) + barWidth);
+				_cursorPosition.y = Clamp(cursorY, (int)Round(getY() * action->getYScale()) + barHeight, (int)Round((getY() + getHeight()) * action->getYScale()) + barHeight);
 				action->getDetails()->motion.x = _cursorPosition.x;
 				action->getDetails()->motion.y = _cursorPosition.y;
 			}

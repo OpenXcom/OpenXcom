@@ -132,10 +132,10 @@ namespace YAML
 		static Node encode(const OpenXcom::MissionArea& rhs)
 		{
 			Node node;
-			node.push_back(rhs.lonMin / M_PI * 180.0);
-			node.push_back(rhs.lonMax / M_PI * 180.0);
-			node.push_back(rhs.latMin / M_PI * 180.0);
-			node.push_back(rhs.latMax / M_PI * 180.0);
+			node.push_back(Rad2Deg(rhs.lonMin));
+			node.push_back(Rad2Deg(rhs.lonMax));
+			node.push_back(Rad2Deg(rhs.latMin));
+			node.push_back(Rad2Deg(rhs.latMax));
 			return node;
 		}
 
@@ -144,10 +144,10 @@ namespace YAML
 			if (!node.IsSequence() || node.size() < 4)
 				return false;
 
-			rhs.lonMin = node[0].as<double>() * M_PI / 180.0;
-			rhs.lonMax = node[1].as<double>() * M_PI / 180.0;
-			rhs.latMin = node[2].as<double>() * M_PI / 180.0;
-			rhs.latMax = node[3].as<double>() * M_PI / 180.0;
+			rhs.lonMin = Deg2Rad(node[0].as<double>());
+			rhs.lonMax = Deg2Rad(node[1].as<double>());
+			rhs.latMin = Deg2Rad(node[2].as<double>());
+			rhs.latMax = Deg2Rad(node[3].as<double>());
 			if (rhs.latMin > rhs.latMax)
 				std::swap(rhs.latMin, rhs.latMax);
 			if (node.size() >= 5) rhs.texture = node[4].as<int>();

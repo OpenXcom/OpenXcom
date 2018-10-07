@@ -48,16 +48,16 @@ void RuleCountry::load(const YAML::Node &node)
 	_type = node["type"].as<std::string>(_type);
 	_fundingBase = node["fundingBase"].as<int>(_fundingBase);
 	_fundingCap = node["fundingCap"].as<int>(_fundingCap);
-	_labelLon = node["labelLon"].as<double>(_labelLon) * M_PI / 180;
-	_labelLat = node["labelLat"].as<double>(_labelLat) * M_PI / 180;
+	_labelLon = Deg2Rad(node["labelLon"].as<double>(_labelLon));
+	_labelLat = Deg2Rad(node["labelLat"].as<double>(_labelLat));
 	std::vector< std::vector<double> > areas;
 	areas = node["areas"].as< std::vector< std::vector<double> > >(areas);
 	for (size_t i = 0; i != areas.size(); ++i)
 	{
-		_lonMin.push_back(areas[i][0] * M_PI / 180);
-		_lonMax.push_back(areas[i][1] * M_PI / 180);
-		_latMin.push_back(areas[i][2] * M_PI / 180);
-		_latMax.push_back(areas[i][3] * M_PI / 180);
+		_lonMin.push_back(Deg2Rad(areas[i][0]));
+		_lonMax.push_back(Deg2Rad(areas[i][1]));
+		_latMin.push_back(Deg2Rad(areas[i][2]));
+		_latMax.push_back(Deg2Rad(areas[i][3]));
 
 		if (_latMin.back() > _latMax.back())
 			std::swap(_latMin.back(), _latMax.back());

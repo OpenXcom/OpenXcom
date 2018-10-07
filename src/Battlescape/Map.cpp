@@ -1696,7 +1696,7 @@ int Map::getSoundAngle(const Position& pos) const
 	_camera->convertMapToScreen(pos, &relativePosition);
 	// cap the position to the screen edges relative to the center,
 	// negative values indicating a left-shift, and positive values shifting to the right.
-	relativePosition.x = std::max(-midPoint, std::min(midPoint, (relativePosition.x + _camera->getMapOffset().x) - midPoint));
+	relativePosition.x = Clamp((relativePosition.x + _camera->getMapOffset().x) - midPoint, -midPoint, midPoint);
 
 	// convert the relative distance to a relative increment of an 80 degree angle
 	// we use +- 80 instead of +- 90, so as not to go ALL the way left or right

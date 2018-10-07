@@ -143,7 +143,7 @@ double MovingTarget::getSpeedRadian() const
  */
 double MovingTarget::calculateRadianSpeed(int speed)
 {
-	return speed * (1 / 60.0) * (M_PI / 180.0) / 720.0;
+	return Nautical(speed) / 720.0;
 }
 
 /**

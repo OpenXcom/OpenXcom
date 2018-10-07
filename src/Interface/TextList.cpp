@@ -27,6 +27,7 @@
 #include "ArrowButton.h"
 #include "ComboBox.h"
 #include "ScrollBar.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {
@@ -1229,7 +1230,7 @@ void TextList::scrollTo(size_t scroll)
 {
 	if (!_scrolling)
 		return;
-	_scroll = std::max((size_t)(0), std::min(_rows.size() - _visibleRows, scroll));
+	_scroll = Clamp(scroll, (size_t)(0), _rows.size() - _visibleRows);
 	draw(); // can't just set _redraw here because reasons
 	updateArrows();
 }

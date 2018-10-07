@@ -29,6 +29,7 @@
 #include "../Mod/Armor.h"
 #include "SerializationHelper.h"
 #include "../Battlescape/Particle.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {
@@ -606,7 +607,7 @@ void Tile::ignite(int power)
 		{
 			if (_fire == 0)
 			{
-				_smoke = 15 - std::max(1, std::min((getFlammability() / 10), 12));
+				_smoke = 15 - Clamp(getFlammability() / 10, 1, 12);
 				_overlaps = 1;
 				_fire = getFuel() + 1;
 				_animationOffset = RNG::generate(0,3);
@@ -713,7 +714,7 @@ void Tile::addSmoke(int smoke)
 	{
 		if (_overlaps == 0)
 		{
-			_smoke = std::max(1, std::min(_smoke + smoke, 15));
+			_smoke = Clamp(_smoke + smoke, 1, 15);
 		}
 		else
 		{
@@ -812,7 +813,7 @@ void Tile::prepareNewTurn(bool smokeDamage)
 	// we've received new smoke in this turn, but we're not on fire, average out the smoke.
 	if ( _overlaps != 0 && _smoke != 0 && _fire == 0)
 	{
-		_smoke = std::max(0, std::min((_smoke / _overlaps)- 1, 15));
+		_smoke = Clamp((_smoke / _overlaps) - 1, 0, 15);
 	}
 	// if we still have smoke/fire
 	if (_smoke)

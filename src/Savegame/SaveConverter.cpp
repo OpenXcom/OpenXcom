@@ -363,8 +363,8 @@ void SaveConverter::loadDatLease()
 	std::vector<char> buffer;
 	char *data = binaryBuffer("LEASE.DAT", buffer);
 
-	double lat = -load<Sint16>(data + 0x00) * 0.125 * M_PI / 180;
-	double lon = -load<Sint16>(data + 0x06) * 0.125 * M_PI / 180;
+	double lat = -Xcom2Rad(load<Sint16>(data + 0x00));
+	double lon = -Xcom2Rad(load<Sint16>(data + 0x06));
 	_save->setGlobeLongitude(lon);
 	_save->setGlobeLatitude(lat);
 	
@@ -599,8 +599,8 @@ void SaveConverter::loadDatLoc()
 		TargetType type = (TargetType)load<Uint8>(tdata);
 
 		int dat = load<Uint8>(tdata + 0x01);
-		double lon = load<Sint16>(tdata + 0x02) * 0.125 * M_PI / 180;
-		double lat = load<Sint16>(tdata + 0x04) * 0.125 * M_PI / 180;
+		double lon = Xcom2Rad(load<Sint16>(tdata + 0x02));
+		double lat = Xcom2Rad(load<Sint16>(tdata + 0x04));
 		int timer = load<Sint16>(tdata + 0x06);
 		int id = load<Sint16>(tdata + 0x0A);
 		std::bitset<3> visibility(load<int>(tdata + 0x10));
@@ -935,8 +935,8 @@ void SaveConverter::loadDatCraft()
 				node["damage"] = (int)load<Uint16>(cdata + _rules->getOffset("CRAFT.DAT_DAMAGE"));
 				node["altitude"] = xcomAltitudes[load<Uint16>(cdata + _rules->getOffset("CRAFT.DAT_ALTITUDE"))];
 				node["speed"] = (int)load<Uint16>(cdata + _rules->getOffset("CRAFT.DAT_SPEED"));
-				node["dest"]["lon"] = load<Sint16>(cdata + _rules->getOffset("CRAFT.DAT_DEST_LON")) * 0.125 * M_PI / 180;
-				node["dest"]["lat"] = load<Sint16>(cdata + _rules->getOffset("CRAFT.DAT_DEST_LAT")) * 0.125 * M_PI / 180;
+				node["dest"]["lon"] = Xcom2Rad(load<Sint16>(cdata + _rules->getOffset("CRAFT.DAT_DEST_LON")));
+				node["dest"]["lat"] = Xcom2Rad(load<Sint16>(cdata + _rules->getOffset("CRAFT.DAT_DEST_LAT")));
 
 				int mission = load<Uint16>(cdata + _rules->getOffset("CRAFT.DAT_MISSION"));
 				int region = load<Uint16>(cdata + _rules->getOffset("CRAFT.DAT_REGION"));

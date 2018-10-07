@@ -55,10 +55,10 @@ void RuleRegion::load(const YAML::Node &node)
 	areas = node["areas"].as< std::vector< std::vector<double> > >(areas);
 	for (size_t i = 0; i != areas.size(); ++i)
 	{
-		_lonMin.push_back(areas[i][0] * M_PI / 180.0);
-		_lonMax.push_back(areas[i][1] * M_PI / 180.0);
-		_latMin.push_back(areas[i][2] * M_PI / 180.0);
-		_latMax.push_back(areas[i][3] * M_PI / 180.0);
+		_lonMin.push_back(Deg2Rad(areas[i][0]));
+		_lonMax.push_back(Deg2Rad(areas[i][1]));
+		_latMin.push_back(Deg2Rad(areas[i][2]));
+		_latMax.push_back(Deg2Rad(areas[i][3]));
 
 		if (_latMin.back() > _latMax.back())
 			std::swap(_latMin.back(), _latMax.back());

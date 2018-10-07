@@ -93,10 +93,10 @@ namespace YAML
 			if (node["area"])
 			{
 				std::vector<double> area = node["area"].as< std::vector<double> >();
-				rhs.lonMin = area[0] * M_PI / 180.0;
-				rhs.lonMax = area[1] * M_PI / 180.0;
-				rhs.latMin = area[2] * M_PI / 180.0;
-				rhs.latMax = area[3] * M_PI / 180.0;
+				rhs.lonMin = Deg2Rad(area[0]);
+				rhs.lonMax = Deg2Rad(area[1]);
+				rhs.latMin = Deg2Rad(area[2]);
+				rhs.latMax = Deg2Rad(area[3]);
 			}
 			return true;
 		}
