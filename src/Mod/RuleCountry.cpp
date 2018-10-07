@@ -48,8 +48,10 @@ void RuleCountry::load(const YAML::Node &node)
 	_type = node["type"].as<std::string>(_type);
 	_fundingBase = node["fundingBase"].as<int>(_fundingBase);
 	_fundingCap = node["fundingCap"].as<int>(_fundingCap);
-	_labelLon = Deg2Rad(node["labelLon"].as<double>(_labelLon));
-	_labelLat = Deg2Rad(node["labelLat"].as<double>(_labelLat));
+	if (node["labelLon"])
+		_labelLon = Deg2Rad(node["labelLon"].as<double>());
+	if (node["labelLat"])
+		_labelLat = Deg2Rad(node["labelLat"].as<double>());
 	std::vector< std::vector<double> > areas;
 	areas = node["areas"].as< std::vector< std::vector<double> > >(areas);
 	for (size_t i = 0; i != areas.size(); ++i)
