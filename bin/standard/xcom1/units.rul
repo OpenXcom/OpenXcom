@@ -248,7 +248,7 @@ units:
       firing: 52
       throwing: 58
       strength: 30
-      psiStrength: 40
+      psiStrength: 50
       psiSkill: 50
       melee: 76
     armor: SECTOID_ARMOR0
@@ -270,7 +270,7 @@ units:
       firing: 52
       throwing: 58
       strength: 30
-      psiStrength: 40
+      psiStrength: 50
       psiSkill: 60
       melee: 76
     armor: SECTOID_ARMOR0
