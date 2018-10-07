@@ -2642,7 +2642,7 @@ void Mod::loadVanillaResources()
 			for (size_t i = 0; i < ARRAYLEN(catsId); ++i)
 			{
 				SoundSet *sound = 0;
-				for (size_t j = 0; j < ARRAYLEN(catsId) && sound == 0; ++j)
+				for (size_t j = 0; j < ARRAYLEN(cats) && sound == 0; ++j)
 				{
 					bool wav = true;
 					if (cats[j] == 0)
