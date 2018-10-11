@@ -21,6 +21,7 @@
 #include "Surface.h"
 #include "FileMap.h"
 #include "Language.h"
+#include <SDL_image.h>
 
 namespace OpenXcom
 {
@@ -92,6 +93,29 @@ void Font::loadTerminal()
 	init(0, L" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
 }
 
+void Font::loadTomThumbNew()
+{
+	FontImage image;
+	image.width = 4;
+	image.height = 6;
+	image.spacing = 0;
+	_monospace = true;
+
+	SDL_RWops *rw = SDL_RWFromConstMem(ttnFont, TTNFONT_SIZE);
+	SDL_Surface *s = IMG_Load_RW(rw, 0);
+	SDL_FreeRW(rw);
+	image.surface = new Surface(s->w, s->h);
+	SDL_Color terminal[2] = {{0, 0, 0, 0}, {185, 185, 185, 255}};
+	image.surface->setPalette(terminal, 0, 2);
+	SDL_BlitSurface(s, 0, image.surface->getSurface(), 0);
+	SDL_FreeSurface(s);
+	_images.push_back(image);
+
+	init(0, L"                                "
+			L" !\"#$%&'()*+,-./0123456789:;<=>?"
+			L"@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_"
+			L"`abcdefghijklmnopqrstuvwxyz{|}~");
+}
 
 /**
  * Calculates the real size and position of each character in
@@ -217,7 +241,7 @@ SDL_Rect Font::getCharSize(wchar_t c)
 	SDL_Rect size = { 0, 0, 0, 0 };
 	if (c != TOK_FLIP_COLORS && !isLinebreak(c) && !isSpace(c))
 	{
-		if (_chars.find(c) == _chars.end()) 
+		if (_chars.find(c) == _chars.end())
 			c = L'?';
 
 		FontImage *image = &_images[_chars[c].first];

@@ -72,6 +72,8 @@ public:
 	void load(const YAML::Node& node);
 	/// Generate the terminal font.
 	void loadTerminal();
+	/// Generate a Tom Thumb New font.
+	void loadTomThumbNew();
 	/// Gets a particular character from the font, with its real size.
 	Surface *getChar(wchar_t c);
 	/// Gets the font's character width.

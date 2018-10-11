@@ -49,7 +49,7 @@ const double Game::VOLUME_GRADIENT = 10.0;
  * creates the display screen and sets up the cursor.
  * @param title Title of the game window.
  */
-Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _save(0), _mod(0), _quit(false), _init(false), _mouseActive(true), _timeUntilNextFrame(0)
+Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _save(0), _mod(0), _quit(false), _init(false), _mod_ready(false), _mouseActive(true)
 {
 	Options::reload = false;
 	Options::mute = false;
@@ -75,7 +75,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _save(0
 
 	// trap the mouse inside the window
 	SDL_WM_GrabInput(Options::captureMouse);
-	
+
 	// Set the window icon
 	CrossPlatform::setWindowIcon(103, FileMap::getFilePath("openxcom.png"));
 
@@ -89,19 +89,17 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _save(0
 
 	// Create cursor
 	_cursor = new Cursor(9, 13);
-	
+
 	// Create invisible hardware cursor to workaround bug with absolute positioning pointing devices
 	SDL_ShowCursor(SDL_ENABLE);
 	Uint8 cursor = 0;
 	SDL_SetCursor(SDL_CreateCursor(&cursor, &cursor, 1,1,0,0));
 
 	// Create fps counter
-	_fpsCounter = new FpsCounter(15, 5, 0, 0);
+	_fpsCounter = new FpsCounter(320, 6, 0, 0);
 
 	// Create blank language
 	_lang = new Language();
-
-	_timeOfLastFrame = 0;
 }
 
 /**
@@ -130,7 +128,6 @@ Game::~Game()
 
 	SDL_Quit();
 }
-
 /**
  * The state machine takes care of passing all the events from SDL to the
  * active state, running any code within and blitting all the states and
@@ -171,6 +168,13 @@ void Game::run()
 			Action action = Action(&ev, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
 			_states.back()->handle(&action);
 		}
+		auto frameStartedAt = SDL_GetTicks();
+		// note: state initialization time is not measured because of the control flow.
+		// if input handling or think() results in a new state being spawned, we need to do the above dance on it,
+		// then look for any input so that the we're responsive if init() was slow, then call think() on it,
+		// so that it is in a good state and ready to blit()
+		//
+		// the frame all this happens in is not counted for the purpose of statistics.
 
 		// Process events
 		while (SDL_PollEvent(&_event))
@@ -257,56 +261,69 @@ void Game::run()
 					break;
 			}
 		}
-		
-		// Process rendering
-		if (runningState != PAUSED)
+		Uint32 frameNominalDuration = 1; // 1e3 FPS should be enough for anybody
+		if (Options::FPS > 0 )
 		{
-			// Process logic
-			_states.back()->think();
-			_fpsCounter->think();
-			if (Options::FPS > 0 && !(Options::useOpenGL && Options::vSyncForOpenGL))
-			{
-				// Update our FPS delay time based on the time of the last draw.
-				int fps = SDL_GetAppState() & SDL_APPINPUTFOCUS ? Options::FPS : Options::FPSInactive;
-
-				_timeUntilNextFrame = (1000.0f / fps) - (SDL_GetTicks() - _timeOfLastFrame);
-			}
-			else
-			{
-				_timeUntilNextFrame = 0;
-			}
-
-			if (_init && _timeUntilNextFrame <= 0)
-			{
-				// make a note of when this frame update occurred.
-				_timeOfLastFrame = SDL_GetTicks();
-				_fpsCounter->addFrame();
-				_screen->clear();
-				std::list<State*>::iterator i = _states.end();
-				do
-				{
-					--i;
-				}
-				while (i != _states.begin() && !(*i)->isScreen());
-
-				for (; i != _states.end(); ++i)
-				{
-					(*i)->blit();
-				}
-				_fpsCounter->blit(_screen->getSurface());
-				_cursor->blit(_screen->getSurface());
-				_screen->flip();
-			}
+			auto fpsLimit = SDL_GetAppState() & SDL_APPINPUTFOCUS ? Options::FPS : Options::FPSInactive;
+			frameNominalDuration = 1000 / fpsLimit;
 		}
-
-		// Save on CPU
-		switch (runningState)
+		auto inputProcessedAt = SDL_GetTicks();
+		auto inputProcessingTime = inputProcessedAt - frameStartedAt;
+		// If we're paused, keep handling input.
+		if (runningState == PAUSED)
 		{
-			case RUNNING: 
-				SDL_Delay(1); //Save CPU from going 100%
-				break;
-			case SLOWED: case PAUSED:
-				SDL_Delay(100); break; //More slowing down.
+			if (inputProcessingTime < frameNominalDuration)
+			{
+				SDL_Delay(frameNominalDuration - inputProcessingTime);
+			}
+			continue;
+		}
+		// If we've got a new state after handling input, init it.
+		if (!_init)
+		{
+			continue;
+		}
+		// Process logic
+		auto logicStartedAt = inputProcessedAt;
+		_states.back()->think();
+		// If we've got a new state after thinking, init it.
+		if (!_init)
+		{
+			continue;
+		}
+		// Do the blit
+		auto blitStartedAt = SDL_GetTicks();
+		auto logicProcessingTime = blitStartedAt - logicStartedAt;
+		auto screenSurface = _screen->getSurface();
+		screenSurface->clear();
+
+		// Find the topmost full-screen state
+		auto i = _states.end();
+		for (--i; i != _states.begin() && !(*i)->isScreen(); --i);
+
+		// Blit it and every other state on top of it
+		for (; i != _states.end(); (*(i++))->blit());
+
+		_fpsCounter->blit(screenSurface);
+		_cursor->blit(screenSurface);
+		_screen->flip();
+
+		auto blitDoneAt = SDL_GetTicks();
+		auto blittingTime = blitDoneAt - blitStartedAt;
+
+		auto frameTimeSpentSoFar = blitDoneAt - frameStartedAt;
+		int32_t idleTime = frameNominalDuration - frameTimeSpentSoFar;
+		if (idleTime < 0)
+		{
+			idleTime = 0;
+		}
+		// Update the stats
+		_fpsCounter->addFrame(inputProcessingTime, logicProcessingTime, blittingTime, idleTime, frameNominalDuration);
+
+		// Sleep until next frame
+		if (idleTime > 0)
+		{
+			SDL_Delay(idleTime);
 		}
 	}
 
@@ -508,7 +525,7 @@ void Game::setSavedGame(SavedGame *save)
  */
 Mod *Game::getMod() const
 {
-	return _mod;
+	return  _mod_ready ? _mod : NULL;
 }
 
 /**
@@ -516,10 +533,12 @@ Mod *Game::getMod() const
  */
 void Game::loadMods()
 {
+	_mod_ready = false;
 	Mod::resetGlobalStatics();
 	delete _mod;
 	_mod = new Mod();
 	_mod->loadAll(FileMap::getRulesets());
+	_mod_ready = true;
 }
 
 /**
