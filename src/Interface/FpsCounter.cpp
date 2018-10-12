@@ -36,8 +36,7 @@ namespace OpenXcom
  * @param y Y position in pixels.
  */
 FpsCounter::FpsCounter(int width, int height, int x, int y)  : Surface(width, height, x, y),
-				_text(), _font(0), _lang(0),
-				_input(), _logic(), _blit(), _idle(), _frame(), _wsconverter()
+				_text(), _font(0), _lang(0), _input(), _logic(), _blit(), _idle(), _frame()
 {
 	_visible = Options::fpsCounter;
 	_font = new Font();
@@ -108,7 +107,7 @@ void FpsCounter::draw()
 	actual_text<<" F:"<<std::setw(2)<<static_cast<int>(round(_frame.get()));
 	actual_text<<"/"<<std::setw(2)<<static_cast<int>(_limit);
 	actual_text<<" FPS: "<<std::setw(2)<<static_cast<int>(round(1000.0/_frame.get()));
-	_text->setText(_wsconverter.from_bytes(actual_text.str().c_str()));
+	_text->setText(Language::utf8ToWstr(actual_text.str().c_str()));
 	_text->draw();
 	_text->blit(this);
 }

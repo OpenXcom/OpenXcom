@@ -18,8 +18,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <locale>
-#include <codecvt>
+
 #include <cmath>
 #include "../Engine/Surface.h"
 
@@ -143,7 +142,6 @@ private:
 
 	ema_filter_t _input, _logic, _blit, _idle, _total, _frame;
 	int _limit;
-	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> _wsconverter;
 
 public:
 	/// Creates a new FPS counter linked to a game.
