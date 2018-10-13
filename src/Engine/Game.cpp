@@ -624,18 +624,19 @@ void Game::defaultLanguage()
  */
 void Game::initAudio()
 {
-	Uint16 format;
+	Uint16 format = MIX_DEFAULT_FORMAT;
 	if (Options::audioBitDepth == 8)
 		format = AUDIO_S8;
-	else
-		format = AUDIO_S16SYS;
-	if (Options::audioSampleRate >= 44100)
-		Options::audioChunkSize = std::max(2048, Options::audioChunkSize);
-	else if (Options::audioSampleRate >= 22050)
-		Options::audioChunkSize = std::max(1024, Options::audioChunkSize);
-	else if (Options::audioSampleRate >= 11025)
-		Options::audioChunkSize = std::max(512, Options::audioChunkSize);
-	if (Mix_OpenAudio(Options::audioSampleRate, format, 2, Options::audioChunkSize) != 0)
+
+	if (Options::audioSampleRate % 11025 != 0)
+	{
+		Log(LOG_WARNING) << "Custom sample rate " << Options::audioSampleRate << "Hz, audio that doesn't match will be distorted!";
+		Log(LOG_WARNING) << "SDL_mixer only supports multiples of 11025Hz.";
+	}
+	int minChunk = Options::audioSampleRate / 11025 * 512;
+	Options::audioChunkSize = std::max(minChunk, Options::audioChunkSize);
+
+	if (Mix_OpenAudio(Options::audioSampleRate, format, MIX_DEFAULT_CHANNELS, Options::audioChunkSize) != 0)
 	{
 		Log(LOG_ERROR) << Mix_GetError();
 		Log(LOG_WARNING) << "No sound device detected, audio disabled.";

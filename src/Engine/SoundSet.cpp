@@ -44,6 +44,24 @@ SoundSet::~SoundSet()
 }
 
 /**
+ * Converts a 8Khz sample to 11Khz.
+ * @param oldsound Pointer to original sample buffer.
+ * @param oldsize Original buffer size.
+ * @param newsound Pointer to converted sample buffer.
+ * @return Converted buffer size.
+ */
+int SoundSet::convertSampleRate(Uint8 *oldsound, unsigned int oldsize, Uint8 *newsound) const
+{
+	const Uint32 step16 = (8000 << 16) / 11025;
+	int newsize = 0;
+	for (Uint32 offset16 = 0; (offset16 >> 16) < oldsize; offset16 += step16, ++newsound, ++newsize)
+	{
+		*newsound = oldsound[offset16 >> 16];
+	}
+	return newsize;
+}
+
+/**
  * Loads the contents of an X-Com CAT file which usually contains
  * a set of sound files. The CAT starts with an index of the offset
  * and size of every file contained within. Each file consists of a
@@ -69,42 +87,39 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 		unsigned int size = sndFile.getObjectSize(i);
 
 		// If there's no WAV header (44 bytes), add it
-		// Assuming sounds are 8-bit 8000Hz (DOS version)
+		// Assuming sounds are 6-bit 8000Hz (DOS version)
 		unsigned char *newsound = 0;
+		const int headerSize = 44;
 		if (!wav)
 		{
+			if (size > 5) size -= 5; // skip 5 garbage name bytes at beginning
+			if (size) size--; // omit trailing null byte
 			if (size != 0)
 			{
 				char header[] = {'R', 'I', 'F', 'F', 0x00, 0x00, 0x00, 0x00, 'W', 'A', 'V', 'E', 'f', 'm', 't', ' ',
 								 0x10, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x11, 0x2b, 0x00, 0x00, 0x11, 0x2b, 0x00, 0x00, 0x01, 0x00, 0x08, 0x00,
 								 'd', 'a', 't', 'a', 0x00, 0x00, 0x00, 0x00};
 
-				for (unsigned int n = 0; n < size; ++n) sound[n] *= 4; // scale to 8 bits
-				if (size > 5) size -= 5; // skip 5 garbage name bytes at beginning
-				if (size) size--; // omit trailing null byte
+				// scale to 8 bits
+				for (unsigned int n = 0; n < size; ++n) sound[5 + n] *= 4;
 
-				newsound = new unsigned char[44 + size*2];
-				memcpy(newsound, header, 44);
-				if (size) memcpy(newsound + 44, sound+5, size);
-				Uint32 step16 = (8000<<16)/11025;
-				Uint8 *w = newsound+44;
-				int newsize = 0;
-				for (Uint32 offset16 = 0; (offset16>>16) < size; offset16 += step16, ++w, ++newsize)
-				{
-					*w = sound[5 + (offset16>>16)];
-				}
-				size = newsize + 44;
+				// copy and do the conversion...
+				newsound = new unsigned char[headerSize + size*2];
+				memcpy(newsound, header, headerSize);
+				memcpy(newsound + headerSize, sound + 5, size);
+				int newsize = convertSampleRate(sound + 5, size, newsound + headerSize);
+				size = newsize + headerSize;
 
+				// Rewrite the number of samples in the WAV file
 				int headersize = newsize + 36;
 				int soundsize = newsize;
 				memcpy(newsound + 4, &headersize, sizeof(headersize));
 				memcpy(newsound + 40, &soundsize, sizeof(soundsize));
 			}
 		}
+		// so it's WAV, but in 8 khz, we have to convert it to 11 khz sound
 		else if (0x40 == sound[0x18] && 0x1F == sound[0x19] && 0x00 == sound[0x1A] && 0x00 == sound[0x1B])
 		{
-			// so it's WAV, but in 8 khz, we have to convert it to 11 khz sound
-
 			unsigned char *sound2 = new unsigned char[size*2];
 
 			// rewrite the samplerate in the header to 11 khz
@@ -112,14 +127,8 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 
 			// copy and do the conversion...
 			memcpy(sound2, sound, size);
-			Uint32 step16 = (8000<<16)/11025;
-			Uint8 *w = sound2+44;
-			int newsize = 0;
-			for (Uint32 offset16 = 0; (offset16>>16) < size-44; offset16 += step16, ++w, ++newsize)
-			{
-				*w = sound[44 + (offset16>>16)];
-			}
-			size = newsize + 44;
+			int newsize = convertSampleRate(sound + headerSize, size - headerSize, sound2 + headerSize);
+			size = newsize + headerSize;
 
 			// Rewrite the number of samples in the WAV file
 			memcpy(sound2 + 0x28, &newsize, sizeof(newsize));

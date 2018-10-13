@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <SDL_mixer.h>
 #include <map>
 #include <string>
 
@@ -34,6 +35,8 @@ class SoundSet
 {
 private:
 	std::map<int, Sound*> _sounds;
+
+	int convertSampleRate(Uint8 *oldsound, unsigned int oldsize, Uint8 *newsound) const;
 public:
 	/// Crates a sound set.
 	SoundSet();
