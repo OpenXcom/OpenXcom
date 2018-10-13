@@ -141,7 +141,7 @@ public:
 	SDL_Rect *getCrop();
 	/**
 	 * Changes the color of a pixel in the surface, relative to
-	 * the top-left corner of the surface.
+	 * the top-left corner of the surface. Invalid positions are ignored.
 	 * @param x X position of the pixel.
 	 * @param y Y position of the pixel.
 	 * @param pixel New color for the pixel.
@@ -176,7 +176,7 @@ public:
 	 * Returns the color of a specified pixel in the surface.
 	 * @param x X position of the pixel.
 	 * @param y Y position of the pixel.
-	 * @return Color of the pixel.
+	 * @return Color of the pixel, zero if the position is invalid.
 	 */
 	Uint8 getPixel(int x, int y) const
 	{
@@ -194,10 +194,6 @@ public:
 	 */
 	Uint8 *getRaw(int x, int y) const
 	{
-		if (x < 0 || x >= getWidth() || y < 0 || y >= getHeight())
-		{
-			return 0;
-		}
 		return (Uint8 *)_surface->pixels + (y * _surface->pitch + x * _surface->format->BytesPerPixel);
 	}
 	/**

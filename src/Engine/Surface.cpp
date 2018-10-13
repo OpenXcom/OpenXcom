@@ -222,7 +222,8 @@ void Surface::rawCopy(const std::vector<T> &src)
 	// Copy whole thing
 	if (_surface->pitch == _surface->w)
 	{
-		std::copy(src.begin(), src.end(), (T*)_surface->pixels);
+		size_t end = std::min(size_t(_surface->w * _surface->h * _surface->format->BytesPerPixel), src.size());
+		std::copy(src.begin(), src.begin() + end, (T*)_surface->pixels);
 	}
 	// Copy row by row
 	else
