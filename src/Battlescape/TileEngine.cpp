@@ -1288,26 +1288,16 @@ void TileEngine::explode(Position center, int power, ItemDamageType type, int ma
 										bu->damage(Position(centerX, centerY, centerZ + 5) - dest->getPosition(), (RNG::generate(min, max)), type);
 									}
 								}
-								bool done = false;
-								while (!done)
+								std::vector<BattleItem*> temp = *dest->getInventory(); // copy this list since it might change
+								for (std::vector<BattleItem*>::iterator it = temp.begin(); it != temp.end(); ++it)
 								{
-									done = dest->getInventory()->empty();
-									for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); )
+									if (power_ > (*it)->getRules()->getArmor())
 									{
-										if (power_ > (*it)->getRules()->getArmor())
+										if ((*it)->getUnit() && (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 										{
-											if ((*it)->getUnit() && (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
-											{
-												(*it)->getUnit()->kill();
-											}
-											_save->removeItem(*it);
-											break;
+											(*it)->getUnit()->kill();
 										}
-										else
-										{
-											++it;
-											done = it == dest->getInventory()->end();
-										}
+										_save->removeItem(*it);
 									}
 								}
 							}

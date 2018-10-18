@@ -248,10 +248,11 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 		for (YAML::const_iterator i = node[fromContainer[pass]].begin(); i != node[fromContainer[pass]].end(); ++i)
 		{
 			std::string type = (*i)["type"].as<std::string>();
-			_itemId = (*i)["id"].as<int>(_itemId);
 			if (mod->getItem(type))
 			{
-				BattleItem *item = new BattleItem(mod->getItem(type), &_itemId);
+				int id = (*i)["id"].as<int>();
+				_itemId = std::max(_itemId, id);
+				BattleItem *item = new BattleItem(mod->getItem(type), &id);
 				item->load(*i);
 				type = (*i)["inventoryslot"].as<std::string>();
 				if (type != "NULL")
@@ -305,6 +306,7 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 			}
 		}
 	}
+	_itemId++;
 
 	// tie ammo items to their weapons, running through the items again
 	std::vector<BattleItem*>::iterator weaponi = _items.begin();
@@ -1039,6 +1041,15 @@ void SavedBattleGame::randomizeItemLocations(Tile *t)
  */
 void SavedBattleGame::removeItem(BattleItem *item)
 {
+	// only delete once
+	for (std::vector<BattleItem*>::iterator it = _deleted.begin(); it != _deleted.end(); ++it)
+	{
+		if ((*it) == item)
+		{
+			return;
+		}
+	}
+
 	// due to strange design, the item has to be removed from the tile it is on too (if it is on a tile)
 	Tile *t = item->getTile();
 	BattleUnit *b = item->getOwner();
