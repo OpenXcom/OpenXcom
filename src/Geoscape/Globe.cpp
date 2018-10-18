@@ -1501,8 +1501,8 @@ void Globe::drawTarget(Target *target, Surface *surface)
 		Sint16 x, y;
 		polarToCart(target->getLongitude(), target->getLatitude(), &x, &y);
 		Surface *marker = _markerSet->getFrame(target->getMarker());
-		marker->setX(x - 1);
-		marker->setY(y - 1);
+		marker->setX(x - marker->getWidth() / 2);
+		marker->setY(y - marker->getHeight() / 2);
 		marker->blit(surface);
 	}
 }

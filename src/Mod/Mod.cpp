@@ -1128,14 +1128,26 @@ void Mod::loadFile(const std::string &filename)
 	}
 	for (YAML::const_iterator i = doc["extraSprites"].begin(); i != doc["extraSprites"].end(); ++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		ExtraSprites *extraSprites = new ExtraSprites();
-		int modOffset = _modOffset;
-		// doesn't support modIndex
-		if (type == "TEXTURE.DAT")
-			modOffset = 0;
-		extraSprites->load(*i, modOffset);
-		_extraSprites[type].push_back(extraSprites);
+		if ((*i)["type"])
+		{
+			std::string type = (*i)["type"].as<std::string>();
+			ExtraSprites *extraSprites = new ExtraSprites();
+			int modOffset = _modOffset;
+			// doesn't support modIndex
+			if (type == "TEXTURE.DAT")
+				modOffset = 0;
+			extraSprites->load(*i, modOffset);
+			_extraSprites[type].push_back(extraSprites);
+		}
+		else if ((*i)["delete"])
+		{
+			std::string type = (*i)["delete"].as<std::string>();
+			std::map<std::string, std::vector<ExtraSprites*> >::iterator j = _extraSprites.find(type);
+			if (j != _extraSprites.end())
+			{
+				_extraSprites.erase(j);
+			}
+		}
 	}
 	for (YAML::const_iterator i = doc["extraSounds"].begin(); i != doc["extraSounds"].end(); ++i)
 	{
