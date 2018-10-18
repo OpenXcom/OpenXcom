@@ -639,7 +639,7 @@ bool compareExt(const std::string &filename, const std::string &extension)
 		return false;
 	if (filename[j - 1] != '.')
 		return false;
-	for (int i = 0; i < extension.length(); ++i)
+	for (size_t i = 0; i < extension.length(); ++i)
 	{
 		if (::tolower(filename[j + i]) != ::tolower(extension[i]))
 			return false;
@@ -925,7 +925,7 @@ void setWindowIcon(int winResource, const std::string &unixPath)
 		SDL_WM_SetIcon(icon, NULL);
 		SDL_FreeSurface(icon);
 	}
-	winResource = winResource;
+	winResource = 0;
 #endif
 }
 

@@ -90,11 +90,11 @@ void AIModule::load(const YAML::Node &node)
 	_AIMode = node["AIMode"].as<int>(AI_PATROL);
 	_wasHitBy = node["wasHitBy"].as<std::vector<int> >(_wasHitBy);
 	// TODO: Figure out why AI are sometimes left with junk nodes
-	if (fromNodeID >= 0 && fromNodeID < _save->getNodes()->size())
+	if (fromNodeID >= 0 && (size_t)fromNodeID < _save->getNodes()->size())
 	{
 		_fromNode = _save->getNodes()->at(fromNodeID);
 	}
-	if (toNodeID >= 0 && toNodeID < _save->getNodes()->size())
+	if (toNodeID >= 0 && (size_t)toNodeID < _save->getNodes()->size())
 	{
 		_toNode = _save->getNodes()->at(toNodeID);
 	}

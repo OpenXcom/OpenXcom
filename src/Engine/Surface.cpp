@@ -351,6 +351,9 @@ void Surface::loadImage(const std::string &filename)
 		std::string err = filename + ":" + IMG_GetError();
 		throw Exception(err);
 	}
+
+	_clear.w = getWidth();
+	_clear.h = getHeight();
 }
 
 /**
