@@ -111,7 +111,7 @@ static inline void gmext_write_delta (std::vector<unsigned char> &midi,
 	do {
 		data[i++] = delta & 0x7F;
 		delta >>= 7;
-	} while (delta > 0);
+	} while (delta > 0 && i <= 3);
 
 	while (--i)
 		midi.push_back(data[i] | 0x80);

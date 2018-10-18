@@ -904,9 +904,9 @@ std::string getDosPath()
  * @param winResource ID for Windows icon.
  * @param unixPath Path to PNG icon for Unix.
  */
-void setWindowIcon(int winResource, const std::string &unixPath)
-{
 #ifdef _WIN32
+void setWindowIcon(int winResource, const std::string &)
+{
 	HINSTANCE handle = GetModuleHandle(NULL);
 	HICON icon = LoadIcon(handle, MAKEINTRESOURCE(winResource));
 
@@ -917,7 +917,10 @@ void setWindowIcon(int winResource, const std::string &unixPath)
 		HWND hwnd = wminfo.window;
 		SetClassLongPtr(hwnd, GCLP_HICON, (LONG_PTR)icon);
 	}
+}
 #else
+void setWindowIcon(int, const std::string &unixPath)
+{
 	std::string utf8 = Language::fsToUtf8(unixPath);
 	SDL_Surface *icon = IMG_Load(utf8.c_str());
 	if (icon != 0)
@@ -925,9 +928,8 @@ void setWindowIcon(int winResource, const std::string &unixPath)
 		SDL_WM_SetIcon(icon, NULL);
 		SDL_FreeSurface(icon);
 	}
-	winResource = 0;
-#endif
 }
+#endif
 
 /**
  * Logs the stack back trace leading up to this function call.
