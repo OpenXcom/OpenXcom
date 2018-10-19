@@ -308,7 +308,7 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 	{
 		if (mod->getItem((*i)["type"].as<std::string>()))
 		{
-			int ammo = (*i)["ammoItem"].as<int>();
+			int ammo = (*i)["ammoItem"].as<int>(-1);
 			if (ammo != -1)
 			{
 				for (std::vector<BattleItem*>::iterator ammoi = _items.begin(); ammoi != _items.end(); ++ammoi)
