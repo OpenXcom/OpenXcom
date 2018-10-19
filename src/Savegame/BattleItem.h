@@ -26,6 +26,7 @@ class RuleItem;
 class RuleInventory;
 class BattleUnit;
 class Tile;
+class Mod;
 
 /**
  * Represents a single item in the battlescape.
@@ -53,7 +54,7 @@ public:
 	/// Cleans up the item.
 	~BattleItem();
 	/// Loads the item from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, Mod *mod);
 	/// Saves the item to YAML.
 	YAML::Node save() const;
 	/// Gets the item's ruleset.

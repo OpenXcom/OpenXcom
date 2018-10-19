@@ -253,23 +253,11 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 				int id = (*i)["id"].as<int>();
 				_itemId = std::max(_itemId, id);
 				BattleItem *item = new BattleItem(mod->getItem(type), &id);
-				item->load(*i);
-				type = (*i)["inventoryslot"].as<std::string>();
-				if (type != "NULL")
-				{
-					if (mod->getInventory(type))
-					{
-						item->setSlot(mod->getInventory(type));
-						
-					}
-					else
-					{
-						item->setSlot(mod->getInventory("STR_GROUND"));
-					}
-				}				
-				int owner = (*i)["owner"].as<int>();
+				item->load(*i, mod);
+
+				int owner = (*i)["owner"].as<int>(-1);
 				int prevOwner = (*i)["previousOwner"].as<int>(-1);
-				int unit = (*i)["unit"].as<int>();
+				int unit = (*i)["unit"].as<int>(-1);
 
 				// match up items and units
 				for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
@@ -282,9 +270,6 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 					{
 						item->setUnit(*bu);
 					}
-				}
-				for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
-				{
 					if ((*bu)->getId() == prevOwner)
 					{
 						item->setPreviousOwner(*bu);
@@ -294,7 +279,7 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 				// match up items and tiles
 				if (item->getSlot() && item->getSlot()->getType() == INV_GROUND)
 				{
-					Position pos = (*i)["position"].as<Position>();
+					Position pos = (*i)["position"].as<Position>(Position(-1, -1, -1));
 					if (pos.x != -1)
 						getTile(pos)->addItem(item, mod->getInventory("STR_GROUND", true));
 				}
