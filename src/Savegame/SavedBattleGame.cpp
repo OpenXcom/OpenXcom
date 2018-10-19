@@ -260,19 +260,28 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 				int unit = (*i)["unit"].as<int>(-1);
 
 				// match up items and units
-				for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
+				for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end() && owner != -1; ++bu)
 				{
 					if ((*bu)->getId() == owner)
 					{
 						item->moveToOwner(*bu);
+						break;
 					}
-					if ((*bu)->getId() == unit)
-					{
-						item->setUnit(*bu);
-					}
+				}
+				for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end() && prevOwner != -1; ++bu)
+				{
 					if ((*bu)->getId() == prevOwner)
 					{
 						item->setPreviousOwner(*bu);
+						break;
+					}
+				}
+				for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end() && unit != -1; ++bu)
+				{
+					if ((*bu)->getId() == unit)
+					{
+						item->setUnit(*bu);
+						break;
 					}
 				}
 
