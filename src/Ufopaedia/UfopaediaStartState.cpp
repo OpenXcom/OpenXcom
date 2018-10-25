@@ -33,6 +33,9 @@
 
 namespace OpenXcom
 {
+	const size_t UfopaediaStartState::CAT_MIN_BUTTONS;
+	const size_t UfopaediaStartState::CAT_MAX_BUTTONS;
+	
 	UfopaediaStartState::UfopaediaStartState() : _offset(0), _scroll(0), _cats(_game->getMod()->getUfopaediaCategoryList())
 	{
 		_screen = false;
@@ -54,7 +57,7 @@ namespace OpenXcom
 
 		// set buttons
 		int y = 50;
-		int numButtons = std::min(_cats.size(), CAT_MAX_BUTTONS);
+		size_t numButtons = std::min(_cats.size(), CAT_MAX_BUTTONS);
 		if (numButtons > CAT_MIN_BUTTONS)
 			y -= 13 * (numButtons - CAT_MIN_BUTTONS);
 
