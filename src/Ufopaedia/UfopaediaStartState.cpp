@@ -26,11 +26,14 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
+#include "../Interface/ArrowButton.h"
 #include "../Mod/Mod.h"
+#include "../Engine/Timer.h"
+#include "../fmath.h"
 
 namespace OpenXcom
 {
-	UfopaediaStartState::UfopaediaStartState()
+	UfopaediaStartState::UfopaediaStartState() : _offset(0), _scroll(0), _cats(_game->getMod()->getUfopaediaCategoryList())
 	{
 		_screen = false;
 
@@ -38,7 +41,7 @@ namespace OpenXcom
 		_window = new Window(this, 256, 180, 32, 10, POPUP_BOTH);
 
 		// set title
-		_txtTitle = new Text(224, 17, 48, 33);
+		_txtTitle = new Text(220, 17, 50, 33);
 
 		// Set palette
 		setInterface("ufopaedia");
@@ -46,25 +49,34 @@ namespace OpenXcom
 		add(_window, "window", "ufopaedia");
 		add(_txtTitle, "text", "ufopaedia");
 
-		_btnOk = new TextButton(224, 12, 48, 167);
+		_btnOk = new TextButton(220, 12, 50, 167);
 		add(_btnOk, "button1", "ufopaedia");
 
 		// set buttons
-		const std::vector<std::string> &list = _game->getMod()->getUfopaediaCategoryList();
 		int y = 50;
-		y -= 13 * (list.size() - 9);
-		for (std::vector<std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+		int numButtons = std::min(_cats.size(), CAT_MAX_BUTTONS);
+		if (numButtons > CAT_MIN_BUTTONS)
+			y -= 13 * (numButtons - CAT_MIN_BUTTONS);
+
+		_btnScrollUp = new ArrowButton(ARROW_BIG_UP, 13, 14, 270, y);
+		add(_btnScrollUp, "button1", "ufopaedia");
+		_btnScrollDown = new ArrowButton(ARROW_BIG_DOWN, 13, 14, 270, 152);
+		add(_btnScrollDown, "button1", "ufopaedia");
+
+		for (size_t i = 0; i < numButtons; ++i)
 		{
-			TextButton *button = new TextButton(224, 12, 48, y);
+			TextButton *button = new TextButton(220, 12, 50, y);
 			y += 13;
 
 			add(button, "button1", "ufopaedia");
 
-			button->setText(tr(*i));
 			button->onMouseClick((ActionHandler)&UfopaediaStartState::btnSectionClick);
+			button->onMousePress((ActionHandler)&UfopaediaStartState::btnScrollUpClick, SDL_BUTTON_WHEELUP);
+			button->onMousePress((ActionHandler)&UfopaediaStartState::btnScrollDownClick, SDL_BUTTON_WHEELDOWN);
 
 			_btnSections.push_back(button);
 		}
+		updateButtons();
 		if (!_btnSections.empty())
 			_txtTitle->setY(_btnSections.front()->getY() - _txtTitle->getHeight());
 
@@ -80,10 +92,34 @@ namespace OpenXcom
 		_btnOk->onMouseClick((ActionHandler)&UfopaediaStartState::btnOkClick);
 		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaStartState::btnOkClick, Options::keyCancel);
 		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaStartState::btnOkClick, Options::keyGeoUfopedia);
+
+		_btnScrollUp->setVisible(_cats.size() > CAT_MAX_BUTTONS);
+		_btnScrollUp->onMousePress((ActionHandler)&UfopaediaStartState::btnScrollUpPress);
+		_btnScrollUp->onMouseRelease((ActionHandler)&UfopaediaStartState::btnScrollRelease);
+		_btnScrollDown->setVisible(_cats.size() > CAT_MAX_BUTTONS);
+		_btnScrollDown->onMousePress((ActionHandler)&UfopaediaStartState::btnScrollDownPress);
+		_btnScrollDown->onMouseRelease((ActionHandler)&UfopaediaStartState::btnScrollRelease);
+
+		_timerScroll = new Timer(50);
+		_timerScroll->onTimer((StateHandler)&UfopaediaStartState::scroll);
 	}
 
+	/**
+	 * Deletes timers.
+	 */
 	UfopaediaStartState::~UfopaediaStartState()
-	{}
+	{
+		delete _timerScroll;
+	}
+
+	/**
+	 * Run timers.
+	 */
+	void UfopaediaStartState::think()
+	{
+		State::think();
+		_timerScroll->think(this, 0);
+	}
 
 	/**
 	 * Returns to the previous screen.
@@ -100,15 +136,85 @@ namespace OpenXcom
 	 */
 	void UfopaediaStartState::btnSectionClick(Action *action)
 	{
-		const std::vector<std::string> &list = _game->getMod()->getUfopaediaCategoryList();
-		for (size_t i = 0; i < list.size(); ++i)
+		for (size_t i = 0; i < _btnSections.size(); ++i)
 		{
 			if (action->getSender() == _btnSections[i])
 			{
-				_game->pushState(new UfopaediaSelectState(list[i]));
+				_game->pushState(new UfopaediaSelectState(_cats[_offset + i]));
 				break;
 			}
 		}
 	}
 
+	/**
+	 * Starts scrolling the section buttons up.
+	 * @param action Pointer to an action.
+	 */
+	void UfopaediaStartState::btnScrollUpPress(Action *)
+	{
+		_scroll = -1;
+		_timerScroll->start();
+	}
+
+	/**
+	 * Scrolls the section buttons up.
+	 * @param action Pointer to an action.
+	 */
+	void UfopaediaStartState::btnScrollUpClick(Action *)
+	{
+		_scroll = -1;
+		scroll();
+	}
+
+	/**
+	 * Starts scrolling the section buttons down.
+	 * @param action Pointer to an action.
+	 */
+	void UfopaediaStartState::btnScrollDownPress(Action *)
+	{
+		_scroll = 1;
+		_timerScroll->start();
+	}
+
+	/**
+	 * Scrolls the section buttons down.
+	 * @param action Pointer to an action.
+	 */
+	void UfopaediaStartState::btnScrollDownClick(Action *)
+	{
+		_scroll = 1;
+		scroll();
+	}
+
+	/**
+	 * Stops scrolling the section buttons.
+	 * @param action Pointer to an action.
+	 */
+	void UfopaediaStartState::btnScrollRelease(Action *)
+	{
+		_timerScroll->stop();
+	}
+
+	/**
+	 * Offsets the list of section buttons.
+	 */
+	void UfopaediaStartState::scroll()
+	{
+		if (_cats.size() > CAT_MAX_BUTTONS)
+		{
+			_offset = Clamp(_offset + _scroll, 0, int(_cats.size() - CAT_MAX_BUTTONS));
+			updateButtons();
+		}
+	}
+
+	/**
+	 * Updates the section button labels based on scroll.
+	 */
+	void UfopaediaStartState::updateButtons()
+	{
+		for (size_t i = 0; i < _btnSections.size(); ++i)
+		{
+			_btnSections[i]->setText(tr(_cats[_offset + i]));
+		}
+	}
 }
