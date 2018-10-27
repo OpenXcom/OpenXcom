@@ -53,7 +53,7 @@ static NSString *getApplicationName(void)
 
 @implementation NSApplication (SDLApplication)
 /* Invoked from the Quit menu item */
-- (void)terminate:(id)sender
+- (void)terminate:(id)__unused sender
 {
     /* Post a SDL_QUIT event */
     SDL_Event event;
@@ -66,7 +66,7 @@ static NSString *getApplicationName(void)
 @implementation SDLMain
 
 /* Set the working directory to the .app's parent directory */
-- (void) setupWorkingDirectory:(BOOL)shouldChdir
+- (void) setupWorkingDirectory:(BOOL)__unused shouldChdir
 {
     NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
     [[NSFileManager defaultManager] changeCurrentDirectoryPath:resourcePath];
@@ -181,7 +181,7 @@ static void setupWindowMenu(void)
 }
 
 /* Replacement for NSApplicationMain */
-static void CustomApplicationMain (int argc, char **argv)
+static void CustomApplicationMain (__unused int argc, __unused char **argv)
 {
     NSAutoreleasePool	*pool = [[NSAutoreleasePool alloc] init];
     SDLMain				*sdlMain;
@@ -223,7 +223,7 @@ static void CustomApplicationMain (int argc, char **argv)
  *
  * This message is ignored once the app's mainline has been called.
  */
-- (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename
+- (BOOL)application:(NSApplication *)__unused theApplication openFile:(NSString *)filename
 {
     const char *temparg;
     size_t arglen;
@@ -258,7 +258,7 @@ static void CustomApplicationMain (int argc, char **argv)
 
 
 /* Called when the internal event loop has just started running */
-- (void) applicationDidFinishLaunching: (NSNotification *) note
+- (void) applicationDidFinishLaunching: (NSNotification *)__unused note
 {
     int status;
 
