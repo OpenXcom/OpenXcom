@@ -57,7 +57,7 @@ manufacture:
       - STR_FUSION_MISSILE
       - STR_NEW_FIGHTER_CRAFT
     space: 30
-    time: 1200
+    time: 1400
     cost: 900000
     requiredItems:
       STR_ALIEN_ALLOYS: 8
