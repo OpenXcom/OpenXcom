@@ -368,6 +368,10 @@ void NewBattleState::save(const std::string &filename)
 
 	sav << out.c_str();
 	sav.close();
+	if (!sav)
+	{
+		Log(LOG_WARNING) << "Failed to save " << filename << ".cfg";
+	}
 }
 
 /**

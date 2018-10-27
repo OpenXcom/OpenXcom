@@ -499,7 +499,7 @@ static void _scanMods(const std::string &modsDir)
  * and finding and loading any existing ones.
  * @param argc Number of arguments.
  * @param argv Array of argument strings.
- * @return Was initialized.
+ * @return Do we start the game?
  */
 bool init(int argc, char *argv[])
 {
@@ -927,8 +927,9 @@ void updateOptions()
 /**
  * Loads options from a YAML file.
  * @param filename YAML filename.
+ * @return Was the loading successful?
  */
-void load(const std::string &filename)
+bool load(const std::string &filename)
 {
 	std::string s = _configFolder + filename + ".cfg";
 	try
@@ -937,7 +938,7 @@ void load(const std::string &filename)
 		// Ignore old options files
 		if (doc["options"]["NewBattleMission"])
 		{
-			return;
+			return false;
 		}
 		for (std::vector<OptionInfo>::iterator i = _info.begin(); i != _info.end(); ++i)
 		{
@@ -959,7 +960,9 @@ void load(const std::string &filename)
 	catch (YAML::Exception &e)
 	{
 		Log(LOG_WARNING) << e.what();
+		return false;
 	}
+	return true;
 }
 
 void writeNode(const YAML::Node& node, YAML::Emitter& emitter)
@@ -1011,15 +1014,16 @@ void writeNode(const YAML::Node& node, YAML::Emitter& emitter)
 /**
  * Saves options to a YAML file.
  * @param filename YAML filename.
+ * @return Was the saving successful?
  */
-void save(const std::string &filename)
+bool save(const std::string &filename)
 {
 	std::string s = _configFolder + filename + ".cfg";
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
 		Log(LOG_WARNING) << "Failed to save " << filename << ".cfg";
-		return;
+		return false;
 	}
 	try
 	{
@@ -1047,8 +1051,15 @@ void save(const std::string &filename)
 	catch (YAML::Exception &e)
 	{
 		Log(LOG_WARNING) << e.what();
+		return false;
 	}
 	sav.close();
+	if (!sav)
+	{
+		Log(LOG_WARNING) << "Failed to save " << filename << ".cfg";
+		return false;
+	}
+	return true;
 }
 
 /**
