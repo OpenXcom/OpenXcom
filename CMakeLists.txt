@@ -107,6 +107,7 @@ if ( NOT OPENGL_FOUND )
   add_definitions(-D__NO_OPENGL)
 else ()
     include_directories ( ${OPENGL_INCLUDE_DIR} )
+    message ( "found openGL (${OPENGL_LIBRARIES})" )
 endif ()
 
 # Read version number
