@@ -1,14 +1,5 @@
 cmake_minimum_required ( VERSION 3.1 )
 
-# Tell newer versions of cmake which policy defaults we find acceptable.
-foreach ( policy_new
-  CMP0072 # 3.11: Prefer GLVND over legacy GL libraries
-  )
-  if ( POLICY ${policy_new} )
-    cmake_policy ( SET ${policy_new} NEW )
-  endif ()
-endforeach ()
-
 project ( OpenXcom )
 
 set ( CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" )
