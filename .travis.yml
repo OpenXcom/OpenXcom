@@ -9,12 +9,18 @@ os:
 sudo: false
 
 addons:
+  homebrew:
+    packages:
+    - yaml-cpp
+    - sdl
+    - sdl_gfx
+    - sdl_image
+    - sdl_mixer
 
 env:
   - BUILD_TYPE=Release EXTRA_WARNING_FLAGS="-Wall -Wextra"
 
 before_install:
-  - if [ $TRAVIS_OS_NAME == osx ]; then brew install yaml-cpp sdl sdl_gfx sdl_image sdl_mixer --with-flac --with-libmikmod --with-libvorbis --with-static-lib; fi
   - if [ $TRAVIS_OS_NAME == linux ]; then mkdir $TRAVIS_BUILD_DIR/dependency-prefix; fi
   - if [ $TRAVIS_OS_NAME == linux ]; then export PKG_CONFIG_PATH=$TRAVIS_BUILD_DIR/dependency-prefix/lib/pkgconfig; fi
 
