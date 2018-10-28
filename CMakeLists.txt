@@ -98,6 +98,7 @@ else ( )
 endif()
 
 # Find OpenGL
+set (OpenGL_GL_PREFERENCE LEGACY)
 find_package ( OpenGL )
 if ( NOT OPENGL_FOUND )
   message ( WARNING "Can't find OpenGL; how does that even happen?\n"
