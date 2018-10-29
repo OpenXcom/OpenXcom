@@ -15,7 +15,7 @@ addons:
     - sdl
     - sdl_gfx
     - sdl_image
-    - sdl_mixer
+    - sdl_mixer --with-flac
 
 env:
   - BUILD_TYPE=Release EXTRA_WARNING_FLAGS="-Wall -Wextra"
