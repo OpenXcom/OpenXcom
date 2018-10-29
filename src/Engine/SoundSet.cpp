@@ -150,7 +150,7 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 			else
 				s->load(newsound, size);
 		}
-		catch (Exception)
+		catch (const Exception &)
 		{
 			// Ignore junk in the file
 		}
@@ -270,7 +270,7 @@ void SoundSet::loadCatbyIndex(const std::string &filename, int index)
 		}
 		s->load(newsound, size);
 	}
-	catch (Exception)
+	catch (const Exception &)
 	{
 		// Ignore junk in the file
 	}

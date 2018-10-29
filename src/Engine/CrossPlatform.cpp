@@ -668,7 +668,7 @@ std::string getLocale()
 	{
 		l = std::locale("");
 	}
-	catch (std::runtime_error)
+	catch (const std::runtime_error &)
 	{
 		return "x-";
 	}
@@ -827,7 +827,7 @@ bool moveFile(const std::string &src, const std::string &dest)
 		srcStream.close();
 		destStream.close();
 	}
-	catch (std::fstream::failure)
+	catch (const std::fstream::failure &)
 	{
 		return false;
 	}
