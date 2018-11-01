@@ -316,14 +316,15 @@ void ComboBox::setDropdown(int options)
 /**
  * Changes the list of available options to choose from.
  * @param options List of strings.
+ * @param translate True for a list of string IDs, false for a list of raw strings.
  */
-void ComboBox::setOptions(const std::vector<std::string> &options)
+void ComboBox::setOptions(const std::vector<std::string> &options, bool translate)
 {
 	setDropdown(options.size());
 	_list->clearList();
 	for (std::vector<std::string>::const_iterator i = options.begin(); i != options.end(); ++i)
 	{
-		_list->addRow(1, i->c_str());
+		_list->addRow(1, (translate ? _lang->getString(*i) : (*i)).c_str());
 	}
 	setSelected(_sel);
 }

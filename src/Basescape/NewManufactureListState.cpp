@@ -105,7 +105,7 @@ NewManufactureListState::NewManufactureListState(Base *base) : _base(base)
 		}
 	}
 
-	_cbxCategory->setOptions(_catStrings);
+	_cbxCategory->setOptions(_catStrings, true);
 	_cbxCategory->onChange((ActionHandler)&NewManufactureListState::cbxCategoryChange);
 
 }

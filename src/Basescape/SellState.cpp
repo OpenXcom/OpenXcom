@@ -238,7 +238,7 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 		}
 	}
 
-	_cbxCategory->setOptions(_cats);
+	_cbxCategory->setOptions(_cats, true);
 	_cbxCategory->onChange((ActionHandler)&SellState::cbxCategoryChange);
 
 	updateList();

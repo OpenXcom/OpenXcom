@@ -266,10 +266,10 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	
 	
 	std::vector<std::string> displayModes;
-	displayModes.push_back("STR_WINDOWED");
-	displayModes.push_back("STR_FULLSCREEN");
-	displayModes.push_back("STR_BORDERLESS");
-	displayModes.push_back("STR_RESIZABLE");
+	displayModes.push_back(tr("STR_WINDOWED"));
+	displayModes.push_back(tr("STR_FULLSCREEN"));
+	displayModes.push_back(tr("STR_BORDERLESS"));
+	displayModes.push_back(tr("STR_RESIZABLE"));
 
 	int displayMode = 0;
 	if (Options::fullscreen)
@@ -295,12 +295,12 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_txtGeoScale->setText(tr("STR_GEOSCAPE_SCALE"));
 	
 	std::vector<std::string> scales;
-	scales.push_back("STR_ORIGINAL");
-	scales.push_back("STR_1_5X");
-	scales.push_back("STR_2X");
-	scales.push_back("STR_THIRD_DISPLAY");
-	scales.push_back("STR_HALF_DISPLAY");
-	scales.push_back("STR_FULL_DISPLAY");
+	scales.push_back(tr("STR_ORIGINAL"));
+	scales.push_back(tr("STR_1_5X"));
+	scales.push_back(tr("STR_2X"));
+	scales.push_back(tr("STR_THIRD_DISPLAY"));
+	scales.push_back(tr("STR_HALF_DISPLAY"));
+	scales.push_back(tr("STR_FULL_DISPLAY"));
 
 	_cbxGeoScale->setOptions(scales);
 	_cbxGeoScale->setSelected(Options::geoscapeScale);

@@ -90,7 +90,7 @@ public:
 	/// Sets the selected option in the list.
 	void setSelected(size_t sel);
 	/// Sets the list of options.
-	void setOptions(const std::vector<std::string> &options);
+	void setOptions(const std::vector<std::string> &options, bool translate = false);
 	/// Blits the combo box onto another surface.
 	void blit(Surface *surface);
 	/// Thinks arrow buttons.

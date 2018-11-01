@@ -168,7 +168,7 @@ NewBattleState::NewBattleState() : _craft(0)
 	_txtAlienTech->setText(tr("STR_ALIEN_TECH_LEVEL"));
 
 	_missionTypes = _game->getMod()->getDeploymentsList();
-	_cbxMission->setOptions(_missionTypes);
+	_cbxMission->setOptions(_missionTypes, true);
 	_cbxMission->onChange((ActionHandler)&NewBattleState::cbxMissionChange);
 
 	const std::vector<std::string> &crafts = _game->getMod()->getCraftsList();
@@ -180,7 +180,7 @@ NewBattleState::NewBattleState() : _craft(0)
 			_crafts.push_back(*i);
 		}
 	}
-	_cbxCraft->setOptions(_crafts);
+	_cbxCraft->setOptions(_crafts, true);
 	_cbxCraft->onChange((ActionHandler)&NewBattleState::cbxCraftChange);
 
 	_slrDarkness->setRange(0, 15);
@@ -190,11 +190,11 @@ NewBattleState::NewBattleState() : _craft(0)
 	_cbxTerrain->onChange((ActionHandler)&NewBattleState::cbxTerrainChange);
 
 	std::vector<std::string> difficulty;
-	difficulty.push_back("STR_1_BEGINNER");
-	difficulty.push_back("STR_2_EXPERIENCED");
-	difficulty.push_back("STR_3_VETERAN");
-	difficulty.push_back("STR_4_GENIUS");
-	difficulty.push_back("STR_5_SUPERHUMAN");
+	difficulty.push_back(tr("STR_1_BEGINNER"));
+	difficulty.push_back(tr("STR_2_EXPERIENCED"));
+	difficulty.push_back(tr("STR_3_VETERAN"));
+	difficulty.push_back(tr("STR_4_GENIUS"));
+	difficulty.push_back(tr("STR_5_SUPERHUMAN"));
 	_cbxDifficulty->setOptions(difficulty);
 
 	_alienRaces = _game->getMod()->getAlienRacesList();
@@ -209,7 +209,7 @@ NewBattleState::NewBattleState() : _craft(0)
 			++i;
 		}
 	}
-		_cbxAlienRace->setOptions(_alienRaces);
+	_cbxAlienRace->setOptions(_alienRaces, true);
 
 	_slrAlienTech->setRange(0, _game->getMod()->getAlienItemLevels().size()-1);
 
@@ -629,7 +629,7 @@ void NewBattleState::cbxMissionChange(Action *)
 	_slrDarkness->setVisible(ruleDeploy->getShade() == -1);
 	_txtTerrain->setVisible(_terrainTypes.size() > 1);
 	_cbxTerrain->setVisible(_terrainTypes.size() > 1);
-	_cbxTerrain->setOptions(terrainStrings);
+	_cbxTerrain->setOptions(terrainStrings, true);
 	_cbxTerrain->setSelected(0);
 	cbxTerrainChange(0);
 }
