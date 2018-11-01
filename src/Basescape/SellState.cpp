@@ -121,7 +121,7 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
 
-	std::wostringstream ss;
+	std::ostringstream ss;
 	ss << _base->getUsedStores() << ":" << _base->getAvailableStores();
 	_txtSpaceUsed->setText(ss.str());
 	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss.str()));
@@ -322,7 +322,7 @@ void SellState::updateList()
 		{
 			continue;
 		}
-		std::wstring name = _items[i].name;
+		std::string name = _items[i].name;
 		bool ammo = false;
 		if (_items[i].type == TRANSFER_ITEM)
 		{
@@ -330,10 +330,10 @@ void SellState::updateList()
 			ammo = (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0));
 			if (ammo)
 			{
-				name.insert(0, L"  ");
+				name.insert(0, "  ");
 			}
 		}
-		std::wostringstream ssQty, ssAmount;
+		std::ostringstream ssQty, ssAmount;
 		ssQty << _items[i].qtySrc - _items[i].amount;
 		ssAmount << _items[i].amount;
 		_lstItems->addRow(4, name.c_str(), ssQty.str().c_str(), ssAmount.str().c_str(), Text::formatFunding(_items[i].cost).c_str());
@@ -672,7 +672,7 @@ void SellState::decrease()
  */
 void SellState::updateItemStrings()
 {
-	std::wostringstream ss, ss2, ss3;
+	std::ostringstream ss, ss2, ss3;
 	ss << getRow().amount;
 	_lstItems->setCellText(_sel, 2, ss.str());
 	ss2 << getRow().qtySrc - getRow().amount;

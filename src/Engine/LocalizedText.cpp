@@ -27,16 +27,16 @@ namespace OpenXcom
  * @param val The value to place in the next placeholder's position.
  * @return A translated string with all occurrences of the marker replaced by @a val.
  */
-LocalizedText LocalizedText::arg(const std::wstring &val) const
+LocalizedText LocalizedText::arg(const std::string &val) const
 {
-	std::wostringstream os;
+	std::ostringstream os;
 	os << '{' << _nextArg << '}';
-	std::wstring marker(os.str());
+	std::string marker(os.str());
 	size_t pos = _text.find(marker);
-	if (std::wstring::npos == pos)
+	if (std::string::npos == pos)
 		return *this;
-	std::wstring ntext(_text);
-	for (/*empty*/ ; std::wstring::npos != pos; pos = ntext.find(marker, pos + val.length()))
+	std::string ntext(_text);
+	for (/*empty*/ ; std::string::npos != pos; pos = ntext.find(marker, pos + val.length()))
 	{
 		ntext.replace(pos, marker.length(), val);
 	}
@@ -48,40 +48,21 @@ LocalizedText LocalizedText::arg(const std::wstring &val) const
  * @param val The value to place in the next placeholder's position.
  * @return The translated string with all occurrences of the marker replaced by @a val.
  */
-LocalizedText &LocalizedText::arg(const std::wstring &val)
+LocalizedText &LocalizedText::arg(const std::string &val)
 {
-	std::wostringstream os;
+	std::ostringstream os;
 	os << '{' << _nextArg << '}';
-	std::wstring marker(os.str());
+	std::string marker(os.str());
 	size_t pos = _text.find(marker);
-	if (std::wstring::npos != pos)
+	if (std::string::npos != pos)
 	{
-		for (/*empty*/ ; std::wstring::npos != pos; pos = _text.find(marker, pos + val.length()))
+		for (/*empty*/ ; std::string::npos != pos; pos = _text.find(marker, pos + val.length()))
 		{
 			_text.replace(pos, marker.length(), val);
 		}
 		++_nextArg;
 	}
 	return *this;
-}
-
-LocalizedText LocalizedText::arg(const std::string &val) const
-{
-	return arg(Language::utf8ToWstr(val));
-}
-
-LocalizedText &LocalizedText::arg(const std::string &val)
-{
-	return arg(Language::utf8ToWstr(val));
-}
-
-/**
- * Return the UTF-8 representation of this string.
- * @return A UTF-8 string.
- */
-std::string LocalizedText::asUTF8() const
-{
-	return Language::wstrToUtf8(_text);
 }
 
 }

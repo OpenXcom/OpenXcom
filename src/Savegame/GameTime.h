@@ -63,7 +63,7 @@ public:
 	/// Gets the ingame day.
 	int getDay() const;
 	// Gets a string version of the ingame day.
-	std::wstring getDayString(Language *lang) const;
+	std::string getDayString(Language *lang) const;
 	/// Gets the ingame month.
 	int getMonth() const;
 	// Gets a string version of the ingame month.

@@ -29,7 +29,7 @@ struct TransferRow
 {
 	TransferType type;
 	void *rule;
-	std::wstring name;
+	std::string name;
 	int cost;
 	int qtySrc, qtyDst;
 	int amount;
@@ -80,7 +80,7 @@ public:
 	/// Sets the engineers of the transfer.
 	void setEngineers(int engineers);
 	/// Gets the name of the transfer.
-	std::wstring getName(Language *lang) const;
+	std::string getName(Language *lang) const;
 	/// Gets the hours remaining of the transfer.
 	int getHours() const;
 	/// Gets the quantity of the transfer.

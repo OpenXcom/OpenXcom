@@ -70,7 +70,7 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 	// scan for masters
 	const std::map<std::string, ModInfo> &modInfos(Options::getModInfos());
 	size_t curMasterIdx = 0;
-	std::vector<std::wstring> masterNames;
+	std::vector<std::string> masterNames;
 	for (std::vector< std::pair<std::string, bool> >::const_iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
 	{
 		std::string modId = i->first;
@@ -89,7 +89,7 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 			++curMasterIdx;
 		}
 		_masters.push_back(modInfo);
-		masterNames.push_back(Language::utf8ToWstr(modInfo->getName()));
+		masterNames.push_back(modInfo->getName());
 	}
 
 	_cbxMasters->setOptions(masterNames);
@@ -123,7 +123,7 @@ OptionsModsState::~OptionsModsState()
 
 }
 
-std::wstring OptionsModsState::makeTooltip(const ModInfo &modInfo)
+std::string OptionsModsState::makeTooltip(const ModInfo &modInfo)
 {
 	return tr("STR_MODS_TOOLTIP").arg(modInfo.getVersion()).arg(modInfo.getAuthor()).arg(modInfo.getDescription());
 }
@@ -167,8 +167,8 @@ void OptionsModsState::lstModsRefresh(size_t scrollLoc)
 			continue;
 		}
 
-		std::wstring modName = Language::fsToWstr(modInfo.getName());
-		_lstMods->addRow(3, modName.c_str(), L"", (i->second ? tr("STR_YES").c_str() : tr("STR_NO").c_str()));
+		std::string modName = Language::fsToUtf8(modInfo.getName());
+		_lstMods->addRow(3, modName.c_str(), "", (i->second ? tr("STR_YES").c_str() : tr("STR_NO").c_str()));
 		_mods.push_back(*i);
 	}
 

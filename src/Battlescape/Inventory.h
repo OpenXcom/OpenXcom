@@ -100,7 +100,7 @@ public:
 	/// Checks for item overlap.
 	static bool overlapItems(BattleUnit *unit, BattleItem *item, RuleInventory *slot, int x = 0, int y = 0);
 	/// Shows a warning message.
-	void showWarning(const std::wstring &msg);
+	void showWarning(const std::string &msg);
 	/// Show priming warnings on grenades.
 	void drawPrimers();
 };

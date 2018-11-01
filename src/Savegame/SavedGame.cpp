@@ -284,38 +284,38 @@ SaveInfo SavedGame::getSaveInfo(const std::string &file, Language *lang)
 	{
 		if (doc["name"])
 		{
-			save.displayName = Language::utf8ToWstr(doc["name"].as<std::string>());
+			save.displayName = doc["name"].as<std::string>();
 		}
 		else
 		{
-			save.displayName = Language::fsToWstr(CrossPlatform::noExt(file));
+			save.displayName = Language::fsToUtf8(CrossPlatform::noExt(file));
 		}
 		save.reserved = false;
 	}
 
 	save.timestamp = CrossPlatform::getDateModified(fullname);
-	std::pair<std::wstring, std::wstring> str = CrossPlatform::timeToString(save.timestamp);
+	std::pair<std::string, std::string> str = CrossPlatform::timeToString(save.timestamp);
 	save.isoDate = str.first;
 	save.isoTime = str.second;
 	save.mods = doc["mods"].as<std::vector< std::string> >(std::vector<std::string>());
 
-	std::wostringstream details;
+	std::ostringstream details;
 	if (doc["turn"])
 	{
-		details << lang->getString("STR_BATTLESCAPE") << L": " << lang->getString(doc["mission"].as<std::string>()) << L", ";
+		details << lang->getString("STR_BATTLESCAPE") << ": " << lang->getString(doc["mission"].as<std::string>()) << ", ";
 		details << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
 	}
 	else
 	{
 		GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
 		time.load(doc["time"]);
-		details << lang->getString("STR_GEOSCAPE") << L": ";
-		details << time.getDayString(lang) << L" " << lang->getString(time.getMonthString()) << L" " << time.getYear() << L", ";
-		details << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
+		details << lang->getString("STR_GEOSCAPE") << ": ";
+		details << time.getDayString(lang) << " " << lang->getString(time.getMonthString()) << " " << time.getYear() << ", ";
+		details << time.getHour() << ":" << std::setfill('0') << std::setw(2) << time.getMinute();
 	}
 	if (doc["ironman"].as<bool>(false))
 	{
-		details << L" (" << lang->getString("STR_IRONMAN") << L")";
+		details << " (" << lang->getString("STR_IRONMAN") << ")";
 	}
 	save.details = details.str();
 
@@ -349,11 +349,11 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 	_time->load(brief["time"]);
 	if (brief["name"])
 	{
-		_name = Language::utf8ToWstr(brief["name"].as<std::string>());
+		_name = brief["name"].as<std::string>();
 	}
 	else
 	{
-		_name = Language::fsToWstr(filename);
+		_name = Language::fsToUtf8(filename);
 	}
 	_ironman = brief["ironman"].as<bool>(_ironman);
 
@@ -579,7 +579,7 @@ void SavedGame::save(const std::string &filename) const
 
 	// Saves the brief game info used in the saves list
 	YAML::Node brief;
-	brief["name"] = Language::wstrToUtf8(_name);
+	brief["name"] = _name;
 	brief["version"] = OPENXCOM_VERSION_SHORT;
 	std::string git_sha = OPENXCOM_VERSION_GIT;
 	if (!git_sha.empty() && git_sha[0] ==  '.')
@@ -697,7 +697,7 @@ void SavedGame::save(const std::string &filename) const
  * Returns the game's name shown in Save screens.
  * @return Save name.
  */
-std::wstring SavedGame::getName() const
+std::string SavedGame::getName() const
 {
 	return _name;
 }
@@ -706,7 +706,7 @@ std::wstring SavedGame::getName() const
  * Changes the game's name shown in Save screens.
  * @param name New name.
  */
-void SavedGame::setName(const std::wstring &name)
+void SavedGame::setName(const std::string &name)
 {
 	_name = name;
 }

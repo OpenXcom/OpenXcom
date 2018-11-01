@@ -104,7 +104,7 @@ void StatisticsState::listStats()
 {
 	SavedGame *save = _game->getSavedGame();
 
-	std::wostringstream ss;
+	std::ostringstream ss;
 	GameTime *time = save->getTime();
 	if (save->getEnding() == END_WIN)
 	{
@@ -118,7 +118,7 @@ void StatisticsState::listStats()
 	{
 		ss << tr("STR_STATISTICS");
 	}
-	ss << L'\x02' << time->getDayString(_game->getLanguage()) << L" " << tr(time->getMonthString()) << L" " << time->getYear();
+	ss << '\x02' << time->getDayString(_game->getLanguage()) << " " << tr(time->getMonthString()) << " " << time->getYear();
 	_txtTitle->setText(ss.str());
 
 	int monthlyScore = sumVector(save->getResearchScores()) / save->getResearchScores().size();

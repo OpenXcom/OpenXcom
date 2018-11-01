@@ -99,7 +99,7 @@ void DeleteGameState::btnYesClick(Action *)
 	_game->popState();
 	if (!CrossPlatform::deleteFile(_filename))
 	{
-		std::wstring error = tr("STR_DELETE_UNSUCCESSFUL");
+		std::string error = tr("STR_DELETE_UNSUCCESSFUL");
 		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(error, _palette, _game->getMod()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getMod()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 		else

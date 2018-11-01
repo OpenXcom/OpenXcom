@@ -91,9 +91,9 @@ namespace OpenXcom
 	{
 		if (stat != 0)
 		{
-			std::wostringstream ss;
+			std::ostringstream ss;
 			if (plus && stat > 0)
-				ss << L"+";
+				ss << "+";
 			ss << stat;
 			_lstInfo->addRow(2, tr(label).c_str(), ss.str().c_str());
 			_lstInfo->setCellColor(_row, 1, Palette::blockOffset(15)+4);
@@ -101,7 +101,7 @@ namespace OpenXcom
 		}
 	}
 
-	void ArticleStateTFTDArmor::addStat(const std::string &label, const std::wstring &stat)
+	void ArticleStateTFTDArmor::addStat(const std::string &label, const std::string &stat)
 	{
 		_lstInfo->addRow(2, tr(label).c_str(), stat.c_str());
 		_lstInfo->setCellColor(_row, 1, Palette::blockOffset(15)+4);

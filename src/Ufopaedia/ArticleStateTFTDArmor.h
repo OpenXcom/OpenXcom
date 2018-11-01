@@ -32,7 +32,7 @@ namespace OpenXcom
 
 	protected:
 		void addStat(const std::string &label, int stat, bool plus = false);
-		void addStat(const std::string &label, const std::wstring &stat);
+		void addStat(const std::string &label, const std::string &stat);
 
 		int _row;
 		TextList *_lstInfo;

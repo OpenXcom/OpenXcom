@@ -35,7 +35,7 @@ namespace OpenXcom
  * @param state Pointer to the Geoscape state.
  * @param msg Error message.
  */
-DogfightErrorState::DogfightErrorState(Craft *craft, const std::wstring &msg) : _craft(craft)
+DogfightErrorState::DogfightErrorState(Craft *craft, const std::string &msg) : _craft(craft)
 {
 	_screen = false;
 

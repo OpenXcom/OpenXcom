@@ -35,7 +35,7 @@ class Target
 protected:
 	double _lon, _lat;
 	int _id;
-	std::wstring _name;
+	std::string _name;
 	std::vector<Target*> _followers;
 	/// Creates a target.
 	Target();
@@ -63,11 +63,11 @@ public:
 	/// Sets the target's ID.
 	void setId(int id);
 	/// Gets the target's name.
-	virtual std::wstring getName(Language *lang) const;
+	virtual std::string getName(Language *lang) const;
 	/// Sets the target's name.
-	void setName(const std::wstring &newName);
+	void setName(const std::string &newName);
 	/// Gets the target's default name.
-	virtual std::wstring getDefaultName(Language *lang) const;
+	virtual std::string getDefaultName(Language *lang) const;
 	/// Gets the target's marker name.
 	virtual std::string getMarkerName() const;
 	/// Gets the target's marker sprite.

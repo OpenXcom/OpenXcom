@@ -42,7 +42,7 @@ class Text : public InteractiveSurface
 private:
 	Font *_big, *_small, *_font;
 	Language *_lang;
-	std::wstring _text, _wrappedText;
+	std::string _text, _wrappedText;
 	std::vector<int> _lineWidth, _lineHeight;
 	bool _wrap, _invert, _contrast, _indent;
 	TextHAlign _align;
@@ -59,11 +59,11 @@ public:
 	/// Cleans up the text.
 	~Text();
 	/// Formats an integer value as number with separators.
-	static std::wstring formatNumber(int64_t value, const std::wstring &currency = L"");
+	static std::string formatNumber(int64_t value, const std::string &currency = "");
 	/// Formats an integer value as currency.
-	static std::wstring formatFunding(int64_t funds);
+	static std::string formatFunding(int64_t funds);
 	/// Formats an integer value as percentage.
-	static std::wstring formatPercentage(int value);
+	static std::string formatPercentage(int value);
 	/// Sets the text size to big.
 	void setBig();
 	/// Sets the text size to small.
@@ -73,9 +73,9 @@ public:
 	/// Initializes the resources for the text.
 	void initText(Font *big, Font *small, Language *lang);
 	/// Sets the text's string.
-	void setText(const std::wstring &text);
+	void setText(const std::string &text);
 	/// Gets the text's string.
-	std::wstring getText() const;
+	std::string getText() const;
 	/// Sets the text's wordwrap setting.
 	void setWordWrap(bool wrap, bool indent = false);
 	/// Sets the text's color invert setting.

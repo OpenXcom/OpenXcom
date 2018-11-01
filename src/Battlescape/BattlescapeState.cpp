@@ -538,7 +538,7 @@ void BattlescapeState::init()
 		_btnReserveAimed->setGroup(&_reserve);
 		_btnReserveAuto->setGroup(&_reserve);
 	}
-	_txtTooltip->setText(L"");
+	_txtTooltip->setText("");
 	_btnReserveKneel->toggle(_save->getKneelReserved());
 	_battleGame->setKneelReserved(_save->getKneelReserved());
 	if (_autosave)
@@ -787,8 +787,8 @@ void BattlescapeState::mapClick(Action *action)
 
 	if (_save->getDebugMode())
 	{
-		std::wostringstream ss;
-		ss << L"Clicked " << pos;
+		std::ostringstream ss;
+		ss << "Clicked " << pos;
 		debug(ss.str());
 	}
 
@@ -1058,7 +1058,7 @@ void BattlescapeState::btnEndTurnClick(Action *)
 {
 	if (allowButtons())
 	{
-		_txtTooltip->setText(L"");
+		_txtTooltip->setText("");
 		_battleGame->requestEndTurn();
 	}
 }
@@ -1307,7 +1307,7 @@ void BattlescapeState::updateSoldierInfo(bool checkFOV)
 	_numAmmoRight->setVisible(playableUnit);
 	if (!playableUnit)
 	{
-		_txtName->setText(L"");
+		_txtName->setText("");
 		showPsiButton(false);
 		toggleKneelButton(0);
 		return;
@@ -1499,7 +1499,7 @@ Map *BattlescapeState::getMap() const
  * Shows a debug message in the topleft corner.
  * @param message Debug message.
  */
-void BattlescapeState::debug(const std::wstring &message)
+void BattlescapeState::debug(const std::string &message)
 {
 	if (_save->getDebugMode())
 	{
@@ -1553,18 +1553,18 @@ inline void BattlescapeState::handle(Action *action)
 					if (action->getDetails()->key.keysym.sym == SDLK_d && (SDL_GetModState() & KMOD_CTRL) != 0)
 					{
 						_save->setDebugMode();
-						debug(L"Debug Mode");
+						debug("Debug Mode");
 					}
 					// "ctrl-v" - reset tile visibility
 					else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_v && (SDL_GetModState() & KMOD_CTRL) != 0)
 					{
-						debug(L"Resetting tile visibility");
+						debug("Resetting tile visibility");
 						_save->resetTiles();
 					}
 					// "ctrl-k" - kill all aliens
 					else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_k && (SDL_GetModState() & KMOD_CTRL) != 0)
 					{
-						debug(L"Influenza bacterium dispersed");
+						debug("Influenza bacterium dispersed");
 						for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i !=_save->getUnits()->end(); ++i)
 						{
 							if ((*i)->getOriginalFaction() == FACTION_HOSTILE && !(*i)->isOut())
@@ -1578,7 +1578,7 @@ inline void BattlescapeState::handle(Action *action)
 					// "ctrl-j" - stun all aliens
 					else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_j && (SDL_GetModState() & KMOD_CTRL) != 0)
 					{
-						debug(L"Deploying Celine Dion album");
+						debug("Deploying Celine Dion album");
 						for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i !=_save->getUnits()->end(); ++i)
 						{
 							if ((*i)->getOriginalFaction() == FACTION_HOSTILE && !(*i)->isOut())
@@ -1592,7 +1592,7 @@ inline void BattlescapeState::handle(Action *action)
 					// "ctrl-w" - warp unit
 					else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_w && (SDL_GetModState() & KMOD_CTRL) != 0)
 					{
-						debug(L"Beam me up Scotty");
+						debug("Beam me up Scotty");
 						BattleUnit *unit = _save->getSelectedUnit();
 						Position newPos;
 						_map->getSelectorPosition(&newPos);
@@ -2209,7 +2209,7 @@ void BattlescapeState::txtTooltipOut(Action *action)
 	{
 		if (_currentTooltip == action->getSender()->getTooltip())
 		{
-			_txtTooltip->setText(L"");
+			_txtTooltip->setText("");
 		}
 	}
 }

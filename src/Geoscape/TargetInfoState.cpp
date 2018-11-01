@@ -82,10 +82,10 @@ TargetInfoState::TargetInfoState(Target *target, Globe *globe) : _target(target)
 	_txtTargetted->setAlign(ALIGN_CENTER);
 	_txtTargetted->setText(tr("STR_TARGETTED_BY"));
 	_txtFollowers->setAlign(ALIGN_CENTER);
-	std::wostringstream ss;
+	std::ostringstream ss;
 	for (std::vector<Target*>::iterator i = _target->getFollowers()->begin(); i != _target->getFollowers()->end(); ++i)
 	{
-		ss << (*i)->getName(_game->getLanguage()) << L'\n';
+		ss << (*i)->getName(_game->getLanguage()) << '\n';
 	}
 	_txtFollowers->setText(ss.str());
 }
@@ -124,7 +124,7 @@ void TargetInfoState::edtTitleChange(Action *action)
 {
 	if (_edtTitle->getText() == _target->getDefaultName(_game->getLanguage()))
 	{
-		_target->setName(L"");
+		_target->setName("");
 	}
 	else
 	{

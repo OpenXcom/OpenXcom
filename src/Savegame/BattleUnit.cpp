@@ -2399,11 +2399,11 @@ Armor *BattleUnit::getArmor() const
  * @param debugAppendId Append unit ID to name for debug purposes.
  * @return name Widecharstring of the unit's name.
  */
-std::wstring BattleUnit::getName(Language *lang, bool debugAppendId) const
+std::string BattleUnit::getName(Language *lang, bool debugAppendId) const
 {
 	if (_type != "SOLDIER" && lang != 0)
 	{
-		std::wstring ret;
+		std::string ret;
 
 		if (_type.find("STR_") != std::string::npos)
 			ret = lang->getString(_type);
@@ -2412,8 +2412,8 @@ std::wstring BattleUnit::getName(Language *lang, bool debugAppendId) const
 
 		if (debugAppendId)
 		{
-			std::wostringstream ss;
-			ss << ret << L" " << _id;
+			std::ostringstream ss;
+			ss << ret << " " << _id;
 			ret = ss.str();
 		}
 		return ret;

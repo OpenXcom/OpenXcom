@@ -41,23 +41,23 @@ namespace OpenXcom
 		_lstInfo->setColumns(2, 104, 46);
 		_lstInfo->setDot(true);
 
-		std::wostringstream ss;
+		std::ostringstream ss;
 		int row = 0;
 		if (facility->getDefenseValue() > 0)
 		{
 			_lstInfo->setY(_lstInfo->getY() - 16);
-			ss.str(L"");ss.clear();
+			ss.str("");ss.clear();
 			ss << facility->getDefenseValue();
 			_lstInfo->addRow(2, tr("STR_DEFENSE_VALUE").c_str(), ss.str().c_str());
 			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
 
-			ss.str(L"");ss.clear();
+			ss.str("");ss.clear();
 			ss << Text::formatPercentage(facility->getHitRatio());
 			_lstInfo->addRow(2, tr("STR_HIT_RATIO").c_str(), ss.str().c_str());
 			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
 		}
 		
-		ss.str(L"");ss.clear();
+		ss.str("");ss.clear();
 		_lstInfo->addRow(2, tr("STR_CONSTRUCTION_TIME").c_str(), tr("STR_DAY", facility->getBuildTime()).c_str());
 		_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
 
@@ -65,7 +65,7 @@ namespace OpenXcom
 		_lstInfo->addRow(2, tr("STR_CONSTRUCTION_COST").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
 
-		ss.str(L"");ss.clear();
+		ss.str("");ss.clear();
 		ss << Text::formatFunding(facility->getMonthlyCost());
 		_lstInfo->addRow(2, tr("STR_MAINTENANCE_COST").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);

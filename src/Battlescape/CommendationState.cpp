@@ -85,7 +85,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 		noun = "noNoun";
 		if (titleChosen)
 		{
-			_lstSoldiers->addRow(2, L"", L""); // Blank row, will be filled in later
+			_lstSoldiers->addRow(2, "", ""); // Blank row, will be filled in later
 			row++;
 		}
 		titleChosen = false;
@@ -107,7 +107,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 					}
 
 					// Soldier name
-					std::wostringstream wssName;
+					std::ostringstream wssName;
 					wssName << "   ";
 					wssName << (*s)->getName();
 					// Decoration level name

@@ -282,9 +282,9 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 		if ((*i)->qty == 0)
 			continue;
 
-		std::wostringstream ss, ss2;
-		ss << L'\x01' << (*i)->qty << L'\x01';
-		ss2 << L'\x01' << (*i)->score;
+		std::ostringstream ss, ss2;
+		ss << '\x01' << (*i)->qty << '\x01';
+		ss2 << '\x01' << (*i)->score;
 		total += (*i)->score;
 		if ((*i)->recovery)
 		{
@@ -318,7 +318,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 		_missionStatistics->valiantCrux = true;
 	}
 
-	std::wostringstream ss3;
+	std::ostringstream ss3;
 	ss3 << total;
 	_lstTotal->addRow(2, tr("STR_TOTAL_UC").c_str(), ss3.str().c_str());
 
@@ -340,7 +340,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 	}
 	else
 	{
-		_txtRecovery->setText(L"");
+		_txtRecovery->setText("");
 		_lstTotal->setY(_lstStats->getY() + statsY + 5);
 	}
 
@@ -568,12 +568,12 @@ DebriefingState::~DebriefingState()
 	_rounds.clear();
 }
 
-std::wstring DebriefingState::makeSoldierString(int stat)
+std::string DebriefingState::makeSoldierString(int stat)
 {
-	if (stat == 0) return L"";
+	if (stat == 0) return "";
 
-	std::wostringstream ss;
-	ss << L'\x01' << L'+' << stat << L'\x01';
+	std::ostringstream ss;
+	ss << '\x01' << '+' << stat << '\x01';
 	return ss.str();
 }
 
@@ -645,7 +645,7 @@ void DebriefingState::txtTooltipOut(Action *action)
 {
 	if (_currentTooltip == action->getSender()->getTooltip())
 	{
-		_txtTooltip->setText(L"");
+		_txtTooltip->setText("");
 	}
 }
 
@@ -1185,7 +1185,7 @@ void DebriefingState::prepareDebriefing()
 					UnitStats statIncrease;
 					(*j)->postMissionProcedures(save, statIncrease);
 					if ((*j)->getGeoscapeSoldier())
-						_soldierStats.push_back(std::pair<std::wstring, UnitStats>((*j)->getGeoscapeSoldier()->getName(), statIncrease));
+						_soldierStats.push_back(std::pair<std::string, UnitStats>((*j)->getGeoscapeSoldier()->getName(), statIncrease));
 					playersInExitArea++;
 
 					recoverItems((*j)->getInventory(), base);

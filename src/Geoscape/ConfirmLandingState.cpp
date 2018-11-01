@@ -90,8 +90,8 @@ ConfirmLandingState::ConfirmLandingState(Craft *craft, Texture *texture, int sha
 
 	_txtBegin->setBig();
 	_txtBegin->setAlign(ALIGN_CENTER);
-	std::wostringstream ss;
-	ss << L'\x01' << tr("STR_BEGIN_MISSION");
+	std::ostringstream ss;
+	ss << '\x01' << tr("STR_BEGIN_MISSION");
 	_txtBegin->setText(ss.str());
 }
 

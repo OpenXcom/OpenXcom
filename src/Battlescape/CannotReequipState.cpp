@@ -85,7 +85,7 @@ CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 
 	for (std::vector<ReequipStat>::iterator i = missingItems.begin(); i != missingItems.end(); ++i)
 	{
-		std::wostringstream ss;
+		std::ostringstream ss;
 		ss << i->qty;
 		_lstItems->addRow(3, tr(i->item).c_str(), ss.str().c_str(), i->craft.c_str());
 	}

@@ -286,7 +286,7 @@ void TransferItemsState::updateList()
 		{
 			continue;
 		}
-		std::wstring name = _items[i].name;
+		std::string name = _items[i].name;
 		bool ammo = false;
 		if (_items[i].type == TRANSFER_ITEM)
 		{
@@ -294,10 +294,10 @@ void TransferItemsState::updateList()
 			ammo = (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0));
 			if (ammo)
 			{
-				name.insert(0, L"  ");
+				name.insert(0, "  ");
 			}
 		}
-		std::wostringstream ssQtySrc, ssQtyDst, ssAmount;
+		std::ostringstream ssQtySrc, ssQtyDst, ssAmount;
 		ssQtySrc << _items[i].qtySrc - _items[i].amount;
 		ssQtyDst << _items[i].qtyDst;
 		ssAmount << _items[i].amount;
@@ -575,7 +575,7 @@ void TransferItemsState::increase()
 void TransferItemsState::increaseByValue(int change)
 {
 	if (0 >= change || getRow().qtySrc <= getRow().amount) return;
-	std::wstring errorMessage;
+	std::string errorMessage;
 	RuleItem *selItem = 0;
 	Craft *craft = 0;
 
@@ -729,7 +729,7 @@ void TransferItemsState::decreaseByValue(int change)
  */
 void TransferItemsState::updateItemStrings()
 {
-	std::wostringstream ss1, ss2;
+	std::ostringstream ss1, ss2;
 	ss1 << getRow().qtySrc - getRow().amount;
 	ss2 << getRow().amount;
 	_lstItems->setCellText(_sel, 1, ss1.str());

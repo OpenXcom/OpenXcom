@@ -112,8 +112,8 @@ void OptionsConfirmState::think()
 void OptionsConfirmState::countdown()
 {
 	_countdown--;
-	std::wostringstream ss;
-	ss << std::setfill(L'0') << std::setw(2) << _countdown;
+	std::ostringstream ss;
+	ss << std::setfill('0') << std::setw(2) << _countdown;
 	_txtTimer->setText(tr("STR_DISPLAY_OPTIONS_REVERT").arg(ss.str()));
 	if (_countdown == 0)
 	{

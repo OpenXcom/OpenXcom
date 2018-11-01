@@ -174,7 +174,7 @@ public:
 	/// Gets map.
 	Map *getMap() const;
 	/// Show debug message.
-	void debug(const std::wstring &message);
+	void debug(const std::string &message);
 	/// Show warning message.
 	void warning(const std::string &message);
 	/// Handles keypresses.

@@ -752,9 +752,9 @@ time_t getDateModified(const std::string &path)
  * @param time Value in timestamp format.
  * @return String pair with date and time.
  */
-std::pair<std::wstring, std::wstring> timeToString(time_t time)
+std::pair<std::string, std::string> timeToString(time_t time)
 {
-	wchar_t localDate[25], localTime[25];
+	char localDate[25], localTime[25];
 
 /*#ifdef _WIN32
 	LARGE_INTEGER li;
@@ -771,8 +771,8 @@ std::pair<std::wstring, std::wstring> timeToString(time_t time)
 #endif*/
 
 	struct tm *timeinfo = localtime(&(time));
-	wcsftime(localDate, 25, L"%Y-%m-%d", timeinfo);
-	wcsftime(localTime, 25, L"%H:%M", timeinfo);
+	strftime(localDate, 25, "%Y-%m-%d", timeinfo);
+	strftime(localTime, 25, "%H:%M", timeinfo);
 
 	return std::make_pair(localDate, localTime);
 }
@@ -783,8 +783,9 @@ std::pair<std::wstring, std::wstring> timeToString(time_t time)
  * @param b String B.
  * @return String A comes before String B.
  */
-bool naturalCompare(const std::wstring &a, const std::wstring &b)
+bool naturalCompare(const std::string &a, const std::string &b)
 {
+/*
 #if defined(_WIN32) && (!defined(__MINGW32__) || defined(__MINGW64_VERSION_MAJOR))
 	typedef int (WINAPI *WinStrCmp)(PCWSTR, PCWSTR);
 	WinStrCmp pWinStrCmp = (WinStrCmp)GetProcAddress(GetModuleHandleA("shlwapi.dll"), "StrCmpLogicalW");
@@ -794,9 +795,10 @@ bool naturalCompare(const std::wstring &a, const std::wstring &b)
 	}
 	else
 #endif
+*/
 	{
 		// sorry unix users you get ASCII sort
-		std::wstring::const_iterator i, j;
+		std::string::const_iterator i, j;
 		for (i = a.begin(), j = b.begin(); i != a.end() && j != b.end() && tolower(*i) == tolower(*j); i++, j++);
 		return (i != a.end() && j != b.end() && tolower(*i) < tolower(*j));
 	}

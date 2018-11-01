@@ -74,10 +74,10 @@ enum GameEnding { END_NONE, END_WIN, END_LOSE };
 struct SaveInfo
 {
 	std::string fileName;
-	std::wstring displayName;
+	std::string displayName;
 	time_t timestamp;
-	std::wstring isoDate, isoTime;
-	std::wstring details;
+	std::string isoDate, isoTime;
+	std::string details;
 	std::vector<std::string> mods;
 	bool reserved;
 };
@@ -99,7 +99,7 @@ struct PromotionInfo
 class SavedGame
 {
 private:
-	std::wstring _name;
+	std::string _name;
 	GameDifficulty _difficulty;
 	GameEnding _end;
 	bool _ironman;
@@ -147,9 +147,9 @@ public:
 	/// Saves a saved game to YAML.
 	void save(const std::string &filename) const;
 	/// Gets the game name.
-	std::wstring getName() const;
+	std::string getName() const;
 	/// Sets the game name.
-	void setName(const std::wstring &name);
+	void setName(const std::string &name);
 	/// Gets the game difficulty.
 	GameDifficulty getDifficulty() const;
 	/// Sets the game difficulty.

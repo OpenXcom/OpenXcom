@@ -70,9 +70,9 @@ public:
 	/// Sets the text button's high contrast color setting.
 	void setHighContrast(bool contrast);
 	/// Sets the text button's text.
-	void setText(const std::wstring &text);
+	void setText(const std::string &text);
 	/// Gets the text button's text.
-	std::wstring getText() const;
+	std::string getText() const;
 	/// Sets the text button's group.
 	void setGroup(TextButton **group);
 	/// Sets the text button's palette.

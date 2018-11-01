@@ -41,7 +41,7 @@ namespace OpenXcom
  * @param state Pointer to the Geoscape state.
  * @param endType What ended the production.
  */
-ProductionCompleteState::ProductionCompleteState(Base *base, const std::wstring &item, GeoscapeState *state, productionProgress_e endType) : _base(base), _state(state), _endType(endType)
+ProductionCompleteState::ProductionCompleteState(Base *base, const std::string &item, GeoscapeState *state, productionProgress_e endType) : _base(base), _state(state), _endType(endType)
 {
 	_screen = false;
 
@@ -82,7 +82,7 @@ ProductionCompleteState::ProductionCompleteState(Base *base, const std::wstring 
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
-	std::wstring s;
+	std::string s;
 	switch(_endType)
 	{
 	case PROGRESS_CONSTRUCTION:

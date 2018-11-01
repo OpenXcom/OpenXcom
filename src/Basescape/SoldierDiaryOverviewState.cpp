@@ -104,7 +104,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(Base *base, size_t soldierI
 	_btnCommendations->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnCommendationsClick);
 	_btnCommendations->setVisible(!_game->getMod()->getCommendationsList().empty());
 
-	_btnPrev->setText(L"<<");
+	_btnPrev->setText("<<");
 	if (_base == 0)
 	{
 		_btnPrev->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnNextClick);
@@ -116,7 +116,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(Base *base, size_t soldierI
 		_btnPrev->onKeyboardPress((ActionHandler)&SoldierDiaryOverviewState::btnPrevClick, Options::keyBattlePrevUnit);
 	}
 
-	_btnNext->setText(L">>");
+	_btnNext->setText(">>");
 	if (_base == 0)
 	{
 		_btnNext->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnPrevClick);
@@ -197,7 +197,7 @@ void SoldierDiaryOverviewState::init()
 			continue;
 		}
 		
-		std::wostringstream ss;
+		std::ostringstream ss;
 		ss << (*j)->time.getYear();
 		
 		_lstDiary->addRow(5, (*j)->getMissionName(_game->getLanguage()).c_str(),

@@ -74,13 +74,6 @@ inline std::ostream& operator<<(std::ostream& out, const Position& pos)
 	return out;
 }
 
-
-inline std::wostream& operator<<(std::wostream& wout, const Position& pos)
-{
-	wout << "(" << pos.x << "," << pos.y << ","<< pos.z << ")";
-	return wout;
-}
-
 typedef Position Vector3i;
 
 }

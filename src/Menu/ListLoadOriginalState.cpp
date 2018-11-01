@@ -106,11 +106,11 @@ ListLoadOriginalState::ListLoadOriginalState(OptionsOrigin origin) : _origin(ori
 
 	_txtDate->setText(tr("STR_DATE"));
 
-	std::wstring dots(80, '.');
+	std::string dots(80, '.');
 	SaveConverter::getList(_game->getLanguage(), _saves);
 	for (int i = 0; i < SaveConverter::NUM_SAVES; ++i)
 	{
-		std::wostringstream ss;
+		std::ostringstream ss;
 		ss << (i + 1);
 		_btnSlot[i]->setText(ss.str());
 		_btnSlot[i]->onMouseClick((ActionHandler)&ListLoadOriginalState::btnSlotClick);
@@ -181,8 +181,8 @@ void ListLoadOriginalState::btnSlotClick(Action *action)
 	{
 		if (_saves[n].tactical)
 		{
-			std::wostringstream error;
-			error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << L"Battlescape saves aren't supported yet.";
+			std::ostringstream error;
+			error << tr("STR_LOAD_UNSUCCESSFUL") << '\x02' << "Battlescape saves aren't supported yet.";
 			_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getMod()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getMod()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 
 		}

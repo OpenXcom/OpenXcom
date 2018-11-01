@@ -94,7 +94,7 @@ struct MissionStatistics
 		return node;
 	}
 
-	std::wstring getMissionName(Language *lang) const
+	std::string getMissionName(Language *lang) const
 	{
 		if (!markerName.empty())
 		{
@@ -106,9 +106,9 @@ struct MissionStatistics
 		}
 	}
 
-	std::wstring getRatingString(Language *lang) const
+	std::string getRatingString(Language *lang) const
 	{
-		std::wostringstream ss;
+		std::ostringstream ss;
 		if (success)
 		{
 			ss << lang->getString("STR_VICTORY");
@@ -117,7 +117,7 @@ struct MissionStatistics
 		{
 			ss << lang->getString("STR_DEFEAT");
 		}
-		ss << L" - " << lang->getString(rating);
+		ss << " - " << lang->getString(rating);
 		return ss.str();
 	}
 

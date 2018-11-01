@@ -109,7 +109,7 @@ private:
 	std::string _type;
 	std::string _rank;
 	std::string _race;
-	std::wstring _name;
+	std::string _name;
 	UnitStats _stats;
 	int _standHeight, _kneelHeight, _floatHeight;
 	std::vector<int> _deathSound;
@@ -348,7 +348,7 @@ public:
 	/// Gets the unit's armor.
 	Armor *getArmor() const;
 	/// Gets the unit's name.
-	std::wstring getName(Language *lang, bool debugAppendId = false) const;
+	std::string getName(Language *lang, bool debugAppendId = false) const;
 	/// Gets the unit's stats.
 	UnitStats *getBaseStats();
 	/// Get the unit's stand height.

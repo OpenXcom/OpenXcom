@@ -120,7 +120,7 @@ public:
 	/// Get the StatString string.
 	std::string getString() const;
 	/// Calculate a StatString.
-	static std::wstring calcStatString(UnitStats &currentStats, const std::vector<StatString*> &statStrings, bool psiStrengthEval, bool inTraining);
+	static std::string calcStatString(UnitStats &currentStats, const std::vector<StatString*> &statStrings, bool psiStrengthEval, bool inTraining);
 	/// Get the CurrentStats.
 	static std::map<std::string, int> getCurrentStats(UnitStats &currentStats);
 };

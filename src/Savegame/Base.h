@@ -76,7 +76,7 @@ public:
 	/// Gets the base's type.
 	std::string getType() const;
 	/// Gets the base's name.
-	std::wstring getName(Language *lang = 0) const;
+	std::string getName(Language *lang = 0) const;
 	/// Gets the base's marker sprite.
 	int getMarker() const;
 	/// Gets the base's facilities.

@@ -488,7 +488,7 @@ void BaseView::draw()
 			text->setX((*i)->getX() * GRID_SIZE);
 			text->setY((*i)->getY() * GRID_SIZE + (GRID_SIZE * (*i)->getRules()->getSize() - 16) / 2);
 			text->setBig();
-			std::wostringstream ss;
+			std::ostringstream ss;
 			ss << (*i)->getBuildTime();
 			text->setAlign(ALIGN_CENTER);
 			text->setColor(_cellColor);

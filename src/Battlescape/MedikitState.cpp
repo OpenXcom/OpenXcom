@@ -44,9 +44,9 @@ namespace OpenXcom
  * @return A string representation of the value.
  */
 template<typename type>
-std::wstring toString (type t)
+std::string toString (type t)
 {
-	std::wostringstream ss;
+	std::ostringstream ss;
 	ss << t;
 	return ss.str();
 }
@@ -58,7 +58,7 @@ class MedikitTitle : public Text
 {
 public:
 	/// Creates a medikit title.
-	MedikitTitle(int y, const std::wstring & title);
+	MedikitTitle(int y, const std::string & title);
 };
 
 /**
@@ -66,7 +66,7 @@ public:
  * @param y The title's y origin.
  * @param title The title.
  */
-MedikitTitle::MedikitTitle (int y, const std::wstring & title) : Text (73, 9, 186, y)
+MedikitTitle::MedikitTitle (int y, const std::string & title) : Text (73, 9, 186, y)
 {
 	this->setText(title);
 	this->setHighContrast(true);

@@ -154,20 +154,20 @@ ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrig
 		{
 			_qtys.push_back(0);
 			_aliens.push_back(*i);
-			std::wostringstream ss;
+			std::ostringstream ss;
 			ss << qty;
-			std::wstring rqty;
+			std::string rqty;
 			std::vector<std::string>::iterator research = std::find(researchList.begin(), researchList.end(), *i);
 			if (research != researchList.end())
 			{
-				rqty = L"1";
+				rqty = "1";
 				researchList.erase(research);
 			}
 			else
 			{
-				rqty = L"0";
+				rqty = "0";
 			}
-			_lstAliens->addRow(4, tr(*i).c_str(), ss.str().c_str(), L"0", rqty.c_str());
+			_lstAliens->addRow(4, tr(*i).c_str(), ss.str().c_str(), "0", rqty.c_str());
 		}
 	}
 
@@ -175,7 +175,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrig
 	{
 		_aliens.push_back(*i);
 		_qtys.push_back(0);
-		_lstAliens->addRow(4, tr(*i).c_str(), L"0", L"0", L"1");
+		_lstAliens->addRow(4, tr(*i).c_str(), "0", "0", "1");
 		_lstAliens->setRowColor(_qtys.size() -1, _lstAliens->getSecondaryColor());
 	}
 	_timerInc = new Timer(250);
@@ -422,7 +422,7 @@ void ManageAlienContainmentState::decreaseByValue(int change)
  */
 void ManageAlienContainmentState::updateStrings()
 {
-	std::wostringstream ss, ss2, ss3;
+	std::ostringstream ss, ss2, ss3;
 	int qty = getQuantity() - _qtys[_sel];
 	ss << qty;
 	ss2 << _qtys[_sel];

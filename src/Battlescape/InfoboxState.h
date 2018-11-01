@@ -38,7 +38,7 @@ private:
 public:
 	static const int INFOBOX_DELAY = 2000;
 	/// Creates the Infobox state.
-	InfoboxState(const std::wstring &msg);
+	InfoboxState(const std::string &msg);
 	/// Cleans up the Infobox state.
 	~InfoboxState();
 	/// Handler for clicking anything.

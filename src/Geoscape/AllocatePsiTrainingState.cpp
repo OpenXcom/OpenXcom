@@ -100,12 +100,12 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base *base) : _sel(0)
 	int row = 0;
 	for (std::vector<Soldier*>::const_iterator s = base->getSoldiers()->begin(); s != base->getSoldiers()->end(); ++s)
 	{
-		std::wostringstream ssStr;
-		std::wostringstream ssSkl;
+		std::ostringstream ssStr;
+		std::ostringstream ssSkl;
 		_soldiers.push_back(*s);
 		if ((*s)->getCurrentStats()->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getMod()->getPsiRequirements())))
 		{
-			ssStr << L"   " << (*s)->getCurrentStats()->psiStrength;
+			ssStr << "   " << (*s)->getCurrentStats()->psiStrength;
 			if (Options::allowPsiStrengthImprovement) ssStr << "/+" << (*s)->getPsiStrImprovement();
 		}
 		else

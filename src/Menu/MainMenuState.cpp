@@ -91,9 +91,9 @@ MainMenuState::MainMenuState()
 
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	std::wostringstream title;
-	title << tr("STR_OPENXCOM") << L"\x02";
-	title << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT);
+	std::ostringstream title;
+	title << tr("STR_OPENXCOM") << "\x02";
+	title << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
 	_txtTitle->setText(title.str());
 }
 

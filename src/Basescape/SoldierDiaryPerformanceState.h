@@ -52,7 +52,7 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtMedalName, *_txtMedalLevel, *_txtMedalInfo;
 	TextList *_lstPerformance, *_lstKillTotals, *_lstMissionTotals, *_lstCommendations;
-	std::vector<std::wstring> _commendationsListEntry;
+	std::vector<std::string> _commendationsListEntry;
 	std::vector<Surface*> _commendations, _commendationDecorations;
 	SurfaceSet *_commendationSprite, *_commendationDecoration;
 

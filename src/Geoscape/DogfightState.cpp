@@ -362,7 +362,7 @@ DogfightState::DogfightState(GeoscapeState *state, Craft *craft, Ufo *ufo) : _st
 	_btnUfo->copy(_window);
 	_btnUfo->onMouseClick((ActionHandler)&DogfightState::btnUfoClick);
 
-	_txtDistance->setText(L"640");
+	_txtDistance->setText("640");
 
 	_txtStatus->setText(tr("STR_STANDOFF"));
 
@@ -377,7 +377,7 @@ DogfightState::DogfightState(GeoscapeState *state, Craft *craft, Ufo *ufo) : _st
 	_btnMinimizedIcon->setVisible(false);
 
 	// Draw correct number on the minimized dogfight icon.
-	std::wostringstream ss1;
+	std::ostringstream ss1;
 	if (_craft->getInterceptionOrder() == 0)
 	{
 		int maxInterceptionOrder = 0;
@@ -444,7 +444,7 @@ DogfightState::DogfightState(GeoscapeState *state, Craft *craft, Ufo *ufo) : _st
 		frame->blit(weapon);
 
 		// Draw ammo
-		std::wostringstream ss;
+		std::ostringstream ss;
 		ss << w->getAmmo();
 		ammo->setText(ss.str());
 
@@ -697,7 +697,7 @@ void DogfightState::animate()
 	// Clears text after a while
 	if (_timeout == 0)
 	{
-		_txtStatus->setText(L"");
+		_txtStatus->setText("");
 	}
 	else
 	{
@@ -813,7 +813,7 @@ void DogfightState::update()
 
 		_currentDist += distanceChange;
 
-		std::wostringstream ss;
+		std::ostringstream ss;
 		ss << _currentDist;
 		_txtDistance->setText(ss.str());
 
@@ -1188,7 +1188,7 @@ void DogfightState::fireWeapon1()
 	{
 		_w1FireCountdown = _w1FireInterval;
 
-		std::wostringstream ss;
+		std::ostringstream ss;
 		ss << w1->getAmmo();
 		_txtAmmo1->setText(ss.str());
 
@@ -1212,7 +1212,7 @@ void DogfightState::fireWeapon2()
 	{
 		_w2FireCountdown = _w2FireInterval;
 
-		std::wostringstream ss;
+		std::ostringstream ss;
 		ss << w2->getAmmo();
 		_txtAmmo2->setText(ss.str());
 

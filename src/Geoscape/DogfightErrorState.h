@@ -41,7 +41,7 @@ private:
 	Text *_txtCraft, *_txtMessage;
 public:
 	/// Creates the Craft Error state.
-	DogfightErrorState(Craft *craft, const std::wstring &msg);
+	DogfightErrorState(Craft *craft, const std::string &msg);
 	/// Cleans up the Craft Error state.
 	~DogfightErrorState();
 	/// Handler for clicking the Continue Interception button.

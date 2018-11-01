@@ -300,7 +300,7 @@ void Craft::changeRules(RuleCraft *rules)
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::wstring Craft::getDefaultName(Language *lang) const
+std::string Craft::getDefaultName(Language *lang) const
 {
 	return lang->getString("STR_CRAFTNAME").arg(lang->getString(getType())).arg(_id);
 }

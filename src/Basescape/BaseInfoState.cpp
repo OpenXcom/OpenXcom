@@ -270,21 +270,21 @@ void BaseInfoState::init()
 	State::init();
 	_edtBase->setText(_base->getName());
 
-	std::wostringstream ss;
+	std::ostringstream ss;
 	ss << _base->getAvailableSoldiers() << ":" << _base->getTotalSoldiers();
 	_numSoldiers->setText(ss.str());
 
 	_barSoldiers->setMax(_base->getTotalSoldiers());
 	_barSoldiers->setValue(_base->getAvailableSoldiers());
 
-	std::wostringstream ss2;
+	std::ostringstream ss2;
 	ss2 << _base->getAvailableEngineers() << ":" << _base->getTotalEngineers();
 	_numEngineers->setText(ss2.str());
 
 	_barEngineers->setMax(_base->getTotalEngineers());
 	_barEngineers->setValue(_base->getAvailableEngineers());
 
-	std::wostringstream ss3;
+	std::ostringstream ss3;
 	ss3 << _base->getAvailableScientists() << ":" << _base->getTotalScientists();
 	_numScientists->setText(ss3.str());
 
@@ -292,28 +292,28 @@ void BaseInfoState::init()
 	_barScientists->setValue(_base->getAvailableScientists());
 
 
-	std::wostringstream ss4;
+	std::ostringstream ss4;
 	ss4 << _base->getUsedQuarters() << ":" << _base->getAvailableQuarters();
 	_numQuarters->setText(ss4.str());
 
 	_barQuarters->setMax(_base->getAvailableQuarters());
 	_barQuarters->setValue(_base->getUsedQuarters());
 
-	std::wostringstream ss5;
+	std::ostringstream ss5;
 	ss5 << (int)floor(_base->getUsedStores() + 0.05) << ":" << _base->getAvailableStores();
 	_numStores->setText(ss5.str());
 
 	_barStores->setMax(_base->getAvailableStores());
 	_barStores->setValue((int)floor(_base->getUsedStores() + 0.05));
 
-	std::wostringstream ss6;
+	std::ostringstream ss6;
 	ss6 << _base->getUsedLaboratories() << ":" << _base->getAvailableLaboratories();
 	_numLaboratories->setText(ss6.str());
 
 	_barLaboratories->setMax(_base->getAvailableLaboratories());
 	_barLaboratories->setValue(_base->getUsedLaboratories());
 
-	std::wostringstream ss7;
+	std::ostringstream ss7;
 	ss7 << _base->getUsedWorkshops() << ":" << _base->getAvailableWorkshops();
 	_numWorkshops->setText(ss7.str());
 
@@ -322,7 +322,7 @@ void BaseInfoState::init()
 
 	if (Options::storageLimitsEnforced)
 	{
-		std::wostringstream ss72;
+		std::ostringstream ss72;
 		ss72 << _base->getUsedContainment() << ":" << _base->getAvailableContainment();
 		_numContainment->setText(ss72.str());
 
@@ -330,7 +330,7 @@ void BaseInfoState::init()
 		_barContainment->setValue(_base->getUsedContainment());
 	}
 
-	std::wostringstream ss8;
+	std::ostringstream ss8;
 	ss8 << _base->getUsedHangars() << ":" << _base->getAvailableHangars();
 	_numHangars->setText(ss8.str());
 
@@ -338,14 +338,14 @@ void BaseInfoState::init()
 	_barHangars->setValue(_base->getUsedHangars());
 
 
-	std::wostringstream ss9;
+	std::ostringstream ss9;
 	ss9 << _base->getDefenseValue();
 	_numDefense->setText(ss9.str());
 
 	_barDefense->setMax(_base->getDefenseValue());
 	_barDefense->setValue(_base->getDefenseValue());
 
-	std::wostringstream ss10;
+	std::ostringstream ss10;
 	int shortRangeDetection = _base->getShortRangeDetection();
 	ss10 << shortRangeDetection;
 	_numShortRange->setText(ss10.str());
@@ -353,7 +353,7 @@ void BaseInfoState::init()
 	_barShortRange->setMax(shortRangeDetection);
 	_barShortRange->setValue(shortRangeDetection);
 
-	std::wostringstream ss11;
+	std::ostringstream ss11;
 	int longRangeDetection = _base->getLongRangeDetection();
 	ss11 << longRangeDetection;
 	_numLongRange->setText(ss11.str());

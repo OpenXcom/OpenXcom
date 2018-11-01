@@ -72,7 +72,6 @@ template <> Sint16 load(char* data) { return SDL_SwapLE16(*(Sint16*)data); }
 template <> int load(char* data) { return SDL_SwapLE32(*(int*)data); }
 template <> unsigned int load(char* data) { return SDL_SwapLE32(*(unsigned int*)data); }
 template <> std::string load(char* data) { return data; }
-template <> std::wstring load(char* data) { return Language::utf8ToWstr(data); }
 
 char *SaveConverter::binaryBuffer(const std::string &filename, std::vector<char> &buffer) const
 {
@@ -131,7 +130,7 @@ void SaveConverter::getList(Language *lang, SaveOriginal info[NUM_SAVES])
 			std::vector<char> buffer((std::istreambuf_iterator<char>(datFile)), (std::istreambuf_iterator<char>()));
 			char *data = &buffer[0];
 
-			std::wstring name = load<std::wstring>(data + 0x02);
+			std::string name = load<std::string>(data + 0x02);
 			int year = load<Uint16>(data + 0x1C);
 			int month = load<Uint16>(data + 0x1E);
 			int day = load<Uint16>(data + 0x20);
@@ -141,9 +140,9 @@ void SaveConverter::getList(Language *lang, SaveOriginal info[NUM_SAVES])
 
 			GameTime time = GameTime(0, day, month + 1, year, hour, minute, 0);
 
-			std::wostringstream ssDate, ssTime;
-			ssDate << time.getDayString(lang) << L"  " << lang->getString(time.getMonthString()) << L"  " << time.getYear();
-			ssTime << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
+			std::ostringstream ssDate, ssTime;
+			ssDate << time.getDayString(lang) << "  " << lang->getString(time.getMonthString()) << "  " << time.getYear();
+			ssTime << time.getHour() << ":" << std::setfill('0') << std::setw(2) << time.getMinute();
 
 			save.id = id;
 			save.name = name;
@@ -706,7 +705,7 @@ void SaveConverter::loadDatBase()
 		{
 			int j = _targetDat[i];
 			char *bdata = (data + j * ENTRY_SIZE);
-			std::wstring name = load<std::wstring>(bdata);
+			std::string name = load<std::string>(bdata);
 			// facilities
 			for (size_t k = 0; k < FACILITIES; ++k)
 			{

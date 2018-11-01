@@ -86,13 +86,11 @@ public:
 	/// selected item if no item is hovered over.
 	size_t getHoveredListIdx() const;
 	/// Sets the button text without changing the selected option
-	void setText(const std::wstring &text);
+	void setText(const std::string &text);
 	/// Sets the selected option in the list.
 	void setSelected(size_t sel);
 	/// Sets the list of options.
 	void setOptions(const std::vector<std::string> &options);
-	/// Sets the list of options.
-	void setOptions(const std::vector<std::wstring> &options);
 	/// Blits the combo box onto another surface.
 	void blit(Surface *surface);
 	/// Thinks arrow buttons.

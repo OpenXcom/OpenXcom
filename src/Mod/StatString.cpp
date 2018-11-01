@@ -101,9 +101,9 @@ std::string StatString::getString() const
  * @param psiStrengthEval Are psi stats available?
  * @return Resulting string of all valid StatStrings.
  */
-std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings, bool psiStrengthEval, bool inTraining)
+std::string StatString::calcStatString(UnitStats &currentStats, const std::vector<StatString *> &statStrings, bool psiStrengthEval, bool inTraining)
 {
-	std::wstring statString;
+	std::string statString;
 	std::map<std::string, int> currentStatsMap = getCurrentStats(currentStats);
 	if (inTraining)
 	{
@@ -130,7 +130,7 @@ std::wstring StatString::calcStatString(UnitStats &currentStats, const std::vect
 		}
 		if (conditionsMet)
 		{
-			std::wstring wstring = Language::utf8ToWstr((*i)->getString());
+			std::string wstring = (*i)->getString();
 			statString += wstring;
 			if (wstring.length() > 1)
 			{

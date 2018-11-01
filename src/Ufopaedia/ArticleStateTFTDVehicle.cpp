@@ -54,31 +54,31 @@ namespace OpenXcom
 		_lstStats2->setColumns(2, 65, 130);
 		_lstStats2->setDot(true);
 
-		std::wostringstream ss;
+		std::ostringstream ss;
 		ss << unit->getStats()->tu;
 		_lstStats->addRow(2, tr("STR_TIME_UNITS").c_str(), ss.str().c_str());
 		
-		std::wostringstream ss2;
+		std::ostringstream ss2;
 		ss2 << unit->getStats()->health;
 		_lstStats->addRow(2, tr("STR_HEALTH").c_str(), ss2.str().c_str());
 		
-		std::wostringstream ss3;
+		std::ostringstream ss3;
 		ss3 << armor->getFrontArmor();
 		_lstStats->addRow(2, tr("STR_FRONT_ARMOR").c_str(), ss3.str().c_str());
 		
-		std::wostringstream ss4;
+		std::ostringstream ss4;
 		ss4 << armor->getSideArmor();
 		_lstStats->addRow(2, tr("STR_LEFT_ARMOR").c_str(), ss4.str().c_str());
 		
-		std::wostringstream ss5;
+		std::ostringstream ss5;
 		ss5 << armor->getSideArmor();
 		_lstStats->addRow(2, tr("STR_RIGHT_ARMOR").c_str(), ss5.str().c_str());
 		
-		std::wostringstream ss6;
+		std::ostringstream ss6;
 		ss6 << armor->getRearArmor();
 		_lstStats->addRow(2, tr("STR_REAR_ARMOR").c_str(), ss6.str().c_str());
 		
-		std::wostringstream ss7;
+		std::ostringstream ss7;
 		ss7 << armor->getUnderArmor();
 		_lstStats->addRow(2, tr("STR_UNDER_ARMOR").c_str(), ss7.str().c_str());
 		
@@ -88,13 +88,13 @@ namespace OpenXcom
 		{
 			RuleItem *ammo = _game->getMod()->getItem(item->getCompatibleAmmo()->front(), true);
 
-			std::wostringstream ss8;
+			std::ostringstream ss8;
 			ss8 << ammo->getPower();
 			_lstStats2->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
 
 			_lstStats2->addRow(2, tr("STR_AMMUNITION").c_str(), tr(ammo->getName()).c_str());
 
-			std::wostringstream ss9;
+			std::ostringstream ss9;
 			if (item->getClipSize() > 0)
 			{
 				ss9 << item->getClipSize();
@@ -108,7 +108,7 @@ namespace OpenXcom
 		}
 		else
 		{
-			std::wostringstream ss8;
+			std::ostringstream ss8;
 			ss8 << item->getPower();
 			_lstStats2->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
 		}

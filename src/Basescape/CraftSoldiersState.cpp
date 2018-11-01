@@ -148,7 +148,7 @@ CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft)
 	_txtCraft->setText(tr("STR_CRAFT"));
 
 	// populate sort options
-	std::vector<std::wstring> sortOptions;
+	std::vector<std::string> sortOptions;
 	sortOptions.push_back(tr("STR_ORIGINAL_ORDER"));
 	_sortFunctors.push_back(NULL);
 

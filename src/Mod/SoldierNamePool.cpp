@@ -49,22 +49,22 @@ void SoldierNamePool::load(const std::string &filename)
 
 	for (YAML::const_iterator i = doc["maleFirst"].begin(); i != doc["maleFirst"].end(); ++i)
 	{
-		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
+		std::string name = i->as<std::string>();
 		_maleFirst.push_back(name);
 	}
 	for (YAML::const_iterator i = doc["femaleFirst"].begin(); i != doc["femaleFirst"].end(); ++i)
 	{
-		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
+		std::string name = i->as<std::string>();
 		_femaleFirst.push_back(name);
 	}
 	for (YAML::const_iterator i = doc["maleLast"].begin(); i != doc["maleLast"].end(); ++i)
 	{
-		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
+		std::string name = i->as<std::string>();
 		_maleLast.push_back(name);
 	}
 	for (YAML::const_iterator i = doc["femaleLast"].begin(); i != doc["femaleLast"].end(); ++i)
 	{
-		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
+		std::string name = i->as<std::string>();
 		_femaleLast.push_back(name);
 	}
 	if (_femaleFirst.empty())
@@ -90,9 +90,9 @@ void SoldierNamePool::load(const std::string &filename)
  * @param gender Returned gender of the name.
  * @return The soldier's name.
  */
-std::wstring SoldierNamePool::genName(SoldierGender *gender, int femaleFrequency) const
+std::string SoldierNamePool::genName(SoldierGender *gender, int femaleFrequency) const
 {
-	std::wostringstream name;
+	std::ostringstream name;
 	bool female;
 	if (_femaleFrequency > -1)
 	{

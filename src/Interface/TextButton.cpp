@@ -154,7 +154,7 @@ void TextButton::setHighContrast(bool contrast)
  * Changes the text of the button label.
  * @param text Text string.
  */
-void TextButton::setText(const std::wstring &text)
+void TextButton::setText(const std::string &text)
 {
 	_text->setText(text);
 	_redraw = true;
@@ -164,7 +164,7 @@ void TextButton::setText(const std::wstring &text)
  * Returns the text of the button label.
  * @return Text string.
  */
-std::wstring TextButton::getText() const
+std::string TextButton::getText() const
 {
 	return _text->getText();
 }

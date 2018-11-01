@@ -146,14 +146,14 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 
 	_txtDisplayX->setAlign(ALIGN_CENTER);
 	_txtDisplayX->setBig();
-	_txtDisplayX->setText(L"x");
+	_txtDisplayX->setText("x");
 
 	_txtDisplayHeight->setAlign(ALIGN_CENTER);
 	_txtDisplayHeight->setBig();
 	_txtDisplayHeight->setConstraint(TEC_NUMERIC_POSITIVE);
 	_txtDisplayHeight->onChange((ActionHandler)&OptionsVideoState::txtDisplayHeightChange);
 
-	std::wostringstream ssW, ssH;
+	std::ostringstream ssW, ssH;
 	ssW << Options::displayWidth;
 	ssH << Options::displayHeight;
 	_txtDisplayWidth->setText(ssW.str());
@@ -189,7 +189,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	
 	_txtLanguage->setText(tr("STR_DISPLAY_LANGUAGE"));
 	
-	std::vector<std::wstring> names;
+	std::vector<std::string> names;
 	Language::getList(_langs, names);
 	_cbxLanguage->setOptions(names);
 	for (size_t i = 0; i < names.size(); ++i)
@@ -205,11 +205,11 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_cbxLanguage->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_cbxLanguage->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
 
-	std::vector<std::wstring> filterNames;
+	std::vector<std::string> filterNames;
 	filterNames.push_back(tr("STR_DISABLED"));
-	filterNames.push_back(L"Scale");
-	filterNames.push_back(L"HQx");
-	filterNames.push_back(L"xBRZ");
+	filterNames.push_back("Scale");
+	filterNames.push_back("HQx");
+	filterNames.push_back("xBRZ");
 	_filters.push_back("");
 	_filters.push_back("");
 	_filters.push_back("");
@@ -222,7 +222,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 		std::string file = (*i);
 		std::string path = GL_FOLDER + file;
 		std::string name = file.substr(0, file.length() - GL_EXT.length() - 1) + GL_STRING;
-		filterNames.push_back(Language::fsToWstr(ucWords(name)));
+		filterNames.push_back(Language::fsToUtf8(ucWords(name)));
 		_filters.push_back(path);
 	}
 #endif
@@ -392,7 +392,7 @@ void OptionsVideoState::btnDisplayResolutionDownClick(Action *)
  */
 void OptionsVideoState::updateDisplayResolution()
 {
-	std::wostringstream ssW, ssH;
+	std::ostringstream ssW, ssH;
 	ssW << (int)_res[_resCurrent]->w;
 	ssH << (int)_res[_resCurrent]->h;
 	_txtDisplayWidth->setText(ssW.str());
@@ -408,7 +408,7 @@ void OptionsVideoState::updateDisplayResolution()
  */
 void OptionsVideoState::txtDisplayWidthChange(Action *)
 {
-	std::wstringstream ss;
+	std::stringstream ss;
 	int width = 0;
 	ss << std::dec << _txtDisplayWidth->getText();
 	ss >> std::dec >> width;
@@ -435,7 +435,7 @@ void OptionsVideoState::txtDisplayWidthChange(Action *)
  */
 void OptionsVideoState::txtDisplayHeightChange(Action *)
 {
-	std::wstringstream ss;
+	std::stringstream ss;
 	int height = 0;
 	ss << std::dec << _txtDisplayHeight->getText();
 	ss >> std::dec >> height;
@@ -601,10 +601,10 @@ void OptionsVideoState::updateBattlescapeScale(Action *)
 void OptionsVideoState::resize(int &dX, int &dY)
 {
 	OptionsBaseState::resize(dX, dY);
-	std::wostringstream ss;
+	std::ostringstream ss;
 	ss << Options::displayWidth;
 	_txtDisplayWidth->setText(ss.str());
-	ss.str(L"");
+	ss.str("");
 	ss << Options::displayHeight;
 	_txtDisplayHeight->setText(ss.str());
 }

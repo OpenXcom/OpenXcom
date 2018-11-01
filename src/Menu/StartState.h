@@ -43,7 +43,7 @@ private:
 	int _anim;
 
 	SDL_Thread *_thread;
-	std::wostringstream _output;
+	std::ostringstream _output;
 public:
 	static LoadingPhase loading;
 	static std::string error;
@@ -61,7 +61,7 @@ public:
 	/// Animates the terminal.
 	void animate();
 	/// Adds a line of text.
-	void addLine(const std::wstring &str);
+	void addLine(const std::string &str);
 	/// Loads the game resources.
 	static int load(void *game_ptr);
 };

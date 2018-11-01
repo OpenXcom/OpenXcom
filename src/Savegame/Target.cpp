@@ -59,7 +59,7 @@ void Target::load(const YAML::Node &node)
 	_id = node["id"].as<int>(_id);
 	if (const YAML::Node &name = node["name"])
 	{
-		_name = Language::utf8ToWstr(name.as<std::string>());
+		_name = name.as<std::string>();
 	}
 }
 
@@ -75,7 +75,7 @@ YAML::Node Target::save() const
 	if (_id)
 		node["id"] = _id;
 	if (!_name.empty())
-		node["name"] = Language::wstrToUtf8(_name);
+		node["name"] = _name;
 	return node;
 }
 
@@ -170,7 +170,7 @@ void Target::setId(int id)
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::wstring Target::getName(Language *lang) const
+std::string Target::getName(Language *lang) const
 {
 	if (_name.empty())
 		return getDefaultName(lang);
@@ -181,7 +181,7 @@ std::wstring Target::getName(Language *lang) const
  * Changes the target's custom name.
  * @param newName New custom name. If set to blank, the language default is used.
  */
-void Target::setName(const std::wstring &newName)
+void Target::setName(const std::string &newName)
 {
 	_name = newName;
 }
@@ -191,7 +191,7 @@ void Target::setName(const std::wstring &newName)
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::wstring Target::getDefaultName(Language *lang) const
+std::string Target::getDefaultName(Language *lang) const
 {
 	return lang->getString(getMarkerName()).arg(_id);
 }

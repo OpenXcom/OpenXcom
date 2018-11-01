@@ -127,7 +127,7 @@ UfoDetectedState::UfoDetectedState(Ufo *ufo, GeoscapeState *state, bool detected
 	}
 	else
 	{
-		_txtDetected->setText(L"");
+		_txtDetected->setText("");
 	}
 
 	_txtHyperwave->setAlign(ALIGN_CENTER);
@@ -140,10 +140,10 @@ UfoDetectedState::UfoDetectedState(Ufo *ufo, GeoscapeState *state, bool detected
 	_lstInfo->setColumns(2, 77, 140);
 	_lstInfo->setDot(true);
 
-	std::wostringstream ss;
-	ss << L'\x01' << tr(_ufo->getRules()->getSize());
+	std::ostringstream ss;
+	ss << '\x01' << tr(_ufo->getRules()->getSize());
 	_lstInfo->addRow(2, tr("STR_SIZE_UC").c_str(), ss.str().c_str());
-	ss.str(L"");
+	ss.str("");
 
 	std::string altitude = _ufo->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _ufo->getAltitude();
 	// Let's assume if there's any underwater craft, the UFO are underwater too
@@ -157,7 +157,7 @@ UfoDetectedState::UfoDetectedState(Ufo *ufo, GeoscapeState *state, bool detected
 	{
 		altitude = "STR_AIRBORNE";
 	}
-	ss << L'\x01' << tr(altitude);
+	ss << '\x01' << tr(altitude);
 	_lstInfo->addRow(2, tr("STR_ALTITUDE").c_str(), ss.str().c_str());
 
 	std::string heading = _ufo->getDirection();
@@ -165,31 +165,31 @@ UfoDetectedState::UfoDetectedState(Ufo *ufo, GeoscapeState *state, bool detected
 	{
 		heading = "STR_NONE_UC";
 	}
-	ss.str(L"");
-	ss << L'\x01' << tr(heading);
+	ss.str("");
+	ss << '\x01' << tr(heading);
 	_lstInfo->addRow(2, tr("STR_HEADING").c_str(), ss.str().c_str());
 
-	ss.str(L"");
-	ss << L'\x01' << Text::formatNumber(_ufo->getSpeed());
+	ss.str("");
+	ss << '\x01' << Text::formatNumber(_ufo->getSpeed());
 	_lstInfo->addRow(2, tr("STR_SPEED").c_str(), ss.str().c_str());
 
 	_lstInfo2->setColumns(2, 77, 140);
 	_lstInfo2->setDot(true);
 
-	ss.str(L"");
-	ss << L'\x01' << tr(_ufo->getRules()->getType());
+	ss.str("");
+	ss << '\x01' << tr(_ufo->getRules()->getType());
 	_lstInfo2->addRow(2, tr("STR_CRAFT_TYPE").c_str(), ss.str().c_str());
 
-	ss.str(L"");
-	ss << L'\x01' << tr(_ufo->getAlienRace());
+	ss.str("");
+	ss << '\x01' << tr(_ufo->getAlienRace());
 	_lstInfo2->addRow(2, tr("STR_RACE").c_str(), ss.str().c_str());
 
-	ss.str(L"");
-	ss << L'\x01' << tr(_ufo->getMissionType());
+	ss.str("");
+	ss << '\x01' << tr(_ufo->getMissionType());
 	_lstInfo2->addRow(2, tr("STR_MISSION").c_str(), ss.str().c_str());
 
-	ss.str(L"");
-	ss << L'\x01' << tr(_ufo->getMission()->getRegion());
+	ss.str("");
+	ss << '\x01' << tr(_ufo->getMission()->getRegion());
 	_lstInfo2->addRow(2, tr("STR_ZONE").c_str(), ss.str().c_str());
 }
 

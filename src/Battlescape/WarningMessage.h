@@ -50,7 +50,7 @@ public:
 	/// Sets the warning message's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Shows the warning message.
-	void showMessage(const std::wstring &msg);
+	void showMessage(const std::string &msg);
 	/// Handles the timers.
 	void think();
 	/// Fades the message.

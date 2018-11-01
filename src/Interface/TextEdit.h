@@ -35,16 +35,16 @@ class TextEdit : public InteractiveSurface
 {
 private:
 	Text *_text, *_caret;
-	std::wstring _value;
+	std::string _value;
 	bool _blink, _modal;
 	Timer *_timer;
-	wchar_t _ascii;
+	char _ascii;
 	size_t _caretPos;
 	TextEditConstraint _textEditConstraint;
 	ActionHandler _change;
 	State *_state;
 	/// Checks if a character will exceed the maximum width.
-	bool exceedsMaxWidth(wchar_t c);
+	bool exceedsMaxWidth(char c);
 	/// Checks if character is valid to be inserted at caret position.
 	bool isValidChar(Uint16 key);
 public:
@@ -63,9 +63,9 @@ public:
 	/// Initializes the text edit's resources.
 	void initText(Font *big, Font *small, Language *lang);
 	/// Sets the text's string.
-	void setText(const std::wstring &text);
+	void setText(const std::string &text);
 	/// Gets the text edit's string.
-	std::wstring getText() const;
+	std::string getText() const;
 	/// Sets the text edit's wordwrap setting.
 	void setWordWrap(bool wrap);
 	/// Sets the text edit's color invert setting.

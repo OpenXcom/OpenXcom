@@ -48,7 +48,7 @@ public:
 	/// Sets the Battlescape message's background.
 	void setBackground(Surface *background);
 	/// Sets the Battlescape message's text.
-	void setText(const std::wstring &message);
+	void setText(const std::string &message);
 	/// Initializes the Battlescape message's resources.
 	void initText(Font *big, Font *small, Language *lang);
 	/// Sets the Battlescape message's palette.

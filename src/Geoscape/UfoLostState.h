@@ -37,10 +37,10 @@ private:
 	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtTitle;
-	std::wstring _id;
+	std::string _id;
 public:
 	/// Creates the Ufo Lost state.
-	UfoLostState(const std::wstring &id);
+	UfoLostState(const std::string &id);
 	/// Cleans up the Ufo Lost state.
 	~UfoLostState();
 	/// Handler for clicking the OK button.

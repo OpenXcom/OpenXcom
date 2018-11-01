@@ -53,7 +53,7 @@ Text::~Text()
  * @param currency Currency symbol.
  * @return The formatted string.
  */
-std::wstring Text::formatNumber(int64_t value, const std::wstring &currency)
+std::string Text::formatNumber(int64_t value, const std::string &currency)
 {
 	// In the future, the whole setlocale thing should be removed from here.
 	// It is inconsistent with the in-game language selection: locale-specific
@@ -62,12 +62,12 @@ std::wstring Text::formatNumber(int64_t value, const std::wstring &currency)
 	//setlocale(LC_MONETARY, ""); // see http://www.cplusplus.com/reference/clocale/localeconv/
 	//setlocale(LC_CTYPE, ""); // this is necessary for mbstowcs to work correctly
 	//struct lconv * lc = localeconv();
-	std::wstring thousands_sep = L"\xA0";// Language::cpToWstr(lc->mon_thousands_sep);
+	std::string thousands_sep = "\xA0";// Language::cpToWstr(lc->mon_thousands_sep);
 
 	bool negative = (value < 0);
-	std::wostringstream ss;
+	std::ostringstream ss;
 	ss << (negative? -value : value);
-	std::wstring s = ss.str();
+	std::string s = ss.str();
 	size_t spacer = s.size() - 3;
 	while (spacer > 0 && spacer < s.size())
 	{
@@ -80,7 +80,7 @@ std::wstring Text::formatNumber(int64_t value, const std::wstring &currency)
 	}
 	if (negative)
 	{
-		s.insert(0, L"-");
+		s.insert(0, "-");
 	}
 	return s;
 }
@@ -91,9 +91,9 @@ std::wstring Text::formatNumber(int64_t value, const std::wstring &currency)
  * @param funds The funding value.
  * @return The formatted string.
  */
-std::wstring Text::formatFunding(int64_t funds)
+std::string Text::formatFunding(int64_t funds)
 {
-	return formatNumber(funds, L"$");
+	return formatNumber(funds, "$");
 }
 
 /**
@@ -102,9 +102,9 @@ std::wstring Text::formatFunding(int64_t funds)
  * @param value The percentage value.
  * @return The formatted string.
  */
-std::wstring Text::formatPercentage(int value)
+std::string Text::formatPercentage(int value)
 {
-	std::wostringstream ss;
+	std::ostringstream ss;
 	ss << value << "%";
 	return ss.str();
 }
@@ -158,12 +158,12 @@ void Text::initText(Font *big, Font *small, Language *lang)
  * Changes the string displayed on screen.
  * @param text Text string.
  */
-void Text::setText(const std::wstring &text)
+void Text::setText(const std::string &text)
 {
 	_text = text;
 	processText();
 	// If big text won't fit the space, try small text
-	if (_font == _big && (getTextWidth() > getWidth() || getTextHeight() > getHeight()) && _text[_text.size()-1] != L'.')
+	if (_font == _big && (getTextWidth() > getWidth() || getTextHeight() > getHeight()) && _text[_text.size()-1] != '.')
 	{
 		setSmall();
 	}
@@ -173,7 +173,7 @@ void Text::setText(const std::wstring &text)
  * Returns the string displayed on screen.
  * @return Text string.
  */
-std::wstring Text::getText() const
+std::string Text::getText() const
 {
 	return _text;
 }
@@ -365,7 +365,7 @@ void Text::processText()
 		return;
 	}
 
-	std::wstring *str = &_text;
+	std::string *str = &_text;
 
 	// Use a separate string for wordwrapping text
 	if (_wrap)
@@ -390,7 +390,7 @@ void Text::processText()
 		{
 			// Add line measurements for alignment later
 			_lineWidth.push_back(width);
-			_lineHeight.push_back(font->getCharSize(L'\n').h);
+			_lineHeight.push_back(font->getCharSize('\n').h);
 			width = 0;
 			word = 0;
 			start = true;
@@ -419,7 +419,7 @@ void Text::processText()
 		{
 			if (font->getChar((*str)[c]) == 0)
 			{
-				(*str)[c] = L'?';
+				(*str)[c] = '?';
 			}
 			int charWidth = font->getCharSize((*str)[c]).w;
 
@@ -438,36 +438,36 @@ void Text::processText()
 					if (Font::isSpace((*str)[space]))
 					{
 						width -= font->getCharSize((*str)[space]).w;
-						(*str)[space] = L'\n';
+						(*str)[space] = '\n';
 					}
 					else
 					{
-						str->insert(space+1, L"\n");
+						str->insert(space+1, "\n");
 						indentLocation++;
 					}
 				}
 				else if (_lang->getTextWrapping() == WRAP_LETTERS)
 				{
 					// Go back to the last letter and put a linebreak there
-					str->insert(c, L"\n");
+					str->insert(c, "\n");
 					width -= charWidth;
 				}
 
 				// Keep initial indentation of text
 				if (textIndentation > 0)
 				{
-					str->insert(indentLocation+1, L" \xA0", textIndentation);
+					str->insert(indentLocation+1, " \xA0", textIndentation);
 					indentLocation += textIndentation;
 				}
 				// Indent due to word wrap.
 				if (_indent)
 				{
-					str->insert(indentLocation+1, L" \xA0");
-					width += font->getCharSize(L' ').w + font->getCharSize(Font::TOK_NBSP).w;
+					str->insert(indentLocation+1, " \xA0");
+					width += font->getCharSize(' ').w + font->getCharSize(Font::TOK_NBSP).w;
 				}
 
 				_lineWidth.push_back(width);
-				_lineHeight.push_back(font->getCharSize(L'\n').h);
+				_lineHeight.push_back(font->getCharSize('\n').h);
 				if (_lang->getTextWrapping() == WRAP_WORDS)
 				{
 					width = word;
@@ -573,7 +573,7 @@ void Text::draw()
 	int x = 0, y = 0, line = 0, height = 0;
 	Font *font = _font;
 	int color = _color;
-	std::wstring *s = &_text;
+	std::string *s = &_text;
 
 	for (std::vector<int>::iterator i = _lineHeight.begin(); i != _lineHeight.end(); ++i)
 	{
@@ -618,7 +618,7 @@ void Text::draw()
 	int mid = _invert ? 3 : 0;
 
 	// Draw each letter one by one
-	for (std::wstring::iterator c = s->begin(); c != s->end(); ++c)
+	for (std::string::iterator c = s->begin(); c != s->end(); ++c)
 	{
 		if (Font::isSpace(*c))
 		{

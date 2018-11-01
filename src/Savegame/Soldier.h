@@ -48,7 +48,7 @@ class SavedGame;
 class Soldier
 {
 private:
-	std::wstring _name;
+	std::string _name;
 	int _id, _improvement, _psiStrImprovement;
 	RuleSoldier *_rules;
 	UnitStats _initialStats, _currentStats;
@@ -62,7 +62,7 @@ private:
 	std::vector<EquipmentLayoutItem*> _equipmentLayout;
 	SoldierDeath *_death;
 	SoldierDiary *_diary;
-	std::wstring _statString;
+	std::string _statString;
 public:
 	/// Creates a new soldier.
 	Soldier(RuleSoldier *rules, Armor *armor, int id = 0);
@@ -73,15 +73,15 @@ public:
 	/// Saves the soldier to YAML.
 	YAML::Node save() const;
 	/// Gets the soldier's name.
-	std::wstring getName(bool statstring = false, unsigned int maxLength = 20) const;
+	std::string getName(bool statstring = false, unsigned int maxLength = 20) const;
 	/// Sets the soldier's name.
-	void setName(const std::wstring &name);
+	void setName(const std::string &name);
 	/// Gets the soldier's craft.
 	Craft *getCraft() const;
 	/// Sets the soldier's craft.
 	void setCraft(Craft *craft);
 	/// Gets the soldier's craft string.
-	std::wstring getCraftString(Language *lang) const;
+	std::string getCraftString(Language *lang) const;
 	/// Gets a string version of the soldier's rank.
 	std::string getRankString() const;
 	/// Gets a sprite version of the soldier's rank.

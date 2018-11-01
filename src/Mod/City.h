@@ -42,7 +42,7 @@ public:
 	/// Cleans up the city.
 	~City();
 	/// Gets the city's name.
-	std::wstring getName(Language *lang) const;
+	std::string getName(Language *lang) const;
 	/// Gets the city's marker.
 	int getMarker() const;
 };

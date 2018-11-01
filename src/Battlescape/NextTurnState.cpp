@@ -95,11 +95,11 @@ NextTurnState::NextTurnState(SavedBattleGame *battleGame, BattlescapeState *stat
 	_txtTurn->setBig();
 	_txtTurn->setAlign(ALIGN_CENTER);
 	_txtTurn->setHighContrast(true);
-	std::wstringstream ss;
+	std::stringstream ss;
 	ss << tr("STR_TURN").arg(_battleGame->getTurn());
 	if (battleGame->getTurnLimit() > 0)
 	{
-		ss << L"/" << battleGame->getTurnLimit();
+		ss << "/" << battleGame->getTurnLimit();
 		if (battleGame->getTurnLimit() - _battleGame->getTurn() <= 3)
 		{
 			// gonna borrow the inventory's "over weight" colour when we're down to the last three turns

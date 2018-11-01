@@ -38,7 +38,7 @@
 namespace OpenXcom
 {
 
-std::map<std::string, std::wstring> Language::_names;
+std::map<std::string, std::string> Language::_names;
 std::vector<std::string> Language::_rtl, Language::_cjk;
 
 /**
@@ -49,43 +49,42 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 	// maps don't have initializers :(
 	if (_names.empty())
 	{
-		// names are in all lower case to support case insensitivity
-		_names["en-US"] = utf8ToWstr("English (US)");
-		_names["en-GB"] = utf8ToWstr("English (UK)");
-		_names["bg"] = utf8ToWstr("Български");
-		_names["cs"] = utf8ToWstr("Česky");
-		_names["cy"] = utf8ToWstr("Cymraeg");
-		_names["da"] = utf8ToWstr("Dansk");
-		_names["de"] = utf8ToWstr("Deutsch");
-		_names["el"] = utf8ToWstr("Ελληνικά");
-		_names["et"] = utf8ToWstr("Eesti");
-		_names["es-ES"] = utf8ToWstr("Español (ES)");
-		_names["es-419"] = utf8ToWstr("Español (AL)");
-		_names["fr"] = utf8ToWstr("Français (FR)");
-		_names["fr-CA"] = utf8ToWstr("Français (CA)");
-		_names["fi"] = utf8ToWstr("Suomi");
-		_names["hr"] = utf8ToWstr("Hrvatski");
-		_names["hu"] = utf8ToWstr("Magyar");
-		_names["it"] = utf8ToWstr("Italiano");
-		_names["ja"] = utf8ToWstr("日本語");
-		_names["ko"] = utf8ToWstr("한국어");
-		_names["lb"] = utf8ToWstr("Lëtzebuergesch");
-		_names["lv"] = utf8ToWstr("Latviešu");
-		_names["nl"] = utf8ToWstr("Nederlands");
-		_names["no"] = utf8ToWstr("Norsk");
-		_names["pl"] = utf8ToWstr("Polski");
-		_names["pt-BR"] = utf8ToWstr("Português (BR)");
-		_names["pt-PT"] = utf8ToWstr("Português (PT)");
-		_names["ro"] = utf8ToWstr("Română");
-		_names["ru"] = utf8ToWstr("Русский");
-		_names["sk"] = utf8ToWstr("Slovenčina");
-		_names["sl"] = utf8ToWstr("Slovenščina");
-		_names["sv"] = utf8ToWstr("Svenska");
-		_names["th"] = utf8ToWstr("ไทย");
-		_names["tr"] = utf8ToWstr("Türkçe");
-		_names["uk"] = utf8ToWstr("Українська");
-		_names["zh-CN"] = utf8ToWstr("中文");
-		_names["zh-TW"] = utf8ToWstr("文言");
+		_names["en-US"] = "English (US)";
+		_names["en-GB"] = "English (UK)";
+		_names["bg"] = "Български";
+		_names["cs"] = "Česky";
+		_names["cy"] = "Cymraeg";
+		_names["da"] = "Dansk";
+		_names["de"] = "Deutsch";
+		_names["el"] = "Ελληνικά";
+		_names["et"] = "Eesti";
+		_names["es-ES"] = "Español (ES)";
+		_names["es-419"] = "Español (AL)";
+		_names["fr"] = "Français (FR)";
+		_names["fr-CA"] = "Français (CA)";
+		_names["fi"] = "Suomi";
+		_names["hr"] = "Hrvatski";
+		_names["hu"] = "Magyar";
+		_names["it"] = "Italiano";
+		_names["ja"] = "日本語";
+		_names["ko"] = "한국어";
+		_names["lb"] = "Lëtzebuergesch";
+		_names["lv"] = "Latviešu";
+		_names["nl"] = "Nederlands";
+		_names["no"] = "Norsk";
+		_names["pl"] = "Polski";
+		_names["pt-BR"] = "Português (BR)";
+		_names["pt-PT"] = "Português (PT)";
+		_names["ro"] = "Română";
+		_names["ru"] = "Русский";
+		_names["sk"] = "Slovenčina";
+		_names["sl"] = "Slovenščina";
+		_names["sv"] = "Svenska";
+		_names["th"] = "ไทย";
+		_names["tr"] = "Türkçe";
+		_names["uk"] = "Українська";
+		_names["zh-CN"] = "中文";
+		_names["zh-TW"] = "文言";
 	}
 	if (_rtl.empty())
 	{
@@ -328,6 +327,17 @@ std::string Language::fsToUtf8(const std::string &src)
 }
 
 /**
+ * Takes a UTF-8 string and converts it to an
+ * 8-bit string with the filesystem encoding. Required for SDL.
+ * @param src Filesystem string.
+ * @return Wide-character string.
+ */
+std::string Language::utf8ToFs(const std::string &src)
+{
+	return Language::wstrToFs(Language::utf8ToWstr(src));
+}
+
+/**
  * Replaces every instance of a substring.
  * @param str The string to modify.
  * @param find The substring to find.
@@ -342,26 +352,12 @@ void Language::replace(std::string &str, const std::string &find, const std::str
 }
 
 /**
- * Replaces every instance of a substring.
- * @param str The string to modify.
- * @param find The substring to find.
- * @param replace The substring to replace it with.
- */
-void Language::replace(std::wstring &str, const std::wstring &find, const std::wstring &replace)
-{
-	for (size_t i = str.find(find); i != std::wstring::npos; i = str.find(find, i + replace.length()))
-	{
-		str.replace(i, find.length(), replace);
-	}
-}
-
-/**
  * Gets all the languages found in the
  * Data folder and returns their properties.
  * @param files List of language filenames.
  * @param names List of language human-readable names.
  */
-void Language::getList(std::vector<std::string> &files, std::vector<std::wstring> &names)
+void Language::getList(std::vector<std::string> &files, std::vector<std::string> &names)
 {
 	files = CrossPlatform::getFolderContents(CrossPlatform::searchDataFolder("common/Language"), "yml");
 	names.clear();
@@ -369,15 +365,15 @@ void Language::getList(std::vector<std::string> &files, std::vector<std::wstring
 	for (std::vector<std::string>::iterator i = files.begin(); i != files.end(); ++i)
 	{
 		*i = CrossPlatform::noExt(*i);
-		std::wstring name;
-		std::map<std::string, std::wstring>::iterator lang = _names.find(*i);
+		std::string name;
+		std::map<std::string, std::string>::iterator lang = _names.find(*i);
 		if (lang != _names.end())
 		{
 			name = lang->second;
 		}
 		else
 		{
-			name = Language::fsToWstr(*i);
+			name = Language::fsToUtf8(*i);
 		}
 		names.push_back(name);
 	}
@@ -466,18 +462,17 @@ void Language::load(ExtraStrings *extras)
 }
 
 /**
- * Replaces all special string markers with the appropriate characters
- * and converts the string encoding.
- * @param string Original UTF-8 string.
- * @return New widechar string.
+ * Replaces all special string markers with the appropriate characters.
+ * @param string Original string.
+ * @return New converted string.
  */
-std::wstring Language::loadString(const std::string &string) const
+std::string Language::loadString(const std::string &string) const
 {
 	std::string s = string;
 	replace(s, "{NEWLINE}", "\n");
 	replace(s, "{SMALLLINE}", "\x02");
 	replace(s, "{ALT}", "\x01");
-	return utf8ToWstr(s);
+	return s;
 }
 
 /**
@@ -493,7 +488,7 @@ std::string Language::getId() const
  * Returns the language's name in its native language.
  * @return Language name.
  */
-std::wstring Language::getName() const
+std::string Language::getName() const
 {
 	return _names[_id];
 }
@@ -506,10 +501,10 @@ std::wstring Language::getName() const
  */
 const LocalizedText &Language::getString(const std::string &id) const
 {
-	static LocalizedText hack(L"");
+	static LocalizedText hack("");
 	if (id.empty())
 	{
-		hack = LocalizedText(L"");
+		hack = LocalizedText("");
 		return hack;
 	}
 	std::map<std::string, LocalizedText>::const_iterator s = _strings.find(id);
@@ -561,7 +556,7 @@ LocalizedText Language::getString(const std::string &id, unsigned n) const
 			notFoundIds.insert(id);
 			Log(LOG_WARNING) << id << " not found in " << Options::language;
 		}
-		return LocalizedText(utf8ToWstr(id));
+		return id;
 	}
 	if (n == UINT_MAX) // Special case
 	{
@@ -575,9 +570,9 @@ LocalizedText Language::getString(const std::string &id, unsigned n) const
 	}
 	else
 	{
-		std::wostringstream ss;
+		std::ostringstream ss;
 		ss << n;
-		std::wstring marker(L"{N}"), val(ss.str()), txt(s->second);
+		std::string marker("{N}"), val(ss.str()), txt(s->second);
 		replace(txt, marker, val);
 		return txt;
 	}
@@ -618,7 +613,7 @@ void Language::toHtml(const std::string &filename) const
 	for (std::map<std::string, LocalizedText>::const_iterator i = _strings.begin(); i != _strings.end(); ++i)
 	{
 		htmlFile << "<tr><td>" << i->first << "</td><td>";
-		std::string s = wstrToUtf8(i->second);
+		std::string s = i->second;
 		for (std::string::const_iterator j = s.begin(); j != s.end(); ++j)
 		{
 			if (*j == 2 || *j == '\n')

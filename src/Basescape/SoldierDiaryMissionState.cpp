@@ -86,11 +86,11 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(Soldier *soldier, int rowEntr
 	_btnOk->onMouseClick((ActionHandler)&SoldierDiaryMissionState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SoldierDiaryMissionState::btnOkClick, Options::keyCancel);
 
-	_btnPrev->setText(L"<<");
+	_btnPrev->setText("<<");
 	_btnPrev->onMouseClick((ActionHandler)&SoldierDiaryMissionState::btnPrevClick);
 	_btnPrev->onKeyboardPress((ActionHandler)&SoldierDiaryMissionState::btnPrevClick, Options::keyBattleNextUnit);
 
-	_btnNext->setText(L">>");
+	_btnNext->setText(">>");
 	_btnNext->onMouseClick((ActionHandler)&SoldierDiaryMissionState::btnNextClick);
 	_btnNext->onKeyboardPress((ActionHandler)&SoldierDiaryMissionState::btnNextClick, Options::keyBattlePrevUnit);
 

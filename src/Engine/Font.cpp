@@ -60,7 +60,7 @@ void Font::load(const YAML::Node &node)
 		image.height = (*i)["height"].as<int>(height);
 		image.spacing = (*i)["spacing"].as<int>(spacing);
 		std::string file = "Language/" + (*i)["file"].as<std::string>();
-		std::wstring chars = Language::utf8ToWstr((*i)["chars"].as<std::string>());
+		std::string chars = (*i)["chars"].as<std::string>();
 		image.surface = new Surface(image.width, image.height);
 		image.surface->loadImage(FileMap::getFilePath(file));
 		_images.push_back(image);
@@ -89,7 +89,7 @@ void Font::loadTerminal()
 	SDL_FreeSurface(s);
 	_images.push_back(image);
 
-	init(0, L" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+	init(0, " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
 }
 
 
@@ -100,7 +100,7 @@ void Font::loadTerminal()
  * @param index The index of the surface to use.
  * @param str A string of characters to map to the surface.
  */
-void Font::init(size_t index, const std::wstring &str)
+void Font::init(size_t index, const std::string &str)
 {
 	FontImage *image = &_images[index];
 	Surface *surface = image->surface;
@@ -167,7 +167,7 @@ void Font::init(size_t index, const std::wstring &str)
  * @return Pointer to the font's surface with the respective
  * cropping rectangle set up.
  */
-Surface *Font::getChar(wchar_t c)
+Surface *Font::getChar(char c)
 {
 	if (_chars.find(c) == _chars.end())
 	{
@@ -212,13 +212,13 @@ int Font::getSpacing() const
  * @param c Font character.
  * @return Width and Height dimensions (X and Y are ignored).
  */
-SDL_Rect Font::getCharSize(wchar_t c)
+SDL_Rect Font::getCharSize(char c)
 {
 	SDL_Rect size = { 0, 0, 0, 0 };
 	if (c != TOK_FLIP_COLORS && !isLinebreak(c) && !isSpace(c))
 	{
 		if (_chars.find(c) == _chars.end()) 
-			c = L'?';
+			c = '?';
 
 		FontImage *image = &_images[_chars[c].first];
 		size.w = _chars[c].second.w + image->spacing;

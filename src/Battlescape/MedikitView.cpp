@@ -65,7 +65,7 @@ void MedikitView::draw()
 {
 	SurfaceSet *set = _game->getMod()->getSurfaceSet("MEDIBITS.DAT");
 	int fatal_wound = _unit->getFatalWound(_selectedPart);
-	std::wostringstream ss, ss1;
+	std::ostringstream ss, ss1;
 	int green = 0;
 	int red = 3;
 	if (_game->getMod()->getInterface("medikit") && _game->getMod()->getInterface("medikit")->getElement("body"))

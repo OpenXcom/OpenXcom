@@ -31,7 +31,7 @@ namespace OpenXcom
 struct SaveOriginal
 {
 	int id;
-	std::wstring name, date, time;
+	std::string name, date, time;
 	bool tactical;
 	SaveOriginal() : tactical(false)
 	{

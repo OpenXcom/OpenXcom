@@ -73,7 +73,7 @@ TestState::TestState()
 	_window->setBackground(_game->getMod()->getSurface("BACK04.SCR"));
 
 	_button->setColor(Palette::blockOffset(15)+1);
-	_button->setText(L"LOLOLOL");
+	_button->setText("LOLOLOL");
 
 	_text->setColor(Palette::blockOffset(15)+1);
 	//_text->setBig();
@@ -84,9 +84,9 @@ TestState::TestState()
 
 	_list->setColor(Palette::blockOffset(15)+1);
 	_list->setColumns(3, 100, 50, 100);
-	_list->addRow(2, L"a", L"b");
-	_list->addRow(3, L"lol", L"welp", L"yo");
-	_list->addRow(1, L"0123456789");
+	_list->addRow(2, "a", "b");
+	_list->addRow(3, "lol", "welp", "yo");
+	_list->addRow(1, "0123456789");
 
 	_number->setColor(Palette::blockOffset(15) + 1);
 	_number->setValue(1234567890);

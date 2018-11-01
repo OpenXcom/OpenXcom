@@ -138,7 +138,7 @@ ListGamesState::ListGamesState(OptionsOrigin origin, int firstValidRow, bool aut
 	_lstSaves->onMousePress((ActionHandler)&ListGamesState::lstSavesPress);
 
 	_txtDetails->setWordWrap(true);
-	_txtDetails->setText(tr("STR_DETAILS").arg(L""));
+	_txtDetails->setText(tr("STR_DETAILS").arg(""));
 
 	_sortName->setX(_sortName->getX() + _txtName->getTextWidth() + 5);
 	_sortName->onMouseClick((ActionHandler)&ListGamesState::sortNameClick);
@@ -265,7 +265,7 @@ void ListGamesState::btnCancelClick(Action *)
 void ListGamesState::lstSavesMouseOver(Action *)
 {
 	int sel = _lstSaves->getSelectedRow() - _firstValidRow;
-	std::wstring wstr;
+	std::string wstr;
 	if (sel >= 0 && sel < (int)_saves.size())
 	{
 		wstr = _saves[sel].details;
@@ -279,7 +279,7 @@ void ListGamesState::lstSavesMouseOver(Action *)
  */
 void ListGamesState::lstSavesMouseOut(Action *)
 {
-	_txtDetails->setText(tr("STR_DETAILS").arg(L""));
+	_txtDetails->setText(tr("STR_DETAILS").arg(""));
 }
 
 /**

@@ -121,7 +121,7 @@ void CraftsState::init()
 	_lstCrafts->clearList();
 	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
 	{
-		std::wostringstream ss, ss2, ss3;
+		std::ostringstream ss, ss2, ss3;
 		ss << (*i)->getNumWeapons() << "/" << (*i)->getRules()->getWeapons();
 		ss2 << (*i)->getNumSoldiers();
 		ss3 << (*i)->getNumVehicles();

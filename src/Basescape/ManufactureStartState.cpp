@@ -123,7 +123,7 @@ ManufactureStartState::ManufactureStartState(Base *base, RuleManufacture *item) 
 		iter != requiredItems.end();
 		++iter)
 	{
-		std::wostringstream s1, s2;
+		std::ostringstream s1, s2;
 		s1 << iter->second;
 		if (_game->getMod()->getItem(iter->first) != 0)
 		{

@@ -47,11 +47,11 @@ Slider::Slider(int width, int height, int x, int y) : InteractiveSurface(width, 
 
 	_txtMinus->setAlign(ALIGN_CENTER);
 	_txtMinus->setVerticalAlign(ALIGN_MIDDLE);
-	_txtMinus->setText(L"-");
+	_txtMinus->setText("-");
 
 	_txtPlus->setAlign(ALIGN_CENTER);
 	_txtPlus->setVerticalAlign(ALIGN_MIDDLE);
-	_txtPlus->setText(L"+");
+	_txtPlus->setText("+");
 
 	_minX = _frame->getX();
 	_maxX = _frame->getX() + _frame->getWidth() - _button->getWidth();

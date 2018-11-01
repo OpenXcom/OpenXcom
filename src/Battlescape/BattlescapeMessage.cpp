@@ -88,7 +88,7 @@ void BattlescapeMessage::setBackground(Surface *background)
  * Changes the message text.
  * @param message Message string.
  */
-void BattlescapeMessage::setText(const std::wstring &message)
+void BattlescapeMessage::setText(const std::string &message)
 {
 	_text->setText(message);
 }

@@ -112,15 +112,15 @@ void OptionsAdvancedState::init()
 {
 	OptionsBaseState::init();
 	_lstOptions->clearList();
-	_lstOptions->addRow(2, tr("STR_GENERAL").c_str(), L"");
+	_lstOptions->addRow(2, tr("STR_GENERAL").c_str(), "");
 	_lstOptions->setCellColor(0, 0, _colorGroup);
 	addSettings(_settingsGeneral);
-	_lstOptions->addRow(2, L"", L"");
-	_lstOptions->addRow(2, tr("STR_GEOSCAPE").c_str(), L"");
+	_lstOptions->addRow(2, "", "");
+	_lstOptions->addRow(2, tr("STR_GEOSCAPE").c_str(), "");
 	_lstOptions->setCellColor(_settingsGeneral.size() + 2, 0, _colorGroup);
 	addSettings(_settingsGeo);
-	_lstOptions->addRow(2, L"", L"");
-	_lstOptions->addRow(2, tr("STR_BATTLESCAPE").c_str(), L"");
+	_lstOptions->addRow(2, "", "");
+	_lstOptions->addRow(2, tr("STR_BATTLESCAPE").c_str(), "");
 	_lstOptions->setCellColor(_settingsGeneral.size() + 2 + _settingsGeo.size() + 2, 0, _colorGroup);
 	addSettings(_settingsBattle);
 }
@@ -133,15 +133,15 @@ void OptionsAdvancedState::addSettings(const std::vector<OptionInfo> &settings)
 {
 	for (std::vector<OptionInfo>::const_iterator i = settings.begin(); i != settings.end(); ++i)
 	{
-		std::wstring name = tr(i->description());
-		std::wstring value;
+		std::string name = tr(i->description());
+		std::string value;
 		if (i->type() == OPTION_BOOL)
 		{
 			value = *i->asBool() ? tr("STR_YES") : tr("STR_NO");
 		}
 		else if (i->type() == OPTION_INT)
 		{
-			std::wostringstream ss;
+			std::ostringstream ss;
 			ss << *i->asInt();
 			value = ss.str();
 		}
@@ -192,7 +192,7 @@ void OptionsAdvancedState::lstOptionsClick(Action *action)
 	OptionInfo *setting = getSetting(sel);
 	if (!setting) return;
 
-	std::wstring settingText;
+	std::string settingText;
 	if (setting->type() == OPTION_BOOL)
 	{
 		bool *b = setting->asBool();
@@ -250,7 +250,7 @@ void OptionsAdvancedState::lstOptionsClick(Action *action)
 			*i = min;
 		}
 
-		std::wostringstream ss;
+		std::ostringstream ss;
 		ss << *i;
 		settingText = ss.str();
 	}
@@ -261,7 +261,7 @@ void OptionsAdvancedState::lstOptionsMouseOver(Action *)
 {
 	size_t sel = _lstOptions->getSelectedRow();
 	OptionInfo *setting = getSetting(sel);
-	std::wstring desc;
+	std::string desc;
 	if (setting)
 	{
 		desc = tr(setting->description() + "_DESC");
@@ -271,7 +271,7 @@ void OptionsAdvancedState::lstOptionsMouseOver(Action *)
 
 void OptionsAdvancedState::lstOptionsMouseOut(Action *)
 {
-	_txtTooltip->setText(L"");
+	_txtTooltip->setText("");
 }
 
 }

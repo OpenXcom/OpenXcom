@@ -72,8 +72,8 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, int id) : _id(id), _improveme
 			// No possible names, just wing it
 			_gender = (RNG::percent(rules->getFemaleFrequency()) ? GENDER_FEMALE : GENDER_MALE);
 			_look = (SoldierLook)RNG::generate(0,3);
-			_name = (_gender == GENDER_FEMALE) ? L"Jane" : L"John";
-			_name += L" Doe";
+			_name = (_gender == GENDER_FEMALE) ? "Jane" : "John";
+			_name += " Doe";
 		}
 	}
 }
@@ -100,7 +100,7 @@ Soldier::~Soldier()
 void Soldier::load(const YAML::Node& node, const Mod *mod, SavedGame *save)
 {
 	_id = node["id"].as<int>(_id);
-	_name = Language::utf8ToWstr(node["name"].as<std::string>());
+	_name = node["name"].as<std::string>();
 	_initialStats = node["initialStats"].as<UnitStats>(_initialStats);
 	_currentStats = node["currentStats"].as<UnitStats>(_currentStats);
 	_rank = (SoldierRank)node["rank"].as<int>();
@@ -155,7 +155,7 @@ YAML::Node Soldier::save() const
 	YAML::Node node;
 	node["type"] = _rules->getType();
 	node["id"] = _id;
-	node["name"] = Language::wstrToUtf8(_name);
+	node["name"] = _name;
 	node["initialStats"] = _initialStats;
 	node["currentStats"] = _currentStats;
 	node["rank"] = (int)_rank;
@@ -197,17 +197,17 @@ YAML::Node Soldier::save() const
  * @param maxLength Restrict length to a certain value.
  * @return Soldier name.
  */
-std::wstring Soldier::getName(bool statstring, unsigned int maxLength) const
+std::string Soldier::getName(bool statstring, unsigned int maxLength) const
 {
 	if (statstring && !_statString.empty())
 	{
 		if (_name.length() + _statString.length() > maxLength)
 		{
-			return _name.substr(0, maxLength - _statString.length()) + L"/" + _statString;
+			return _name.substr(0, maxLength - _statString.length()) + "/" + _statString;
 		}
 		else
 		{
-			return _name + L"/" + _statString;
+			return _name + "/" + _statString;
 		}
 	}
 	else
@@ -220,7 +220,7 @@ std::wstring Soldier::getName(bool statstring, unsigned int maxLength) const
  * Changes the soldier's full name.
  * @param name Soldier name.
  */
-void Soldier::setName(const std::wstring &name)
+void Soldier::setName(const std::string &name)
 {
 	_name = name;
 }
@@ -250,9 +250,9 @@ void Soldier::setCraft(Craft *craft)
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::wstring Soldier::getCraftString(Language *lang) const
+std::string Soldier::getCraftString(Language *lang) const
 {
-	std::wstring s;
+	std::string s;
 	if (_recovery > 0)
 	{
 		s = lang->getString("STR_WOUNDED");

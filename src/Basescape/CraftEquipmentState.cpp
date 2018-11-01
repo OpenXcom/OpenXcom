@@ -118,8 +118,8 @@ CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _c
 
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
 
-	std::wostringstream ss3;
-	ss3 << tr("STR_SOLDIERS_UC") << ">" << L'\x01'<< c->getNumSoldiers();
+	std::ostringstream ss3;
+	ss3 << tr("STR_SOLDIERS_UC") << ">" << '\x01'<< c->getNumSoldiers();
 	_txtCrew->setText(ss3.str());
 
 	_lstEquipment->setArrowColumn(203, ARROW_HORIZONTAL);
@@ -155,7 +155,7 @@ CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _c
 			(_base->getStorageItems()->getItem(*i) > 0 || cQty > 0))
 		{
 			_items.push_back(*i);
-			std::wostringstream ss, ss2;
+			std::ostringstream ss, ss2;
 			if (_game->getSavedGame()->getMonthsPassed() > -1)
 			{
 				ss << _base->getStorageItems()->getItem(*i);
@@ -166,10 +166,10 @@ CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _c
 			}
 			ss2 << cQty;
 
-			std::wstring s = tr(*i);
+			std::string s = tr(*i);
 			if (rule->getBattleType() == BT_AMMO)
 			{
-				s.insert(0, L"  ");
+				s.insert(0, "  ");
 			}
 			_lstEquipment->addRow(3, s.c_str(), ss.str().c_str(), ss2.str().c_str());
 
@@ -364,7 +364,7 @@ void CraftEquipmentState::updateQuantity()
 	{
 		cQty = c->getItems()->getItem(_items[_sel]);
 	}
-	std::wostringstream ss, ss2;
+	std::ostringstream ss, ss2;
 	if (_game->getSavedGame()->getMonthsPassed() > -1)
 	{
 		ss << _base->getStorageItems()->getItem(_items[_sel]);

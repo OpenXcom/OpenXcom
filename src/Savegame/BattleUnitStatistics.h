@@ -32,7 +32,7 @@ namespace OpenXcom
 struct BattleUnitKills
 {
 	// Variables
-	std::wstring name;
+	std::string name;
 	std::string type, rank, race, weapon, weaponAmmo;
 	UnitFaction faction;
 	UnitStatus status;
@@ -65,7 +65,7 @@ struct BattleUnitKills
 	{
 		if (const YAML::Node n = node["name"])
 		{
-			name = Language::utf8ToWstr(n.as<std::string>());
+			name = n.as<std::string>();
 		}
 		type = node["type"].as<std::string>(type);
 		rank = node["rank"].as<std::string>(rank);
@@ -86,7 +86,7 @@ struct BattleUnitKills
 	{
 		YAML::Node node;
 		if (!name.empty())
-			node["name"] = Language::wstrToUtf8(name);
+			node["name"] = name;
 		if (!type.empty())
 			node["type"] = type;
 		node["rank"] = rank;
@@ -171,7 +171,7 @@ struct BattleUnitKills
 	}
 
 	/// Get human-readable victim name.
-	std::wstring getUnitName(Language *lang) const
+	std::string getUnitName(Language *lang) const
 	{
 		if (!name.empty())
 		{
@@ -183,8 +183,8 @@ struct BattleUnitKills
 		}
 		else
 		{
-			std::wostringstream ss;
-			ss << lang->getString(race) << L" " << lang->getString(rank);
+			std::ostringstream ss;
+			ss << lang->getString(race) << " " << lang->getString(rank);
 			return ss.str();
 		}
 	}
@@ -192,7 +192,7 @@ struct BattleUnitKills
 	/// Decide victim name, race and rank.
 	void setUnitStats(BattleUnit *unit)
 	{
-		name = L"";
+		name = "";
 		type = "";
 		if (unit->getGeoscapeSoldier())
 		{

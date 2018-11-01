@@ -46,7 +46,7 @@ City::~City()
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::wstring City::getName(Language *lang) const
+std::string City::getName(Language *lang) const
 {
 	return lang->getString(_name);
 }

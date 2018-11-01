@@ -112,10 +112,10 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 			continue;
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
-			std::wostringstream ss;
+			std::ostringstream ss;
 			if ((*j)->getNumWeapons() > 0)
 			{
-				ss << L'\x01' << (*j)->getNumWeapons() << L'\x01';
+				ss << '\x01' << (*j)->getNumWeapons() << '\x01';
 			}
 			else
 			{
@@ -124,7 +124,7 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 			ss << "/";
 			if ((*j)->getNumSoldiers() > 0)
 			{
-				ss << L'\x01' << (*j)->getNumSoldiers() << L'\x01';
+				ss << '\x01' << (*j)->getNumSoldiers() << '\x01';
 			}
 			else
 			{
@@ -133,7 +133,7 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 			ss << "/";
 			if ((*j)->getNumVehicles() > 0)
 			{
-				ss << L'\x01' << (*j)->getNumVehicles() << L'\x01';
+				ss << '\x01' << (*j)->getNumVehicles() << '\x01';
 			}
 			else
 			{

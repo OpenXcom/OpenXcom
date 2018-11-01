@@ -88,7 +88,7 @@ TransfersState::TransfersState(Base *base) : _base(base)
 
 	for (std::vector<Transfer*>::iterator i = _base->getTransfers()->begin(); i != _base->getTransfers()->end(); ++i)
 	{
-		std::wostringstream ss, ss2;
+		std::ostringstream ss, ss2;
 		ss << (*i)->getQuantity();
 		ss2 << (*i)->getHours();
 		_lstTransfers->addRow(3, (*i)->getName(_game->getLanguage()).c_str(), ss.str().c_str(), ss2.str().c_str());

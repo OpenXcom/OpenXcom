@@ -48,7 +48,7 @@ private:
 	Text *_txtW1Name, *_txtW1Ammo, *_txtW2Name, *_txtW2Ammo;
 	Surface *_sprite, *_weapon1, *_weapon2, *_crew, *_equip;
 	/// Formats an amount of time.
-	std::wstring formatTime(int time);
+	std::string formatTime(int time);
 public:
 	/// Creates the Craft Info state.
 	CraftInfoState(Base *base, size_t craftId);

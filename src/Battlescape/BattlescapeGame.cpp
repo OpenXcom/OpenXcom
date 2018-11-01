@@ -167,7 +167,7 @@ void BattlescapeGame::init()
  */
 void BattlescapeGame::handleAI(BattleUnit *unit)
 {
-	std::wostringstream ss;
+	std::ostringstream ss;
 
 	if (unit->getTimeUnits() <= 5)
 	{
@@ -230,7 +230,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 
 	if (action.type == BA_RETHINK)
 	{
-		_parentState->debug(L"Rethink");
+		_parentState->debug("Rethink");
 		unit->think(&action);
 	}
 
@@ -254,7 +254,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	}
 	if (action.type == BA_WALK)
 	{
-		ss << L"Walking to " << action.target;
+		ss << "Walking to " << action.target;
 		_parentState->debug(ss.str());
 
 		if (_save->getTile(action.target))
@@ -270,7 +270,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	if (action.type == BA_SNAPSHOT || action.type == BA_AUTOSHOT || action.type == BA_AIMEDSHOT || action.type == BA_THROW || action.type == BA_HIT || action.type == BA_MINDCONTROL || action.type == BA_PANIC || action.type == BA_LAUNCH)
 	{
 		ss.clear();
-		ss << L"Attack type=" << action.type << " target="<< action.target << " weapon=" << Language::utf8ToWstr(action.weapon->getRules()->getName());
+		ss << "Attack type=" << action.type << " target="<< action.target << " weapon=" << action.weapon->getRules()->getName();
 		_parentState->debug(ss.str());
 		action.TU = unit->getActionTUs(action.type, action.weapon);
 		if (action.type == BA_MINDCONTROL || action.type == BA_PANIC)
@@ -294,7 +294,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 
 	if (action.type == BA_NONE)
 	{
-		_parentState->debug(L"Idle");
+		_parentState->debug("Idle");
 		_AIActionCounter = 0;
 		if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
 		{

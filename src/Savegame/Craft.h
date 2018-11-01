@@ -74,7 +74,7 @@ public:
 	/// Sets the craft's ruleset.
 	void changeRules(RuleCraft *rules);
 	/// Gets the craft's default name.
-	std::wstring getDefaultName(Language *lang) const;
+	std::string getDefaultName(Language *lang) const;
 	/// Gets the craft's marker sprite.
 	int getMarker() const;
 	/// Gets the craft's base.

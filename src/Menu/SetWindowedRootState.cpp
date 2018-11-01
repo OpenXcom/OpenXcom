@@ -75,7 +75,7 @@ SetWindowedRootState::SetWindowedRootState(OptionsOrigin origin, OptionsVideoSta
 	_txtWindowedModePositionY->setWordWrap(true);
 	_txtWindowedModePositionY->setText(tr("STR_DISPLAY_WINDOW_POSITION_NEW_Y"));
 
-	std::wostringstream wss, wss2;
+	std::ostringstream wss, wss2;
 
 	wss << Options::newWindowedModePositionX;
 	wss2 << Options::newWindowedModePositionY;
@@ -118,7 +118,7 @@ SetWindowedRootState::~SetWindowedRootState()
  */
 void SetWindowedRootState::btnOkClick(Action *)
 {
-	std::wstringstream convStreamX, convStreamY;
+	std::stringstream convStreamX, convStreamY;
 	int newWindowedModePositionX = 0, newWindowedModePositionY = 0;
 
 	convStreamX << _edtWindowedModePositionX->getText();

@@ -108,7 +108,7 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES").arg(Text::formatFunding(_total)));
 
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
-	std::wostringstream ss;
+	std::ostringstream ss;
 	ss << _base->getUsedStores() << ":" << _base->getAvailableStores();
 	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss.str()));
 
@@ -293,7 +293,7 @@ void PurchaseState::updateList()
 		{
 			continue;
 		}
-		std::wstring name = _items[i].name;
+		std::string name = _items[i].name;
 		bool ammo = false;
 		if (_items[i].type == TRANSFER_ITEM)
 		{
@@ -301,10 +301,10 @@ void PurchaseState::updateList()
 			ammo = (rule->getBattleType() == BT_AMMO || (rule->getBattleType() == BT_NONE && rule->getClipSize() > 0));
 			if (ammo)
 			{
-				name.insert(0, L"  ");
+				name.insert(0, "  ");
 			}
 		}
-		std::wostringstream ssQty, ssAmount;
+		std::ostringstream ssQty, ssAmount;
 		ssQty << _items[i].qtySrc;
 		ssAmount << _items[i].amount;
 		_lstItems->addRow(4, name.c_str(), Text::formatFunding(_items[i].cost).c_str(), ssQty.str().c_str(), ssAmount.str().c_str());
@@ -509,7 +509,7 @@ void PurchaseState::increase()
 void PurchaseState::increaseByValue(int change)
 {
 	if (0 >= change) return;
-	std::wstring errorMessage;
+	std::string errorMessage;
 
 	if (_total + getRow().cost > _game->getSavedGame()->getFunds())
 	{
@@ -640,7 +640,7 @@ void PurchaseState::decreaseByValue(int change)
 void PurchaseState::updateItemStrings()
 {
 	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES").arg(Text::formatFunding(_total)));
-	std::wostringstream ss, ss5;
+	std::ostringstream ss, ss5;
 	ss << getRow().amount;
 	_lstItems->setCellText(_sel, 3, ss.str());
 	if (getRow().amount > 0)

@@ -134,7 +134,7 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 
 	// Calculate rating
 	int difficulty_threshold = _game->getMod()->getDefeatScore() + 100 * _game->getSavedGame()->getDifficultyCoefficient();
-	std::wstring rating = tr("STR_RATING_TERRIBLE");
+	std::string rating = tr("STR_RATING_TERRIBLE");
 	if (_ratingTotal > difficulty_threshold - 300)
 	{
 		rating = tr("STR_RATING_POOR");
@@ -154,27 +154,27 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 
 	_txtRating->setText(tr("STR_MONTHLY_RATING").arg(_ratingTotal).arg(rating));
 
-	std::wostringstream ss;
-	ss << tr("STR_INCOME") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
-	ss << L" (";
+	std::ostringstream ss;
+	ss << tr("STR_INCOME") << "> \x01" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
+	ss << " (";
 	if (_fundingDiff > 0)
 		ss << '+';
-	ss << Text::formatFunding(_fundingDiff) << L")";
+	ss << Text::formatFunding(_fundingDiff) << ")";
 	_txtIncome->setText(ss.str());
 
-	std::wostringstream ss2;
-	ss2 << tr("STR_MAINTENANCE") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getBaseMaintenance());
+	std::ostringstream ss2;
+	ss2 << tr("STR_MAINTENANCE") << "> \x01" << Text::formatFunding(_game->getSavedGame()->getBaseMaintenance());
 	_txtMaintenance->setText(ss2.str());
 
-	std::wostringstream ss3;
-	ss3 << tr("STR_BALANCE") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getFunds());
+	std::ostringstream ss3;
+	ss3 << tr("STR_BALANCE") << "> \x01" << Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtBalance->setText(ss3.str());
 
 	_txtDesc->setWordWrap(true);
 
 	// calculate satisfaction
-	std::wostringstream ss5;
-	std::wstring satisFactionString = tr("STR_COUNCIL_IS_DISSATISFIED");
+	std::ostringstream ss5;
+	std::string satisFactionString = tr("STR_COUNCIL_IS_DISSATISFIED");
 	bool resetWarning = true;
 	if (_ratingTotal > difficulty_threshold)
 	{
@@ -201,7 +201,7 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 		{
 			if (_game->getSavedGame()->getWarned())
 			{
-				ss5.str(L"");
+				ss5.str("");
 				ss5 << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
 				_pactList.erase(_pactList.begin(), _pactList.end());
 				_happyList.erase(_happyList.begin(), _happyList.end());
@@ -404,9 +404,9 @@ void MonthlyReportState::calculateChanges()
  * @param singular String ID to append at the end if the list is singular.
  * @param plural String ID to append at the end if the list is plural.
  */
-std::wstring MonthlyReportState::countryList(const std::vector<std::string> &countries, const std::string &singular, const std::string &plural)
+std::string MonthlyReportState::countryList(const std::vector<std::string> &countries, const std::string &singular, const std::string &plural)
 {
-	std::wostringstream ss;
+	std::ostringstream ss;
 	if (!countries.empty())
 	{
 		ss << "\n\n";

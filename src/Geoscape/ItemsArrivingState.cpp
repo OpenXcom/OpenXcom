@@ -123,7 +123,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState *state) : _state(state), _b
 				}
 
 				// Remove transfer
-				std::wostringstream ss;
+				std::ostringstream ss;
 				ss << (*j)->getQuantity();
 				_lstTransfers->addRow(3, (*j)->getName(_game->getLanguage()).c_str(), ss.str().c_str(), (*i)->getName().c_str());
 				delete *j;

@@ -432,7 +432,7 @@ void BasescapeState::viewRightClick(Action *)
 void BasescapeState::viewMouseOver(Action *)
 {
 	BaseFacility *f = _view->getSelectedFacility();
-	std::wostringstream ss;
+	std::ostringstream ss;
 	if (f != 0)
 	{
 		if (f->getRules()->getCrafts() == 0 || f->getBuildTime() > 0)
@@ -444,7 +444,7 @@ void BasescapeState::viewMouseOver(Action *)
 			ss << tr(f->getRules()->getType());
 			if (f->getCraft() != 0)
 			{
-				ss << L" " << tr("STR_CRAFT_").arg(f->getCraft()->getName(_game->getLanguage()));
+				ss << " " << tr("STR_CRAFT_").arg(f->getCraft()->getName(_game->getLanguage()));
 			}
 		}
 	}
@@ -457,7 +457,7 @@ void BasescapeState::viewMouseOver(Action *)
  */
 void BasescapeState::viewMouseOut(Action *)
 {
-	_txtFacility->setText(L"");
+	_txtFacility->setText("");
 }
 
 /**

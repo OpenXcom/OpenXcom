@@ -99,7 +99,7 @@ PrimeGrenadeState::PrimeGrenadeState(BattleAction *action, bool inInventoryView,
 		square.h -= 2;
 		_button[i]->drawRect(&square, grenadeBackground->color2);
 
-		std::wostringstream ss;
+		std::ostringstream ss;
 		ss << i;
 		add(_number[i], "grenadeMenu", "battlescape");
 		_number[i]->setBig();

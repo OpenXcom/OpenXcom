@@ -103,7 +103,7 @@ void WarningMessage::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
  * Displays the warning message.
  * @param msg Message string.
  */
-void WarningMessage::showMessage(const std::wstring &msg)
+void WarningMessage::showMessage(const std::string &msg)
 {
 	_text->setText(msg);
 	_fade = 0;

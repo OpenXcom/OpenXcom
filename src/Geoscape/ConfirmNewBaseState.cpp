@@ -74,7 +74,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(Base *base, Globe *globe) : _base(base)
 	_btnCancel->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&ConfirmNewBaseState::btnCancelClick, Options::keyCancel);
 
-	std::wstring area;
+	std::string area;
 	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
 	{
 		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude()))

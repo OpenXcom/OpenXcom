@@ -254,7 +254,7 @@ void Ufo::changeRules(const RuleUfo *rules)
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::wstring Ufo::getDefaultName(Language *lang) const
+std::string Ufo::getDefaultName(Language *lang) const
 {
 	switch (_status)
 	{

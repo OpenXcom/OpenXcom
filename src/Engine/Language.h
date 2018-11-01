@@ -45,11 +45,11 @@ private:
 	TextDirection _direction;
 	TextWrapping _wrap;
 
-	static std::map<std::string, std::wstring> _names;
+	static std::map<std::string, std::string> _names;
 	static std::vector<std::string> _rtl, _cjk;
 
 	/// Parses a text string loaded from an external file.
-	std::wstring loadString(const std::string &s) const;
+	std::string loadString(const std::string &s) const;
 public:
 	/// Creates a blank language.
 	Language();
@@ -69,12 +69,12 @@ public:
 	static std::wstring fsToWstr(const std::string &src);
 	/// Converts a filesystem string to UTF-8.
 	static std::string fsToUtf8(const std::string &src);
+	/// Converts a UTF-8 string to filesystem.
+	static std::string utf8ToFs(const std::string &src);
 	/// Replaces a substring.
 	static void replace(std::string &str, const std::string &find, const std::string &replace);
-	/// Replaces a substring.
-	static void replace(std::wstring &str, const std::wstring &find, const std::wstring &replace);
 	/// Gets list of languages in the data directory.
-	static void getList(std::vector<std::string> &files, std::vector<std::wstring> &names);
+	static void getList(std::vector<std::string> &files, std::vector<std::string> &names);
 	/// Loads the language from a YAML file.
 	void load(const std::string &filename);
 	/// Loads the language from a ruleset file.
@@ -82,7 +82,7 @@ public:
 	/// Gets the language's ID.
 	std::string getId() const;
 	/// Gets the language's name.
-	std::wstring getName() const;
+	std::string getName() const;
 	/// Outputs the language to a HTML file.
 	void toHtml(const std::string &filename) const;
 	/// Get a localized text.

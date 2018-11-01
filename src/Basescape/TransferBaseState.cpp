@@ -95,7 +95,7 @@ TransferBaseState::TransferBaseState(Base *base) : _base(base)
 		if ((*i) != _base)
 		{
 			// Get area
-			std::wstring area;
+			std::string area;
 			for (std::vector<Region*>::iterator j = _game->getSavedGame()->getRegions()->begin(); j != _game->getSavedGame()->getRegions()->end(); ++j)
 			{
 				if ((*j)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
@@ -104,8 +104,8 @@ TransferBaseState::TransferBaseState(Base *base) : _base(base)
 					break;
 				}
 			}
-			std::wostringstream ss;
-			ss << L'\x01' << area;
+			std::ostringstream ss;
+			ss << '\x01' << area;
 			_lstBases->addRow(2, (*i)->getName().c_str(), ss.str().c_str());
 			_bases.push_back(*i);
 			row++;

@@ -176,7 +176,7 @@ void TextList::setRowColor(size_t row, Uint8 color)
  * @param column Column number.
  * @return Text string.
  */
-std::wstring TextList::getCellText(size_t row, size_t column) const
+std::string TextList::getCellText(size_t row, size_t column) const
 {
 	return _texts[row][column]->getText();
 }
@@ -187,7 +187,7 @@ std::wstring TextList::getCellText(size_t row, size_t column) const
  * @param column Column number.
  * @param text Text string.
  */
-void TextList::setCellText(size_t row, size_t column, const std::wstring &text)
+void TextList::setCellText(size_t row, size_t column, const std::string &text)
 {
 	_texts[row][column]->setText(text);
 	_redraw = true;
@@ -319,7 +319,7 @@ void TextList::addRow(int cols, ...)
 			txt->setSmall();
 		}
 		if (cols > 0)
-			txt->setText(va_arg(args, wchar_t*));
+			txt->setText(va_arg(args, char*));
 		// grab this before we enable word wrapping so we can use it to calculate
 		// the total row height below
 		int vmargin = _font->getHeight() - txt->getTextHeight();
@@ -334,7 +334,7 @@ void TextList::addRow(int cols, ...)
 		// Places dots between text
 		if (_dot && i < cols - 1)
 		{
-			std::wstring buf = txt->getText();
+			std::string buf = txt->getText();
 			unsigned int w = txt->getTextWidth();
 			while (w < _columns[i])
 			{

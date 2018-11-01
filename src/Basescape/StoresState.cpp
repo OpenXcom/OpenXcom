@@ -92,7 +92,7 @@ StoresState::StoresState(Base *base) : _base(base)
 		if (qty > 0)
 		{
 			RuleItem *rule = _game->getMod()->getItem(*i, true);
-			std::wostringstream ss, ss2;
+			std::ostringstream ss, ss2;
 			ss << qty;
 			ss2 << qty * rule->getSize();
 			_lstStores->addRow(3, tr(*i).c_str(), ss.str().c_str(), ss2.str().c_str());

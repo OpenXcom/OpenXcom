@@ -97,7 +97,7 @@ SoldierArmorState::SoldierArmorState(Base *base, size_t soldier) : _base(base), 
 		if (_base->getStorageItems()->getItem(a->getStoreItem()) > 0)
 		{
 			_armors.push_back(a);
-			std::wostringstream ss;
+			std::ostringstream ss;
 			if (_game->getSavedGame()->getMonthsPassed() > -1)
 			{
 				ss << _base->getStorageItems()->getItem(a->getStoreItem());

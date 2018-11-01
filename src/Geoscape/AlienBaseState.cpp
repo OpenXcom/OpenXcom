@@ -71,7 +71,7 @@ AlienBaseState::AlienBaseState(AlienBase *base, GeoscapeState *state) : _state(s
 	_txtTitle->setWordWrap(true);
 
 	// Check location of base
-	std::wstring region, country;
+	std::string region, country;
 	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
 	{
 		if ((*i)->getRules()->insideCountry(_base->getLongitude(), _base->getLatitude()))
@@ -88,7 +88,7 @@ AlienBaseState::AlienBaseState(AlienBase *base, GeoscapeState *state) : _state(s
 			break;
 		}
 	}
-	std::wstring location;
+	std::string location;
 	if (!country.empty())
 	{
 		location = tr("STR_COUNTRIES_COMMA").arg(country).arg(region);

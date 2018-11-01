@@ -87,7 +87,7 @@ ActionMenuItem::~ActionMenuItem()
  * @param timeunits The timeunits string, including the TUs> prefix.
  * @param tu The timeunits value.
  */
-void ActionMenuItem::setAction(BattleActionType action, const std::wstring &description, const std::wstring &accuracy, const std::wstring &timeunits, int tu)
+void ActionMenuItem::setAction(BattleActionType action, const std::string &description, const std::string &accuracy, const std::string &timeunits, int tu)
 {
 	_action = action;
 	_txtDescription->setText(description);

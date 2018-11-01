@@ -33,7 +33,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param id Name of the UFO.
  */
-UfoLostState::UfoLostState(const std::wstring &id) : _id(id)
+UfoLostState::UfoLostState(const std::string &id) : _id(id)
 {
 	_screen = false;
 
@@ -61,8 +61,8 @@ UfoLostState::UfoLostState(const std::wstring &id) : _id(id)
 
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	std::wstring s = _id;
-	s += L'\n';
+	std::string s = _id;
+	s += '\n';
 	s += tr("STR_TRACKING_LOST");
 	_txtTitle->setText(s);
 }

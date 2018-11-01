@@ -246,21 +246,21 @@ GraphsState::GraphsState() : _butRegionsOffset(0), _butCountriesOffset(0)
 	// i know using textlist for this is ugly and brutal, but YOU try getting this damn text to line up.
 	// also, there's nothing wrong with being ugly or brutal, you should learn tolerance.
 	_txtMonths->setColumns(12, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17);
-	_txtMonths->addRow(12, L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ");
+	_txtMonths->addRow(12, " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
 	_txtYears->setColumns(6, 34, 34, 34, 34, 34, 34);
-	_txtYears->addRow(6, L" ", L" ", L" ", L" ", L" ", L" ");
+	_txtYears->addRow(6, " ", " ", " ", " ", " ", " ");
 
 	for (int iter = 0; iter != 12; ++iter)
 	{
 		if (month > 11)
 		{
 			month = 0;
-			std::wostringstream ss;
+			std::ostringstream ss;
 			ss << _game->getSavedGame()->getTime()->getYear();
 			_txtYears->setCellText(0, iter/2, ss.str());
 			if (iter > 2)
 			{
-				std::wostringstream ss2;
+				std::ostringstream ss2;
 				ss2 << (_game->getSavedGame()->getTime()->getYear()-1);
 				_txtYears->setCellText(0, 0, ss2.str());
 			}

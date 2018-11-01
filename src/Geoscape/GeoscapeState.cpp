@@ -343,12 +343,12 @@ GeoscapeState::GeoscapeState() : _pause(false), _zoomInEffectDone(false), _zoomO
 	_txtHour->setAlign(ALIGN_RIGHT);
 
 	_txtHourSep->setBig();
-	_txtHourSep->setText(L":");
+	_txtHourSep->setText(":");
 
 	_txtMin->setBig();
 
 	_txtMinSep->setBig();
-	_txtMinSep->setText(L":");
+	_txtMinSep->setText(":");
 
 	_txtWeekday->setAlign(ALIGN_CENTER);
 
@@ -438,11 +438,11 @@ void GeoscapeState::handle(Action *action)
 			_game->getSavedGame()->setDebugMode();
 			if (_game->getSavedGame()->getDebugMode())
 			{
-				_txtDebug->setText(L"DEBUG MODE");
+				_txtDebug->setText("DEBUG MODE");
 			}
 			else
 			{
-				_txtDebug->setText(L"");
+				_txtDebug->setText("");
 			}
 		}
 		// "ctrl-c" - delete all soldier commendations
@@ -450,7 +450,7 @@ void GeoscapeState::handle(Action *action)
 		{
 			if (_game->getSavedGame()->getDebugMode())
 			{
-				_txtDebug->setText(L"SOLDIER COMMENDATIONS DELETED");
+				_txtDebug->setText("SOLDIER COMMENDATIONS DELETED");
 				for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 				{
 					for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
@@ -465,7 +465,7 @@ void GeoscapeState::handle(Action *action)
 			}
 			else
 			{
-				_txtDebug->setText(L"");
+				_txtDebug->setText("");
 			}
 		}
 		// quick save and quick load
@@ -535,7 +535,7 @@ void GeoscapeState::init()
 		// as long as there's a base
 		!_game->getSavedGame()->getBases()->empty() &&
 		// and it has a name (THIS prevents it from running prior to the base being placed.)
-		_game->getSavedGame()->getBases()->front()->getName() != L"")
+		_game->getSavedGame()->getBases()->front()->getName() != "")
 	{
 		_game->getSavedGame()->addMonth();
 		determineAlienMissions();
@@ -592,19 +592,19 @@ void GeoscapeState::timeDisplay()
 		_txtFunds->setText(Text::formatFunding(_game->getSavedGame()->getFunds()));
 	}
 
-	std::wostringstream ss;
-	ss << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
+	std::ostringstream ss;
+	ss << std::setfill('0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
 	_txtSec->setText(ss.str());
 
-	std::wostringstream ss2;
-	ss2 << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getMinute();
+	std::ostringstream ss2;
+	ss2 << std::setfill('0') << std::setw(2) << _game->getSavedGame()->getTime()->getMinute();
 	_txtMin->setText(ss2.str());
 
-	std::wostringstream ss3;
+	std::ostringstream ss3;
 	ss3 << _game->getSavedGame()->getTime()->getHour();
 	_txtHour->setText(ss3.str());
 
-	std::wostringstream ss4;
+	std::ostringstream ss4;
 	ss4 << _game->getSavedGame()->getTime()->getDayString(_game->getLanguage());
 	_txtDay->setText(ss4.str());
 
@@ -612,7 +612,7 @@ void GeoscapeState::timeDisplay()
 
 	_txtMonth->setText(tr(_game->getSavedGame()->getTime()->getMonthString()));
 
-	std::wostringstream ss5;
+	std::ostringstream ss5;
 	ss5 << _game->getSavedGame()->getTime()->getYear();
 	_txtYear->setText(ss5.str());
 }
@@ -1271,7 +1271,7 @@ void GeoscapeState::time30Minutes()
 					}
 					else if (!(*j)->getLowFuel())
 					{
-						std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
+						std::string msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
 										   .arg(tr(item))
 										   .arg((*j)->getName(_game->getLanguage()))
 										   .arg((*i)->getName());
@@ -1422,7 +1422,7 @@ void GeoscapeState::time1Hour()
 				std::string s = (*j)->rearm(_game->getMod());
 				if (!s.empty())
 				{
-					std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REARM_CRAFT_AT_BASE")
+					std::string msg = tr("STR_NOT_ENOUGH_ITEM_TO_REARM_CRAFT_AT_BASE")
 									   .arg(tr(s))
 									   .arg((*j)->getName(_game->getLanguage()))
 									   .arg((*i)->getName());
@@ -1857,7 +1857,7 @@ void GeoscapeState::globeClick(Action *action)
 		_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
 		double lonDeg = lon / M_PI * 180, latDeg = lat / M_PI * 180;
 		_globe->getPolygonTextureAndShade(lon, lat, &texture, &shade);
-		std::wostringstream ss;
+		std::ostringstream ss;
 		ss << "rad: " << lon << ", " << lat << std::endl;
 		ss << "deg: " << lonDeg << ", " << latDeg << std::endl;
 		ss << "texture: " << texture << ", shade: " << shade << std::endl;

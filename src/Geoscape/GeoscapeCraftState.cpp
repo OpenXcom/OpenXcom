@@ -119,7 +119,7 @@ GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *way
 	_txtTitle->setText(_craft->getName(_game->getLanguage()));
 
 	_txtStatus->setWordWrap(true);
-	std::wstring status;
+	std::string status;
 	if (_waypoint != 0)
 	{
 		status = tr("STR_INTERCEPTING_UFO").arg(_waypoint->getId());
@@ -219,12 +219,12 @@ GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *way
 	_txtRedirect->setAlign(ALIGN_CENTER);
 	_txtRedirect->setText(tr("STR_REDIRECT_CRAFT"));
 
-	std::wostringstream ss11;
-	ss11 << tr("STR_SOLDIERS_UC") << ">" << L'\x01' << _craft->getNumSoldiers();
+	std::ostringstream ss11;
+	ss11 << tr("STR_SOLDIERS_UC") << ">" << '\x01' << _craft->getNumSoldiers();
 	_txtSoldier->setText(ss11.str());
 
-	std::wostringstream ss12;
-	ss12 << tr("STR_HWPS") << ">" << L'\x01' << _craft->getNumVehicles();
+	std::ostringstream ss12;
+	ss12 << tr("STR_HWPS") << ">" << '\x01' << _craft->getNumVehicles();
 	_txtHWP->setText(ss12.str());
 
 	if (_waypoint == 0)

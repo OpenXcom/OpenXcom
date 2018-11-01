@@ -213,7 +213,7 @@ void Transfer::setEngineers(int engineers)
  * @param lang Language to get strings from.
  * @return Name string.
  */
-std::wstring Transfer::getName(Language *lang) const
+std::string Transfer::getName(Language *lang) const
 {
 	if (_soldier != 0)
 	{

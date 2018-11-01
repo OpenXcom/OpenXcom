@@ -425,10 +425,10 @@ UnitInfoState::UnitInfoState(BattleUnit *unit, BattlescapeState *parent, bool fr
 
 	if (!_mindProbe)
 	{
-		_btnPrev->setText(L"<<");
+		_btnPrev->setText("<<");
 		_btnPrev->onMouseClick((ActionHandler)&UnitInfoState::btnPrevClick);
 		_btnPrev->onKeyboardPress((ActionHandler)&UnitInfoState::btnPrevClick, Options::keyBattlePrevUnit);
-		_btnNext->setText(L">>");
+		_btnNext->setText(">>");
 		_btnNext->onMouseClick((ActionHandler)&UnitInfoState::btnNextClick);
 		_btnNext->onKeyboardPress((ActionHandler)&UnitInfoState::btnNextClick, Options::keyBattleNextUnit);
 	}
@@ -450,13 +450,13 @@ UnitInfoState::~UnitInfoState()
 void UnitInfoState::init()
 {
 	State::init();
-	std::wostringstream ss;
+	std::ostringstream ss;
 	ss << _unit->getTimeUnits();
 	_numTimeUnits->setText(ss.str());
 	_barTimeUnits->setMax(_unit->getBaseStats()->tu);
 	_barTimeUnits->setValue(_unit->getTimeUnits());
 
-	ss.str(L"");
+	ss.str("");
 	// aliens have their rank in their "name", soldiers don't
 	if (_unit->getType() == "SOLDIER")
 	{
@@ -467,62 +467,62 @@ void UnitInfoState::init()
 	_txtName->setBig();
 	_txtName->setText(ss.str());
 
-	ss.str(L"");
+	ss.str("");
 	ss << _unit->getEnergy();
 	_numEnergy->setText(ss.str());
 	_barEnergy->setMax(_unit->getBaseStats()->stamina);
 	_barEnergy->setValue(_unit->getEnergy());
 
-	ss.str(L"");
+	ss.str("");
 	ss << _unit->getHealth();
 	_numHealth->setText(ss.str());
 	_barHealth->setMax(_unit->getBaseStats()->health);
 	_barHealth->setValue(_unit->getHealth());
 	_barHealth->setValue2(_unit->getStunlevel());
 
-	ss.str(L"");
+	ss.str("");
 	ss << _unit->getFatalWounds();
 	_numFatalWounds->setText(ss.str());
 	_barFatalWounds->setMax(_unit->getFatalWounds());
 	_barFatalWounds->setValue(_unit->getFatalWounds());
 
-	ss.str(L"");
+	ss.str("");
 	ss << _unit->getBaseStats()->bravery;
 	_numBravery->setText(ss.str());
 	_barBravery->setMax(_unit->getBaseStats()->bravery);
 	_barBravery->setValue(_unit->getBaseStats()->bravery);
 
-	ss.str(L"");
+	ss.str("");
 	ss << _unit->getMorale();
 	_numMorale->setText(ss.str());
 	_barMorale->setMax(100);
 	_barMorale->setValue(_unit->getMorale());
 
-	ss.str(L"");
+	ss.str("");
 	ss << _unit->getBaseStats()->reactions;
 	_numReactions->setText(ss.str());
 	_barReactions->setMax(_unit->getBaseStats()->reactions);
 	_barReactions->setValue(_unit->getBaseStats()->reactions);
 
-	ss.str(L"");
+	ss.str("");
 	ss << ((_unit->getBaseStats()->firing * _unit->getHealth()) / _unit->getBaseStats()->health);
 	_numFiring->setText(ss.str());
 	_barFiring->setMax(_unit->getBaseStats()->firing);
 	_barFiring->setValue((_unit->getBaseStats()->firing * _unit->getHealth()) / _unit->getBaseStats()->health);
 
-	ss.str(L"");
+	ss.str("");
 	ss << ((_unit->getBaseStats()->throwing * _unit->getHealth()) / _unit->getBaseStats()->health);
 	_numThrowing->setText(ss.str());
 	_barThrowing->setMax(_unit->getBaseStats()->throwing);
 	_barThrowing->setValue((_unit->getBaseStats()->throwing * _unit->getHealth()) / _unit->getBaseStats()->health);
 
-	ss.str(L"");
+	ss.str("");
 	ss << ((_unit->getBaseStats()->melee * _unit->getHealth()) / _unit->getBaseStats()->health);
 	_numMelee->setText(ss.str());
 	_barMelee->setMax(_unit->getBaseStats()->melee);
 	_barMelee->setValue((_unit->getBaseStats()->melee * _unit->getHealth()) / _unit->getBaseStats()->health);
 
-	ss.str(L"");
+	ss.str("");
 	ss << _unit->getBaseStats()->strength;
 	_numStrength->setText(ss.str());
 	_barStrength->setMax(_unit->getBaseStats()->strength);
@@ -530,7 +530,7 @@ void UnitInfoState::init()
 
 	if (_unit->getBaseStats()->psiSkill > 0 || (Options::psiStrengthEval && _game->getSavedGame()->isResearched(_game->getMod()->getPsiRequirements())))
 	{
-		ss.str(L"");
+		ss.str("");
 		ss << _unit->getBaseStats()->psiStrength;
 		_numPsiStrength->setText(ss.str());
 		_barPsiStrength->setMax(_unit->getBaseStats()->psiStrength);
@@ -549,7 +549,7 @@ void UnitInfoState::init()
 
 	if (_unit->getBaseStats()->psiSkill > 0)
 	{
-		ss.str(L"");
+		ss.str("");
 		ss << _unit->getBaseStats()->psiSkill;
 		_numPsiSkill->setText(ss.str());
 		_barPsiSkill->setMax(_unit->getBaseStats()->psiSkill);
@@ -566,31 +566,31 @@ void UnitInfoState::init()
 		_barPsiSkill->setVisible(false);
 	}
 
-	ss.str(L"");
+	ss.str("");
 	ss << _unit->getArmor(SIDE_FRONT);
 	_numFrontArmor->setText(ss.str());
 	_barFrontArmor->setMax(_unit->getMaxArmor(SIDE_FRONT));
 	_barFrontArmor->setValue(_unit->getArmor(SIDE_FRONT));
 
-	ss.str(L"");
+	ss.str("");
 	ss << _unit->getArmor(SIDE_LEFT);
 	_numLeftArmor->setText(ss.str());
 	_barLeftArmor->setMax(_unit->getMaxArmor(SIDE_LEFT));
 	_barLeftArmor->setValue(_unit->getArmor(SIDE_LEFT));
 
-	ss.str(L"");
+	ss.str("");
 	ss << _unit->getArmor(SIDE_RIGHT);
 	_numRightArmor->setText(ss.str());
 	_barRightArmor->setMax(_unit->getMaxArmor(SIDE_RIGHT));
 	_barRightArmor->setValue(_unit->getArmor(SIDE_RIGHT));
 
-	ss.str(L"");
+	ss.str("");
 	ss << _unit->getArmor(SIDE_REAR);
 	_numRearArmor->setText(ss.str());
 	_barRearArmor->setMax(_unit->getMaxArmor(SIDE_REAR));
 	_barRearArmor->setValue(_unit->getArmor(SIDE_REAR));
 
-	ss.str(L"");
+	ss.str("");
 	ss << _unit->getArmor(SIDE_UNDER);
 	_numUnderArmor->setText(ss.str());
 	_barUnderArmor->setMax(_unit->getMaxArmor(SIDE_UNDER));

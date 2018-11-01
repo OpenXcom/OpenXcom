@@ -86,16 +86,16 @@ FundingState::FundingState()
 	_lstCountries->setDot(true);
 	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
 	{
-		std::wostringstream ss, ss2;
-		ss << L'\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)) << L'\x01';
+		std::ostringstream ss, ss2;
+		ss << '\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)) << '\x01';
 		if ((*i)->getFunding().size() > 1)
 		{
-			ss2 << L'\x01';
+			ss2 << '\x01';
 			int change = (*i)->getFunding().back() - (*i)->getFunding().at((*i)->getFunding().size()-2);
 			if (change > 0)
-				ss2 << L'+';
+				ss2 << '+';
 			ss2 << Text::formatFunding(change);
-			ss2 << L'\x01';
+			ss2 << '\x01';
 		}
 		else
 		{

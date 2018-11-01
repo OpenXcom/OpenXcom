@@ -35,7 +35,7 @@ class ListSaveState : public ListGamesState
 private:
 	TextEdit *_edtSave;
 	TextButton *_btnSaveGame;
-	std::wstring _selected;
+	std::string _selected;
 	int _previousSelectedRow, _selectedRow;
 public:
 	/// Creates the Save Game state.

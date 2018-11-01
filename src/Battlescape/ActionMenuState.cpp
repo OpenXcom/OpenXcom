@@ -150,7 +150,7 @@ ActionMenuState::~ActionMenuState()
  */
 void ActionMenuState::addItem(BattleActionType ba, const std::string &name, int *id)
 {
-	std::wstring s1, s2;
+	std::string s1, s2;
 	int acc = _action->actor->getFiringAccuracy(ba, _action->weapon);
 	if (ba == BA_THROW)
 		acc = (int)(_action->actor->getThrowingAccuracy());

@@ -47,7 +47,7 @@ public:
 	OptionsModsState(OptionsOrigin origin);
 	/// Cleans up the Advanced state.
 	~OptionsModsState();
-	std::wstring makeTooltip(const ModInfo &modInfo);
+	std::string makeTooltip(const ModInfo &modInfo);
 	void cbxMasterHover(Action *action);
 	void cbxMasterChange(Action *action);
 	void lstModsRefresh(size_t scrollLoc);

@@ -102,7 +102,7 @@ CraftWeaponsState::CraftWeaponsState(Base *base, size_t craft, size_t weapon) : 
 		if (_base->getStorageItems()->getItem(w->getLauncherItem()) > 0)
 		{
 			_weapons.push_back(w);
-			std::wostringstream ss, ss2;
+			std::ostringstream ss, ss2;
 			ss << _base->getStorageItems()->getItem(w->getLauncherItem());
 			if (!w->getClipItem().empty())
 			{

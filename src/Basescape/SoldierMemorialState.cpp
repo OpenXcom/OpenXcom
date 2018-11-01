@@ -112,7 +112,7 @@ SoldierMemorialState::SoldierMemorialState()
 	{
 		SoldierDeath *death = (*i)->getDeath();
 
-		std::wostringstream saveDay, saveMonth, saveYear;
+		std::ostringstream saveDay, saveMonth, saveYear;
 		saveDay << death->getTime()->getDayString(_game->getLanguage());
 		saveMonth << tr(death->getTime()->getMonthString());
 		saveYear << death->getTime()->getYear();

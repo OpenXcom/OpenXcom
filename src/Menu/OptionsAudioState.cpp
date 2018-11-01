@@ -33,8 +33,8 @@
 namespace OpenXcom
 {
 /* MUS_NONE, MUS_CMD, MUS_WAV, MUS_MOD, MUS_MID, MUS_OGG, MUS_MP3, MUS_MP3_MAD, MUS_FLAC, MUS_MODPLUG */
-const std::wstring OptionsAudioState::musFormats[] = {L"Adlib", L"?", L"WAV", L"MOD", L"MIDI", L"OGG", L"MP3", L"MP3", L"FLAC", L"MOD"};
-const std::wstring OptionsAudioState::sndFormats[] = {L"?", L"1.4", L"1.0"};
+const std::string OptionsAudioState::musFormats[] = {"Adlib", "?", "WAV", "MOD", "MIDI", "OGG", "MP3", "MP3", "FLAC", "MOD"};
+const std::string OptionsAudioState::sndFormats[] = {"?", "1.4", "1.0"};
 
 /**
  * Initializes all the elements in the Audio Options screen.
@@ -117,21 +117,21 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	_slrUiVolume->onMouseIn((ActionHandler)&OptionsAudioState::txtTooltipIn);
 	_slrUiVolume->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
 
-	std::vector<std::wstring> musicText, soundText, videoText;
+	std::vector<std::string> musicText, soundText, videoText;
 	/* MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_GM, MUSIC_MIDI */
 	musicText.push_back(tr("STR_PREFERRED_FORMAT_AUTO"));
-	musicText.push_back(L"FLAC");
-	musicText.push_back(L"OGG");
-	musicText.push_back(L"MP3");
-	musicText.push_back(L"MOD");
-	musicText.push_back(L"WAV");
-	musicText.push_back(L"Adlib");
-	musicText.push_back(L"GM");
-	musicText.push_back(L"MIDI");
+	musicText.push_back("FLAC");
+	musicText.push_back("OGG");
+	musicText.push_back("MP3");
+	musicText.push_back("MOD");
+	musicText.push_back("WAV");
+	musicText.push_back("Adlib");
+	musicText.push_back("GM");
+	musicText.push_back("MIDI");
 
 	soundText.push_back(tr("STR_PREFERRED_FORMAT_AUTO"));
-	soundText.push_back(L"1.4");
-	soundText.push_back(L"1.0");
+	soundText.push_back("1.4");
+	soundText.push_back("1.0");
 
 	videoText.push_back(tr("STR_PREFERRED_VIDEO_ANIMATION"));
 	videoText.push_back(tr("STR_PREFERRED_VIDEO_SLIDESHOW"));
@@ -145,7 +145,7 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	_cbxMusicFormat->onMouseIn((ActionHandler)&OptionsAudioState::txtTooltipIn);
 	_cbxMusicFormat->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
 
-	std::wstring curMusic = musFormats[Mix_GetMusicType(0)];
+	std::string curMusic = musFormats[Mix_GetMusicType(0)];
 	_txtCurrentMusic->setText(tr("STR_CURRENT_FORMAT").arg(curMusic));
 
 	_txtSoundFormat->setText(tr("STR_PREFERRED_SFX_FORMAT"));
@@ -157,7 +157,7 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	_cbxSoundFormat->onMouseIn((ActionHandler)&OptionsAudioState::txtTooltipIn);
 	_cbxSoundFormat->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
 
-	std::wstring curSound = sndFormats[Options::currentSound];
+	std::string curSound = sndFormats[Options::currentSound];
 	_txtCurrentSound->setText(tr("STR_CURRENT_FORMAT").arg(curSound));
 
 	_txtVideoFormat->setText(tr("STR_PREFERRED_VIDEO_FORMAT"));

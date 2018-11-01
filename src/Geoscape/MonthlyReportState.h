@@ -49,7 +49,7 @@ private:
 	Globe *_globe;
 	std::vector<Soldier*> _soldiersMedalled;
 	/// Builds a country list string.
-	std::wstring countryList(const std::vector<std::string> &countries, const std::string &singular, const std::string &plural);
+	std::string countryList(const std::vector<std::string> &countries, const std::string &singular, const std::string &plural);
 public:
 	/// Creates the Monthly Report state.
 	MonthlyReportState(bool psi, Globe *globe);

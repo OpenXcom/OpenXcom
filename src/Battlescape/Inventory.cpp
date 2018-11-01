@@ -1016,7 +1016,7 @@ bool Inventory::canBeStacked(BattleItem *itemA, BattleItem *itemB)
  * Shows a warning message.
  * @param msg The message to show.
  */
-void Inventory::showWarning(const std::wstring &msg)
+void Inventory::showWarning(const std::string &msg)
 {
 	_warning->showMessage(msg);
 }
