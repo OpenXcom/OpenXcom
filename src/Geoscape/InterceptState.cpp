@@ -115,7 +115,7 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 			std::ostringstream ss;
 			if ((*j)->getNumWeapons() > 0)
 			{
-				ss << '\x01' << (*j)->getNumWeapons() << '\x01';
+				ss << Unicode::TOK_COLOR_FLIP << (*j)->getNumWeapons() << Unicode::TOK_COLOR_FLIP;
 			}
 			else
 			{
@@ -124,7 +124,7 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 			ss << "/";
 			if ((*j)->getNumSoldiers() > 0)
 			{
-				ss << '\x01' << (*j)->getNumSoldiers() << '\x01';
+				ss << Unicode::TOK_COLOR_FLIP << (*j)->getNumSoldiers() << Unicode::TOK_COLOR_FLIP;
 			}
 			else
 			{
@@ -133,7 +133,7 @@ InterceptState::InterceptState(Globe *globe, Base *base, Target *target) : _glob
 			ss << "/";
 			if ((*j)->getNumVehicles() > 0)
 			{
-				ss << '\x01' << (*j)->getNumVehicles() << '\x01';
+				ss << Unicode::TOK_COLOR_FLIP << (*j)->getNumVehicles() << Unicode::TOK_COLOR_FLIP;
 			}
 			else
 			{

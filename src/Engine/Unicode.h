@@ -42,12 +42,12 @@ typedef std::basic_string<UCode> UString;
 namespace Unicode
 {
 	/* Special text tokens */
-	const char TOK_BREAK_SMALLLINE = 2;		/// line break and change to small font
-	const char TOK_FLIP_COLORS = 1;			/// flip color scheme
-	const char TOK_NBSP = 0xA0;				/// non-breaking space
+	const char TOK_NL_SMALL = 2;		/// line break and change to small font
+	const char TOK_COLOR_FLIP = 1;		/// alternate between primary and secondary color
+	const char TOK_NBSP = 0xA0;			/// non-breaking space
 
 	/// Checks if a character is a linebreak.
-	inline bool isLinebreak(UCode c) { return (c == '\n' || c == TOK_BREAK_SMALLLINE); }
+	inline bool isLinebreak(UCode c) { return (c == '\n' || c == TOK_NL_SMALL); }
 	/// Checks if a character is a blank space (includes non-breaking spaces).
 	inline bool isSpace(UCode c) { return (c == ' ' || c == TOK_NBSP); }
 	/// Checks if a character is a word separator.

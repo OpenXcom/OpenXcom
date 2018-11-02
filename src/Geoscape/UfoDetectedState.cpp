@@ -142,7 +142,7 @@ UfoDetectedState::UfoDetectedState(Ufo *ufo, GeoscapeState *state, bool detected
 	_lstInfo->setDot(true);
 
 	std::ostringstream ss;
-	ss << '\x01' << tr(_ufo->getRules()->getSize());
+	ss << Unicode::TOK_COLOR_FLIP << tr(_ufo->getRules()->getSize());
 	_lstInfo->addRow(2, tr("STR_SIZE_UC").c_str(), ss.str().c_str());
 	ss.str("");
 
@@ -158,7 +158,7 @@ UfoDetectedState::UfoDetectedState(Ufo *ufo, GeoscapeState *state, bool detected
 	{
 		altitude = "STR_AIRBORNE";
 	}
-	ss << '\x01' << tr(altitude);
+	ss << Unicode::TOK_COLOR_FLIP << tr(altitude);
 	_lstInfo->addRow(2, tr("STR_ALTITUDE").c_str(), ss.str().c_str());
 
 	std::string heading = _ufo->getDirection();
@@ -167,30 +167,30 @@ UfoDetectedState::UfoDetectedState(Ufo *ufo, GeoscapeState *state, bool detected
 		heading = "STR_NONE_UC";
 	}
 	ss.str("");
-	ss << '\x01' << tr(heading);
+	ss << Unicode::TOK_COLOR_FLIP << tr(heading);
 	_lstInfo->addRow(2, tr("STR_HEADING").c_str(), ss.str().c_str());
 
 	ss.str("");
-	ss << '\x01' << Unicode::formatNumber(_ufo->getSpeed());
+	ss << Unicode::TOK_COLOR_FLIP << Unicode::formatNumber(_ufo->getSpeed());
 	_lstInfo->addRow(2, tr("STR_SPEED").c_str(), ss.str().c_str());
 
 	_lstInfo2->setColumns(2, 77, 140);
 	_lstInfo2->setDot(true);
 
 	ss.str("");
-	ss << '\x01' << tr(_ufo->getRules()->getType());
+	ss << Unicode::TOK_COLOR_FLIP << tr(_ufo->getRules()->getType());
 	_lstInfo2->addRow(2, tr("STR_CRAFT_TYPE").c_str(), ss.str().c_str());
 
 	ss.str("");
-	ss << '\x01' << tr(_ufo->getAlienRace());
+	ss << Unicode::TOK_COLOR_FLIP << tr(_ufo->getAlienRace());
 	_lstInfo2->addRow(2, tr("STR_RACE").c_str(), ss.str().c_str());
 
 	ss.str("");
-	ss << '\x01' << tr(_ufo->getMissionType());
+	ss << Unicode::TOK_COLOR_FLIP << tr(_ufo->getMissionType());
 	_lstInfo2->addRow(2, tr("STR_MISSION").c_str(), ss.str().c_str());
 
 	ss.str("");
-	ss << '\x01' << tr(_ufo->getMission()->getRegion());
+	ss << Unicode::TOK_COLOR_FLIP << tr(_ufo->getMission()->getRegion());
 	_lstInfo2->addRow(2, tr("STR_ZONE").c_str(), ss.str().c_str());
 }
 

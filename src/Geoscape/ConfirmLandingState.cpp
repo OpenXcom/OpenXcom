@@ -91,7 +91,7 @@ ConfirmLandingState::ConfirmLandingState(Craft *craft, Texture *texture, int sha
 	_txtBegin->setBig();
 	_txtBegin->setAlign(ALIGN_CENTER);
 	std::ostringstream ss;
-	ss << '\x01' << tr("STR_BEGIN_MISSION");
+	ss << Unicode::TOK_COLOR_FLIP << tr("STR_BEGIN_MISSION");
 	_txtBegin->setText(ss.str());
 }
 

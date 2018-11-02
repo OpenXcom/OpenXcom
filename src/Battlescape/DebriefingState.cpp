@@ -283,8 +283,8 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 			continue;
 
 		std::ostringstream ss, ss2;
-		ss << '\x01' << (*i)->qty << '\x01';
-		ss2 << '\x01' << (*i)->score;
+		ss << Unicode::TOK_COLOR_FLIP << (*i)->qty << Unicode::TOK_COLOR_FLIP;
+		ss2 << Unicode::TOK_COLOR_FLIP << (*i)->score;
 		total += (*i)->score;
 		if ((*i)->recovery)
 		{
@@ -573,7 +573,7 @@ std::string DebriefingState::makeSoldierString(int stat)
 	if (stat == 0) return "";
 
 	std::ostringstream ss;
-	ss << '\x01' << '+' << stat << '\x01';
+	ss << Unicode::TOK_COLOR_FLIP << '+' << stat << Unicode::TOK_COLOR_FLIP;
 	return ss.str();
 }
 

@@ -230,10 +230,10 @@ void CraftInfoState::init()
 			frame->blit(_weapon1);
 
 			std::ostringstream leftWeaponLine;
-			leftWeaponLine << '\x01' << tr(w1->getRules()->getType());
+			leftWeaponLine << Unicode::TOK_COLOR_FLIP << tr(w1->getRules()->getType());
 			_txtW1Name->setText(leftWeaponLine.str());
 			leftWeaponLine.str("");
-			leftWeaponLine << tr("STR_AMMO_").arg(w1->getAmmo()) << "\n\x01";
+			leftWeaponLine << tr("STR_AMMO_").arg(w1->getAmmo()) << "\n" << Unicode::TOK_COLOR_FLIP;
 			leftWeaponLine << tr("STR_MAX").arg(w1->getRules()->getAmmoMax());
 			if (_craft->getStatus() == "STR_REARMING" && w1->getAmmo() < w1->getRules()->getAmmoMax())
 			{
@@ -269,10 +269,10 @@ void CraftInfoState::init()
 			frame->blit(_weapon2);
 
 			std::ostringstream rightWeaponLine;
-			rightWeaponLine << '\x01' << tr(w2->getRules()->getType());
+			rightWeaponLine << Unicode::TOK_COLOR_FLIP << tr(w2->getRules()->getType());
 			_txtW2Name->setText(rightWeaponLine.str());
 			rightWeaponLine.str("");
-			rightWeaponLine << tr("STR_AMMO_").arg(w2->getAmmo()) << "\n\x01";
+			rightWeaponLine << tr("STR_AMMO_").arg(w2->getAmmo()) << "\n" << Unicode::TOK_COLOR_FLIP;
 			rightWeaponLine << tr("STR_MAX").arg(w2->getRules()->getAmmoMax());
 			if (_craft->getStatus() == "STR_REARMING" && w2->getAmmo() < w2->getRules()->getAmmoMax())
 			{

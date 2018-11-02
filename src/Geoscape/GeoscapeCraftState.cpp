@@ -221,11 +221,11 @@ GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *way
 	_txtRedirect->setText(tr("STR_REDIRECT_CRAFT"));
 
 	std::ostringstream ss11;
-	ss11 << tr("STR_SOLDIERS_UC") << ">" << '\x01' << _craft->getNumSoldiers();
+	ss11 << tr("STR_SOLDIERS_UC") << ">" << Unicode::TOK_COLOR_FLIP << _craft->getNumSoldiers();
 	_txtSoldier->setText(ss11.str());
 
 	std::ostringstream ss12;
-	ss12 << tr("STR_HWPS") << ">" << '\x01' << _craft->getNumVehicles();
+	ss12 << tr("STR_HWPS") << ">" << Unicode::TOK_COLOR_FLIP << _craft->getNumVehicles();
 	_txtHWP->setText(ss12.str());
 
 	if (_waypoint == 0)

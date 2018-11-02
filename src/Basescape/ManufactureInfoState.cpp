@@ -310,10 +310,10 @@ void ManufactureInfoState::setAssignedEngineer()
 	_txtAvailableEngineer->setText(tr("STR_ENGINEERS_AVAILABLE_UC").arg(_base->getAvailableEngineers()));
 	_txtAvailableSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE_UC").arg(_base->getFreeWorkshops()));
 	std::ostringstream s3;
-	s3 << ">\x01" << _production->getAssignedEngineers();
+	s3 << ">" << Unicode::TOK_COLOR_FLIP << _production->getAssignedEngineers();
 	_txtAllocated->setText(s3.str());
 	std::ostringstream s4;
-	s4 << ">\x01";
+	s4 << ">" << Unicode::TOK_COLOR_FLIP;
 	if (_production->getInfiniteAmount()) s4 << "∞";
 	else s4 << _production->getAmountTotal();
 	_txtTodo->setText(s4.str());

@@ -88,15 +88,15 @@ FundingState::FundingState()
 	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
 	{
 		std::ostringstream ss, ss2;
-		ss << '\x01' << Unicode::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)) << '\x01';
+		ss << Unicode::TOK_COLOR_FLIP << Unicode::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)) << Unicode::TOK_COLOR_FLIP;
 		if ((*i)->getFunding().size() > 1)
 		{
-			ss2 << '\x01';
+			ss2 << Unicode::TOK_COLOR_FLIP;
 			int change = (*i)->getFunding().back() - (*i)->getFunding().at((*i)->getFunding().size()-2);
 			if (change > 0)
 				ss2 << '+';
 			ss2 << Unicode::formatFunding(change);
-			ss2 << '\x01';
+			ss2 << Unicode::TOK_COLOR_FLIP;
 		}
 		else
 		{

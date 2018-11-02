@@ -220,8 +220,8 @@ std::string Language::loadString(const std::string &string) const
 {
 	std::string s = string;
 	Unicode::replace(s, "{NEWLINE}", "\n");
-	Unicode::replace(s, "{SMALLLINE}", "\x02");
-	Unicode::replace(s, "{ALT}", "\x01");
+	Unicode::replace(s, "{SMALLLINE}", "\x02"); // Unicode::TOK_NL_SMALL
+	Unicode::replace(s, "{ALT}", "\x01"); // Unicode::TOK_COLOR_FLIP
 	return s;
 }
 

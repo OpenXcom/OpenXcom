@@ -328,8 +328,7 @@ void Text::processText()
 
 			if (c == str.size())
 				break;
-			// \x02 marks start of small text
-			else if (str[c] == Unicode::TOK_BREAK_SMALLLINE)
+			else if (str[c] == Unicode::TOK_NL_SMALL)
 				font = _small;
 		}
 		// Keep track of spaces for wordwrapping
@@ -346,7 +345,7 @@ void Text::processText()
 			start = false;
 		}
 		// Keep track of the width of the last line and word
-		else if (str[c] != Unicode::TOK_FLIP_COLORS)
+		else if (str[c] != Unicode::TOK_COLOR_FLIP)
 		{
 			int charWidth = font->getCharSize(str[c]).w;
 
@@ -551,12 +550,12 @@ void Text::draw()
 			line++;
 			y += font->getCharSize(*c).h;
 			x = getLineX(line);
-			if (*c == Unicode::TOK_BREAK_SMALLLINE)
+			if (*c == Unicode::TOK_NL_SMALL)
 			{
 				font = _small;
 			}
 		}
-		else if (*c == Unicode::TOK_FLIP_COLORS)
+		else if (*c == Unicode::TOK_COLOR_FLIP)
 		{
 			color = (color == _color ? _color2 : _color);
 		}

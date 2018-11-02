@@ -81,7 +81,7 @@ TransferConfirmState::TransferConfirmState(Base *base, TransferItemsState *state
 	_txtCost->setText(tr("STR_COST"));
 
 	std::ostringstream ss;
-	ss << '\x01' << Unicode::formatFunding(_state->getTotal());
+	ss << Unicode::TOK_COLOR_FLIP << Unicode::formatFunding(_state->getTotal());
 
 	_txtTotal->setBig();
 	_txtTotal->setText(ss.str().c_str());

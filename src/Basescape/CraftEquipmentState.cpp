@@ -119,7 +119,7 @@ CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _c
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
 
 	std::ostringstream ss3;
-	ss3 << tr("STR_SOLDIERS_UC") << ">" << '\x01'<< c->getNumSoldiers();
+	ss3 << tr("STR_SOLDIERS_UC") << ">" << Unicode::TOK_COLOR_FLIP << c->getNumSoldiers();
 	_txtCrew->setText(ss3.str());
 
 	_lstEquipment->setArrowColumn(203, ARROW_HORIZONTAL);

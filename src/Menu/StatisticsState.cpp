@@ -119,7 +119,7 @@ void StatisticsState::listStats()
 	{
 		ss << tr("STR_STATISTICS");
 	}
-	ss << '\x02' << time->getDayString(_game->getLanguage()) << " " << tr(time->getMonthString()) << " " << time->getYear();
+	ss << Unicode::TOK_NL_SMALL << time->getDayString(_game->getLanguage()) << " " << tr(time->getMonthString()) << " " << time->getYear();
 	_txtTitle->setText(ss.str());
 
 	int monthlyScore = sumVector(save->getResearchScores()) / save->getResearchScores().size();

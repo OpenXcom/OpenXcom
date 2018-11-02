@@ -152,7 +152,7 @@ MonthlyCostsState::MonthlyCostsState(Base *base) : _base(base)
 	_lstMaintenance->setColumns(2, 239, 60);
 	_lstMaintenance->setDot(true);
 	std::ostringstream ss7;
-	ss7 << '\x01' << Unicode::formatFunding(_base->getFacilityMaintenance());
+	ss7 << Unicode::TOK_COLOR_FLIP << Unicode::formatFunding(_base->getFacilityMaintenance());
 	_lstMaintenance->addRow(2, tr("STR_BASE_MAINTENANCE").c_str(), ss7.str().c_str());
 
 	_lstTotal->setColumns(2, 44, 55);

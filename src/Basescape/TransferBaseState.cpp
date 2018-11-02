@@ -106,7 +106,7 @@ TransferBaseState::TransferBaseState(Base *base) : _base(base)
 				}
 			}
 			std::ostringstream ss;
-			ss << '\x01' << area;
+			ss << Unicode::TOK_COLOR_FLIP << area;
 			_lstBases->addRow(2, (*i)->getName().c_str(), ss.str().c_str());
 			_bases.push_back(*i);
 			row++;
