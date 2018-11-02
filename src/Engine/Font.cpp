@@ -60,7 +60,7 @@ void Font::load(const YAML::Node &node)
 		image.height = (*i)["height"].as<int>(height);
 		image.spacing = (*i)["spacing"].as<int>(spacing);
 		std::string file = "Language/" + (*i)["file"].as<std::string>();
-		UString chars = Unicode::unpackUtf8((*i)["chars"].as<std::string>());
+		UString chars = Unicode::convUtf8ToUtf32((*i)["chars"].as<std::string>());
 		image.surface = new Surface(image.width, image.height);
 		image.surface->loadImage(FileMap::getFilePath(file));
 		_images.push_back(image);
@@ -89,7 +89,8 @@ void Font::loadTerminal()
 	SDL_FreeSurface(s);
 	_images.push_back(image);
 
-	init(0, Unicode::unpackUtf8(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"));
+	UString chars = Unicode::convUtf8ToUtf32(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+	init(_images.size() - 1, chars);
 }
 
 

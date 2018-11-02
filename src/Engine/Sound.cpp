@@ -46,7 +46,7 @@ Sound::~Sound()
  */
 void Sound::load(const std::string &filename)
 {
-	std::string utf8 = Unicode::fsToUtf8(filename);
+	std::string utf8 = Unicode::convPathToUtf8(filename);
 	_sound = Mix_LoadWAV(utf8.c_str());
 	if (_sound == 0)
 	{

@@ -288,7 +288,7 @@ SaveInfo SavedGame::getSaveInfo(const std::string &file, Language *lang)
 		}
 		else
 		{
-			save.displayName = Unicode::fsToUtf8(CrossPlatform::noExt(file));
+			save.displayName = Unicode::convPathToUtf8(CrossPlatform::noExt(file));
 		}
 		save.reserved = false;
 	}
@@ -339,13 +339,6 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 
 	// Get brief save info
 	YAML::Node brief = file[0];
-	/*
-	std::string version = brief["version"].as<std::string>();
-	if (version != OPENXCOM_VERSION_SHORT)
-	{
-		throw Exception("Version mismatch");
-	}
-	*/
 	_time->load(brief["time"]);
 	if (brief["name"])
 	{
@@ -353,7 +346,7 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 	}
 	else
 	{
-		_name = Unicode::fsToUtf8(filename);
+		_name = Unicode::convPathToUtf8(filename);
 	}
 	_ironman = brief["ironman"].as<bool>(_ironman);
 

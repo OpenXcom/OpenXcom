@@ -778,33 +778,6 @@ std::pair<std::string, std::string> timeToString(time_t time)
 }
 
 /**
- * Compares two Unicode strings using natural human ordering.
- * @param a String A.
- * @param b String B.
- * @return String A comes before String B.
- */
-bool naturalCompare(const std::string &a, const std::string &b)
-{
-/*
-#if defined(_WIN32) && (!defined(__MINGW32__) || defined(__MINGW64_VERSION_MAJOR))
-	typedef int (WINAPI *WinStrCmp)(PCWSTR, PCWSTR);
-	WinStrCmp pWinStrCmp = (WinStrCmp)GetProcAddress(GetModuleHandleA("shlwapi.dll"), "StrCmpLogicalW");
-	if (pWinStrCmp)
-	{
-		return (pWinStrCmp(a.c_str(), b.c_str()) < 0);
-	}
-	else
-#endif
-*/
-	{
-		// sorry unix users you get ASCII sort
-		std::string::const_iterator i, j;
-		for (i = a.begin(), j = b.begin(); i != a.end() && j != b.end() && tolower(*i) == tolower(*j); i++, j++);
-		return (i != a.end() && j != b.end() && tolower(*i) < tolower(*j));
-	}
-}
-
-/**
  * Moves a file from one path to another,
  * replacing any existing file.
  * @param src Source path.

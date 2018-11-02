@@ -169,7 +169,7 @@ void ListSaveState::saveGame()
 {
 	_game->getSavedGame()->setName(_edtSave->getText());
 	std::string oldFilename, newFilename;
-	newFilename = CrossPlatform::sanitizeFilename(Unicode::utf8ToFs(_edtSave->getText()));
+	newFilename = CrossPlatform::sanitizeFilename(Unicode::convUtf8ToPath(_edtSave->getText()));
 	if (_selectedRow > 0)
 	{
 		oldFilename = _saves[_selectedRow - 1].fileName;

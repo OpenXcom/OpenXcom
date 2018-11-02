@@ -52,7 +52,7 @@ Music::~Music()
 void Music::load(const std::string &filename)
 {
 #ifndef __NO_MUSIC
-	std::string utf8 = Unicode::fsToUtf8(filename);
+	std::string utf8 = Unicode::convPathToUtf8(filename);
 	_music = Mix_LoadMUS(utf8.c_str());
 	if (_music == 0)
 	{

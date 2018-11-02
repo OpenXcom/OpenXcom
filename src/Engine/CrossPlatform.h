@@ -85,8 +85,6 @@ namespace CrossPlatform
 	time_t getDateModified(const std::string &path);
 	/// Converts a timestamp to a string.
 	std::pair<std::string, std::string> timeToString(time_t time);
-	/// Compares two strings by natural order.
-	bool naturalCompare(const std::string &a, const std::string &b);
 	/// Move/rename a file between paths.
 	bool moveFile(const std::string &src, const std::string &dest);
 	/// Flashes the game window.

@@ -24,7 +24,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
-#include "../Engine/CrossPlatform.h"
+#include "../Engine/Unicode.h"
 #include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
 #include "../Interface/TextButton.h"
@@ -47,7 +47,7 @@ struct compareSaveName : public std::binary_function<SaveInfo&, SaveInfo&, bool>
 	{
 		if (a.reserved == b.reserved)
 		{
-			return CrossPlatform::naturalCompare(a.displayName, b.displayName);
+			return Unicode::naturalCompare(a.displayName, b.displayName);
 		}
 		else
 		{

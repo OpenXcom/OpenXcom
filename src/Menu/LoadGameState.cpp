@@ -187,7 +187,7 @@ void LoadGameState::think()
 		{
 			Log(LOG_ERROR) << e.what();
 			std::ostringstream error;
-			error << tr("STR_LOAD_UNSUCCESSFUL") << Unicode::TOK_NL_SMALL << Unicode::fsToUtf8(e.what());
+			error << tr("STR_LOAD_UNSUCCESSFUL") << Unicode::TOK_NL_SMALL << Unicode::convPathToUtf8(e.what());
 			if (_origin != OPT_BATTLESCAPE)
 				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getMod()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getMod()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 			else
@@ -202,7 +202,7 @@ void LoadGameState::think()
 		{
 			Log(LOG_ERROR) << e.what();
 			std::ostringstream error;
-			error << tr("STR_LOAD_UNSUCCESSFUL") << Unicode::TOK_NL_SMALL << Unicode::fsToUtf8(e.what());
+			error << tr("STR_LOAD_UNSUCCESSFUL") << Unicode::TOK_NL_SMALL << Unicode::convPathToUtf8(e.what());
 			if (_origin != OPT_BATTLESCAPE)
 				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getMod()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getMod()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 			else

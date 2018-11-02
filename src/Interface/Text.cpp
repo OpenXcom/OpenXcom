@@ -303,7 +303,7 @@ void Text::processText()
 		return;
 	}
 
-	_processedText = Unicode::unpackUtf8(_text);
+	_processedText = Unicode::convUtf8ToUtf32(_text);
 	_lineWidth.clear();
 	_lineHeight.clear();
 

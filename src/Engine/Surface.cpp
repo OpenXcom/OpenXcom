@@ -342,7 +342,7 @@ void Surface::loadImage(const std::string &filename)
 	// Otherwise default to SDL_Image
 	if (!_surface)
 	{
-		std::string utf8 = Unicode::fsToUtf8(filename);
+		std::string utf8 = Unicode::convPathToUtf8(filename);
 		_surface = IMG_Load(utf8.c_str());
 	}
 

@@ -123,7 +123,7 @@ void Language::getList(std::vector<std::string> &files, std::vector<std::string>
 		}
 		else
 		{
-			name = Unicode::fsToUtf8(*i);
+			name = *i;
 		}
 		names.push_back(name);
 	}

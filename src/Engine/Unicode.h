@@ -54,26 +54,18 @@ namespace Unicode
 	inline bool isSeparator(UCode c) { return (c == '-' || c == '/'); }
 	/// Checks if a character is visible to the user.
 	inline bool isPrintable(UCode c) { return (c > 32 && c != TOK_NBSP); }
-	
-	/// Converts a wide-string to UTF-8.
-	std::string wstrToUtf8(const std::wstring &src);
-	/// Converts a wide-string to local-codepage string.
-	std::string wstrToCp(const std::wstring &src);
-	/// Converts a wide-string to filesystem string.
-	std::string wstrToFs(const std::wstring &src);
-	/// Converts a UTF-8 string to wide-string.
-	std::wstring utf8ToWstr(const std::string &src);
-	/// Converts a local-codepage string to wide-string.
-	std::wstring cpToWstr(const std::string &src);
-	/// Converts a filesystem string to wide-string.
-	std::wstring fsToWstr(const std::string &src);
-	/// Converts a filesystem string to UTF-8.
-	std::string fsToUtf8(const std::string &src);
-	/// Converts a UTF-8 string to filesystem.
-	std::string utf8ToFs(const std::string &src);
 
-	UString unpackUtf8(const std::string &src);
+	/// Converts a UTF-8 string to UTF-32.
+	UString convUtf8ToUtf32(const std::string &src);
+	/// Converts a UTF-32 string to UTF-8.
+	std::string convUtf32ToUtf8(const UString &src);
+	/// Converts a path to a UTF-8 string.
+	std::string convPathToUtf8(const std::string &src);
+	/// Converts a UTF-8 string to a path.
+	std::string convUtf8ToPath(const std::string &src);
 
+	/// Compares two strings by natural order.
+	bool naturalCompare(const std::string &a, const std::string &b);
 	/// Replaces a substring.
 	void replace(std::string &str, const std::string &find, const std::string &replace);
 	/// Formats an integer value as number with separators.
