@@ -60,7 +60,7 @@ void Font::load(const YAML::Node &node)
 		image.height = (*i)["height"].as<int>(height);
 		image.spacing = (*i)["spacing"].as<int>(spacing);
 		std::string file = "Language/" + (*i)["file"].as<std::string>();
-		std::string chars = (*i)["chars"].as<std::string>();
+		UString chars = Language::unpackUtf8((*i)["chars"].as<std::string>());
 		image.surface = new Surface(image.width, image.height);
 		image.surface->loadImage(FileMap::getFilePath(file));
 		_images.push_back(image);
@@ -89,7 +89,7 @@ void Font::loadTerminal()
 	SDL_FreeSurface(s);
 	_images.push_back(image);
 
-	init(0, " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+	init(0, Language::unpackUtf8(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"));
 }
 
 
@@ -100,7 +100,7 @@ void Font::loadTerminal()
  * @param index The index of the surface to use.
  * @param str A string of characters to map to the surface.
  */
-void Font::init(size_t index, const std::string &str)
+void Font::init(size_t index, const UString &str)
 {
 	FontImage *image = &_images[index];
 	Surface *surface = image->surface;
@@ -167,12 +167,10 @@ void Font::init(size_t index, const std::string &str)
  * @return Pointer to the font's surface with the respective
  * cropping rectangle set up.
  */
-Surface *Font::getChar(char c)
+Surface *Font::getChar(UCode c)
 {
 	if (_chars.find(c) == _chars.end())
-	{
-		return 0;
-	}
+		c = '?';
 	Surface *surface = _images[_chars[c].first].surface;
 	*surface->getCrop() = _chars[c].second;
 	return surface;
@@ -197,10 +195,10 @@ int Font::getHeight() const
 }
 
 /**
- * Returns the spacing for any character in the font.
+ * Returns the spacing between any character in the font.
  * @return Spacing in pixels.
  * @note This does not refer to character spacing within the surface,
- * but to the spacing used between multiple characters in a line.
+ * but to the spacing used between successive characters in a line.
  */
 int Font::getSpacing() const
 {
@@ -212,10 +210,10 @@ int Font::getSpacing() const
  * @param c Font character.
  * @return Width and Height dimensions (X and Y are ignored).
  */
-SDL_Rect Font::getCharSize(char c)
+SDL_Rect Font::getCharSize(UCode c)
 {
 	SDL_Rect size = { 0, 0, 0, 0 };
-	if (c != TOK_FLIP_COLORS && !isLinebreak(c) && !isSpace(c))
+	if (isPrintable(c))
 	{
 		if (_chars.find(c) == _chars.end()) 
 			c = '?';
@@ -228,8 +226,10 @@ SDL_Rect Font::getCharSize(char c)
 	{
 		if (_monospace)
 			size.w = getWidth() + getSpacing();
-		else if (isNonBreakableSpace(c))
+		else if (c == TOK_NBSP)
 			size.w = getWidth() / 4;
+		else if (c == '\t')
+			size.w = getWidth() * 3 / 4;
 		else
 			size.w = getWidth() / 2;
 		size.h = getHeight() + getSpacing();

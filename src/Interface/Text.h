@@ -21,12 +21,12 @@
 #include <vector>
 #include <string>
 #include <stdint.h>
+#include "../Engine/Language.h"
 
 namespace OpenXcom
 {
 
 class Font;
-class Language;
 
 enum TextHAlign { ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT };
 enum TextVAlign { ALIGN_TOP, ALIGN_MIDDLE, ALIGN_BOTTOM };
@@ -42,7 +42,8 @@ class Text : public InteractiveSurface
 private:
 	Font *_big, *_small, *_font;
 	Language *_lang;
-	std::string _text, _wrappedText;
+	std::string _text;
+	UString _processedText;
 	std::vector<int> _lineWidth, _lineHeight;
 	bool _wrap, _invert, _contrast, _indent;
 	TextHAlign _align;

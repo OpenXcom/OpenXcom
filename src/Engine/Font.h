@@ -23,6 +23,7 @@
 #include <string>
 #include <SDL.h>
 #include <yaml-cpp/yaml.h>
+#include "Language.h"
 
 namespace OpenXcom
 {
@@ -46,10 +47,10 @@ class Font
 {
 private:
 	std::vector<FontImage> _images;
-	std::map< char, std::pair<size_t, SDL_Rect> > _chars;
+	std::map< UCode, std::pair<size_t, SDL_Rect> > _chars;
 	bool _monospace;
 	/// Determines the size and position of each character in the font.
-	void init(size_t index, const std::string &str);
+	void init(size_t index, const UString &str);
 public:
 	/* Special text tokens */
 	static const char TOK_BREAK_SMALLLINE = 2;		// line break and change to small font
@@ -61,19 +62,19 @@ public:
 	/// Cleans up the font.
 	~Font();
 	/// Checks if a character is a linebreak.
-	static inline bool isLinebreak(char c) { return (c == '\n' || c == TOK_BREAK_SMALLLINE); }
+	static inline bool isLinebreak(UCode c) { return (c == '\n' || c == TOK_BREAK_SMALLLINE); }
 	/// Checks if a character is a blank space (includes non-breaking spaces).
-	static inline bool isSpace(char c) { return (c == ' ' || c == TOK_NBSP); }
+	static inline bool isSpace(UCode c) { return (c == ' ' || c == TOK_NBSP); }
 	/// Checks if a character is a word separator.
-	static inline bool isSeparator(char c) { return (c == '-' || c == '/'); }
-	/// Checks if a character is a non-breaking space.
-	static inline bool isNonBreakableSpace(char c) { return (c == TOK_NBSP); }
+	static inline bool isSeparator(UCode c) { return (c == '-' || c == '/'); }
+	/// Checks if a character is visible to the user.
+	static inline bool isPrintable(UCode c) { return (c > 32 && c != TOK_NBSP); }
 	/// Loads the font from YAML.
 	void load(const YAML::Node& node);
 	/// Generate the terminal font.
 	void loadTerminal();
 	/// Gets a particular character from the font, with its real size.
-	Surface *getChar(char c);
+	Surface *getChar(UCode c);
 	/// Gets the font's character width.
 	int getWidth() const;
 	/// Gets the font's character height.
@@ -81,7 +82,7 @@ public:
 	/// Gets the spacing between characters.
 	int getSpacing() const;
 	/// Gets the size of a particular character;
-	SDL_Rect getCharSize(char c);
+	SDL_Rect getCharSize(UCode c);
 	/// Gets the font's palette.
 	SDL_Color *getPalette() const;
 	/// Sets the font's palette.

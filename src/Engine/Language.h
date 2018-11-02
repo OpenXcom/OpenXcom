@@ -20,6 +20,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <SDL.h>
 #include "LocalizedText.h"
 #include "../Savegame/Soldier.h"
 
@@ -31,6 +32,13 @@ enum TextWrapping { WRAP_WORDS, WRAP_LETTERS };
 class TextList;
 class ExtraStrings;
 class LanguagePlurality;
+
+/**
+ * Represents a string where each character
+ * is a Unicode codepoint. Used for rendering text.
+ */
+typedef Uint32 UCode;
+typedef std::basic_string<UCode> UString;
 
 /**
  * Contains strings used throughout the game for localization.
@@ -71,6 +79,8 @@ public:
 	static std::string fsToUtf8(const std::string &src);
 	/// Converts a UTF-8 string to filesystem.
 	static std::string utf8ToFs(const std::string &src);
+
+	static UString unpackUtf8(const std::string &src);
 	/// Replaces a substring.
 	static void replace(std::string &str, const std::string &find, const std::string &replace);
 	/// Gets list of languages in the data directory.

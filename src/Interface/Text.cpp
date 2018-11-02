@@ -355,8 +355,9 @@ int Text::getTextWidth(int line) const
 }
 
 /**
- * Takes care of any text post-processing like calculating
- * line metrics for alignment and wordwrapping if necessary.
+ * Takes care of any text post-processing like converting
+ * encoded text to individual codepoints and calculating
+ * line metrics for alignment and wordwrapping.
  */
 void Text::processText()
 {
@@ -365,15 +366,7 @@ void Text::processText()
 		return;
 	}
 
-	std::string *str = &_text;
-
-	// Use a separate string for wordwrapping text
-	if (_wrap)
-	{
-		_wrappedText = _text;
-		str = &_wrappedText;
-	}
-
+	_processedText = Language::unpackUtf8(_text);
 	_lineWidth.clear();
 	_lineHeight.clear();
 
@@ -381,12 +374,13 @@ void Text::processText()
 	size_t space = 0, textIndentation = 0;
 	bool start = true;
 	Font *font = _font;
+	UString &str = _processedText;
 
 	// Go through the text character by character
-	for (size_t c = 0; c <= str->size(); ++c)
+	for (size_t c = 0; c <= str.size(); ++c)
 	{
 		// End of the line
-		if (c == str->size() || Font::isLinebreak((*str)[c]))
+		if (c == str.size() || Font::isLinebreak(str[c]))
 		{
 			// Add line measurements for alignment later
 			_lineWidth.push_back(width);
@@ -395,14 +389,14 @@ void Text::processText()
 			word = 0;
 			start = true;
 
-			if (c == str->size())
+			if (c == str.size())
 				break;
 			// \x02 marks start of small text
-			else if ((*str)[c] == Font::TOK_BREAK_SMALLLINE)
+			else if (str[c] == Font::TOK_BREAK_SMALLLINE)
 				font = _small;
 		}
 		// Keep track of spaces for wordwrapping
-		else if (Font::isSpace((*str)[c]) || Font::isSeparator((*str)[c]))
+		else if (Font::isSpace(str[c]) || Font::isSeparator(str[c]))
 		{
 			// Store existing indentation
 			if (c == textIndentation)
@@ -410,18 +404,14 @@ void Text::processText()
 				textIndentation++;
 			}
 			space = c;
-			width += font->getCharSize((*str)[c]).w;
+			width += font->getCharSize(str[c]).w;
 			word = 0;
 			start = false;
 		}
 		// Keep track of the width of the last line and word
-		else if ((*str)[c] != Font::TOK_FLIP_COLORS)
+		else if (str[c] != Font::TOK_FLIP_COLORS)
 		{
-			if (font->getChar((*str)[c]) == 0)
-			{
-				(*str)[c] = '?';
-			}
-			int charWidth = font->getCharSize((*str)[c]).w;
+			int charWidth = font->getCharSize(str[c]).w;
 
 			width += charWidth;
 			word += charWidth;
@@ -430,40 +420,40 @@ void Text::processText()
 			if (_wrap && width >= getWidth() && (!start || _lang->getTextWrapping() == WRAP_LETTERS))
 			{
 				size_t indentLocation = c;
-				if (_lang->getTextWrapping() == WRAP_WORDS || Font::isSpace((*str)[c]))
+				if (_lang->getTextWrapping() == WRAP_WORDS || Font::isSpace(str[c]))
 				{
 					// Go back to the last space and put a linebreak there
 					width -= word;
 					indentLocation = space;
-					if (Font::isSpace((*str)[space]))
+					if (Font::isSpace(str[space]))
 					{
-						width -= font->getCharSize((*str)[space]).w;
-						(*str)[space] = '\n';
+						width -= font->getCharSize(str[space]).w;
+						str[space] = '\n';
 					}
 					else
 					{
-						str->insert(space+1, "\n");
+						str.insert(space+1, 1, '\n');
 						indentLocation++;
 					}
 				}
 				else if (_lang->getTextWrapping() == WRAP_LETTERS)
 				{
 					// Go back to the last letter and put a linebreak there
-					str->insert(c, "\n");
+					str.insert(c, 1, '\n');
 					width -= charWidth;
 				}
 
 				// Keep initial indentation of text
 				if (textIndentation > 0)
 				{
-					str->insert(indentLocation+1, " \xA0", textIndentation);
+					str.insert(indentLocation+1, textIndentation, '\t');
 					indentLocation += textIndentation;
 				}
 				// Indent due to word wrap.
 				if (_indent)
 				{
-					str->insert(indentLocation+1, " \xA0");
-					width += font->getCharSize(' ').w + font->getCharSize(Font::TOK_NBSP).w;
+					str.insert(indentLocation+1, 1, '\t');
+					width += font->getCharSize('\t').w;
 				}
 
 				_lineWidth.push_back(width);
@@ -573,7 +563,7 @@ void Text::draw()
 	int x = 0, y = 0, line = 0, height = 0;
 	Font *font = _font;
 	int color = _color;
-	std::string *s = &_text;
+	const UString &s = _processedText;
 
 	for (std::vector<int>::iterator i = _lineHeight.begin(); i != _lineHeight.end(); ++i)
 	{
@@ -595,11 +585,6 @@ void Text::draw()
 
 	x = getLineX(line);
 
-	if (_wrap)
-	{
-		s = &_wrappedText;
-	}
-
 	// Set up text color
 	int mul = 1;
 	if (_contrast)
@@ -618,9 +603,9 @@ void Text::draw()
 	int mid = _invert ? 3 : 0;
 
 	// Draw each letter one by one
-	for (std::string::iterator c = s->begin(); c != s->end(); ++c)
+	for (UString::const_iterator c = s.begin(); c != s.end(); ++c)
 	{
-		if (Font::isSpace(*c))
+		if (Font::isSpace(*c) || *c == '\t')
 		{
 			x += dir * font->getCharSize(*c).w;
 		}
