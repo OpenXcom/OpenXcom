@@ -21,6 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Mod/Mod.h"
 #include "../Engine/Language.h"
+#include "../Engine/Unicode.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -92,7 +93,7 @@ ManufactureState::ManufactureState(Base *base) : _base(base)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_CURRENT_PRODUCTION"));
 
-	_txtFunds->setText(tr("STR_CURRENT_FUNDS").arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
+	_txtFunds->setText(tr("STR_CURRENT_FUNDS").arg(Unicode::formatFunding(_game->getSavedGame()->getFunds())));
 
 	_txtItem->setText(tr("STR_ITEM"));
 
@@ -172,7 +173,7 @@ void ManufactureState::fillProductionList()
 		else s2 << (*iter)->getAmountTotal();
 		if ((*iter)->getSellItems()) s2 << " $";
 		std::ostringstream s3;
-		s3 << Text::formatFunding((*iter)->getRules()->getManufactureCost());
+		s3 << Unicode::formatFunding((*iter)->getRules()->getManufactureCost());
 		std::ostringstream s4;
 		if ((*iter)->getInfiniteAmount())
 		{

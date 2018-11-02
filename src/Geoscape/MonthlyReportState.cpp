@@ -32,6 +32,7 @@
 #include "../Mod/RuleCountry.h"
 #include "Globe.h"
 #include "../Engine/Options.h"
+#include "../Engine/Unicode.h"
 #include "../Menu/CutsceneState.h"
 #include "../Savegame/Base.h"
 #include "../Battlescape/CommendationState.h"
@@ -155,19 +156,19 @@ MonthlyReportState::MonthlyReportState(bool psi, Globe *globe) : _psi(psi), _gam
 	_txtRating->setText(tr("STR_MONTHLY_RATING").arg(_ratingTotal).arg(rating));
 
 	std::ostringstream ss;
-	ss << tr("STR_INCOME") << "> \x01" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
+	ss << tr("STR_INCOME") << "> \x01" << Unicode::formatFunding(_game->getSavedGame()->getCountryFunding());
 	ss << " (";
 	if (_fundingDiff > 0)
 		ss << '+';
-	ss << Text::formatFunding(_fundingDiff) << ")";
+	ss << Unicode::formatFunding(_fundingDiff) << ")";
 	_txtIncome->setText(ss.str());
 
 	std::ostringstream ss2;
-	ss2 << tr("STR_MAINTENANCE") << "> \x01" << Text::formatFunding(_game->getSavedGame()->getBaseMaintenance());
+	ss2 << tr("STR_MAINTENANCE") << "> \x01" << Unicode::formatFunding(_game->getSavedGame()->getBaseMaintenance());
 	_txtMaintenance->setText(ss2.str());
 
 	std::ostringstream ss3;
-	ss3 << tr("STR_BALANCE") << "> \x01" << Text::formatFunding(_game->getSavedGame()->getFunds());
+	ss3 << tr("STR_BALANCE") << "> \x01" << Unicode::formatFunding(_game->getSavedGame()->getFunds());
 	_txtBalance->setText(ss3.str());
 
 	_txtDesc->setWordWrap(true);

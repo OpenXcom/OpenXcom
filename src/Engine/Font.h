@@ -23,7 +23,7 @@
 #include <string>
 #include <SDL.h>
 #include <yaml-cpp/yaml.h>
-#include "Language.h"
+#include "Unicode.h"
 
 namespace OpenXcom
 {
@@ -52,23 +52,11 @@ private:
 	/// Determines the size and position of each character in the font.
 	void init(size_t index, const UString &str);
 public:
-	/* Special text tokens */
-	static const char TOK_BREAK_SMALLLINE = 2;		// line break and change to small font
-	static const char TOK_FLIP_COLORS = 1;			// flip color scheme
-	static const char TOK_NBSP = 0xA0;				// non-breaking space
 
 	/// Creates a blank font.
 	Font();
 	/// Cleans up the font.
 	~Font();
-	/// Checks if a character is a linebreak.
-	static inline bool isLinebreak(UCode c) { return (c == '\n' || c == TOK_BREAK_SMALLLINE); }
-	/// Checks if a character is a blank space (includes non-breaking spaces).
-	static inline bool isSpace(UCode c) { return (c == ' ' || c == TOK_NBSP); }
-	/// Checks if a character is a word separator.
-	static inline bool isSeparator(UCode c) { return (c == '-' || c == '/'); }
-	/// Checks if a character is visible to the user.
-	static inline bool isPrintable(UCode c) { return (c > 32 && c != TOK_NBSP); }
 	/// Loads the font from YAML.
 	void load(const YAML::Node& node);
 	/// Generate the terminal font.

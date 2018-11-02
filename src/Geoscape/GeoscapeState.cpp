@@ -29,6 +29,7 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Options.h"
+#include "../Engine/Unicode.h"
 #include "Globe.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -589,7 +590,7 @@ void GeoscapeState::timeDisplay()
 {
 	if (Options::showFundsOnGeoscape)
 	{
-		_txtFunds->setText(Text::formatFunding(_game->getSavedGame()->getFunds()));
+		_txtFunds->setText(Unicode::formatFunding(_game->getSavedGame()->getFunds()));
 	}
 
 	std::ostringstream ss;

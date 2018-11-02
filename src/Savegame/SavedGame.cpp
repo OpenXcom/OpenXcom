@@ -26,7 +26,7 @@
 #include "../Engine/Logger.h"
 #include "../Mod/Mod.h"
 #include "../Engine/RNG.h"
-#include "../Engine/Language.h"
+#include "../Engine/Unicode.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Engine/CrossPlatform.h"
@@ -288,7 +288,7 @@ SaveInfo SavedGame::getSaveInfo(const std::string &file, Language *lang)
 		}
 		else
 		{
-			save.displayName = Language::fsToUtf8(CrossPlatform::noExt(file));
+			save.displayName = Unicode::fsToUtf8(CrossPlatform::noExt(file));
 		}
 		save.reserved = false;
 	}
@@ -353,7 +353,7 @@ void SavedGame::load(const std::string &filename, Mod *mod)
 	}
 	else
 	{
-		_name = Language::fsToUtf8(filename);
+		_name = Unicode::fsToUtf8(filename);
 	}
 	_ironman = brief["ironman"].as<bool>(_ironman);
 

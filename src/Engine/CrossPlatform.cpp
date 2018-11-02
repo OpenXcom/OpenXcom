@@ -33,7 +33,7 @@
 #include "Logger.h"
 #include "Exception.h"
 #include "Options.h"
-#include "Language.h"
+#include "Unicode.h"
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -121,7 +121,7 @@ void showError(const std::string &error)
 	else
 	{
 		std::string nError = '"' + error + '"';
-		Language::replace(nError, "\n", "\\n");
+		Unicode::replace(nError, "\n", "\\n");
 		std::string cmd = errorDlg + nError;
 		if (system(cmd.c_str()) != 0)
 			std::cerr << error << std::endl;
@@ -923,7 +923,7 @@ void setWindowIcon(int winResource, const std::string &)
 #else
 void setWindowIcon(int, const std::string &unixPath)
 {
-	std::string utf8 = Language::fsToUtf8(unixPath);
+	std::string utf8 = Unicode::fsToUtf8(unixPath);
 	SDL_Surface *icon = IMG_Load(utf8.c_str());
 	if (icon != 0)
 	{

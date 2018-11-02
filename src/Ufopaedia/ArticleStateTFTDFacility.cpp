@@ -25,6 +25,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/LocalizedText.h"
+#include "../Engine/Unicode.h"
 #include "../Interface/TextList.h"
 
 namespace OpenXcom
@@ -52,7 +53,7 @@ namespace OpenXcom
 			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
 
 			ss.str("");ss.clear();
-			ss << Text::formatPercentage(facility->getHitRatio());
+			ss << Unicode::formatPercentage(facility->getHitRatio());
 			_lstInfo->addRow(2, tr("STR_HIT_RATIO").c_str(), ss.str().c_str());
 			_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
 		}
@@ -61,12 +62,12 @@ namespace OpenXcom
 		_lstInfo->addRow(2, tr("STR_CONSTRUCTION_TIME").c_str(), tr("STR_DAY", facility->getBuildTime()).c_str());
 		_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
 
-		ss << Text::formatFunding(facility->getBuildCost());
+		ss << Unicode::formatFunding(facility->getBuildCost());
 		_lstInfo->addRow(2, tr("STR_CONSTRUCTION_COST").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
 
 		ss.str("");ss.clear();
-		ss << Text::formatFunding(facility->getMonthlyCost());
+		ss << Unicode::formatFunding(facility->getMonthlyCost());
 		_lstInfo->addRow(2, tr("STR_MAINTENANCE_COST").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(row++, 1, Palette::blockOffset(15)+4);
 

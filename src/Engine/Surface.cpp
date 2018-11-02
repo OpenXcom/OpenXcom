@@ -29,6 +29,7 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "ShaderMove.h"
+#include "Unicode.h"
 #include <stdlib.h>
 #ifdef _WIN32
 #include <malloc.h>
@@ -37,7 +38,6 @@
 #define _aligned_malloc __mingw_aligned_malloc
 #define _aligned_free   __mingw_aligned_free
 #endif //MINGW
-#include "Language.h"
 #ifdef __MORPHOS__
 #include <ppcinline/exec.h>
 #endif
@@ -342,7 +342,7 @@ void Surface::loadImage(const std::string &filename)
 	// Otherwise default to SDL_Image
 	if (!_surface)
 	{
-		std::string utf8 = Language::fsToUtf8(filename);
+		std::string utf8 = Unicode::fsToUtf8(filename);
 		_surface = IMG_Load(utf8.c_str());
 	}
 

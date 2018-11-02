@@ -30,6 +30,7 @@
 #include "BaseNameState.h"
 #include "../Menu/ErrorMessageState.h"
 #include "../Engine/Options.h"
+#include "../Engine/Unicode.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
@@ -85,7 +86,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(Base *base, Globe *globe) : _base(base)
 		}
 	}
 
-	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(_cost)));
+	_txtCost->setText(tr("STR_COST_").arg(Unicode::formatFunding(_cost)));
 
 	_txtArea->setText(tr("STR_AREA_").arg(area));
 }

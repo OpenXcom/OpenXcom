@@ -137,6 +137,7 @@ set ( engine_src
   Engine/Surface.cpp
   Engine/SurfaceSet.cpp
   Engine/Timer.cpp
+  Engine/Unicode.cpp
   Engine/Zoom.cpp
 )
 

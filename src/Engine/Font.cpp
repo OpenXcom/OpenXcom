@@ -20,7 +20,7 @@
 #include "DosFont.h"
 #include "Surface.h"
 #include "FileMap.h"
-#include "Language.h"
+#include "Unicode.h"
 
 namespace OpenXcom
 {
@@ -60,7 +60,7 @@ void Font::load(const YAML::Node &node)
 		image.height = (*i)["height"].as<int>(height);
 		image.spacing = (*i)["spacing"].as<int>(spacing);
 		std::string file = "Language/" + (*i)["file"].as<std::string>();
-		UString chars = Language::unpackUtf8((*i)["chars"].as<std::string>());
+		UString chars = Unicode::unpackUtf8((*i)["chars"].as<std::string>());
 		image.surface = new Surface(image.width, image.height);
 		image.surface->loadImage(FileMap::getFilePath(file));
 		_images.push_back(image);
@@ -89,7 +89,7 @@ void Font::loadTerminal()
 	SDL_FreeSurface(s);
 	_images.push_back(image);
 
-	init(0, Language::unpackUtf8(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"));
+	init(0, Unicode::unpackUtf8(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"));
 }
 
 
@@ -213,7 +213,7 @@ int Font::getSpacing() const
 SDL_Rect Font::getCharSize(UCode c)
 {
 	SDL_Rect size = { 0, 0, 0, 0 };
-	if (isPrintable(c))
+	if (Unicode::isPrintable(c))
 	{
 		if (_chars.find(c) == _chars.end()) 
 			c = '?';
@@ -226,7 +226,7 @@ SDL_Rect Font::getCharSize(UCode c)
 	{
 		if (_monospace)
 			size.w = getWidth() + getSpacing();
-		else if (c == TOK_NBSP)
+		else if (c == Unicode::TOK_NBSP)
 			size.w = getWidth() / 4;
 		else if (c == '\t')
 			size.w = getWidth() * 3 / 4;

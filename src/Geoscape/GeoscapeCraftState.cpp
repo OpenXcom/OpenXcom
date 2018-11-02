@@ -35,6 +35,7 @@
 #include "../Savegame/Waypoint.h"
 #include "SelectDestinationState.h"
 #include "../Engine/Options.h"
+#include "../Engine/Unicode.h"
 #include "Globe.h"
 
 namespace OpenXcom
@@ -176,9 +177,9 @@ GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *way
 			speed = ufo->getSpeed();
 		}
 	}
-	_txtSpeed->setText(tr("STR_SPEED_").arg(Text::formatNumber(speed)));
+	_txtSpeed->setText(tr("STR_SPEED_").arg(Unicode::formatNumber(speed)));
 
-	_txtMaxSpeed->setText(tr("STR_MAXIMUM_SPEED_UC").arg(Text::formatNumber(_craft->getRules()->getMaxSpeed())));
+	_txtMaxSpeed->setText(tr("STR_MAXIMUM_SPEED_UC").arg(Unicode::formatNumber(_craft->getRules()->getMaxSpeed())));
 
 	std::string altitude = _craft->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _craft->getAltitude();
 	if (_craft->getRules()->isWaterOnly() && !_globe->insideLand(_craft->getLongitude(), _craft->getLatitude()))
@@ -187,9 +188,9 @@ GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *way
 	}
 	_txtAltitude->setText(tr("STR_ALTITUDE_").arg(tr(altitude)));
 
-	_txtFuel->setText(tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage())));
+	_txtFuel->setText(tr("STR_FUEL").arg(Unicode::formatPercentage(_craft->getFuelPercentage())));
 
-	_txtDamage->setText(tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage())));
+	_txtDamage->setText(tr("STR_DAMAGE_UC_").arg(Unicode::formatPercentage(_craft->getDamagePercentage())));
 
 	if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 	{

@@ -37,6 +37,7 @@
 #include "Options.h"
 #include "CrossPlatform.h"
 #include "FileMap.h"
+#include "Unicode.h"
 #include "../Menu/TestState.h"
 
 namespace OpenXcom
@@ -321,7 +322,7 @@ void Game::quit()
 	// Always save ironman
 	if (_save != 0 && _save->isIronman() && !_save->getName().empty())
 	{
-		std::string filename = CrossPlatform::sanitizeFilename(Language::utf8ToFs(_save->getName())) + ".sav";
+		std::string filename = CrossPlatform::sanitizeFilename(Unicode::utf8ToFs(_save->getName())) + ".sav";
 		_save->save(filename);
 	}
 	_quit = true;
@@ -576,7 +577,7 @@ void Game::defaultLanguage()
 		std::string locale = CrossPlatform::getLocale();
 		std::string lang = locale.substr(0, locale.find_first_of('-'));
 		// Try to load full locale
-		Language::replace(path, defaultLang, locale);
+		Unicode::replace(path, defaultLang, locale);
 		if (CrossPlatform::fileExists(path))
 		{
 			currentLang = locale;
@@ -584,7 +585,7 @@ void Game::defaultLanguage()
 		else
 		{
 			// Try to load language locale
-			Language::replace(path, locale, lang);
+			Unicode::replace(path, locale, lang);
 			if (CrossPlatform::fileExists(path))
 			{
 				currentLang = lang;
@@ -599,7 +600,7 @@ void Game::defaultLanguage()
 	else
 	{
 		// Use options language
-		Language::replace(path, defaultLang, Options::language);
+		Unicode::replace(path, defaultLang, Options::language);
 		if (CrossPlatform::fileExists(path))
 		{
 			currentLang = Options::language;

@@ -32,6 +32,7 @@
 #include "../Battlescape/BattlescapeState.h"
 #include "../Mod/Mod.h"
 #include "../Engine/Sound.h"
+#include "../Engine/Unicode.h"
 #include "../Mod/RuleInterface.h"
 #include "StatisticsState.h"
 
@@ -186,7 +187,7 @@ void LoadGameState::think()
 		{
 			Log(LOG_ERROR) << e.what();
 			std::ostringstream error;
-			error << tr("STR_LOAD_UNSUCCESSFUL") << '\x02' << Language::fsToUtf8(e.what());
+			error << tr("STR_LOAD_UNSUCCESSFUL") << '\x02' << Unicode::fsToUtf8(e.what());
 			if (_origin != OPT_BATTLESCAPE)
 				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getMod()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getMod()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 			else
@@ -201,7 +202,7 @@ void LoadGameState::think()
 		{
 			Log(LOG_ERROR) << e.what();
 			std::ostringstream error;
-			error << tr("STR_LOAD_UNSUCCESSFUL") << '\x02' << Language::fsToUtf8(e.what());
+			error << tr("STR_LOAD_UNSUCCESSFUL") << '\x02' << Unicode::fsToUtf8(e.what());
 			if (_origin != OPT_BATTLESCAPE)
 				_game->pushState(new ErrorMessageState(error.str(), _palette, _game->getMod()->getInterface("errorMessages")->getElement("geoscapeColor")->color, "BACK01.SCR", _game->getMod()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 			else

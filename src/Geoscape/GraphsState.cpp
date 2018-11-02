@@ -36,6 +36,7 @@
 #include "../Interface/TextList.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
+#include "../Engine/Unicode.h"
 #include "../Mod/RuleInterface.h"
 
 namespace OpenXcom
@@ -616,7 +617,7 @@ void GraphsState::updateScale(double lowerLimit, double upperLimit)
 	double text = lowerLimit;
 	for (int i = 0; i < 10; ++i)
 	{
-		_txtScale.at(i)->setText(Text::formatNumber(static_cast<int>(text)));
+		_txtScale.at(i)->setText(Unicode::formatNumber(static_cast<int>(text)));
 		text += increment;
 	}
 }

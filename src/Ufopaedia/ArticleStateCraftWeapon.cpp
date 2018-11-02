@@ -26,6 +26,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/LocalizedText.h"
+#include "../Engine/Unicode.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -75,19 +76,19 @@ namespace OpenXcom
 		_lstInfo->setDot(true);
 		_lstInfo->setBig();
 
-		_lstInfo->addRow(2, tr("STR_DAMAGE").c_str(), Text::formatNumber(weapon->getDamage()).c_str());
+		_lstInfo->addRow(2, tr("STR_DAMAGE").c_str(), Unicode::formatNumber(weapon->getDamage()).c_str());
 		_lstInfo->setCellColor(0, 1, Palette::blockOffset(15)+4);
 
 		_lstInfo->addRow(2, tr("STR_RANGE").c_str(), tr("STR_KILOMETERS").arg(weapon->getRange()).c_str());
 		_lstInfo->setCellColor(1, 1, Palette::blockOffset(15)+4);
 
-		_lstInfo->addRow(2, tr("STR_ACCURACY").c_str(), Text::formatPercentage(weapon->getAccuracy()).c_str());
+		_lstInfo->addRow(2, tr("STR_ACCURACY").c_str(), Unicode::formatPercentage(weapon->getAccuracy()).c_str());
 		_lstInfo->setCellColor(2, 1, Palette::blockOffset(15)+4);
 
 		_lstInfo->addRow(2, tr("STR_RE_LOAD_TIME").c_str(), tr("STR_SECONDS").arg(weapon->getStandardReload()).c_str());
 		_lstInfo->setCellColor(3, 1, Palette::blockOffset(15)+4);
 
-		_lstInfo->addRow(2, tr("STR_ROUNDS").c_str(), Text::formatNumber(weapon->getAmmoMax()).c_str());
+		_lstInfo->addRow(2, tr("STR_ROUNDS").c_str(), Unicode::formatNumber(weapon->getAmmoMax()).c_str());
 		_lstInfo->setCellColor(4, 1, Palette::blockOffset(15)+4);
 
 		centerAllSurfaces();

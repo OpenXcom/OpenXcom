@@ -30,6 +30,7 @@
 #include "../Engine/Logger.h"
 #include "../Interface/ComboBox.h"
 #include "../Engine/Game.h"
+#include "../Engine/Unicode.h"
 #include "SetWindowedRootState.h"
 
 namespace OpenXcom
@@ -222,7 +223,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 		std::string file = (*i);
 		std::string path = GL_FOLDER + file;
 		std::string name = file.substr(0, file.length() - GL_EXT.length() - 1) + GL_STRING;
-		filterNames.push_back(Language::fsToUtf8(ucWords(name)));
+		filterNames.push_back(Unicode::fsToUtf8(ucWords(name)));
 		_filters.push_back(path);
 	}
 #endif

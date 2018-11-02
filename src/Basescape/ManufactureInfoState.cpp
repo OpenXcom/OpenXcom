@@ -27,6 +27,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
+#include "../Engine/Unicode.h"
 #include "../Mod/Mod.h"
 #include "../Mod/RuleCraft.h"
 #include "../Mod/RuleItem.h"
@@ -316,7 +317,7 @@ void ManufactureInfoState::setAssignedEngineer()
 	if (_production->getInfiniteAmount()) s4 << "∞";
 	else s4 << _production->getAmountTotal();
 	_txtTodo->setText(s4.str());
-	_txtMonthlyProfit->setText(tr("STR_MONTHLY_PROFIT").arg(Text::formatFunding(getMonthlyNetFunds()).c_str()));
+	_txtMonthlyProfit->setText(tr("STR_MONTHLY_PROFIT").arg(Unicode::formatFunding(getMonthlyNetFunds()).c_str()));
 }
 
 /**

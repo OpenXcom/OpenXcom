@@ -20,13 +20,13 @@
 #include "../Engine/InteractiveSurface.h"
 #include <vector>
 #include <string>
-#include <stdint.h>
-#include "../Engine/Language.h"
+#include "../Engine/Unicode.h"
 
 namespace OpenXcom
 {
 
 class Font;
+class Language;
 
 enum TextHAlign { ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT };
 enum TextVAlign { ALIGN_TOP, ALIGN_MIDDLE, ALIGN_BOTTOM };
@@ -59,12 +59,6 @@ public:
 	Text(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the text.
 	~Text();
-	/// Formats an integer value as number with separators.
-	static std::string formatNumber(int64_t value, const std::string &currency = "");
-	/// Formats an integer value as currency.
-	static std::string formatFunding(int64_t funds);
-	/// Formats an integer value as percentage.
-	static std::string formatPercentage(int value);
 	/// Sets the text size to big.
 	void setBig();
 	/// Sets the text size to small.

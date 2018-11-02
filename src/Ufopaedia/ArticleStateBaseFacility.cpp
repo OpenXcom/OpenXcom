@@ -27,6 +27,7 @@
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/LocalizedText.h"
+#include "../Engine/Unicode.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -123,12 +124,12 @@ namespace OpenXcom
 		_lstInfo->setCellColor(0, 1, Palette::blockOffset(13)+0);
 
 		std::ostringstream ss;
-		ss << Text::formatFunding(facility->getBuildCost());
+		ss << Unicode::formatFunding(facility->getBuildCost());
 		_lstInfo->addRow(2, tr("STR_CONSTRUCTION_COST").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(1, 1, Palette::blockOffset(13)+0);
 
 		ss.str("");ss.clear();
-		ss << Text::formatFunding(facility->getMonthlyCost());
+		ss << Unicode::formatFunding(facility->getMonthlyCost());
 		_lstInfo->addRow(2, tr("STR_MAINTENANCE_COST").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(2, 1, Palette::blockOffset(13)+0);
 
@@ -140,7 +141,7 @@ namespace OpenXcom
 			_lstInfo->setCellColor(3, 1, Palette::blockOffset(13)+0);
 
 			ss.str("");ss.clear();
-			ss << Text::formatPercentage(facility->getHitRatio());
+			ss << Unicode::formatPercentage(facility->getHitRatio());
 			_lstInfo->addRow(2, tr("STR_HIT_RATIO").c_str(), ss.str().c_str());
 			_lstInfo->setCellColor(4, 1, Palette::blockOffset(13)+0);
 		}

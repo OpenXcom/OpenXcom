@@ -27,6 +27,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/LocalizedText.h"
+#include "../Engine/Unicode.h"
 #include "../Interface/TextList.h"
 
 namespace OpenXcom
@@ -61,7 +62,7 @@ namespace OpenXcom
 			std::string damage = getDamageTypeText(dt);
 			if (percentage != 100 && damage != "STR_UNKNOWN")
 			{
-				addStat(damage, Text::formatPercentage(percentage));
+				addStat(damage, Unicode::formatPercentage(percentage));
 			}
 		}
 

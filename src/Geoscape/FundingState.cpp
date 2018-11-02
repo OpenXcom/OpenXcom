@@ -21,6 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Mod/Mod.h"
 #include "../Engine/LocalizedText.h"
+#include "../Engine/Unicode.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -87,23 +88,23 @@ FundingState::FundingState()
 	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
 	{
 		std::ostringstream ss, ss2;
-		ss << '\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)) << '\x01';
+		ss << '\x01' << Unicode::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)) << '\x01';
 		if ((*i)->getFunding().size() > 1)
 		{
 			ss2 << '\x01';
 			int change = (*i)->getFunding().back() - (*i)->getFunding().at((*i)->getFunding().size()-2);
 			if (change > 0)
 				ss2 << '+';
-			ss2 << Text::formatFunding(change);
+			ss2 << Unicode::formatFunding(change);
 			ss2 << '\x01';
 		}
 		else
 		{
-			ss2 << Text::formatFunding(0);
+			ss2 << Unicode::formatFunding(0);
 		}
 		_lstCountries->addRow(3, tr((*i)->getRules()->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
 	}
-	_lstCountries->addRow(2, tr("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
+	_lstCountries->addRow(2, tr("STR_TOTAL_UC").c_str(), Unicode::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
 	_lstCountries->setRowColor(_game->getSavedGame()->getCountries()->size(), _txtCountry->getColor());
 }
 

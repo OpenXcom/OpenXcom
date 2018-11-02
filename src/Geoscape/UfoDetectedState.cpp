@@ -31,6 +31,7 @@
 #include "Globe.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
+#include "../Engine/Unicode.h"
 #include "../Savegame/AlienMission.h"
 #include "InterceptState.h"
 #include "../Mod/RuleCraft.h"
@@ -170,7 +171,7 @@ UfoDetectedState::UfoDetectedState(Ufo *ufo, GeoscapeState *state, bool detected
 	_lstInfo->addRow(2, tr("STR_HEADING").c_str(), ss.str().c_str());
 
 	ss.str("");
-	ss << '\x01' << Text::formatNumber(_ufo->getSpeed());
+	ss << '\x01' << Unicode::formatNumber(_ufo->getSpeed());
 	_lstInfo->addRow(2, tr("STR_SPEED").c_str(), ss.str().c_str());
 
 	_lstInfo2->setColumns(2, 77, 140);

@@ -17,11 +17,10 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Text.h"
-#include <cmath>
-#include <sstream>
 #include "../Engine/Font.h"
 #include "../Engine/Options.h"
 #include "../Engine/Language.h"
+#include "../Engine/Unicode.h"
 #include "../Engine/ShaderDraw.h"
 #include "../Engine/ShaderMove.h"
 
@@ -45,68 +44,6 @@ Text::Text(int width, int height, int x, int y) : InteractiveSurface(width, heig
 Text::~Text()
 {
 
-}
-
-/**
- * Takes an integer value and formats it as number with separators (spacing the thousands).
- * @param value The value.
- * @param currency Currency symbol.
- * @return The formatted string.
- */
-std::string Text::formatNumber(int64_t value, const std::string &currency)
-{
-	// In the future, the whole setlocale thing should be removed from here.
-	// It is inconsistent with the in-game language selection: locale-specific
-	// symbols, such as thousands separators, should be determined by the game
-	// language, not by system locale.
-	//setlocale(LC_MONETARY, ""); // see http://www.cplusplus.com/reference/clocale/localeconv/
-	//setlocale(LC_CTYPE, ""); // this is necessary for mbstowcs to work correctly
-	//struct lconv * lc = localeconv();
-	std::string thousands_sep = "\xA0";// Language::cpToWstr(lc->mon_thousands_sep);
-
-	bool negative = (value < 0);
-	std::ostringstream ss;
-	ss << (negative? -value : value);
-	std::string s = ss.str();
-	size_t spacer = s.size() - 3;
-	while (spacer > 0 && spacer < s.size())
-	{
-		s.insert(spacer, thousands_sep);
-		spacer -= 3;
-	}
-	if (!currency.empty())
-	{
-		s.insert(0, currency);
-	}
-	if (negative)
-	{
-		s.insert(0, "-");
-	}
-	return s;
-}
-
-/**
- * Takes an integer value and formats it as currency,
- * spacing the thousands and adding a $ sign to the front.
- * @param funds The funding value.
- * @return The formatted string.
- */
-std::string Text::formatFunding(int64_t funds)
-{
-	return formatNumber(funds, "$");
-}
-
-/**
- * Takes an integer value and formats it as percentage,
- * adding a % sign.
- * @param value The percentage value.
- * @return The formatted string.
- */
-std::string Text::formatPercentage(int value)
-{
-	std::ostringstream ss;
-	ss << value << "%";
-	return ss.str();
 }
 
 /**
@@ -366,7 +303,7 @@ void Text::processText()
 		return;
 	}
 
-	_processedText = Language::unpackUtf8(_text);
+	_processedText = Unicode::unpackUtf8(_text);
 	_lineWidth.clear();
 	_lineHeight.clear();
 
@@ -380,7 +317,7 @@ void Text::processText()
 	for (size_t c = 0; c <= str.size(); ++c)
 	{
 		// End of the line
-		if (c == str.size() || Font::isLinebreak(str[c]))
+		if (c == str.size() || Unicode::isLinebreak(str[c]))
 		{
 			// Add line measurements for alignment later
 			_lineWidth.push_back(width);
@@ -392,11 +329,11 @@ void Text::processText()
 			if (c == str.size())
 				break;
 			// \x02 marks start of small text
-			else if (str[c] == Font::TOK_BREAK_SMALLLINE)
+			else if (str[c] == Unicode::TOK_BREAK_SMALLLINE)
 				font = _small;
 		}
 		// Keep track of spaces for wordwrapping
-		else if (Font::isSpace(str[c]) || Font::isSeparator(str[c]))
+		else if (Unicode::isSpace(str[c]) || Unicode::isSeparator(str[c]))
 		{
 			// Store existing indentation
 			if (c == textIndentation)
@@ -409,7 +346,7 @@ void Text::processText()
 			start = false;
 		}
 		// Keep track of the width of the last line and word
-		else if (str[c] != Font::TOK_FLIP_COLORS)
+		else if (str[c] != Unicode::TOK_FLIP_COLORS)
 		{
 			int charWidth = font->getCharSize(str[c]).w;
 
@@ -420,12 +357,12 @@ void Text::processText()
 			if (_wrap && width >= getWidth() && (!start || _lang->getTextWrapping() == WRAP_LETTERS))
 			{
 				size_t indentLocation = c;
-				if (_lang->getTextWrapping() == WRAP_WORDS || Font::isSpace(str[c]))
+				if (_lang->getTextWrapping() == WRAP_WORDS || Unicode::isSpace(str[c]))
 				{
 					// Go back to the last space and put a linebreak there
 					width -= word;
 					indentLocation = space;
-					if (Font::isSpace(str[space]))
+					if (Unicode::isSpace(str[space]))
 					{
 						width -= font->getCharSize(str[space]).w;
 						str[space] = '\n';
@@ -605,21 +542,21 @@ void Text::draw()
 	// Draw each letter one by one
 	for (UString::const_iterator c = s.begin(); c != s.end(); ++c)
 	{
-		if (Font::isSpace(*c) || *c == '\t')
+		if (Unicode::isSpace(*c) || *c == '\t')
 		{
 			x += dir * font->getCharSize(*c).w;
 		}
-		else if (Font::isLinebreak(*c))
+		else if (Unicode::isLinebreak(*c))
 		{
 			line++;
 			y += font->getCharSize(*c).h;
 			x = getLineX(line);
-			if (*c == Font::TOK_BREAK_SMALLLINE)
+			if (*c == Unicode::TOK_BREAK_SMALLLINE)
 			{
 				font = _small;
 			}
 		}
-		else if (*c == Font::TOK_FLIP_COLORS)
+		else if (*c == Unicode::TOK_FLIP_COLORS)
 		{
 			color = (color == _color ? _color2 : _color);
 		}

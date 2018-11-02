@@ -21,6 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Engine/Language.h"
+#include "../Engine/Unicode.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextList.h"
 #include "../Interface/TextEdit.h"
@@ -168,7 +169,7 @@ void ListSaveState::saveGame()
 {
 	_game->getSavedGame()->setName(_edtSave->getText());
 	std::string oldFilename, newFilename;
-	newFilename = CrossPlatform::sanitizeFilename(Language::utf8ToFs(_edtSave->getText()));
+	newFilename = CrossPlatform::sanitizeFilename(Unicode::utf8ToFs(_edtSave->getText()));
 	if (_selectedRow > 0)
 	{
 		oldFilename = _saves[_selectedRow - 1].fileName;

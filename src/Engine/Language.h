@@ -20,7 +20,6 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <SDL.h>
 #include "LocalizedText.h"
 #include "../Savegame/Soldier.h"
 
@@ -32,13 +31,6 @@ enum TextWrapping { WRAP_WORDS, WRAP_LETTERS };
 class TextList;
 class ExtraStrings;
 class LanguagePlurality;
-
-/**
- * Represents a string where each character
- * is a Unicode codepoint. Used for rendering text.
- */
-typedef Uint32 UCode;
-typedef std::basic_string<UCode> UString;
 
 /**
  * Contains strings used throughout the game for localization.
@@ -63,26 +55,6 @@ public:
 	Language();
 	/// Cleans up the language.
 	~Language();
-	/// Converts a wide-string to UTF-8.
-	static std::string wstrToUtf8(const std::wstring &src);
-	/// Converts a wide-string to local-codepage string.
-	static std::string wstrToCp(const std::wstring &src);
-	/// Converts a wide-string to filesystem string.
-	static std::string wstrToFs(const std::wstring &src);
-	/// Converts a UTF-8 string to wide-string.
-	static std::wstring utf8ToWstr(const std::string &src);
-	/// Converts a local-codepage string to wide-string.
-	static std::wstring cpToWstr(const std::string &src);
-	/// Converts a filesystem string to wide-string.
-	static std::wstring fsToWstr(const std::string &src);
-	/// Converts a filesystem string to UTF-8.
-	static std::string fsToUtf8(const std::string &src);
-	/// Converts a UTF-8 string to filesystem.
-	static std::string utf8ToFs(const std::string &src);
-
-	static UString unpackUtf8(const std::string &src);
-	/// Replaces a substring.
-	static void replace(std::string &str, const std::string &find, const std::string &replace);
 	/// Gets list of languages in the data directory.
 	static void getList(std::vector<std::string> &files, std::vector<std::string> &names);
 	/// Loads the language from a YAML file.

@@ -28,6 +28,7 @@
 #include "../Interface/ComboBox.h"
 #include "../Engine/Options.h"
 #include "../Engine/Action.h"
+#include "../Engine/Unicode.h"
 
 namespace OpenXcom
 {
@@ -167,7 +168,7 @@ void OptionsModsState::lstModsRefresh(size_t scrollLoc)
 			continue;
 		}
 
-		std::string modName = Language::fsToUtf8(modInfo.getName());
+		std::string modName = Unicode::fsToUtf8(modInfo.getName());
 		_lstMods->addRow(3, modName.c_str(), "", (i->second ? tr("STR_YES").c_str() : tr("STR_NO").c_str()));
 		_mods.push_back(*i);
 	}

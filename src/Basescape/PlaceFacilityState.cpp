@@ -30,6 +30,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Menu/ErrorMessageState.h"
 #include "../Engine/Options.h"
+#include "../Engine/Unicode.h"
 #include "../Mod/RuleInterface.h"
 #include <climits>
 
@@ -91,7 +92,7 @@ PlaceFacilityState::PlaceFacilityState(Base *base, RuleBaseFacility *rule) : _ba
 	_txtCost->setText(tr("STR_COST_UC"));
 
 	_numCost->setBig();
-	_numCost->setText(Text::formatFunding(_rule->getBuildCost()));
+	_numCost->setText(Unicode::formatFunding(_rule->getBuildCost()));
 
 	_txtTime->setText(tr("STR_CONSTRUCTION_TIME_UC"));
 
@@ -101,7 +102,7 @@ PlaceFacilityState::PlaceFacilityState(Base *base, RuleBaseFacility *rule) : _ba
 	_txtMaintenance->setText(tr("STR_MAINTENANCE_UC"));
 
 	_numMaintenance->setBig();
-	_numMaintenance->setText(Text::formatFunding(_rule->getMonthlyCost()));
+	_numMaintenance->setText(Unicode::formatFunding(_rule->getMonthlyCost()));
 }
 
 /**

@@ -175,6 +175,7 @@
 #include "./Engine/Surface.h"
 #include "./Engine/SurfaceSet.h"
 #include "./Engine/Timer.h"
+#include "./Engine/Unicode.h"
 #include "./Engine/Zoom.h"
 #include "./Interface/ArrowButton.h"
 #include "./Interface/Bar.h"
