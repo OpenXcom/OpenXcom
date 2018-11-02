@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class Text;
+class SavedGame;
 
 /**
  * Loads a saved game, with an optional message.
@@ -51,6 +52,8 @@ public:
 	void init();
 	/// Loads the game.
 	void think();
+	/// Shows an error message.
+	void error(const std::string &msg, SavedGame *save);
 };
 
 }

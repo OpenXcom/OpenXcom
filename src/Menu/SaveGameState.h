@@ -50,6 +50,8 @@ public:
 	void buildUi(SDL_Color *palette);
 	/// Saves the game.
 	void think();
+	/// Shows an error message.
+	void error(const std::string &msg);
 };
 
 }
