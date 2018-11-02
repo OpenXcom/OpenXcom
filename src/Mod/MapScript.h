@@ -21,7 +21,6 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 #include <SDL_video.h>
-#include "RuleTerrain.h"
 #include "MapBlock.h"
 
 namespace OpenXcom

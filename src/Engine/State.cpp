@@ -31,8 +31,6 @@
 #include "../Interface/TextEdit.h"
 #include "../Interface/TextList.h"
 #include "../Interface/BattlescapeButton.h"
-#include "../Interface/ArrowButton.h"
-#include "../Interface/Slider.h"
 #include "../Interface/ComboBox.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"

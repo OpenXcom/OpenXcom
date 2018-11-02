@@ -24,7 +24,6 @@
 #include "../Engine/State.h"
 #include "../Engine/Language.h"
 #include "../Engine/Font.h"
-#include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"

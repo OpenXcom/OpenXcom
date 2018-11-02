@@ -30,7 +30,6 @@
 #include "NewBattleState.h"
 #include "ListLoadState.h"
 #include "OptionsVideoState.h"
-#include "../Engine/Screen.h"
 #include "../Engine/Options.h"
 
 namespace OpenXcom

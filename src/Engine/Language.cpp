@@ -435,7 +435,7 @@ number used. The keys for texts that depend on numbers also have special
 suffixes, that depend on the language. For all languages, a suffix of
 <tt>_zero</tt> is tried if the number is zero, before trying the actual key
 according to the language rules. The rest of the suffixes depend on the language,
-as described <a href="http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html">here</a>.
+as described <a href="http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html">here</a>.
 
 So, you would write (for English):
 <pre>

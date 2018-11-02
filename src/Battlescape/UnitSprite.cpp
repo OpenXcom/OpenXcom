@@ -27,7 +27,6 @@
 #include "../Engine/ShaderDraw.h"
 #include "../Engine/ShaderMove.h"
 #include "../Engine/Options.h"
-#include "../fmath.h"
 
 namespace OpenXcom
 {

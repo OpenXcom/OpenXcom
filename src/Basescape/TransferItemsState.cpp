@@ -20,7 +20,6 @@
 #include <algorithm>
 #include <sstream>
 #include <climits>
-#include <cfloat>
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Mod/Mod.h"

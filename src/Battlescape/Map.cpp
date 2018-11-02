@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <fstream>
 #include "Map.h"
 #include "Camera.h"
 #include "UnitSprite.h"
@@ -959,7 +958,6 @@ void Map::drawTerrain(Surface *surface)
 							{
 								BattleAction *action = _save->getBattleGame()->getCurrentAction();
 								RuleItem *weapon = action->weapon->getRules();
-								std::ostringstream ss;
 								int accuracy = action->actor->getFiringAccuracy(action->type, action->weapon);
 								int distance = _save->getTileEngine()->distance(Position (itX, itY,itZ), action->actor->getPosition());
 								int upperLimit = 200;
@@ -1019,9 +1017,7 @@ void Map::drawTerrain(Surface *surface)
 									accuracy = 0;
 									_txtAccuracy->setColor(Palette::blockOffset(Pathfinding::red - 1)-1);
 								}
-								ss << accuracy;
-								ss << "%";
-								_txtAccuracy->setText(ss.str());
+								_txtAccuracy->setText(Unicode::formatPercentage(accuracy));
 								_txtAccuracy->draw();
 								_txtAccuracy->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 							}

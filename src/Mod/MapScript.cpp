@@ -21,6 +21,7 @@
 #include <yaml-cpp/yaml.h>
 #include "../Engine/RNG.h"
 #include "../Engine/Exception.h"
+#include "../Mod/RuleTerrain.h"
 
 
 namespace OpenXcom

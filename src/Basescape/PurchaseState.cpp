@@ -20,7 +20,6 @@
 #include <algorithm>
 #include <sstream>
 #include <climits>
-#include <cfloat>
 #include <iomanip>
 #include "../fmath.h"
 #include "../Engine/Game.h"

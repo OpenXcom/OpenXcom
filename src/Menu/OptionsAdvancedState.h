@@ -20,7 +20,6 @@
 #include "OptionsBaseState.h"
 #include "../Engine/OptionInfo.h"
 #include <vector>
-#include <string>
 
 namespace OpenXcom
 {

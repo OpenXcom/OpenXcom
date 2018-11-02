@@ -29,7 +29,6 @@
 #include <algorithm>
 #include <cassert>
 #include <string.h>
-#include <cmath>
 #include <SDL_mixer.h>
 #include <fstream>
 #include "Logger.h"

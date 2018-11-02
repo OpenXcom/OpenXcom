@@ -24,16 +24,13 @@
 #include <algorithm>
 #include <sstream>
 #include <string>
-#include <locale>
 #include <stdint.h>
 #include <time.h>
 #include <sys/stat.h>
-#include <signal.h>
 #include "../dirent.h"
 #include "Logger.h"
 #include "Exception.h"
 #include "Options.h"
-#include "Unicode.h"
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -60,11 +57,13 @@
 #else
 #include <iostream>
 #include <fstream>
+#include <locale>
 #include <SDL_image.h>
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
+#include <signal.h>
 #include <sys/param.h>
 #include <sys/types.h>
 #include <pwd.h>

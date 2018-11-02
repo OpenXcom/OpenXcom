@@ -39,7 +39,6 @@
 #include "../Savegame/SoldierDiary.h"
 #include "../Menu/SaveGameState.h"
 #include "../Mod/RuleInterface.h"
-#include "../fmath.h"
 
 namespace OpenXcom
 {

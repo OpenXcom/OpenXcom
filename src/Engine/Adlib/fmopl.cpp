@@ -32,7 +32,6 @@
 #define INLINE		__inline
 #define HAS_YM3812	1
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <cmath>
@@ -46,6 +45,7 @@
 /* -------------------- for debug --------------------- */
 /* #define OPL_OUTPUT_LOG */
 #ifdef OPL_OUTPUT_LOG
+#include <stdio.h>
 static FILE *opl_dbg_fp = NULL;
 static FM_OPL *opl_dbg_opl[16];
 static int opl_dbg_maxchip,opl_dbg_chip;
