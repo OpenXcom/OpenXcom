@@ -25,7 +25,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Screen.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/Text.h"
 #include "../Geoscape/GeoscapeState.h"
 #include "ErrorMessageState.h"

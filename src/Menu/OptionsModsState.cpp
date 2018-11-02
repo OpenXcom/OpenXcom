@@ -21,7 +21,7 @@
 #include <algorithm>
 #include "../Engine/Game.h"
 #include "../Mod/Mod.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Interface/Window.h"
 #include "../Interface/TextList.h"
 #include "../Interface/Text.h"

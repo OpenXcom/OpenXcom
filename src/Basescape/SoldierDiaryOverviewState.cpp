@@ -23,7 +23,7 @@
 #include <sstream>
 #include "../Mod/Mod.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"

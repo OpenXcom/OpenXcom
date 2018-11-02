@@ -20,7 +20,7 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Unicode.h"
 #include "../Engine/Options.h"
 #include "../Interface/TextList.h"

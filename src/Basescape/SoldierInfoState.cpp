@@ -23,7 +23,6 @@
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Mod/Mod.h"
-#include "../Engine/Language.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Interface/Bar.h"
@@ -496,14 +495,12 @@ void SoldierInfoState::init()
 		_btnSack->setVisible(false);
 		_txtCraft->setVisible(false);
 		_txtDead->setVisible(true);
+		std::string s = "STR_MISSING_IN_ACTION";
 		if (_soldier->getDeath() && _soldier->getDeath()->getCause())
 		{
-			_txtDead->setText(_game->getLanguage()->getString("STR_KILLED_IN_ACTION", _soldier->getGender()));
+			s = "STR_KILLED_IN_ACTION";
 		}
-		else
-		{
-			_txtDead->setText(_game->getLanguage()->getString("STR_MISSING_IN_ACTION", _soldier->getGender()));
-		}
+		_txtDead->setText(tr(s, _soldier->getGender()));
 	}
 	else
 	{

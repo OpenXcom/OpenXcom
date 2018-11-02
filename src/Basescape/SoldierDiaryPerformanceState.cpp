@@ -21,7 +21,7 @@
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Mod/Mod.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Interface/TextButton.h"

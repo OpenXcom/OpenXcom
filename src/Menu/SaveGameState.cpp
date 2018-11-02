@@ -24,7 +24,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Engine/Language.h"
+#include "../Engine/LocalizedText.h"
 #include "../Engine/Unicode.h"
 #include "../Interface/Text.h"
 #include "ErrorMessageState.h"
