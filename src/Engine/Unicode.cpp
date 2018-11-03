@@ -255,7 +255,7 @@ void replace(std::string &str, const std::string &find, const std::string &repla
  */
 std::string formatNumber(int64_t value, const std::string &currency)
 {
-	const char thousands_sep = TOK_NBSP;
+	const std::string thousands_sep = "\xC2\xA0"; // TOK_NBSP
 
 	bool negative = (value < 0);
 	std::ostringstream ss;
@@ -264,7 +264,7 @@ std::string formatNumber(int64_t value, const std::string &currency)
 	size_t spacer = s.size() - 3;
 	while (spacer > 0 && spacer < s.size())
 	{
-		s.insert(spacer, 1, thousands_sep);
+		s.insert(spacer, thousands_sep);
 		spacer -= 3;
 	}
 	if (!currency.empty())
