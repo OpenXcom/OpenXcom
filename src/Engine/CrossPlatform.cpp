@@ -68,6 +68,7 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <execinfo.h>
+#include "Unicode.h"
 #endif
 #include <SDL.h>
 #include <SDL_syswm.h>

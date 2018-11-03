@@ -42,9 +42,9 @@ typedef std::basic_string<UCode> UString;
 namespace Unicode
 {
 	/* Special text tokens */
-	const char TOK_NL_SMALL = 2;		/// line break and change to small font
-	const char TOK_COLOR_FLIP = 1;		/// alternate between primary and secondary color
-	const char TOK_NBSP = 0xA0;			/// non-breaking space
+	const char TOK_NL_SMALL = 2;			/// line break and change to small font
+	const char TOK_COLOR_FLIP = 1;			/// alternate between primary and secondary color
+	const unsigned char TOK_NBSP = 0xA0;	/// non-breaking space
 
 	/// Checks if a character is a linebreak.
 	inline bool isLinebreak(UCode c) { return (c == '\n' || c == TOK_NL_SMALL); }
