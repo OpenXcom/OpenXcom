@@ -262,10 +262,10 @@ static bool positionHaveSameXY(Position a, Position b)
  * @param currTile
  * @param currTileScreenPosition
  * @param shade
- * @param topLayer
  * @param obstacleShade unitShade override for no LOF obstacle indicator
+ * @param topLayer
  */
-void Map::drawUnit(Surface *surface, Tile *unitTile, Tile *currTile, Position currTileScreenPosition, int shade, bool topLayer, int obstacleShade)
+void Map::drawUnit(Surface *surface, Tile *unitTile, Tile *currTile, Position currTileScreenPosition, int shade, int obstacleShade, bool topLayer)
 {
 	const int tileFoorWidth = 32;
 	const int tileFoorHeight = 16;
@@ -456,7 +456,7 @@ void Map::drawUnit(Surface *surface, Tile *unitTile, Tile *currTile, Position cu
 	calculateWalkingOffset(bu, &offset, &shadeOffset);
 	int tileShade = currTile->isDiscovered(2) ? currTile->getShade() : 16;
 	int unitShade = (tileShade * (16 - shadeOffset) + shade * shadeOffset) / 16;
-	if (currTile->getObstacle(4) && !moving) //unit
+	if (!moving && unitTile->getObstacle(4))
 	{
 		unitShade = obstacleShade;
 	}
@@ -718,7 +718,7 @@ void Map::drawTerrain(Surface *surface)
 
 					for (int b = 0; b < backPosSize; ++b)
 					{
-						drawUnit(surface, _save->getTile(mapPosition + backPos[b]), tile, screenPosition, tileShade, topLayer, obstacleShade);
+						drawUnit(surface, _save->getTile(mapPosition + backPos[b]), tile, screenPosition, tileShade, obstacleShade, topLayer);
 					}
 
 					// Draw walls
@@ -863,7 +863,7 @@ void Map::drawTerrain(Surface *surface)
 					}
 					unit = tile->getUnit();
 					// Draw soldier from this tile or below
-					drawUnit(surface, tile, tile, screenPosition, tileShade, topLayer, obstacleShade);
+					drawUnit(surface, tile, tile, screenPosition, tileShade, obstacleShade, topLayer);
 
 					// special handling for a moving unit in forground of tile.
 					const int frontPosSize = 5;
@@ -878,7 +878,7 @@ void Map::drawTerrain(Surface *surface)
 
 					for (int f = 0; f < frontPosSize; ++f)
 					{
-						drawUnit(surface, _save->getTile(mapPosition + frontPos[f]), tile, screenPosition, tileShade, topLayer, obstacleShade);
+						drawUnit(surface, _save->getTile(mapPosition + frontPos[f]), tile, screenPosition, tileShade, obstacleShade, topLayer);
 					}
 
 					// Draw smoke/fire
