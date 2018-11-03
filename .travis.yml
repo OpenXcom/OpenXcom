@@ -34,7 +34,7 @@ install:
   - if [ $TRAVIS_OS_NAME == linux ]; then bash scripts/compile_YAML-CPP.travis; fi
 
 before_script:
-  - cmake . -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" -DYAMLCPP_INCLUDE_DIR=$TRAVIS_BUILD_DIR/dependency-prefix/include -DCMAKE_CXX_FLAGS="${EXTRA_WARNING_FLAGS}" -DCMAKE_C_FLAGS="${EXTRA_WARNING_FLAGS}"
+  - bash scripts/cmake_prepare_build.travis
 
 script: make -j2
 
