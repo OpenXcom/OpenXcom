@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Text.h"
+#include <cmath>
 #include "../Engine/Font.h"
 #include "../Engine/Options.h"
 #include "../Engine/Language.h"
