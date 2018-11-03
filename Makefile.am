@@ -301,6 +301,8 @@ openxcom_SOURCES = \
 	src/Engine/SurfaceSet.h \
 	src/Engine/Timer.cpp \
 	src/Engine/Timer.h \
+	src/Engine/Unicode.cpp \
+	src/Engine/Unicode.h \
 	src/Engine/Zoom.cpp \
 	src/Engine/Zoom.h \
 	src/Geoscape/AlienBaseState.cpp \
