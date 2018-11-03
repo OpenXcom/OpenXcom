@@ -896,7 +896,7 @@ void setWindowIcon(int winResource, const std::string &)
 #else
 void setWindowIcon(int, const std::string &unixPath)
 {
-	std::string utf8 = Unicode::fsToUtf8(unixPath);
+	std::string utf8 = Unicode::convPathToUtf8(unixPath);
 	SDL_Surface *icon = IMG_Load(utf8.c_str());
 	if (icon != 0)
 	{
