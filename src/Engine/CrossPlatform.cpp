@@ -26,6 +26,7 @@
 #include <string>
 #include <stdint.h>
 #include <time.h>
+#include <signal.h>
 #include <sys/stat.h>
 #include "../dirent.h"
 #include "Logger.h"
@@ -63,7 +64,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
-#include <signal.h>
 #include <sys/param.h>
 #include <sys/types.h>
 #include <pwd.h>
