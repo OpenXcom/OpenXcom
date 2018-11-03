@@ -134,9 +134,10 @@ std::string convWcToMb(const std::wstring &src, unsigned int cp)
 #else
 	const int MAX = 500;
 	char buffer[MAX + 1];
-	setlocale(LC_ALL, "");
+	cp = LC_ALL;
+	setlocale(cp, "");
 	size_t len = wcstombs(buffer, src.c_str(), MAX);
-	setlocale(LC_ALL, "C");
+	setlocale(cp, "C");
 	if (len == (size_t)-1)
 		return "?";
 	return std::string(buffer);
@@ -163,9 +164,10 @@ std::wstring convMbToWc(const std::string &src, unsigned int cp)
 #else
 	const int MAX = 500;
 	wchar_t buffer[MAX + 1];
-	setlocale(LC_ALL, "");
+	cp = LC_ALL;
+	setlocale(cp, "");
 	size_t len = mbstowcs(buffer, src.c_str(), MAX);
-	setlocale(LC_ALL, "C");
+	setlocale(cp, "C");
 	if (len == (size_t)-1)
 		return L"?";
 	return std::wstring(buffer, len);

@@ -495,12 +495,12 @@ void SoldierInfoState::init()
 		_btnSack->setVisible(false);
 		_txtCraft->setVisible(false);
 		_txtDead->setVisible(true);
-		std::string s = "STR_MISSING_IN_ACTION";
+		std::string status = "STR_MISSING_IN_ACTION";
 		if (_soldier->getDeath() && _soldier->getDeath()->getCause())
 		{
-			s = "STR_KILLED_IN_ACTION";
+			status = "STR_KILLED_IN_ACTION";
 		}
-		_txtDead->setText(tr(s, _soldier->getGender()));
+		_txtDead->setText(tr(status, _soldier->getGender()));
 	}
 	else
 	{

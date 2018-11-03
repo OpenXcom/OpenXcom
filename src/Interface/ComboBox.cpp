@@ -323,7 +323,10 @@ void ComboBox::setOptions(const std::vector<std::string> &options, bool translat
 	_list->clearList();
 	for (std::vector<std::string>::const_iterator i = options.begin(); i != options.end(); ++i)
 	{
-		_list->addRow(1, (translate ? _lang->getString(*i) : (*i)).c_str());
+		if (translate)
+			_list->addRow(1, _lang->getString(*i).c_str());
+		else
+			_list->addRow(1, i->c_str());
 	}
 	setSelected(_sel);
 }
