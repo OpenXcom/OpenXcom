@@ -20,6 +20,7 @@
 #include <vector>
 #include <string>
 #include <SDL.h>
+#include "../Savegame/Soldier.h"
 
 namespace OpenXcom
 {
@@ -87,6 +88,8 @@ public:
 	const LocalizedText &tr(const std::string &id) const;
 	/// Get the localized text.
 	LocalizedText tr(const std::string &id, unsigned n) const;
+	/// Get the localized text.
+	const LocalizedText &tr(const std::string &id, SoldierGender gender) const;
 	/// redraw all the text-type surfaces.
 	void redrawText();
 	/// center all surfaces relative to the screen.

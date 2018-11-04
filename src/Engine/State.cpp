@@ -365,6 +365,18 @@ LocalizedText State::tr(const std::string &id, unsigned n) const
 }
 
 /**
+ * Get a modifiable copy of the localized text for dictionary key @a id.
+ * This function forwards the call to Language::getString(const std::string &, SoldierGender).
+ * @param id The dictionary key to search for.
+ * @param gender Current soldier gender.
+ * @return A reference to the localized text.
+ */
+const LocalizedText &State::tr(const std::string &id, SoldierGender gender) const
+{
+	return _game->getLanguage()->getString(id, gender);
+}
+
+/**
  * centers all the surfaces on the screen.
  */
 void State::centerAllSurfaces()
