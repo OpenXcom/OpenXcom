@@ -66,6 +66,8 @@ namespace Unicode
 
 	/// Compares two strings by natural order.
 	bool naturalCompare(const std::string &a, const std::string &b);
+	/// Uppercases a string in place.
+	void upperCase(std::string &s);
 	/// Replaces a substring.
 	void replace(std::string &str, const std::string &find, const std::string &replace);
 	/// Formats an integer value as number with separators.

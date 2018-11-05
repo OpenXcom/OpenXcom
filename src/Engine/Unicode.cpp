@@ -27,6 +27,7 @@
 #else
 #include <locale.h>
 #include <stdlib.h>
+#include <ctype.h>
 #endif
 
 namespace OpenXcom
@@ -227,10 +228,31 @@ bool naturalCompare(const std::string &a, const std::string &b)
 #endif
 	{
 		// sorry unix users you get ASCII sort
+		setlocale(LC_ALL, "");
 		std::string::const_iterator i, j;
 		for (i = a.begin(), j = b.begin(); i != a.end() && j != b.end() && tolower(*i) == tolower(*j); ++i, ++j);
-		return (i != a.end() && j != b.end() && tolower(*i) < tolower(*j));
+		bool result = (i != a.end() && j != b.end() && tolower(*i) < tolower(*j));
+		setlocale(LC_ALL, "C");
+		return result;
 	}
+}
+
+/**
+ * Uppercases a UTF-8 string, modified in place.
+ * Used for case-insensitive comparisons.
+ * @param s Source string.
+ */
+void upperCase(std::string &s)
+{
+#ifdef _WIN32
+	std::wstring ws = convMbToWc(s, CP_UTF8);
+	CharUpperW(&ws[0]);
+	s = convWcToMb(ws, CP_UTF8);
+#else
+	setlocale(LC_ALL, "");
+	for (std::string::iterator i = s.begin(); i != s.end(); ++i) *i = toupper(*i);
+	setlocale(LC_ALL, "C");
+#endif
 }
 
 /**
