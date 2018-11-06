@@ -20,12 +20,15 @@
 #include <sstream>
 #include <locale>
 #include <stdexcept>
+#include "Logger.h"
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#else
+#include <cassert>
 #endif
 
 namespace OpenXcom
@@ -45,7 +48,7 @@ void getUtf8Locale()
 	// Try a fixed UTF-8 locale
 	try
 	{
-		utf8 = std::locale("en_US.UTF8");
+		utf8 = std::locale("C.UTF-8");
 	}
 	catch (const std::runtime_error &)
 #endif
@@ -60,6 +63,7 @@ void getUtf8Locale()
 			// Well we're stuck with the C locale, hope for the best
 		}
 	}
+	Log(LOG_INFO) << "Detected locale: " << utf8.name();
 }
 
 /**
@@ -161,9 +165,9 @@ std::string convWcToMb(const std::wstring &src, unsigned int cp)
 	return str;
 #else
 	(void)cp;
-	std::string str(src.size()+1, 0);
-	std::use_facet< std::ctype<wchar_t> >(utf8).narrow(&src[0], &src[src.size()], '?', &str[0]);
-	return str;
+	assert(sizeof(wchar_t) == sizeof(UCode));
+	const UString *ustr = reinterpret_cast<const UString*>(&src);
+	return convUtf32ToUtf8(*ustr);
 #endif
 }
 
@@ -186,9 +190,10 @@ std::wstring convMbToWc(const std::string &src, unsigned int cp)
 	return wstr;
 #else
 	(void)cp;
-	std::wstring wstr(src.size()+1, 0);
-	std::use_facet< std::ctype<wchar_t> >(utf8).widen(&src[0], &src[src.size()], &wstr[0]);
-	return wstr;
+	assert(sizeof(wchar_t) == sizeof(UCode));
+	UString ustr = convUtf8ToUtf32(src);
+	const std::wstring *wstr = reinterpret_cast<const std::wstring*>(&ustr);
+	return *wstr;
 #endif
 }
 
@@ -265,7 +270,9 @@ void upperCase(std::string &s)
 	CharUpperW(&ws[0]);
 	s = convWcToMb(ws, CP_UTF8);
 #else
-	std::use_facet< std::ctype<char> >(utf8).toupper(&s[0], &s[s.size()]);
+	std::wstring ws = convMbToWc(s, 0);
+	std::use_facet< std::ctype<wchar_t> >(utf8).toupper(&ws[0], &ws[ws.size()]);
+	s = convWcToMb(ws, 0);
 #endif
 }
 
