@@ -83,7 +83,9 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _save(0
 	// Set the window caption
 	SDL_WM_SetCaption(title.c_str(), 0);
 
+	// Set up unicode
 	SDL_EnableUNICODE(1);
+	Unicode::getUtf8Locale();
 
 	// Create display
 	_screen = new Screen();

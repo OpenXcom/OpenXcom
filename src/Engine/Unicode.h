@@ -55,6 +55,8 @@ namespace Unicode
 	/// Checks if a character is visible to the user.
 	inline bool isPrintable(UCode c) { return (c > 32 && c != TOK_NBSP); }
 
+	/// Find a UTF-8 locale.
+	void getUtf8Locale();
 	/// Converts a UTF-8 string to UTF-32.
 	UString convUtf8ToUtf32(const std::string &src);
 	/// Converts a UTF-32 string to UTF-8.

@@ -18,22 +18,48 @@
  */
 #include "Unicode.h"
 #include <sstream>
+#include <locale>
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#else
-#include <locale.h>
-#include <stdlib.h>
-#include <ctype.h>
 #endif
 
 namespace OpenXcom
 {
 namespace Unicode
 {
+
+std::locale utf8;
+
+/**
+ * Store a UTF-8 locale to use when dealing with character conversions.
+ * Windows doesn't have a UTF-8 locale so we just use its APIs directly.
+ */
+void getUtf8Locale()
+{
+#ifndef _WIN32
+	// Try a fixed UTF-8 locale
+	try
+	{
+		loc = std::locale("en_US.UTF8");
+	}
+	catch (const std::runtime_error &)
+#endif
+	{
+		// That didn't work, try the default locale and hope it's UTF-8
+		try
+		{
+			utf8 = std::locale("");
+		}
+		catch (const std::runtime_error &)
+		{
+			// Well we're stuck with the C locale, hope for the best
+		}
+	}
+}
 
 /**
  * Takes a Unicode 32-bit string and converts it
@@ -133,15 +159,9 @@ std::string convWcToMb(const std::wstring &src, unsigned int cp)
 	WideCharToMultiByte(cp, 0, &src[0], (int)src.size(), &str[0], size, NULL, NULL);
 	return str;
 #else
-	const int MAX = 500;
-	char buffer[MAX + 1];
-	cp = LC_ALL;
-	setlocale(cp, "");
-	size_t len = wcstombs(buffer, src.c_str(), MAX);
-	setlocale(cp, "C");
-	if (len == (size_t)-1)
-		return "?";
-	return std::string(buffer);
+	std::string str(src.size()+1, 0);
+	std::use_facet< std::ctype<wchar_t> >(utf8).narrow(&src[0], &src[src.size()], '?', &str[0]);
+	return str;
 #endif
 }
 
@@ -163,15 +183,9 @@ std::wstring convMbToWc(const std::string &src, unsigned int cp)
 	MultiByteToWideChar(cp, 0, &src[0], (int)src.size(), &wstr[0], size);
 	return wstr;
 #else
-	const int MAX = 500;
-	wchar_t buffer[MAX + 1];
-	cp = LC_ALL;
-	setlocale(cp, "");
-	size_t len = mbstowcs(buffer, src.c_str(), MAX);
-	setlocale(cp, "C");
-	if (len == (size_t)-1)
-		return L"?";
-	return std::wstring(buffer, len);
+	std::wstring wstr(src.size()+1, 0);
+	std::use_facet< std::ctype<wchar_t> >(utf8).widen(&src[0], &src[src.size()], &wstr[0]);
+	return wstr;
 #endif
 }
 
@@ -228,12 +242,9 @@ bool naturalCompare(const std::string &a, const std::string &b)
 #endif
 	{
 		// sorry unix users you get ASCII sort
-		setlocale(LC_ALL, "");
 		std::string::const_iterator i, j;
-		for (i = a.begin(), j = b.begin(); i != a.end() && j != b.end() && tolower(*i) == tolower(*j); ++i, ++j);
-		bool result = (i != a.end() && j != b.end() && tolower(*i) < tolower(*j));
-		setlocale(LC_ALL, "C");
-		return result;
+		for (i = a.begin(), j = b.begin(); i != a.end() && j != b.end() && std::tolower(*i, utf8) == std::tolower(*j, utf8); ++i, ++j);
+		return (i != a.end() && j != b.end() && std::tolower(*i, utf8) < tolower(*j, utf8));
 	}
 }
 
@@ -244,14 +255,14 @@ bool naturalCompare(const std::string &a, const std::string &b)
  */
 void upperCase(std::string &s)
 {
+	if (s.empty())
+		return;
 #ifdef _WIN32
 	std::wstring ws = convMbToWc(s, CP_UTF8);
 	CharUpperW(&ws[0]);
 	s = convWcToMb(ws, CP_UTF8);
 #else
-	setlocale(LC_ALL, "");
-	for (std::string::iterator i = s.begin(); i != s.end(); ++i) *i = toupper(*i);
-	setlocale(LC_ALL, "C");
+	std::use_facet< std::ctype<char> >(utf8).toupper(&s[0], &s[s.size()]);
 #endif
 }
 
