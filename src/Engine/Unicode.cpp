@@ -19,6 +19,7 @@
 #include "Unicode.h"
 #include <sstream>
 #include <locale>
+#include <stdexcept>
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -44,7 +45,7 @@ void getUtf8Locale()
 	// Try a fixed UTF-8 locale
 	try
 	{
-		loc = std::locale("en_US.UTF8");
+		utf8 = std::locale("en_US.UTF8");
 	}
 	catch (const std::runtime_error &)
 #endif
@@ -159,6 +160,7 @@ std::string convWcToMb(const std::wstring &src, unsigned int cp)
 	WideCharToMultiByte(cp, 0, &src[0], (int)src.size(), &str[0], size, NULL, NULL);
 	return str;
 #else
+	(void)cp;
 	std::string str(src.size()+1, 0);
 	std::use_facet< std::ctype<wchar_t> >(utf8).narrow(&src[0], &src[src.size()], '?', &str[0]);
 	return str;
@@ -183,6 +185,7 @@ std::wstring convMbToWc(const std::string &src, unsigned int cp)
 	MultiByteToWideChar(cp, 0, &src[0], (int)src.size(), &wstr[0], size);
 	return wstr;
 #else
+	(void)cp;
 	std::wstring wstr(src.size()+1, 0);
 	std::use_facet< std::ctype<wchar_t> >(utf8).widen(&src[0], &src[src.size()], &wstr[0]);
 	return wstr;
