@@ -68,7 +68,13 @@ namespace Unicode
 
 	/// Compares two strings by natural order.
 	bool naturalCompare(const std::string &a, const std::string &b);
+	/// Compares two strings case-insensitive.
+	bool caseCompare(const std::string &a, const std::string &b);
+	/// Find a string in another case-insensitive.
+	bool caseFind(const std::string &haystack, const std::string &needle);
 	/// Uppercases a string in place.
+	void upperCase(std::string &s);
+	/// Lowercases a string in place.
 	void upperCase(std::string &s);
 	/// Replaces a substring.
 	void replace(std::string &str, const std::string &find, const std::string &replace);
