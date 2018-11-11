@@ -33,6 +33,7 @@ struct RuleSlot
 enum InventoryType { INV_SLOT, INV_HAND, INV_GROUND };
 
 class RuleItem;
+class BattleUnit;
 
 /**
  * Represents a specific section of the inventory,
@@ -53,6 +54,7 @@ public:
 	static const int SLOT_H = 16;
 	static const int HAND_W = 2;
 	static const int HAND_H = 3;
+	static const std::vector<std::string> DefaultInventories;
 	/// Creates a blank inventory ruleset.
 	RuleInventory(const std::string &id);
 	/// Cleans up the inventory ruleset.
@@ -72,7 +74,7 @@ public:
 	/// Checks for a slot in a certain position.
 	bool checkSlotInPosition(int *x, int *y) const;
 	/// Checks if an item fits in a slot.
-	bool fitItemInSlot(RuleItem *item, int x, int y) const;
+	bool fitItemInSlot(RuleItem *item, int x, int y, BattleUnit *bu=NULL) const;
 	/// Gets a certain cost in the inventory.
 	int getCost(RuleInventory *slot) const;
 	int getListOrder() const;
