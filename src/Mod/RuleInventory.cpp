@@ -19,6 +19,7 @@
 #include "RuleInventory.h"
 #include <cmath>
 #include "RuleItem.h"
+#include "../Savegame/BattleUnit.h"
 
 namespace YAML
 {
@@ -48,6 +49,7 @@ namespace YAML
 namespace OpenXcom
 {
 
+const std::vector<std::string> RuleInventory::DefaultInventories = { "STR_GROUND", "STR_RIGHT_HAND", "STR_LEFT_HAND", "STR_BELT", "STR_RIGHT_LEG", "STR_LEFT_LEG", "STR_RIGHT_SHOULDER", "STR_LEFT_SHOULDER", "STR_BACK_PACK" };
 /**
  * Creates a blank ruleset for a certain
  * type of inventory section.
@@ -184,7 +186,7 @@ bool RuleInventory::checkSlotInPosition(int *x, int *y) const
  * @param y Slot Y position.
  * @return True if there's a slot there.
  */
-bool RuleInventory::fitItemInSlot(RuleItem *item, int x, int y) const
+bool RuleInventory::fitItemInSlot(RuleItem *item, int x, int y, BattleUnit *bu) const
 {
 	if (_type == INV_HAND)
 	{
@@ -216,6 +218,8 @@ bool RuleInventory::fitItemInSlot(RuleItem *item, int x, int y) const
 			if (i->x >= x && i->x < x + item->getInventoryWidth() &&
 				i->y >= y && i->y < y + item->getInventoryHeight())
 			{
+				if (bu && bu->getItem(this, i->x, i->y))
+					return false;
 				foundSlots++;
 			}
 		}
