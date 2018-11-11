@@ -298,7 +298,7 @@ public:
 	/// Gets the unit's tile.
 	Tile *getTile() const;
 	/// Gets the item in the specified slot.
-	BattleItem *getItem(RuleInventory *slot, int x = 0, int y = 0) const;
+	BattleItem *getItem(const RuleInventory *slot, int x = 0, int y = 0) const;
 	/// Gets the item in the specified slot.
 	BattleItem *getItem(const std::string &slot, int x = 0, int y = 0) const;
 	/// Gets the item in the main hand.
