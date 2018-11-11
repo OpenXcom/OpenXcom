@@ -2029,6 +2029,7 @@ bool BattlescapeGame::takeItem(BattleItem* item, BattleAction *action)
 {
 	bool placed = false;
 	Mod *mod = _parentState->getGame()->getMod();
+	RuleInventory * ruleI;
 	switch (item->getRules()->getBattleType())
 	{
 	case BT_AMMO:
@@ -2042,13 +2043,16 @@ bool BattlescapeGame::takeItem(BattleItem* item, BattleAction *action)
 		}
 		else
 		{
-			for (int i = 0; i != 4; ++i)
+			ruleI = mod->getInventory(action->actor->getArmor()->getDefaultInventoryMap("STR_BELT"), true);
+			//try to fit in the inventoryrule and test the actual inventory is empty also
+			for (std::vector<struct RuleSlot>::const_iterator is = ruleI->getSlots()->cbegin(); is != ruleI->getSlots()->cend(); is++)
 			{
-				if (!action->actor->getItem("STR_BELT", i))
+				if (ruleI->fitItemInSlot(item->getRules(), is->x, is->y, action->actor))
 				{
 					item->moveToOwner(action->actor);
-					item->setSlot(mod->getInventory("STR_BELT", true));
-					item->setSlotX(i);
+					item->setSlot(ruleI);
+					item->setSlotX(is->x);
+					item->setSlotY(is->y);
 					placed = true;
 					break;
 				}
@@ -2057,13 +2061,16 @@ bool BattlescapeGame::takeItem(BattleItem* item, BattleAction *action)
 		break;
 	case BT_GRENADE:
 	case BT_PROXIMITYGRENADE:
-		for (int i = 0; i != 4; ++i)
+		ruleI = mod->getInventory(action->actor->getArmor()->getDefaultInventoryMap("STR_BELT"), true);
+		//try to fit in the inventoryrule and test the actual inventory is empty also
+		for (std::vector<struct RuleSlot>::const_iterator is = ruleI->getSlots()->cbegin(); is != ruleI->getSlots()->cend(); is++)
 		{
-			if (!action->actor->getItem("STR_BELT", i))
+			if (ruleI->fitItemInSlot(item->getRules(), is->x, is->y, action->actor))
 			{
 				item->moveToOwner(action->actor);
-				item->setSlot(mod->getInventory("STR_BELT", true));
-				item->setSlotX(i);
+				item->setSlot(ruleI);
+				item->setSlotX(is->x);
+				item->setSlotY(is->y);
 				placed = true;
 				break;
 			}
@@ -2074,24 +2081,32 @@ bool BattlescapeGame::takeItem(BattleItem* item, BattleAction *action)
 		if (!action->actor->getItem("STR_RIGHT_HAND"))
 		{
 			item->moveToOwner(action->actor);
-			item->setSlot(mod->getInventory("STR_RIGHT_HAND", true));
+			item->setSlot(mod->getInventory(action->actor->getArmor()->getDefaultInventoryMap("STR_RIGHT_HAND"), true));
 			placed = true;
 		}
 		break;
 	case BT_MEDIKIT:
 	case BT_SCANNER:
-		if (!action->actor->getItem("STR_BACK_PACK"))
+		ruleI = mod->getInventory(action->actor->getArmor()->getDefaultInventoryMap("STR_BACK_PACK"), true);
+		//try to fit in the inventoryrule and test the actual inventory is empty also
+		for (std::vector<struct RuleSlot>::const_iterator is = ruleI->getSlots()->cbegin(); is != ruleI->getSlots()->cend(); is++)
 		{
-			item->moveToOwner(action->actor);
-			item->setSlot(mod->getInventory("STR_BACK_PACK", true));
-			placed = true;
+			if (ruleI->fitItemInSlot(item->getRules(), is->x, is->y, action->actor))
+			{
+				item->moveToOwner(action->actor);
+				item->setSlot(ruleI);
+				item->setSlotX(is->x);
+				item->setSlotY(is->y);
+				placed = true;
+				break;
+			}
 		}
 		break;
 	case BT_MINDPROBE:
 		if (!action->actor->getItem("STR_LEFT_HAND"))
 		{
 			item->moveToOwner(action->actor);
-			item->setSlot(mod->getInventory("STR_LEFT_HAND", true));
+			item->setSlot(mod->getInventory(action->actor->getArmor()->getDefaultInventoryMap("STR_LEFT_HAND"), true));
 			placed = true;
 		}
 		break;
