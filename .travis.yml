@@ -1,5 +1,7 @@
 language: cpp
 
+cache: ccache
+
 compiler:
   - clang
   - gcc
@@ -18,7 +20,7 @@ addons:
       - libsdl-image1.2-dev
       - libsdl-gfx1.2-dev
   homebrew:
-    brewfile: Brewfile.travis
+    brewfile: scripts/Brewfile.travis
 
 env:
   - BUILD_TYPE=Release EXTRA_WARNING_FLAGS="-Wall -Wextra"
@@ -26,12 +28,15 @@ env:
 before_install:
   - if [ $TRAVIS_OS_NAME == linux ]; then mkdir $TRAVIS_BUILD_DIR/dependency-prefix; fi
   - if [ $TRAVIS_OS_NAME == linux ]; then export PKG_CONFIG_PATH=$TRAVIS_BUILD_DIR/dependency-prefix/lib/pkgconfig; fi
+  - if [ $TRAVIS_OS_NAME == osx ]; then export PATH="/usr/local/opt/ccache/libexec:$PATH"; fi
 
 install:
-  - if [ $TRAVIS_OS_NAME == linux ]; then mkdir -p $TRAVIS_BUILD_DIR/dependencies/; fi
-  - if [ $TRAVIS_OS_NAME == linux ]; then pushd $TRAVIS_BUILD_DIR/dependencies/ && git clone https://github.com/jbeder/yaml-cpp.git && pushd yaml-cpp && git checkout yaml-cpp-0.6.2 && cmake -DCMAKE_INSTALL_PREFIX=$TRAVIS_BUILD_DIR/dependency-prefix -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" -DYAML_CPP_BUILD_CONTRIB=NO -DYAML_CPP_BUILD_TOOLS=NO . && make -j2 && make install && popd && popd; fi
-      
+  - if [ $TRAVIS_OS_NAME == linux ]; then bash scripts/compile_YAML-CPP.travis; fi
+
 before_script:
-  - cmake . -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" -DYAMLCPP_INCLUDE_DIR=$TRAVIS_BUILD_DIR/dependency-prefix/include -DCMAKE_CXX_FLAGS="${EXTRA_WARNING_FLAGS}" -DCMAKE_C_FLAGS="${EXTRA_WARNING_FLAGS}"
+  - bash scripts/cmake_prepare_build.travis
 
 script: make -j2
+
+after_script:
+  - ccache -s

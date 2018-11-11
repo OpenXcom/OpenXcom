@@ -1,0 +1,15 @@
+#!/bin/bash
+
+CMAKE_OPTIONS=(
+	-DYAMLCPP_INCLUDE_DIR="${TRAVIS_BUILD_DIR}/dependency-prefix/include"
+	-DCMAKE_BUILD_TYPE="${BUILD_TYPE}"
+	-DCMAKE_CXX_FLAGS="${EXTRA_WARNING_FLAGS}"
+	-DCMAKE_C_FLAGS="${EXTRA_WARNING_FLAGS}"
+	-DCHECK_CCACHE=TRUE
+)
+
+echo
+echo "CMAKE options are: ${CMAKE_OPTIONS[@]}"
+echo
+
+cmake ${CMAKE_OPTIONS[@]} .

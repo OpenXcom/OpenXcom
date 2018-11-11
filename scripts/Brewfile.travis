@@ -3,3 +3,4 @@ brew "sdl"
 brew "sdl_gfx"
 brew "sdl_image"
 brew "sdl_mixer", args: ["with-flac"]
+brew "ccache"
