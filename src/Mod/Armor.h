@@ -51,7 +51,8 @@ private:
 	ForcedTorso _forcedTorso;
 	int _faceColorGroup, _hairColorGroup, _utileColorGroup, _rankColorGroup;
 	std::vector<int> _faceColor, _hairColor, _utileColor, _rankColor;
-	std::vector<std::string> _units;
+	std::vector<std::string> _units, _inventorySlots;
+	std::map<std::string, std::string> _defaultInventoriesMap;
 public:
 	/// Creates a blank armor ruleset.
 	Armor(const std::string &type);
@@ -123,6 +124,10 @@ public:
 	bool hasInventory() const;
 	/// Gets the armor's units.
 	const std::vector<std::string> &getUnits() const;
+	/// Gets the armor's inventory slots.
+	const std::vector<std::string> &getInventorySlots() const;
+	/// Gets the default inventory rules mapping
+	std::string getDefaultInventoryMap(std::string s) const;
 };
 
 }
