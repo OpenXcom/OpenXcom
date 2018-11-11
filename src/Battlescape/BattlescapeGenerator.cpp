@@ -1315,8 +1315,8 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem *item)
  */
 static bool _addItem(BattleItem *item, BattleUnit *unit, Mod *mod, SavedBattleGame *addToSave, bool allowAutoLoadout, bool allowSecondClip)
 {
-	RuleInventory *rightHand = mod->getInventory("STR_RIGHT_HAND", true);
-	RuleInventory *leftHand = mod->getInventory("STR_LEFT_HAND", true);
+	RuleInventory *rightHand = mod->getInventory(unit->getArmor()->getDefaultInventoryMap("STR_RIGHT_HAND"), true);
+	RuleInventory *leftHand = mod->getInventory(unit->getArmor()->getDefaultInventoryMap("STR_LEFT_HAND"), true);
 	bool placed = false;
 	bool loaded = false;
 	BattleItem *rightWeapon = unit->getItem("STR_RIGHT_HAND");
@@ -1455,7 +1455,7 @@ static bool _addItem(BattleItem *item, BattleUnit *unit, Mod *mod, SavedBattleGa
 		{
 			if (unit->getBaseStats()->strength >= weight) // weight is always considered 0 for aliens
 			{
-				for (std::vector<std::string>::const_iterator i = mod->getInvsList().begin(); i != mod->getInvsList().end() && !placed; ++i)
+				for (std::vector<std::string>::const_iterator i = unit->getArmor()->getInventorySlots().begin(); i != unit->getArmor()->getInventorySlots().end() && !placed; ++i)
 				{
 					RuleInventory *slot = mod->getInventory(*i);
 					if (slot->getType() == INV_SLOT)
