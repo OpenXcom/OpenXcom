@@ -1889,7 +1889,7 @@ Tile *BattleUnit::getTile() const
  * @param y Y position in slot.
  * @return Item in the slot, or NULL if none.
  */
-BattleItem *BattleUnit::getItem(RuleInventory *slot, int x, int y) const
+BattleItem *BattleUnit::getItem(const RuleInventory *slot, int x, int y) const
 {
 	// Soldier items
 	if (slot->getType() != INV_GROUND)
@@ -1926,12 +1926,20 @@ BattleItem *BattleUnit::getItem(RuleInventory *slot, int x, int y) const
  */
 BattleItem *BattleUnit::getItem(const std::string &slot, int x, int y) const
 {
+	//translate Inventory slot key
+	std::string actualSlot = slot;
+	for (std::vector<std::string>::const_iterator i = RuleInventory::DefaultInventories.cbegin(); i != RuleInventory::DefaultInventories.cend(); i++)
+		if (slot == *i)
+		{
+			actualSlot = _armor->getDefaultInventoryMap(slot);
+			break;
+		}
 	// Soldier items
 	if (slot != "STR_GROUND")
 	{
 		for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 		{
-			if ((*i)->getSlot() != 0 && (*i)->getSlot()->getId() == slot && (*i)->occupiesSlot(x, y))
+			if ((*i)->getSlot() != 0 && (*i)->getSlot()->getId() == actualSlot && (*i)->occupiesSlot(x, y))
 			{
 				return *i;
 			}
