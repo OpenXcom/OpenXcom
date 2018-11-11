@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Armor.h"
+#include "../Mod/RuleInventory.h"
 
 namespace OpenXcom
 {
@@ -37,6 +38,11 @@ Armor::Armor(const std::string &type) :
 {
 	for (int i=0; i < DAMAGE_TYPES; i++)
 		_damageModifier[i] = 1.0f;
+	for (std::vector<std::string>::const_iterator i = RuleInventory::DefaultInventories.cbegin(); i != RuleInventory::DefaultInventories.cend() ; i++)
+	{
+		_inventorySlots.push_back(*i);
+		_defaultInventoriesMap[*i] = *i;
+	}
 }
 
 /**
@@ -114,6 +120,15 @@ void Armor::load(const YAML::Node &node)
 	_rankColor = node["spriteRankColor"].as<std::vector<int> >(_rankColor);
 	_utileColor = node["spriteUtileColor"].as<std::vector<int> >(_utileColor);
 	_units = node["units"].as< std::vector<std::string> >(_units);
+	if(const YAML::Node &tst = node["inventorySlots"])
+		_inventorySlots = tst.as< std::vector<std::string> >(_inventorySlots);
+	if (const YAML::Node &tst = node["defaultInventoriesMap"])
+	{
+		std::map<std::string, std::string> par = tst.as <std::map<std::string, std::string> >(par);
+		for (std::map<std::string, std::string>::iterator i = par.begin(); i != par.end(); ++i)
+			_defaultInventoriesMap[i->first] = i->second;
+
+	}
 }
 
 /**
@@ -438,6 +453,27 @@ bool Armor::hasInventory() const
 const std::vector<std::string> &Armor::getUnits() const
 {
 	return _units;
+}
+
+/**
+* Gets the list of inventory slots this armor posess.
+* @return The list of inventory slots (empty => no inventory).
+*/
+const std::vector<std::string> &Armor::getInventorySlots() const
+{
+	return _inventorySlots;
+}
+
+/**
+* Gets the default inventory rule mapping.
+* @return The default inventory rule mapping.
+*/
+std::string Armor::getDefaultInventoryMap(std::string s) const
+{
+	std::map<std::string, std::string>::const_iterator i = _defaultInventoriesMap.find(s);
+	if(i != _defaultInventoriesMap.cend())
+		return i->second;
+	return s;
 }
 
 }
