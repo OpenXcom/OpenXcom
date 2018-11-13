@@ -525,6 +525,18 @@ bool init(int argc, char *argv[])
 	{
 		Log(LOG_WARNING) << "Couldn't create log file, switching to stderr";
 	}
+
+	Log(LOG_INFO) << "OpenXcom Version: " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
+#ifdef _WIN32
+	Log(LOG_INFO) << "Platform: Windows";
+#elif __APPLE__
+	Log(LOG_INFO) << "Platform: OSX";
+#elif  __ANDROID_API__
+	Log(LOG_INFO) << "Platform: Android";
+#else
+	Log(LOG_INFO) << "Platform: Unix-like";
+#endif
+
 	Log(LOG_INFO) << "Data folder is: " << _dataFolder;
 	Log(LOG_INFO) << "Data search is: ";
 	for (std::vector<std::string>::iterator i = _dataList.begin(); i != _dataList.end(); ++i)
