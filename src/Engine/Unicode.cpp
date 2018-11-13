@@ -29,7 +29,10 @@
 #include <windows.h>
 #include <shlwapi.h>
 #else
-#include <cassert>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
 #endif
 
 namespace OpenXcom
@@ -45,24 +48,38 @@ std::locale utf8;
  */
 void getUtf8Locale()
 {
+	std::string loc;
 #ifndef _WIN32
-	// Try a fixed UTF-8 locale
+	// Find any UTF-8 locale
+	FILE *fp = popen("locale -a", "r");
+	if (fp != NULL)
+	{
+		char buf[50];
+		while (fgets(buf, sizeof(buf), fp) != NULL)
+		{
+			if (strstr(buf, ".utf8") != NULL ||
+				strstr(buf, ".UTF-8") != NULL)
+			{
+				// Trim newline
+				size_t end = strlen(buf) - 1;
+				if (buf[end] == '\n')
+					buf[end] = '\0';
+
+				loc = buf;
+				break;
+			}
+		}
+		pclose(fp);
+	}
+#endif
+	// Try a UTF-8 locale (or default if none was found)
 	try
 	{
-		utf8 = std::locale("C.UTF-8");
+		utf8 = std::locale(loc);
 	}
 	catch (const std::runtime_error &)
-#endif
 	{
-		// That didn't work, try the default locale and hope it's UTF-8
-		try
-		{
-			utf8 = std::locale("");
-		}
-		catch (const std::runtime_error &)
-		{
-			// Well we're stuck with the C locale, hope for the best
-		}
+		// Well we're stuck with the C locale, hope for the best
 	}
 	Log(LOG_INFO) << "Detected locale: " << utf8.name();
 }
