@@ -29,6 +29,7 @@ before_install:
   - if [ $TRAVIS_OS_NAME == linux ]; then mkdir $TRAVIS_BUILD_DIR/dependency-prefix; fi
   - if [ $TRAVIS_OS_NAME == linux ]; then export PKG_CONFIG_PATH=$TRAVIS_BUILD_DIR/dependency-prefix/lib/pkgconfig; fi
   - if [ $TRAVIS_OS_NAME == osx ]; then export PATH="/usr/local/opt/ccache/libexec:$PATH"; fi
+  - if [ $TRAVIS_OS_NAME == linux ] && [ $TRAVIS_COMPILER == clang ]; then export CCACHE_CPP2=yes; fi
 
 install:
   - if [ $TRAVIS_OS_NAME == linux ]; then bash scripts/compile_YAML-CPP.travis; fi
