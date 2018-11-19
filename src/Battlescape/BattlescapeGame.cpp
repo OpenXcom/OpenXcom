@@ -1402,6 +1402,8 @@ void BattlescapeGame::primaryAction(Position pos)
 {
 	bool bPreviewed = Options::battleNewPreviewPath != PATH_NONE;
 
+	getMap()->resetObstacles();
+
 	if (_currentAction.targeting && _save->getSelectedUnit())
 	{
 		if (_currentAction.type == BA_LAUNCH)

@@ -125,6 +125,8 @@ void ProjectileFlyBState::init()
 	
 	Tile *endTile = _parent->getSave()->getTile(_action.target);
 	int distance = _parent->getTileEngine()->distance(_action.actor->getPosition(), _action.target);
+	bool isPlayer = _parent->getSave()->getSide() == FACTION_PLAYER;
+	if (isPlayer) _parent->getMap()->resetObstacles();
 	switch (_action.type)
 	{
 	case BA_SNAPSHOT:
@@ -189,7 +191,8 @@ void ProjectileFlyBState::init()
 		return;
 	}
 	
-	if (_action.type == BA_LAUNCH || (Options::forceFire && (SDL_GetModState() & KMOD_CTRL) != 0 && _parent->getSave()->getSide() == FACTION_PLAYER) || !_parent->getPanicHandled())
+	bool forceEnableObstacles = false;
+	if (_action.type == BA_LAUNCH || (Options::forceFire && (SDL_GetModState() & KMOD_CTRL) != 0 && isPlayer) || !_parent->getPanicHandled())
 	{
 		// target nothing, targets the middle of the tile
 		_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
@@ -207,7 +210,7 @@ void ProjectileFlyBState::init()
 			}
 		}
 	}
-	else
+	else if (!_action.weapon->getRules()->getArcingShot())
 	{
 		// determine the target voxel.
 		// aim at the center of the unit, the object, the walls or the floor (in that priority)
@@ -227,50 +230,63 @@ void ProjectileFlyBState::init()
 			}
 			else
 			{
-				if (!_parent->getTileEngine()->canTargetUnit(&originVoxel, targetTile, &_targetVoxel, _unit))
+				if (!_parent->getTileEngine()->canTargetUnit(&originVoxel, targetTile, &_targetVoxel, _unit, isPlayer))
 				{
 					_targetVoxel = Position(-16,-16,-24); // out of bounds, even after voxel to tile calculation.
+					if (isPlayer)
+					{
+						forceEnableObstacles = true;
+					}
 				}
 			}
 		}
 		else if (targetTile->getMapData(O_OBJECT) != 0)
 		{
-			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, O_OBJECT, &_targetVoxel, _unit))
+			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, O_OBJECT, &_targetVoxel, _unit, isPlayer))
 			{
 				_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
 			}
 		}
 		else if (targetTile->getMapData(O_NORTHWALL) != 0)
 		{
-			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, O_NORTHWALL, &_targetVoxel, _unit))
+			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, O_NORTHWALL, &_targetVoxel, _unit, isPlayer))
 			{
 				_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16, _action.target.z*24 + 9);
 			}
 		}
 		else if (targetTile->getMapData(O_WESTWALL) != 0)
 		{
-			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, O_WESTWALL, &_targetVoxel, _unit))
+			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, O_WESTWALL, &_targetVoxel, _unit, isPlayer))
 			{
 				_targetVoxel = Position(_action.target.x*16, _action.target.y*16 + 8, _action.target.z*24 + 9);
 			}
 		}
 		else if (targetTile->getMapData(O_FLOOR) != 0)
 		{
-			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, O_FLOOR, &_targetVoxel, _unit))
+			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, O_FLOOR, &_targetVoxel, _unit, isPlayer))
 			{
 				_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 2);
 			}
 		}
 		else
 		{
+			// dummy attempt (only to highlight obstacles)
+			_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_DUMMY, &_targetVoxel, _unit, isPlayer);
+
 			// target nothing, targets the middle of the tile
 			_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
 		}
 	}
+
 	if (createNewProjectile())
 	{
 		_parent->getMap()->setCursorType(CT_NONE);
 		_parent->getMap()->getCamera()->stopMouseScrolling();
+		_parent->getMap()->disableObstacles();
+	}
+	else if (isPlayer && (_targetVoxel.z >= 0 || forceEnableObstacles))
+	{
+		_parent->getMap()->enableObstacles();
 	}
 }
 

@@ -46,7 +46,7 @@ class Map : public InteractiveSurface
 private:
 	static const int SCROLL_INTERVAL = 15;
 	static const int BULLET_SPRITES = 35;
-	Timer *_scrollMouseTimer, *_scrollKeyTimer;
+	Timer *_scrollMouseTimer, *_scrollKeyTimer, *_obstacleTimer;
 	Game *_game;
 	SavedBattleGame *_save;
 	Surface *_arrow;
@@ -69,11 +69,12 @@ private:
 	Text *_txtAccuracy;
 	SurfaceSet *_projectileSet;
 
-	void drawUnit(Surface *surface, Tile *unitTile, Tile *currTile, Position tileScreenPosition, int shade, bool topLayer);
+	void drawUnit(Surface *surface, Tile *unitTile, Tile *currTile, Position tileScreenPosition, int shade, int obstacleShade, bool topLayer);
 	void drawTerrain(Surface *surface);
 	int getTerrainLevel(const Position& pos, int size) const;
 	int _iconHeight, _iconWidth, _messageColor;
 	const std::vector<Uint8> *_transparencies;
+	bool _showObstacles;
 public:
 	/// Creates a new map at the specified position and size.
 	Map(Game* game, int width, int height, int x, int y, int visibleMapHeight);
@@ -151,6 +152,12 @@ public:
 	void setBlastFlash(bool flash);
 	/// Check if the screen is flashing this.
 	bool getBlastFlash() const;
+	/// Resets obstacle markers.
+	void resetObstacles();
+	/// Enables obstacle markers.
+	void enableObstacles();
+	/// Disables obstacle markers.
+	void disableObstacles();
 };
 
 }

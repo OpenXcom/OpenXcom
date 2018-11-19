@@ -63,6 +63,7 @@ private:
 	int _loftID[12];
 	unsigned short _miniMapIndex;
 public:
+	static const int O_DUMMY = 999;
 	MapData(MapDataSet *dataset);
 	~MapData();
 	/// Gets the dataset this object belongs to.
