@@ -188,7 +188,7 @@ int AlienStrategy::getMissionsRun(const std::string &varName)
  */
 void AlienStrategy::addMissionRun(const std::string &varName)
 {
-	if (varName == "")
+	if (varName.empty())
 		return;
 	_missionRuns[varName]++;
 }

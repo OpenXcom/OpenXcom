@@ -237,7 +237,7 @@ std::vector<std::string> RuleGlobe::getTerrains(const std::string &deployment) c
 	std::vector<std::string> terrains;
 	for (std::map<int, Texture*>::const_iterator i = _textures.begin(); i != _textures.end(); ++i)
 	{
-		if ((deployment == "" && i->second->getDeployments().empty()) || i->second->getDeployments().find(deployment) != i->second->getDeployments().end())
+		if ((deployment.empty() && i->second->getDeployments().empty()) || i->second->getDeployments().find(deployment) != i->second->getDeployments().end())
 		{
 			for (std::vector<TerrainCriteria>::const_iterator j = i->second->getTerrain()->begin(); j != i->second->getTerrain()->end(); ++j)
 			{

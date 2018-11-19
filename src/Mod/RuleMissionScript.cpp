@@ -97,7 +97,7 @@ void RuleMissionScript::load(const YAML::Node& node)
 	}
 	_researchTriggers = node["researchTriggers"].as< std::map<std::string, bool> >(_researchTriggers);
 	_useTable = node["useTable"].as<bool>(_useTable);
-	if (_varName == "" && (_maxRuns > 0 || _avoidRepeats > 0))
+	if (_varName.empty() && (_maxRuns > 0 || _avoidRepeats > 0))
 	{
 		throw Exception("Error in mission script: " + _type +": no varName provided for a script with maxRuns or repeatAvoidance.");
 	}

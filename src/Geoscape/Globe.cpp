@@ -1163,19 +1163,9 @@ void Globe::drawGlobeCircle(double lat, double lon, double radius, int segments)
 	}
 }
 
-void Globe::setNewBaseHover(void)
+void Globe::setNewBaseHover(bool hover)
 {
-	_hover=true;
-}
-
-void Globe::unsetNewBaseHover(void)
-{
-	_hover=false;
-}
-
-bool Globe::getNewBaseHover(void) const
-{
-	return _hover;
+	_hover=hover;
 }
 
 void Globe::setNewBaseHoverPos(double lon, double lat)

@@ -1096,7 +1096,7 @@ void DebriefingState::prepareDebriefing()
 			success = destroyAlienBase;
 			if (destroyAlienBase)
 			{
-				if (objectiveCompleteText != "")
+				if (!objectiveCompleteText.empty())
 				{
 					addStat(objectiveCompleteText, 1, objectiveCompleteScore);
 				}
@@ -1314,7 +1314,7 @@ void DebriefingState::prepareDebriefing()
 		else
 		{
 			_txtTitle->setText(tr("STR_ALIENS_DEFEATED"));
-			if (objectiveCompleteText != "")
+			if (!objectiveCompleteText.empty())
 			{
 				int victoryStat = 0;
 				if (ruleDeploy->getEscapeType() != ESCAPE_NONE)
@@ -1397,7 +1397,7 @@ void DebriefingState::prepareDebriefing()
 		else
 		{
 			_txtTitle->setText(tr("STR_TERROR_CONTINUES"));
-			if (objectiveFailedText != "")
+			if (!objectiveFailedText.empty())
 			{
 				addStat(objectiveFailedText, 1, objectiveFailedScore);
 			}

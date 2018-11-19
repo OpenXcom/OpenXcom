@@ -529,14 +529,14 @@ void GeoscapeState::init()
 	{
 		_game->getMod()->playMusic("GMINTER");
 	}
-	_globe->unsetNewBaseHover();
+	_globe->setNewBaseHover(false);
 
 		// run once
 	if (_game->getSavedGame()->getMonthsPassed() == -1 &&
 		// as long as there's a base
 		!_game->getSavedGame()->getBases()->empty() &&
 		// and it has a name (THIS prevents it from running prior to the base being placed.)
-		_game->getSavedGame()->getBases()->front()->getName() != "")
+		!_game->getSavedGame()->getBases()->front()->getName().empty())
 	{
 		_game->getSavedGame()->addMonth();
 		determineAlienMissions();
@@ -1522,7 +1522,7 @@ void GenerateSupplyMission::operator()(const AlienBase *base) const
 			_save.getAlienMissions().push_back(mission);
 		}
 	}
-	else if (base->getDeployment()->getGenMissionType() != "")
+	else if (!base->getDeployment()->getGenMissionType().empty())
 	{
 		throw Exception("Alien Base tried to generate undefined mission: " + base->getDeployment()->getGenMissionType());
 	}
@@ -2591,7 +2591,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 		targetRegion = command->generate(month, GEN_REGION);
 	}
 
-	if (targetRegion == "")
+	if (targetRegion.empty())
 	{
 		// something went horribly wrong, we should have had at LEAST a region by now.
 		return false;
@@ -2604,7 +2604,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 		throw Exception("Error proccessing mission script named: " + command->getType() + ", region named: " + targetRegion + " is not defined");
 	}
 
-	if (missionType == "") // ie: not a terror mission, not targetting a base, or otherwise not already chosen
+	if (missionType.empty()) // ie: not a terror mission, not targetting a base, or otherwise not already chosen
 	{
 		if (!command->hasMissionWeights())
 		{
@@ -2618,7 +2618,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 		}
 	}
 
-	if (missionType == "")
+	if (missionType.empty())
 	{
 		// something went horribly wrong, we didn't manage to choose a mission type
 		return false;

@@ -75,7 +75,7 @@ namespace Unicode
 	/// Uppercases a string in place.
 	void upperCase(std::string &s);
 	/// Lowercases a string in place.
-	void upperCase(std::string &s);
+	void lowerCase(std::string &s);
 	/// Replaces a substring.
 	void replace(std::string &str, const std::string &find, const std::string &replace);
 	/// Formats an integer value as number with separators.

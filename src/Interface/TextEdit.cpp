@@ -397,7 +397,7 @@ bool TextEdit::isValidChar(UCode c) const
 		else
 		{
 			return ((c >= '0' && c <= '9') || c == '+' || c == '-') &&
-					(_value.size() == 0 || (_value[0] != '+' && _value[0] != '-'));
+					(_value.empty() || (_value[0] != '+' && _value[0] != '-'));
 		}
 
 	case TEC_NONE:

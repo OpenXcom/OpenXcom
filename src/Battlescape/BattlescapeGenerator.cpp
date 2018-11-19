@@ -379,7 +379,7 @@ void BattlescapeGenerator::nextStage()
 	{
 		script = _game->getMod()->getMapScript(ruleDeploy->getScript());
 	}
-	else if (ruleDeploy->getScript() != "")
+	else if (!ruleDeploy->getScript().empty())
 	{
 		throw Exception("Map generator encountered an error: " + ruleDeploy->getScript() + " script not found.");
 	}
@@ -459,7 +459,7 @@ void BattlescapeGenerator::nextStage()
 	_alienRace = ruleDeploy->getRace();
 
 	for (std::vector<MissionSite*>::iterator i = _game->getSavedGame()->getMissionSites()->begin();
-		_alienRace == "" && i != _game->getSavedGame()->getMissionSites()->end(); ++i)
+		_alienRace.empty() && i != _game->getSavedGame()->getMissionSites()->end(); ++i)
 	{
 		if ((*i)->isInBattlescape())
 		{
@@ -468,7 +468,7 @@ void BattlescapeGenerator::nextStage()
 	}
 
 	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin();
-		_alienRace == "" && i != _game->getSavedGame()->getAlienBases()->end(); ++i)
+		_alienRace.empty() && i != _game->getSavedGame()->getAlienBases()->end(); ++i)
 	{
 		if ((*i)->isInBattlescape())
 		{
@@ -546,7 +546,7 @@ void BattlescapeGenerator::run()
 	{
 		script = _game->getMod()->getMapScript(ruleDeploy->getScript());
 	}
-	else if (ruleDeploy->getScript() != "")
+	else if (!ruleDeploy->getScript().empty())
 	{
 		throw Exception("Map generator encountered an error: " + ruleDeploy->getScript() + " script not found.");
 	}
@@ -999,7 +999,7 @@ bool BattlescapeGenerator::canPlaceXCOMUnit(Tile *tile)
 void BattlescapeGenerator::deployAliens(AlienDeployment *deployment)
 {
 	// race defined by deployment if there is one.
-	if (deployment->getRace() != "" && _game->getSavedGame()->getMonthsPassed() > -1)
+	if (!deployment->getRace().empty() && _game->getSavedGame()->getMonthsPassed() > -1)
 	{
 		_alienRace = deployment->getRace();
 	}
@@ -1094,7 +1094,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment *deployment)
 				}
 				else
 				{
-					if ((*d).itemSets.size() == 0)
+					if ((*d).itemSets.empty())
 					{
 						throw Exception("Unit generator encountered an error: item set not defined");
 					}

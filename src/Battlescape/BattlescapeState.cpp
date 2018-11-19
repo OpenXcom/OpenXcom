@@ -455,7 +455,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _firstInit(true), _isMouseSc
 	_btnReserveAuto->setGroup(&_reserve);
 	
 	// Set music
-	if (_save->getMusic() == "")
+	if (_save->getMusic().empty())
 	{
 		_game->getMod()->playMusic("GMTACTIC");
 	}

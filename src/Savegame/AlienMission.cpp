@@ -177,8 +177,8 @@ void AlienMission::think(Game &engine, const Globe &globe)
 		//Some missions may not spawn a UFO!
 		game.getUfos()->push_back(ufo);
 	}
-	else if ((mod.getDeployment(wave.ufoType) && !mod.getUfo(wave.ufoType) && mod.getDeployment(wave.ufoType)->getMarkerName() != "") // a mission site that we want to spawn directly
-			|| (_rule.getObjective() == OBJECTIVE_SITE && wave.objective))															  // or we want to spawn one at random according to our terrain
+	else if ((mod.getDeployment(wave.ufoType) && !mod.getUfo(wave.ufoType) && !mod.getDeployment(wave.ufoType)->getMarkerName().empty()) // a mission site that we want to spawn directly
+			|| (_rule.getObjective() == OBJECTIVE_SITE && wave.objective)) // or we want to spawn one at random according to our terrain
 	{
 		std::vector<MissionArea> areas = mod.getRegion(_region, true)->getMissionZones().at((_rule.getSpawnZone() == -1) ? trajectory.getZone(0) : _rule.getSpawnZone()).areas;
 		MissionArea area = areas.at((_missionSiteZone == -1) ? RNG::generate(0, areas.size()-1) : _missionSiteZone);
@@ -828,7 +828,7 @@ void AlienMission::setMissionSiteZone(int zone)
 
 void AlienMission::logMissionError(int zone, const RuleRegion &region)
 {
-	if (region.getMissionZones().size() > 0)
+	if (!region.getMissionZones().empty())
 	{
 		std::stringstream ss, ss2;
 		ss << zone;

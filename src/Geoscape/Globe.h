@@ -200,11 +200,7 @@ public:
 	/// Sets hover base position.
 	void setNewBaseHoverPos(double lon, double lat);
 	/// Turns on new base hover mode.
-	void setNewBaseHover(void);
-	/// Turns off new base hover mode.
-	void unsetNewBaseHover(void);
-	/// Gets state of base hover mode
-	bool getNewBaseHover(void) const;
+	void setNewBaseHover(bool hover);
 	/// set the _radarLines variable
 	void toggleRadarLines();
 	/// Update the resolution settings, we just resized the window.
