@@ -137,6 +137,12 @@ SelectDestinationState::SelectDestinationState(Craft *craft, Globe *globe) : _cr
 		_btnCydonia->setText(tr("STR_CYDONIA"));
 		_btnCydonia->onMouseClick((ActionHandler)&SelectDestinationState::btnCydoniaClick);
 	}
+
+	if (_craft->getStatus() != "STR_OUT")
+	{
+		_globe->setCraftRange(_craft->getLongitude(), _craft->getLatitude(), _craft->getBaseRange());
+		_globe->invalidate();
+	}
 }
 
 /**
@@ -144,7 +150,7 @@ SelectDestinationState::SelectDestinationState(Craft *craft, Globe *globe) : _cr
  */
 SelectDestinationState::~SelectDestinationState()
 {
-
+	_globe->setCraftRange(0.0, 0.0, 0.0);
 }
 
 /**
