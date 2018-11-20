@@ -196,6 +196,9 @@ void BattlescapeGenerator::nextStage()
 	// send all enemy units, or those not in endpoint area (if aborted) to time out
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
+		(*i)->clearVisibleUnits();
+		(*i)->clearVisibleTiles();
+
 		if ((*i)->getStatus() != STATUS_DEAD                              // if they're not dead
 			&& (((*i)->getOriginalFaction() == FACTION_PLAYER               // and they're a soldier
 			&& _save->isAborted()											  // and you aborted
