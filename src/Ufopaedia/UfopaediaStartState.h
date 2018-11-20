@@ -43,8 +43,8 @@ namespace OpenXcom
 		virtual ~UfopaediaStartState();
 
 	protected:
-		static const size_t CAT_MIN_BUTTONS = 9;
-		static const size_t CAT_MAX_BUTTONS = 10;
+		static const size_t CAT_MIN_BUTTONS;
+		static const size_t CAT_MAX_BUTTONS;
 		Window *_window;
 		Text *_txtTitle;
 		TextButton *_btnOk;

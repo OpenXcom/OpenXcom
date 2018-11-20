@@ -33,8 +33,8 @@
 
 namespace OpenXcom
 {
-	const size_t UfopaediaStartState::CAT_MIN_BUTTONS;
-	const size_t UfopaediaStartState::CAT_MAX_BUTTONS;
+	const size_t UfopaediaStartState::CAT_MIN_BUTTONS = 9;
+	const size_t UfopaediaStartState::CAT_MAX_BUTTONS = 10;
 	
 	UfopaediaStartState::UfopaediaStartState() : _offset(0), _scroll(0), _cats(_game->getMod()->getUfopaediaCategoryList())
 	{
