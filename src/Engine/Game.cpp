@@ -557,10 +557,10 @@ bool Game::isQuitting() const
 }
 
 /**
- * Loads the most appropriate language
+ * Loads the most appropriate languages
  * given current system and game options.
  */
-void Game::defaultLanguage()
+void Game::loadLanguages()
 {
 	const std::string defaultLang = "en-US";
 	std::string currentLang = defaultLang;

@@ -285,7 +285,7 @@ int StartState::load(void *game_ptr)
 		game->loadMods();
 		Log(LOG_INFO) << "Data loaded successfully.";
 		Log(LOG_INFO) << "Loading language...";
-		game->defaultLanguage();
+		game->loadLanguages();
 		Log(LOG_INFO) << "Language loaded successfully.";
 		loading = LOADING_SUCCESSFUL;
 	}

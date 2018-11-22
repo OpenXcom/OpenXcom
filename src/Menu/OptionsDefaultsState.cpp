@@ -93,7 +93,7 @@ void OptionsDefaultsState::btnYesClick(Action *action)
 {
 	std::vector< std::pair<std::string, bool> > prevMods(Options::mods);
 	Options::resetDefault();
-	_game->defaultLanguage();
+	_game->loadLanguages();
 
 	if (_origin == OPT_MENU && prevMods != Options::mods)
 	{

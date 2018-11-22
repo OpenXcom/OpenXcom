@@ -55,6 +55,8 @@ private:
 	int _timeUntilNextFrame;
 	static const double VOLUME_GRADIENT;
 
+	/// Loads a new language for the game.
+	void loadLanguage(const std::string &filename);
 public:
 	/// Creates a new game and initializes SDL.
 	Game(const std::string &title);
@@ -82,8 +84,6 @@ public:
 	void popState();
 	/// Gets the currently loaded language.
 	Language *getLanguage() const;
-	/// Loads a new language for the game.
-	void loadLanguage(const std::string &filename);
 	/// Gets the currently loaded saved game.
 	SavedGame *getSavedGame() const;
 	/// Sets a new saved game for the game.
@@ -98,8 +98,8 @@ public:
 	bool isState(State *state) const;
 	/// Returns whether the game is shutting down.
 	bool isQuitting() const;
-	/// Sets up the default language.
-	void defaultLanguage();
+	/// Loads the default and current language.
+	void loadLanguages();
 	/// Sets up the audio.
 	void initAudio();
 };
