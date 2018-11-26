@@ -192,6 +192,30 @@ void BattlescapeGenerator::setMissionSite(MissionSite *mission)
  */
 void BattlescapeGenerator::nextStage()
 {
+	// preventively drop all units from soldier's inventory (makes handling easier)
+	// 1. no alien/civilian living, dead or unconscious is allowed to transition
+	// 2. no dead xcom unit is allowed to transition
+	// 3. only living or unconscious xcom units can transition
+	for (std::vector<BattleUnit*>::iterator unit = _save->getUnits()->begin(); unit != _save->getUnits()->end(); ++unit)
+	{
+		if ((*unit)->getOriginalFaction() == FACTION_PLAYER && !(*unit)->isOut())
+		{
+			std::vector<BattleItem*> unitsToDrop;
+			for (std::vector<BattleItem*>::iterator item = (*unit)->getInventory()->begin(); item != (*unit)->getInventory()->end(); ++item)
+			{
+				if ((*item)->getUnit())
+				{
+					unitsToDrop.push_back(*item);
+				}
+			}
+			for (std::vector<BattleItem*>::iterator corpseItem = unitsToDrop.begin(); corpseItem != unitsToDrop.end(); ++corpseItem)
+			{
+				(*corpseItem)->moveToOwner(0);
+				(*unit)->getTile()->addItem(*corpseItem, (*corpseItem)->getSlot());
+			}
+		}
+	}
+
 	int aliensAlive = 0;
 	// send all enemy units, or those not in endpoint area (if aborted) to time out
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
@@ -199,10 +223,13 @@ void BattlescapeGenerator::nextStage()
 		(*i)->clearVisibleUnits();
 		(*i)->clearVisibleTiles();
 
+		Tile *tmpTile = _save->getTile((*i)->getPosition());
+		bool isInExit = (*i)->isInExitArea(END_POINT) || (*i)->liesInExitArea(tmpTile, END_POINT);
+
 		if ((*i)->getStatus() != STATUS_DEAD                              // if they're not dead
 			&& (((*i)->getOriginalFaction() == FACTION_PLAYER               // and they're a soldier
 			&& _save->isAborted()											  // and you aborted
-			&& !(*i)->isInExitArea(END_POINT))                                // and they're not on the exit
+			&& !isInExit)                                                     // and they're not on the exit
 			|| (*i)->getOriginalFaction() != FACTION_PLAYER))               // or they're not a soldier
 		{
 			if ((*i)->getOriginalFaction() == FACTION_HOSTILE && !(*i)->isOut())
@@ -309,7 +336,17 @@ void BattlescapeGenerator::nextStage()
 								// on the exit grid? it goes to stage two.
 								else if (tile->getMapData(O_FLOOR)->getSpecialType() == END_POINT)
 								{
-									toContainer = &takeToNextStage;
+									// apply similar logic (for units) as in protocol 1
+									if ((*i)->getUnit() &&
+										((*i)->getUnit()->getOriginalFaction() != FACTION_PLAYER ||
+										(*i)->getUnit()->getStatus() == STATUS_DEAD))
+									{
+										toContainer = takeHomeConditional;
+									}
+									else
+									{
+										toContainer = &takeToNextStage;
+									}
 								}
 							}
 						}
