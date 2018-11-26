@@ -987,6 +987,11 @@ void DebriefingState::prepareDebriefing()
 			{
 				playersUnconscious++;
 			}
+			else if ((*j)->getStatus() == STATUS_IGNORE_ME && (*j)->getStunlevel() >= (*j)->getHealth())
+			{
+				// even for ignored xcom units, we need to know if they're conscious or unconscious
+				playersUnconscious++;
+			}
 			else if ((*j)->isInExitArea(END_POINT))
 			{
 				playersInExitArea++;
