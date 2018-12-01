@@ -2643,6 +2643,11 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 		missionRace = command->generate(month, GEN_RACE);
 	}
 
+	if (missionRace.empty())
+	{
+		throw Exception("Error proccessing mission script named: " + command->getType() + ", mission type: " + missionType + " has no available races");
+	}
+
 	// we're bound to end up with typos, so let's throw an exception instead of simply returning false
 	// that way, the modder can fix their mistake
 	if (mod->getAlienRace(missionRace) == 0)
