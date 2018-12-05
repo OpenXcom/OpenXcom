@@ -29,7 +29,7 @@ namespace OpenXcom
  * type of soldier.
  * @param type String defining the type.
  */
-RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _costBuy(0), _costSalary(0), _standHeight(0), _kneelHeight(0), _floatHeight(0), _femaleFrequency(50), _value(20)
+RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _costBuy(0), _costSalary(0), _standHeight(0), _kneelHeight(0), _floatHeight(0), _femaleFrequency(50), _value(20), _transferTime(0)
 {
 }
 
@@ -67,6 +67,7 @@ void RuleSoldier::load(const YAML::Node &node, Mod *mod)
 	_floatHeight = node["floatHeight"].as<int>(_floatHeight);
 	_femaleFrequency = node["femaleFrequency"].as<int>(_femaleFrequency);
 	_value = node["value"].as<int>(_value);
+	_transferTime = node["transferTime"].as<int>(_transferTime);
 
 	if (node["deathMale"])
 	{
@@ -281,6 +282,16 @@ const std::vector<SoldierNamePool*> &RuleSoldier::getNames() const
 int RuleSoldier::getValue() const
 {
 	return _value;
+}
+
+/**
+ * Gets the amount of time this item
+ * takes to arrive at a base.
+ * @return The time in hours.
+ */
+int RuleSoldier::getTransferTime() const
+{
+	return _transferTime;
 }
 
 }

@@ -338,7 +338,10 @@ void PurchaseState::btnOkClick(Action *)
 				for (int s = 0; s < i->amount; s++)
 				{
 					RuleSoldier *rule = (RuleSoldier*)i->rule;
-					t = new Transfer(_game->getMod()->getPersonnelTime());
+					int time = rule->getTransferTime();
+					if (time == 0)
+						time = _game->getMod()->getPersonnelTime();
+					t = new Transfer(time);
 					t->setSoldier(_game->getMod()->genSoldier(_game->getSavedGame(), rule->getType()));
 					_base->getTransfers()->push_back(t);
 				}

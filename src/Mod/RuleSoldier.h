@@ -40,7 +40,7 @@ private:
 	UnitStats _minStats, _maxStats, _statCaps;
 	std::string _armor;
 	int _costBuy, _costSalary, _standHeight, _kneelHeight, _floatHeight;
-	int _femaleFrequency, _value;
+	int _femaleFrequency, _value, _transferTime;
 	std::vector<int> _deathSoundMale, _deathSoundFemale;
 	std::vector<SoldierNamePool*> _names;
 
@@ -84,6 +84,8 @@ public:
 	const std::vector<SoldierNamePool*> &getNames() const;
 	/// Gets the value - for score calculation.
 	int getValue() const;
+	/// Gets the soldier's transfer time.
+	int getTransferTime() const;
 };
 
 }
