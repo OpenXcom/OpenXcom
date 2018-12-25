@@ -388,7 +388,6 @@ if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES 
     # add warning flags recognized by clang but not by g++
     add_definitions (
       -Wno-overloaded-virtual         # overloads with different parameters
-      -Wno-shift-negative-value       # opl
       )
   endif ()
 endif ()

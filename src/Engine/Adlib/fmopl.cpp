@@ -10,7 +10,7 @@
 
 /*
  * Modified version for X-COM (increased polyphony) by Volutar
- */
+*/
 
 /* This version of fmopl.c is a fork of the MAME one, relicensed under the LGPL.
  *
@@ -26,10 +26,14 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
 #define INLINE		__inline
+#else
+#define INLINE		static inline
+#endif
 #define HAS_YM3812	1
 
 #include <stdlib.h>
@@ -67,7 +71,7 @@ static int opl_dbg_maxchip,opl_dbg_chip;
 /* final output shift , limit minimum and maximum */
 #define OPL_OUTSB   (TL_BITS+1-16)		/* OPL output final shift 16bit */
 #define OPL_MAXOUT (0x7fff<<OPL_OUTSB)
-#define OPL_MINOUT (-0x8000<<OPL_OUTSB)
+#define OPL_MINOUT (-(0x8000<<OPL_OUTSB))
 
 /* -------------------- quality selection --------------------- */
 
@@ -122,57 +126,59 @@ static const int slot_array[32]=
 /* key scale level */
 /* table is 3dB/OCT , DV converts this in TL step at 6dB/OCT */
 #define DV (EG_STEP/2)
+#define U(x) ((UINT32)(x))
 static const UINT32 KSL_TABLE[8*16]=
 {
 	/* OCT 0 */
-	 static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV),
-	 static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV),
-	 static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV),
-	 static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV),
+	U( 0.000/DV),U( 0.000/DV),U( 0.000/DV),U( 0.000/DV),
+	U( 0.000/DV),U( 0.000/DV),U( 0.000/DV),U( 0.000/DV),
+	U( 0.000/DV),U( 0.000/DV),U( 0.000/DV),U( 0.000/DV),
+	U( 0.000/DV),U( 0.000/DV),U( 0.000/DV),U( 0.000/DV),
 	/* OCT 1 */
-	 static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV),
-	 static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV),
-	 static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.750/DV), static_cast<UINT32>(1.125/DV), static_cast<UINT32>(1.500/DV),
-	 static_cast<UINT32>(1.875/DV), static_cast<UINT32>(2.250/DV), static_cast<UINT32>(2.625/DV), static_cast<UINT32>(3.000/DV),
+	U( 0.000/DV),U( 0.000/DV),U( 0.000/DV),U( 0.000/DV),
+	U( 0.000/DV),U( 0.000/DV),U( 0.000/DV),U( 0.000/DV),
+	U( 0.000/DV),U( 0.750/DV),U( 1.125/DV),U( 1.500/DV),
+	U( 1.875/DV),U( 2.250/DV),U( 2.625/DV),U( 3.000/DV),
 	/* OCT 2 */
-	 static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV),
-	 static_cast<UINT32>(0.000/DV), static_cast<UINT32>(1.125/DV), static_cast<UINT32>(1.875/DV), static_cast<UINT32>(2.625/DV),
-	 static_cast<UINT32>(3.000/DV), static_cast<UINT32>(3.750/DV), static_cast<UINT32>(4.125/DV), static_cast<UINT32>(4.500/DV),
-	 static_cast<UINT32>(4.875/DV), static_cast<UINT32>(5.250/DV), static_cast<UINT32>(5.625/DV), static_cast<UINT32>(6.000/DV),
+	U( 0.000/DV),U( 0.000/DV),U( 0.000/DV),U( 0.000/DV),
+	U( 0.000/DV),U( 1.125/DV),U( 1.875/DV),U( 2.625/DV),
+	U( 3.000/DV),U( 3.750/DV),U( 4.125/DV),U( 4.500/DV),
+	U( 4.875/DV),U( 5.250/DV),U( 5.625/DV),U( 6.000/DV),
 	/* OCT 3 */
-	 static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV), static_cast<UINT32>(1.875/DV),
-	 static_cast<UINT32>(3.000/DV), static_cast<UINT32>(4.125/DV), static_cast<UINT32>(4.875/DV), static_cast<UINT32>(5.625/DV),
-	 static_cast<UINT32>(6.000/DV), static_cast<UINT32>(6.750/DV), static_cast<UINT32>(7.125/DV), static_cast<UINT32>(7.500/DV),
-	 static_cast<UINT32>(7.875/DV), static_cast<UINT32>(8.250/DV), static_cast<UINT32>(8.625/DV), static_cast<UINT32>(9.000/DV),
+	U( 0.000/DV),U( 0.000/DV),U( 0.000/DV),U( 1.875/DV),
+	U( 3.000/DV),U( 4.125/DV),U( 4.875/DV),U( 5.625/DV),
+	U( 6.000/DV),U( 6.750/DV),U( 7.125/DV),U( 7.500/DV),
+	U( 7.875/DV),U( 8.250/DV),U( 8.625/DV),U( 9.000/DV),
 	/* OCT 4 */
-	 static_cast<UINT32>(0.000/DV), static_cast<UINT32>(0.000/DV), static_cast<UINT32>(3.000/DV), static_cast<UINT32>(4.875/DV),
-	 static_cast<UINT32>(6.000/DV), static_cast<UINT32>(7.125/DV), static_cast<UINT32>(7.875/DV), static_cast<UINT32>(8.625/DV),
-	 static_cast<UINT32>(9.000/DV), static_cast<UINT32>(9.750/DV),static_cast<UINT32>(10.125/DV),static_cast<UINT32>(10.500/DV),
-	static_cast<UINT32>(10.875/DV),static_cast<UINT32>(11.250/DV),static_cast<UINT32>(11.625/DV),static_cast<UINT32>(12.000/DV),
+	U( 0.000/DV),U( 0.000/DV),U( 3.000/DV),U( 4.875/DV),
+	U( 6.000/DV),U( 7.125/DV),U( 7.875/DV),U( 8.625/DV),
+	U( 9.000/DV),U( 9.750/DV),U(10.125/DV),U(10.500/DV),
+	U(10.875/DV),U(11.250/DV),U(11.625/DV),U(12.000/DV),
 	/* OCT 5 */
-	 static_cast<UINT32>(0.000/DV), static_cast<UINT32>(3.000/DV), static_cast<UINT32>(6.000/DV), static_cast<UINT32>(7.875/DV),
-	 static_cast<UINT32>(9.000/DV),static_cast<UINT32>(10.125/DV),static_cast<UINT32>(10.875/DV),static_cast<UINT32>(11.625/DV),
-	static_cast<UINT32>(12.000/DV),static_cast<UINT32>(12.750/DV),static_cast<UINT32>(13.125/DV),static_cast<UINT32>(13.500/DV),
-	static_cast<UINT32>(13.875/DV),static_cast<UINT32>(14.250/DV),static_cast<UINT32>(14.625/DV),static_cast<UINT32>(15.000/DV),
+	U( 0.000/DV),U( 3.000/DV),U( 6.000/DV),U( 7.875/DV),
+	U( 9.000/DV),U(10.125/DV),U(10.875/DV),U(11.625/DV),
+	U(12.000/DV),U(12.750/DV),U(13.125/DV),U(13.500/DV),
+	U(13.875/DV),U(14.250/DV),U(14.625/DV),U(15.000/DV),
 	/* OCT 6 */
-	 static_cast<UINT32>(0.000/DV), static_cast<UINT32>(6.000/DV), static_cast<UINT32>(9.000/DV),static_cast<UINT32>(10.875/DV),
-	static_cast<UINT32>(12.000/DV),static_cast<UINT32>(13.125/DV),static_cast<UINT32>(13.875/DV),static_cast<UINT32>(14.625/DV),
-	static_cast<UINT32>(15.000/DV),static_cast<UINT32>(15.750/DV),static_cast<UINT32>(16.125/DV),static_cast<UINT32>(16.500/DV),
-	static_cast<UINT32>(16.875/DV),static_cast<UINT32>(17.250/DV),static_cast<UINT32>(17.625/DV),static_cast<UINT32>(18.000/DV),
+	U( 0.000/DV),U( 6.000/DV),U( 9.000/DV),U(10.875/DV),
+	U(12.000/DV),U(13.125/DV),U(13.875/DV),U(14.625/DV),
+	U(15.000/DV),U(15.750/DV),U(16.125/DV),U(16.500/DV),
+	U(16.875/DV),U(17.250/DV),U(17.625/DV),U(18.000/DV),
 	/* OCT 7 */
-	 static_cast<UINT32>(0.000/DV), static_cast<UINT32>(9.000/DV),static_cast<UINT32>(12.000/DV),static_cast<UINT32>(13.875/DV),
-	static_cast<UINT32>(15.000/DV),static_cast<UINT32>(16.125/DV),static_cast<UINT32>(16.875/DV),static_cast<UINT32>(17.625/DV),
-	static_cast<UINT32>(18.000/DV),static_cast<UINT32>(18.750/DV),static_cast<UINT32>(19.125/DV),static_cast<UINT32>(19.500/DV),
-	static_cast<UINT32>(19.875/DV),static_cast<UINT32>(20.250/DV),static_cast<UINT32>(20.625/DV),static_cast<UINT32>(21.000/DV)
+	U( 0.000/DV),U( 9.000/DV),U(12.000/DV),U(13.875/DV),
+	U(15.000/DV),U(16.125/DV),U(16.875/DV),U(17.625/DV),
+	U(18.000/DV),U(18.750/DV),U(19.125/DV),U(19.500/DV),
+	U(19.875/DV),U(20.250/DV),U(20.625/DV),U(21.000/DV)
 };
+#undef U
 #undef DV
 
 /* sustain level table (3db per step) */
 /* 0 - 15: 0, 3, 6, 9,12,15,18,21,24,27,30,33,36,39,42,93 (dB)*/
-#define SC(db) (db*((3/EG_STEP)*(1<<ENV_BITS)))+EG_DST
+#define SC(db) (INT32)((db*((3/EG_STEP)*(1<<ENV_BITS)))+EG_DST)
 static const INT32 SL_TABLE[16]={
- static_cast<INT32>(SC( 0)),static_cast<INT32>(SC( 1)),static_cast<INT32>(SC( 2)),static_cast<INT32>(SC(3 )),static_cast<INT32>(SC(4 )),static_cast<INT32>(SC(5 )),static_cast<INT32>(SC(6 )),static_cast<INT32>(SC( 7)),
- static_cast<INT32>(SC( 8)),static_cast<INT32>(SC( 9)),static_cast<INT32>(SC(10)),static_cast<INT32>(SC(11)),static_cast<INT32>(SC(12)),static_cast<INT32>(SC(13)),static_cast<INT32>(SC(14)),static_cast<INT32>(SC(31))
+ SC( 0),SC( 1),SC( 2),SC(3 ),SC(4 ),SC(5 ),SC(6 ),SC( 7),
+ SC( 8),SC( 9),SC(10),SC(11),SC(12),SC(13),SC(14),SC(31)
 };
 #undef SC
 
@@ -197,8 +203,8 @@ static INT32 ENV_CURVE[2*EG_ENT+1];
 #define ML 2
 static const UINT32 MUL_TABLE[16]= {
 /* 1/2, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15 */
-   static_cast<UINT32>(0.50*ML), static_cast<UINT32>(1.00*ML), static_cast<UINT32>(2.00*ML), static_cast<UINT32>(3.00*ML), static_cast<UINT32>(4.00*ML), static_cast<UINT32>(5.00*ML), static_cast<UINT32>(6.00*ML), static_cast<UINT32>(7.00*ML),
-   static_cast<UINT32>(8.00*ML), static_cast<UINT32>(9.00*ML),static_cast<UINT32>(10.00*ML),static_cast<UINT32>(10.00*ML),static_cast<UINT32>(12.00*ML),static_cast<UINT32>(12.00*ML),static_cast<UINT32>(15.00*ML),static_cast<UINT32>(15.00*ML)
+   ML/2, 1*ML, 2*ML, 3*ML, 4*ML, 5*ML, 6*ML, 7*ML,
+   8*ML, 9*ML,10*ML,10*ML,12*ML,12*ML,15*ML,15*ML
 };
 #undef ML
 
@@ -585,7 +591,7 @@ static void init_timetables( FM_OPL *OPL , int ARRATE , int DRRATE )
 
 	/* make attack rate & decay rate tables */
 	for (i = 0;i < 4;i++) OPL->AR_TABLE[i] = OPL->DR_TABLE[i] = 0;
-	for (i = 4;i < 60;i++){
+	for (i = 4;i <= 60;i++){
 		rate  = OPL->freqbase;						/* frequency rate */
 		if( i < 60 ) rate *= 1.0+(i&3)*0.25;		/* b0-1 : x1 , x1.25 , x1.5 , x1.75 */
 		rate *= 1<<((i>>2)-1);						/* b2-5 : shift bit */
@@ -752,7 +758,7 @@ static void OPLWriteReg(FM_OPL *OPL, int r, int v)
 {
 	OPL_CH *CH;
 	int slot;
-	unsigned int block_fnum;
+	int block_fnum;
 
 	switch(r&0xe0)
 	{
@@ -967,7 +973,7 @@ static void OPLWriteReg(FM_OPL *OPL, int r, int v)
 			}
 		}
 		/* update */
-		if(CH->block_fnum != block_fnum)
+		if((int)CH->block_fnum != block_fnum)
 		{
 			int blockRv = 7-(block_fnum>>10);
 			int fnum   = block_fnum&0x3ff;
@@ -986,10 +992,10 @@ static void OPLWriteReg(FM_OPL *OPL, int r, int v)
 		if( (r&0x0f) > 11) return;//8
 		CH = &OPL->P_CH[r&0x0f];
 		{
-			int feedback = (v>>1)&7;
-			CH->FB   = feedback ? (8+1) - feedback : 0;
-			CH->CON = v&1;
-			set_algorythm(CH);
+		int feedback = (v>>1)&7;
+		CH->FB   = feedback ? (8+1) - feedback : 0;
+		CH->CON = v&1;
+		set_algorythm(CH);
 		}
 		return;
 	case 0xe0: /* wave type */
@@ -1258,19 +1264,13 @@ FM_OPL *OPLCreate(int type, int clock, int rate)
 	return OPL;
 }
 
-void OPLReInit(FM_OPL *OPL, int clock, int rate)
-{
-	/* set channel state pointer */
-	OPL->clock = clock;
-	OPL->rate  = rate;
-	/* init global tables */
-	OPL_initalize(OPL);
-}
-
-
 /* ----------  Destroy one of virtual YM3812 ----------       */
 void OPLDestroy(FM_OPL *OPL)
 {
+	if(!OPL)
+	{
+		return;
+	}
 #ifdef OPL_OUTPUT_LOG
 	if(opl_dbg_fp)
 	{
