@@ -191,16 +191,6 @@ int RuleUfo::getMaxSpeed() const
 }
 
 /**
- * Gets the acceleration of the UFO for
- * taking off / stopping.
- * @return The acceleration.
- */
-int RuleUfo::getAcceleration() const
-{
-	return _accel;
-}
-
-/**
  * Gets the maximum damage done by the
  * UFO's weapons per shot.
  * @return The weapon power.

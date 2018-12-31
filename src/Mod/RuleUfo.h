@@ -65,8 +65,6 @@ public:
 	int getMaxDamage() const;
 	/// Gets the UFO's maximum speed.
 	int getMaxSpeed() const;
-	/// Gets the UFO's acceleration.
-	int getAcceleration() const;
 	/// Gets the UFO's weapon power.
 	int getWeaponPower() const;
 	/// Gets the UFO's weapon range.
