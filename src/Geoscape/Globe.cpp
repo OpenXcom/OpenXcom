@@ -1486,11 +1486,24 @@ void Globe::drawFlights()
 				continue;
 
 			double lon1 = (*j)->getLongitude();
-			double lon2 = (*j)->getDestination()->getLongitude();
 			double lat1 = (*j)->getLatitude();
+			double lon2 = (*j)->getDestination()->getLongitude();
 			double lat2 = (*j)->getDestination()->getLatitude();
 
+			if ((*j)->isMeetCalculated())
+			{
+				lon2 = (*j)->getMeetLongitude();
+				lat2 = (*j)->getMeetLatitude();
+			}
 			drawPath(_radars, lon1, lat1, lon2, lat2);
+
+			if ((*j)->isMeetCalculated())
+			{
+				lon1 = (*j)->getDestination()->getLongitude();
+				lat1 = (*j)->getDestination()->getLatitude();
+
+				drawPath(_radars, lon1, lat1, lon2, lat2);
+			}
 		}
 	}
 

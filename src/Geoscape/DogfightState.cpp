@@ -1016,17 +1016,12 @@ void DogfightState::update()
 		}
 		if (_ufo->isCrashed())
 		{
-			for (std::vector<Target*>::iterator i = _ufo->getFollowers()->begin(); i != _ufo->getFollowers()->end();)
+			std::vector<Craft*> followers = _ufo->getCraftFollowers();
+			for (std::vector<Craft*>::iterator i = followers.begin(); i != followers.end(); ++i)
 			{
-				Craft* c = dynamic_cast<Craft*>(*i);
-				if (c != 0 && c->getNumSoldiers() == 0 && c->getNumVehicles() == 0)
+				if ((*i)->getNumSoldiers() == 0 && (*i)->getNumVehicles() == 0)
 				{
-					c->returnToBase();
-					i = _ufo->getFollowers()->begin();
-				}
-				else
-				{
-					++i;
+					(*i)->returnToBase();
 				}
 			}
 		}

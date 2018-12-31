@@ -24,7 +24,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextEdit.h"
-#include "../Savegame/Target.h"
+#include "../Savegame/MovingTarget.h"
 #include "../Engine/Options.h"
 #include "InterceptState.h"
 #include "../Engine/Action.h"
@@ -83,7 +83,7 @@ TargetInfoState::TargetInfoState(Target *target, Globe *globe) : _target(target)
 	_txtTargetted->setText(tr("STR_TARGETTED_BY"));
 	_txtFollowers->setAlign(ALIGN_CENTER);
 	std::ostringstream ss;
-	for (std::vector<Target*>::iterator i = _target->getFollowers()->begin(); i != _target->getFollowers()->end(); ++i)
+	for (std::vector<MovingTarget*>::iterator i = _target->getFollowers()->begin(); i != _target->getFollowers()->end(); ++i)
 	{
 		ss << (*i)->getName(_game->getLanguage()) << '\n';
 	}

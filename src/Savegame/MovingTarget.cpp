@@ -27,7 +27,7 @@ namespace OpenXcom
 /**
  * Initializes a moving target with blank coordinates.
  */
-MovingTarget::MovingTarget() : Target(), _dest(0), _speedLon(0.0), _speedLat(0.0), _speedRadian(0.0), _meetPointLon(0.0), _meetPointLat(0.0), _speed(0)
+MovingTarget::MovingTarget() : Target(), _dest(0), _speedLon(0.0), _speedLat(0.0), _speedRadian(0.0), _meetPointLon(0.0), _meetPointLat(0.0), _speed(0), _meetCalculated(false)
 {
 }
 
@@ -36,17 +36,7 @@ MovingTarget::MovingTarget() : Target(), _dest(0), _speedLon(0.0), _speedLat(0.0
  */
 MovingTarget::~MovingTarget()
 {
-	if (_dest != 0 && !_dest->getFollowers()->empty())
-	{
-		for (std::vector<Target*>::iterator i = _dest->getFollowers()->begin(); i != _dest->getFollowers()->end(); ++i)
-		{
-			if ((*i) == this)
-			{
-				_dest->getFollowers()->erase(i);
-				break;
-			}
-		}
-	}
+	setDestination(0);
 }
 
 /**
@@ -95,10 +85,11 @@ Target *MovingTarget::getDestination() const
  */
 void MovingTarget::setDestination(Target *dest)
 {
+	_meetCalculated = false;
 	// Remove moving target from old destination's followers
 	if (_dest != 0)
 	{
-		for (std::vector<Target*>::iterator i = _dest->getFollowers()->begin(); i != _dest->getFollowers()->end(); ++i)
+		for (std::vector<MovingTarget*>::iterator i = _dest->getFollowers()->begin(); i != _dest->getFollowers()->end(); ++i)
 		{
 			if ((*i) == this)
 			{
@@ -112,6 +103,11 @@ void MovingTarget::setDestination(Target *dest)
 	if (_dest != 0)
 	{
 		_dest->getFollowers()->push_back(this);
+	}
+	// Recalculate meeting point for any followers
+	for (std::vector<MovingTarget*>::iterator i = getFollowers()->begin(); i != getFollowers()->end(); ++i)
+	{
+		(*i)->resetMeetPoint();
 	}
 	calculateSpeed();
 }
@@ -229,6 +225,9 @@ void MovingTarget::move()
  */
 void MovingTarget::calculateMeetPoint()
 {
+	if (!Options::meetingPoint) _meetCalculated = false;
+	if (_meetCalculated) return;
+
 	// Initialize
 	if (_dest != 0)
 	{
@@ -243,19 +242,19 @@ void MovingTarget::calculateMeetPoint()
 
 	if (!_dest || !Options::meetingPoint) return;
 
-	MovingTarget *u = dynamic_cast<MovingTarget*>(_dest);
-	if (!u || !u->getDestination()) return;
+	MovingTarget *t = dynamic_cast<MovingTarget*>(_dest);
+	if (!t || !t->getDestination()) return;
 
 	// Speed ratio
-	if (AreSame(u->getSpeedRadian(), 0.0)) return;
-	const double speedRatio = _speedRadian/ u->getSpeedRadian();
+	if (AreSame(t->getSpeedRadian(), 0.0)) return;
+	const double speedRatio = _speedRadian/ t->getSpeedRadian();
 
 	// The direction pseudovector
-	double	nx = cos(u->getLatitude())*sin(u->getLongitude())*sin(u->getDestination()->getLatitude()) -
-					sin(u->getLatitude())*cos(u->getDestination()->getLatitude())*sin(u->getDestination()->getLongitude()),
-			ny = sin(u->getLatitude())*cos(u->getDestination()->getLatitude())*cos(u->getDestination()->getLongitude()) -
-					cos(u->getLatitude())*cos(u->getLongitude())*sin(u->getDestination()->getLatitude()),
-			nz = cos(u->getLatitude())*cos(u->getDestination()->getLatitude())*sin(u->getDestination()->getLongitude() - u->getLongitude());
+	double	nx = cos(t->getLatitude())*sin(t->getLongitude())*sin(t->getDestination()->getLatitude()) -
+					sin(t->getLatitude())*cos(t->getDestination()->getLatitude())*sin(t->getDestination()->getLongitude()),
+			ny = sin(t->getLatitude())*cos(t->getDestination()->getLatitude())*cos(t->getDestination()->getLongitude()) -
+					cos(t->getLatitude())*cos(t->getLongitude())*sin(t->getDestination()->getLatitude()),
+			nz = cos(t->getLatitude())*cos(t->getDestination()->getLatitude())*sin(t->getDestination()->getLongitude() - t->getLongitude());
 	// Normalize and multiplex with radian speed
 	double	nk = _speedRadian/sqrt(nx*nx+ny*ny+nz*nz);
 	nx *= nk;
@@ -281,6 +280,8 @@ void MovingTarget::calculateMeetPoint()
 	while (std::abs(_meetPointLon) > M_PI) _meetPointLon -= lonSign * 2 * M_PI;
 	while (std::abs(_meetPointLat) > M_PI) _meetPointLat -= latSign * 2 * M_PI;
 	if (std::abs(_meetPointLat) > M_PI_2) { _meetPointLat = latSign * std::abs(2 * M_PI - std::abs(_meetPointLat)); _meetPointLon -= lonSign * M_PI; }
+
+	_meetCalculated = true;
 }
 
 /**
@@ -299,6 +300,20 @@ double MovingTarget::getMeetLatitude() const
 double MovingTarget::getMeetLongitude() const
 {
 	return _meetPointLon;
+}
+
+/**
+ * Forces the meeting point to be recalculated in the event
+ * that the target has changed direction.
+ */
+void MovingTarget::resetMeetPoint()
+{
+	_meetCalculated = false;
+}
+
+bool MovingTarget::isMeetCalculated() const
+{
+	return _meetCalculated;
 }
 
 }

@@ -483,17 +483,12 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			MissionSite *missionSite = spawnMissionSite(game, deployment, area);
 			if (missionSite)
 			{
-				for (std::vector<Target*>::iterator t = ufo.getFollowers()->begin(); t != ufo.getFollowers()->end();)
+				std::vector<Craft*> followers = ufo.getCraftFollowers();
+				for (std::vector<Craft*>::iterator c = followers.begin(); c != followers.end(); ++c)
 				{
-					Craft* c = dynamic_cast<Craft*>(*t);
-					if (c && c->getNumSoldiers() != 0)
+					if ((*c)->getNumSoldiers() != 0)
 					{
-						c->setDestination(missionSite);
-						t = ufo.getFollowers()->begin();
-					}
-					else
-					{
-						++t;
+						(*c)->setDestination(missionSite);
 					}
 				}
 			}
