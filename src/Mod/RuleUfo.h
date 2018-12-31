@@ -37,7 +37,7 @@ class RuleUfo
 private:
 	std::string _type, _size;
 	int _sprite, _marker, _markerLand, _markerCrash;
-	int _damageMax, _speedMax, _accel, _power, _range, _score, _reload, _breakOffTime, _sightRange, _missionScore;
+	int _damageMax, _speedMax, _power, _range, _score, _reload, _breakOffTime, _sightRange, _missionScore;
 	RuleTerrain *_battlescapeTerrainData;
 	std::string _modSprite;
 public:

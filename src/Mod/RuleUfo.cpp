@@ -28,7 +28,7 @@ namespace OpenXcom
  * type of UFO.
  * @param type String defining the type.
  */
-RuleUfo::RuleUfo(const std::string &type) : _type(type), _size("STR_VERY_SMALL"), _sprite(-1), _marker(-1), _markerLand(-1), _markerCrash(-1), _damageMax(0), _speedMax(0), _accel(0),
+RuleUfo::RuleUfo(const std::string &type) : _type(type), _size("STR_VERY_SMALL"), _sprite(-1), _marker(-1), _markerLand(-1), _markerCrash(-1), _damageMax(0), _speedMax(0),
 											_power(0), _range(0), _score(0), _reload(0), _breakOffTime(0), _sightRange(268), _missionScore(1), _battlescapeTerrainData(0)
 {
 }
@@ -65,7 +65,6 @@ void RuleUfo::load(const YAML::Node &node, Mod *mod)
 	}
 	_damageMax = node["damageMax"].as<int>(_damageMax);
 	_speedMax = node["speedMax"].as<int>(_speedMax);
-	_accel = node["accel"].as<int>(_accel);
 	_power = node["power"].as<int>(_power);
 	_range = node["range"].as<int>(_range);
 	_score = node["score"].as<int>(_score);
