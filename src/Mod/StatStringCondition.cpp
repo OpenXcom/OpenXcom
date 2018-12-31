@@ -27,11 +27,8 @@ namespace OpenXcom
  * @param minVal Minimum value.
  * @param maxVal Maximum value.
  */
-StatStringCondition::StatStringCondition(const std::string &conditionName, int minVal, int maxVal)
+StatStringCondition::StatStringCondition(const std::string &conditionName, int minVal, int maxVal) : _conditionName(conditionName), _minVal(minVal), _maxVal(maxVal)
 {
-	_conditionName = conditionName;
-	_minVal = minVal;
-	_maxVal = maxVal;
 }
 
 /**

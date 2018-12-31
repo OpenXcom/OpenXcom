@@ -1093,7 +1093,7 @@ void GeoscapeState::time10Minutes()
 				if ((*j)->getDestination() == 0)
 				{
 					double range = Nautical((*j)->getRules()->getSightRange());
-					for (std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
+					for (std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 					{
 						if ((*j)->getDistance(*b) <= range)
 						{

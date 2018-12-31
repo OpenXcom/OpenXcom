@@ -84,7 +84,7 @@ TransferConfirmState::TransferConfirmState(Base *base, TransferItemsState *state
 	ss << Unicode::TOK_COLOR_FLIP << Unicode::formatFunding(_state->getTotal());
 
 	_txtTotal->setBig();
-	_txtTotal->setText(ss.str().c_str());
+	_txtTotal->setText(ss.str());
 }
 
 /**
