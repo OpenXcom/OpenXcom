@@ -732,26 +732,34 @@ void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::st
 		catch (Exception &e)
 		{
 			const std::string &modId = mods[i].first;
-			Log(LOG_WARNING) << "disabling mod with invalid ruleset: " << modId;
-			std::vector<std::pair<std::string, bool> >::iterator it =
-				std::find(Options::mods.begin(), Options::mods.end(),
-					std::pair<std::string, bool>(modId, true));
-			if (it == Options::mods.end())
-			{
-				Log(LOG_ERROR) << "cannot find broken mod in mods list: " << modId;
-				Log(LOG_ERROR) << "clearing mods list";
-				Options::mods.clear();
-			}
-			else
-			{
-				it->second = false;
-			}
-			Options::save();
+			std::ostringstream ss;
+			ss << "failed to load '"
+				<< Options::getModInfos().at(modId).getName()
+				<< "'";
 
-			throw Exception("failed to load '" +
-				Options::getModInfos().at(modId).getName() +
-				"'; mod disabled for next startup\n" +
-				e.what());
+			if (!Options::debug)
+			{
+				Log(LOG_WARNING) << "disabling mod with invalid ruleset: " << modId;
+				std::vector<std::pair<std::string, bool> >::iterator it =
+					std::find(Options::mods.begin(), Options::mods.end(),
+						std::pair<std::string, bool>(modId, true));
+				if (it == Options::mods.end())
+				{
+					Log(LOG_ERROR) << "cannot find broken mod in mods list: " << modId;
+					Log(LOG_ERROR) << "clearing mods list";
+					Options::mods.clear();
+				}
+				else
+				{
+					it->second = false;
+				}
+				Options::save();
+
+				ss << "; mod disabled";
+			}
+
+			ss << std::endl << e.what();
+			throw Exception(ss.str());
 		}
 	}
 	sortLists();
