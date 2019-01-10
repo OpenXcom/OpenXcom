@@ -46,9 +46,10 @@ MapScript::~MapScript()
  */
 void MapScript::load(const YAML::Node& node)
 {
+	std::string command;
 	if (const YAML::Node &map = node["type"])
 	{
-		std::string command = map.as<std::string>("");
+		command = map.as<std::string>("");
 		if (command == "addBlock")
 			_type = MSC_ADDBLOCK;
 		else if (command == "addLine")
@@ -223,38 +224,32 @@ void MapScript::load(const YAML::Node& node)
 
 	if (const YAML::Node &map = node["direction"])
 	{
-		std::string dir = map.as<std::string>("");
-		if (dir.length())
+		std::string direction = map.as<std::string>("");
+		if (!direction.empty())
 		{
-			std::transform(dir.begin(), dir.end(), dir.begin(), ::toupper);
-			if (dir[0] == 'V')
+			char dir = toupper(direction[0]);
+			switch (dir)
 			{
+			case 'V':
 				_direction = MD_VERTICAL;
-			}
-			else if (dir[0] == 'H')
-			{
+				break;
+			case 'H':
 				_direction = MD_HORIZONTAL;
-			}
-			else if (dir[0] == 'B')
-			{
+				break;
+			case 'B':
 				_direction = MD_BOTH;
-			}
-			else
-			{
-				throw Exception("direction must be [V]ertical, [H]orizontal, or [B]oth, what does " + dir + " mean?");
+				break;
+			default:
+				throw Exception("direction must be [V]ertical, [H]orizontal, or [B]oth, what does " + direction + " mean?");
 			}
 		}
 	}
 
 	if (_direction == MD_NONE)
 	{
-		if (_type == MSC_DIGTUNNEL)
+		if (_type == MSC_DIGTUNNEL || _type == MSC_ADDLINE)
 		{
-			throw Exception("no direction defined for dig tunnel command, must be [V]ertical, [H]orizontal, or [B]oth");
-		}
-		else if (_type == MSC_ADDLINE)
-		{
-			throw Exception("no direction defined for add line command, must be [V]ertical, [H]orizontal, or [B]oth");
+			throw Exception("no direction defined for " + command + " command, must be [V]ertical, [H]orizontal, or [B]oth");
 		}
 	}
 
