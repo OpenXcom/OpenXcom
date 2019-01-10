@@ -4,7 +4,6 @@ ufos:
     sprite: 0
     damageMax: 50
     speedMax: 2200
-    accel: 12
     power: 0
     range: 0
     score: 50
@@ -24,7 +23,6 @@ ufos:
     sprite: 1
     damageMax: 200
     speedMax: 2400
-    accel: 9
     power: 20
     range: 15
     score: 75
@@ -46,7 +44,6 @@ ufos:
     sprite: 2
     damageMax: 250
     speedMax: 2700
-    accel: 9
     power: 20
     range: 34
     score: 125
@@ -68,7 +65,6 @@ ufos:
     sprite: 3
     damageMax: 500
     speedMax: 4000
-    accel: 8
     power: 40
     range: 22
     score: 250
@@ -91,7 +87,6 @@ ufos:
     sprite: 4
     damageMax: 500
     speedMax: 4300
-    accel: 8
     power: 40
     range: 20
     score: 250
@@ -114,7 +109,6 @@ ufos:
     sprite: 5
     damageMax: 1200
     speedMax: 4800
-    accel: 6
     power: 120
     range: 42
     score: 500
@@ -137,7 +131,6 @@ ufos:
     sprite: 6
     damageMax: 3000
     speedMax: 5000
-    accel: 6
     power: 140
     range: 65
     score: 700
@@ -160,7 +153,6 @@ ufos:
     sprite: 7
     damageMax: 2200
     speedMax: 3200
-    accel: 6
     power: 60
     range: 36
     score: 400
