@@ -163,6 +163,7 @@ void Mod::resetGlobalStatics()
 	DEBRIEF_MUSIC_BAD = "GMMARS";
 
 	Globe::OCEAN_COLOR = Palette::blockOffset(12);
+	Globe::OCEAN_SHADING = true;
 	Globe::COUNTRY_LABEL_COLOR = 239;
 	Globe::LINE_COLOR = 162;
 	Globe::CITY_LABEL_COLOR = 138;

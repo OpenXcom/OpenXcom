@@ -61,6 +61,7 @@ const double Globe::ROTATE_LONGITUDE = 0.10;
 const double Globe::ROTATE_LATITUDE = 0.06;
 
 Uint8 Globe::OCEAN_COLOR;
+bool Globe::OCEAN_SHADING;
 Uint8 Globe::COUNTRY_LABEL_COLOR;
 Uint8 Globe::LINE_COLOR;
 Uint8 Globe::CITY_LABEL_COLOR;
@@ -172,7 +173,7 @@ struct Ocean
 
 struct CreateShadow
 {
-	static inline Uint8 getShadowValue(const Uint8& dest, const Cord& earth, const Cord& sun, const Sint16& noise)
+	static inline Uint8 getShadowValue(const Cord& earth, const Cord& sun, const Sint16& noise)
 	{
 		Cord temp = earth;
 		//diff
@@ -196,48 +197,50 @@ struct CreateShadow
 
 		temp.x -= noise;
 
-		if (temp.x > 0.)
-		{
-			const Sint16 val = (temp.x> 31)? 31 : (Sint16)temp.x;
-			const int d = dest & helper::ColorGroup;
-			if (d ==  Globe::OCEAN_COLOR || d == Globe::OCEAN_COLOR + 16)
-			{
-				//this pixel is ocean
-				return Globe::OCEAN_COLOR + val;
-			}
-			else
-			{
-				//this pixel is land
-				if (dest==0) return val;
-				const int s = val / 3;
-				const int e = dest+s;
-				if (e > d + helper::ColorShade)
-					return d + helper::ColorShade;
-				return e;
-			}
-		}
-		else
-		{
-			const int d = dest & helper::ColorGroup;
-			if (d ==  Globe::OCEAN_COLOR || d ==  Globe::OCEAN_COLOR + 16)
-			{
-				//this pixel is ocean
-				return Globe::OCEAN_COLOR;
-			}
-			else
-			{
-				//this pixel is land
-				return dest;
-			}
-		}
+		return Clamp(temp.x, 0., 31.);
+	}
+
+	static inline Uint8 getOceanShadow(const Uint8& shadow)
+	{
+		return Globe::OCEAN_COLOR + shadow;
+	}
+
+	static inline Uint8 getLandShadow(const Uint8& dest, const Uint8& shadow)
+	{
+		if (shadow == 0) return dest;
+		const int s = shadow / 3;
+		const int e = dest + s;
+		const int d = dest & helper::ColorGroup;
+		if (e > d + helper::ColorShade)
+			return d + helper::ColorShade;
+		return e;
+	}
+
+	static inline bool isOcean(const Uint8& dest)
+	{
+		return Globe::OCEAN_SHADING && dest >= Globe::OCEAN_COLOR && dest < Globe::OCEAN_COLOR + 32;
 	}
 
 	static inline void func(Uint8& dest, const Cord& earth, const Cord& sun, const Sint16& noise, const int&)
 	{
 		if (dest && earth.z)
-			dest = getShadowValue(dest, earth, sun, noise);
+		{
+			const Uint8 shadow = getShadowValue(earth, sun, noise);
+			//this pixel is ocean
+			if (isOcean(dest))
+			{
+				dest = getOceanShadow(shadow);
+			}
+			//this pixel is land
+			else
+			{
+				dest = getLandShadow(dest, shadow);
+			}
+		}
 		else
+		{
 			dest = 0;
+		}
 	}
 };
 
@@ -1044,18 +1047,13 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 		tcol=src->getPixel((int)x0,(int)y0);
 		if (tcol)
 		{
-			const int d = tcol & helper::ColorGroup;
-			if (d ==  OCEAN_COLOR || d ==  OCEAN_COLOR + 16)
+			if (CreateShadow::isOcean(tcol))
 			{
-				//this pixel is ocean
-				tcol = OCEAN_COLOR + shade + 8;
+				tcol = CreateShadow::getOceanShadow(shade + 8);
 			}
 			else
 			{
-				const int e = tcol + shade;
-				if (e > d + helper::ColorShade)
-					tcol = d + helper::ColorShade;
-				else tcol = e;
+				tcol = CreateShadow::getLandShadow(tcol, shade * 3);
 			}
 			surface->setPixel((int)x0,(int)y0,tcol);
 		}
@@ -1826,14 +1824,14 @@ void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int 
 							 7, 7, 8, 8, 9, 9,10,11,
 							11,12,12,13,13,14,15,15};
 
-	*shade = worldshades[ CreateShadow::getShadowValue(0, Cord(0.,0.,1.), getSunDirection(lon, lat), 0) ];
+	*shade = worldshades[ CreateShadow::getShadowValue(Cord(0.,0.,1.), getSunDirection(lon, lat), 0) ];
 	Polygon *t = getPolygonFromLonLat(lon,lat);
 	*texture = (t==NULL)? -1 : t->getTexture();
 }
 
 /**
- * Checks if the globe is zoomed in to it's maximum.
- * @return Returns true if globe is at max zoom, otherwise returns false.
+ * Returns the current globe zoom factor.
+ * @return Current zoom (0-5).
  */
 size_t Globe::getZoom() const
 {

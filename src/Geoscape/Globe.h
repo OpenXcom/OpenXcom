@@ -106,12 +106,13 @@ private:
 	/// Set up the radius of earth and stuff.
 	void setupRadii(int width, int height);
 public:
-
+	static Uint8 OCEAN_COLOR;
+	static bool OCEAN_SHADING;
 	static Uint8 COUNTRY_LABEL_COLOR;
 	static Uint8 LINE_COLOR;
 	static Uint8 CITY_LABEL_COLOR;
 	static Uint8 BASE_LABEL_COLOR;
-	static Uint8 OCEAN_COLOR;
+
 	/// Creates a new globe at the specified position and size.
 	Globe(Game* game, int cenX, int cenY, int width, int height, int x = 0, int y = 0);
 	/// Cleans up the globe.
