@@ -98,7 +98,11 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) :
 	_loftempsSet = _armor->getLoftempsSet();
 	_gender = soldier->getGender();
 	_faceDirection = -1;
-	_breathFrame = 0;
+	_breathFrame = -1;
+	if (_armor->drawBubbles())
+	{
+		_breathFrame = 0;
+	}
 	_floorAbove = false;
 	_breathing = false;
 
@@ -216,7 +220,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, St
 	_stats += *_armor->getStats();	// armors may modify effective stats
 
 	_breathFrame = -1; // most aliens don't breathe per-se, that's exclusive to humanoids
-	if (armor->getDrawingRoutine() == 14)
+	if (armor->drawBubbles())
 	{
 		_breathFrame = 0;
 	}

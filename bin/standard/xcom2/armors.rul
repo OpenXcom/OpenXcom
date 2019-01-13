@@ -21,6 +21,7 @@ armors: #done
       - 1.0
     loftemps: 3
     drawingRoutine: 13
+    drawBubbles: true
     spriteFaceGroup: 14
     spriteFaceColor: [160, 160, 64, 160, 160, 64, 160, 160] #M0 F0 M1 F1 M2 F2 M3 F3
     spriteHairGroup: 4
@@ -47,6 +48,7 @@ armors: #done
       - 1.0
     loftemps: 3
     drawingRoutine: 13
+    drawBubbles: true
     spriteFaceGroup: 14
     spriteFaceColor: [160, 160, 64, 160, 160, 64, 160, 160] #M0 F0 M1 F1 M2 F2 M3 F3
     spriteHairGroup: 4
@@ -73,6 +75,7 @@ armors: #done
       - 0.0
     loftemps: 3
     drawingRoutine: 13
+    drawBubbles: true
     forcedTorso: 1
     spriteFaceGroup: 14
     spriteFaceColor: [160, 160, 64, 160, 160, 64, 160, 160] #M0 F0 M1 F1 M2 F2 M3 F3
@@ -101,6 +104,7 @@ armors: #done
       - 0.0
     loftemps: 3
     drawingRoutine: 13
+    drawBubbles: true
     forcedTorso: 2
     spriteFaceGroup: 14
     spriteFaceColor: [160, 160, 64, 160, 160, 64, 160, 160] #M0 F0 M1 F1 M2 F2 M3 F3
@@ -147,6 +151,7 @@ armors: #done
       - 1.0
     loftemps: 3
     drawingRoutine: 14
+    drawBubbles: true
   - type: GILLMAN_ARMOR0
     spriteSheet: GILLMAN.PCK
     corpseItem: STR_GILLMAN_CORPSE
@@ -167,6 +172,7 @@ armors: #done
       - 1.0
     loftemps: 3
     drawingRoutine: 14
+    drawBubbles: true
   - type: TASOTH_ARMOR0
     spriteSheet: TASOTHS.PCK
     corpseItem: STR_TASOTH_CORPSE
@@ -187,6 +193,7 @@ armors: #done
       - 1.1
     loftemps: 3
     drawingRoutine: 14
+    drawBubbles: true
   - type: CALCINITE_ARMOR0
     spriteSheet: CALCIN.PCK
     allowInv: false
@@ -208,6 +215,7 @@ armors: #done
       - 1.0
     loftemps: 3
     drawingRoutine: 14
+    drawBubbles: true
   - type: TENTACULAT_ARMOR0
     spriteSheet: TENTAC.PCK
     allowInv: false
@@ -250,6 +258,7 @@ armors: #done
       - 1.1
     loftemps: 4
     drawingRoutine: 14
+    drawBubbles: true
   - type: LOBSTERMAN_ARMOR1
     spriteSheet: LOBSTER.PCK
     corpseItem: STR_LOBSTERMAN_CORPSE
@@ -270,6 +279,7 @@ armors: #done
       - 1.1
     loftemps: 4
     drawingRoutine: 14
+    drawBubbles: true
   - type: LOBSTERMAN_ARMOR2
     spriteSheet: LOBSTER.PCK
     corpseItem: STR_LOBSTERMAN_CORPSE
@@ -290,6 +300,7 @@ armors: #done
       - 1.1
     loftemps: 4
     drawingRoutine: 14
+    drawBubbles: true
   - type: XARQUID_ARMOR0
     spriteSheet: XARQUID.PCK
     allowInv: false

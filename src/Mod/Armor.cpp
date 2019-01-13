@@ -30,7 +30,7 @@ const std::string Armor::NONE = "STR_NONE";
  */
 Armor::Armor(const std::string &type) :
 	_type(type), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0),
-	_drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0),
+	_drawingRoutine(0), _drawBubbles(false), _movementType(MT_WALK), _size(1), _weight(0),
 	_deathFrames(3), _constantAnimation(false), _canHoldWeapon(false), _hasInventory(true),
 	_forcedTorso(TORSO_USE_GENDER),
 	_faceColorGroup(0), _hairColorGroup(0), _utileColorGroup(0), _rankColorGroup(0)
@@ -76,6 +76,7 @@ void Armor::load(const YAML::Node &node)
 	_rearArmor = node["rearArmor"].as<int>(_rearArmor);
 	_underArmor = node["underArmor"].as<int>(_underArmor);
 	_drawingRoutine = node["drawingRoutine"].as<int>(_drawingRoutine);
+	_drawBubbles = node["drawBubbles"].as<bool>(_drawBubbles);
 	_movementType = (MovementType)node["movementType"].as<int>(_movementType);
 	_size = node["size"].as<int>(_size);
 	_weight = node["weight"].as<int>(_weight);
@@ -226,6 +227,15 @@ std::string Armor::getSpecialWeapon() const
 int Armor::getDrawingRoutine() const
 {
 	return _drawingRoutine;
+}
+
+/**
+ * Gets whether or not to draw bubbles (breathing animation).
+ * @return True if breathing animation is enabled, false otherwise.
+ */
+bool Armor::drawBubbles() const
+{
+	return _drawBubbles;
 }
 
 /**
