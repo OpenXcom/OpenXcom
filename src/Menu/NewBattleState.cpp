@@ -273,6 +273,7 @@ void NewBattleState::load(const std::string &filename)
 			_cbxCraft->setSelected(std::min(doc["craft"].as<size_t>(0), _crafts.size() - 1));
 			_slrDarkness->setValue(doc["darkness"].as<size_t>(0));
 			_cbxTerrain->setSelected(std::min(doc["terrain"].as<size_t>(0), _terrainTypes.size() - 1));
+			cbxTerrainChange(0);
 			_cbxAlienRace->setSelected(std::min(doc["alienRace"].as<size_t>(0), _alienRaces.size() - 1));
 			_cbxDifficulty->setSelected(doc["difficulty"].as<size_t>(0));
 			_slrAlienTech->setValue(doc["alienTech"].as<size_t>(0));
