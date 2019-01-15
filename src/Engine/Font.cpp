@@ -216,7 +216,7 @@ SDL_Rect Font::getCharSize(UCode c)
 	SDL_Rect size = { 0, 0, 0, 0 };
 	if (Unicode::isPrintable(c))
 	{
-		if (_chars.find(c) == _chars.end()) 
+		if (_chars.find(c) == _chars.end())
 			c = '?';
 
 		FontImage *image = &_images[_chars[c].first];

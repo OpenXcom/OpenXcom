@@ -85,7 +85,7 @@ public:
 	bool isTarget() const;
 	void setDummy(bool dummy);
 	bool isDummy() const;
-	
+
 };
 
 }

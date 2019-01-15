@@ -33,7 +33,7 @@ class City : public Target
 {
 private:
 	std::string _name;
-	
+
 	/// Gets the city's type (unused).
 	std::string getType() const { return ""; }
 public:

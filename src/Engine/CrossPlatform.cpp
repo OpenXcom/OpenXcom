@@ -159,7 +159,7 @@ std::vector<std::string> findDataFolders()
 	list.push_back("PROGDIR:");
 	return list;
 #endif
-	
+
 #ifdef _WIN32
 	char path[MAX_PATH];
 
@@ -244,7 +244,7 @@ std::vector<std::string> findDataFolders()
 std::vector<std::string> findUserFolders()
 {
 	std::vector<std::string> list;
-	
+
 #ifdef __MORPHOS__
 	list.push_back("PROGDIR:");
 	return list;
@@ -283,7 +283,7 @@ std::vector<std::string> findUserFolders()
 #endif
 	char const *home = getHome();
 	char path[MAXPATHLEN];
-	
+
 	// Get user folders
 	if (char const *const xdg_data_home = getenv("XDG_DATA_HOME"))
  	{

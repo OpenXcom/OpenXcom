@@ -1,14 +1,14 @@
 # Locate SDL_gfx library
 # This module defines
 # SDLGFX_LIBRARY, the name of the library to link against
-# SDLGFX_FOUND, if false, do not try to link to SDL
-# SDLGFX_INCLUDE_DIR, where to find SDL/SDL.h
+# SDLGFX_FOUND, if false, do not try to link to SDL_gfx
+# SDLGFX_INCLUDE_DIR, where to find SDL/SDL_gfx.h
 #
 # $SDLDIR is an environment variable that would
 # correspond to the ./configure --prefix=$SDLDIR
 # used in building SDL.
 #
-# Created by Guillaume Chevallereau. This was influenced by the FindSDL.cmake 
+# Created by Guillaume Chevallereau. This was influenced by the FindSDL.cmake
 # module.
 
 #=============================================================================
@@ -28,7 +28,7 @@ FIND_PATH(SDLGFX_INCLUDE_DIR SDL_gfx.h
   HINTS
   $ENV{SDLGFXDIR}
   $ENV{SDLDIR}
-  PATH_SUFFIXES include SDL 
+  PATH_SUFFIXES include SDL
   PATHS
   ~/Library/Frameworks
   /Library/Frameworks
@@ -45,12 +45,12 @@ FIND_PATH(SDLGFX_INCLUDE_DIR SDL_gfx.h
   /opt/local/include/SDL # DarwinPorts
   /opt/local/include
   /opt/csw/include/SDL # Blastwave
-  /opt/csw/include 
+  /opt/csw/include
   /opt/include/SDL
   /opt/include
 )
 
-FIND_LIBRARY(SDLGFX_LIBRARY 
+FIND_LIBRARY(SDLGFX_LIBRARY
   NAMES SDL_gfx
   HINTS
   $ENV{SDLGFXDIR}
@@ -89,10 +89,10 @@ IF(NOT SDLGFX_INCLUDE_DIR)
     /opt/local/include/SDL # DarwinPorts
     /opt/local/include
     /opt/csw/include/SDL # Blastwave
-    /opt/csw/include 
+    /opt/csw/include
     /opt/include/SDL
     /opt/include
-)  
+)
 endif(NOT SDLGFX_INCLUDE_DIR)
 
 SET(SDLGFX_FOUND "NO")

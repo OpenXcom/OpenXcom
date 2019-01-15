@@ -89,7 +89,7 @@ public:
 	bool getSiteType() const;
 	/// Generates either a region, a mission, or a race based on the month.
 	std::string generate(const size_t monthsPassed, const GenerationType type) const;
-	
+
 };
 
 }

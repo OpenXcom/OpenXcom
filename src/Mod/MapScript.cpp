@@ -148,7 +148,7 @@ void MapScript::load(const YAML::Node& node)
 			_sizeY = _sizeX;
 		}
 	}
-	
+
 	if (const YAML::Node &map = node["groups"])
 	{
 		_groups.clear();
@@ -181,7 +181,7 @@ void MapScript::load(const YAML::Node& node)
 		}
 		selectionSize = _blocks.size();
 	}
-	
+
 	_frequencies.resize(selectionSize, 1);
 	_maxUses.resize(selectionSize, -1);
 

@@ -108,7 +108,7 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_obstacleTimer = new Timer(2500);
 	_obstacleTimer->stop();
 	_obstacleTimer->onTimer((SurfaceHandler)&Map::disableObstacles);
-	
+
 	_txtAccuracy = new Text(24, 9, 0, 0);
 	_txtAccuracy->setSmall();
 	_txtAccuracy->setPalette(_game->getScreen()->getPalette());
@@ -499,7 +499,7 @@ void Map::drawTerrain(Surface *surface)
 	BattleUnit *unit = 0;
 	int tileShade, wallShade, tileColor, obstacleShade;
 	static const int arrowBob[8] = {0,1,2,1,0,1,2,1};
-	
+
 	NumberText *_numWaypid = 0;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
@@ -1559,7 +1559,7 @@ void Map::cacheUnit(BattleUnit *unit)
 				cache = new Surface(_spriteWidth * 2, _spriteHeight);
 				cache->setPalette(this->getPalette());
 			}
-			
+
 			unitSprite->setBattleUnit(unit, i);
 			unitSprite->setSurfaces(_game->getMod()->getSurfaceSet(unit->getArmor()->getSpriteSheet()),
 									_game->getMod()->getSurfaceSet("HANDOB.PCK"),

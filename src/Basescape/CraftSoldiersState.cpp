@@ -155,7 +155,7 @@ CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft)
 #define PUSH_IN(strId, functor) \
 	sortOptions.push_back(tr(strId)); \
 	_sortFunctors.push_back(new SortFunctor(_game, functor));
-	
+
 	PUSH_IN("STR_RANK", rankStat);
 	PUSH_IN("STR_MISSIONS2", missionsStat);
 	PUSH_IN("STR_KILLS2", killsStat);

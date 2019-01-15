@@ -319,7 +319,7 @@ static void _moveBelow(const std::pair<std::string, bool> &srcMod, const std::pa
 			break;
 		}
 	}
-	
+
 	// remove old copy of srcMod in separate loop since the insert above invalidated the iterator
 	for (std::vector< std::pair<std::string, bool> >::iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
 	{

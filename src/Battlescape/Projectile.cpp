@@ -121,7 +121,7 @@ int Projectile::calculateTrajectory(double accuracy, const Position& originVoxel
 {
 	Tile *targetTile = _save->getTile(_action.target);
 	BattleUnit *bu = _action.actor;
-	
+
 	int test;
 	if (excludeUnit)
 	{
@@ -216,7 +216,7 @@ int Projectile::calculateTrajectory(double accuracy, const Position& originVoxel
 int Projectile::calculateThrow(double accuracy)
 {
 	Tile *targetTile = _save->getTile(_action.target);
-		
+
 	Position originVoxel = _save->getTileEngine()->getOriginVoxel(_action, 0);
 	Position targetVoxel;
 	std::vector<Position> targets;
@@ -229,7 +229,7 @@ int Projectile::calculateThrow(double accuracy)
 	{
 		targets.push_back(targetVoxel);
 	}
-	else 
+	else
 	{
 		BattleUnit *tu = targetTile->getUnit();
 		if (!tu && _action.target.z > 0 && targetTile->hasNoFloor(0))
@@ -316,7 +316,7 @@ int Projectile::calculateThrow(double accuracy)
 			&& endTile->getMapData(O_OBJECT)->getTUCost(MT_WALK) == 255
 			&& !(endTile->isBigWall() && (endTile->getMapData(O_OBJECT)->getBigWall()<1 || endTile->getMapData(O_OBJECT)->getBigWall()>3)))
 		{
-			test = V_OUTOFBOUNDS; 
+			test = V_OUTOFBOUNDS;
 		}
 	}
 	return test;
@@ -388,13 +388,13 @@ void Projectile::applyAccuracy(Position origin, Position *target, double accurac
 		deviation += 50;				// add extra spread to "miss" cloud
 	else
 		deviation += 10;				//accuracy of 109 or greater will become 1 (tightest spread)
-	
+
 	deviation = std::max(1, zShift * deviation / 200);	//range ratio
-		
+
 	target->x += RNG::generate(0, deviation) - deviation / 2;
 	target->y += RNG::generate(0, deviation) - deviation / 2;
 	target->z += RNG::generate(0, deviation / 2) / 2 - deviation / 8;
-	
+
 	if (extendLine)
 	{
 		double rotation, tilt;

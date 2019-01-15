@@ -30,7 +30,7 @@
 
 #include <assert.h>
 
-#if (_MSC_VER >= 1400) 
+#if (_MSC_VER >= 1400)
 #define restrict __restrict
 #else
 #define restrict

@@ -51,7 +51,7 @@ CutsceneState::~CutsceneState()
 void CutsceneState::init()
 {
 	State::init();
-	
+
 	// pop self off stack and replace with actual player state
 	_game->popState();
 

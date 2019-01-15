@@ -96,7 +96,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(Base *base, size_t soldierI
 
 	_btnKills->setText(tr("STR_COMBAT"));
 	_btnKills->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnKillsClick);
-	
+
 	_btnMissions->setText(tr("STR_PERFORMANCE"));
 	_btnMissions->onMouseClick((ActionHandler)&SoldierDiaryOverviewState::btnMissionsClick);
 
@@ -174,7 +174,7 @@ void SoldierDiaryOverviewState::init()
 	_soldier = _list->at(_soldierId);
 	_txtTitle->setText(_soldier->getName());
 	_lstDiary->clearList();
-	
+
 	std::vector<MissionStatistics*> *missionStatistics = _game->getSavedGame()->getMissionStatistics();
 
 	unsigned int row = 0;
@@ -196,10 +196,10 @@ void SoldierDiaryOverviewState::init()
 		{
 			continue;
 		}
-		
+
 		std::ostringstream ss;
 		ss << (*j)->time.getYear();
-		
+
 		_lstDiary->addRow(5, (*j)->getMissionName(_game->getLanguage()).c_str(),
 							 (*j)->getRatingString(_game->getLanguage()).c_str(),
 							 (*j)->time.getDayString(_game->getLanguage()).c_str(),

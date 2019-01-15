@@ -605,7 +605,7 @@ void Mod::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); ++i)
 	{
 		i->second->setPalette(colors, firstcolor, ncolors);
-	}	
+	}
 	for (std::map<std::string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
 		if (!CrossPlatform::compareExt(i->first, "LBM"))
@@ -614,7 +614,7 @@ void Mod::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	for (std::map<std::string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); ++i)
 	{
 		i->second->setPalette(colors, firstcolor, ncolors);
-	}	
+	}
 }
 
 /**
@@ -3315,7 +3315,7 @@ Music *Mod::loadMusic(MusicFormat fmt, const std::string &file, int track, float
 			if (gmcat && track < gmcat->getAmount())
 			{
 				music = gmcat->loadMIDI(track);
-			}			
+			}
 		}
 		// Try digital tracks
 		else

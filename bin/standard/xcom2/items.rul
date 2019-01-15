@@ -1465,7 +1465,7 @@ items: #done
     invHeight: 3
     clipSize: -1
     recover: false
-  - type: DEEP_ONE_WEAPON 
+  - type: DEEP_ONE_WEAPON
     bigSprite: -3
     bulletSprite: 8
     fireSound: 40

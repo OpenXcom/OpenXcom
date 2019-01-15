@@ -31,13 +31,13 @@ namespace OpenXcom
 
 /*
 NameStats in XCOMUTIL.CFG:
- 
+
 StatStrings, which were added in version 7.2, are used for automatically
 renaming soldiers.  They are case sensitive and they are processed in the
 order in which they are specified.  The format of these StatStrings is:
- 
+
   string statid:[lower]-[upper] [statid:[lower]-[upper] [...] ]
- 
+
   where string = string to add to name.  If length == 1, then the strings
 				 accumulate.  Otherwise, success ends the search.  All
 				 single character strings SHOULD come last, but that is
@@ -57,18 +57,18 @@ order in which they are specified.  The format of these StatStrings is:
 				 t = throwing accuracy
 		 lower = lower limit of stat (inclusive), defaults to 0
 		 upper = upper limit of stat (inclusive), defaults to 255
- 
+
 Stat ranges are ANDed together when testing for success.  To achieve a logical
 OR, list the same string more than once.  For example, Wimp b:0-10 and
 Wimp s:0-20 would designate a Wimp as either someone who is not brave or
 someone who is very weak.  By arranging the string properly, you can put all
 of your strengths before your weaknesses or list the stats in order, which is
-the default.  
- 
+the default.
+
 You may specify as many ranges for one StatString as you like, up to the limit
 of the memory I have allocated.  There is enough space for a total of more
 than 600 ranges to be defined.  Let me know if you need more.
- 
+
 The # character is a special string that will be replaced by numbers
 corresponding to the values of the statistics listed, divided by 10.  For
 example, # fr will generate the string 74 if the firing accuracy value is 72
@@ -78,7 +78,7 @@ example P p:0-255 followed by # p would generate P6 for a Psi Strength of 64,
 assuming that Psi Skill is non-zero.  Psi/MC Strength is always reported as
 zero unless Psi/MC Skill is greater than 0.  To test Psi/MC Strength without
 checking the Psi/MC Skill, use the q statid.
- 
+
 Since strings longer than one character will terminate the checking, these
 strings are normally listed first.  More stats accumulating after Snpr would
 ruin the usefulness of Snpr as an equipment type.  However, if you wanted to
@@ -88,12 +88,12 @@ example, if you wanted to know that your Snpr had a very low Psi/MC Strength
 and had little resistance to alien control, you could put x p:0-30 or x q:0-30
 at the start of the list to produce Snpr or xSnpr as your final code. This is
 what I did in the default case.  See the XCOMUTIL.CFG file for examples.
- 
+
 If the resulting string exceeds the maximum length for a name, the first
 name will be replaced by an initial.  If the string is still too long, the
 first name will be removed entirely.  If this string is still too long, no
-change will be made.  
- 
+change will be made.
+
 If / is used as a statid, it indicates that this is the last required name
 stat.  That is, if the name stats make the name too long, the total string
 will be reduced to the size at the moment that the / statid was

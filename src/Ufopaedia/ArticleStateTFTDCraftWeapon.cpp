@@ -34,7 +34,7 @@ namespace OpenXcom
 	ArticleStateTFTDCraftWeapon::ArticleStateTFTDCraftWeapon(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs)
 	{
 		RuleCraftWeapon *weapon = _game->getMod()->getCraftWeapon(defs->id, true);
-		
+
 		_lstInfo = new TextList(150, 50, 168, 126);
 		add(_lstInfo);
 

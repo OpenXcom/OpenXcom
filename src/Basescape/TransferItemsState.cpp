@@ -691,7 +691,7 @@ void TransferItemsState::decreaseByValue(int change)
 	if (0 >= change || 0 >= getRow().amount) return;
 	Craft *craft = 0;
 	change = std::min(getRow().amount, change);
-	
+
 	switch (getRow().type)
 	{
 	case TRANSFER_SOLDIER:

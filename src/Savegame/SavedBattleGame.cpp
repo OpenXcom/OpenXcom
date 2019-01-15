@@ -1722,7 +1722,7 @@ bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, const Position& en
 	{
 		return true;
 	}
-	
+
 	int me = 0 - unit->getArmor()->getSize();
 	int you = largeFriend ? 2 : 1;
 	int xArray[8] = {0, you, you, you, 0, me, me, me};

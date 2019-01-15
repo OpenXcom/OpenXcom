@@ -37,7 +37,7 @@ class Timer
 public:
 	static int maxFrameSkip;
 	static Uint32 gameSlowSpeed;
-	
+
 private:
 	Uint32 _start;
 	Uint32 _frameSkipStart;

@@ -228,7 +228,7 @@ void MedikitState::onHealClick(Action *)
 		_medikitView->updateSelectedPart();
 		_medikitView->invalidate();
 		update();
-		
+
 		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS && _targetUnit->getStunlevel() < _targetUnit->getHealth() && _targetUnit->getHealth() > 0)
 		{
 			if (!_revivedTarget)

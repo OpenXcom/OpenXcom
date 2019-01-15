@@ -6,7 +6,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -36,7 +36,7 @@ alienDeployments: #done
         highQty: 4
         dQty: 2
         percentageOutsideUfo: 60
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -58,7 +58,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 1
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -88,7 +88,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 5
         percentageOutsideUfo: 65
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -109,7 +109,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 1
         percentageOutsideUfo: 25
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -131,7 +131,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 1
         percentageOutsideUfo: 35
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -161,7 +161,7 @@ alienDeployments: #done
         highQty: 9
         dQty: 4
         percentageOutsideUfo: 70
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -182,7 +182,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -205,7 +205,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_THERMAL_SHOK_LAUNCHER
             - STR_THERMAL_SHOK_BOMB
@@ -228,7 +228,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 30
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_CANNON
             - STR_CANNON_POWER_CLIP
@@ -251,7 +251,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 1
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_CANNON
             - STR_CANNON_POWER_CLIP
@@ -282,7 +282,7 @@ alienDeployments: #done
         highQty: 5
         dQty: 4
         percentageOutsideUfo: 70
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_CANNON
             - STR_CANNON_POWER_CLIP
@@ -305,7 +305,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 1
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -328,7 +328,7 @@ alienDeployments: #done
         highQty: 4
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -351,7 +351,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 30
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -375,7 +375,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_CANNON
             - STR_CANNON_POWER_CLIP
@@ -406,7 +406,7 @@ alienDeployments: #done
         highQty: 6
         dQty: 1
         percentageOutsideUfo: 70
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -427,7 +427,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -450,7 +450,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -473,7 +473,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -494,7 +494,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -506,7 +506,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -518,7 +518,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -538,7 +538,7 @@ alienDeployments: #done
         highQty: 8
         dQty: 4
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -561,7 +561,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -585,7 +585,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_CANNON
             - STR_CANNON_POWER_CLIP
@@ -608,7 +608,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -630,7 +630,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -651,7 +651,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -673,7 +673,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 1
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -685,7 +685,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 1
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -705,7 +705,7 @@ alienDeployments: #done
         highQty: 7
         dQty: 6
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -726,7 +726,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -746,7 +746,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -767,7 +767,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -787,7 +787,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 1
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -815,7 +815,7 @@ alienDeployments: #done
         highQty: 6
         dQty: 1
         percentageOutsideUfo: 70
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -836,7 +836,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -859,7 +859,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -882,7 +882,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -903,7 +903,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -915,7 +915,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -927,7 +927,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -956,7 +956,7 @@ alienDeployments: #done
         highQty: 6
         dQty: 1
         percentageOutsideUfo: 70
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -977,7 +977,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1000,7 +1000,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -1023,7 +1023,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1044,7 +1044,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1056,7 +1056,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1068,7 +1068,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1097,7 +1097,7 @@ alienDeployments: #done
         highQty: 6
         dQty: 1
         percentageOutsideUfo: 70
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1118,7 +1118,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1141,7 +1141,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -1164,7 +1164,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1185,7 +1185,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1197,7 +1197,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1209,7 +1209,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1241,7 +1241,7 @@ alienDeployments: #done
         highQty: 6
         dQty: 1
         percentageOutsideUfo: 70
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1262,7 +1262,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1285,7 +1285,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -1308,7 +1308,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1329,7 +1329,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1341,7 +1341,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1353,7 +1353,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1373,7 +1373,7 @@ alienDeployments: #done
       desc: STR_SHIP_RESCUE_P2_BRIEFING
       palette: 4
       music: GMISPOSH
-      background: BACK01.SCR    
+      background: BACK01.SCR
     markerName: STR_TERROR_SITE
   - type: STR_CRUISE_SHIP_P1
     data:
@@ -1382,7 +1382,7 @@ alienDeployments: #done
         highQty: 6
         dQty: 1
         percentageOutsideUfo: 70
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1403,7 +1403,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1426,7 +1426,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -1449,7 +1449,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1470,7 +1470,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1482,7 +1482,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1494,7 +1494,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1526,7 +1526,7 @@ alienDeployments: #done
         highQty: 6
         dQty: 1
         percentageOutsideUfo: 70
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1547,7 +1547,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1570,7 +1570,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -1593,7 +1593,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1614,7 +1614,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1626,7 +1626,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1638,7 +1638,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1668,7 +1668,7 @@ alienDeployments: #done
         dQty: 1
         extraQty: 2
         percentageOutsideUfo: 70
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1690,7 +1690,7 @@ alienDeployments: #done
         dQty: 0
         extraQty: 2
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1714,7 +1714,7 @@ alienDeployments: #done
         dQty: 0
         extraQty: 2
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -1738,7 +1738,7 @@ alienDeployments: #done
         dQty: 0
         extraQty: 2
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1760,7 +1760,7 @@ alienDeployments: #done
         dQty: 0
         extraQty: 2
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1773,7 +1773,7 @@ alienDeployments: #done
         dQty: 2
         extraQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1786,7 +1786,7 @@ alienDeployments: #done
         dQty: 2
         extraQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1818,7 +1818,7 @@ alienDeployments: #done
         dQty: 1
         extraQty: 2
         percentageOutsideUfo: 70
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1840,7 +1840,7 @@ alienDeployments: #done
         dQty: 0
         extraQty: 2
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1864,7 +1864,7 @@ alienDeployments: #done
         dQty: 0
         extraQty: 2
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -1888,7 +1888,7 @@ alienDeployments: #done
         dQty: 0
         extraQty: 2
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -1910,7 +1910,7 @@ alienDeployments: #done
         dQty: 0
         extraQty: 2
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1923,7 +1923,7 @@ alienDeployments: #done
         dQty: 2
         extraQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1936,7 +1936,7 @@ alienDeployments: #done
         dQty: 2
         extraQty: 2
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1969,7 +1969,7 @@ alienDeployments: #done
         highQty: 4
         dQty: 1
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1981,7 +1981,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 1
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -1993,7 +1993,7 @@ alienDeployments: #done
         highQty: 9
         dQty: 5
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2013,7 +2013,7 @@ alienDeployments: #done
         highQty: 4
         dQty: 2
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2034,7 +2034,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 1
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -2056,7 +2056,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 1
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2076,7 +2076,7 @@ alienDeployments: #done
         highQty: 4
         dQty: 1
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2098,7 +2098,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 1
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2145,7 +2145,7 @@ alienDeployments: #done
         highQty: 4
         dQty: 1
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -2157,7 +2157,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 1
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -2169,7 +2169,7 @@ alienDeployments: #done
         highQty: 9
         dQty: 5
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2189,7 +2189,7 @@ alienDeployments: #done
         highQty: 4
         dQty: 2
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2210,7 +2210,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 1
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -2232,7 +2232,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 1
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2252,7 +2252,7 @@ alienDeployments: #done
         highQty: 4
         dQty: 1
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2274,7 +2274,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 1
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2316,7 +2316,7 @@ alienDeployments: #done
         highQty: 8
         dQty: 4
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2339,7 +2339,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_PISTOL
             - STR_PISTOL_POWER_CLIP
@@ -2363,7 +2363,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_CANNON
             - STR_CANNON_POWER_CLIP
@@ -2386,7 +2386,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 20
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2408,7 +2408,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2429,7 +2429,7 @@ alienDeployments: #done
         highQty: 1
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2451,7 +2451,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 1
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -2463,7 +2463,7 @@ alienDeployments: #done
         highQty: 2
         dQty: 1
         percentageOutsideUfo: 50
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -2488,7 +2488,7 @@ alienDeployments: #done
         highQty: 6
         dQty: 0
         percentageOutsideUfo: 60
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_CANNON
             - STR_CANNON_POWER_CLIP
@@ -2512,7 +2512,7 @@ alienDeployments: #done
         highQty: 5
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2536,7 +2536,7 @@ alienDeployments: #done
         highQty: 5
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2556,7 +2556,7 @@ alienDeployments: #done
         highQty: 4
         dQty: 0
         percentageOutsideUfo: 100
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -2566,7 +2566,7 @@ alienDeployments: #done
     width: 60
     length: 60
     height: 2
-    terrains: 
+    terrains:
       - ALSHIP
     shade: 15
     depth: [3, 3]
@@ -2591,7 +2591,7 @@ alienDeployments: #done
         highQty: 4
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -2603,7 +2603,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -2615,7 +2615,7 @@ alienDeployments: #done
         highQty: 5
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -2627,7 +2627,7 @@ alienDeployments: #done
         highQty: 5
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_CANNON
             - STR_CANNON_POWER_CLIP
@@ -2651,7 +2651,7 @@ alienDeployments: #done
         highQty: 5
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_CANNON
             - STR_CANNON_POWER_CLIP
@@ -2675,7 +2675,7 @@ alienDeployments: #done
         highQty: 5
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2699,7 +2699,7 @@ alienDeployments: #done
         highQty: 4
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -2709,7 +2709,7 @@ alienDeployments: #done
     width: 60
     length: 60
     height: 2
-    terrains: 
+    terrains:
       - LEVEL
     shade: 15
     depth: [3, 3]
@@ -2732,7 +2732,7 @@ alienDeployments: #done
         highQty: 4
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -2744,7 +2744,7 @@ alienDeployments: #done
         highQty: 3
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -2756,7 +2756,7 @@ alienDeployments: #done
         highQty: 5
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -
@@ -2768,7 +2768,7 @@ alienDeployments: #done
         highQty: 5
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_CANNON
             - STR_CANNON_POWER_CLIP
@@ -2792,7 +2792,7 @@ alienDeployments: #done
         highQty: 5
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_CANNON
             - STR_CANNON_POWER_CLIP
@@ -2816,7 +2816,7 @@ alienDeployments: #done
         highQty: 5
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             - STR_SONIC_BLASTA_RIFLE
             - STR_BLASTA_POWER_CLIP
@@ -2840,7 +2840,7 @@ alienDeployments: #done
         highQty: 4
         dQty: 0
         percentageOutsideUfo: 0
-        itemSets: 
+        itemSets:
           -
             []
           -

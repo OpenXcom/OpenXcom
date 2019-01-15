@@ -5,7 +5,7 @@
 
 	;Enable support for Unicode
 	Unicode true
-	
+
 	;Compress the hell out of it
 	SetCompressor /SOLID lzma
 
@@ -58,11 +58,11 @@
 	Var XLabelDirTFTD
 	Var XDirTFTD
 	Var XBrowseTFTD
-	
+
 	Var ZDialog
 	Var ZLabelPortable
 	Var ZCheckPortable
-	
+
 	Var StartMenuFolder
 	Var UFO_DIR
 	Var TFTD_DIR
@@ -89,26 +89,26 @@
 	!insertmacro MUI_PAGE_WELCOME
 	!insertmacro MUI_PAGE_COMPONENTS
 	!insertmacro MUI_PAGE_DIRECTORY
-	
+
 	Page custom XcomFolder ValidateXcom
-	
+
 	Page custom ExtraOptions ExtraOptionsSave
-	
+
 	;Start Menu Folder Page Configuration
 	!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
 	!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${GAME_NAME}"
 	!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
-	
+
 	!insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
-	
+
 	!insertmacro MUI_PAGE_INSTFILES
-	
+
 	;Finish Page Configuration
 	!define MUI_FINISHPAGE_RUN "$INSTDIR\OpenXcom.exe"
 	!define MUI_FINISHPAGE_NOREBOOTSUPPORT
-	
+
 	!insertmacro MUI_PAGE_FINISH
-	
+
 	!insertmacro MUI_UNPAGE_COMPONENTS
 	!insertmacro MUI_UNPAGE_CONFIRM
 	!insertmacro MUI_UNPAGE_INSTFILES
@@ -122,28 +122,28 @@ Function ExtraOptions
 	StrCmp $0 "" 0 portable_no
 	${StrStr} $0 $INSTDIR $PROGRAMFILES64
 	StrCmp $0 "" portable_yes portable_no
-	
+
 	portable_no:
 	StrCpy $PortableMode ${BST_UNCHECKED}
 	Abort
-	
+
 	portable_yes:
 	!insertmacro MUI_HEADER_TEXT $(SETUP_EXTRA_OPTIONS_TITLE) $(SETUP_EXTRA_OPTIONS_SUBTITLE)
-	
+
 	nsDialogs::Create 1018
 	Pop $ZDialog
 
 	${If} $ZDialog == error
 		Abort
 	${EndIf}
-	
+
 	${NSD_CreateCheckBox} 0 0 100% 10u $(SETUP_PORTABLE)
 	Pop $ZCheckPortable
 	${NSD_SetState} $ZCheckPortable $PortableMode
-	
+
 	${NSD_CreateLabel} 0 15u 100% 20u $(SETUP_PORTABLE_DESC)
 	Pop $ZLabelPortable
-	
+
 	nsDialogs::Show
 
 FunctionEnd
@@ -153,43 +153,43 @@ Function ExtraOptionsSave
 	${NSD_GetState} $ZCheckPortable $PortableMode
 
 FunctionEnd
-	
+
 Function XcomFolder
 
 	!insertmacro MUI_HEADER_TEXT $(SETUP_XCOM_FOLDER_TITLE) $(SETUP_XCOM_FOLDER_SUBTITLE)
-	
+
 	nsDialogs::Create 1018
 	Pop $XDialog
 
 	${If} $XDialog == error
 		Abort
 	${EndIf}
-	
+
 	${NSD_CreateLabel} 0 0 100% 50% $(SETUP_XCOM_FOLDER)
 	Pop $XLabelHeader
-	
+
 	${NSD_CreateLabel} 0 -67u 100% 10u $(SETUP_UFO_FOLDER)
 	Pop $XLabelDirUFO
-	
+
 	${NSD_CreateDirRequest} 0 -56u 95% 12u $UFO_DIR
 	Pop $XDirUFO
 	${NSD_OnChange} $XDirUFO XcomFolderOnChange
-	
+
 	${NSD_CreateBrowseButton} -14u -56u 14u 12u "..."
 	Pop $XBrowseUFO
 	${NSD_OnClick} $XBrowseUFO XcomFolderOnBrowse
-	
+
 	${NSD_CreateLabel} 0 -31u 95% 10u $(SETUP_TFTD_FOLDER)
 	Pop $XLabelDirTFTD
-	
+
 	${NSD_CreateDirRequest} 0 -20u 95% 12u $TFTD_DIR
 	Pop $XDirTFTD
 	${NSD_OnChange} $XDirTFTD XcomFolderOnChange
-	
+
 	${NSD_CreateBrowseButton} -14u -20u 14u 12u "..."
 	Pop $XBrowseTFTD
 	${NSD_OnClick} $XBrowseTFTD XcomFolderOnBrowse
-	
+
 	nsDialogs::Show
 
 FunctionEnd
@@ -197,11 +197,11 @@ FunctionEnd
 Function XcomFolderOnChange
 
 	Pop $0
-	
+
 	${If} $0 == $XDirUFO
 		${NSD_GetText} $0 $UFO_DIR
 	${EndIf}
-	
+
 	${If} $0 == $XDirTFTD
 		${NSD_GetText} $0 $TFTD_DIR
 	${EndIf}
@@ -211,7 +211,7 @@ FunctionEnd
 Function XcomFolderOnBrowse
 
 	Pop $0
-	
+
 	${If} $0 == $XBrowseUFO
 		nsDialogs::SelectFolderDialog $(SETUP_UFO_FOLDER) $UFO_DIR
 		Pop $1
@@ -221,7 +221,7 @@ Function XcomFolderOnBrowse
 		StrCpy $UFO_DIR $1
 		${NSD_SetText} $XDirUFO $UFO_DIR
 	${EndIf}
-	
+
 	${If} $0 == $XBrowseTFTD
 		nsDialogs::SelectFolderDialog $(SETUP_TFTD_FOLDER) $TFTD_DIR
 		Pop $1
@@ -246,7 +246,7 @@ FunctionEnd
 	;If you are using solid compression, files that are required before
 	;the actual installation should be stored first in the data block,
 	;because this will make your installer start faster.
-	
+
 	!insertmacro MUI_RESERVEFILE_LANGDLL
 
 ;--------------------------------
@@ -255,9 +255,9 @@ FunctionEnd
 Section "$(SETUP_GAME)" SecMain
 
 	SectionIn RO
-	
+
 	SetOutPath "$INSTDIR"
-	
+
 !ifdef NSIS_WIN32_MAKENSIS
 ${If} ${RunningX64}
 	File "..\..\bin\x64\Release\OpenXcom.exe"
@@ -272,13 +272,13 @@ ${EndIf}
 	File "..\..\LICENSE.txt"
 	File "..\..\CHANGELOG.txt"
 	File /oname=README.txt "..\..\README.md"
-	
+
 	;Copy UFO files
 	SetOutPath "$INSTDIR\UFO"
-	
+
 	StrCmp $UFO_DIR "" install_ufo_no 0
 	IfFileExists "$UFO_DIR\*.*" 0 install_ufo_no
-	
+
 	CreateDirectory "$INSTDIR\UFO\GEODATA"
 	CopyFiles /SILENT "$UFO_DIR\GEODATA\*.*" "$INSTDIR\UFO\GEODATA"
 	CreateDirectory "$INSTDIR\UFO\GEOGRAPH"
@@ -297,16 +297,16 @@ ${EndIf}
 	CopyFiles /SILENT "$UFO_DIR\UFOINTRO\*.*" "$INSTDIR\UFO\UFOINTRO"
 	CreateDirectory "$INSTDIR\UFO\UNITS"
 	CopyFiles /SILENT "$UFO_DIR\UNITS\*.*" "$INSTDIR\UFO\UNITS"
-	
+
 	install_ufo_no:
 	File "..\..\bin\UFO\README.txt"
-	
+
 	;Copy TFTD files
 	SetOutPath "$INSTDIR\TFTD"
-	
+
 	StrCmp $TFTD_DIR "" install_tftd_no 0
 	IfFileExists "$TFTD_DIR\*.*" 0 install_tftd_no
-	
+
 	CreateDirectory "$INSTDIR\TFTD\ANIMS"
 	CopyFiles /SILENT "$TFTD_DIR\ANIMS\*.*" "$INSTDIR\TFTD\ANIMS"
 	CreateDirectory "$INSTDIR\TFTD\FLOP_INT"
@@ -327,22 +327,22 @@ ${EndIf}
 	CopyFiles /SILENT "$TFTD_DIR\UFOGRAPH\*.*" "$INSTDIR\TFTD\UFOGRAPH"
 	CreateDirectory "$INSTDIR\TFTD\UNITS"
 	CopyFiles /SILENT "$TFTD_DIR\UNITS\*.*" "$INSTDIR\TFTD\UNITS"
-	
+
 	install_tftd_no:
 	File "..\..\bin\TFTD\README.txt"
-	
+
 	SetOutPath "$INSTDIR"
-	
+
 	File /r "..\..\bin\common"
 	File /r "..\..\bin\standard"
-	
+
 ${If} $PortableMode == ${BST_CHECKED}
 	CreateDirectory "$INSTDIR\user"
 ${EndIf}
-	
+
 	;Store installation folder
 	WriteRegStr HKLM "Software\${GAME_NAME}" "" $INSTDIR
-	
+
 	;Write the uninstall keys for Windows
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "DisplayName" "${GAME_NAME} ${GAME_VERSION}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "DisplayIcon" '"$INSTDIR\OpenXcom.exe",0'
@@ -353,15 +353,15 @@ ${EndIf}
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "URLInfoAbout" "https://openxcom.org"
 	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "NoModify" 1
 	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "NoRepair" 1
-	
+
 	;Create uninstaller
 	WriteUninstaller "$INSTDIR\Uninstall.exe"
-	
+
 	;Create shortcuts
 	SetOutPath "$INSTDIR"
-	
+
 	!insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-	
+
 		CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${GAME_NAME}.lnk" "$INSTDIR\OpenXcom.exe"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(SETUP_SHORTCUT_CHANGELOG).lnk" "$INSTDIR\CHANGELOG.txt"
@@ -372,7 +372,7 @@ ${Else}
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(SETUP_SHORTCUT_USER).lnk" "$DOCUMENTS\OpenXcom"
 ${EndIf}
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(SETUP_SHORTCUT_UNINSTALL).lnk" "$INSTDIR\Uninstall.exe"
-	
+
 	!insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
@@ -381,56 +381,56 @@ Section "$(SETUP_PATCH)" SecPatch
 
 	;Patch UFO files
 	SetOutPath "$INSTDIR\UFO"
-	
+
 	StrCmp $UFO_DIR "" patch_ufo_no 0
 	IfFileExists "$UFO_DIR\*.*" 0 patch_ufo_no
-	
+
 	;(uses inetc.dll)
 	inetc::get "https://openxcom.org/download/extras/universal-patch-ufo.zip" "$TEMP\universal-patch-ufo.zip" /end
 	Pop $0
 	StrCmp $0 "OK" 0 patch_ufo_fail1
-	
+
 	;(uses nsisunz.dll)
 	nsisunz::UnzipToLog "$TEMP\universal-patch-ufo.zip" "$INSTDIR\UFO"
 	Pop $0
 	StrCmp $0 "success" patch_ufo_yes patch_ufo_fail1
-	
+
 	patch_ufo_fail1:
 	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(SETUP_WARNING_PATCH) /SD IDYES IDYES patch_ufo_yes IDNO patch_ufo_fail2
 	patch_ufo_fail2:
 	Abort "Error"
-	
-	patch_ufo_yes:	
+
+	patch_ufo_yes:
 	Delete "$TEMP\universal-patch-ufo.zip"
-	
+
 	patch_ufo_no:
-	
+
 	;Patch TFTD files
 	SetOutPath "$INSTDIR\TFTD"
-	
+
 	StrCmp $TFTD_DIR "" patch_tftd_no 0
 	IfFileExists "$TFTD_DIR\*.*" 0 patch_tftd_no
-	
+
 	;(uses inetc.dll)
 	inetc::get "https://openxcom.org/download/extras/universal-patch-tftd.zip" "$TEMP\universal-patch-tftd.zip" /end
 	Pop $0
 	StrCmp $0 "OK" 0 patch_tftd_fail1
-	
+
 	;(uses nsisunz.dll)
 	nsisunz::UnzipToLog "$TEMP\universal-patch-tftd.zip" "$INSTDIR\TFTD"
 	Pop $0
 	StrCmp $0 "success" patch_tftd_yes patch_tftd_fail1
-	
+
 	patch_tftd_fail1:
 	MessageBox MB_ICONEXCLAMATION|MB_YESNO $(SETUP_WARNING_PATCH) /SD IDYES IDYES patch_tftd_yes IDNO patch_tftd_fail2
 	patch_tftd_fail2:
 	Abort "Error"
-	
-	patch_tftd_yes:	
+
+	patch_tftd_yes:
 	Delete "$TEMP\universal-patch-tftd.zip"
-	
+
 	patch_tftd_no:
-	
+
 	SetOutPath "$INSTDIR"
 
 SectionEnd
@@ -438,7 +438,7 @@ SectionEnd
 Section /o "$(SETUP_DESKTOP)" SecDesktop
 
 	SetOutPath "$INSTDIR"
-	
+
 	CreateShortCut "$DESKTOP\${GAME_NAME}.lnk" "$INSTDIR\OpenXcom.exe"
 
 SectionEnd
@@ -467,14 +467,14 @@ ${EndIf}
 !endif
 	StrCpy $StartMenuFolder "${GAME_NAME}"
 	StrCpy $PortableMode ${BST_UNCHECKED}
-	
+
 	; Check for existing X-COM installs
 	StrCpy $UFO_DIR ""
 	StrCpy $TFTD_DIR ""
-	
+
 	Call ScanSteam
 	Call ScanGOG
-	
+
 	!insertmacro MUI_LANGDLL_DISPLAY
 
 FunctionEnd
@@ -490,7 +490,7 @@ Function ScanSteam
 	ReadRegStr $R1 HKLM "Software\Valve\Steam" "InstallPath"
 	IfErrors steam_done
 	Call ScanSteamLibrary
-	
+
 	ClearErrors
 	FileOpen $0 "$R1\config\config.vdf" r
 	IfErrors steam_read_done
@@ -506,7 +506,7 @@ Function ScanSteam
 	Goto steam_read_loop
 	steam_read_done:
 	FileClose $0
-	
+
 	steam_done:
 
 FunctionEnd
@@ -521,7 +521,7 @@ Function ScanSteamLibrary
 	steam_ufo_yes:
 	StrCpy $UFO_DIR $R0
 	steam_ufo_no:
-	
+
 	StrCpy $R0 "$R1\steamapps\common\X-COM Terror from the Deep\TFD"
 	IfFileExists "$R0\*.*" steam_tftd_yes steam_tftd_no
 	steam_tftd_yes:
@@ -541,7 +541,7 @@ Function ScanGOG
 	gog_ufo_yes:
 	StrCpy $UFO_DIR $R0
 	gog_ufo_no:
-	
+
 	ReadRegStr $R0 HKLM "Software\GOG.com\Games\1445249983" "PATH"
 	IfErrors gog_tftd_no
 	IfFileExists "$R0\*.*" gog_tftd_yes gog_tftd_no
@@ -576,7 +576,7 @@ Function ValidateXcom
 	validate_ufo_no:
 	Abort
 	validate_ufo_yes:
-	
+
 	; TFTD
 	StrCmp $TFTD_DIR "" validate_tftd_yes
 	IfFileExists "$TFTD_DIR\FLOP_INT\*.*" 0 confirm_tftd
@@ -625,25 +625,25 @@ SectionEnd
 Section "-un.Main"
 
 	SetOutPath "$TEMP"
-	
+
 	Delete "$INSTDIR\OpenXcom.exe"
 	Delete "$INSTDIR\*.dll"
 	Delete "$INSTDIR\*.txt"
 	Delete "$INSTDIR\*.md"
-	
+
 	RMDir /r "$INSTDIR\common"
 	RMDir /r "$INSTDIR\standard"
 
 	Delete "$INSTDIR\Uninstall.exe"
 	RMDir "$INSTDIR"
-	
+
 	!insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
-	
+
 	Delete "$SMPROGRAMS\$StartMenuFolder\*.*"
 	RMDir "$SMPROGRAMS\$StartMenuFolder"
-	
+
 	Delete "$DESKTOP\${GAME_NAME}.lnk"
-	
+
 	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}"
 	DeleteRegKey /ifempty HKLM "Software\${GAME_NAME}"
 

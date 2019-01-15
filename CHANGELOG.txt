@@ -81,7 +81,7 @@ New features:
 - Added right-click on soldier in Craft screen to show their stats.
 - Ufopaedia now shows armor damage and stat modifiers.
 - New Advanced-Option: View soldier's Psi-Strength after the appropriate research has been completed.*
-  
+
   Battlescape:
 - Inventory: Ctrl-click an item to attempt to swap it between the ground and your soldier's inventory.
 - Inventory: Added ability to define paper dolls for non-player units.
@@ -143,7 +143,7 @@ Bugfixes:
 - Palette system overhauled to prevent windows changing colours incorrectly.
 - Fixed various bugs with Unicode handling in paths and strings.
 - Fixed various UI bugs on tablets.
-  
+
   Geoscape:
 - X-Com now correctly pays their first month's rent and maintenance in advance.
 - To avoid lawsuits, sacked soldiers no longer take their armour with them.
@@ -163,7 +163,7 @@ Bugfixes:
 - Fix the council congratulating XCom on a job well done as they cancel the project.
 - Downed UFOs will use appropriate behaviour after XCom dusts off.
 - Alien mission timers fixed.
-  
+
   Battlescape:
 - Fixes to various UFOpaedia articles.
 - Loading saved games now correctly preserves the difficulty adjustments to alien stats.
@@ -551,7 +551,7 @@ New features:
 - Support for user soldier name pools.
 - Various new options (see docs).
 - Debug mode.
- 
+
 Bugfixes:
 - Two duplicating ammo bugs.
 - Wrong rocket launcher hand sprite.

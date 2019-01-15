@@ -567,7 +567,7 @@ units:
     deathSound: 8
     moveSound: 0
     intelligence: 5
-    aggression: 2  
+    aggression: 2
   - type: STR_SNAKEMAN_COMMANDER
     race: STR_SNAKEMAN
     rank: STR_LIVE_COMMANDER

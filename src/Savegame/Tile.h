@@ -53,7 +53,7 @@ public:
 		Uint8 boolFields;
 		Uint32 totalBytes; // per structure, including any data not mentioned here and accounting for all array members!
 	} serializationKey;
-	
+
 	static const int NOT_CALCULATED = -1;
 
 protected:

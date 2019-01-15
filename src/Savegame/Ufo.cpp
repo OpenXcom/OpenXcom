@@ -201,7 +201,7 @@ YAML::Node Ufo::save(bool newBattle) const
 		node["trajectory"] = _trajectory->getID();
 		node["trajectoryPoint"] = _trajectoryPoint;
 	}
-	
+
 	node["fireCountdown"] = _fireCountdown;
 	node["escapeCountdown"] = _escapeCountdown;
 	return node;

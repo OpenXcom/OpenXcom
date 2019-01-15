@@ -61,7 +61,7 @@ public:
 	void setDiscovered(bool discovered);
 
 	AlienDeployment *getDeployment() const;
- 
+
 };
 
 }

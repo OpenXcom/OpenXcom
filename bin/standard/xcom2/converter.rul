@@ -223,7 +223,7 @@ converter:
     - STR_AQUATOID
     - STR_GILLMAN
     - STR_LOBSTERMAN
-    - STR_TASOTH 
+    - STR_TASOTH
     - STR_MIXED_CREW
     - STR_MIXED_CREW_2
   crafts:
@@ -286,7 +286,7 @@ converter:
     - _SQUAD_LEADER
     - _SOLDIER
     - _TERRORIST
-  research:    
+  research:
     - STR_GAUSS_TECH
     - STR_PARTICLE_DISTURBANCE_SENSOR
     - STR_MEDI_KIT
@@ -342,7 +342,7 @@ converter:
     - STR_TENTACULAT_CORPSE
     - STR_TRISCENE_CORPSE
     - STR_HALLUCINOID_CORPSE
-    - STR_XARQUID_CORPSE    
+    - STR_XARQUID_CORPSE
     - STR_ALIEN_ORIGINS
     - STR_THE_ULTIMATE_THREAT
     - STR_TLETH_ALIEN_CITY

@@ -1,10 +1,10 @@
 # Locate yaml-cpp library
 # This module defines
 # YAMLCPP_LIBRARY, the name of the library to link against
-# YAMLCPP_FOUND, if false, do not try to link to SDL
-# YAMLCPP_INCLUDE_DIR, where to find SDL/SDL.h
+# YAMLCPP_FOUND, if false, do not try to link to yaml-cpp
+# YAMLCPP_INCLUDE_DIR, where to find yaml-cpp/yaml.h
 #
-# Created by Guillaume Chevallereau. This was influenced by the FindSDL.cmake 
+# Created by Guillaume Chevallereau. This was influenced by the FindSDL.cmake
 # module.
 
 #=============================================================================
@@ -46,7 +46,7 @@ FIND_PATH(YAMLCPP_INCLUDE_DIR yaml.h
   /opt/include
 )
 
-FIND_LIBRARY(YAMLCPP_LIBRARY 
+FIND_LIBRARY(YAMLCPP_LIBRARY
   NAMES yaml-cpp
   HINTS
   ${PC_YAMLCPP_LIBDIR}
@@ -66,7 +66,7 @@ FIND_LIBRARY(YAMLCPP_LIBRARY
 
 if ( APPLE )
   if ( NOT YAMLCPP_LIBRARY )
-    FIND_LIBRARY(YAMLCPP_LIBRARY 
+    FIND_LIBRARY(YAMLCPP_LIBRARY
       NAMES YAML
       HINTS
       $ENV{YAMLCPPDIR}

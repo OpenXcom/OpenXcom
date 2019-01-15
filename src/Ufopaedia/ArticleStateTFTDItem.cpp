@@ -122,7 +122,7 @@ namespace OpenXcom
 			add(_txtAmmoType[i]);
 			_txtAmmoType[i]->setColor(Palette::blockOffset(0)+2);
 			_txtAmmoType[i]->setWordWrap(true);
-			
+
 			_txtAmmoDamage[i] = new Text(20, 9, 300, 144 + i*10);
 			add(_txtAmmoDamage[i]);
 			_txtAmmoDamage[i]->setColor(Palette::blockOffset(3)+6);

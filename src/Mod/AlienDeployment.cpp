@@ -128,7 +128,7 @@ AlienDeployment::~AlienDeployment()
 
 /**
  * Loads the Deployment from a YAML file.
- * @param node YAML node. 
+ * @param node YAML node.
  * @param mod Mod for the deployment.
  */
 void AlienDeployment::load(const YAML::Node &node, Mod *mod)

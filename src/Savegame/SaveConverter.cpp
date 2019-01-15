@@ -366,7 +366,7 @@ void SaveConverter::loadDatLease()
 	double lon = -Xcom2Rad(load<Sint16>(data + 0x06));
 	_save->setGlobeLongitude(lon);
 	_save->setGlobeLatitude(lat);
-	
+
 	int zoom = load<Sint16>(data + 0x0C);
 	const int DISTANCE[] = { 90, 120, 180, 360, 450, 720 };
 	for (size_t i = 0; i < 6; ++i)

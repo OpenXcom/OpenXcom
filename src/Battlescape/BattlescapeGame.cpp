@@ -70,7 +70,7 @@ bool BattlescapeGame::_debugPlay = false;
  */
 BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState) : _save(save), _parentState(parentState), _playerPanicHandled(true), _AIActionCounter(0), _AISecondMove(false), _playedAggroSound(false), _endTurnRequested(false), _endTurnProcessed(false)
 {
-	
+
 	_currentAction.actor = 0;
 	_currentAction.targeting = false;
 	_currentAction.type = BA_NONE;
@@ -368,7 +368,7 @@ void BattlescapeGame::endTurn()
 		{
 			getMod()->getSoundByDepth(_save->getDepth(), Mod::SLIDING_DOOR_CLOSE)->play(); // ufo door closed
 		}
-		
+
 		Position p;
 
 		// check for hot grenades on the ground
@@ -399,7 +399,7 @@ void BattlescapeGame::endTurn()
 		statePushBack(0);
 		return;
 	}
-	
+
 	if (!_endTurnProcessed)
 	{
 		if (_save->getSide() != FACTION_NEUTRAL)
@@ -580,7 +580,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *o
 			}
 		}
 	}
-	
+
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
 		if ((*j)->getStatus() == STATUS_IGNORE_ME) continue;
@@ -1476,7 +1476,7 @@ void BattlescapeGame::primaryAction(Position pos)
 		{
 			_currentAction.target = pos;
 			getMap()->setCursorType(CT_NONE);
-			
+
 			if (Options::battleConfirmFireMode)
 			{
 				_currentAction.waypoints.clear();
@@ -2162,7 +2162,7 @@ bool BattlescapeGame::convertInfected()
 				Game *game = _parentState->getGame();
 				game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_BEEN_KILLED", (*i)->getGender()).arg((*i)->getName(game->getLanguage()))));
 			}
-		
+
 			convertUnit((*i));
 			i = _save->getUnits()->begin();
 		}

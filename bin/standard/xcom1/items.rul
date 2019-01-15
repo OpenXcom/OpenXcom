@@ -905,7 +905,7 @@ items:
     weight: 5
     bigSprite: 29
     floorSprite: 28
-    hitSound: 37    
+    hitSound: 37
     battleType: 8
     invWidth: 2
     invHeight: 2

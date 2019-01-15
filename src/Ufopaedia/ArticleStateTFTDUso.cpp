@@ -34,7 +34,7 @@ namespace OpenXcom
 	ArticleStateTFTDUso::ArticleStateTFTDUso(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs)
 	{
 		RuleUfo *ufo = _game->getMod()->getUfo(defs->id, true);
-		
+
 		_lstInfo = new TextList(150, 50, 168, 142);
 		add(_lstInfo);
 

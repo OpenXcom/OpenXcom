@@ -79,7 +79,7 @@ void MeleeAttackBState::init()
 	}
 
 	_unit = _action.actor;
-	
+
 	if (_unit->isOut() || _unit->getHealth() == 0 || _unit->getHealth() < _unit->getStunlevel())
 	{
 		// something went wrong - we can't shoot when dead or unconscious, or if we're about to fall over.
@@ -107,7 +107,7 @@ void MeleeAttackBState::init()
 		}
 	}
 
-	
+
 	AIModule *ai = _unit->getAIModule();
 
 	if (_unit->getFaction() == _parent->getSave()->getSide() &&
@@ -173,7 +173,7 @@ void MeleeAttackBState::think()
 //		{
 //			_parent->getTileEngine()->checkReactionFire(_unit);
 //		}
-		
+
 		if (_parent->getSave()->getSide() == FACTION_PLAYER || _parent->getSave()->getDebugMode())
 		{
 			_parent->setupCursor();
@@ -208,7 +208,7 @@ void MeleeAttackBState::performMeleeAttack()
 		_action.weapon->setAmmoItem(0);
 	}
 	_parent->getMap()->setCursorType(CT_NONE);
-	
+
 	// make an explosion animation
 	_parent->statePushFront(new ExplosionBState(_parent, _voxel, _action.weapon, _action.actor, 0, true, true));
 }
@@ -228,7 +228,7 @@ void MeleeAttackBState::resolveHit()
 		}
 
 		// check if this unit turns others into zombies
-		if (_weapon->getRules()->getBattleType() == BT_MELEE 
+		if (_weapon->getRules()->getBattleType() == BT_MELEE
 			&& _ammo
 			&& !_ammo->getRules()->getZombieUnit().empty()
 			&& _target
@@ -260,7 +260,7 @@ void MeleeAttackBState::resolveHit()
 		{
 			_parent->getMod()->getSoundByDepth(_parent->getDepth(), _action.weapon->getRules()->getMeleeHitSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
 		}
-		
+
 		// offset the damage voxel ever so slightly so that the target knows which side the attack came from
 		Position difference = _unit->getPosition() - _action.target;
 		// large units may cause it to offset too much, so we'll clamp the values.

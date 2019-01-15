@@ -275,7 +275,7 @@ void StatisticsState::listStats()
 	}
 
 	int researchDone = save->getDiscoveredResearch().size();
-	
+
 	std::string difficulty[] = { "STR_1_BEGINNER", "STR_2_EXPERIENCED", "STR_3_VETERAN", "STR_4_GENIUS", "STR_5_SUPERHUMAN" };
 
 	_lstStats->addRow(2, tr("STR_DIFFICULTY").c_str(), tr(difficulty[save->getDifficulty()]).c_str());

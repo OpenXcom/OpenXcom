@@ -37,10 +37,10 @@ fragment: |
       colB = texture2DProj(rubyTexture, gl_TexCoord[3]);  //B (top)
       colH = texture2DProj(rubyTexture, gl_TexCoord[4]);  //H (bottom)
 
-      sel = fract(gl_TexCoord[0].xy * rubyTextureSize.xy);       //where are we (E0-E3)? 
+      sel = fract(gl_TexCoord[0].xy * rubyTextureSize.xy);       //where are we (E0-E3)?
                                                                  //E0 is default
       if(sel.y >= 0.5) { tmp = colB; colB = colH; colH = tmp; }  //E1 (or E3): swap B and H
-      if(sel.x >= 0.5) { tmp = colF; colF = colD; colD = tmp; }  //E2 (or E3): swap D and F 
+      if(sel.x >= 0.5) { tmp = colF; colF = colD; colD = tmp; }  //E2 (or E3): swap D and F
 
       if(colB == colD && colB != colF && colD != colH) {  //do the Scale2x rule
         col = colD;

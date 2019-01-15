@@ -53,7 +53,7 @@ public:
 	Logger();
 	virtual ~Logger();
 	std::ostringstream& get(SeverityLevel level = LOG_INFO);
-	
+
 	static SeverityLevel& reportingLevel();
 	static std::string& logFile();
 	static std::string toString(SeverityLevel level);

@@ -109,7 +109,7 @@ OptionsBattlescapeState::OptionsBattlescapeState(OptionsOrigin origin) : Options
 	_cbxEdgeScroll->onMouseOut((ActionHandler)&OptionsBattlescapeState::txtTooltipOut);
 
 	_txtDragScroll->setText(tr("STR_DRAG_SCROLL"));
-	
+
 	std::vector<std::string> dragScrolls;
 	dragScrolls.push_back(tr("STR_DISABLED"));
 	dragScrolls.push_back(tr("STR_LEFT_MOUSE_BUTTON"));
@@ -176,7 +176,7 @@ OptionsBattlescapeState::OptionsBattlescapeState(OptionsOrigin origin) : Options
 	_btnTuCost->onMouseOut((ActionHandler)&OptionsBattlescapeState::txtTooltipOut);
 
 	_txtOptions->setText(tr("STR_USER_INTERFACE_OPTIONS"));
-	
+
 	_btnTooltips->setText(tr("STR_TOOLTIPS"));
 	_btnTooltips->setPressed(Options::battleTooltips);
 	_btnTooltips->onMouseClick((ActionHandler)&OptionsBattlescapeState::btnTooltipsClick);

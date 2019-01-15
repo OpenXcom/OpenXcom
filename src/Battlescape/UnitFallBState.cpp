@@ -100,7 +100,7 @@ void UnitFallBState::think()
 		{
 			(*unit)->keepWalking(tileBelow, true); 	// advances the phase
 			_parent->getMap()->cacheUnit(*unit);	// make sure the unit sprites are up to date
-			
+
 			if ((*unit)->getPosition() != (*unit)->getLastPosition())
 			{
 				// Reset tiles moved from.
@@ -159,7 +159,7 @@ void UnitFallBState::think()
 				}
 			}
 		}
-		
+
 		falling = largeCheck
 			&& (*unit)->getPosition().z != 0
 			&& (*unit)->getTile()->hasNoFloor(tileBelow)
@@ -212,7 +212,7 @@ void UnitFallBState::think()
 		}
 	}
 
-	
+
 	// Find somewhere to move the unit(s) In danger of being squashed.
 	if (!unitsToMove.empty())
 	{
@@ -282,7 +282,7 @@ void UnitFallBState::think()
 							}
 
 							Tile *bu = _parent->getSave()->getTile(originalPosition + Position(0,0,-1));
-							unitBelow->startWalking(dir, unitBelow->getPosition() + offset, bu, 
+							unitBelow->startWalking(dir, unitBelow->getPosition() + offset, bu,
 								(unitBelow->getVisible() && _parent->getMap()->getCamera()->isOnScreen(unitBelow->getPosition(), true, unitBelow->getArmor()->getSize() - 1, false)));
 							ub = unitsToMove.erase(ub);
 						}

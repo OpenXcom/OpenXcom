@@ -35,7 +35,7 @@ namespace OpenXcom
 {
 	const size_t UfopaediaStartState::CAT_MIN_BUTTONS = 9;
 	const size_t UfopaediaStartState::CAT_MAX_BUTTONS = 10;
-	
+
 	UfopaediaStartState::UfopaediaStartState() : _offset(0), _scroll(0), _cats(_game->getMod()->getUfopaediaCategoryList())
 	{
 		_screen = false;
@@ -90,7 +90,7 @@ namespace OpenXcom
 		_txtTitle->setBig();
 		_txtTitle->setAlign(ALIGN_CENTER);
 		_txtTitle->setText(tr("STR_UFOPAEDIA"));
-		
+
 		_btnOk->setText(tr("STR_OK"));
 		_btnOk->onMouseClick((ActionHandler)&UfopaediaStartState::btnOkClick);
 		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaStartState::btnOkClick, Options::keyCancel);

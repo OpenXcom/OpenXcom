@@ -372,7 +372,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 
 	SavedGame *save = _game->getSavedGame();
 	SavedBattleGame *battle = save->getSavedBattle();
-	
+
 	_missionStatistics->daylight = save->getSavedBattle()->getGlobalShade();
 	_missionStatistics->id = _game->getSavedGame()->getMissionStatistics()->size();
 	_game->getSavedGame()->getMissionStatistics()->push_back(_missionStatistics);
@@ -386,7 +386,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 	// Check to see if any of the dead soldiers were exceptional.
 	for (std::vector<BattleUnit*>::iterator deadUnit = battle->getUnits()->begin(); deadUnit != battle->getUnits()->end(); ++deadUnit)
 	{
-		if (!(*deadUnit)->getGeoscapeSoldier() || (*deadUnit)->getStatus() != STATUS_DEAD) 
+		if (!(*deadUnit)->getGeoscapeSoldier() || (*deadUnit)->getStatus() != STATUS_DEAD)
 		{
 			continue;
 		}
@@ -423,7 +423,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 
 		SoldierRank rank = (*deadUnit)->getGeoscapeSoldier()->getRank();
 		// Rookies don't get this next award. No one likes them.
-		if (rank == RANK_ROOKIE) 
+		if (rank == RANK_ROOKIE)
 		{
 			continue;
 		}
@@ -455,7 +455,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 	// Now award those soldiers commendations!
 	for (std::vector<BattleUnit*>::iterator deadUnit = battle->getUnits()->begin(); deadUnit != battle->getUnits()->end(); ++deadUnit)
 	{
-		if (!(*deadUnit)->getGeoscapeSoldier() || (*deadUnit)->getStatus() != STATUS_DEAD) 
+		if (!(*deadUnit)->getGeoscapeSoldier() || (*deadUnit)->getStatus() != STATUS_DEAD)
 		{
 			continue;
 		}
@@ -518,9 +518,9 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 						martyrKills++;
 					}
 				}
-				if (martyrKills > 0) 
+				if (martyrKills > 0)
 				{
-					if (martyrKills > 10) 
+					if (martyrKills > 10)
 					{
 						martyrKills = 10;
 					}
@@ -1012,7 +1012,7 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
-	
+
 	// if it's a UFO, let's see what happens to it
 	for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
 	{
@@ -1047,7 +1047,7 @@ void DebriefingState::prepareDebriefing()
 		{
 			success = playersInEntryArea > 0;
 		}
-		
+
 		if (ruleDeploy->getEscapeType() != ESCAPE_ENTRY)
 		{
 			success = success || playersInExitArea > 0;
@@ -1086,7 +1086,7 @@ void DebriefingState::prepareDebriefing()
 				if (!battle->allObjectivesDestroyed())
 					destroyAlienBase = false;
 			}
-			
+
 			if (ruleDeploy && !ruleDeploy->getNextStage().empty())
 			{
 				_missionStatistics->alienRace = (*i)->getAlienRace();

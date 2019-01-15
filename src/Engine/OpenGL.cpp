@@ -424,7 +424,7 @@ void OpenGL::init(int w, int h)
 	glUniform1i = (PFNGLUNIFORM1IPROC)glGetProcAddress("glUniform1i");
 	glUniform2fv = (PFNGLUNIFORM2FVPROC)glGetProcAddress("glUniform2fv");
 	glUniform4fv = (PFNGLUNIFORM4FVPROC)glGetProcAddress("glUniform4fv");
-	
+
 	shader_support = glCreateProgram && glDeleteProgram && glUseProgram && glCreateShader
 	&& glDeleteShader && glShaderSource && glCompileShader && glAttachShader
 	&& glDetachShader && glLinkProgram && glGetUniformLocation && glIsProgram && glIsShader

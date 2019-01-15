@@ -132,7 +132,7 @@ void RuleGlobe::load(const YAML::Node &node)
 	Globe::COUNTRY_LABEL_COLOR = node["countryColor"].as<int>(Globe::COUNTRY_LABEL_COLOR);
 	Globe::CITY_LABEL_COLOR = node["cityColor"].as<int>(Globe::CITY_LABEL_COLOR);
 	Globe::BASE_LABEL_COLOR = node["baseColor"].as<int>(Globe::BASE_LABEL_COLOR);
-	Globe::LINE_COLOR = node["lineColor"].as<int>(Globe::LINE_COLOR);	
+	Globe::LINE_COLOR = node["lineColor"].as<int>(Globe::LINE_COLOR);
 	if (node["oceanPalette"])
 	{
 		Globe::OCEAN_COLOR = Palette::blockOffset(node["oceanPalette"].as<int>(Globe::OCEAN_COLOR));
@@ -179,7 +179,7 @@ void RuleGlobe::loadDat(const std::string &filename)
 	{
 		Polygon* poly;
 		int points;
-		
+
 		for (int i = 0; i < 10; ++i)
 		{
 			value[i] = SDL_SwapLE16(value[i]);

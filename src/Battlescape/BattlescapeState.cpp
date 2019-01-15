@@ -165,7 +165,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _firstInit(true), _isMouseSc
 	if (_game->getMod()->getInterface("battlescape")->getElement("pathfinding"))
 	{
 		Element *pathing = _game->getMod()->getInterface("battlescape")->getElement("pathfinding");
-		
+
 		Pathfinding::green = pathing->color;
 		Pathfinding::yellow = pathing->color2;
 		Pathfinding::red = pathing->border;
@@ -173,7 +173,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _firstInit(true), _isMouseSc
 
 	add(_map);
 	add(_icons);
-	
+
 	// Add in custom reserve buttons
 	Surface *icons = _game->getMod()->getSurface("ICONS.PCK");
 	if (_game->getMod()->getSurface("TFTDReserve", false))
@@ -183,7 +183,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _firstInit(true), _isMouseSc
 		tftdIcons->setY(176);
 		tftdIcons->blit(icons);
 	}
-	
+
 	// there is some cropping going on here, because the icons image is 320x200 while we only need the bottom of it.
 	SDL_Rect *r = icons->getCrop();
 	r->x = 0;
@@ -453,7 +453,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _firstInit(true), _isMouseSc
 	_btnReserveSnap->setGroup(&_reserve);
 	_btnReserveAimed->setGroup(&_reserve);
 	_btnReserveAuto->setGroup(&_reserve);
-	
+
 	// Set music
 	if (_save->getMusic().empty())
 	{
@@ -612,7 +612,7 @@ void BattlescapeState::mapOver(Action *action)
 		}
 
 		_isMouseScrolled = true;
-		
+
 		if (Options::touchEnabled == false)
 		{
 			// Set the mouse cursor back
@@ -645,7 +645,7 @@ void BattlescapeState::mapOver(Action *action)
 				_totalMouseMoveX = -(int) (delta2.x * action->getXScale());
 				_totalMouseMoveY = -(int) (delta2.y * action->getYScale());
 			}
-			
+
 			if (Options::touchEnabled == false)
 			{
 				action->getDetails()->motion.x = _xBeforeMouseScrolling;
@@ -677,7 +677,7 @@ void BattlescapeState::mapOver(Action *action)
 			int cursorY = _cursorPosition.y + Round(delta.y * action->getYScale());
 			_cursorPosition.x = Clamp(cursorX, barWidth, _game->getScreen()->getWidth() - barWidth - (int)(Round(action->getXScale())));
 			_cursorPosition.y = Clamp(cursorY, barHeight, _game->getScreen()->getHeight() - barHeight - (int)(Round(action->getYScale())));
-			
+
 			if (Options::touchEnabled == false)
 			{
 				action->getDetails()->motion.x = _cursorPosition.x;
@@ -774,7 +774,7 @@ void BattlescapeState::mapClick(Action *action)
 			return;
 		}
 	}
-	
+
 	// don't handle mouseclicks over the buttons (it overlaps with map surface)
 	if (_mouseOverIcons) return;
 
@@ -1527,7 +1527,7 @@ inline void BattlescapeState::handle(Action *action)
 		if (_game->getCursor()->getVisible() || ((action->getDetails()->type == SDL_MOUSEBUTTONDOWN || action->getDetails()->type == SDL_MOUSEBUTTONUP) && action->getDetails()->button.button == SDL_BUTTON_RIGHT))
 		{
 			State::handle(action);
-			
+
 			if (Options::touchEnabled == false && _isMouseScrolling && !Options::battleDragScrollInvert)
 			{
 				_map->setSelectorPosition((_cursorPosition.x - _game->getScreen()->getCursorLeftBlackBand()) / action->getXScale(), (_cursorPosition.y - _game->getScreen()->getCursorTopBlackBand()) / action->getYScale());
