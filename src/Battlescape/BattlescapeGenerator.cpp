@@ -192,6 +192,8 @@ void BattlescapeGenerator::setMissionSite(MissionSite *mission)
  */
 void BattlescapeGenerator::nextStage()
 {
+	RuleInventory *ground = _game->getMod()->getInventory("STR_GROUND", true);
+
 	// preventively drop all units from soldier's inventory (makes handling easier)
 	// 1. no alien/civilian living, dead or unconscious is allowed to transition
 	// 2. no dead xcom unit is allowed to transition
@@ -211,7 +213,11 @@ void BattlescapeGenerator::nextStage()
 			for (std::vector<BattleItem*>::iterator corpseItem = unitsToDrop.begin(); corpseItem != unitsToDrop.end(); ++corpseItem)
 			{
 				(*corpseItem)->moveToOwner(0);
-				(*unit)->getTile()->addItem(*corpseItem, (*corpseItem)->getSlot());
+				(*unit)->getTile()->addItem(*corpseItem, ground);
+				if ((*corpseItem)->getUnit() && (*corpseItem)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+				{
+					(*corpseItem)->getUnit()->setPosition((*unit)->getTile()->getPosition());
+				}
 			}
 		}
 	}
@@ -475,7 +481,6 @@ void BattlescapeGenerator::nextStage()
 	{
 		_save->selectNextPlayerUnit();
 	}
-	RuleInventory *ground = _game->getMod()->getInventory("STR_GROUND", true);
 
 	for (std::vector<BattleItem*>::iterator i = takeToNextStage.begin(); i != takeToNextStage.end(); ++i)
 	{
