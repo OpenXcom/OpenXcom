@@ -2104,6 +2104,17 @@ bool BattleUnit::isInExitArea(SpecialTileType stt) const
 }
 
 /**
+ * Check if this unit lies (e.g. unconscious) in the exit area.
+ * @param tile Unit's location.
+ * @param stt Type of exit tile to check for.
+ * @return Is in the exit area?
+ */
+bool BattleUnit::liesInExitArea(Tile *tile, SpecialTileType stt) const
+{
+	return tile && tile->getMapData(O_FLOOR) && (tile->getMapData(O_FLOOR)->getSpecialType() == stt);
+}
+
+/**
  * Gets the unit height taking into account kneeling/standing.
  * @return Unit's height.
  */

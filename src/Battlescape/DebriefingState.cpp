@@ -806,6 +806,7 @@ void DebriefingState::prepareDebriefing()
 	int playersSurvived = 0; // if this stays 0 the craft is lost...
 	int playersUnconscious = 0;
 	int playersInEntryArea = 0;
+	int playersMIA = 0;
 
 	_stats.push_back(new DebriefingStat("STR_ALIENS_KILLED", false));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_CORPSES_RECOVERED", false));
@@ -987,6 +988,11 @@ void DebriefingState::prepareDebriefing()
 			{
 				playersUnconscious++;
 			}
+			else if ((*j)->getStatus() == STATUS_IGNORE_ME && (*j)->getStunlevel() >= (*j)->getHealth())
+			{
+				// even for ignored xcom units, we need to know if they're conscious or unconscious
+				playersUnconscious++;
+			}
 			else if ((*j)->isInExitArea(END_POINT))
 			{
 				playersInExitArea++;
@@ -995,20 +1001,36 @@ void DebriefingState::prepareDebriefing()
 			{
 				playersInEntryArea++;
 			}
+			else if (aborted)
+			{
+				// if aborted, conscious xcom unit that is not on start/end point counts as MIA
+				playersMIA++;
+			}
 			playersSurvived++;
 		}
 		else if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getStatus() == STATUS_DEAD)
 			deadSoldiers++;
 	}
 	// if all our men are unconscious, the aliens get to have their way with them.
-	if (playersUnconscious == playersSurvived)
+	if (playersUnconscious + playersMIA == playersSurvived)
 	{
-		playersSurvived = 0;
+		playersSurvived = playersMIA;
 		for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
 		{
 			if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getStatus() != STATUS_DEAD)
 			{
-				(*j)->instaKill();
+				if ((*j)->getStatus() == STATUS_UNCONSCIOUS || (*j)->getFaction() == FACTION_HOSTILE)
+				{
+					(*j)->instaKill();
+				}
+				else if ((*j)->getStatus() == STATUS_IGNORE_ME && (*j)->getStunlevel() >= (*j)->getHealth())
+				{
+					(*j)->instaKill();
+				}
+				else
+				{
+					// do nothing, units will be marked MIA later
+				}
 			}
 		}
 	}
