@@ -451,42 +451,6 @@ Language *Game::getLanguage() const
 }
 
 /**
- * Changes the language currently in use by the game.
- * @param filename Filename of the language file.
- */
-void Game::loadLanguage(const std::string &filename)
-{
-	std::ostringstream ss;
-	ss << "/Language/" << filename << ".yml";
-	std::string path = CrossPlatform::searchDataFile("common" + ss.str());
-	try
-	{
-		_lang->load(path);
-	}
-	catch (YAML::Exception &e)
-	{
-		throw Exception(path + ": " + std::string(e.what()));
-	}
-
-	std::vector<const ModInfo*> activeMods = Options::getActiveMods();
-	for (std::vector<const ModInfo*>::const_iterator i = activeMods.begin(); i != activeMods.end(); ++i)
-	{
-		std::string file = (*i)->getPath() + ss.str();
-		if (CrossPlatform::fileExists(file))
-		{
-			_lang->load(file);
-		}
-	}
-
-	const std::map<std::string, ExtraStrings*> &extraStrings = _mod->getExtraStrings();
-	std::map<std::string, ExtraStrings*>::const_iterator it = extraStrings.find(filename);
-	if (it != extraStrings.end())
-	{
-		_lang->load(it->second);
-	}
-}
-
-/**
  * Returns the saved game currently in use by the game.
  * @return Pointer to the saved game.
  */
@@ -613,13 +577,28 @@ void Game::loadLanguages()
 			currentLang = defaultLang;
 		}
 	}
-
-	loadLanguage(defaultLang);
-	if (currentLang != defaultLang)
-	{
-		loadLanguage(currentLang);
-	}
 	Options::language = currentLang;
+
+	// Load default and current language
+	std::ostringstream ssDefault, ssCurrent;
+	ssDefault << "/Language/" << defaultLang << ".yml";
+	ssCurrent << "/Language/" << currentLang << ".yml";
+
+	_lang->loadFile(CrossPlatform::searchDataFile("common" + ssDefault.str()));
+	if (currentLang != defaultLang)
+		_lang->loadFile(CrossPlatform::searchDataFile("common" + ssCurrent.str()));
+
+	std::vector<const ModInfo*> activeMods = Options::getActiveMods();
+	for (std::vector<const ModInfo*>::const_iterator i = activeMods.begin(); i != activeMods.end(); ++i)
+	{
+		_lang->loadFile((*i)->getPath() + ssDefault.str());
+		if (currentLang != defaultLang)
+			_lang->loadFile((*i)->getPath() + ssCurrent.str());
+	}
+
+	_lang->loadRule(_mod->getExtraStrings(), defaultLang);
+	if (currentLang != defaultLang)
+		_lang->loadRule(_mod->getExtraStrings(), currentLang);
 }
 
 /**

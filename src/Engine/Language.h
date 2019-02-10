@@ -50,6 +50,8 @@ private:
 
 	/// Parses a text string loaded from an external file.
 	std::string loadString(const std::string &s) const;
+	/// Loads the language from a YAML file.
+	void load(const std::string &filename);
 public:
 	/// Creates a blank language.
 	Language();
@@ -57,10 +59,10 @@ public:
 	~Language();
 	/// Gets list of languages in the data directory.
 	static void getList(std::vector<std::string> &files, std::vector<std::string> &names);
-	/// Loads the language from a YAML file.
-	void load(const std::string &filename);
+	/// Loads the language from an external file.
+	void loadFile(const std::string &filename);
 	/// Loads the language from a ruleset file.
-	void load(ExtraStrings *strings);
+	void loadRule(const std::map<std::string, ExtraStrings*> &extraStrings, const std::string &id);
 	/// Gets the language's ID.
 	std::string getId() const;
 	/// Gets the language's name.

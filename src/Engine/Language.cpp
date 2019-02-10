@@ -27,6 +27,7 @@
 #include "Options.h"
 #include "LanguagePlurality.h"
 #include "Unicode.h"
+#include "Exception.h"
 #include "../Mod/ExtraStrings.h"
 
 namespace OpenXcom
@@ -197,13 +198,35 @@ void Language::load(const std::string &filename)
 }
 
 /**
- * Loads a language file from a mod's ExtraStrings.
- * @param extras Pointer to extra strings from ruleset.
+ * Loads a language file from an external path.
+ * @param path Language file path.
  */
-void Language::load(ExtraStrings *extras)
+void Language::loadFile(const std::string &path)
 {
-	if (extras)
+	try
 	{
+		if (CrossPlatform::fileExists(path))
+		{
+			load(path);
+		}
+	}
+	catch (YAML::Exception &e)
+	{
+		throw Exception(path + ": " + std::string(e.what()));
+	}
+}
+
+/**
+ * Loads a language file from a mod's ExtraStrings.
+ * @param extraStrings List of ExtraStrings.
+ * @param id Language ID.
+ */
+void Language::loadRule(const std::map<std::string, ExtraStrings*> &extraStrings, const std::string &id)
+{
+	std::map<std::string, ExtraStrings*>::const_iterator it = extraStrings.find(id);
+	if (it != extraStrings.end())
+	{
+		ExtraStrings *extras = it->second;
 		for (std::map<std::string, std::string>::const_iterator i = extras->getStrings()->begin(); i != extras->getStrings()->end(); ++i)
 		{
 			_strings[i->first] = loadString(i->second);
@@ -366,7 +389,7 @@ void Language::toHtml(const std::string &filename) const
 		std::string s = i->second;
 		for (std::string::const_iterator j = s.begin(); j != s.end(); ++j)
 		{
-			if (*j == 2 || *j == '\n')
+			if (*j == Unicode::TOK_NL_SMALL || *j == '\n')
 			{
 				htmlFile << "<br />";
 			}

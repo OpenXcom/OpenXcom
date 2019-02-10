@@ -53,8 +53,6 @@ private:
 	bool _mouseActive;
 	static const double VOLUME_GRADIENT;
 
-	/// Loads a new language for the game.
-	void loadLanguage(const std::string &filename);
 public:
 	/// Creates a new game and initializes SDL.
 	Game(const std::string &title);
