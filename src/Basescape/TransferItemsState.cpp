@@ -122,7 +122,7 @@ TransferItemsState::TransferItemsState(Base *baseFrom, Base *baseTo) : _baseFrom
 
 	_distance = getDistance();
 
-	_cats.push_back("STR_ALL_ITEMS");
+	_cats.emplace_back("STR_ALL_ITEMS");
 
 	const std::vector<std::string> &cw = _game->getMod()->getCraftWeaponsList();
 	for (std::vector<std::string>::const_iterator i = cw.begin(); i != cw.end(); ++i)

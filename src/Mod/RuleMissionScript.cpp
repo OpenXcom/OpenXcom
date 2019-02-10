@@ -74,7 +74,7 @@ void RuleMissionScript::load(const YAML::Node& node)
 		{
 			WeightedOptions *nw = new WeightedOptions();
 			nw->load(nn->second);
-			_missionWeights.push_back(std::make_pair(nn->first.as<size_t>(0), nw));
+			_missionWeights.emplace_back(nn->first.as<size_t>(0), nw);
 		}
 	}
 	if (const YAML::Node &weights = node["raceWeights"])
@@ -83,7 +83,7 @@ void RuleMissionScript::load(const YAML::Node& node)
 		{
 			WeightedOptions *nw = new WeightedOptions();
 			nw->load(nn->second);
-			_raceWeights.push_back(std::make_pair(nn->first.as<size_t>(0), nw));
+			_raceWeights.emplace_back(nn->first.as<size_t>(0), nw);
 		}
 	}
 	if (const YAML::Node &weights = node["regionWeights"])
@@ -92,7 +92,7 @@ void RuleMissionScript::load(const YAML::Node& node)
 		{
 			WeightedOptions *nw = new WeightedOptions();
 			nw->load(nn->second);
-			_regionWeights.push_back(std::make_pair(nn->first.as<size_t>(0), nw));
+			_regionWeights.emplace_back(nn->first.as<size_t>(0), nw);
 		}
 	}
 	_researchTriggers = node["researchTriggers"].as< std::map<std::string, bool> >(_researchTriggers);

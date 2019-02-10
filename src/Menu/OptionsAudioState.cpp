@@ -119,18 +119,18 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	std::vector<std::string> musicText, soundText, videoText;
 	/* MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_GM, MUSIC_MIDI */
 	musicText.push_back(tr("STR_PREFERRED_FORMAT_AUTO"));
-	musicText.push_back("FLAC");
-	musicText.push_back("OGG");
-	musicText.push_back("MP3");
-	musicText.push_back("MOD");
-	musicText.push_back("WAV");
-	musicText.push_back("Adlib");
-	musicText.push_back("GM");
-	musicText.push_back("MIDI");
+	musicText.emplace_back("FLAC");
+	musicText.emplace_back("OGG");
+	musicText.emplace_back("MP3");
+	musicText.emplace_back("MOD");
+	musicText.emplace_back("WAV");
+	musicText.emplace_back("Adlib");
+	musicText.emplace_back("GM");
+	musicText.emplace_back("MIDI");
 
 	soundText.push_back(tr("STR_PREFERRED_FORMAT_AUTO"));
-	soundText.push_back("1.4");
-	soundText.push_back("1.0");
+	soundText.emplace_back("1.4");
+	soundText.emplace_back("1.0");
 
 	videoText.push_back(tr("STR_PREFERRED_VIDEO_ANIMATION"));
 	videoText.push_back(tr("STR_PREFERRED_VIDEO_SLIDESHOW"));

@@ -86,7 +86,7 @@ NewManufactureListState::NewManufactureListState(Base *base) : _base(base)
 
 	_possibleProductions.clear();
 	_game->getSavedGame()->getAvailableProductions(_possibleProductions, _game->getMod(), _base);
-	_catStrings.push_back("STR_ALL_ITEMS");
+	_catStrings.emplace_back("STR_ALL_ITEMS");
 
 	for (std::vector<RuleManufacture *>::iterator it = _possibleProductions.begin(); it != _possibleProductions.end(); ++it)
 	{

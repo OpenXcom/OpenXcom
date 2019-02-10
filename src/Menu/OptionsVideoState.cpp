@@ -207,13 +207,13 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 
 	std::vector<std::string> filterNames;
 	filterNames.push_back(tr("STR_DISABLED"));
-	filterNames.push_back("Scale");
-	filterNames.push_back("HQx");
-	filterNames.push_back("xBRZ");
-	_filters.push_back("");
-	_filters.push_back("");
-	_filters.push_back("");
-	_filters.push_back("");
+	filterNames.emplace_back("Scale");
+	filterNames.emplace_back("HQx");
+	filterNames.emplace_back("xBRZ");
+	_filters.emplace_back("");
+	_filters.emplace_back("");
+	_filters.emplace_back("");
+	_filters.emplace_back("");
 
 #ifndef __NO_OPENGL
 	std::set<std::string> filters = FileMap::filterFiles(FileMap::getVFolderContents(GL_FOLDER), GL_EXT);

@@ -76,8 +76,8 @@ void RuleTerrain::load(const YAML::Node &node, Mod *mod)
 	}
 	else
 	{
-		_civilianTypes.push_back("MALE_CIVILIAN");
-		_civilianTypes.push_back("FEMALE_CIVILIAN");
+		_civilianTypes.emplace_back("MALE_CIVILIAN");
+		_civilianTypes.emplace_back("FEMALE_CIVILIAN");
 	}
 	for (YAML::const_iterator i = node["music"].begin(); i != node["music"].end(); ++i)
 	{

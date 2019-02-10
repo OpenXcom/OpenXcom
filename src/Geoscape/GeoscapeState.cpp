@@ -2427,7 +2427,7 @@ bool GeoscapeState::processCommand(RuleMissionScript *command)
 						// this prevents the same location getting hit more than once every n missions.
 						if ((*j).isPoint() && strategy.validMissionLocation(command->getVarName(), region->getType(), counter))
 						{
-							validAreas.push_back(std::make_pair(region->getType(), counter));
+							validAreas.emplace_back(region->getType(), counter);
 						}
 						counter++;
 					}

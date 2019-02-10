@@ -529,7 +529,7 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 			// its noun will be "noNoun".
 			if (modularCommendations.empty())
 			{
-				modularCommendations.push_back("noNoun");
+				modularCommendations.emplace_back("noNoun");
 			}
 			for (std::vector<std::string>::const_iterator j = modularCommendations.begin(); j != modularCommendations.end(); ++j)
 			{

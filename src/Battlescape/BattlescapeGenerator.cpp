@@ -2399,7 +2399,7 @@ void BattlescapeGenerator::generateBaseMap()
 										tEast && !tEast->getMapData(O_WESTWALL) &&
 										tSouth && !tSouth->getMapData(O_NORTHWALL))
 									{
-										_save->getStorageSpace().push_back(Position(k, l, groundLevel));
+										_save->getStorageSpace().emplace_back(k, l, groundLevel);
 									}
 								}
 							}
@@ -2590,7 +2590,7 @@ bool BattlescapeGenerator::selectPosition(const std::vector<SDL_Rect *> *rects, 
 					}
 					if (add)
 					{
-						valid.push_back(std::make_pair(x,y));
+						valid.emplace_back(x,y);
 					}
 				}
 			}

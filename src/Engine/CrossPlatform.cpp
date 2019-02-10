@@ -205,7 +205,7 @@ std::vector<std::string> findDataFolders()
 		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/", home);
 #endif
  	}
- 	list.push_back(path);
+ 	list.emplace_back(path);
 
 	// Get global data folders
 	if (char *xdg_data_dirs = getenv("XDG_DATA_DIRS"))
@@ -214,23 +214,23 @@ std::vector<std::string> findDataFolders()
 		while (dir != 0)
 		{
 			snprintf(path, MAXPATHLEN, "%s/openxcom/", dir);
-			list.push_back(path);
+			list.emplace_back(path);
 			dir = strtok(0, ":");
 		}
 	}
 #ifdef __APPLE__
 	list.push_back("/Users/Shared/OpenXcom/");
 #else
-	list.push_back("/usr/local/share/openxcom/");
-	list.push_back("/usr/share/openxcom/");
+	list.emplace_back("/usr/local/share/openxcom/");
+	list.emplace_back("/usr/share/openxcom/");
 #ifdef DATADIR
 	snprintf(path, MAXPATHLEN, "%s/", DATADIR);
-	list.push_back(path);
+	list.emplace_back(path);
 #endif
 
 #endif
 	// Get working directory
-	list.push_back("./");
+	list.emplace_back("./");
 #endif
 
 	return list;
@@ -297,14 +297,14 @@ std::vector<std::string> findUserFolders()
 		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/", home);
 #endif
  	}
-	list.push_back(path);
+	list.emplace_back(path);
 
 	// Get old-style folder
 	snprintf(path, MAXPATHLEN, "%s/.openxcom/", home);
-	list.push_back(path);
+	list.emplace_back(path);
 
 	// Get working directory
-	list.push_back("./user/");
+	list.emplace_back("./user/");
 #endif
 
 	return list;

@@ -1207,7 +1207,7 @@ void DebriefingState::prepareDebriefing()
 					UnitStats statIncrease;
 					(*j)->postMissionProcedures(save, statIncrease);
 					if ((*j)->getGeoscapeSoldier())
-						_soldierStats.push_back(std::pair<std::string, UnitStats>((*j)->getGeoscapeSoldier()->getName(), statIncrease));
+						_soldierStats.emplace_back((*j)->getGeoscapeSoldier()->getName(), statIncrease);
 					playersInExitArea++;
 
 					recoverItems((*j)->getInventory(), base);

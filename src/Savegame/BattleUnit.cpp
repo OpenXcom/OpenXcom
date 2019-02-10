@@ -369,7 +369,7 @@ void BattleUnit::load(const YAML::Node &node)
 		_recolor.clear();
 		for (size_t i = 0; i < p.size(); ++i)
 		{
-			_recolor.push_back(std::make_pair(p[i][0].as<int>(), p[i][1].as<int>()));
+			_recolor.emplace_back(p[i][0].as<int>(), p[i][1].as<int>());
 		}
 	}
 	_mindControllerID = node["mindControllerID"].as<int>(_mindControllerID);
@@ -469,7 +469,7 @@ void BattleUnit::setRecolor(int basicLook, int utileLook, int rankLook)
 	{
 		if (colors[i].first > 0 && colors[i].second > 0)
 		{
-			_recolor.push_back(std::make_pair(colors[i].first << 4, colors[i].second));
+			_recolor.emplace_back(colors[i].first << 4, colors[i].second);
 		}
 	}
 }

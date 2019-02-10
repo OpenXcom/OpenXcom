@@ -83,14 +83,14 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 	}
 	if (_rtl.empty())
 	{
-		_rtl.push_back("he");
+		_rtl.emplace_back("he");
 	}
 	if (_cjk.empty())
 	{
-		_cjk.push_back("ja");
+		_cjk.emplace_back("ja");
 		//_cjk.push_back("ko");  has spacing between words
-		_cjk.push_back("zh-CN");
-		_cjk.push_back("zh-TW");
+		_cjk.emplace_back("zh-CN");
+		_cjk.emplace_back("zh-TW");
 	}
 }
 

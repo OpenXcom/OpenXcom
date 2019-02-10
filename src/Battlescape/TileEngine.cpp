@@ -936,7 +936,7 @@ std::vector<std::pair<BattleUnit *, int> > TileEngine::getSpottingUnits(BattleUn
 					int attackType = determineReactionType(*i, unit);
 					if (attackType != BA_NONE)
 					{
-						spotters.push_back(std::make_pair(*i, attackType));
+						spotters.emplace_back(*i, attackType);
 					}
 				}
 			}
@@ -2013,69 +2013,69 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 			switch (dir)
 			{
 			case 0: // north
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), O_NORTHWALL)); // origin
+				checkPositions.emplace_back(Position(0, 0, 0), O_NORTHWALL); // origin
 				if (x != 0)
 				{
-					checkPositions.push_back(std::make_pair(Position(0, -1, 0), O_WESTWALL)); // one tile north
+					checkPositions.emplace_back(Position(0, -1, 0), O_WESTWALL); // one tile north
 				}
 				break;
 			case 1: // north east
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), O_NORTHWALL)); // origin
-				checkPositions.push_back(std::make_pair(Position(1, -1, 0), O_WESTWALL)); // one tile north-east
+				checkPositions.emplace_back(Position(0, 0, 0), O_NORTHWALL); // origin
+				checkPositions.emplace_back(Position(1, -1, 0), O_WESTWALL); // one tile north-east
 				if (rClick)
 				{
-					checkPositions.push_back(std::make_pair(Position(1, 0, 0), O_WESTWALL)); // one tile east
-					checkPositions.push_back(std::make_pair(Position(1, 0, 0), O_NORTHWALL)); // one tile east
+					checkPositions.emplace_back(Position(1, 0, 0), O_WESTWALL); // one tile east
+					checkPositions.emplace_back(Position(1, 0, 0), O_NORTHWALL); // one tile east
 				}
 				break;
 			case 2: // east
-				checkPositions.push_back(std::make_pair(Position(1, 0, 0), O_WESTWALL)); // one tile east
+				checkPositions.emplace_back(Position(1, 0, 0), O_WESTWALL); // one tile east
 				break;
 			case 3: // south-east
 				if (!y)
-					checkPositions.push_back(std::make_pair(Position(1, 1, 0), O_WESTWALL)); // one tile south-east
+					checkPositions.emplace_back(Position(1, 1, 0), O_WESTWALL); // one tile south-east
 				if (!x)
-					checkPositions.push_back(std::make_pair(Position(1, 1, 0), O_NORTHWALL)); // one tile south-east
+					checkPositions.emplace_back(Position(1, 1, 0), O_NORTHWALL); // one tile south-east
 				if (rClick)
 				{
-					checkPositions.push_back(std::make_pair(Position(1, 0, 0), O_WESTWALL)); // one tile east
-					checkPositions.push_back(std::make_pair(Position(0, 1, 0), O_NORTHWALL)); // one tile south
+					checkPositions.emplace_back(Position(1, 0, 0), O_WESTWALL); // one tile east
+					checkPositions.emplace_back(Position(0, 1, 0), O_NORTHWALL); // one tile south
 				}
 				break;
 			case 4: // south
-				checkPositions.push_back(std::make_pair(Position(0, 1, 0), O_NORTHWALL)); // one tile south
+				checkPositions.emplace_back(Position(0, 1, 0), O_NORTHWALL); // one tile south
 				break;
 			case 5: // south-west
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), O_WESTWALL)); // origin
-				checkPositions.push_back(std::make_pair(Position(-1, 1, 0), O_NORTHWALL)); // one tile south-west
+				checkPositions.emplace_back(Position(0, 0, 0), O_WESTWALL); // origin
+				checkPositions.emplace_back(Position(-1, 1, 0), O_NORTHWALL); // one tile south-west
 				if (rClick)
 				{
-					checkPositions.push_back(std::make_pair(Position(0, 1, 0), O_WESTWALL)); // one tile south
-					checkPositions.push_back(std::make_pair(Position(0, 1, 0), O_NORTHWALL)); // one tile south
+					checkPositions.emplace_back(Position(0, 1, 0), O_WESTWALL); // one tile south
+					checkPositions.emplace_back(Position(0, 1, 0), O_NORTHWALL); // one tile south
 				}
 				break;
 			case 6: // west
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), O_WESTWALL)); // origin
+				checkPositions.emplace_back(Position(0, 0, 0), O_WESTWALL); // origin
 				if (y != 0)
 				{
-					checkPositions.push_back(std::make_pair(Position(-1, 0, 0), O_NORTHWALL)); // one tile west
+					checkPositions.emplace_back(Position(-1, 0, 0), O_NORTHWALL); // one tile west
 				}
 				break;
 			case 7: // north-west
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), O_WESTWALL)); // origin
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), O_NORTHWALL)); // origin
+				checkPositions.emplace_back(Position(0, 0, 0), O_WESTWALL); // origin
+				checkPositions.emplace_back(Position(0, 0, 0), O_NORTHWALL); // origin
 				if (x)
 				{
-					checkPositions.push_back(std::make_pair(Position(-1, -1, 0), O_WESTWALL)); // one tile north
+					checkPositions.emplace_back(Position(-1, -1, 0), O_WESTWALL); // one tile north
 				}
 				if (y)
 				{
-					checkPositions.push_back(std::make_pair(Position(-1, -1, 0), O_NORTHWALL)); // one tile north
+					checkPositions.emplace_back(Position(-1, -1, 0), O_NORTHWALL); // one tile north
 				}
 				if (rClick)
 				{
-					checkPositions.push_back(std::make_pair(Position(0, -1, 0), O_WESTWALL)); // one tile north
-					checkPositions.push_back(std::make_pair(Position(-1, 0, 0), O_NORTHWALL)); // one tile west
+					checkPositions.emplace_back(Position(0, -1, 0), O_WESTWALL); // one tile north
+					checkPositions.emplace_back(Position(-1, 0, 0), O_NORTHWALL); // one tile west
 				}
 				break;
 			default:

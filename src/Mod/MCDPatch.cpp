@@ -51,87 +51,87 @@ void MCDPatch::load(const YAML::Node &node)
 		if ((*i)["bigWall"])
 		{
 			int bigWall = (*i)["bigWall"].as<int>();
-			_bigWalls.push_back(std::make_pair(MCDIndex, bigWall));
+			_bigWalls.emplace_back(MCDIndex, bigWall);
 		}
 		if ((*i)["TUWalk"])
 		{
 			int TUWalk = (*i)["TUWalk"].as<int>();
-			_TUWalks.push_back(std::make_pair(MCDIndex, TUWalk));
+			_TUWalks.emplace_back(MCDIndex, TUWalk);
 		}
 		if ((*i)["TUFly"])
 		{
 			int TUFly = (*i)["TUFly"].as<int>();
-			_TUFlys.push_back(std::make_pair(MCDIndex, TUFly));
+			_TUFlys.emplace_back(MCDIndex, TUFly);
 		}
 		if ((*i)["TUSlide"])
 		{
 			int TUSlide = (*i)["TUSlide"].as<int>();
-			_TUSlides.push_back(std::make_pair(MCDIndex, TUSlide));
+			_TUSlides.emplace_back(MCDIndex, TUSlide);
 		}
 		if ((*i)["deathTile"])
 		{
 			int deathTile = (*i)["deathTile"].as<int>();
-			_deathTiles.push_back(std::make_pair(MCDIndex, deathTile));
+			_deathTiles.emplace_back(MCDIndex, deathTile);
 		}
 		if ((*i)["terrainHeight"])
 		{
 			int terrainHeight = (*i)["terrainHeight"].as<int>();
-			_terrainHeight.push_back(std::make_pair(MCDIndex, terrainHeight));
+			_terrainHeight.emplace_back(MCDIndex, terrainHeight);
 		}
 		if ((*i)["specialType"])
 		{
 			int specialType = (*i)["specialType"].as<int>();
-			_specialTypes.push_back(std::make_pair(MCDIndex, specialType));
+			_specialTypes.emplace_back(MCDIndex, specialType);
 		}
 		if ((*i)["explosive"])
 		{
 			int explosive = (*i)["explosive"].as<int>();
-			_explosives.push_back(std::make_pair(MCDIndex, explosive));
+			_explosives.emplace_back(MCDIndex, explosive);
 		}
 		if ((*i)["armor"])
 		{
 			int armor = (*i)["armor"].as<int>();
-			_armors.push_back(std::make_pair(MCDIndex, armor));
+			_armors.emplace_back(MCDIndex, armor);
 		}
 		if ((*i)["flammability"])
 		{
 			int flammability = (*i)["flammability"].as<int>();
-			_flammabilities.push_back(std::make_pair(MCDIndex, flammability));
+			_flammabilities.emplace_back(MCDIndex, flammability);
 		}
 		if ((*i)["fuel"])
 		{
 			int fuel = (*i)["fuel"].as<int>();
-			_fuels.push_back(std::make_pair(MCDIndex, fuel));
+			_fuels.emplace_back(MCDIndex, fuel);
 		}
 		if ((*i)["footstepSound"])
 		{
 			int footstepSound = (*i)["footstepSound"].as<int>();
-			_footstepSounds.push_back(std::make_pair(MCDIndex, footstepSound));
+			_footstepSounds.emplace_back(MCDIndex, footstepSound);
 		}
 		if ((*i)["HEBlock"])
 		{
 			int HEBlock = (*i)["HEBlock"].as<int>();
-			_HEBlocks.push_back(std::make_pair(MCDIndex, HEBlock));
+			_HEBlocks.emplace_back(MCDIndex, HEBlock);
 		}
 		if ((*i)["noFloor"])
 		{
 			bool noFloor = (*i)["noFloor"].as<bool>();
-			_noFloors.push_back(std::make_pair(MCDIndex, noFloor));
+			_noFloors.emplace_back(MCDIndex, noFloor);
 		}
 		if ((*i)["LOFTS"])
 		{
 			std::vector<int> lofts = (*i)["LOFTS"].as< std::vector<int> >();
-			_LOFTS.push_back(std::make_pair(MCDIndex, lofts));
+			_LOFTS.emplace_back(MCDIndex, lofts);
 		}
 		if ((*i)["stopLOS"])
 		{
 			bool stopLOS = (*i)["stopLOS"].as<bool>();
-			_stopLOSses.push_back(std::make_pair(MCDIndex, stopLOS));
+			_stopLOSses.emplace_back(MCDIndex, stopLOS);
 		}
 		if ((*i)["objectType"])
 		{
 			int objectType = (*i)["objectType"].as<int>();
-			_objectTypes.push_back(std::make_pair(MCDIndex, objectType));
+			_objectTypes.emplace_back(MCDIndex, objectType);
 		}
 	}
 }

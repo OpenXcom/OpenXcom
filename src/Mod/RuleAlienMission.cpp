@@ -128,7 +128,7 @@ void RuleAlienMission::load(const YAML::Node &node)
 			else
 			{
 				// Place it
-				_raceDistribution.push_back(*ii);
+				_raceDistribution.emplace_back(*ii);
 			}
 		}
 	}

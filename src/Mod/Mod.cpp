@@ -1162,7 +1162,7 @@ void Mod::loadFile(const std::string &filename)
 		std::string type = (*i)["type"].as<std::string>();
 		ExtraSounds *extraSounds = new ExtraSounds();
 		extraSounds->load(*i, _modOffset);
-		_extraSounds.push_back(std::make_pair(type, extraSounds));
+		_extraSounds.emplace_back(type, extraSounds);
 	}
 	for (YAML::const_iterator i = doc["extraStrings"].begin(); i != doc["extraStrings"].end(); ++i)
 	{
