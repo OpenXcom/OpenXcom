@@ -118,12 +118,12 @@ YAML::Node BattleItem::save() const
 	if (_ammoItem)
 		node["ammoItem"] = _ammoItem->getId();
 
-	if (_painKiller)
+	if (_rules && _rules->getBattleType() == BT_MEDIKIT)
+	{
 		node["painKiller"] = _painKiller;
-	if (_heal)
 		node["heal"] = _heal;
-	if (_stimulant)
 		node["stimulant"] = _stimulant;
+	}
 	if (_fuseTimer != -1)
 		node["fuseTimer"] = _fuseTimer;
 	if (_droppedOnAlienTurn)
