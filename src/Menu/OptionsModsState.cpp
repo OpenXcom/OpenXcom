@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "OptionsModsState.h"
+#include "OptionsInformExtendedState.h"
 #include <climits>
 #include <algorithm>
 #include "../Engine/Game.h"
@@ -37,7 +38,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(origin)
+OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(origin), _curMasterIdx(0)
 {
 	setCategory(_btnMods);
 
@@ -69,7 +70,6 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 
 	// scan for masters
 	const std::map<std::string, ModInfo> &modInfos(Options::getModInfos());
-	size_t curMasterIdx = 0;
 	std::vector<std::string> masterNames;
 	for (std::vector< std::pair<std::string, bool> >::const_iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
 	{
@@ -86,14 +86,14 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 		}
 		else if (_curMasterId.empty())
 		{
-			++curMasterIdx;
+			++_curMasterIdx;
 		}
 		_masters.push_back(modInfo);
 		masterNames.push_back(modInfo->getName());
 	}
 
 	_cbxMasters->setOptions(masterNames);
-	_cbxMasters->setSelected(curMasterIdx);
+	_cbxMasters->setSelected(_curMasterIdx);
 	_cbxMasters->onChange((ActionHandler)&OptionsModsState::cbxMasterChange);
 	_cbxMasters->onMouseIn((ActionHandler)&OptionsModsState::txtTooltipIn);
 	_cbxMasters->onMouseOut((ActionHandler)&OptionsModsState::txtTooltipOut);
@@ -135,6 +135,22 @@ void OptionsModsState::cbxMasterHover(Action *)
 
 void OptionsModsState::cbxMasterChange(Action *)
 {
+	const ModInfo *masterModInfo = _masters[_cbxMasters->getSelected()];
+
+	// when changing a master mod, check if it requires OXCE
+	{
+		if (!masterModInfo->getRequiredExtendedVersion().empty())
+		{
+			_game->pushState(new OptionsInformExtendedState(this, true));
+			return;
+		}
+	}
+
+	changeMasterMod();
+}
+
+void OptionsModsState::changeMasterMod()
+{
 	std::string masterId = _masters[_cbxMasters->getSelected()]->getId();
 	for (std::vector< std::pair<std::string, bool> >::iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
 	{
@@ -149,8 +165,14 @@ void OptionsModsState::cbxMasterChange(Action *)
 	}
 	Options::reload = true;
 
+	_curMasterIdx = _cbxMasters->getSelected();
 	_curMasterId = masterId;
 	lstModsRefresh(0);
+}
+
+void OptionsModsState::revertMasterMod()
+{
+	_cbxMasters->setSelected(_curMasterIdx);
 }
 
 void OptionsModsState::lstModsRefresh(size_t scrollLoc)
@@ -195,6 +217,26 @@ void OptionsModsState::lstModsClick(Action *action)
 	}
 
 	std::pair<std::string, bool> &mod(_mods.at(_lstMods->getSelectedRow()));
+
+	// when activating a mod, check if it requires OXCE
+	if (!mod.second)
+	{
+		const ModInfo *modInfo = &Options::getModInfos().at(mod.first);
+		if (!modInfo->getRequiredExtendedVersion().empty())
+		{
+			_game->pushState(new OptionsInformExtendedState(this, false));
+			return;
+		}
+	}
+
+	// if deactivating, or if not OXCE mod
+	toggleMod();
+}
+
+void OptionsModsState::toggleMod()
+{
+	std::pair<std::string, bool> &mod(_mods.at(_lstMods->getSelectedRow()));
+
 	for (std::vector< std::pair<std::string, bool> >::iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
 	{
 		if (mod.first != i->first)

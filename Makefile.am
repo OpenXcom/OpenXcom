@@ -452,6 +452,8 @@ openxcom_SOURCES = \
 	src/Menu/OptionsDefaultsState.h \
 	src/Menu/OptionsGeoscapeState.cpp \
 	src/Menu/OptionsGeoscapeState.h \
+	src/Menu/OptionsInformExtendedState.cpp \
+	src/Menu/OptionsInformExtendedState.h \
 	src/Menu/OptionsModsState.cpp \
 	src/Menu/OptionsModsState.h \
 	src/Menu/OptionsNoAudioState.cpp \

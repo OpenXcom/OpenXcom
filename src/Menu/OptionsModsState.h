@@ -42,6 +42,7 @@ private:
 	std::vector<const ModInfo *> _masters;
 	std::string _curMasterId;
 	std::vector< std::pair<std::string, bool> > _mods;
+	size_t _curMasterIdx;
 public:
 	/// Creates the Advanced state.
 	OptionsModsState(OptionsOrigin origin);
@@ -50,10 +51,13 @@ public:
 	std::string makeTooltip(const ModInfo &modInfo);
 	void cbxMasterHover(Action *action);
 	void cbxMasterChange(Action *action);
+	void changeMasterMod();
+	void revertMasterMod();
 	void lstModsRefresh(size_t scrollLoc);
 	void lstModsHover(Action *action);
 	/// Handler for clicking an item on the menu.
 	void lstModsClick(Action *action);
+	void toggleMod();
 	/// Handler for clicking the left reordering button.
 	void lstModsLeftArrowClick(Action *action);
 	/// Moves a mod up.
