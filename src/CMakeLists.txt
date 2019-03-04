@@ -221,6 +221,7 @@ set ( menu_src
   Menu/OptionsControlsState.cpp
   Menu/OptionsDefaultsState.cpp
   Menu/OptionsGeoscapeState.cpp
+  Menu/OptionsInformExtendedState.cpp
   Menu/OptionsModsState.cpp
   Menu/OptionsNoAudioState.cpp
   Menu/OptionsVideoState.cpp

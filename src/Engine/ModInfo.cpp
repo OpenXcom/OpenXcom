@@ -43,6 +43,7 @@ void ModInfo::load(const std::string &filename)
 	_id       = doc["id"].as<std::string>(_id);
 	_isMaster = doc["isMaster"].as<bool>(_isMaster);
 	_reservedSpace = doc["reservedSpace"].as<int>(_reservedSpace);
+	_requiredExtendedVersion = doc["requiredExtendedVersion"].as<std::string>(_requiredExtendedVersion);
 
 	if (_reservedSpace < 1)
 	{
@@ -77,6 +78,7 @@ const std::string &ModInfo::getAuthor()      const { return _author;   }
 const std::string &ModInfo::getId()          const { return _id;       }
 const std::string &ModInfo::getMaster()      const { return _master;   }
 bool               ModInfo::isMaster()       const { return _isMaster; }
+const std::string &ModInfo::getRequiredExtendedVersion() const { return _requiredExtendedVersion; }
 int                ModInfo::getReservedSpace()        const { return _reservedSpace;     }
 void ModInfo::setReservedSpace(int reservedSpace)
 {

@@ -943,6 +943,9 @@
     <ClCompile Include="Engine\Unicode.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\OptionsInformExtendedState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1925,6 +1928,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Unicode.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsInformExtendedState.h">
+      <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
