@@ -30,7 +30,7 @@ cmake . -DCMAKE_BUILD_TYPE="Debug"
 ```
 make -j2
 ```
-1. Make sure that you set up your [Data directory](https://github.com/SupSuper/OpenXcom#directory-locations) properly.
+1. Make sure that you set up your [Data directory](https://github.com/OpenXcom/OpenXcom#directory-locations) properly.
 1. Your artifact will be named `openxcom.app` in the root of the repository.
 
 

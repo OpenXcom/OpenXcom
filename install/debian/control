@@ -13,8 +13,8 @@ Build-Depends:
 	libboost-dev
 Standards-Version: 3.9.6
 Homepage: https://openxcom.org/
-Vcs-Git: git://github.com/SupSuper/OpenXcom.git
-Vcs-Browser: https://github.com/SupSuper/OpenXcom
+Vcs-Git: git://github.com/OpenXcom/OpenXcom.git
+Vcs-Browser: https://github.com/OpenXcom/OpenXcom
 
 Package: openxcom
 Architecture: any

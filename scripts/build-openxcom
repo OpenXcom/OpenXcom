@@ -22,7 +22,7 @@ exe="${prog}"
 exeRelativePath=""
 
 # The path to the repository:
-repo="https://github.com/SupSuper/OpenXcom.git"
+repo="https://github.com/OpenXcom/OpenXcom.git"
 
 # No touching below this line, with the exception of the "Compile" section
 # -----------------------------------------------------------------------------

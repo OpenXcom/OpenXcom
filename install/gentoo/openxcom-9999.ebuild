@@ -4,7 +4,7 @@
 
 EAPI=5
 
-EGIT_REPO_URI="https://github.com/SupSuper/OpenXcom.git"
+EGIT_REPO_URI="https://github.com/OpenXcom/OpenXcom.git"
 
 inherit git-2 cmake-utils
 
