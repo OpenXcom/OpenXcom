@@ -30,7 +30,7 @@ data or user folder (see below for folder locations).
 
 Mods are an important and exciting part of the game.  OpenXcom comes with a set
 of standard mods based on traditional XcomUtil and UFOExtender functionality.
-There is also a [mod portal website](http://www.openxcom.com) with a thriving
+There is also a [mod portal website](https://openxcom.mod.io/) with a thriving
 mod community with hundreds of innovative mods to choose from.
 
 To install a mod, go to the mods subdirectory in your user directory (see below
