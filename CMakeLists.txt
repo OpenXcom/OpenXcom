@@ -113,6 +113,14 @@ else ()
     message ( "found openGL (${OPENGL_LIBRARIES})" )
 endif ()
 
+# Resolve backtraces
+if ( WIN32 )
+	link_libraries( dbghelp )
+endif ()
+if ( UNIX )
+	link_libraries( ${CMAKE_DL_LIBS} )
+endif ()
+
 # Read version number
 set ( file "${CMAKE_SOURCE_DIR}/src/version.h" )
 file ( READ ${file} lines )
