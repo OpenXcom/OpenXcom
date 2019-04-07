@@ -37,7 +37,7 @@ CXXFLAGS += $(shell $(PKG-CONFIG) --cflags sdl yaml-cpp)
 ifeq ($(TARGET),OSX)
 LIBS = $(shell $(PKG-CONFIG) --libs sdl yaml-cpp) -lSDL_gfx -lSDL_mixer -lSDL_image -framework OpenGL
 else
-LIBS = $(shell $(PKG-CONFIG) --libs sdl yaml-cpp) -lSDL_gfx -lSDL_mixer -lSDL_image -lGL
+LIBS = $(shell $(PKG-CONFIG) --libs sdl yaml-cpp) -lSDL_gfx -lSDL_mixer -lSDL_image -lGL -ldl
 endif
 
 # Rules
