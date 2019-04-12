@@ -247,8 +247,8 @@ SurfaceSet *ExtraSprites::loadSurfaceSet(SurfaceSet *set)
 			}
 			else
 			{
-				Surface *temp = new Surface(_width, _height);
-				temp->loadImage(fullPath);
+				Surface temp = Surface(_width, _height);
+				temp.loadImage(fullPath);
 				int xDivision = _width / _subX;
 				int yDivision = _height / _subY;
 				int frames = xDivision * yDivision;
@@ -259,18 +259,13 @@ SurfaceSet *ExtraSprites::loadSurfaceSet(SurfaceSet *set)
 				{
 					for (int x = 0; x != xDivision; ++x)
 					{
-						Surface *frame = set->getFrame(offset);
-						if (frame)
-						{
-							frame->clear();
-						}
-						frame = getFrame(set, offset, adding);
+						Surface* frame = getFrame(set, offset, adding);
+						frame->clear();
 						// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
-						temp->blitNShade(frame, 0 - (x * _subX), 0 - (y * _subY), 0);
+						temp.blitNShade(frame, 0 - (x * _subX), 0 - (y * _subY), 0);
 						++offset;
 					}
 				}
-				delete temp;
 			}
 		}
 	}
