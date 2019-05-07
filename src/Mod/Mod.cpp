@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <sstream>
 #include <climits>
+#include <cassert>
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/FileMap.h"
 #include "../Engine/Palette.h"
@@ -190,7 +191,7 @@ void Mod::resetGlobalStatics()
  * Creates an empty mod.
  */
 Mod::Mod() : _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _turnAIUseGrenade(3), _turnAIUseBlaster(3), _defeatScore(0), _defeatFunds(0), _startingTime(6, 1, 1, 1999, 12, 0, 0),
-			 _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0), _modOffset(0), _statePalette(0)
+			 _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0), _modCurrent(0), _statePalette(0)
 {
 	_muteMusic = new Music();
 	_muteSound = new Sound();
@@ -655,7 +656,7 @@ const std::vector<std::vector<Uint8> > *Mod::getLUTs() const
  */
 int Mod::getModOffset() const
 {
-	return _modOffset;
+	return _modCurrent->Offset;
 }
 
 /**
@@ -666,9 +667,10 @@ int Mod::getModOffset() const
  */
 int Mod::getSpriteOffset(int sprite, const std::string& set) const
 {
+	assert(_modCurrent);
 	std::map<std::string, SurfaceSet*>::const_iterator i = _sets.find(set);
 	if (i != _sets.end() && sprite >= (int)i->second->getTotalFrames())
-		return sprite + _modOffset;
+		return sprite + _modCurrent->Offset;
 	else
 		return sprite;
 }
@@ -681,9 +683,10 @@ int Mod::getSpriteOffset(int sprite, const std::string& set) const
  */
 int Mod::getSoundOffset(int sound, const std::string& set) const
 {
+	assert(_modCurrent);
 	std::map<std::string, SoundSet*>::const_iterator i = _sounds.find(set);
 	if (i != _sounds.end() && sound >= (int)i->second->getTotalSounds())
-		return sound + _modOffset;
+		return sound + _modCurrent->Offset;
 	else
 		return sound;
 }
@@ -696,8 +699,9 @@ int Mod::getSoundOffset(int sound, const std::string& set) const
  */
 int Mod::getOffset(int id, int max) const
 {
+	assert(_modCurrent);
 	if (id > max)
-		return id + _modOffset;
+		return id + _modCurrent->Offset;
 	else
 		return id;
 }
@@ -709,26 +713,52 @@ int Mod::getOffset(int id, int max) const
 void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::string> > > &mods)
 {
 	Log(LOG_INFO) << "Loading rulesets...";
-	std::vector<size_t> modOffsets(mods.size());
+	_modData.clear();
+	_modData.resize(mods.size());
+
+	// calculated offsets and other things for all mods
 	size_t offset = 0;
 	for (size_t i = 0; mods.size() > i; ++i)
 	{
-		modOffsets[i] = offset;
-		std::map<std::string, ModInfo>::const_iterator it = Options::getModInfos().find(mods[i].first);
-		if (it != Options::getModInfos().end())
+		const std::string& name = mods[i].first;
+		std::map<std::string, ModInfo>::const_iterator it = Options::getModInfos().find(name);
+		if (it == Options::getModInfos().end())
 		{
-			offset += it->second.getReservedSpace();
+			throw Exception("failed to load '" + name + "' beceuse of lack of mod metadata");
 		}
-		else
+		size_t size = it->second.getReservedSpace();
+		_modData[i].Name = name;
+		_modData[i].Offset = 1000 * offset;
+		_modData[i].Info = &it->second;
+		_modData[i].Size = 1000 * size;
+		offset += size;
+	}
+
+	// load rulesets that can affect loading vanilla resources
+	for (size_t i = 0; _modData.size() > i; ++i)
+	{
+		_modCurrent = &_modData.at(0);
+		if (_modCurrent->Info->isMaster())
 		{
-			offset += 1;
+			std::string path = _modCurrent->Info->getResourceConfigFile();
+			if (CrossPlatform::fileExists(path))
+			{
+				loadResourceConfigFile(path);
+			}
 		}
 	}
+
+	// vanilla resources load
+	_modCurrent = &_modData.at(0);
+	loadVanillaResources();
+
+	// load rest rulesets
 	for (size_t i = 0; mods.size() > i; ++i)
 	{
 		try
 		{
-			loadMod(mods[i].second, modOffsets[i]);
+			_modCurrent = &_modData.at(i);
+			loadMod(mods[i].second);
 		}
 		catch (Exception &e)
 		{
@@ -763,6 +793,9 @@ void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::st
 			throw Exception(ss.str());
 		}
 	}
+
+	//back master
+	_modCurrent = &_modData.at(0);
 	sortLists();
 	loadExtraResources();
 	modResources();
@@ -772,12 +805,9 @@ void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::st
  * Loads a list of rulesets from YAML files for the mod at the specified index. The first
  * mod loaded should be the master at index 0, then 1, and so on.
  * @param rulesetFiles List of rulesets to load.
- * @param modIdx Mod index number.
  */
-void Mod::loadMod(const std::vector<std::string> &rulesetFiles, size_t modIdx)
+void Mod::loadMod(const std::vector<std::string> &rulesetFiles)
 {
-	_modOffset = 1000 * modIdx;
-
 	for (std::vector<std::string>::const_iterator i = rulesetFiles.begin(); i != rulesetFiles.end(); ++i)
 	{
 		Log(LOG_VERBOSE) << "- " << *i;
@@ -847,10 +877,35 @@ void Mod::loadMod(const std::vector<std::string> &rulesetFiles, size_t modIdx)
 			}
 		}
 	}
+}
 
-	if (modIdx == 0)
+/**
+ * Loads a ruleset from a YAML file that have basic resources configuration.
+ * @param filename YAML filename.
+ */
+void Mod::loadResourceConfigFile(const std::string &filename)
+{
+	YAML::Node doc = YAML::LoadFile(filename);
+
+	for (YAML::const_iterator i = doc["soundDefs"].begin(); i != doc["soundDefs"].end(); ++i)
 	{
-		loadVanillaResources();
+		SoundDefinition *rule = loadRule(*i, &_soundDefs);
+		if (rule != 0)
+		{
+			rule->load(*i);
+		}
+	}
+	for (YAML::const_iterator i = doc["transparencyLUTs"].begin(); i != doc["transparencyLUTs"].end(); ++i)
+	{
+		for (YAML::const_iterator j = (*i)["colors"].begin(); j != (*i)["colors"].end(); ++j)
+		{
+			SDL_Color color;
+			color.r = (*j)[0].as<int>(0);
+			color.g = (*j)[1].as<int>(0);
+			color.b = (*j)[2].as<int>(0);
+			color.unused = (*j)[3].as<int>(2);;
+			_transparencies.push_back(color);
+		}
 	}
 }
 
@@ -1140,11 +1195,11 @@ void Mod::loadFile(const std::string &filename)
 		{
 			std::string type = (*i)["type"].as<std::string>();
 			ExtraSprites *extraSprites = new ExtraSprites();
-			int modOffset = _modOffset;
+			const ModData* data = _modCurrent;
 			// doesn't support modIndex
 			if (type == "TEXTURE.DAT")
-				modOffset = 0;
-			extraSprites->load(*i, modOffset);
+				data = &_modData.at(0);
+			extraSprites->load(*i, data->Offset);
 			_extraSprites[type].push_back(extraSprites);
 		}
 		else if ((*i)["delete"])
@@ -1161,7 +1216,7 @@ void Mod::loadFile(const std::string &filename)
 	{
 		std::string type = (*i)["type"].as<std::string>();
 		ExtraSounds *extraSounds = new ExtraSounds();
-		extraSounds->load(*i, _modOffset);
+		extraSounds->load(*i, _modCurrent->Offset);
 		_extraSounds.push_back(std::make_pair(type, extraSounds));
 	}
 	for (YAML::const_iterator i = doc["extraStrings"].begin(); i != doc["extraStrings"].end(); ++i)
@@ -1189,14 +1244,6 @@ void Mod::loadFile(const std::string &filename)
 	for (YAML::const_iterator i = doc["interfaces"].begin(); i != doc["interfaces"].end(); ++i)
 	{
 		RuleInterface *rule = loadRule(*i, &_interfaces);
-		if (rule != 0)
-		{
-			rule->load(*i);
-		}
-	}
-	for (YAML::const_iterator i = doc["soundDefs"].begin(); i != doc["soundDefs"].end(); ++i)
-	{
-		SoundDefinition *rule = loadRule(*i, &_soundDefs);
 		if (rule != 0)
 		{
 			rule->load(*i);
@@ -1255,18 +1302,6 @@ void Mod::loadFile(const std::string &filename)
 		}
 		DEBRIEF_MUSIC_GOOD = (*i)["goodDebriefingMusic"].as<std::string>(DEBRIEF_MUSIC_GOOD);
 		DEBRIEF_MUSIC_BAD = (*i)["badDebriefingMusic"].as<std::string>(DEBRIEF_MUSIC_BAD);
-	}
-	for (YAML::const_iterator i = doc["transparencyLUTs"].begin(); i != doc["transparencyLUTs"].end(); ++i)
-	{
-		for (YAML::const_iterator j = (*i)["colors"].begin(); j != (*i)["colors"].end(); ++j)
-		{
-			SDL_Color color;
-			color.r = (*j)[0].as<int>(0);
-			color.g = (*j)[1].as<int>(0);
-			color.b = (*j)[2].as<int>(0);
-			color.unused = (*j)[3].as<int>(2);;
-			_transparencies.push_back(color);
-		}
 	}
 	for (YAML::const_iterator i = doc["mapScripts"].begin(); i != doc["mapScripts"].end(); ++i)
 	{
@@ -2729,11 +2764,6 @@ void Mod::loadVanillaResources()
 		}
 	}
 
-	TextButton::soundPress = getSound("GEO.CAT", Mod::BUTTON_PRESS);
-	Window::soundPopup[0] = getSound("GEO.CAT", Mod::WINDOW_POPUP[0]);
-	Window::soundPopup[1] = getSound("GEO.CAT", Mod::WINDOW_POPUP[1]);
-	Window::soundPopup[2] = getSound("GEO.CAT", Mod::WINDOW_POPUP[2]);
-
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
 }
 
@@ -2757,6 +2787,8 @@ void Mod::loadBattlescapeResources()
 	_sets["MEDIBITS.DAT"]->loadDat(FileMap::getFilePath("UFOGRAPH/MEDIBITS.DAT"));
 	_sets["DETBLOB.DAT"] = new SurfaceSet(16, 16);
 	_sets["DETBLOB.DAT"]->loadDat(FileMap::getFilePath("UFOGRAPH/DETBLOB.DAT"));
+	_sets["Projectiles"] = new SurfaceSet(3, 3);
+	_sets["UnderwaterProjectiles"] = new SurfaceSet(3, 3);
 
 	// Load Battlescape Terrain (only blanks are loaded, others are loaded just in time)
 	_sets["BLANKS.PCK"] = new SurfaceSet(32, 40);
@@ -3117,6 +3149,11 @@ void Mod::loadExtraResources()
 		}
 		_sounds[setName] = soundPack->loadSoundSet(set);
 	}
+
+	TextButton::soundPress = getSound("GEO.CAT", Mod::BUTTON_PRESS);
+	Window::soundPopup[0] = getSound("GEO.CAT", Mod::WINDOW_POPUP[0]);
+	Window::soundPopup[1] = getSound("GEO.CAT", Mod::WINDOW_POPUP[1]);
+	Window::soundPopup[2] = getSound("GEO.CAT", Mod::WINDOW_POPUP[2]);
 }
 
 void Mod::loadExtraSprite(ExtraSprites *spritePack)

@@ -75,10 +75,26 @@ class RuleGlobe;
 class RuleConverter;
 class SoundDefinition;
 class MapScript;
+class ModInfo;
 class RuleVideo;
 class RuleMusic;
 class RuleMissionScript;
 struct StatAdjustment;
+
+/**
+ * Mod data used when loading resources
+ */
+struct ModData
+{
+	/// Mod name
+	std::string Name;
+	/// Optional info about mod
+	const ModInfo* Info;
+	/// Offset that mod use is common sets
+	size_t Offset;
+	/// Maximum size allowed by mod in common sets
+	size_t Size;
+};
 
 /**
  * Contains all the game-specific static data that never changes
@@ -148,10 +164,13 @@ private:
 	std::vector<std::vector<int> > _alienItemLevels;
 	std::vector<SDL_Color> _transparencies;
 	int _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder, _invListOrder;
-	size_t _modOffset;
+	std::vector<ModData> _modData;
+	ModData* _modCurrent;
 	SDL_Color *_statePalette;
 	std::vector<std::string> _psiRequirements; // it's a cache for psiStrengthEval
 
+	/// Loads a ruleset from a YAML file that have basic resources configuration.
+	void loadResourceConfigFile(const std::string &filename);
 	/// Loads a ruleset from a YAML file.
 	void loadFile(const std::string &filename);
 	/// Loads a ruleset element.
@@ -171,7 +190,7 @@ private:
 	/// Creates a transparency lookup table for a given palette.
 	void createTransparencyLUT(Palette *pal);
 	/// Loads a specified mod content.
-	void loadMod(const std::vector<std::string> &rulesetFiles, size_t modIdx);
+	void loadMod(const std::vector<std::string> &rulesetFiles);
 	/// Loads resources from vanilla.
 	void loadVanillaResources();
 	/// Loads resources from extra rulesets.

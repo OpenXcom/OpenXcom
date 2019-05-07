@@ -34,6 +34,7 @@ private:
 	bool _isMaster;
 	int _reservedSpace;
 	std::string _requiredExtendedVersion;
+	std::string _resourceConfigFile;
 	std::vector<std::string> _externalResourceDirs;
 public:
 	/// Creates default metadata for a mod at the specified path.
@@ -65,6 +66,8 @@ public:
 	void setReservedSpace(int reservedSpace);
 	/// Gets the OXCE version required by this mod.
 	const std::string &getRequiredExtendedVersion() const;
+	/// Gets ruleset file where are defined based resosruces like required original game data.
+	std::string getResourceConfigFile() const;
 	/// Gets the list of external resource dirs to load for this mod.
 	const std::vector<std::string> &getExternalResourceDirs() const;
 };
