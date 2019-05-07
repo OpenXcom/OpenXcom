@@ -763,6 +763,31 @@ void Mod::loadSoundOffset(const std::string &parent, int& sound, const YAML::Nod
 }
 
 /**
+ * Gets the mod offset array for a certain sound.
+ */
+void Mod::loadSoundOffset(const std::string &parent, std::vector<int>& sounds, const YAML::Node &node, const std::string &set) const
+{
+	if (node)
+	{
+		int maxShared = getSoundSet(set)->getMaxSharedSounds();
+		sounds.clear();
+		if (node.IsSequence())
+		{
+			for (YAML::const_iterator i = node.begin(); i != node.end(); ++i)
+			{
+				sounds.push_back(-1);
+				loadOffsetNode(parent, sounds.back(), *i, maxShared, 1);
+			}
+		}
+		else
+		{
+			sounds.push_back(-1);
+			loadOffsetNode(parent, sounds.back(), node, maxShared, 1);
+		}
+	}
+}
+
+/**
  * Returns the appropriate mod-based offset for a generic ID.
  * If the ID is bigger than the max, the mod offset is applied.
  * @param id Numeric ID.

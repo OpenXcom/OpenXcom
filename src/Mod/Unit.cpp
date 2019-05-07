@@ -73,23 +73,7 @@ void Unit::load(const YAML::Node &node, Mod *mod)
 	{
 		_builtInWeapons.push_back(node["builtInWeapons"].as<std::vector<std::string> >());
 	}
-	if (node["deathSound"])
-	{
-		_deathSound.clear();
-		if (node["deathSound"].IsSequence())
-		{
-			for (YAML::const_iterator i = node["deathSound"].begin(); i != node["deathSound"].end(); ++i)
-			{
-				_deathSound.push_back(-1);
-				mod->loadSoundOffset(_type, _deathSound.back(), *i, "BATTLE.CAT");
-			}
-		}
-		else
-		{
-			_deathSound.push_back(-1);
-			mod->loadSoundOffset(_type, _deathSound.back(), node["deathSound"], "BATTLE.CAT");
-		}
-	}
+	mod->loadSoundOffset(_type, _deathSound, node["deathSound"], "BATTLE.CAT");
 	mod->loadSoundOffset(_type, _aggroSound, node["aggroSound"], "BATTLE.CAT");
 	mod->loadSoundOffset(_type, _moveSound, node["moveSound"], "BATTLE.CAT");
 }

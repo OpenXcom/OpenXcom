@@ -277,6 +277,8 @@ public:
 	void loadSpriteOffset(const std::string &parent, int& sprite, const YAML::Node &node, const std::string &set, int multipler = 1) const;
 	/// Gets the mod offset for a certain sound.
 	void loadSoundOffset(const std::string &parent, int& sound, const YAML::Node &node, const std::string &set) const;
+	/// Gets the mod offset array for a certain sound.
+	void loadSoundOffset(const std::string &parent, std::vector<int>& sounds, const YAML::Node &node, const std::string &set) const;
 	/// Gets the mod offset for a generic value.
 	int getOffset(int id, int max) const;
 
