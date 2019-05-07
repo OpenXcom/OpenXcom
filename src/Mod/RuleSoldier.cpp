@@ -76,12 +76,14 @@ void RuleSoldier::load(const YAML::Node &node, Mod *mod)
 		{
 			for (YAML::const_iterator i = node["deathMale"].begin(); i != node["deathMale"].end(); ++i)
 			{
-				_deathSoundMale.push_back(mod->getSoundOffset(i->as<int>(), "BATTLE.CAT"));
+				_deathSoundMale.push_back(-1);
+				mod->loadSoundOffset(_type, _deathSoundMale.back(), *i, "BATTLE.CAT");
 			}
 		}
 		else
 		{
-			_deathSoundMale.push_back(mod->getSoundOffset(node["deathMale"].as<int>(), "BATTLE.CAT"));
+			_deathSoundMale.push_back(-1);
+			mod->loadSoundOffset(_type, _deathSoundMale.back(), node["deathMale"], "BATTLE.CAT");
 		}
 	}
 	if (node["deathFemale"])
@@ -91,12 +93,14 @@ void RuleSoldier::load(const YAML::Node &node, Mod *mod)
 		{
 			for (YAML::const_iterator i = node["deathFemale"].begin(); i != node["deathFemale"].end(); ++i)
 			{
-				_deathSoundFemale.push_back(mod->getSoundOffset(i->as<int>(), "BATTLE.CAT"));
+				_deathSoundFemale.push_back(-1);
+				mod->loadSoundOffset(_type, _deathSoundFemale.back(), *i, "BATTLE.CAT");
 			}
 		}
 		else
 		{
-			_deathSoundFemale.push_back(mod->getSoundOffset(node["deathFemale"].as<int>(), "BATTLE.CAT"));
+			_deathSoundFemale.push_back(-1);
+			mod->loadSoundOffset(_type, _deathSoundFemale.back(), node["deathFemale"], "BATTLE.CAT");
 		}
 	}
 

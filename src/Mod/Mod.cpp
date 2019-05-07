@@ -660,19 +660,92 @@ int Mod::getModOffset() const
 }
 
 /**
+ * Get offset and index for sound set or sprite set.
+ */
+void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Node &node, size_t shared, size_t multipler) const
+{
+	assert(_modCurrent);
+	const ModData* curr = _modCurrent;
+	if (node.IsScalar())
+	{
+		offset = node.as<int>();
+	}
+	else if (node.IsMap())
+	{
+		offset = node["index"].as<int>();
+		std::string mod = node["mod"].as<std::string>();
+		if (mod == "master")
+		{
+			curr = &_modData.at(0);
+		}
+		else if (mod == "current")
+		{
+			//nothing
+		}
+		else
+		{
+			const ModData* n = 0;
+			for (size_t i = 0; i < _modData.size(); ++i)
+			{
+				const ModData& d = _modData[i];
+				if (d.Name == mod)
+				{
+					n = &d;
+					break;
+				}
+			}
+
+			if (n)
+			{
+				curr = n;
+			}
+			else
+			{
+				std::ostringstream err;
+				err << "Error for '" << parent << "': unknown mod '" << mod << "' used";
+				throw Exception(err.str());
+			}
+		}
+	}
+
+	if (offset < -1)
+	{
+		std::ostringstream err;
+		err << "Error for '" << parent << "': offset '" << offset << "' have incorrect value";
+		throw Exception(err.str());
+	}
+	else if (offset == -1)
+	{
+		//ok
+	}
+	else
+	{
+		int f = offset;
+		f *= multipler;
+		if ((size_t)f > curr->Size)
+		{
+			std::ostringstream err;
+			err << "Error for '" << parent << "': offset '" << offset << "' excess mod size limit " << (curr->Size / multipler);
+			throw Exception(err.str());
+		}
+		if ((size_t)f >= shared)
+			f += curr->Offset;
+		offset = f;
+	}
+}
+
+/**
  * Returns the appropriate mod-based offset for a sprite.
  * If the ID is bigger than the surfaceset contents, the mod offset is applied.
  * @param sprite Numeric ID of the sprite.
  * @param set Name of the surfaceset to lookup.
  */
-int Mod::getSpriteOffset(int sprite, const std::string& set) const
+void Mod::loadSpriteOffset(const std::string &parent, int& sprite, const YAML::Node &node, const std::string &set, int multipler) const
 {
-	assert(_modCurrent);
-	std::map<std::string, SurfaceSet*>::const_iterator i = _sets.find(set);
-	if (i != _sets.end() && sprite >= (int)i->second->getTotalFrames())
-		return sprite + _modCurrent->Offset;
-	else
-		return sprite;
+	if (node)
+	{
+		loadOffsetNode(parent, sprite, node, getRule(set, "Sprite Set", _sets, true)->getMaxSharedFrames(), multipler);
+	}
 }
 
 /**
@@ -681,14 +754,12 @@ int Mod::getSpriteOffset(int sprite, const std::string& set) const
  * @param sound Numeric ID of the sound.
  * @param set Name of the soundset to lookup.
  */
-int Mod::getSoundOffset(int sound, const std::string& set) const
+void Mod::loadSoundOffset(const std::string &parent, int& sound, const YAML::Node &node, const std::string &set) const
 {
-	assert(_modCurrent);
-	std::map<std::string, SoundSet*>::const_iterator i = _sounds.find(set);
-	if (i != _sounds.end() && sound >= (int)i->second->getTotalSounds())
-		return sound + _modCurrent->Offset;
-	else
-		return sound;
+	if (node)
+	{
+		loadOffsetNode(parent, sound, node, getSoundSet(set)->getMaxSharedSounds(), 1);
+	}
 }
 
 /**
@@ -716,11 +787,23 @@ void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::st
 	_modData.clear();
 	_modData.resize(mods.size());
 
+	std::set<std::string> usedModNames;
+	usedModNames.insert("master");
+	usedModNames.insert("current");
+
+
 	// calculated offsets and other things for all mods
 	size_t offset = 0;
 	for (size_t i = 0; mods.size() > i; ++i)
 	{
 		const std::string& name = mods[i].first;
+		if (usedModNames.insert(name).second == false)
+		{
+			std::ostringstream ss;
+			ss << "failed to load '" << name << "'" << std::endl
+				<< "this mod name is already used";
+			throw Exception(ss.str());
+		}
 		std::map<std::string, ModInfo>::const_iterator it = Options::getModInfos().find(name);
 		if (it == Options::getModInfos().end())
 		{
@@ -1199,7 +1282,7 @@ void Mod::loadFile(const std::string &filename)
 			// doesn't support modIndex
 			if (type == "TEXTURE.DAT")
 				data = &_modData.at(0);
-			extraSprites->load(*i, data->Offset);
+			extraSprites->load(*i, data);
 			_extraSprites[type].push_back(extraSprites);
 		}
 		else if ((*i)["delete"])
@@ -1216,7 +1299,7 @@ void Mod::loadFile(const std::string &filename)
 	{
 		std::string type = (*i)["type"].as<std::string>();
 		ExtraSounds *extraSounds = new ExtraSounds();
-		extraSounds->load(*i, _modCurrent->Offset);
+		extraSounds->load(*i, _modCurrent);
 		_extraSounds.push_back(std::make_pair(type, extraSounds));
 	}
 	for (YAML::const_iterator i = doc["extraStrings"].begin(); i != doc["extraStrings"].end(); ++i)
@@ -2765,6 +2848,56 @@ void Mod::loadVanillaResources()
 	}
 
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
+
+	//update number of shared indexes in surface sets and sound sets
+	{
+		std::string surfaceNames[] =
+		{
+			"BIGOBS.PCK",
+			"FLOOROB.PCK",
+			"HANDOB.PCK",
+			"SMOKE.PCK",
+			"HIT.PCK",
+			"BASEBITS.PCK",
+			"X1.PCK",
+		};
+
+		for (size_t i = 0; i < ARRAYLEN(surfaceNames); ++i)
+		{
+			SurfaceSet* s = _sets[surfaceNames[i]];
+			s->setMaxSharedFrames((int)s->getTotalFrames());
+		}
+		//special case for surface set that is loaded later
+		{
+			SurfaceSet* s = _sets["Projectiles"];
+			s->setMaxSharedFrames(385);
+		}
+		{
+			SurfaceSet* s = _sets["UnderwaterProjectiles"];
+			s->setMaxSharedFrames(385);
+		}
+	}
+	{
+		std::string soundNames[] =
+		{
+			"BATTLE.CAT",
+			"GEO.CAT",
+		};
+
+		for (size_t i = 0; i < ARRAYLEN(soundNames); ++i)
+		{
+			SoundSet* s = _sounds[soundNames[i]];
+			s->setMaxSharedSounds((int)s->getTotalSounds());
+		}
+		//case for underwater surface
+		{
+			SoundSet* s = _sounds["BATTLE2.CAT"];
+			if (s)
+			{
+				s->setMaxSharedSounds((int)s->getTotalSounds());
+			}
+		}
+	}
 }
 
 /**

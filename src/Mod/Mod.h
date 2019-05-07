@@ -268,12 +268,15 @@ public:
 	Sound *getSoundByDepth(unsigned int depth, unsigned int sound, bool error = true) const;
 	/// Gets list of LUT data.
 	const std::vector<std::vector<Uint8> > *getLUTs() const;
+
 	/// Gets the mod offset.
 	int getModOffset() const;
+	/// Get offset and index for sound set or sprite set.
+	void loadOffsetNode(const std::string &parent, int& offset, const YAML::Node &node, size_t shared, size_t multipler) const;
 	/// Gets the mod offset for a certain sprite.
-	int getSpriteOffset(int sprite, const std::string &set) const;
+	void loadSpriteOffset(const std::string &parent, int& sprite, const YAML::Node &node, const std::string &set, int multipler = 1) const;
 	/// Gets the mod offset for a certain sound.
-	int getSoundOffset(int sound, const std::string &set) const;
+	void loadSoundOffset(const std::string &parent, int& sound, const YAML::Node &node, const std::string &set) const;
 	/// Gets the mod offset for a generic value.
 	int getOffset(int id, int max) const;
 

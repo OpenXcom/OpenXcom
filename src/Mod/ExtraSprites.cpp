@@ -23,6 +23,7 @@
 #include "../Engine/FileMap.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Exception.h"
+#include "Mod.h"
 
 namespace OpenXcom
 {
@@ -30,7 +31,7 @@ namespace OpenXcom
 /**
  * Creates a blank set of extra sprite data.
  */
-ExtraSprites::ExtraSprites() : _width(320), _height(200), _singleImage(false), _modIndex(0), _subX(0), _subY(0), _loaded(false)
+ExtraSprites::ExtraSprites() : _current(0), _width(320), _height(200), _singleImage(false), _subX(0), _subY(0), _loaded(false)
 {
 }
 
@@ -46,7 +47,7 @@ ExtraSprites::~ExtraSprites()
  * @param node YAML node.
  * @param modIndex the internal index of the associated mod.
  */
-void ExtraSprites::load(const YAML::Node &node, int modIndex)
+void ExtraSprites::load(const YAML::Node &node, const ModData* current)
 {
 	_type = node["type"].as<std::string>(_type);
 	_sprites = node["files"].as< std::map<int, std::string> >(_sprites);
@@ -55,7 +56,7 @@ void ExtraSprites::load(const YAML::Node &node, int modIndex)
 	_singleImage = node["singleImage"].as<bool>(_singleImage);
 	_subX = node["subX"].as<int>(_subX);
 	_subY = node["subY"].as<int>(_subY);
-	_modIndex = modIndex;
+	_current = current;
 }
 
 /**
@@ -101,15 +102,6 @@ int ExtraSprites::getHeight() const
 bool ExtraSprites::getSingleImage() const
 {
 	return _singleImage;
-}
-
-/**
- * Gets the mod index for this external sprite set.
- * @return The mod index.
- */
-int ExtraSprites::getModIndex() const
-{
-	return _modIndex;
 }
 
 /**
@@ -193,11 +185,9 @@ SurfaceSet *ExtraSprites::loadSurfaceSet(SurfaceSet *set)
 	_loaded = true;
 
 	bool subdivision = (_subX != 0 && _subY != 0);
-	bool adding = false;
 	if (set == 0)
 	{
 		Log(LOG_VERBOSE) << "Creating new surface set: " << _type;
-		adding = true;
 		if (subdivision)
 		{
 			set = new SurfaceSet(_subX, _subY);
@@ -228,7 +218,7 @@ SurfaceSet *ExtraSprites::loadSurfaceSet(SurfaceSet *set)
 				try
 				{
 					const std::string &fullPath = FileMap::getFilePath(fileName + *k);
-					getFrame(set, offset, adding)->loadImage(fullPath);
+					getFrame(set, offset)->loadImage(fullPath);
 					offset++;
 				}
 				catch (Exception &e)
@@ -242,8 +232,7 @@ SurfaceSet *ExtraSprites::loadSurfaceSet(SurfaceSet *set)
 			const std::string &fullPath = FileMap::getFilePath(fileName);
 			if (!subdivision)
 			{
-				// TODO: Should we be passing "adding" here?
-				getFrame(set, startFrame, false)->loadImage(fullPath);
+				getFrame(set, startFrame)->loadImage(fullPath);
 			}
 			else
 			{
@@ -259,8 +248,7 @@ SurfaceSet *ExtraSprites::loadSurfaceSet(SurfaceSet *set)
 				{
 					for (int x = 0; x != xDivision; ++x)
 					{
-						Surface* frame = getFrame(set, offset, adding);
-						frame->clear();
+						Surface* frame = getFrame(set, offset);
 						// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
 						temp.blitNShade(frame, 0 - (x * _subX), 0 - (y * _subY), 0);
 						++offset;
@@ -272,25 +260,30 @@ SurfaceSet *ExtraSprites::loadSurfaceSet(SurfaceSet *set)
 	return set;
 }
 
-Surface *ExtraSprites::getFrame(SurfaceSet *set, int index, bool adding) const
+Surface *ExtraSprites::getFrame(SurfaceSet *set, int index) const
 {
-	Surface *frame = set->getFrame(index);
+	int indexWithOffset = index;
+	if (indexWithOffset >= set->getMaxSharedFrames())
+	{
+		if ((size_t)indexWithOffset >= _current->Size)
+		{
+			std::ostringstream err;
+			err << "ExtraSprites '" << _type << "' frame '" << indexWithOffset << "' excess mod '"<< _current->Name <<"' size limit " << _current->Size;
+			throw Exception(err.str());
+		}
+		indexWithOffset += _current->Offset;
+	}
+
+	Surface *frame = set->getFrame(indexWithOffset);
 	if (frame)
 	{
-		Log(LOG_VERBOSE) << "Replacing frame: " << index;
+		Log(LOG_VERBOSE) << "Replacing frame: " << index << ", using index: " << indexWithOffset;
+		frame->clear();
 	}
 	else
 	{
-		if (adding)
-		{
-			Log(LOG_VERBOSE) << "Adding frame: " << index;
-			frame = set->addFrame(index);
-		}
-		else
-		{
-			Log(LOG_VERBOSE) << "Adding frame: " << index << ", using index: " << index + _modIndex;
-			frame = set->addFrame(index + _modIndex);
-		}
+		Log(LOG_VERBOSE) << "Adding frame: " << index << ", using index: " << indexWithOffset;
+		frame = set->addFrame(indexWithOffset);
 	}
 	return frame;
 }

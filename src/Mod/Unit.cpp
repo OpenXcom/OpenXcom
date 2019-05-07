@@ -80,22 +80,18 @@ void Unit::load(const YAML::Node &node, Mod *mod)
 		{
 			for (YAML::const_iterator i = node["deathSound"].begin(); i != node["deathSound"].end(); ++i)
 			{
-				_deathSound.push_back(mod->getSoundOffset(i->as<int>(), "BATTLE.CAT"));
+				_deathSound.push_back(-1);
+				mod->loadSoundOffset(_type, _deathSound.back(), *i, "BATTLE.CAT");
 			}
 		}
 		else
 		{
-			_deathSound.push_back(mod->getSoundOffset(node["deathSound"].as<int>(), "BATTLE.CAT"));
+			_deathSound.push_back(-1);
+			mod->loadSoundOffset(_type, _deathSound.back(), node["deathSound"], "BATTLE.CAT");
 		}
 	}
-	if (node["aggroSound"])
-	{
-		_aggroSound = mod->getSoundOffset(node["aggroSound"].as<int>(_aggroSound), "BATTLE.CAT");
-	}
-	if (node["moveSound"])
-	{
-		_moveSound = mod->getSoundOffset(node["moveSound"].as<int>(_moveSound), "BATTLE.CAT");
-	}
+	mod->loadSoundOffset(_type, _aggroSound, node["aggroSound"], "BATTLE.CAT");
+	mod->loadSoundOffset(_type, _moveSound, node["moveSound"], "BATTLE.CAT");
 }
 
 /**
