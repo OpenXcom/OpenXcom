@@ -803,6 +803,44 @@ int Mod::getOffset(int id, int max) const
 }
 
 /**
+ * Helper function used to disable buged mod and throw exception to quit game
+ * @param modId Mod id
+ * @param error Error message
+ */
+static void throwModOnErrorHelper(const std::string& modId, const std::string& error)
+{
+	std::ostringstream errorStream;
+
+	errorStream << "failed to load '"
+		<< Options::getModInfos().at(modId).getName()
+		<< "'";
+
+	if (!Options::debug)
+	{
+		Log(LOG_WARNING) << "disabling mod with invalid ruleset: " << modId;
+		std::vector<std::pair<std::string, bool> >::iterator it =
+			std::find(Options::mods.begin(), Options::mods.end(),
+				std::pair<std::string, bool>(modId, true));
+		if (it == Options::mods.end())
+		{
+			Log(LOG_ERROR) << "cannot find broken mod in mods list: " << modId;
+			Log(LOG_ERROR) << "clearing mods list";
+			Options::mods.clear();
+		}
+		else
+		{
+			it->second = false;
+		}
+		Options::save();
+
+		errorStream << "; mod disabled";
+	}
+	errorStream << std::endl << error;
+
+	throw Exception(errorStream.str());
+}
+
+/**
  * Loads a list of mods specified in the options.
  * @param mods List of <modId, rulesetFiles> pairs.
  */
@@ -821,23 +859,16 @@ void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::st
 	size_t offset = 0;
 	for (size_t i = 0; mods.size() > i; ++i)
 	{
-		const std::string& name = mods[i].first;
-		if (usedModNames.insert(name).second == false)
+		const std::string& modId = mods[i].first;
+		if (usedModNames.insert(modId).second == false)
 		{
-			std::ostringstream ss;
-			ss << "failed to load '" << name << "'" << std::endl
-				<< "this mod name is already used";
-			throw Exception(ss.str());
+			throwModOnErrorHelper(modId, "this mod name is already used");
 		}
-		std::map<std::string, ModInfo>::const_iterator it = Options::getModInfos().find(name);
-		if (it == Options::getModInfos().end())
-		{
-			throw Exception("failed to load '" + name + "' beceuse of lack of mod metadata");
-		}
-		size_t size = it->second.getReservedSpace();
-		_modData[i].Name = name;
+		const ModInfo *modInfo = &Options::getModInfos().at(modId);
+		size_t size = modInfo->getReservedSpace();
+		_modData[i].Name = modId;
 		_modData[i].Offset = 1000 * offset;
-		_modData[i].Info = &it->second;
+		_modData[i].Info = modInfo;
 		_modData[i].Size = 1000 * size;
 		offset += size;
 	}
@@ -871,34 +902,7 @@ void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::st
 		catch (Exception &e)
 		{
 			const std::string &modId = mods[i].first;
-			std::ostringstream ss;
-			ss << "failed to load '"
-				<< Options::getModInfos().at(modId).getName()
-				<< "'";
-
-			if (!Options::debug)
-			{
-				Log(LOG_WARNING) << "disabling mod with invalid ruleset: " << modId;
-				std::vector<std::pair<std::string, bool> >::iterator it =
-					std::find(Options::mods.begin(), Options::mods.end(),
-						std::pair<std::string, bool>(modId, true));
-				if (it == Options::mods.end())
-				{
-					Log(LOG_ERROR) << "cannot find broken mod in mods list: " << modId;
-					Log(LOG_ERROR) << "clearing mods list";
-					Options::mods.clear();
-				}
-				else
-				{
-					it->second = false;
-				}
-				Options::save();
-
-				ss << "; mod disabled";
-			}
-
-			ss << std::endl << e.what();
-			throw Exception(ss.str());
+			throwModOnErrorHelper(modId, e.what());
 		}
 	}
 
