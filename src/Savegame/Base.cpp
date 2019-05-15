@@ -1635,7 +1635,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 		{
 			if ((*i)->isInPsiTraining())
 			{
-				(*i)->setPsiTraining();
+				(*i)->setPsiTraining(false);
 				--toRemove;
 			}
 		}
@@ -1766,6 +1766,41 @@ void Base::cleanupDefenses(bool reclaimItems)
 		delete *i;
 		i = _vehicles.erase(i);
 	}
+}
+
+/**
+ * Removes the craft and all associations from the base (does not destroy it!).
+ * @param craft Pointer to craft.
+ * @param unload Unload craft contents before removing.
+ */
+std::vector<Craft*>::iterator Base::removeCraft(Craft *craft, bool unload)
+{
+	// Unload craft
+	if (unload)
+	{
+		craft->unload(_mod);
+	}
+
+	// Clear hangar
+	for (std::vector<BaseFacility*>::iterator f = _facilities.begin(); f != _facilities.end(); ++f)
+	{
+		if ((*f)->getCraft() == craft)
+		{
+			(*f)->setCraft(0);
+			break;
+		}
+	}
+
+	// Remove craft
+	std::vector<Craft*>::iterator c;
+	for (c = _crafts.begin(); c != _crafts.end(); ++c)
+	{
+		if (*c == craft)
+		{
+			return _crafts.erase(c);
+		}
+	}
+	return c;
 }
 
 }

@@ -571,11 +571,11 @@ bool Soldier::isInPsiTraining() const
 }
 
 /**
- * toggles whether or not the unit is in psi training
+ * changes whether or not the unit is in psi training
  */
-void Soldier::setPsiTraining()
+void Soldier::setPsiTraining(bool psi)
 {
-	_psiTraining = !_psiTraining;
+	_psiTraining = psi;
 }
 
 /**

@@ -815,8 +815,8 @@ void GeoscapeState::time5Seconds()
 						}
 					}
 				}
+				j = (*i)->removeCraft(*j, false);
 				delete *j;
-				j = (*i)->getCrafts()->erase(j);
 				continue;
 			}
 			if ((*j)->getDestination() != 0)

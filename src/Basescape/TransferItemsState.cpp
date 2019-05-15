@@ -342,10 +342,7 @@ void TransferItemsState::completeTransfer()
 				{
 					if (*s == i->rule)
 					{
-						 if ((*s)->isInPsiTraining())
-						 {
-							 (*s)->setPsiTraining();
-						 }
+						(*s)->setPsiTraining(false);
 						t = new Transfer(time);
 						t->setSoldier(*s);
 						_baseTo->getTransfers()->push_back(t);
@@ -361,8 +358,11 @@ void TransferItemsState::completeTransfer()
 				{
 					if ((*s)->getCraft() == craft)
 					{
-						if ((*s)->isInPsiTraining()) (*s)->setPsiTraining();
-						if (craft->getStatus() == "STR_OUT") _baseTo->getSoldiers()->push_back(*s);
+						(*s)->setPsiTraining(false);
+						if (craft->getStatus() == "STR_OUT")
+						{
+							_baseTo->getSoldiers()->push_back(*s);
+						}
 						else
 						{
 							t = new Transfer(time);
@@ -378,45 +378,28 @@ void TransferItemsState::completeTransfer()
 				}
 
 				// Transfer craft
-				for (std::vector<Craft*>::iterator c = _baseFrom->getCrafts()->begin(); c != _baseFrom->getCrafts()->end(); ++c)
+				_baseFrom->removeCraft(craft, false);
+				if (craft->getStatus() == "STR_OUT")
 				{
-					if (*c == craft)
+					bool returning = (craft->getDestination() == (Target*)craft->getBase());
+					_baseTo->getCrafts()->push_back(craft);
+					craft->setBase(_baseTo, false);
+					if (craft->getFuel() <= craft->getFuelLimit(_baseTo))
 					{
-						if (craft->getStatus() == "STR_OUT")
-						{
-							bool returning = (craft->getDestination() == (Target*)craft->getBase());
-							_baseTo->getCrafts()->push_back(craft);
-							craft->setBase(_baseTo, false);
-							if (craft->getFuel() <= craft->getFuelLimit(_baseTo))
-							{
-								craft->setLowFuel(true);
-								craft->returnToBase();
-							}
-							else if (returning)
-							{
-								craft->setLowFuel(false);
-								craft->returnToBase();
-							}
-						}
-						else
-						{
-							t = new Transfer(time);
-							t->setCraft(*c);
-							_baseTo->getTransfers()->push_back(t);
-						}
-						// Clear hangar
-						for (std::vector<BaseFacility*>::iterator f = _baseFrom->getFacilities()->begin(); f != _baseFrom->getFacilities()->end(); ++f)
-						{
-							if ((*f)->getCraft() == *c)
-							{
-								(*f)->setCraft(0);
-								break;
-							}
-						}
-
-						_baseFrom->getCrafts()->erase(c);
-						break;
+						craft->setLowFuel(true);
+						craft->returnToBase();
 					}
+					else if (returning)
+					{
+						craft->setLowFuel(false);
+						craft->returnToBase();
+					}
+				}
+				else
+				{
+					t = new Transfer(time);
+					t->setCraft(craft);
+					_baseTo->getTransfers()->push_back(t);
 				}
 				break;
 			case TRANSFER_SCIENTIST:

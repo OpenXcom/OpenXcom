@@ -213,6 +213,8 @@ public:
 	void destroyFacility(std::vector<BaseFacility*>::iterator facility);
 	/// Cleans up the defenses vector and optionally reclaims the tanks and their ammo.
 	void cleanupDefenses(bool reclaimItems);
+	/// Removes a craft from the base.
+	std::vector<Craft*>::iterator removeCraft(Craft *craft, bool unload);
 };
 
 }

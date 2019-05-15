@@ -798,7 +798,6 @@ void DebriefingState::prepareDebriefing()
 	bool aborted = battle->isAborted();
 	bool success = !aborted || battle->allObjectivesDestroyed();
 	Craft *craft = 0;
-	std::vector<Craft*>::iterator craftIterator;
 	Base *base = 0;
 	std::string target;
 
@@ -872,7 +871,6 @@ void DebriefingState::prepareDebriefing()
 				}
 				craft = (*j);
 				base = (*i);
-				craftIterator = j;
 				if (craft->getDestination() != 0)
 				{
 					_missionStatistics->markerName = craft->getDestination()->getMarkerName();
@@ -1303,10 +1301,10 @@ void DebriefingState::prepareDebriefing()
 		// Since this is not a base defense mission, we can safely erase the craft,
 		// without worrying it's vehicles' destructor calling double (on base defense missions
 		// all vehicle object in the craft is also referenced by base->getVehicles() !!)
+		base->removeCraft(craft, false);
 		delete craft;
 		craft = 0; // To avoid a crash down there!!
 		lostCraft = true;
-		base->getCrafts()->erase(craftIterator);
 		playersSurvived = 0; // assuming you aborted and left everyone behind
 		success = false;
 	}

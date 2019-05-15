@@ -382,29 +382,7 @@ void SellState::btnOkClick(Action *)
 				break;
 			case TRANSFER_CRAFT:
 				craft = (Craft*)i->rule;
-
-				// Unload craft
-				craft->unload(_game->getMod());
-
-				// Clear hangar
-				for (std::vector<BaseFacility*>::iterator f = _base->getFacilities()->begin(); f != _base->getFacilities()->end(); ++f)
-				{
-					if ((*f)->getCraft() == craft)
-					{
-						(*f)->setCraft(0);
-						break;
-					}
-				}
-
-				// Remove craft
-				for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
-				{
-					if (*c == craft)
-					{
-						_base->getCrafts()->erase(c);
-						break;
-					}
-				}
+				_base->removeCraft(craft, true);
 				delete craft;
 				break;
 			case TRANSFER_SCIENTIST:

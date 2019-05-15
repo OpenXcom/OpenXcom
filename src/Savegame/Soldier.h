@@ -131,7 +131,7 @@ public:
 	/// Returns whether the unit is in psi training or not
 	bool isInPsiTraining() const;
 	/// set the psi training status
-	void setPsiTraining();
+	void setPsiTraining(bool psi);
 	/// returns this soldier's psionic skill improvement score for this month.
 	int getImprovement() const;
 	/// returns this soldier's psionic strength improvement score for this month.
