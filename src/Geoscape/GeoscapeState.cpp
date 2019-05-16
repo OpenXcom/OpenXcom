@@ -815,8 +815,9 @@ void GeoscapeState::time5Seconds()
 						}
 					}
 				}
-				j = (*i)->removeCraft(*j, false);
-				delete *j;
+				Craft *craft = *j;
+				j = (*i)->removeCraft(craft, false);
+				delete craft;
 				continue;
 			}
 			if ((*j)->getDestination() != 0)

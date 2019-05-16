@@ -196,8 +196,9 @@ void Production::startItem(Base * b, SavedGame * g, const Mod *m) const
 			{
 				if ((*c)->getRules()->getType() == iter->first)
 				{
-					b->removeCraft(*c, true);
-					delete *c;
+					Craft *craft = *c;
+					b->removeCraft(craft, true);
+					delete craft;
 					break;
 				}
 			}
