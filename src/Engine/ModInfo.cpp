@@ -83,10 +83,6 @@ bool               ModInfo::isMaster()       const { return _isMaster; }
 const std::string &ModInfo::getRequiredExtendedVersion() const { return _requiredExtendedVersion; }
 std::string        ModInfo::getResourceConfigFile() const { return _path + "/" + _resourceConfigFile; }
 int                ModInfo::getReservedSpace()        const { return _reservedSpace;     }
-void ModInfo::setReservedSpace(int reservedSpace)
-{
-	_reservedSpace = reservedSpace;
-}
 
 /**
  * Checks if a given mod can be activated.

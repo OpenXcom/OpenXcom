@@ -62,8 +62,6 @@ public:
 	bool canActivate(const std::string &curMaster) const;
 	/// Gets size of mod, bigger mod reserve more values in common colections/surfacesets.
 	int getReservedSpace() const;
-	/// Sets mod size (DO NOT use this method outside Options::updateReservedSpace()).
-	void setReservedSpace(int reservedSpace);
 	/// Gets the OXCE version required by this mod.
 	const std::string &getRequiredExtendedVersion() const;
 	/// Gets ruleset file where are defined based resosruces like required original game data.
