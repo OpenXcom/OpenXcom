@@ -2908,6 +2908,7 @@ void Mod::loadVanillaResources()
 			"HIT.PCK",
 			"BASEBITS.PCK",
 			"X1.PCK",
+			"INTICON.PCK",
 		};
 
 		for (size_t i = 0; i < ARRAYLEN(surfaceNames); ++i)
@@ -2923,6 +2924,10 @@ void Mod::loadVanillaResources()
 		{
 			SurfaceSet* s = _sets["UnderwaterProjectiles"];
 			s->setMaxSharedFrames(385);
+		}
+		{
+			SurfaceSet* s = _sets["GlobeMarkers"];
+			s->setMaxSharedFrames(8);
 		}
 	}
 	{
