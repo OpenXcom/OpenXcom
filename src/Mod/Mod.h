@@ -272,7 +272,7 @@ public:
 	/// Gets the mod offset.
 	int getModOffset() const;
 	/// Get offset and index for sound set or sprite set.
-	void loadOffsetNode(const std::string &parent, int& offset, const YAML::Node &node, size_t shared, size_t multipler) const;
+	void loadOffsetNode(const std::string &parent, int& offset, const YAML::Node &node, int shared, size_t multipler) const;
 	/// Gets the mod offset for a certain sprite.
 	void loadSpriteOffset(const std::string &parent, int& sprite, const YAML::Node &node, const std::string &set, int multipler = 1) const;
 	/// Gets the mod offset for a certain sound.

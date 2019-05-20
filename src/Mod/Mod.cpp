@@ -672,7 +672,7 @@ int Mod::getModOffset() const
  * @param shared Max offset limit that is shared for every mod
  * @param multipler Value used by `projectle` surface set to convert projectle offset to index offset in surface.
  */
-void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Node &node, size_t shared, size_t multipler) const
+void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Node &node, int shared, size_t multipler) const
 {
 	assert(_modCurrent);
 	const ModData* curr = _modCurrent;
@@ -738,7 +738,7 @@ void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Nod
 			err << "Error for '" << parent << "': offset '" << offset << "' exceeds mod size limit " << (curr->Size / multipler);
 			throw Exception(err.str());
 		}
-		if ((size_t)f >= shared)
+		if (f >= shared)
 			f += curr->Offset;
 		offset = f;
 	}
