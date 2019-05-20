@@ -265,13 +265,13 @@ Surface *ExtraSprites::getFrame(SurfaceSet *set, int index) const
 	int indexWithOffset = index;
 	if (indexWithOffset >= set->getMaxSharedFrames())
 	{
-		if ((size_t)indexWithOffset >= _current->Size)
+		if ((size_t)indexWithOffset >= _current->size)
 		{
 			std::ostringstream err;
-			err << "ExtraSprites '" << _type << "' frame '" << indexWithOffset << "' exceeds mod '"<< _current->Name <<"' size limit " << _current->Size;
+			err << "ExtraSprites '" << _type << "' frame '" << indexWithOffset << "' exceeds mod '"<< _current->name <<"' size limit " << _current->size;
 			throw Exception(err.str());
 		}
-		indexWithOffset += _current->Offset;
+		indexWithOffset += _current->offset;
 	}
 
 	Surface *frame = set->getFrame(indexWithOffset);

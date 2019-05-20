@@ -87,13 +87,13 @@ struct StatAdjustment;
 struct ModData
 {
 	/// Mod name
-	std::string Name;
+	std::string name;
 	/// Optional info about mod
-	const ModInfo* Info;
+	const ModInfo* info;
 	/// Offset that mod use is common sets
-	size_t Offset;
+	size_t offset;
 	/// Maximum size allowed by mod in common sets
-	size_t Size;
+	size_t size;
 };
 
 /**

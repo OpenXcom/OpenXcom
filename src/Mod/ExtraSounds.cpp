@@ -123,13 +123,13 @@ void ExtraSounds::loadSound(SoundSet *set, int index, const std::string &fileNam
 	int indexWithOffset = index;
 	if (indexWithOffset >= set->getMaxSharedSounds())
 	{
-		if ((size_t)indexWithOffset >= _current->Size)
+		if ((size_t)indexWithOffset >= _current->size)
 		{
 			std::ostringstream err;
-			err << "ExtraSounds '" << _type << "' sound '" << indexWithOffset << "' exceeds mod '"<< _current->Name <<"' size limit " << _current->Size;
+			err << "ExtraSounds '" << _type << "' sound '" << indexWithOffset << "' exceeds mod '"<< _current->name <<"' size limit " << _current->size;
 			throw Exception(err.str());
 		}
-		indexWithOffset += _current->Offset;
+		indexWithOffset += _current->offset;
 	}
 
 	const std::string &fullPath = FileMap::getFilePath(fileName);

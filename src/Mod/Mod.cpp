@@ -661,7 +661,7 @@ const std::vector<std::vector<Uint8> > *Mod::getLUTs() const
  */
 int Mod::getModOffset() const
 {
-	return _modCurrent->Offset;
+	return _modCurrent->offset;
 }
 
 /**
@@ -698,7 +698,7 @@ void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Nod
 			for (size_t i = 0; i < _modData.size(); ++i)
 			{
 				const ModData& d = _modData[i];
-				if (d.Name == mod)
+				if (d.name == mod)
 				{
 					n = &d;
 					break;
@@ -732,14 +732,14 @@ void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Nod
 	{
 		int f = offset;
 		f *= multipler;
-		if ((size_t)f > curr->Size)
+		if ((size_t)f > curr->size)
 		{
 			std::ostringstream err;
-			err << "Error for '" << parent << "': offset '" << offset << "' exceeds mod size limit " << (curr->Size / multipler);
+			err << "Error for '" << parent << "': offset '" << offset << "' exceeds mod size limit " << (curr->size / multipler);
 			throw Exception(err.str());
 		}
 		if (f >= shared)
-			f += curr->Offset;
+			f += curr->offset;
 		offset = f;
 	}
 }
@@ -816,7 +816,7 @@ int Mod::getOffset(int id, int max) const
 {
 	assert(_modCurrent);
 	if (id > max)
-		return id + _modCurrent->Offset;
+		return id + _modCurrent->offset;
 	else
 		return id;
 }
@@ -885,10 +885,10 @@ void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::st
 		}
 		const ModInfo *modInfo = &Options::getModInfos().at(modId);
 		size_t size = modInfo->getReservedSpace();
-		_modData[i].Name = modId;
-		_modData[i].Offset = 1000 * offset;
-		_modData[i].Info = modInfo;
-		_modData[i].Size = 1000 * size;
+		_modData[i].name = modId;
+		_modData[i].offset = 1000 * offset;
+		_modData[i].info = modInfo;
+		_modData[i].size = 1000 * size;
 		offset += size;
 	}
 
@@ -896,9 +896,9 @@ void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::st
 	for (size_t i = 0; _modData.size() > i; ++i)
 	{
 		_modCurrent = &_modData.at(0);
-		if (_modCurrent->Info->isMaster())
+		if (_modCurrent->info->isMaster())
 		{
-			std::string path = _modCurrent->Info->getResourceConfigFile();
+			std::string path = _modCurrent->info->getResourceConfigFile();
 			if (CrossPlatform::fileExists(path))
 			{
 				loadResourceConfigFile(path);
