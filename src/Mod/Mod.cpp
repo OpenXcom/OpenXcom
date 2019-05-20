@@ -725,7 +725,7 @@ void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Nod
 		if ((size_t)f > curr->Size)
 		{
 			std::ostringstream err;
-			err << "Error for '" << parent << "': offset '" << offset << "' excess mod size limit " << (curr->Size / multipler);
+			err << "Error for '" << parent << "': offset '" << offset << "' exceeds mod size limit " << (curr->Size / multipler);
 			throw Exception(err.str());
 		}
 		if ((size_t)f >= shared)

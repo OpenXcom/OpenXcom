@@ -268,7 +268,7 @@ Surface *ExtraSprites::getFrame(SurfaceSet *set, int index) const
 		if ((size_t)indexWithOffset >= _current->Size)
 		{
 			std::ostringstream err;
-			err << "ExtraSprites '" << _type << "' frame '" << indexWithOffset << "' excess mod '"<< _current->Name <<"' size limit " << _current->Size;
+			err << "ExtraSprites '" << _type << "' frame '" << indexWithOffset << "' exceeds mod '"<< _current->Name <<"' size limit " << _current->Size;
 			throw Exception(err.str());
 		}
 		indexWithOffset += _current->Offset;

@@ -126,7 +126,7 @@ void ExtraSounds::loadSound(SoundSet *set, int index, const std::string &fileNam
 		if ((size_t)indexWithOffset >= _current->Size)
 		{
 			std::ostringstream err;
-			err << "ExtraSounds '" << _type << "' sound '" << indexWithOffset << "' excess mod '"<< _current->Name <<"' size limit " << _current->Size;
+			err << "ExtraSounds '" << _type << "' sound '" << indexWithOffset << "' exceeds mod '"<< _current->Name <<"' size limit " << _current->Size;
 			throw Exception(err.str());
 		}
 		indexWithOffset += _current->Offset;

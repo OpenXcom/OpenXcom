@@ -193,7 +193,7 @@ Sound *SoundSet::addSound(unsigned int i)
 }
 
 /**
- * Set number of shared sound indexs that are accesable for all mods.
+ * Set number of shared sound indexs that are accessible for all mods.
  */
 void SoundSet::setMaxSharedSounds(int i)
 {
@@ -208,7 +208,7 @@ void SoundSet::setMaxSharedSounds(int i)
 }
 
 /**
- * Gets number of shared sound indexs that are accesable for all mods.
+ * Gets number of shared sound indexs that are accessible for all mods.
  */
 int SoundSet::getMaxSharedSounds() const
 {

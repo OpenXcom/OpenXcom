@@ -50,7 +50,7 @@ void RuleCraftWeapon::load(const YAML::Node &node, Mod *mod)
 		// used in
 		// Surface set (baseOffset):
 		//   BASEBITS.PCK (48)
-		//   INTICONS.PCK (5)
+		//   INTICON.PCK (5)
 		//
 		// Final index in surfaceset is `baseOffset + sprite + (sprite > 5 ? modOffset : 0)`
 		_sprite = mod->getOffset(node["sprite"].as<int>(_sprite), 5);

@@ -59,9 +59,9 @@ public:
 	/// Gets the height of all frames.
 	int getHeight() const;
 
-	/// Set number of shared frame indexs that are accesable for all mods.
+	/// Set number of shared frame indexs that are accessible for all mods.
 	void setMaxSharedFrames(int i);
-	/// Gets number of shared frame indexs that are accesable for all mods.
+	/// Gets number of shared frame indexs that are accessible for all mods.
 	int getMaxSharedFrames() const;
 
 	/// Gets the total frames in the set.

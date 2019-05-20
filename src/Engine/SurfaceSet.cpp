@@ -263,7 +263,7 @@ int SurfaceSet::getHeight() const
 }
 
 /**
- * Set number of shared frame indexs that are accesable for all mods.
+ * Set number of shared frame indexs that are accessible for all mods.
  */
 void SurfaceSet::setMaxSharedFrames(int i)
 {
@@ -278,7 +278,7 @@ void SurfaceSet::setMaxSharedFrames(int i)
 }
 
 /**
- * Gets number of shared frame indexs that are accesable for all mods.
+ * Gets number of shared frame indexs that are accessible for all mods.
  */
 int SurfaceSet::getMaxSharedFrames() const
 {
