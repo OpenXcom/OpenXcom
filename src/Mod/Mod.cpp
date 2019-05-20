@@ -126,6 +126,11 @@ std::string Mod::DEBRIEF_MUSIC_GOOD;
 std::string Mod::DEBRIEF_MUSIC_BAD;
 int Mod::DIFFICULTY_COEFFICIENT[5];
 
+/// Predefined name for first loaded mod that have all original data
+const std::string ModNameMaster = "master";
+/// Predefined name for current mod that is loading rulesets.
+const std::string ModNameCurrent = "current";
+
 void Mod::resetGlobalStatics()
 {
 	DOOR_OPEN = 3;
@@ -679,11 +684,11 @@ void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Nod
 	{
 		offset = node["index"].as<int>();
 		std::string mod = node["mod"].as<std::string>();
-		if (mod == "master")
+		if (mod == ModNameMaster)
 		{
 			curr = &_modData.at(0);
 		}
-		else if (mod == "current")
+		else if (mod == ModNameCurrent)
 		{
 			//nothing
 		}
@@ -865,8 +870,8 @@ void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::st
 	_modData.resize(mods.size());
 
 	std::set<std::string> usedModNames;
-	usedModNames.insert("master");
-	usedModNames.insert("current");
+	usedModNames.insert(ModNameMaster);
+	usedModNames.insert(ModNameCurrent);
 
 
 	// calculated offsets and other things for all mods
