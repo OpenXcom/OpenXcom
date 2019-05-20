@@ -26,7 +26,7 @@ namespace OpenXcom
 
 class Surface;
 class SurfaceSet;
-class ModData;
+struct ModData;
 
 /**
  * For adding a set of extra sprite data to the game.

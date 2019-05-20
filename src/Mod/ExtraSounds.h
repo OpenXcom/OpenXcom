@@ -25,7 +25,7 @@ namespace OpenXcom
 {
 
 class SoundSet;
-class ModData;
+struct ModData;
 
 /**
  * For adding a set of extra sound data to the game.
