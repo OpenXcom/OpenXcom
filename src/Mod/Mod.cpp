@@ -661,6 +661,11 @@ int Mod::getModOffset() const
 
 /**
  * Get offset and index for sound set or sprite set.
+ * @param parent Name of parent node, used for better error message
+ * @param offset Member to load new value.
+ * @param node Node with data
+ * @param shared Max offset limit that is shared for every mod
+ * @param multipler Value used by `projectle` surface set to convert projectle offset to index offset in surface.
  */
 void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Node &node, size_t shared, size_t multipler) const
 {
@@ -737,8 +742,11 @@ void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Nod
 /**
  * Returns the appropriate mod-based offset for a sprite.
  * If the ID is bigger than the surfaceset contents, the mod offset is applied.
- * @param sprite Numeric ID of the sprite.
+ * @param parent Name of parent node, used for better error message
+ * @param sprite Member to load new sprite ID index.
+ * @param node Node with data
  * @param set Name of the surfaceset to lookup.
+ * @param multipler Value used by `projectle` surface set to convert projectle offset to index offset in surface.
  */
 void Mod::loadSpriteOffset(const std::string &parent, int& sprite, const YAML::Node &node, const std::string &set, int multipler) const
 {
@@ -751,7 +759,9 @@ void Mod::loadSpriteOffset(const std::string &parent, int& sprite, const YAML::N
 /**
  * Returns the appropriate mod-based offset for a sound.
  * If the ID is bigger than the soundset contents, the mod offset is applied.
- * @param sound Numeric ID of the sound.
+ * @param parent Name of parent node, used for better error message
+ * @param sound Member to load new sound ID index.
+ * @param node Node with data
  * @param set Name of the soundset to lookup.
  */
 void Mod::loadSoundOffset(const std::string &parent, int& sound, const YAML::Node &node, const std::string &set) const
@@ -764,6 +774,10 @@ void Mod::loadSoundOffset(const std::string &parent, int& sound, const YAML::Nod
 
 /**
  * Gets the mod offset array for a certain sound.
+ * @param parent Name of parent node, used for better error message
+ * @param sounds Member to load new list of sound ID indexes.
+ * @param node Node with data
+ * @param set Name of the soundset to lookup.
  */
 void Mod::loadSoundOffset(const std::string &parent, std::vector<int>& sounds, const YAML::Node &node, const std::string &set) const
 {
