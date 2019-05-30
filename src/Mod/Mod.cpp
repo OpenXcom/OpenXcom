@@ -2693,6 +2693,9 @@ namespace
  */
 void Mod::loadVanillaResources()
 {
+	// Create Geoscape surface
+	_sets["GlobeMarkers"] = new SurfaceSet(3, 3);
+
 	// Load palettes
 	const char *pal[] = { "PAL_GEOSCAPE", "PAL_BASESCAPE", "PAL_GRAPHS", "PAL_UFOPAEDIA", "PAL_BATTLEPEDIA" };
 	for (size_t i = 0; i < ARRAYLEN(pal); ++i)
