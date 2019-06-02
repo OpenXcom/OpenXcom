@@ -672,7 +672,7 @@ int Mod::getModOffset() const
  * @param shared Max offset limit that is shared for every mod
  * @param multipler Value used by `projectle` surface set to convert projectle offset to index offset in surface.
  */
-void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Node &node, int shared, size_t multipler) const
+void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Node &node, int shared, const std::string &set, size_t multipler) const
 {
 	assert(_modCurrent);
 	const ModData* curr = _modCurrent;
@@ -721,7 +721,7 @@ void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Nod
 	if (offset < -1)
 	{
 		std::ostringstream err;
-		err << "Error for '" << parent << "': offset '" << offset << "' have incorrect value";
+		err << "Error for '" << parent << "': offset '" << offset << "' have incorrect value in set '" << set << "'";
 		throw Exception(err.str());
 	}
 	else if (offset == -1)
@@ -735,7 +735,7 @@ void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Nod
 		if ((size_t)f > curr->size)
 		{
 			std::ostringstream err;
-			err << "Error for '" << parent << "': offset '" << offset << "' exceeds mod size limit " << (curr->size / multipler);
+			err << "Error for '" << parent << "': offset '" << offset << "' exceeds mod size limit " << (curr->size / multipler) << " in set '" << set << "'";
 			throw Exception(err.str());
 		}
 		if (f >= shared)
@@ -757,7 +757,7 @@ void Mod::loadSpriteOffset(const std::string &parent, int& sprite, const YAML::N
 {
 	if (node)
 	{
-		loadOffsetNode(parent, sprite, node, getRule(set, "Sprite Set", _sets, true)->getMaxSharedFrames(), multipler);
+		loadOffsetNode(parent, sprite, node, getRule(set, "Sprite Set", _sets, true)->getMaxSharedFrames(), set, multipler);
 	}
 }
 
@@ -773,7 +773,7 @@ void Mod::loadSoundOffset(const std::string &parent, int& sound, const YAML::Nod
 {
 	if (node)
 	{
-		loadOffsetNode(parent, sound, node, getSoundSet(set)->getMaxSharedSounds(), 1);
+		loadOffsetNode(parent, sound, node, getSoundSet(set)->getMaxSharedSounds(), set, 1);
 	}
 }
 
@@ -795,13 +795,13 @@ void Mod::loadSoundOffset(const std::string &parent, std::vector<int>& sounds, c
 			for (YAML::const_iterator i = node.begin(); i != node.end(); ++i)
 			{
 				sounds.push_back(-1);
-				loadOffsetNode(parent, sounds.back(), *i, maxShared, 1);
+				loadOffsetNode(parent, sounds.back(), *i, maxShared, set, 1);
 			}
 		}
 		else
 		{
 			sounds.push_back(-1);
-			loadOffsetNode(parent, sounds.back(), node, maxShared, 1);
+			loadOffsetNode(parent, sounds.back(), node, maxShared, set, 1);
 		}
 	}
 }
