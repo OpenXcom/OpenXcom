@@ -22,9 +22,9 @@
 namespace OpenXcom
 {
 const float PROGRESS_LIMIT_UNKNOWN = 0.333f;
-const float PROGRESS_LIMIT_POOR = 0.008f;
-const float PROGRESS_LIMIT_AVERAGE = 0.14f;
-const float PROGRESS_LIMIT_GOOD = 0.26f;
+const float PROGRESS_LIMIT_POOR = 0.07f;
+const float PROGRESS_LIMIT_AVERAGE = 0.13f;
+const float PROGRESS_LIMIT_GOOD = 0.25f;
 
 ResearchProject::ResearchProject(RuleResearch * p, int c) : _project(p), _assigned(0), _spent(0), _cost(c)
 {
@@ -143,7 +143,7 @@ std::string ResearchProject::getResearchProgress() const
 	{
 		return "STR_NONE";
 	}
-	else if (progress < PROGRESS_LIMIT_UNKNOWN)
+	else if (progress <= PROGRESS_LIMIT_UNKNOWN)
 	{
 		return "STR_UNKNOWN";
 	}
@@ -151,15 +151,15 @@ std::string ResearchProject::getResearchProgress() const
 	{
 		float rating = (float)getAssigned();
 		rating /= getRules()->getCost();
-		if (rating < PROGRESS_LIMIT_POOR)
+		if (rating <= PROGRESS_LIMIT_POOR)
 		{
 			return "STR_POOR";
 		}
-		else if (rating < PROGRESS_LIMIT_AVERAGE)
+		else if (rating <= PROGRESS_LIMIT_AVERAGE)
 		{
 			return "STR_AVERAGE";
 		}
-		else if (rating < PROGRESS_LIMIT_GOOD)
+		else if (rating <= PROGRESS_LIMIT_GOOD)
 		{
 			return "STR_GOOD";
 		}
