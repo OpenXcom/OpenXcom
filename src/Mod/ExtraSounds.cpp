@@ -23,6 +23,7 @@
 #include "../Engine/FileMap.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Exception.h"
+#include "Mod.h"
 
 namespace OpenXcom
 {
@@ -30,7 +31,7 @@ namespace OpenXcom
 /**
  * Creates a blank set of extra sound data.
  */
-ExtraSounds::ExtraSounds() : _modIndex(0)
+ExtraSounds::ExtraSounds() : _current(0)
 {
 }
 
@@ -46,11 +47,11 @@ ExtraSounds::~ExtraSounds()
  * @param node YAML node.
  * @param modIndex The internal index of the associated mod.
  */
-void ExtraSounds::load(const YAML::Node &node, int modIndex)
+void ExtraSounds::load(const YAML::Node &node, const ModData* current)
 {
 	_type = node["type"].as<std::string>(_type);
 	_sounds = node["files"].as< std::map<int, std::string> >(_sounds);
-	_modIndex = modIndex;
+	_current = current;
 }
 
 /**
@@ -69,15 +70,6 @@ std::string ExtraSounds::getType() const
 std::map<int, std::string> *ExtraSounds::getSounds()
 {
 	return &_sounds;
-}
-
-/**
- * Gets the mod index for this external sounds set.
- * @return The mod index for this external sounds set.
- */
-int ExtraSounds::getModIndex() const
-{
-	return _modIndex;
 }
 
 /**
@@ -128,16 +120,28 @@ SoundSet *ExtraSounds::loadSoundSet(SoundSet *set) const
 
 void ExtraSounds::loadSound(SoundSet *set, int index, const std::string &fileName) const
 {
+	int indexWithOffset = index;
+	if (indexWithOffset >= set->getMaxSharedSounds())
+	{
+		if ((size_t)indexWithOffset >= _current->size)
+		{
+			std::ostringstream err;
+			err << "ExtraSounds '" << _type << "' sound '" << indexWithOffset << "' exceeds mod '"<< _current->name <<"' size limit " << _current->size;
+			throw Exception(err.str());
+		}
+		indexWithOffset += _current->offset;
+	}
+
 	const std::string &fullPath = FileMap::getFilePath(fileName);
-	Sound *sound = set->getSound(index);
+	Sound *sound = set->getSound(indexWithOffset);
 	if (sound)
 	{
-		Log(LOG_VERBOSE) << "Replacing index: " << index;
+		Log(LOG_VERBOSE) << "Replacing sound: " << index << ", using index: " << indexWithOffset;
 	}
 	else
 	{
-		Log(LOG_VERBOSE) << "Adding index: " << index;
-		sound = set->addSound(index + _modIndex);
+		Log(LOG_VERBOSE) << "Adding sound: " << index << ", using index: " << indexWithOffset;
+		sound = set->addSound(indexWithOffset);
 	}
 	sound->load(fullPath);
 }

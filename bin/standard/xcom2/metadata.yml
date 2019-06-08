@@ -8,5 +8,6 @@ author: Microprose
 id: xcom2
 
 isMaster: true
+resourceConfig: vars.rul
 loadResources:
   - TFTD

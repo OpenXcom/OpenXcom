@@ -470,8 +470,9 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 	{
 		std::string file = dirp->d_name;
 
-		if (file == "." || file == "..")
+		if (file.length() >= 1 && file[0] == '.')
 		{
+			//skip ".", "..", ".git", ".svn", ".bashrc", ".ssh" etc.
 			continue;
 		}
 		if (!compareExt(file, ext))
@@ -1041,6 +1042,8 @@ void stackTrace(void *ctx)
 #else
 	Log(LOG_FATAL) << "Unfortunately, no stack trace information is available";
 #endif
+#elif __CYGWIN__
+	Log(LOG_FATAL) << "Unfortunately, no stack trace information is available";
 #else
 	void *frames[32];
 	char buf[1024];

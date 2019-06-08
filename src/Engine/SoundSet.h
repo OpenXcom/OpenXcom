@@ -35,6 +35,7 @@ class SoundSet
 {
 private:
 	std::map<int, Sound*> _sounds;
+	int _sharedSounds;
 
 	int convertSampleRate(Uint8 *oldsound, unsigned int oldsize, Uint8 *newsound) const;
 public:
@@ -48,6 +49,12 @@ public:
 	Sound *getSound(unsigned int i);
 	/// Creates a new sound and returns a pointer to it.
 	Sound *addSound(unsigned int i);
+
+	/// Set number of shared sound indexs that are accessible for all mods.
+	void setMaxSharedSounds(int i);
+	/// Gets number of shared sound indexs that are accessible for all mods.
+	int getMaxSharedSounds() const;
+
 	/// Gets the total sounds in the set.
 	size_t getTotalSounds() const;
 	/// Loads a specific entry from a CAT file into the soundset.

@@ -660,7 +660,6 @@ void updateMods()
 		_masterMod = activeMaster;
 	}
 
-	updateReservedSpace();
 	mapResources();
 	userSplitMasters();
 }
@@ -712,57 +711,6 @@ static void _loadMod(const ModInfo &modInfo, std::set<std::string> circDepCheck)
 		else
 		{
 			throw Exception(modInfo.getId() + " mod requires " + modInfo.getMaster() + " master");
-		}
-	}
-}
-
-void updateReservedSpace()
-{
-	Log(LOG_VERBOSE) << "Updating reservedSpace for master mods if necessary...";
-
-	Log(LOG_VERBOSE) << "_masterMod = " << _masterMod;
-
-	int maxSize = 1;
-	for (std::vector< std::pair<std::string, bool> >::reverse_iterator i = mods.rbegin(); i != mods.rend(); ++i)
-	{
-		if (!i->second)
-		{
-			Log(LOG_VERBOSE) << "skipping inactive mod: " << i->first;
-			continue;
-		}
-
-		const ModInfo &modInfo = _modInfos.find(i->first)->second;
-		if (!modInfo.canActivate(_masterMod))
-		{
-			Log(LOG_VERBOSE) << "skipping mod for non-current master: " << i->first << "(" << modInfo.getMaster() << " != " << _masterMod << ")";
-			continue;
-		}
-
-		if (modInfo.getReservedSpace() > maxSize)
-		{
-			maxSize = modInfo.getReservedSpace();
-		}
-	}
-
-	if (maxSize > 1)
-	{
-		// Small hack: update ALL masters, not only active master!
-		// this is because, there can be a hierarchy of multiple masters (e.g. xcom1 master > fluffyUnicorns master > some fluffyUnicorns mod)
-		// and the one that needs to be updated is actually the "root", i.e. xcom1 master
-		for (std::map<std::string, ModInfo>::iterator i = _modInfos.begin(); i != _modInfos.end(); ++i)
-		{
-			if (i->second.isMaster())
-			{
-				if (i->second.getReservedSpace() < maxSize)
-				{
-					i->second.setReservedSpace(maxSize);
-					Log(LOG_INFO) << "reservedSpace for: " << i->first << " updated to: " << i->second.getReservedSpace();
-				}
-				else
-				{
-					Log(LOG_INFO) << "reservedSpace for: " << i->first << " is: " << i->second.getReservedSpace();
-				}
-			}
 		}
 	}
 }

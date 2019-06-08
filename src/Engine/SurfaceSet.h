@@ -35,8 +35,10 @@ class Surface;
 class SurfaceSet
 {
 private:
-	int _width, _height;
 	std::map<int, Surface*> _frames;
+	int _width, _height;
+	int _sharedFrames;
+
 public:
 	/// Crates a surface set with frames of the specified size.
 	SurfaceSet(int width, int height);
@@ -56,6 +58,12 @@ public:
 	int getWidth() const;
 	/// Gets the height of all frames.
 	int getHeight() const;
+
+	/// Set number of shared frame indexs that are accessible for all mods.
+	void setMaxSharedFrames(int i);
+	/// Gets number of shared frame indexs that are accessible for all mods.
+	int getMaxSharedFrames() const;
+
 	/// Gets the total frames in the set.
 	size_t getTotalFrames() const;
 	/// Sets the surface set's palette.

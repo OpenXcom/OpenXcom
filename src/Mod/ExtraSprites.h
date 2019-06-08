@@ -26,6 +26,7 @@ namespace OpenXcom
 
 class Surface;
 class SurfaceSet;
+struct ModData;
 
 /**
  * For adding a set of extra sprite data to the game.
@@ -35,19 +36,20 @@ class ExtraSprites
 private:
 	std::string _type;
 	std::map<int, std::string> _sprites;
+	const ModData* _current;
 	int _width, _height;
 	bool _singleImage;
-	int _modIndex, _subX, _subY;
+	int _subX, _subY;
 	bool _loaded;
 
-	Surface *getFrame(SurfaceSet *set, int index, bool adding) const;
+	Surface *getFrame(SurfaceSet *set, int index) const;
 public:
 	/// Creates a blank external sprite set.
 	ExtraSprites();
 	/// Cleans up the external sprite set.
 	virtual ~ExtraSprites();
 	/// Loads the data from YAML.
-	void load(const YAML::Node &node, int modIndex);
+	void load(const YAML::Node &node, const ModData* current);
 	/// Gets the sprite's type.
 	std::string getType() const;
 	/// Gets the list of sprites defined by this mod.
@@ -58,8 +60,6 @@ public:
 	int getHeight() const;
 	/// Checks if this is a single surface, or a set of surfaces.
 	bool getSingleImage() const;
-	/// Gets the mod index for this external sprite set.
-	int getModIndex() const;
 	/// Gets the x subdivision.
 	int getSubX() const;
 	/// Gets the y subdivision.
