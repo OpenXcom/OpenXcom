@@ -65,7 +65,7 @@ public:
 	/// Gets the OXCE version required by this mod.
 	const std::string &getRequiredExtendedVersion() const;
 	/// Gets ruleset file where are defined based resources like required original game data.
-	std::string getResourceConfigFile() const;
+	const std::string &getResourceConfigFile() const;
 	/// Gets the list of external resource dirs to load for this mod.
 	const std::vector<std::string> &getExternalResourceDirs() const;
 };

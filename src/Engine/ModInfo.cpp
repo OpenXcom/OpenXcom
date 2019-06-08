@@ -72,17 +72,17 @@ void ModInfo::load(const std::string &filename)
 	}
 }
 
-const std::string &ModInfo::getPath()        const { return _path;     }
-const std::string &ModInfo::getName()        const { return _name;     }
-const std::string &ModInfo::getDescription() const { return _desc;     }
-const std::string &ModInfo::getVersion()     const { return _version;  }
-const std::string &ModInfo::getAuthor()      const { return _author;   }
-const std::string &ModInfo::getId()          const { return _id;       }
-const std::string &ModInfo::getMaster()      const { return _master;   }
-bool               ModInfo::isMaster()       const { return _isMaster; }
+const std::string &ModInfo::getPath()                    const { return _path;                    }
+const std::string &ModInfo::getName()                    const { return _name;                    }
+const std::string &ModInfo::getDescription()             const { return _desc;                    }
+const std::string &ModInfo::getVersion()                 const { return _version;                 }
+const std::string &ModInfo::getAuthor()                  const { return _author;                  }
+const std::string &ModInfo::getId()                      const { return _id;                      }
+const std::string &ModInfo::getMaster()                  const { return _master;                  }
+bool               ModInfo::isMaster()                   const { return _isMaster;                }
 const std::string &ModInfo::getRequiredExtendedVersion() const { return _requiredExtendedVersion; }
-std::string        ModInfo::getResourceConfigFile() const { return _path + "/" + _resourceConfigFile; }
-int                ModInfo::getReservedSpace()        const { return _reservedSpace;     }
+const std::string &ModInfo::getResourceConfigFile()      const { return _resourceConfigFile;      }
+int                ModInfo::getReservedSpace()           const { return _reservedSpace;           }
 
 /**
  * Checks if a given mod can be activated.

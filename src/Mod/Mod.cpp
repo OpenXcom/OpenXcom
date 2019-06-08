@@ -896,9 +896,10 @@ void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::st
 	for (size_t i = 0; _modData.size() > i; ++i)
 	{
 		_modCurrent = &_modData.at(0);
-		if (_modCurrent->info->isMaster())
+		const ModInfo *info = _modCurrent->info;
+		if (info->isMaster() && !info->getResourceConfigFile().empty())
 		{
-			std::string path = _modCurrent->info->getResourceConfigFile();
+			std::string path = info->getPath() + "/" + info->getResourceConfigFile();
 			if (CrossPlatform::fileExists(path))
 			{
 				loadResourceConfigFile(path);
