@@ -185,21 +185,24 @@ SurfaceSet *ExtraSprites::loadSurfaceSet(SurfaceSet *set)
 	_loaded = true;
 
 	bool subdivision = (_subX != 0 && _subY != 0);
+	int surfaceSetX = subdivision ? _subX : _width;
+	int surfaceSetY = subdivision ? _subY : _height;
 	if (set == 0)
 	{
 		Log(LOG_VERBOSE) << "Creating new surface set: " << _type;
-		if (subdivision)
-		{
-			set = new SurfaceSet(_subX, _subY);
-		}
-		else
-		{
-			set = new SurfaceSet(_width, _height);
-		}
+		set = new SurfaceSet(surfaceSetX, surfaceSetY);
 	}
 	else
 	{
 		Log(LOG_VERBOSE) << "Adding/Replacing items in surface set: " << _type;
+		if (set->getTotalFrames() == 0 && (set->getWidth() != surfaceSetX || set->getHeight() != surfaceSetY))
+		{
+			Log(LOG_VERBOSE) << "Resize empty set to: " << surfaceSetX << " x " << surfaceSetY;
+			int shared = set->getMaxSharedFrames();
+			delete set;
+			set = new SurfaceSet(surfaceSetX, surfaceSetY);
+			set->setMaxSharedFrames(shared);
+		}
 	}
 
 	for (std::map<int, std::string>::const_iterator j = _sprites.begin(); j != _sprites.end(); ++j)
