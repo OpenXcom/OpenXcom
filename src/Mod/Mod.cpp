@@ -2931,7 +2931,7 @@ void Mod::loadVanillaResources()
 		}
 		{
 			SurfaceSet* s = _sets["GlobeMarkers"];
-			s->setMaxSharedFrames(8);
+			s->setMaxSharedFrames(9);
 		}
 	}
 	{
