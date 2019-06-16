@@ -1000,7 +1000,6 @@ void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect
 {
 	if (allowButtons())
 	{
-		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 		BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect, setReselect, checkInventory);
 		updateSoldierInfo(checkFOV);
 		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
