@@ -18,6 +18,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "../Engine/State.h"
+#include <string>
 #include <sstream>
 
 namespace OpenXcom
@@ -41,6 +42,7 @@ private:
 	Timer *_timer;
 	Language *_lang;
 	int _anim;
+	std::string _oldMaster;
 
 	SDL_Thread *_thread;
 	std::ostringstream _output;
