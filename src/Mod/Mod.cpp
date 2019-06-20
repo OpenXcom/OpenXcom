@@ -1391,34 +1391,37 @@ void Mod::loadFile(const std::string &filename)
 	}
 	for (YAML::const_iterator i = doc["constants"].begin(); i != doc["constants"].end(); ++i)
 	{
-		DOOR_OPEN = (*i)["doorSound"].as<int>(DOOR_OPEN);
-		SLIDING_DOOR_OPEN = (*i)["slidingDoorSound"].as<int>(SLIDING_DOOR_OPEN);
-		SLIDING_DOOR_CLOSE = (*i)["slidingDoorClose"].as<int>(SLIDING_DOOR_CLOSE);
-		SMALL_EXPLOSION = (*i)["smallExplosion"].as<int>(SMALL_EXPLOSION);
-		LARGE_EXPLOSION = (*i)["largeExplosion"].as<int>(LARGE_EXPLOSION);
-		EXPLOSION_OFFSET = (*i)["explosionOffset"].as<int>(EXPLOSION_OFFSET);
-		SMOKE_OFFSET = (*i)["smokeOffset"].as<int>(SMOKE_OFFSET);
-		UNDERWATER_SMOKE_OFFSET = (*i)["underwaterSmokeOffset"].as<int>(UNDERWATER_SMOKE_OFFSET);
-		ITEM_DROP = (*i)["itemDrop"].as<int>(ITEM_DROP);
-		ITEM_THROW = (*i)["itemThrow"].as<int>(ITEM_THROW);
-		ITEM_RELOAD = (*i)["itemReload"].as<int>(ITEM_RELOAD);
-		WALK_OFFSET = (*i)["walkOffset"].as<int>(WALK_OFFSET);
-		FLYING_SOUND = (*i)["flyingSound"].as<int>(FLYING_SOUND);
-		BUTTON_PRESS = (*i)["buttonPress"].as<int>(BUTTON_PRESS);
+		loadSoundOffset("constants", DOOR_OPEN, (*i)["doorSound"], "BATTLE.CAT");
+		loadSoundOffset("constants", SLIDING_DOOR_OPEN, (*i)["slidingDoorSound"], "BATTLE.CAT");
+		loadSoundOffset("constants", SLIDING_DOOR_CLOSE, (*i)["slidingDoorClose"], "BATTLE.CAT");
+		loadSoundOffset("constants", SMALL_EXPLOSION, (*i)["smallExplosion"], "BATTLE.CAT");
+		loadSoundOffset("constants", LARGE_EXPLOSION, (*i)["largeExplosion"], "BATTLE.CAT");
+
+		loadSpriteOffset("constants", EXPLOSION_OFFSET, (*i)["explosionOffset"], "X1.PCK");
+		loadSpriteOffset("constants", SMOKE_OFFSET, (*i)["smokeOffset"], "SMOKE.PCK");
+		loadSpriteOffset("constants", UNDERWATER_SMOKE_OFFSET, (*i)["underwaterSmokeOffset"], "SMOKE.PCK");
+
+		loadSoundOffset("constants", ITEM_DROP, (*i)["itemDrop"], "BATTLE.CAT");
+		loadSoundOffset("constants", ITEM_THROW, (*i)["itemThrow"], "BATTLE.CAT");
+		loadSoundOffset("constants", ITEM_RELOAD, (*i)["itemReload"], "BATTLE.CAT");
+		loadSoundOffset("constants", WALK_OFFSET, (*i)["walkOffset"], "BATTLE.CAT");
+		loadSoundOffset("constants", FLYING_SOUND, (*i)["flyingSound"], "BATTLE.CAT");
+
+		loadSoundOffset("constants", BUTTON_PRESS, (*i)["buttonPress"], "GEO.CAT");
 		if ((*i)["windowPopup"])
 		{
 			int k = 0;
 			for (YAML::const_iterator j = (*i)["windowPopup"].begin(); j != (*i)["windowPopup"].end() && k < 3; ++j, ++k)
 			{
-				WINDOW_POPUP[k] = (*j).as<int>(WINDOW_POPUP[k]);
+				loadSoundOffset("constants", WINDOW_POPUP[k], (*j), "GEO.CAT");
 			}
 		}
-		UFO_FIRE = (*i)["ufoFire"].as<int>(UFO_FIRE);
-		UFO_HIT = (*i)["ufoHit"].as<int>(UFO_HIT);
-		UFO_CRASH = (*i)["ufoCrash"].as<int>(UFO_CRASH);
-		UFO_EXPLODE = (*i)["ufoExplode"].as<int>(UFO_EXPLODE);
-		INTERCEPTOR_HIT = (*i)["interceptorHit"].as<int>(INTERCEPTOR_HIT);
-		INTERCEPTOR_EXPLODE = (*i)["interceptorExplode"].as<int>(INTERCEPTOR_EXPLODE);
+		loadSoundOffset("constants", UFO_FIRE, (*i)["ufoFire"], "GEO.CAT");
+		loadSoundOffset("constants", UFO_HIT, (*i)["ufoHit"], "GEO.CAT");
+		loadSoundOffset("constants", UFO_CRASH, (*i)["ufoCrash"], "GEO.CAT");
+		loadSoundOffset("constants", UFO_EXPLODE, (*i)["ufoExplode"], "GEO.CAT");
+		loadSoundOffset("constants", INTERCEPTOR_HIT, (*i)["interceptorHit"], "GEO.CAT");
+		loadSoundOffset("constants", INTERCEPTOR_EXPLODE, (*i)["interceptorExplode"], "GEO.CAT");
 		GEOSCAPE_CURSOR = (*i)["geoscapeCursor"].as<int>(GEOSCAPE_CURSOR);
 		BASESCAPE_CURSOR = (*i)["basescapeCursor"].as<int>(BASESCAPE_CURSOR);
 		BATTLESCAPE_CURSOR = (*i)["battlescapeCursor"].as<int>(BATTLESCAPE_CURSOR);
@@ -2696,6 +2699,10 @@ void Mod::loadVanillaResources()
 {
 	// Create Geoscape surface
 	_sets["GlobeMarkers"] = new SurfaceSet(3, 3);
+	// Create Sound sets
+	_sounds["GEO.CAT"] = new SoundSet();
+	_sounds["BATTLE.CAT"] = new SoundSet();
+	_sounds["BATTLE2.CAT"] = new SoundSet();
 
 	// Load palettes
 	const char *pal[] = { "PAL_GEOSCAPE", "PAL_BASESCAPE", "PAL_GRAPHS", "PAL_UFOPAEDIA", "PAL_BATTLEPEDIA" };
@@ -2844,7 +2851,7 @@ void Mod::loadVanillaResources()
 					std::set<std::string>::iterator file = soundFiles.find(fname);
 					if (file != soundFiles.end())
 					{
-						sound = new SoundSet();
+						sound = _sounds[catsId[i]];
 						sound->loadCat(FileMap::getFilePath("SOUND/" + cats[j][i]), wav);
 						Options::currentSound = (wav) ? SOUND_14 : SOUND_10;
 					}
@@ -2852,10 +2859,6 @@ void Mod::loadVanillaResources()
 				if (sound == 0)
 				{
 					throw Exception(catsWin[i] + " not found");
-				}
-				else
-				{
-					_sounds[catsId[i]] = sound;
 				}
 			}
 		}
@@ -2911,7 +2914,6 @@ void Mod::loadVanillaResources()
 			"SMOKE.PCK",
 			"HIT.PCK",
 			"BASEBITS.PCK",
-			"X1.PCK",
 			"INTICON.PCK",
 		};
 
@@ -2933,6 +2935,11 @@ void Mod::loadVanillaResources()
 			SurfaceSet* s = _sets["GlobeMarkers"];
 			s->setMaxSharedFrames(9);
 		}
+		//HACK: because of value "hitAnimation" from item that is used as offet in "X1.PCK", this set need have same number of shared frames as "SMOKE.PCK".
+		{
+			SurfaceSet* s = _sets["X1.PCK"];
+			s->setMaxSharedFrames((int)_sets["SMOKE.PCK"]->getMaxSharedFrames());
+		}
 	}
 	{
 		std::string soundNames[] =
@@ -2946,13 +2953,10 @@ void Mod::loadVanillaResources()
 			SoundSet* s = _sounds[soundNames[i]];
 			s->setMaxSharedSounds((int)s->getTotalSounds());
 		}
-		//case for underwater surface
+		//HACK: case for underwater surface, it should share same offsets as "BATTLE.CAT"
 		{
 			SoundSet* s = _sounds["BATTLE2.CAT"];
-			if (s)
-			{
-				s->setMaxSharedSounds((int)s->getTotalSounds());
-			}
+			s->setMaxSharedSounds((int)_sounds["BATTLE.CAT"]->getTotalSounds());
 		}
 	}
 }
