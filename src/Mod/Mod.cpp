@@ -1042,6 +1042,59 @@ void Mod::loadResourceConfigFile(const std::string &filename)
 }
 
 /**
+ * Loads "constants" node.
+ */
+void Mod::loadConstants(const YAML::Node &node)
+{
+	loadSoundOffset("constants", DOOR_OPEN, node["doorSound"], "BATTLE.CAT");
+	loadSoundOffset("constants", SLIDING_DOOR_OPEN, node["slidingDoorSound"], "BATTLE.CAT");
+	loadSoundOffset("constants", SLIDING_DOOR_CLOSE, node["slidingDoorClose"], "BATTLE.CAT");
+	loadSoundOffset("constants", SMALL_EXPLOSION, node["smallExplosion"], "BATTLE.CAT");
+	loadSoundOffset("constants", LARGE_EXPLOSION, node["largeExplosion"], "BATTLE.CAT");
+
+	loadSpriteOffset("constants", EXPLOSION_OFFSET, node["explosionOffset"], "X1.PCK");
+	loadSpriteOffset("constants", SMOKE_OFFSET, node["smokeOffset"], "SMOKE.PCK");
+	loadSpriteOffset("constants", UNDERWATER_SMOKE_OFFSET, node["underwaterSmokeOffset"], "SMOKE.PCK");
+
+	loadSoundOffset("constants", ITEM_DROP, node["itemDrop"], "BATTLE.CAT");
+	loadSoundOffset("constants", ITEM_THROW, node["itemThrow"], "BATTLE.CAT");
+	loadSoundOffset("constants", ITEM_RELOAD, node["itemReload"], "BATTLE.CAT");
+	loadSoundOffset("constants", WALK_OFFSET, node["walkOffset"], "BATTLE.CAT");
+	loadSoundOffset("constants", FLYING_SOUND, node["flyingSound"], "BATTLE.CAT");
+
+	loadSoundOffset("constants", BUTTON_PRESS, node["buttonPress"], "GEO.CAT");
+	if (node["windowPopup"])
+	{
+		int k = 0;
+		for (YAML::const_iterator j = node["windowPopup"].begin(); j != node["windowPopup"].end() && k < 3; ++j, ++k)
+		{
+			loadSoundOffset("constants", WINDOW_POPUP[k], (*j), "GEO.CAT");
+		}
+	}
+	loadSoundOffset("constants", UFO_FIRE, node["ufoFire"], "GEO.CAT");
+	loadSoundOffset("constants", UFO_HIT, node["ufoHit"], "GEO.CAT");
+	loadSoundOffset("constants", UFO_CRASH, node["ufoCrash"], "GEO.CAT");
+	loadSoundOffset("constants", UFO_EXPLODE, node["ufoExplode"], "GEO.CAT");
+	loadSoundOffset("constants", INTERCEPTOR_HIT, node["interceptorHit"], "GEO.CAT");
+	loadSoundOffset("constants", INTERCEPTOR_EXPLODE, node["interceptorExplode"], "GEO.CAT");
+	GEOSCAPE_CURSOR = node["geoscapeCursor"].as<int>(GEOSCAPE_CURSOR);
+	BASESCAPE_CURSOR = node["basescapeCursor"].as<int>(BASESCAPE_CURSOR);
+	BATTLESCAPE_CURSOR = node["battlescapeCursor"].as<int>(BATTLESCAPE_CURSOR);
+	UFOPAEDIA_CURSOR = node["ufopaediaCursor"].as<int>(UFOPAEDIA_CURSOR);
+	GRAPHS_CURSOR = node["graphsCursor"].as<int>(GRAPHS_CURSOR);
+	DAMAGE_RANGE = node["damageRange"].as<int>(DAMAGE_RANGE);
+	EXPLOSIVE_DAMAGE_RANGE = node["explosiveDamageRange"].as<int>(EXPLOSIVE_DAMAGE_RANGE);
+	size_t num = 0;
+	for (YAML::const_iterator j = node["fireDamageRange"].begin(); j != node["fireDamageRange"].end() && num < 2; ++j)
+	{
+		FIRE_DAMAGE_RANGE[num] = (*j).as<int>(FIRE_DAMAGE_RANGE[num]);
+		++num;
+	}
+	DEBRIEF_MUSIC_GOOD = node["goodDebriefingMusic"].as<std::string>(DEBRIEF_MUSIC_GOOD);
+	DEBRIEF_MUSIC_BAD = node["badDebriefingMusic"].as<std::string>(DEBRIEF_MUSIC_BAD);
+}
+
+/**
  * Loads a ruleset's contents from a YAML file.
  * Rules that match pre-existing rules overwrite them.
  * @param filename YAML filename.
@@ -1389,54 +1442,20 @@ void Mod::loadFile(const std::string &filename)
 	{
 		_converter->load(doc["converter"]);
 	}
-	for (YAML::const_iterator i = doc["constants"].begin(); i != doc["constants"].end(); ++i)
+	if (const YAML::Node& constants = doc["constants"])
 	{
-		loadSoundOffset("constants", DOOR_OPEN, (*i)["doorSound"], "BATTLE.CAT");
-		loadSoundOffset("constants", SLIDING_DOOR_OPEN, (*i)["slidingDoorSound"], "BATTLE.CAT");
-		loadSoundOffset("constants", SLIDING_DOOR_CLOSE, (*i)["slidingDoorClose"], "BATTLE.CAT");
-		loadSoundOffset("constants", SMALL_EXPLOSION, (*i)["smallExplosion"], "BATTLE.CAT");
-		loadSoundOffset("constants", LARGE_EXPLOSION, (*i)["largeExplosion"], "BATTLE.CAT");
-
-		loadSpriteOffset("constants", EXPLOSION_OFFSET, (*i)["explosionOffset"], "X1.PCK");
-		loadSpriteOffset("constants", SMOKE_OFFSET, (*i)["smokeOffset"], "SMOKE.PCK");
-		loadSpriteOffset("constants", UNDERWATER_SMOKE_OFFSET, (*i)["underwaterSmokeOffset"], "SMOKE.PCK");
-
-		loadSoundOffset("constants", ITEM_DROP, (*i)["itemDrop"], "BATTLE.CAT");
-		loadSoundOffset("constants", ITEM_THROW, (*i)["itemThrow"], "BATTLE.CAT");
-		loadSoundOffset("constants", ITEM_RELOAD, (*i)["itemReload"], "BATTLE.CAT");
-		loadSoundOffset("constants", WALK_OFFSET, (*i)["walkOffset"], "BATTLE.CAT");
-		loadSoundOffset("constants", FLYING_SOUND, (*i)["flyingSound"], "BATTLE.CAT");
-
-		loadSoundOffset("constants", BUTTON_PRESS, (*i)["buttonPress"], "GEO.CAT");
-		if ((*i)["windowPopup"])
+		//backward compatiblity version
+		if (constants.IsSequence())
 		{
-			int k = 0;
-			for (YAML::const_iterator j = (*i)["windowPopup"].begin(); j != (*i)["windowPopup"].end() && k < 3; ++j, ++k)
+			for (YAML::const_iterator i = constants.begin(); i != constants.end(); ++i)
 			{
-				loadSoundOffset("constants", WINDOW_POPUP[k], (*j), "GEO.CAT");
+				loadConstants((*i));
 			}
 		}
-		loadSoundOffset("constants", UFO_FIRE, (*i)["ufoFire"], "GEO.CAT");
-		loadSoundOffset("constants", UFO_HIT, (*i)["ufoHit"], "GEO.CAT");
-		loadSoundOffset("constants", UFO_CRASH, (*i)["ufoCrash"], "GEO.CAT");
-		loadSoundOffset("constants", UFO_EXPLODE, (*i)["ufoExplode"], "GEO.CAT");
-		loadSoundOffset("constants", INTERCEPTOR_HIT, (*i)["interceptorHit"], "GEO.CAT");
-		loadSoundOffset("constants", INTERCEPTOR_EXPLODE, (*i)["interceptorExplode"], "GEO.CAT");
-		GEOSCAPE_CURSOR = (*i)["geoscapeCursor"].as<int>(GEOSCAPE_CURSOR);
-		BASESCAPE_CURSOR = (*i)["basescapeCursor"].as<int>(BASESCAPE_CURSOR);
-		BATTLESCAPE_CURSOR = (*i)["battlescapeCursor"].as<int>(BATTLESCAPE_CURSOR);
-		UFOPAEDIA_CURSOR = (*i)["ufopaediaCursor"].as<int>(UFOPAEDIA_CURSOR);
-		GRAPHS_CURSOR = (*i)["graphsCursor"].as<int>(GRAPHS_CURSOR);
-		DAMAGE_RANGE = (*i)["damageRange"].as<int>(DAMAGE_RANGE);
-		EXPLOSIVE_DAMAGE_RANGE = (*i)["explosiveDamageRange"].as<int>(EXPLOSIVE_DAMAGE_RANGE);
-		size_t num = 0;
-		for (YAML::const_iterator j = (*i)["fireDamageRange"].begin(); j != (*i)["fireDamageRange"].end() && num < 2; ++j)
+		else
 		{
-			FIRE_DAMAGE_RANGE[num] = (*j).as<int>(FIRE_DAMAGE_RANGE[num]);
-			++num;
+			loadConstants(constants);
 		}
-		DEBRIEF_MUSIC_GOOD = (*i)["goodDebriefingMusic"].as<std::string>(DEBRIEF_MUSIC_GOOD);
-		DEBRIEF_MUSIC_BAD = (*i)["badDebriefingMusic"].as<std::string>(DEBRIEF_MUSIC_BAD);
 	}
 	for (YAML::const_iterator i = doc["mapScripts"].begin(); i != doc["mapScripts"].end(); ++i)
 	{

@@ -171,6 +171,7 @@ private:
 
 	/// Loads a ruleset from a YAML file that have basic resources configuration.
 	void loadResourceConfigFile(const std::string &filename);
+	void loadConstants(const YAML::Node &node);
 	/// Loads a ruleset from a YAML file.
 	void loadFile(const std::string &filename);
 	/// Loads a ruleset element.
