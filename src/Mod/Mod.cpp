@@ -1042,6 +1042,59 @@ void Mod::loadResourceConfigFile(const std::string &filename)
 }
 
 /**
+ * Loads "constants" node.
+ */
+void Mod::loadConstants(const YAML::Node &node)
+{
+	loadSoundOffset("constants", DOOR_OPEN, node["doorSound"], "BATTLE.CAT");
+	loadSoundOffset("constants", SLIDING_DOOR_OPEN, node["slidingDoorSound"], "BATTLE.CAT");
+	loadSoundOffset("constants", SLIDING_DOOR_CLOSE, node["slidingDoorClose"], "BATTLE.CAT");
+	loadSoundOffset("constants", SMALL_EXPLOSION, node["smallExplosion"], "BATTLE.CAT");
+	loadSoundOffset("constants", LARGE_EXPLOSION, node["largeExplosion"], "BATTLE.CAT");
+
+	loadSpriteOffset("constants", EXPLOSION_OFFSET, node["explosionOffset"], "X1.PCK");
+	loadSpriteOffset("constants", SMOKE_OFFSET, node["smokeOffset"], "SMOKE.PCK");
+	loadSpriteOffset("constants", UNDERWATER_SMOKE_OFFSET, node["underwaterSmokeOffset"], "SMOKE.PCK");
+
+	loadSoundOffset("constants", ITEM_DROP, node["itemDrop"], "BATTLE.CAT");
+	loadSoundOffset("constants", ITEM_THROW, node["itemThrow"], "BATTLE.CAT");
+	loadSoundOffset("constants", ITEM_RELOAD, node["itemReload"], "BATTLE.CAT");
+	loadSoundOffset("constants", WALK_OFFSET, node["walkOffset"], "BATTLE.CAT");
+	loadSoundOffset("constants", FLYING_SOUND, node["flyingSound"], "BATTLE.CAT");
+
+	loadSoundOffset("constants", BUTTON_PRESS, node["buttonPress"], "GEO.CAT");
+	if (node["windowPopup"])
+	{
+		int k = 0;
+		for (YAML::const_iterator j = node["windowPopup"].begin(); j != node["windowPopup"].end() && k < 3; ++j, ++k)
+		{
+			loadSoundOffset("constants", WINDOW_POPUP[k], (*j), "GEO.CAT");
+		}
+	}
+	loadSoundOffset("constants", UFO_FIRE, node["ufoFire"], "GEO.CAT");
+	loadSoundOffset("constants", UFO_HIT, node["ufoHit"], "GEO.CAT");
+	loadSoundOffset("constants", UFO_CRASH, node["ufoCrash"], "GEO.CAT");
+	loadSoundOffset("constants", UFO_EXPLODE, node["ufoExplode"], "GEO.CAT");
+	loadSoundOffset("constants", INTERCEPTOR_HIT, node["interceptorHit"], "GEO.CAT");
+	loadSoundOffset("constants", INTERCEPTOR_EXPLODE, node["interceptorExplode"], "GEO.CAT");
+	GEOSCAPE_CURSOR = node["geoscapeCursor"].as<int>(GEOSCAPE_CURSOR);
+	BASESCAPE_CURSOR = node["basescapeCursor"].as<int>(BASESCAPE_CURSOR);
+	BATTLESCAPE_CURSOR = node["battlescapeCursor"].as<int>(BATTLESCAPE_CURSOR);
+	UFOPAEDIA_CURSOR = node["ufopaediaCursor"].as<int>(UFOPAEDIA_CURSOR);
+	GRAPHS_CURSOR = node["graphsCursor"].as<int>(GRAPHS_CURSOR);
+	DAMAGE_RANGE = node["damageRange"].as<int>(DAMAGE_RANGE);
+	EXPLOSIVE_DAMAGE_RANGE = node["explosiveDamageRange"].as<int>(EXPLOSIVE_DAMAGE_RANGE);
+	size_t num = 0;
+	for (YAML::const_iterator j = node["fireDamageRange"].begin(); j != node["fireDamageRange"].end() && num < 2; ++j)
+	{
+		FIRE_DAMAGE_RANGE[num] = (*j).as<int>(FIRE_DAMAGE_RANGE[num]);
+		++num;
+	}
+	DEBRIEF_MUSIC_GOOD = node["goodDebriefingMusic"].as<std::string>(DEBRIEF_MUSIC_GOOD);
+	DEBRIEF_MUSIC_BAD = node["badDebriefingMusic"].as<std::string>(DEBRIEF_MUSIC_BAD);
+}
+
+/**
  * Loads a ruleset's contents from a YAML file.
  * Rules that match pre-existing rules overwrite them.
  * @param filename YAML filename.
@@ -1389,51 +1442,20 @@ void Mod::loadFile(const std::string &filename)
 	{
 		_converter->load(doc["converter"]);
 	}
-	for (YAML::const_iterator i = doc["constants"].begin(); i != doc["constants"].end(); ++i)
+	if (const YAML::Node& constants = doc["constants"])
 	{
-		DOOR_OPEN = (*i)["doorSound"].as<int>(DOOR_OPEN);
-		SLIDING_DOOR_OPEN = (*i)["slidingDoorSound"].as<int>(SLIDING_DOOR_OPEN);
-		SLIDING_DOOR_CLOSE = (*i)["slidingDoorClose"].as<int>(SLIDING_DOOR_CLOSE);
-		SMALL_EXPLOSION = (*i)["smallExplosion"].as<int>(SMALL_EXPLOSION);
-		LARGE_EXPLOSION = (*i)["largeExplosion"].as<int>(LARGE_EXPLOSION);
-		EXPLOSION_OFFSET = (*i)["explosionOffset"].as<int>(EXPLOSION_OFFSET);
-		SMOKE_OFFSET = (*i)["smokeOffset"].as<int>(SMOKE_OFFSET);
-		UNDERWATER_SMOKE_OFFSET = (*i)["underwaterSmokeOffset"].as<int>(UNDERWATER_SMOKE_OFFSET);
-		ITEM_DROP = (*i)["itemDrop"].as<int>(ITEM_DROP);
-		ITEM_THROW = (*i)["itemThrow"].as<int>(ITEM_THROW);
-		ITEM_RELOAD = (*i)["itemReload"].as<int>(ITEM_RELOAD);
-		WALK_OFFSET = (*i)["walkOffset"].as<int>(WALK_OFFSET);
-		FLYING_SOUND = (*i)["flyingSound"].as<int>(FLYING_SOUND);
-		BUTTON_PRESS = (*i)["buttonPress"].as<int>(BUTTON_PRESS);
-		if ((*i)["windowPopup"])
+		//backward compatiblity version
+		if (constants.IsSequence())
 		{
-			int k = 0;
-			for (YAML::const_iterator j = (*i)["windowPopup"].begin(); j != (*i)["windowPopup"].end() && k < 3; ++j, ++k)
+			for (YAML::const_iterator i = constants.begin(); i != constants.end(); ++i)
 			{
-				WINDOW_POPUP[k] = (*j).as<int>(WINDOW_POPUP[k]);
+				loadConstants((*i));
 			}
 		}
-		UFO_FIRE = (*i)["ufoFire"].as<int>(UFO_FIRE);
-		UFO_HIT = (*i)["ufoHit"].as<int>(UFO_HIT);
-		UFO_CRASH = (*i)["ufoCrash"].as<int>(UFO_CRASH);
-		UFO_EXPLODE = (*i)["ufoExplode"].as<int>(UFO_EXPLODE);
-		INTERCEPTOR_HIT = (*i)["interceptorHit"].as<int>(INTERCEPTOR_HIT);
-		INTERCEPTOR_EXPLODE = (*i)["interceptorExplode"].as<int>(INTERCEPTOR_EXPLODE);
-		GEOSCAPE_CURSOR = (*i)["geoscapeCursor"].as<int>(GEOSCAPE_CURSOR);
-		BASESCAPE_CURSOR = (*i)["basescapeCursor"].as<int>(BASESCAPE_CURSOR);
-		BATTLESCAPE_CURSOR = (*i)["battlescapeCursor"].as<int>(BATTLESCAPE_CURSOR);
-		UFOPAEDIA_CURSOR = (*i)["ufopaediaCursor"].as<int>(UFOPAEDIA_CURSOR);
-		GRAPHS_CURSOR = (*i)["graphsCursor"].as<int>(GRAPHS_CURSOR);
-		DAMAGE_RANGE = (*i)["damageRange"].as<int>(DAMAGE_RANGE);
-		EXPLOSIVE_DAMAGE_RANGE = (*i)["explosiveDamageRange"].as<int>(EXPLOSIVE_DAMAGE_RANGE);
-		size_t num = 0;
-		for (YAML::const_iterator j = (*i)["fireDamageRange"].begin(); j != (*i)["fireDamageRange"].end() && num < 2; ++j)
+		else
 		{
-			FIRE_DAMAGE_RANGE[num] = (*j).as<int>(FIRE_DAMAGE_RANGE[num]);
-			++num;
+			loadConstants(constants);
 		}
-		DEBRIEF_MUSIC_GOOD = (*i)["goodDebriefingMusic"].as<std::string>(DEBRIEF_MUSIC_GOOD);
-		DEBRIEF_MUSIC_BAD = (*i)["badDebriefingMusic"].as<std::string>(DEBRIEF_MUSIC_BAD);
 	}
 	for (YAML::const_iterator i = doc["mapScripts"].begin(); i != doc["mapScripts"].end(); ++i)
 	{
@@ -2696,6 +2718,10 @@ void Mod::loadVanillaResources()
 {
 	// Create Geoscape surface
 	_sets["GlobeMarkers"] = new SurfaceSet(3, 3);
+	// Create Sound sets
+	_sounds["GEO.CAT"] = new SoundSet();
+	_sounds["BATTLE.CAT"] = new SoundSet();
+	_sounds["BATTLE2.CAT"] = new SoundSet();
 
 	// Load palettes
 	const char *pal[] = { "PAL_GEOSCAPE", "PAL_BASESCAPE", "PAL_GRAPHS", "PAL_UFOPAEDIA", "PAL_BATTLEPEDIA" };
@@ -2844,7 +2870,7 @@ void Mod::loadVanillaResources()
 					std::set<std::string>::iterator file = soundFiles.find(fname);
 					if (file != soundFiles.end())
 					{
-						sound = new SoundSet();
+						sound = _sounds[catsId[i]];
 						sound->loadCat(FileMap::getFilePath("SOUND/" + cats[j][i]), wav);
 						Options::currentSound = (wav) ? SOUND_14 : SOUND_10;
 					}
@@ -2852,10 +2878,6 @@ void Mod::loadVanillaResources()
 				if (sound == 0)
 				{
 					throw Exception(catsWin[i] + " not found");
-				}
-				else
-				{
-					_sounds[catsId[i]] = sound;
 				}
 			}
 		}
@@ -2911,7 +2933,6 @@ void Mod::loadVanillaResources()
 			"SMOKE.PCK",
 			"HIT.PCK",
 			"BASEBITS.PCK",
-			"X1.PCK",
 			"INTICON.PCK",
 		};
 
@@ -2933,6 +2954,11 @@ void Mod::loadVanillaResources()
 			SurfaceSet* s = _sets["GlobeMarkers"];
 			s->setMaxSharedFrames(9);
 		}
+		//HACK: because of value "hitAnimation" from item that is used as offet in "X1.PCK", this set need have same number of shared frames as "SMOKE.PCK".
+		{
+			SurfaceSet* s = _sets["X1.PCK"];
+			s->setMaxSharedFrames((int)_sets["SMOKE.PCK"]->getMaxSharedFrames());
+		}
 	}
 	{
 		std::string soundNames[] =
@@ -2946,13 +2972,10 @@ void Mod::loadVanillaResources()
 			SoundSet* s = _sounds[soundNames[i]];
 			s->setMaxSharedSounds((int)s->getTotalSounds());
 		}
-		//case for underwater surface
+		//HACK: case for underwater surface, it should share same offsets as "BATTLE.CAT"
 		{
 			SoundSet* s = _sounds["BATTLE2.CAT"];
-			if (s)
-			{
-				s->setMaxSharedSounds((int)s->getTotalSounds());
-			}
+			s->setMaxSharedSounds((int)_sounds["BATTLE.CAT"]->getTotalSounds());
 		}
 	}
 }

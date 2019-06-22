@@ -18,31 +18,31 @@ alienFuel: [STR_ZRBITE, 50]
 fontName: Font.dat
 
 constants: #done
-  - doorSound: 47
-  - slidingDoorSound: 46
-  - slidingDoorClose: -1
-  - smallExplosion: 30
-  - largeExplosion: 29
-  - itemDrop: 44
-  - itemThrow: 42
-  - itemReload: 45
-  - walkOffset: 0
-  - flyingSound: 66
-  - buttonPress: 0
-  - windowPopup: [1, 1, 1]
-  - ufoFire: 5
-  - ufoHit: 4
-  - ufoExplode: 3
-  - ufoCrash: 2
-  - interceptorHit: 2
-  - interceptorExplode: 2
-  - explosionOffset: 8
-  - smokeOffset: 56
-  - underwaterSmokeOffset: 8
-  - basescapeCursor: 42
-  - graphsCursor: 144
-  - goodDebriefingMusic: GMDEBGOO
-  - badDebriefingMusic: GMDEBPOR
+  doorSound: 47
+  slidingDoorSound: 46
+  slidingDoorClose: -1
+  smallExplosion: 30
+  largeExplosion: 29
+  itemDrop: 44
+  itemThrow: 42
+  itemReload: 45
+  walkOffset: 0
+  flyingSound: 66
+  buttonPress: 0
+  windowPopup: [1, 1, 1]
+  ufoFire: 5
+  ufoHit: 4
+  ufoExplode: 3
+  ufoCrash: 2
+  interceptorHit: 2
+  interceptorExplode: 2
+  explosionOffset: 8
+  smokeOffset: 56
+  underwaterSmokeOffset: 8
+  basescapeCursor: 42
+  graphsCursor: 144
+  goodDebriefingMusic: GMDEBGOO
+  badDebriefingMusic: GMDEBPOR
 
 soundDefs: #done: double check explosions.
   - type: GEO.CAT
