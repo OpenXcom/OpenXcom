@@ -83,7 +83,7 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 	}
 	if (_rtl.empty())
 	{
-		_rtl.push_back("he");
+		//_rtl.push_back("he"); needs translation
 	}
 	if (_cjk.empty())
 	{
