@@ -49,6 +49,10 @@ namespace OpenXcom
  */
 BriefingState::BriefingState(Craft *craft, Base *base)
 {
+	Options::baseXResolution = Options::baseXGeoscape;
+	Options::baseYResolution = Options::baseYGeoscape;
+	_game->getScreen()->resetDisplay(false);
+
 	_screen = true;
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
