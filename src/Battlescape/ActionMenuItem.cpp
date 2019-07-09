@@ -31,7 +31,7 @@ namespace OpenXcom
  * @param id The unique identifier of the menu item.
  * @param game Pointer to the game.
  * @param x Position on the x-axis.
- * @param y Position on the y-asis.
+ * @param y Position on the y-axis.
  */
 ActionMenuItem::ActionMenuItem(int id, Game *game, int x, int y) : InteractiveSurface(272, 40, x + 24, y - (id*40)), _highlighted(false), _action(BA_NONE), _tu(0)
 {

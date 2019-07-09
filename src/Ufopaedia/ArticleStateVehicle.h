@@ -27,7 +27,7 @@ namespace OpenXcom
 	class ArticleDefinitionVehicle;
 
 	/**
-	 * ArticleStateVehicle hasa caption, text and a stats block.
+	 * ArticleStateVehicle has a caption, text and a stats block.
 	 */
 
 	class ArticleStateVehicle : public ArticleState

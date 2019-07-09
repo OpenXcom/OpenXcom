@@ -470,7 +470,7 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 	{
 		std::string file = dirp->d_name;
 
-		if (file.length() >= 1 && file[0] == '.')
+		if (!file.empty() && file[0] == '.')
 		{
 			//skip ".", "..", ".git", ".svn", ".bashrc", ".ssh" etc.
 			continue;

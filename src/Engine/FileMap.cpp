@@ -99,7 +99,7 @@ const std::vector<std::pair<std::string, std::vector<std::string> > > &getRulese
 static std::string _combinePath(const std::string &prefixPath, const std::string &appendPath)
 {
 	std::string ret;
-	if (prefixPath.length())
+	if (!prefixPath.empty())
 	{
 		ret += prefixPath + "/";
 	}

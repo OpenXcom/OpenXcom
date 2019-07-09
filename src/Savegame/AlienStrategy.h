@@ -45,7 +45,7 @@ public:
 	std::string chooseRandomRegion(const Mod *mod);
 	/// Choose a random mission for a region.
 	std::string chooseRandomMission(const std::string &region) const;
-	/// Remove a region and mission from the list of posibilities.
+	/// Remove a region and mission from the list of possibilities.
 	bool removeMission(const std::string &region, const std::string &mission);
 	/// Checks the number of missions run labelled as "varName".
 	int getMissionsRun(const std::string &varName);
