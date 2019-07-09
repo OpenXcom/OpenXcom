@@ -158,15 +158,7 @@ void SaveGameState::think()
 		// Save the game
 		try
 		{
-			std::string backup = _filename + ".bak";
-			_game->getSavedGame()->save(backup);
-			std::string fullPath = Options::getMasterUserFolder() + _filename;
-			std::string bakPath = Options::getMasterUserFolder() + backup;
-			if (!CrossPlatform::moveFile(bakPath, fullPath))
-			{
-				throw Exception("Save backed up in " + backup);
-			}
-
+			_game->getSavedGame()->save(_filename);
 			if (_type == SAVE_IRONMAN_END)
 			{
 				Screen::updateScale(Options::geoscapeScale, Options::baseXGeoscape, Options::baseYGeoscape, true);

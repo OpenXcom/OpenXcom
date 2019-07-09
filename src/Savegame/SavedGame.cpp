@@ -561,9 +561,10 @@ void SavedGame::load(const std::string &filename, Mod *mod)
  */
 void SavedGame::save(const std::string &filename) const
 {
-	std::string s = Options::getMasterUserFolder() + filename;
-	std::ofstream sav(s.c_str());
-	if (!sav)
+	std::string savPath = Options::getMasterUserFolder() + filename;
+	std::string tmpPath = savPath + ".tmp";
+	std::ofstream tmp(tmpPath.c_str());
+	if (!tmp)
 	{
 		throw Exception("Failed to save " + filename);
 	}
@@ -678,12 +679,33 @@ void SavedGame::save(const std::string &filename) const
 		node["battleGame"] = _battleGame->save();
 	}
 	out << node;
+
+	// Save to temp
+	// If this goes wrong, the original save will be safe
+	tmp << out.c_str();
+	tmp.close();
+	if (!tmp)
+	{
+		throw Exception("Failed to save " + filename);
+	}
+
+	// If temp went fine, save for real
+	// If this goes wrong, they will have the temp
+	std::ofstream sav(savPath.c_str());
+	if (!sav)
+	{
+		throw Exception("Failed to save " + filename);
+	}
 	sav << out.c_str();
 	sav.close();
 	if (!sav)
 	{
 		throw Exception("Failed to save " + filename);
 	}
+
+	// Everything went fine, delete the temp
+	// We don't care if this fails
+	CrossPlatform::deleteFile(tmpPath);
 }
 
 /**
