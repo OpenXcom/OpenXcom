@@ -30,6 +30,7 @@
 #include "NewBattleState.h"
 #include "ListLoadState.h"
 #include "OptionsVideoState.h"
+#include "OptionsModsState.h"
 #include "../Engine/Options.h"
 
 namespace OpenXcom
@@ -54,7 +55,8 @@ MainMenuState::MainMenuState()
 	_btnNewBattle = new TextButton(92, 20, 164, 90);
 	_btnLoad = new TextButton(92, 20, 64, 118);
 	_btnOptions = new TextButton(92, 20, 164, 118);
-	_btnQuit = new TextButton(192, 20, 64, 146);
+	_btnMods = new TextButton(92, 20, 64, 146);
+	_btnQuit = new TextButton(92, 20, 164, 146);
 	_txtTitle = new Text(256, 30, 32, 45);
 
 	// Set palette
@@ -65,6 +67,7 @@ MainMenuState::MainMenuState()
 	add(_btnNewBattle, "button", "mainMenu");
 	add(_btnLoad, "button", "mainMenu");
 	add(_btnOptions, "button", "mainMenu");
+	add(_btnMods, "button", "mainMenu");
 	add(_btnQuit, "button", "mainMenu");
 	add(_txtTitle, "text", "mainMenu");
 
@@ -84,6 +87,9 @@ MainMenuState::MainMenuState()
 
 	_btnOptions->setText(tr("STR_OPTIONS"));
 	_btnOptions->onMouseClick((ActionHandler)&MainMenuState::btnOptionsClick);
+
+	_btnMods->setText(tr("STR_MODS"));
+	_btnMods->onMouseClick((ActionHandler)&MainMenuState::btnModsClick);
 
 	_btnQuit->setText(tr("STR_QUIT"));
 	_btnQuit->onMouseClick((ActionHandler)&MainMenuState::btnQuitClick);
@@ -139,6 +145,15 @@ void MainMenuState::btnOptionsClick(Action *)
 {
 	Options::backupDisplay();
 	_game->pushState(new OptionsVideoState(OPT_MENU));
+}
+
+/**
+* Opens the Mods screen.
+* @param action Pointer to an action.
+*/
+void MainMenuState::btnModsClick(Action *)
+{
+	_game->pushState(new OptionsModsState);
 }
 
 /**

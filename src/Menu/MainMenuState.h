@@ -40,7 +40,7 @@ public:
 class MainMenuState : public State
 {
 private:
-	TextButton *_btnNewGame, *_btnNewBattle, *_btnLoad, *_btnOptions, *_btnQuit;
+	TextButton *_btnNewGame, *_btnNewBattle, *_btnLoad, *_btnOptions, *_btnMods, *_btnQuit;
 	Window *_window;
 	Text *_txtTitle;
 public:
@@ -56,6 +56,8 @@ public:
 	void btnLoadClick(Action *action);
 	/// Handler for clicking the Options button.
 	void btnOptionsClick(Action *action);
+	/// Handler for clicking the Mods button.
+	void btnModsClick(Action *action);
 	/// Handler for clicking the Quit button.
 	void btnQuitClick(Action *action);
 	/// Update the resolution settings, we just resized the window.

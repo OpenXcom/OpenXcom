@@ -26,9 +26,11 @@
 #include "../Interface/Window.h"
 #include "../Interface/TextList.h"
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/ComboBox.h"
 #include "../Engine/Options.h"
 #include "../Engine/Action.h"
+#include "StartState.h"
 
 namespace OpenXcom
 {
@@ -36,19 +38,32 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Mod Options window.
  * @param game Pointer to the core game.
- * @param origin Game section that originated this state.
  */
-OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(origin), _curMasterIdx(0)
+OptionsModsState::OptionsModsState() : _curMasterIdx(0)
 {
-	setCategory(_btnMods);
-
 	// Create objects
-	_txtMaster = new Text(114, 9, 94, 8);
-	_cbxMasters = new ComboBox(this, 218, 16, 94, 18);
-	_lstMods = new TextList(200, 104, 94, 40);
+	_window = new Window(this, 320, 200, 0, 0);
+
+	_txtMaster = new Text(305, 9, 8, 8);
+	_cbxMasters = new ComboBox(this, 305, 16, 8, 18);
+	_lstMods = new TextList(288, 104, 8, 40);
+
+	_btnOk = new TextButton(100, 16, 8, 176);
+	_btnCancel = new TextButton(100, 16, 212, 176);
+
+	_txtTooltip = new Text(305, 25, 8, 148);
+
+	// Set palette
+	setInterface("optionsMenu");
+
+	add(_window, "window", "optionsMenu");
 
 	add(_txtMaster, "text", "modsMenu");
 	add(_lstMods, "optionLists", "modsMenu");
+	add(_btnOk, "button", "optionsMenu");
+	add(_btnCancel, "button", "optionsMenu");
+	add(_txtTooltip, "tooltip", "optionsMenu");
+
 	add(_cbxMasters, "button", "modsMenu");
 
 	centerAllSurfaces();
@@ -66,7 +81,9 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 	int leftcol = _lstMods->getWidth() - (rightcol + arrowCol);
 
 	// Set up objects
-	_txtMaster->setText(tr("STR_GAME_TYPE"));
+	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
+
+	_txtMaster->setText(tr("STR_BASE_GAME"));
 
 	// scan for masters
 	const std::map<std::string, ModInfo> &modInfos(Options::getModInfos());
@@ -116,6 +133,16 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin) : OptionsBaseState(orig
 	_lstMods->onMouseOut((ActionHandler)&OptionsModsState::txtTooltipOut);
 	_lstMods->onMouseOver((ActionHandler)&OptionsModsState::lstModsHover);
 	lstModsRefresh(0);
+
+	_btnOk->setText(tr("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler)&OptionsModsState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&OptionsModsState::btnOkClick, Options::keyOk);
+
+	_btnCancel->setText(tr("STR_CANCEL"));
+	_btnCancel->onMouseClick((ActionHandler)&OptionsModsState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&OptionsModsState::btnCancelClick, Options::keyCancel);
+
+	_txtTooltip->setWordWrap(true);
 }
 
 OptionsModsState::~OptionsModsState()
@@ -438,6 +465,58 @@ void OptionsModsState::lstModsMousePress(Action *action)
 		{
 			moveModDown(action, row);
 		}
+	}
+}
+
+/**
+ * Restarts game with new mods.
+ * @param action Pointer to an action.
+ */
+void OptionsModsState::btnOkClick(Action *)
+{
+	Options::save();
+	if (Options::reload)
+	{
+		Options::mapResources();
+		_game->loadLanguages();
+		_game->setState(new StartState);
+}
+	else
+	{
+		_game->popState();
+	}
+}
+
+/**
+ * Ignores mod changes and returns to the previous screen.
+ * @param action Pointer to an action.
+ */
+void OptionsModsState::btnCancelClick(Action *)
+{
+	Options::reload = false;
+	Options::load();
+	_game->popState();
+}
+
+/**
+ * Shows a tooltip for the appropriate button.
+ * @param action Pointer to an action.
+ */
+void OptionsModsState::txtTooltipIn(Action *action)
+{
+	_currentTooltip = action->getSender()->getTooltip();
+	_txtTooltip->setText(tr(_currentTooltip));
+}
+
+/**
+ * Clears the tooltip text.
+ * @param action Pointer to an action.
+ */
+void OptionsModsState::txtTooltipOut(Action *action)
+{
+	if (_currentTooltip == action->getSender()->getTooltip())
+	{
+		_txtTooltip->setText("");
 	}
 }
 

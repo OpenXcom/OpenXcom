@@ -43,7 +43,7 @@ class OptionsBaseState : public State
 protected:
 	OptionsOrigin _origin;
 	Window *_window;
-	TextButton *_btnVideo, *_btnAudio, *_btnControls, *_btnGeoscape, *_btnBattlescape, *_btnAdvanced, *_btnMods;
+	TextButton *_btnVideo, *_btnAudio, *_btnControls, *_btnGeoscape, *_btnBattlescape, *_btnAdvanced;
 	TextButton *_btnOk, *_btnCancel, *_btnDefault;
 	Text *_txtTooltip;
 	std::string _currentTooltip;

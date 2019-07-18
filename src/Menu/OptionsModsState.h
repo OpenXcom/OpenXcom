@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "OptionsBaseState.h"
+#include "../Engine/State.h"
 #include "../Engine/ModInfo.h"
 #include <vector>
 #include <string>
@@ -26,27 +26,34 @@
 namespace OpenXcom
 {
 
+class Window;
+class Text;
 class TextList;
+class TextButton;
 class ComboBox;
 
 /**
  * Options window that displays the
  * available mods.
  */
-class OptionsModsState : public OptionsBaseState
+class OptionsModsState : public State
 {
 private:
-	Text     *_txtMaster;
+	Window *_window;
+	Text *_txtMaster;
 	ComboBox *_cbxMasters;
 	TextList *_lstMods;
+	TextButton *_btnOk, *_btnCancel;
+	Text *_txtTooltip;
+	std::string _currentTooltip;
 	std::vector<const ModInfo *> _masters;
 	std::string _curMasterId;
 	std::vector< std::pair<std::string, bool> > _mods;
 	size_t _curMasterIdx;
 public:
-	/// Creates the Advanced state.
-	OptionsModsState(OptionsOrigin origin);
-	/// Cleans up the Advanced state.
+	/// Creates the Mods state.
+	OptionsModsState();
+	/// Cleans up the Mods state.
 	~OptionsModsState();
 	std::string makeTooltip(const ModInfo &modInfo);
 	void cbxMasterHover(Action *action);
@@ -68,6 +75,14 @@ public:
 	void moveModDown(Action *action, unsigned int row, bool max = false);
 	/// Handler for pressing-down a mouse-button in the list.
 	void lstModsMousePress(Action *action);
+	/// Handler for showing tooltip.
+	void txtTooltipIn(Action *action);
+	/// Handler for hiding tooltip.
+	void txtTooltipOut(Action *action);
+	/// Handler for clicking the OK button.
+	void btnOkClick(Action *action);
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(Action *action);
 };
 
 }
