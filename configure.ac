@@ -12,7 +12,7 @@ m4_define([openxcom_version],[openxcom_version_major.openxcom_version_minor.open
 # =============
 # Automake init
 # =============
-AC_INIT([openxcom],[openxcom_version],[https://github.com/OpenXcom/OpenXcom/issues])
+AC_INIT([openxcom],[openxcom_version],[openxcom@gmail.com])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([1.11 foreign dist-xz])
 AM_SILENT_RULES([yes])
