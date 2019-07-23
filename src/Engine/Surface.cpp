@@ -201,6 +201,7 @@ Surface::Surface(const Surface& other)
 	_visible = other._visible;
 	_hidden = other._hidden;
 	_redraw = other._redraw;
+	_tftdMode = other._tftdMode;
 }
 
 /**

@@ -49,7 +49,7 @@ const int MAX_FRAME = 2;
  * @param camera The Battlescape camera.
  * @param battleGame Pointer to the SavedBattleGame.
  */
-MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Camera * camera, SavedBattleGame * battleGame) : InteractiveSurface(w, h, x, y), _game(game), _camera(camera), _battleGame(battleGame), _frame(0), _isMouseScrolling(false), _isMouseScrolled(false), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _mouseScrollX(0), _mouseScrollY(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(false)
+MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Camera * camera, SavedBattleGame * battleGame) : InteractiveSurface(w, h, x, y), _game(game), _camera(camera), _battleGame(battleGame), _frame(0), _mouseScrollingStartTime(0), _isMouseScrolling(false), _isMouseScrolled(false), _xBeforeMouseScrolling(0), _yBeforeMouseScrolling(0), _mouseScrollX(0), _mouseScrollY(0), _totalMouseMoveX(0), _totalMouseMoveY(0), _mouseMovedOverThreshold(false)
 {
 	_set = _game->getMod()->getSurfaceSet("SCANG.DAT");
 }
@@ -77,10 +77,8 @@ void MiniMapView::draw()
 			int px = _startX;
 			for (int x = Surface::getX(); x < getWidth() + Surface::getX(); x += CELL_WIDTH)
 			{
-				MapData * data = 0;
-				Tile * t = 0;
-				Position p (px, py, lvl);
-				t = _battleGame->getTile(p);
+				Position p(px, py, lvl);
+				Tile *t = _battleGame->getTile(p);
 				if (!t)
 				{
 					px++;
@@ -88,11 +86,11 @@ void MiniMapView::draw()
 				}
 				for (int i = O_FLOOR; i <= O_OBJECT; i++)
 				{
-					data = t->getMapData((TilePart)i);
+					MapData *data = t->getMapData((TilePart)i);
 
 					if (data && data->getMiniMapIndex())
 					{
-						Surface * s = _set->getFrame (data->getMiniMapIndex()+35);
+						Surface *s = _set->getFrame(data->getMiniMapIndex() + 35);
 						if (s)
 						{
 							int shade = 16;

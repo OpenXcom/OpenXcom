@@ -40,7 +40,7 @@ namespace OpenXcom
 /**
  * Sets up a PsiAttackBState.
  */
-PsiAttackBState::PsiAttackBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _item(0), _initialized(false)
+PsiAttackBState::PsiAttackBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _target(0), _item(0), _initialized(false)
 {
 }
 

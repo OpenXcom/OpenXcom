@@ -253,7 +253,7 @@ bool OpenGL::set_shader(const char *source_yaml_filename)
 		glprogram = 0;
 	}
 
-	if (source_yaml_filename && strlen(source_yaml_filename))
+	if (source_yaml_filename && source_yaml_filename[0] != '\0')
 	{
 		glprogram = glCreateProgram();
 		if (glprogram == 0)
@@ -501,7 +501,7 @@ void OpenGL::term()
 	delete buffer_surface;
 }
 
-  OpenGL::OpenGL() : gltexture(0), glprogram(0), linear(false),
+  OpenGL::OpenGL() : gltexture(0), glprogram(0), linear(false), shader_support(false),
                      buffer(NULL), buffer_surface(NULL), iwidth(0), iheight(0),
                      iformat(GL_UNSIGNED_INT_8_8_8_8_REV), // this didn't seem to be set anywhere before...
                      ibpp(32)                              // ...nor this
