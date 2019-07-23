@@ -80,7 +80,7 @@ public:
 	virtual void blit();
 	/// Hides all the state surfaces.
 	void hideAll();
-	/// Shws all the state surfaces.
+	/// Shows all the state surfaces.
 	void showAll();
 	/// Resets all the state surfaces.
 	void resetAll();

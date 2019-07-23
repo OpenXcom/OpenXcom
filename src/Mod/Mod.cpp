@@ -670,9 +670,9 @@ int Mod::getModOffset() const
  * @param offset Member to load new value.
  * @param node Node with data
  * @param shared Max offset limit that is shared for every mod
- * @param multipler Value used by `projectle` surface set to convert projectle offset to index offset in surface.
+ * @param multiplier Value used by `projectile` surface set to convert projectile offset to index offset in surface.
  */
-void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Node &node, int shared, const std::string &set, size_t multipler) const
+void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Node &node, int shared, const std::string &set, size_t multiplier) const
 {
 	assert(_modCurrent);
 	const ModData* curr = _modCurrent;
@@ -721,7 +721,7 @@ void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Nod
 	if (offset < -1)
 	{
 		std::ostringstream err;
-		err << "Error for '" << parent << "': offset '" << offset << "' have incorrect value in set '" << set << "'";
+		err << "Error for '" << parent << "': offset '" << offset << "' has incorrect value in set '" << set << "'";
 		throw Exception(err.str());
 	}
 	else if (offset == -1)
@@ -731,11 +731,11 @@ void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Nod
 	else
 	{
 		int f = offset;
-		f *= multipler;
+		f *= multiplier;
 		if ((size_t)f > curr->size)
 		{
 			std::ostringstream err;
-			err << "Error for '" << parent << "': offset '" << offset << "' exceeds mod size limit " << (curr->size / multipler) << " in set '" << set << "'";
+			err << "Error for '" << parent << "': offset '" << offset << "' exceeds mod size limit " << (curr->size / multiplier) << " in set '" << set << "'";
 			throw Exception(err.str());
 		}
 		if (f >= shared)
@@ -751,13 +751,13 @@ void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Nod
  * @param sprite Member to load new sprite ID index.
  * @param node Node with data
  * @param set Name of the surfaceset to lookup.
- * @param multipler Value used by `projectle` surface set to convert projectle offset to index offset in surface.
+ * @param multiplier Value used by `projectile` surface set to convert projectile offset to index offset in surface.
  */
-void Mod::loadSpriteOffset(const std::string &parent, int& sprite, const YAML::Node &node, const std::string &set, int multipler) const
+void Mod::loadSpriteOffset(const std::string &parent, int& sprite, const YAML::Node &node, const std::string &set, size_t multiplier) const
 {
 	if (node)
 	{
-		loadOffsetNode(parent, sprite, node, getRule(set, "Sprite Set", _sets, true)->getMaxSharedFrames(), set, multipler);
+		loadOffsetNode(parent, sprite, node, getRule(set, "Sprite Set", _sets, true)->getMaxSharedFrames(), set, multiplier);
 	}
 }
 
@@ -822,7 +822,7 @@ int Mod::getOffset(int id, int max) const
 }
 
 /**
- * Helper function used to disable buged mod and throw exception to quit game
+ * Helper function used to disable invalid mod and throw exception to quit game
  * @param modId Mod id
  * @param error Error message
  */
@@ -955,13 +955,13 @@ void Mod::loadMod(const std::vector<std::string> &rulesetFiles)
 
 	// these need to be validated, otherwise we're gonna get into some serious trouble down the line.
 	// it may seem like a somewhat arbitrary limitation, but there is a good reason behind it.
-	// i'd need to know what results are going to be before they are formulated, and there's a heirarchical structure to
+	// i'd need to know what results are going to be before they are formulated, and there's a hierarchical structure to
 	// the order in which variables are determined for a mission, and the order is DIFFERENT for regular missions vs
 	// missions that spawn a mission site. where normally we pick a region, then a mission based on the weights for that region.
 	// a terror-type mission picks a mission type FIRST, then a region based on the criteria defined by the mission.
 	// there is no way i can conceive of to reconcile this difference to allow mixing and matching,
 	// short of knowing the results of calls to the RNG before they're determined.
-	// the best solution i can come up with is to disallow it, as there are other ways to acheive what this would amount to anyway,
+	// the best solution i can come up with is to disallow it, as there are other ways to achieve what this would amount to anyway,
 	// and they don't require time travel. - Warboy
 	for (std::map<std::string, RuleMissionScript*>::iterator i = _missionScripts.begin(); i != _missionScripts.end(); ++i)
 	{
@@ -2506,7 +2506,7 @@ std::string Mod::getFontName() const
 }
 
 /**
- * Returns the minimum facilitie's radar range.
+ * Returns the smallest facility's radar range.
  * @return The minimum range.
  */
  int Mod::getMinRadarRange() const
