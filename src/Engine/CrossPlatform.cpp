@@ -212,7 +212,9 @@ std::vector<std::string> findDataFolders()
 	// Get global data folders
 	if (char *xdg_data_dirs = getenv("XDG_DATA_DIRS"))
 	{
-		char *dir = strtok(xdg_data_dirs, ":");
+		char xdg_data_dirs_copy[strlen(xdg_data_dirs)+1];
+		strcpy(xdg_data_dirs_copy, xdg_data_dirs);
+		char *dir = strtok(xdg_data_dirs_copy, ":");
 		while (dir != 0)
 		{
 			snprintf(path, MAXPATHLEN, "%s/openxcom/", dir);
