@@ -96,7 +96,7 @@ void getErrorDialog()
 		if (getenv("KDE_SESSION_UID") && system("which kdialog 2>&1 > /dev/null") == 0)
 			errorDlg = "kdialog --error ";
 		else if (system("which zenity 2>&1 > /dev/null") == 0)
-			errorDlg = "zenity --error --text=";
+			errorDlg = "zenity --no-wrap --error --text=";
 		else if (system("which kdialog 2>&1 > /dev/null") == 0)
 			errorDlg = "kdialog --error ";
 		else if (system("which gdialog 2>&1 > /dev/null") == 0)
