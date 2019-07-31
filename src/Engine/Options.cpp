@@ -817,7 +817,7 @@ void setFolders()
 /**
  * Splits the game's User folder by master mod,
  * creating a subfolder for each one and moving
- * the apppropriate user data among them.
+ * the appropriate user data among them.
  */
 void userSplitMasters()
 {

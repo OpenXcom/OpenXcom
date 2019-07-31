@@ -138,7 +138,7 @@ public:
 	SavedGame();
 	/// Cleans up the saved game.
 	~SavedGame();
-	/// Sanitizies a mod name in a save.
+	/// Sanitizes a mod name in a save.
 	static std::string sanitizeModName(const std::string &name);
 	/// Gets list of saves in the user directory.
 	static std::vector<SaveInfo> getList(Language *lang, bool autoquick);

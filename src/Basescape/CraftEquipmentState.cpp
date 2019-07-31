@@ -439,7 +439,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 			{
 				ammoPerVehicle = ammo->getClipSize();
 			}
-			// Put the vehicles and their ammo back as seperate items.
+			// Put the vehicles and their ammo back as separate items.
 			if (_game->getSavedGame()->getMonthsPassed() != -1)
 			{
 				_base->getStorageItems()->addItem(_items[_sel], change);

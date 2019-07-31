@@ -1203,7 +1203,7 @@ BattleUnit *TileEngine::hit(Position center, int power, ItemDamageType type, Bat
  * @param center Center of the explosion in voxelspace.
  * @param power Power of the explosion.
  * @param type The damage type of the explosion.
- * @param maxRadius The maximum radius othe explosion.
+ * @param maxRadius The maximum radius of the explosion.
  * @param unit The unit that caused the explosion.
  */
 void TileEngine::explode(Position center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit)

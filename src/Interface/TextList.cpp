@@ -1151,7 +1151,7 @@ void TextList::mouseOver(Action *action, State *state)
 {
 	if (_selectable)
 	{
-		int rowHeight = _font->getHeight() + _font->getSpacing(); //theorethical line height
+		int rowHeight = _font->getHeight() + _font->getSpacing(); //theoretical line height
 		_selRow = std::max(0, (int)(_scroll + (int)floor(action->getRelativeYMouse() / (rowHeight * action->getYScale()))));
 		if (_selRow < _rows.size())
 		{

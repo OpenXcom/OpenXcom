@@ -27,7 +27,7 @@ namespace OpenXcom
 
 /**
  * Represents game-specific contents needed
- * for save convertion and ID matching.
+ * for save conversion and ID matching.
  * @sa SaveConverter
  */
 class RuleConverter

@@ -525,7 +525,7 @@ void UnitSprite::drawRoutine0()
 	}
 
 	// offset everything to the left by 16 pixels.
-	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	// this is because we draw the sprites double wide, to accommodate weapons in-hand
 	torso->setX(offXSprite);
 	legs->setX(offXSprite);
 	leftArm->setX(offXSprite);
@@ -720,7 +720,7 @@ void UnitSprite::drawRoutine1()
 	}
 
 	// offset everything to the left by 16 pixels.
-	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	// this is because we draw the sprites double wide, to accommodate weapons in-hand
 	torso->setX(offXSprite);
 	leftArm->setX(offXSprite);
 	rightArm->setX(offXSprite);
@@ -829,7 +829,7 @@ void UnitSprite::drawRoutine3()
 	s = _unitSurface->getFrame((_part * 8) + _unit->getDirection());
 
 	// offset everything to the left by 16 pixels.
-	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	// this is because we draw the sprites double wide, to accommodate weapons in-hand
 	s->setX(offXSprite);
 
 	drawRecolored(s);
@@ -964,7 +964,7 @@ void UnitSprite::drawRoutine4()
 	}
 
 	// offset everything to the right by 16 pixels.
-	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	// this is because we draw the sprites double wide, to accommodate weapons in-hand
 	s->setX(offXSprite);
 	if (itemR)
 		itemR->setX(itemR->getX() + offXSprite);
@@ -1013,7 +1013,7 @@ void UnitSprite::drawRoutine5()
 	}
 
 	// offset everything to the right by 16 pixels.
-	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	// this is because we draw the sprites double wide, to accommodate weapons in-hand
 	s->setX(offXSprite);
 	drawRecolored(s);
 }
@@ -1182,7 +1182,7 @@ void UnitSprite::drawRoutine6()
 		torso->setY(0);
 	}
 	// offset everything to the right by 16 pixels.
-	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	// this is because we draw the sprites double wide, to accommodate weapons in-hand
 	torso->setX(offXSprite);
 	legs->setX(offXSprite);
 	leftArm->setX(offXSprite);
@@ -1268,7 +1268,7 @@ void UnitSprite::drawRoutine7()
 		torso->setY(0);
 	}
 	// offset everything to the right by 16 pixels.
-	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	// this is because we draw the sprites double wide, to accommodate weapons in-hand
 	torso->setX(offXSprite);
 	legs->setX(offXSprite);
 	leftArm->setX(offXSprite);
@@ -1315,7 +1315,7 @@ void UnitSprite::drawRoutine8()
 		legs = _unitSurface->getFrame(aim);
 
 	// offset everything to the right by 16 pixels.
-	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	// this is because we draw the sprites double wide, to accommodate weapons in-hand
 	legs->setX(offXSprite);
 
 	drawRecolored(legs);
@@ -1344,7 +1344,7 @@ void UnitSprite::drawRoutine9()
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 
 	// offset everything to the right by 16 pixels.
-	// this is because we draw the sprites double wide, to accomodate weapons in-hand
+	// this is because we draw the sprites double wide, to accommodate weapons in-hand
 	torso->setX(offXSprite);
 
 	drawRecolored(torso);

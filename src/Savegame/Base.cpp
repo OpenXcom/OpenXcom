@@ -980,7 +980,7 @@ int Base::getCraftMaintenance() const
  * Returns the total amount of soldiers of
  * a certain type stored in the base.
  * @param soldier Soldier type.
- * @return Number of soldiert.
+ * @return Number of soldiers.
  */
 int Base::getSoldierCount(const std::string &soldier) const
 {

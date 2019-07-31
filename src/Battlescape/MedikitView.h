@@ -43,7 +43,7 @@ public:
 	void draw();
 	/// Gets the selected body part.
 	int getSelectedPart() const;
-	/// Updates the seleted body part.
+	/// Updates the selected body part.
 	void updateSelectedPart();
 };
 }

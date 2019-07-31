@@ -515,7 +515,7 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 						}
 					} /// End of AND loop.
 				  if (andCriteriaMet)
-				    break; // Stop looking, becuase we _are_ getting one, regardless of what's in the next OR block.
+				    break; // Stop looking, because we _are_ getting one, regardless of what's in the next OR block.
 				} /// End of OR loop.
 
 				if (!andCriteriaMet)

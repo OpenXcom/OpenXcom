@@ -1929,7 +1929,7 @@ int SavedBattleGame::getAmbientSound() const
 
 /**
  * get the list of items we're guaranteed to take with us (ie: items that were in the skyranger)
- * @return the list of items we're garaunteed.
+ * @return the list of items we're guaranteed.
  */
 std::vector<BattleItem*> *SavedBattleGame::getGuaranteedRecoveredItems()
 {

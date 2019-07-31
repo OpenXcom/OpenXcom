@@ -408,7 +408,7 @@ int AlienDeployment::getMaxDepth() const
 }
 
 /**
- * Gets the target type for this mission (ie: alien control consoles and synonium devices).
+ * Gets the target type for this mission (ie: alien control consoles and synomium devices).
  * @return the target type for this mission.
  */
 int AlienDeployment::getObjectiveType() const

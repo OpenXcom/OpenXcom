@@ -404,7 +404,7 @@ void BattlescapeGenerator::nextStage()
 	// rebuild it with only the items we want to keep active in battle for the next stage
 	// here we add all the items that our soldiers are carrying, and we'll add the items on the
 	// inventory tile after we've generated our map. everything else will either be in one of the
-	// recovery arrays, or deleted from existance at this point.
+	// recovery arrays, or deleted from existence at this point.
 	for (std::vector<BattleItem*>::iterator i = carryToNextStage.begin(); i != carryToNextStage.end();++i)
 	{
 		_save->getItems()->push_back(*i);

@@ -60,7 +60,7 @@ public:
 	bool isMaster() const;
 	/// Gets whether this mod can be activated.
 	bool canActivate(const std::string &curMaster) const;
-	/// Gets size of mod, bigger mod reserve more values in common colections/surfacesets.
+	/// Gets size of mod, bigger mod reserve more values in common collections/surfacesets.
 	int getReservedSpace() const;
 	/// Gets the OXCE version required by this mod.
 	const std::string &getRequiredExtendedVersion() const;

@@ -24,7 +24,7 @@ namespace OpenXcom
 
 /**
  * RuleMissionScript: the rules for the alien mission progression.
- * Each script element is independant, and the saved game will probe the list of these each month to determine what's going to happen.
+ * Each script element is independent, and the saved game will probe the list of these each month to determine what's going to happen.
  */
 RuleMissionScript::RuleMissionScript(const std::string &type) : _type(type), _firstMonth(0), _lastMonth(-1), _label(0), _executionOdds(100),
 															_targetBaseOdds(0), _minDifficulty(0), _maxRuns(-1), _avoidRepeats(0), _delay(0),

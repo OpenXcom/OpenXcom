@@ -44,7 +44,7 @@ private:
 	Uint16 _headerType;    /* Fli header check */
 	Uint16 _headerFrames;  /* Number of frames in flic */
 	Uint16 _headerWidth;   /* Fli width */
-	Uint16 _headerHeight;  /* Fli heigth */
+	Uint16 _headerHeight;  /* Fli height */
 	Uint16 _headerDepth;   /* Color depth */
 	Uint16 _headerSpeed;   /* Number of video ticks between frame */
 	Uint32 _videoFrameSize;     /* Frame size in bytes */
