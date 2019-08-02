@@ -556,7 +556,7 @@ bool init(int argc, char *argv[])
 	return true;
 }
 
-void updateMods()
+void refreshMods()
 {
 	if (reload)
 	{
@@ -674,9 +674,24 @@ void updateMods()
 	{
 		_masterMod = activeMaster;
 	}
+	save();
+}
 
+void updateMods()
+{
+	refreshMods();
 	mapResources();
 	userSplitMasters();
+
+	Log(LOG_INFO) << "Active mods:";
+	for (std::vector< std::pair<std::string, bool> >::const_iterator i = mods.begin(); i != mods.end(); ++i)
+	{
+		if (i->second)
+		{
+			const ModInfo &modInfo = _modInfos.find(i->first)->second;
+			Log(LOG_INFO) << "- " << modInfo.getId() << " v" << modInfo.getVersion();
+		}
+	}
 }
 
 /**

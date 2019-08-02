@@ -86,6 +86,7 @@ OptionsModsState::OptionsModsState() : _curMasterIdx(0)
 	_txtMaster->setText(tr("STR_BASE_GAME"));
 
 	// scan for masters
+	Options::refreshMods();
 	const std::map<std::string, ModInfo> &modInfos(Options::getModInfos());
 	std::vector<std::string> masterNames;
 	for (std::vector< std::pair<std::string, bool> >::const_iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
@@ -477,8 +478,6 @@ void OptionsModsState::btnOkClick(Action *)
 	Options::save();
 	if (Options::reload)
 	{
-		Options::mapResources();
-		_game->loadLanguages();
 		_game->setState(new StartState);
 }
 	else

@@ -105,6 +105,8 @@ namespace Options
 	void mapResources();
 	/// Gets the map of mod ids to mod infos
 	const std::map<std::string, ModInfo> &getModInfos();
+	/// Refreshes the mods.
+	void refreshMods();
 	/// Refreshes the mods and filemaps.
 	void updateMods();
 	/// Gets the list of currently active mods.
