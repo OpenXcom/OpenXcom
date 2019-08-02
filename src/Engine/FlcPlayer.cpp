@@ -180,10 +180,13 @@ void FlcPlayer::deInit()
 		_mainScreen = 0;
 	}
 
-	delete[] _fileBuf;
-	_fileBuf = 0;
+	if (_fileBuf != 0)
+	{
+		delete[] _fileBuf;
+		_fileBuf = 0;
 
-	deInitAudio();
+		deInitAudio();
+	}
 }
 
 /**
