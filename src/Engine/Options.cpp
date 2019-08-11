@@ -685,13 +685,10 @@ void updateMods()
 	userSplitMasters();
 
 	Log(LOG_INFO) << "Active mods:";
-	for (std::vector< std::pair<std::string, bool> >::const_iterator i = mods.begin(); i != mods.end(); ++i)
+	std::vector<const ModInfo*> activeMods = Options::getActiveMods();
+	for (std::vector<const ModInfo*>::const_iterator i = activeMods.begin(); i != activeMods.end(); ++i)
 	{
-		if (i->second)
-		{
-			const ModInfo &modInfo = _modInfos.find(i->first)->second;
-			Log(LOG_INFO) << "- " << modInfo.getId() << " v" << modInfo.getVersion();
-		}
+		Log(LOG_INFO) << "- " << (*i)->getId() << " v" << (*i)->getVersion();
 	}
 }
 
