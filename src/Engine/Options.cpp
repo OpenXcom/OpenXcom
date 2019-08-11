@@ -563,9 +563,7 @@ void refreshMods()
 		_masterMod = "";
 	}
 
-	// pick up stuff in common before-hand
-	FileMap::load("common", CrossPlatform::searchDataFolder("common"), true);
-
+	_modInfos.clear();
 	std::string modPath = CrossPlatform::searchDataFolder("standard");
 	Log(LOG_INFO) << "Scanning standard mods in '" << modPath << "'...";
 	_scanMods(modPath);
@@ -679,6 +677,9 @@ void refreshMods()
 
 void updateMods()
 {
+	// pick up stuff in common before-hand
+	FileMap::load("common", CrossPlatform::searchDataFolder("common"), true);
+
 	refreshMods();
 	mapResources();
 	userSplitMasters();
