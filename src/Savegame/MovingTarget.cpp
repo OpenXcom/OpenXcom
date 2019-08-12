@@ -152,6 +152,11 @@ void MovingTarget::setSpeed(int speed)
 {
 	_speed = speed;
 	_speedRadian = calculateRadianSpeed(_speed);
+	// Recalculate meeting point for any followers
+	for (std::vector<MovingTarget *>::iterator i = getFollowers()->begin(); i != getFollowers()->end(); ++i)
+	{
+		(*i)->resetMeetPoint();
+	}
 	calculateSpeed();
 }
 
