@@ -80,6 +80,7 @@ public:
 	std::vector<Craft*> getCraftFollowers() const;
 	/// Gets the distance to another target.
 	double getDistance(const Target *target) const;
+	double getDistance(double lon, double lat) const;
 };
 
 }

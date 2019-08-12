@@ -32,12 +32,12 @@
 
 inline bool AreSame(float l, float r)
 {
-	return std::fabs(l-r) <= FLT_EPSILON;
+	return std::fabs(l-r) <= FLT_EPSILON * std::max(1.0f, std::max(std::fabs(l), std::fabs(r)));
 }
 
 inline bool AreSame(double l, double r)
 {
-	return std::fabs(l-r) <= DBL_EPSILON;
+	return std::fabs(l-r) <= DBL_EPSILON * std::max(1.0, std::max(std::fabs(l), std::fabs(r)));;
 }
 
 inline float Round(float x)

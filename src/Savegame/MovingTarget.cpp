@@ -207,7 +207,7 @@ void MovingTarget::move()
 	calculateSpeed();
 	if (_dest != 0)
 	{
-		if (getDistance(_dest) > _speedRadian)
+		if (getDistance(_meetPointLon, _meetPointLat) > _speedRadian)
 		{
 			setLongitude(_lon + _speedLon);
 			setLatitude(_lat + _speedLat);
@@ -216,6 +216,7 @@ void MovingTarget::move()
 		{
 			setLongitude(_dest->getLongitude());
 			setLatitude(_dest->getLatitude());
+			resetMeetPoint();
 		}
 	}
 }
@@ -240,7 +241,7 @@ void MovingTarget::calculateMeetPoint()
 		_meetPointLon = _lon;
 	}
 
-	if (!_dest || !Options::meetingPoint) return;
+	if (!_dest || !Options::meetingPoint || reachedDestination()) return;
 
 	MovingTarget *t = dynamic_cast<MovingTarget*>(_dest);
 	if (!t || !t->getDestination()) return;
