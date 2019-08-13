@@ -233,16 +233,14 @@ std::vector<Craft*> Target::getCraftFollowers() const
 /**
  * Returns the great circle distance to another
  * target on the globe.
- * @param target Pointer to other target.
+ * @param lon Longitude.
+ * @param lat Latitude.
  * @returns Distance in radian.
  */
-double Target::getDistance(const Target *target) const
-{
-	return getDistance(target->getLongitude(), target->getLatitude());
-}
-
 double Target::getDistance(double lon, double lat) const
 {
+	if (AreSame(lon, _lon) && AreSame(lat, _lat))
+		return 0.0;
 	return acos(cos(_lat) * cos(lat) * cos(lon - _lon) + sin(_lat) * sin(lat));
 }
 

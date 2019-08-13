@@ -748,7 +748,7 @@ void DogfightState::update()
 			_ufo->setInterceptionProcessed(true);
 			int escapeCounter = _ufo->getEscapeCountdown();
 
-			if (escapeCounter > 0 )
+			if (escapeCounter > 0)
 			{
 				escapeCounter--;
 				_ufo->setEscapeCountdown(escapeCounter);

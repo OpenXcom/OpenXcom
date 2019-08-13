@@ -879,20 +879,21 @@ void GeoscapeState::time5Seconds()
 							continue;
 						}
 						// Can we actually fight it
-						if (!(*j)->isInDogfight())
+						if (!(*j)->isInDogfight() && u->getSpeed() <= (*j)->getRules()->getMaxSpeed())
 						{
-							_dogfightsToBeStarted.push_back(new DogfightState(this, (*j), u));
+							DogfightState *dogfight = new DogfightState(this, (*j), u);
+							_dogfightsToBeStarted.push_back(dogfight);
 							if ((*j)->getRules()->isWaterOnly() && u->getAltitudeInt() > (*j)->getRules()->getMaxAltitude())
 							{
 								popup(new DogfightErrorState((*j), tr("STR_UNABLE_TO_ENGAGE_DEPTH")));
-								_dogfightsToBeStarted.back()->setMinimized(true);
-								_dogfightsToBeStarted.back()->setWaitForAltitude(true);
+								dogfight->setMinimized(true);
+								dogfight->setWaitForAltitude(true);
 							}
 							else if ((*j)->getRules()->isWaterOnly() && !_globe->insideLand((*j)->getLongitude(), (*j)->getLatitude()))
 							{
 								popup(new DogfightErrorState((*j), tr("STR_UNABLE_TO_ENGAGE_AIRBORNE")));
-								_dogfightsToBeStarted.back()->setMinimized(true);
-								_dogfightsToBeStarted.back()->setWaitForPoly(true);
+								dogfight->setMinimized(true);
+								dogfight->setWaitForPoly(true);
 							}
 							if (!_dogfightStartTimer->isRunning())
 							{

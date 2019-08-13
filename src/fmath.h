@@ -37,7 +37,7 @@ inline bool AreSame(float l, float r)
 
 inline bool AreSame(double l, double r)
 {
-	return std::fabs(l-r) <= DBL_EPSILON * std::max(1.0, std::max(std::fabs(l), std::fabs(r)));;
+	return std::fabs(l-r) <= DBL_EPSILON * std::max(1.0, std::max(std::fabs(l), std::fabs(r)));
 }
 
 inline float Round(float x)
