@@ -75,6 +75,8 @@
 #include "../Savegame/Country.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/Vehicle.h"
+#include "../Savegame/ItemContainer.h"
 #include "../Savegame/Transfer.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../Savegame/AlienStrategy.h"
@@ -1686,10 +1688,36 @@ SavedGame *Mod::newSave() const
 			}
 		}
 		// Generate soldiers
+		unsigned maxSoldiersInTransportCraft = 0;
+		if (transportCraft != 0)
+		{
+			maxSoldiersInTransportCraft = transportCraft->getRules()->getSoldiers();
+			for (std::vector<Vehicle*>::iterator v = transportCraft->getVehicles()->begin(); v != transportCraft->getVehicles()->end();)
+			{
+				if (maxSoldiersInTransportCraft < (*v)->getSize())
+				{
+					base->getStorageItems()->addItem((*v)->getRules()->getType(), 1);
+					if ((*v)->getAmmo() > 0 && !(*v)->getRules()->getCompatibleAmmo()->empty())
+					{
+						base->getStorageItems()->addItem(
+							(*v)->getRules()->getCompatibleAmmo()->front(),
+							(*v)->getAmmo() / getItem((*v)->getRules()->getCompatibleAmmo()->front())->getClipSize());
+					}
+					delete (*v);
+					v = transportCraft->getVehicles()->erase(v);
+				}
+				else
+				{
+					maxSoldiersInTransportCraft -= (*v)->getSize();
+					++v;
+				}
+			}
+		}
+
 		for (size_t i = 0; i < randomTypes.size(); ++i)
 		{
 			Soldier *soldier = genSoldier(save, randomTypes[i]);
-			if (transportCraft != 0 && i < (unsigned)transportCraft->getRules()->getSoldiers())
+			if (transportCraft != 0 && i < maxSoldiersInTransportCraft)
 			{
 				soldier->setCraft(transportCraft);
 			}
