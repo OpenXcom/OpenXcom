@@ -103,6 +103,7 @@
 #include <OpenGL/glext.h>
 #include <GLUT/glut.h>
 #endif
+#define __gl_glext_h_
 #include <SDL_opengl.h>
 #endif
 
