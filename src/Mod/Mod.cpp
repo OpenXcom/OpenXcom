@@ -1694,7 +1694,7 @@ SavedGame *Mod::newSave() const
 			maxSoldiersInTransportCraft = transportCraft->getRules()->getSoldiers();
 			for (std::vector<Vehicle*>::iterator v = transportCraft->getVehicles()->begin(); v != transportCraft->getVehicles()->end();)
 			{
-				if (maxSoldiersInTransportCraft < (*v)->getSize())
+				if ((int)maxSoldiersInTransportCraft < (*v)->getSize())
 				{
 					base->getStorageItems()->addItem((*v)->getRules()->getType(), 1);
 					if ((*v)->getAmmo() > 0 && !(*v)->getRules()->getCompatibleAmmo()->empty())
