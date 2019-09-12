@@ -897,7 +897,7 @@ void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::st
 	// load rulesets that can affect loading vanilla resources
 	for (size_t i = 0; _modData.size() > i; ++i)
 	{
-		_modCurrent = &_modData.at(0);
+		_modCurrent = &_modData.at(i);
 		const ModInfo *info = _modCurrent->info;
 		if (info->isMaster() && !info->getResourceConfigFile().empty())
 		{
