@@ -917,7 +917,7 @@ void Mod::loadAll(const std::vector< std::pair< std::string, std::vector<std::st
 	{
 		_modCurrent = &_modData.at(i);
 		const ModInfo *info = _modCurrent->info;
-		if (info->isMaster() && !info->getResourceConfigFile().empty())
+		if (!info->getResourceConfigFile().empty())
 		{
 			std::string path = info->getPath() + "/" + info->getResourceConfigFile();
 			if (CrossPlatform::fileExists(path))
