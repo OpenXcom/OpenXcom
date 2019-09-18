@@ -874,7 +874,7 @@ void DebriefingState::prepareDebriefing()
 				if (craft->getDestination() != 0)
 				{
 					_missionStatistics->markerName = craft->getDestination()->getMarkerName();
-					_missionStatistics->markerId = craft->getDestination()->getId();
+					_missionStatistics->markerId = craft->getDestination()->getMarkerId();
 					target = craft->getDestination()->getType();
 					// Ignore custom mission names
 					if (dynamic_cast<AlienBase*>(craft->getDestination()))

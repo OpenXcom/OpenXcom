@@ -202,6 +202,15 @@ std::string Target::getMarkerName() const
 }
 
 /**
+ * Returns the marker ID on the globe for the target.
+ * @return Marker ID.
+ */
+int Target::getMarkerId() const
+{
+	return _id;
+}
+
+/**
  * Returns the list of targets currently
  * following this target.
  * @return Pointer to list of targets.

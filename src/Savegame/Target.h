@@ -72,6 +72,8 @@ public:
 	virtual std::string getDefaultName(Language *lang) const;
 	/// Gets the target's marker name.
 	virtual std::string getMarkerName() const;
+	/// Gets the target's marker ID.
+	virtual int getMarkerId() const;
 	/// Gets the target's marker sprite.
 	virtual int getMarker() const = 0;
 	/// Gets the target's followers.

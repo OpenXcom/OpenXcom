@@ -79,6 +79,8 @@ public:
 	std::string getDefaultName(Language *lang) const;
 	/// Gets the UFO's marker name.
 	std::string getMarkerName() const;
+	/// Gets the UFO's marker ID.
+	int getMarkerId() const override;
 	/// Gets the UFO's marker sprite.
 	int getMarker() const;
 	/// Gets the UFO's amount of damage.

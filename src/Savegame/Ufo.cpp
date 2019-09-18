@@ -272,6 +272,23 @@ std::string Ufo::getMarkerName() const
 }
 
 /**
+ * Returns the marker ID on the globe for the UFO.
+ * @return Marker ID.
+ */
+int Ufo::getMarkerId() const
+{
+	switch (_status)
+	{
+	case LANDED:
+		return _landId;
+	case CRASHED:
+		return _crashId;
+	default:
+		return _id;
+	}
+}
+
+/**
  * Returns the globe marker for the UFO.
  * @return Marker sprite, -1 if none.
  */
