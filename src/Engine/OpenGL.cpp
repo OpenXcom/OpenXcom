@@ -10,13 +10,11 @@
 
 #ifndef __NO_OPENGL
 
+#include "OpenGL.h"
 #include <SDL.h>
-#define __gl_glext_h_
-#include <SDL_opengl.h>
 #include <yaml-cpp/yaml.h>
 #include <fstream>
 
-#include "OpenGL.h"
 #include "Logger.h"
 #include "Surface.h"
 

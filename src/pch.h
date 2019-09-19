@@ -97,12 +97,6 @@
 
 // library headers
 #ifndef __NO_OPENGL
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <OpenGL/glext.h>
-#include <GLUT/glut.h>
-#endif
 #define __gl_glext_h_
 #include <SDL_opengl.h>
 #endif
