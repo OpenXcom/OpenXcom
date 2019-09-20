@@ -144,74 +144,74 @@ void MCDPatch::modifyData(MapDataSet *dataSet) const
 {
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _bigWalls.begin(); i != _bigWalls.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setBigWall(i->second);
+		dataSet->getObject(i->first)->setBigWall(i->second);
 	}
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _TUWalks.begin(); i != _TUWalks.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setTUWalk(i->second);
+		dataSet->getObject(i->first)->setTUWalk(i->second);
 	}
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _TUFlys.begin(); i != _TUFlys.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setTUFly(i->second);
+		dataSet->getObject(i->first)->setTUFly(i->second);
 	}
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _TUSlides.begin(); i != _TUSlides.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setTUSlide(i->second);
+		dataSet->getObject(i->first)->setTUSlide(i->second);
 	}
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _deathTiles.begin(); i != _deathTiles.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setDieMCD(i->second);
+		dataSet->getObject(i->first)->setDieMCD(i->second);
 	}
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _terrainHeight.begin(); i != _terrainHeight.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setTerrainLevel(i->second);
+		dataSet->getObject(i->first)->setTerrainLevel(i->second);
 	}
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _specialTypes.begin(); i != _specialTypes.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setSpecialType(i->second, dataSet->getObjects()->at(i->first)->getObjectType());
+		dataSet->getObject(i->first)->setSpecialType(i->second, dataSet->getObject(i->first)->getObjectType());
 	}
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _explosives.begin(); i != _explosives.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setExplosive(i->second);
+		dataSet->getObject(i->first)->setExplosive(i->second);
 	}
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _armors.begin(); i != _armors.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setArmor(i->second);
+		dataSet->getObject(i->first)->setArmor(i->second);
 	}
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _flammabilities.begin(); i != _flammabilities.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setFlammable(i->second);
+		dataSet->getObject(i->first)->setFlammable(i->second);
 	}
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _fuels.begin(); i != _fuels.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setFuel(i->second);
+		dataSet->getObject(i->first)->setFuel(i->second);
 	}
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _HEBlocks.begin(); i != _HEBlocks.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setHEBlock(i->second);
+		dataSet->getObject(i->first)->setHEBlock(i->second);
 	}
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _footstepSounds.begin(); i != _footstepSounds.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setFootstepSound(i->second);
+		dataSet->getObject(i->first)->setFootstepSound(i->second);
 	}
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _objectTypes.begin(); i != _objectTypes.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setObjectType((TilePart)i->second);
+		dataSet->getObject(i->first)->setObjectType((TilePart)i->second);
 	}
 	for (std::vector<std::pair<size_t, bool> >::const_iterator i = _noFloors.begin(); i != _noFloors.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setNoFloor(i->second);
+		dataSet->getObject(i->first)->setNoFloor(i->second);
 	}
 	for (std::vector<std::pair<size_t, bool> >::const_iterator i = _stopLOSses.begin(); i != _stopLOSses.end(); ++i)
 	{
-		dataSet->getObjects()->at(i->first)->setStopLOS(i->second);
+		dataSet->getObject(i->first)->setStopLOS(i->second);
 	}
 	for (std::vector<std::pair<size_t, std::vector<int> > >::const_iterator i = _LOFTS.begin(); i != _LOFTS.end(); ++i)
 	{
 		int layer = 0;
 		for (std::vector<int>::const_iterator j = i->second.begin(); j != i->second.end(); ++j)
 		{
-			dataSet->getObjects()->at(i->first)->setLoftID(*j, layer);
+			dataSet->getObject(i->first)->setLoftID(*j, layer);
 			++layer;
 		}
 	}
