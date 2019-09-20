@@ -131,7 +131,7 @@ public:
 	/// Gets the floor object footstep sound.
 	int getFootstepSound(Tile *tileBelow) const;
 	/// Open a door, returns the ID, 0(normal), 1(ufo) or -1 if no door opened.
-	int openDoor(TilePart part, BattleUnit *Unit = 0, BattleActionType reserve = BA_NONE);
+	int openDoor(TilePart part, BattleUnit *unit = 0, BattleActionType reserve = BA_NONE);
 
 	/**
 	 * Check if the ufo door is open or opening. Used for visibility/light blocking checks.
