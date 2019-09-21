@@ -24,6 +24,7 @@
 #include "../Engine/Exception.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/FileMap.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -219,15 +220,11 @@ void MapDataSet::loadData()
 	{
 		if (_objects[i]->getDieMCD() >= _objects.size())
 		{
-			std::ostringstream ss;
-			ss << "MCD " << _name << " object " << i << " has invalid DieMCD: " << _objects[i]->getDieMCD();
-			throw Exception(ss.str());
+			Log(LOG_INFO) << "MCD " << _name << " object " << i << " has invalid DieMCD: " << _objects[i]->getDieMCD();
 		}
 		if (_objects[i]->getAltMCD() >= _objects.size())
 		{
-			std::ostringstream ss;
-			ss << "MCD " << _name << " object " << i << " has invalid AltMCD: " << _objects[i]->getAltMCD();
-			throw Exception(ss.str());
+			Log(LOG_INFO) << "MCD " << _name << " object " << i << " has invalid AltMCD: " << _objects[i]->getAltMCD();
 		}
 	}
 
