@@ -97,9 +97,6 @@
 
 // library headers
 #ifndef __NO_OPENGL
-#ifndef WIN32
-#define NO_SDL_GLEXT
-#endif
 #include <SDL_opengl.h>
 #endif
 
