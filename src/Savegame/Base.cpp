@@ -230,6 +230,58 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 	}
 
 	_retaliationTarget = node["retaliationTarget"].as<bool>(_retaliationTarget);
+
+	isOverlappingOrOverflowing(); // don't crash, just report in the log file...
+}
+
+/**
+ * Tests whether the base facilities are within the base boundaries and not overlapping.
+ * @return True if the base has a problem.
+ */
+bool Base::isOverlappingOrOverflowing()
+{
+	bool result = false;
+	BaseFacility* grid[BASE_SIZE][BASE_SIZE];
+
+	// i don't think i NEED to do this for a pointer array, but who knows what might happen on weird archaic linux distros if i don't?
+	for (int x = 0; x < BASE_SIZE; ++x)
+	{
+		for (int y = 0; y < BASE_SIZE; ++y)
+		{
+			grid[x][y] = 0;
+		}
+	}
+
+	for (std::vector<BaseFacility*>::iterator f = _facilities.begin(); f != _facilities.end(); ++f)
+	{
+		RuleBaseFacility *rules = (*f)->getRules();
+		int facilityX = (*f)->getX();
+		int facilityY = (*f)->getY();
+		int facilitySize = rules->getSize();
+
+		if (facilityX < 0 || facilityY < 0 || facilityX + (facilitySize - 1) >= BASE_SIZE || facilityY + (facilitySize - 1) >= BASE_SIZE)
+		{
+			Log(LOG_ERROR) << "Facility " << rules->getType() << " at [" << facilityX << ", " << facilityY << "] (size " << facilitySize << ") is outside of base boundaries.";
+			result = true;
+			continue;
+		}
+
+		for (int x = facilityX; x < facilityX + facilitySize; ++x)
+		{
+			for (int y = facilityY; y < facilityY + facilitySize; ++y)
+			{
+				if (grid[x][y] != 0)
+				{
+					Log(LOG_ERROR) << "Facility " << rules->getType() << " at [" << facilityX << ", " << facilityY << "] size " << facilitySize
+						<< ") overlaps with "<< grid[x][y]->getRules()->getType() <<" at [" << x << ", " << y <<"] size " << grid[x][y]->getRules()->getSize() << ")";
+					result = true;
+				}
+				grid[x][y] = *f;
+			}
+		}
+	}
+
+	return result;
 }
 
 /**

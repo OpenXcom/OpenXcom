@@ -71,6 +71,8 @@ public:
 	~Base();
 	/// Loads the base from YAML.
 	void load(const YAML::Node& node, SavedGame *save, bool newGame, bool newBattleGame = false);
+	/// Tests whether the base facilities are within the base boundaries and not overlapping.
+	bool isOverlappingOrOverflowing();
 	/// Saves the base to YAML.
 	YAML::Node save() const;
 	/// Gets the base's type.
