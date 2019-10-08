@@ -272,8 +272,8 @@ bool Base::isOverlappingOrOverflowing()
 			{
 				if (grid[x][y] != 0)
 				{
-					Log(LOG_ERROR) << "Facility " << rules->getType() << " at [" << facilityX << ", " << facilityY << "] size " << facilitySize
-						<< ") overlaps with "<< grid[x][y]->getRules()->getType() <<" at [" << x << ", " << y <<"] size " << grid[x][y]->getRules()->getSize() << ")";
+					Log(LOG_ERROR) << "Facility " << rules->getType() << " at [" << facilityX << ", " << facilityY << "] (size " << facilitySize
+						<< ") overlaps with " << grid[x][y]->getRules()->getType() << " at [" << x << ", " << y << "] (size " << grid[x][y]->getRules()->getSize() << ")";
 					result = true;
 				}
 				grid[x][y] = *f;
