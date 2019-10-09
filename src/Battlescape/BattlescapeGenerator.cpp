@@ -1614,6 +1614,12 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 
 	if (z > (_save->getMapSizeZ()-1))
 	{
+		if (_save->getMissionType() == "STR_BASE_DEFENSE")
+		{
+			// we'll already have gone through _base->isOverlappingOrOverflowing() by the time we hit this, possibly multiple times
+			// let's just throw an exception and tell them to check the log, it'll have all the detail they'll need.
+			throw Exception("Something is wrong with your base, check your log file for additional information.");
+		}
 		throw Exception("Something is wrong in your map definitions, craft/ufo map is too tall?");
 	}
 
@@ -2372,54 +2378,42 @@ void BattlescapeGenerator::generateBaseMap()
 					mapnum += num;
 					if (mapnum < 10) newname << 0;
 					newname << mapnum;
-					if (addBlock(x, y, _terrain->getMapBlock(newname.str())))
+					addBlock(x, y, _terrain->getMapBlock(newname.str()));
+					_drillMap[x][y] = MD_NONE;
+					num++;
+					if ((*i)->getRules()->getStorage() > 0)
 					{
-						_drillMap[x][y] = MD_NONE;
-						num++;
-						if ((*i)->getRules()->getStorage() > 0)
+						int groundLevel;
+						for (groundLevel = _mapsize_z - 1; groundLevel >= 0; --groundLevel)
 						{
-							int groundLevel;
-							for (groundLevel = _mapsize_z - 1; groundLevel >= 0; --groundLevel)
+							if (!_save->getTile(Position(x * 10, y * 10, groundLevel))->hasNoFloor(0))
+								break;
+						}
+						// general stores - there is where the items are put
+						for (int k = x * 10; k != (x + 1) * 10; ++k)
+						{
+							for (int l = y * 10; l != (y + 1) * 10; ++l)
 							{
-								if (!_save->getTile(Position(x * 10, y * 10, groundLevel))->hasNoFloor(0))
-
-									break;
-							}
-							// general stores - there is where the items are put
-							for (int k = x * 10; k != (x + 1) * 10; ++k)
-							{
-								for (int l = y * 10; l != (y + 1) * 10; ++l)
+								// we only want every other tile, giving us a "checkerboard" pattern
+								if ((k + l) % 2 == 0)
 								{
-									// we only want every other tile, giving us a "checkerboard" pattern
-									if ((k + l) % 2 == 0)
+									Tile *t = _save->getTile(Position(k, l, groundLevel));
+									Tile *tEast = _save->getTile(Position(k + 1, l, groundLevel));
+									Tile *tSouth = _save->getTile(Position(k, l + 1, groundLevel));
+									if (t && t->getMapData(O_FLOOR) && !t->getMapData(O_OBJECT) &&
+										tEast && !tEast->getMapData(O_WESTWALL) &&
+										tSouth && !tSouth->getMapData(O_NORTHWALL))
 									{
-										Tile *t = _save->getTile(Position(k, l, groundLevel));
-										Tile *tEast = _save->getTile(Position(k + 1, l, groundLevel));
-										Tile *tSouth = _save->getTile(Position(k, l + 1, groundLevel));
-										if (t && t->getMapData(O_FLOOR) && !t->getMapData(O_OBJECT) &&
-											tEast && !tEast->getMapData(O_WESTWALL) &&
-											tSouth && !tSouth->getMapData(O_NORTHWALL))
-										{
-											_save->getStorageSpace().push_back(Position(k, l, groundLevel));
-										}
+										_save->getStorageSpace().push_back(Position(k, l, groundLevel));
 									}
 								}
 							}
-							// let's put the inventory tile on the lower floor, just to be safe.
-							if (!_craftInventoryTile)
-							{
-								_craftInventoryTile = _save->getTile(Position((x * 10) + 5, (y * 10) + 5, groundLevel - 1));
-							}
 						}
-					}
-					else
-					{
-						// gather and report information on why we failed.
-						_base->isOverlappingOrOverflowing();
-
-						std::stringstream ss;
-						ss << "Map Generator encountered an error: could not place facility " << (*i)->getRules()->getType() << " at: [" << x << ", " << y << "], see logfile for further details.";
-						throw Exception(ss.str());
+						// let's put the inventory tile on the lower floor, just to be safe.
+						if (!_craftInventoryTile)
+						{
+							_craftInventoryTile = _save->getTile(Position((x * 10) + 5, (y * 10) + 5, groundLevel - 1));
+						}
 					}
 				}
 			}
