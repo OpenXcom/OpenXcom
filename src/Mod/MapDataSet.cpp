@@ -94,7 +94,7 @@ SurfaceSet *MapDataSet::getSurfaceset() const
  * Loads terrain data in XCom format (MCD & PCK files).
  * @sa http://www.ufopaedia.org/index.php?title=MCD
  */
-void MapDataSet::loadData()
+void MapDataSet::loadData(MCDPatch *patch)
 {
 	// prevents loading twice
 	if (_loaded) return;
@@ -215,17 +215,37 @@ void MapDataSet::loadData()
 
 	mapFile.close();
 
+	// apply any ruleset patches before validation
+	if (patch)
+	{
+		patch->modifyData(this);
+	}
+
 	// Validate MCD references
+	bool validData = true;
+
 	for (size_t i = 0; i < _objects.size(); ++i)
 	{
 		if (_objects[i]->getDieMCD() >= _objects.size())
 		{
 			Log(LOG_INFO) << "MCD " << _name << " object " << i << " has invalid DieMCD: " << _objects[i]->getDieMCD();
+			validData = false;
 		}
 		if (_objects[i]->getAltMCD() >= _objects.size())
 		{
 			Log(LOG_INFO) << "MCD " << _name << " object " << i << " has invalid AltMCD: " << _objects[i]->getAltMCD();
+			validData = false;
 		}
+		if (_objects[i]->getArmor() == 0)
+		{
+			Log(LOG_INFO) << "MCD " << _name << " object " << i << " has 0 armor";
+			validData = false;
+		}
+	}
+
+	if (!validData)
+	{
+		throw Exception("invalid MCD file: " + fname + ", check log file for more details.");
 	}
 
 	// Load terrain sprites/surfaces/PCK files into a surfaceset

@@ -344,11 +344,7 @@ void SavedBattleGame::loadMapResources(Mod *mod)
 {
 	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
-		(*i)->loadData();
-		if (mod->getMCDPatch((*i)->getName()))
-		{
-			mod->getMCDPatch((*i)->getName())->modifyData(*i);
-		}
+		(*i)->loadData(mod->getMCDPatch((*i)->getName()));
 	}
 
 	int mdsID, mdID;

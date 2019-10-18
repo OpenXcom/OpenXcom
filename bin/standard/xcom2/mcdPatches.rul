@@ -9,6 +9,10 @@ MCDPatches: #will never be done
 # bigWall 7 = acts as south wall
 # bigWall 8 = acts as east and south wall
 # bigWall 9 = acts as west and north wall
+  - type: ENTRY
+    data:
+      - MCDIndex: 6
+        deathTile: 7
   - type: ATLANTIS
     data:
       - MCDIndex: 47
