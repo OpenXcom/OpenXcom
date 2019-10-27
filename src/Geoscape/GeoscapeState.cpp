@@ -939,7 +939,7 @@ void GeoscapeState::time5Seconds()
 						// look up polygons texture
 						int texture, shade;
 						_globe->getPolygonTextureAndShade(m->getLongitude(), m->getLatitude(), &texture, &shade);
-						if (m->getTexture() != 0)
+						if (_game->getMod()->getGlobe()->getTexture(m->getTexture()) != 0)
 						{
 							texture = m->getTexture();
 						}
