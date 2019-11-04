@@ -761,30 +761,43 @@ std::pair<double, double> AlienMission::getWaypoint(const UfoTrajectory &traject
 
 /**
  * Get a random point inside the given region zone.
- * The point will be used to land a UFO, so it HAS to be on land.
+ * The point will be used to land a UFO, so it HAS to be on land (UNLESS it's landing on a city).
+ * @param globe reference to the globe data.
+ * @param region reference to the region we want a land point in.
+ * @param zone the missionZone set within the region to find a landing zone in.
+ * @return a set of longitudinal and latitudinal coordinates.
  */
 std::pair<double, double> AlienMission::getLandPoint(const Globe &globe, const RuleRegion &region, size_t zone)
 {
-	if (zone >= region.getMissionZones().size())
+	if (zone >= region.getMissionZones().size() || region.getMissionZones().at(zone).areas.size() == 0)
 	{
 		logMissionError(zone, region);
 	}
-	int tries = 0;
+
 	std::pair<double, double> pos;
-	do
+
+	if (region.getMissionZones().at(zone).areas.at(0).isPoint()) // if a UFO wants to land on a city, let it.
 	{
 		pos = region.getRandomPoint(zone);
-		++tries;
 	}
-	while (!(globe.insideLand(pos.first, pos.second)
-		&& region.insideRegion(pos.first, pos.second))
-		&& tries < 100);
-	if (tries == 100)
+	else
 	{
-		Log(LOG_DEBUG) << "Region: " << region.getType() << " Longitude: " << pos.first << " Latitude: " << pos.second << " invalid zone: " << zone << " ufo forced to land on water!";
+		int tries = 0;
+		do
+		{
+			pos = region.getRandomPoint(zone);
+			++tries;
+		}
+		while (!(globe.insideLand(pos.first, pos.second)
+			&& region.insideRegion(pos.first, pos.second))
+			&& tries < 100);
+
+		if (tries == 100)
+		{
+			Log(LOG_DEBUG) << "Region: " << region.getType() << " Longitude: " << pos.first << " Latitude: " << pos.second << " invalid zone: " << zone << " ufo forced to land on water!";
+		}
 	}
 	return pos;
-
 }
 
 /**
