@@ -915,12 +915,12 @@ void SaveConverter::loadDatCraft()
 
 				craft->load(node, _mod, _save);
 
-				if (flight != 0 && dest != 0xFF)
+				if (flight != 0 && dest != 0xFFFF)
 				{
 					Target *t = _targets[dest];
 					craft->setDestination(t);
 				}
-				if (base != 0xFF)
+				if (base != 0xFFFF)
 				{
 					Base *b = dynamic_cast<Base*>(_targets[base]);
 					craft->setBase(b, false);
