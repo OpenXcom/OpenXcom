@@ -276,7 +276,7 @@ LocalizedText Language::getString(const std::string &id) const
 {
 	if (id.empty())
 	{
-		return "";
+		return id;
 	}
 	std::map<std::string, LocalizedText>::const_iterator s = _strings.find(id);
 	// Check if translation strings recently learned pluralization.
