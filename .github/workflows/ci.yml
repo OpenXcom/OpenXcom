@@ -1,0 +1,125 @@
+name: ci
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: ${{ matrix.name }} (${{ matrix.compiler }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        name:
+          - Linux
+          - Windows
+          - macOS
+        compiler: [gcc, clang]
+
+        exclude:
+          - name: Windows
+            compiler: gcc
+
+        include:
+          - name: Linux
+            os: ubuntu-latest
+            packages: >-
+              libsdl1.2-dev libsdl-mixer1.2-dev
+              libsdl-image1.2-dev libsdl-gfx1.2-dev
+            compiler: gcc
+            cpp-compiler: g++
+            cflags: "-Wall -Wextra"
+            cxxflags: "-Wall -Wextra"
+
+          - name: Linux
+            os: ubuntu-latest
+            packages: >-
+              libsdl1.2-dev libsdl-mixer1.2-dev
+              libsdl-image1.2-dev libsdl-gfx1.2-dev
+            compiler: clang
+            cpp-compiler: clang++
+            cflags: "-Wall -Wextra"
+            cxxflags: "-Wall -Wextra"
+
+          - name: Windows
+            os: windows-latest
+            compiler: clang
+            cpp-compiler: clang++
+            cmake-args: -A Win32
+
+          - name: macOS
+            os: macOS-latest
+            packages: yaml-cpp sdl sdl_gfx sdl_image sdl_mixer
+            compiler: gcc
+            cpp-compiler: g++
+            cflags: "-Wall -Wextra"
+            cxxflags: "-Wall -Wextra"
+
+          - name: macOS
+            os: macOS-latest
+            packages: yaml-cpp sdl sdl_gfx sdl_image sdl_mixer
+            compiler: clang
+            cpp-compiler: clang++
+            cflags: "-Wall -Wextra"
+            cxxflags: "-Wall -Wextra"
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Install packages (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get -yq --no-install-suggests --no-install-recommends install ccache ${{ matrix.packages }}
+
+          wget -q http://archive.ubuntu.com/ubuntu/pool/main/y/yaml-cpp/libyaml-cpp0.6_0.6.2-4fakesync1_amd64.deb
+          wget -q http://archive.ubuntu.com/ubuntu/pool/main/y/yaml-cpp/libyaml-cpp-dev_0.6.2-4fakesync1_amd64.deb
+          sudo dpkg -i libyaml-cpp0.6_0.6.2-4fakesync1_amd64.deb libyaml-cpp-dev_0.6.2-4fakesync1_amd64.deb
+
+      - name: Install packages (Windows)
+        if: runner.os == 'Windows' && matrix.packages
+        run: |
+          choco install ${{ matrix.packages }}
+
+      - name: Install packages (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew install ccache ${{ matrix.packages }}
+
+      - name: Setup Cache
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        uses: actions/cache@v1
+        with:
+          path: ~/.ccache
+          key: ccache-${{ runner.os }}-${{ matrix.compiler }}
+
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Download dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          Invoke-WebRequest -Uri "https://openxcom.org/download/dev/openxcom-deps-win-vc2017.zip" -OutFile "openxcom-deps-win-vc2017-newest.zip"
+          Expand-Archive -Path "openxcom-deps-win-vc2017-newest.zip"
+          Move-Item -Path "openxcom-deps-win-vc2017-newest\deps\*" -Destination "deps"
+
+      - name: Generate project files
+        run: |
+          mkdir ${{ matrix.build-dir || '.not-used' }}
+          cd ${{ matrix.build-dir || '.' }}
+          cmake ${{ matrix.build-src-dir || '.' }} -DCMAKE_BUILD_TYPE="Release" -DCHECK_CCACHE=TRUE ${{ matrix.cmake-args }}
+        env:
+          CC: ${{ matrix.compiler }}
+          CXX: ${{ matrix.cpp-compiler }}
+          CFLAGS: ${{ matrix.cflags || env.CFLAGS }}
+          CXXFLAGS: ${{ matrix.cxxflags || env.CXXFLAGS }}
+          LDFLAGS: ${{ matrix.ldflags || env.LDFLAGS }}
+
+      - name: Compile source code
+        run: |
+          cd ${{ matrix.build-src-dir || '.' }}
+          cmake --build . --config ${{ matrix.build-config || 'Release' }}
+
+      - name: ccache stats
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        run: ccache -s --max-size=390MB
