@@ -24,6 +24,7 @@
 #include "../Interface/ComboBox.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
+#include "../Interface/ToggleTextButton.h"
 #include "../Interface/Slider.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
@@ -48,22 +49,25 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	_txtMusicVolume = new Text(114, 9, 94, 8);
 	_slrMusicVolume = new Slider(104, 16, 94, 18);
 
-	_txtSoundVolume = new Text(114, 9, 206, 8);
-	_slrSoundVolume = new Slider(104, 16, 206, 18);
+	_txtSoundVolume = new Text(114, 9, 94, 40);
+	_slrSoundVolume = new Slider(104, 16, 94, 50);
 
-	_txtUiVolume = new Text(114, 9, 94, 40);
-	_slrUiVolume = new Slider(104, 16, 94, 50);
+	_txtUiVolume = new Text(114, 9, 94, 72);
+	_slrUiVolume = new Slider(104, 16, 94, 82);
 
-	_txtMusicFormat = new Text(114, 9, 94, 72);
-	_cbxMusicFormat = new ComboBox(this, 104, 16, 94, 82);
-	_txtCurrentMusic = new Text(114, 9, 94, 100);
+	_txtMusicFormat = new Text(114, 9, 206, 40);
+	_cbxMusicFormat = new ComboBox(this, 104, 16, 206, 50);
+	_txtCurrentMusic = new Text(114, 9, 206, 68);
 
-	_txtSoundFormat = new Text(114, 9, 206, 72);
-	_cbxSoundFormat = new ComboBox(this, 104, 16, 206, 82);
-	_txtCurrentSound = new Text(114, 9, 206, 100);
+	_txtSoundFormat = new Text(114, 9, 206, 82);
+	_cbxSoundFormat = new ComboBox(this, 104, 16, 206, 92);
+	_txtCurrentSound = new Text(114, 9, 206, 110);
 
-	_txtVideoFormat = new Text(114, 9, 206, 40);
-	_cbxVideoFormat = new ComboBox(this, 104, 16, 206, 50);
+	_txtVideoFormat = new Text(114, 9, 206, 8);
+	_cbxVideoFormat = new ComboBox(this, 104, 16, 206, 18);
+
+	_txtOptions = new Text(114, 9, 94, 104);
+	_btnBackgroundMute = new ToggleTextButton(104, 16, 94, 114);
 
 	add(_txtMusicVolume, "text", "audioMenu");
 	add(_slrMusicVolume, "button", "audioMenu");
@@ -83,6 +87,9 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	add(_cbxMusicFormat, "button", "audioMenu");
 	add(_cbxSoundFormat, "button", "audioMenu");
 	add(_cbxVideoFormat, "button", "audioMenu");
+
+	add(_txtOptions, "text", "audioMenu");
+	add(_btnBackgroundMute, "button", "audioMenu");
 
 	centerAllSurfaces();
 
@@ -177,6 +184,15 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	_txtSoundFormat->setVisible(_origin == OPT_MENU && _game->getMod()->getSoundDefinitions()->empty());
 	_cbxSoundFormat->setVisible(_origin == OPT_MENU && _game->getMod()->getSoundDefinitions()->empty());
 	_txtCurrentSound->setVisible(_origin == OPT_MENU && _game->getMod()->getSoundDefinitions()->empty());
+
+	_txtOptions->setText(tr("STR_SOUND_OPTIONS"));
+
+	_btnBackgroundMute->setText(tr("STR_BACKGROUND_MUTE"));
+	_btnBackgroundMute->setPressed(Options::backgroundMute);
+	_btnBackgroundMute->onMouseClick((ActionHandler)&OptionsAudioState::btnBackgroundMuteClick);
+	_btnBackgroundMute->setTooltip("STR_BACKGROUND_MUTE_DESC");
+	_btnBackgroundMute->onMouseIn((ActionHandler)&OptionsAudioState::txtTooltipIn);
+	_btnBackgroundMute->onMouseOut((ActionHandler)&OptionsAudioState::txtTooltipOut);
 }
 
 /**
@@ -262,6 +278,15 @@ void OptionsAudioState::cbxSoundFormatChange(Action *)
 {
 	Options::preferredSound = (SoundFormat)_cbxSoundFormat->getSelected();
 	Options::reload = true;
+}
+
+/**
+ * Updates the Background Mute option.
+ * @param action Pointer to an action.
+ */
+void OptionsAudioState::btnBackgroundMuteClick(Action*)
+{
+	Options::backgroundMute = _btnBackgroundMute->getPressed();
 }
 
 }

@@ -25,6 +25,7 @@ namespace OpenXcom
 class Text;
 class ComboBox;
 class Slider;
+class ToggleTextButton;
 
 /**
  * Screen that lets the user configure various
@@ -38,6 +39,8 @@ private:
 	Slider *_slrMusicVolume, *_slrSoundVolume, *_slrUiVolume;
 	Text *_txtMusicFormat, *_txtCurrentMusic, *_txtSoundFormat, *_txtCurrentSound, *_txtVideoFormat;
 	ComboBox *_cbxMusicFormat, *_cbxSoundFormat, *_cbxVideoFormat;
+	Text* _txtOptions;
+	ToggleTextButton *_btnBackgroundMute;
 public:
 	/// Creates the Audio Options state.
 	OptionsAudioState(OptionsOrigin origin);
@@ -59,6 +62,8 @@ public:
 	void cbxSoundFormatChange(Action *action);
 	/// Handler for changing the Video Format combobox.
 	void cbxVideoFormatChange(Action *action);
+	/// Handler for clicking the Background Mute button.
+	void btnBackgroundMuteClick(Action* action);
 };
 
 }
