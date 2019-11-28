@@ -186,17 +186,25 @@ void Game::run()
 					quit();
 					break;
 				case SDL_ACTIVEEVENT:
-					switch (reinterpret_cast<SDL_ActiveEvent*>(&_event)->state)
+					// An event other than SDL_APPMOUSEFOCUS change happened.
+					if (reinterpret_cast<SDL_ActiveEvent*>(&_event)->state & ~SDL_APPMOUSEFOCUS)
 					{
-						case SDL_APPACTIVE:
-							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : stateRun[Options::pauseMode];
-							break;
-						case SDL_APPMOUSEFOCUS:
-							// We consciously ignore it.
-							break;
-						case SDL_APPINPUTFOCUS:
-							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : kbFocusRun[Options::pauseMode];
-							break;
+						Uint8 currentState = SDL_GetAppState();
+						// Game is minimized
+						if (!(currentState & SDL_APPACTIVE))
+						{
+							runningState = stateRun[Options::pauseMode];
+						}
+						// Game is not minimized but has no keyboard focus.
+						else if (!(currentState & SDL_APPINPUTFOCUS))
+						{
+							runningState = kbFocusRun[Options::pauseMode];
+						}
+						// Game has keyboard focus.
+						else
+						{
+							runningState = RUNNING;
+						}
 					}
 					break;
 				case SDL_VIDEORESIZE:
