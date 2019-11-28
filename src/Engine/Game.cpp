@@ -194,16 +194,28 @@ void Game::run()
 						if (!(currentState & SDL_APPACTIVE))
 						{
 							runningState = stateRun[Options::pauseMode];
+							if (Options::backgroundMute)
+							{
+								setVolume(0, 0, 0);
+							}
 						}
 						// Game is not minimized but has no keyboard focus.
 						else if (!(currentState & SDL_APPINPUTFOCUS))
 						{
 							runningState = kbFocusRun[Options::pauseMode];
+							if (Options::backgroundMute)
+							{
+								setVolume(0, 0, 0);
+							}
 						}
 						// Game has keyboard focus.
 						else
 						{
 							runningState = RUNNING;
+							if (Options::backgroundMute)
+							{
+								setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
+							}
 						}
 					}
 					break;
