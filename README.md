@@ -1,4 +1,9 @@
-# OpenXcom [![Build Status](https://travis-ci.org/OpenXcom/OpenXcom.svg)](https://travis-ci.org/OpenXcom/OpenXcom)
+# OpenXcom [![Build Status][travis-badge]][travis-url] [![Workflow Status][workflow-badge]][actions-url]
+
+[travis-badge]: https://travis-ci.org/OpenXcom/OpenXcom.svg
+[travis-url]: https://travis-ci.org/OpenXcom/OpenXcom
+[workflow-badge]: https://github.com/OpenXcom/OpenXcom/workflows/ci/badge.svg
+[actions-url]: https://github.com/OpenXcom/OpenXcom/actions
 
 OpenXcom is an open-source clone of the popular "UFO: Enemy Unknown" ("X-COM:
 UFO Defense" in the USA release) and "X-COM: Terror From the Deep" videogames
