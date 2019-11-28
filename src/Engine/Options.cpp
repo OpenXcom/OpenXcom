@@ -142,6 +142,7 @@ void create()
 	_info.push_back(OptionInfo("touchEnabled", &touchEnabled, false));
 	_info.push_back(OptionInfo("rootWindowedMode", &rootWindowedMode, false));
 	_info.push_back(OptionInfo("lazyLoadResources", &lazyLoadResources, true));
+	_info.push_back(OptionInfo("backgroundMute", &backgroundMute, false));
 
 	// advanced options
 	_info.push_back(OptionInfo("playIntro", &playIntro, true, "STR_PLAYINTRO", "STR_GENERAL"));
