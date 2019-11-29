@@ -140,9 +140,8 @@ void AdlibMusic::play(int) const
 void AdlibMusic::player(void *udata, Uint8 *stream, int len)
 {
 #ifndef __NO_MUSIC
-	// Read from SDL instead of Options for Background Mute functionality
-	int musicVolume = Mix_VolumeMusic(-1);
-	if (musicVolume == 0)
+	// Check SDL volume for Background Mute functionality
+	if (Options::musicVolume == 0 || Mix_VolumeMusic(-1) == 0)
 		return;
 	if (Options::musicAlwaysLoop && !func_is_music_playing())
 	{
@@ -157,7 +156,7 @@ void AdlibMusic::player(void *udata, Uint8 *stream, int len)
 		int i = std::min(delay, len);
 		if (i)
 		{
-			float volume = Game::volumeExponent(musicVolume);
+			float volume = Game::volumeExponent(Options::musicVolume);
 			YM3812UpdateOne(opl[0], (INT16*)stream, i / 2, 2, volume);
 			YM3812UpdateOne(opl[1], ((INT16*)stream) + 1, i / 2, 2, volume);
 			stream += i;
