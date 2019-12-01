@@ -33,6 +33,8 @@ research:
   - name: STR_TRISCENE_TERRORIST
     unlocks:
       - STR_ALIEN_ORIGINS
+  - name: STR_MC_READER
+    dependencies: []
 manufacture:
   - delete: STR_MC_DISRUPTOR
 ufopaedia:
