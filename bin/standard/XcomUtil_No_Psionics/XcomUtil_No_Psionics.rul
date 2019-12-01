@@ -33,8 +33,6 @@ research:
       - STR_LEADER_PLUS
       - STR_COMMANDER_PLUS
       - STR_ALIEN_ORIGINS
-  - name: STR_MC_READER
-    dependencies: []
 manufacture:
   - delete: STR_PSI_AMP
 ufopaedia:
