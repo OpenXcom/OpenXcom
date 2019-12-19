@@ -1067,7 +1067,7 @@ bool TileEngine::tryReaction(BattleUnit *unit, BattleUnit *target, int attackTyp
 				unit->setAIModule(ai);
 			}
 
-			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius() &&
+			if (action.type != BA_HIT && action.weapon->getAmmoItem()->getRules()->getExplosionRadius() &&
 				ai->explosiveEfficacy(action.target, unit, action.weapon->getAmmoItem()->getRules()->getExplosionRadius(), -1) == false)
 			{
 				action.targeting = false;
