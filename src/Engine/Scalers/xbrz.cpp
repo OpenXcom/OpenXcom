@@ -428,7 +428,7 @@ void blendPixel(const Kernel_3x3& ker,
 			doLineBlend = true;
 
         //make sure there is no second blending in an adjacent rotation for this pixel: handles insular pixels, mario eyes
-        else if (getTopR(blend) != BLEND_NONE && !_eq(e, g)) //but support double-blending for 90° corners
+        else if (getTopR(blend) != BLEND_NONE && !_eq(e, g)) //but support double-blending for 90 corners
 			doLineBlend = false;
         else if (getBottomL(blend) != BLEND_NONE && !_eq(e, c))
 			doLineBlend = false;

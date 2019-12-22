@@ -132,10 +132,6 @@ public:
 	int getMinDepth() const;
 	/// Gets the maximum depth.
 	int getMaxDepth() const;
-	/// Gets the minimum site depth.
-	int getMinSiteDepth() const;
-	/// Gets the maximum site depth.
-	int getMaxSiteDepth() const;
 	/// Gets the target type for this mission.
 	int getObjectiveType() const;
 	/// Gets a fixed number of objectives requires (if any).
