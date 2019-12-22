@@ -159,7 +159,7 @@ public:
 	/// Gets whether or not this is an alien base (purely for new battle mode)
 	bool isAlienBase() const;
 
-	std::string getGenMissionType() const;
+	std::string chooseGenMissionType() const;
 
 	int getGenMissionFrequency() const;
 
