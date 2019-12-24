@@ -276,6 +276,12 @@ Surface *ExtraSprites::getFrame(SurfaceSet *set, int index) const
 		}
 		indexWithOffset += _current->offset;
 	}
+	else if (indexWithOffset < 0)
+	{
+		std::ostringstream err;
+		err << "ExtraSprites '" << _type << "' frame '" << indexWithOffset << "' in mod '" << _current->name << "' is not allowed.";
+		throw Exception(err.str());
+	}
 
 	Surface *frame = set->getFrame(indexWithOffset);
 	if (frame)
