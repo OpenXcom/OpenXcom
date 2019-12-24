@@ -1512,13 +1512,13 @@ private:
  */
 void GenerateSupplyMission::operator()(const AlienBase *base) const
 {
-	std::string mission = base->getDeployment()->chooseGenMissionType();
-	if (_mod.getAlienMission(mission))
+	std::string missionName = base->getDeployment()->chooseGenMissionType();
+	if (_mod.getAlienMission(missionName))
 	{
 		if (RNG::percent(base->getDeployment()->getGenMissionFrequency()))
 		{
 			//Spawn supply mission for this base.
-			const RuleAlienMission &rule = *_mod.getAlienMission(mission);
+			const RuleAlienMission &rule = *_mod.getAlienMission(missionName);
 			AlienMission *mission = new AlienMission(rule);
 			mission->setRegion(_save.locateRegion(*base)->getRules()->getType(), _mod);
 			mission->setId(_save.getId("ALIEN_MISSIONS"));
@@ -1528,9 +1528,9 @@ void GenerateSupplyMission::operator()(const AlienBase *base) const
 			_save.getAlienMissions().push_back(mission);
 		}
 	}
-	else if (!mission.empty())
+	else if (!missionName.empty())
 	{
-		throw Exception("Alien Base tried to generate undefined mission: " + mission);
+		throw Exception("Alien Base tried to generate undefined mission: " + missionName);
 	}
 }
 
