@@ -1190,7 +1190,7 @@ void Map::drawTerrain(Surface *surface)
 		{
 			offset.y += 4;
 		}
-		offset.y += 24 - unit->getHeight();
+		offset.y += 24 - (unit->getHeight() + unit->getFloatHeight());
 		if (unit->isKneeled())
 		{
 			offset.y -= 2;
