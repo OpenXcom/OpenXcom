@@ -104,7 +104,8 @@
 	!insertmacro MUI_PAGE_INSTFILES
 
 	;Finish Page Configuration
-	!define MUI_FINISHPAGE_RUN "$INSTDIR\OpenXcom.exe"
+	!define MUI_FINISHPAGE_RUN
+	!define MUI_FINISHPAGE_RUN_FUNCTION RunAsUser
 	!define MUI_FINISHPAGE_NOREBOOTSUPPORT
 
 	!insertmacro MUI_PAGE_FINISH
@@ -112,7 +113,10 @@
 	!insertmacro MUI_UNPAGE_COMPONENTS
 	!insertmacro MUI_UNPAGE_CONFIRM
 	!insertmacro MUI_UNPAGE_INSTFILES
-
+	
+Function RunAsUser
+	ShellExecAsUser::ShellExecAsUser "open" "$INSTDIR\OpenXcom.exe"
+FunctionEnd
 
 ${StrStr}
 Function ExtraOptions
