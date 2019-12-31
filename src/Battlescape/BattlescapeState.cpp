@@ -1003,7 +1003,7 @@ void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect
 		BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect, setReselect, checkInventory);
 		updateSoldierInfo(checkFOV);
 		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
-		_battleGame->cancelCurrentAction();
+		_battleGame->cancelAllActions();
 		_battleGame->getCurrentAction()->actor = unit;
 		_battleGame->setupCursor();
 	}
@@ -1019,11 +1019,10 @@ void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect, bool setRese
 {
 	if (allowButtons())
 	{
-		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 		BattleUnit *unit = _save->selectPreviousPlayerUnit(checkReselect, setReselect, checkInventory);
 		updateSoldierInfo();
 		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
-		_battleGame->cancelCurrentAction();
+		_battleGame->cancelAllActions();
 		_battleGame->getCurrentAction()->actor = unit;
 		_battleGame->setupCursor();
 	}

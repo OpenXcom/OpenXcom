@@ -130,6 +130,8 @@ public:
 	bool kneel(BattleUnit *bu);
 	/// Cancels the current action.
 	bool cancelCurrentAction(bool bForce = false);
+	/// Cancels all actions.
+	void cancelAllActions();
 	/// Gets a pointer to access action members directly.
 	BattleAction *getCurrentAction();
 	/// Determines whether there is an action currently going on.
