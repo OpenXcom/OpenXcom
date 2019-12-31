@@ -84,8 +84,8 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin) : OptionsBaseState(or
 	add(_txtSoundFormat, "text", "audioMenu");
 	add(_txtCurrentSound, "text", "audioMenu");
 
-	add(_cbxMusicFormat, "button", "audioMenu");
 	add(_cbxSoundFormat, "button", "audioMenu");
+	add(_cbxMusicFormat, "button", "audioMenu");
 	add(_cbxVideoFormat, "button", "audioMenu");
 
 	add(_txtOptions, "text", "audioMenu");
