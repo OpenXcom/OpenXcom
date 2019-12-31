@@ -974,7 +974,10 @@ void BattlescapeState::btnNextSoldierClick(Action *)
 void BattlescapeState::btnNextStopClick(Action *)
 {
 	if (allowButtons())
+	{
 		selectNextPlayerUnit(true, true);
+		_map->refreshSelectorPosition();
+	}
 }
 
 /**
