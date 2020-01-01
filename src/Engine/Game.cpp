@@ -148,8 +148,6 @@ void Game::run()
 	while (!_quit)
 	{
 		Uint32 timeFrameStarted = SDL_GetTicks();
-		State *gameState = _states.back();
-
 		// Clean up states
 		while (!_deleted.empty())
 		{
@@ -161,10 +159,10 @@ void Game::run()
 		if (!_init)
 		{
 			_init = true;
-			gameState->init();
+			_states.back()->init();
 
 			// Unpress buttons
-			gameState->resetAll();
+			_states.back()->resetAll();
 
 			// Refresh mouse position
 			SDL_Event ev;
@@ -174,7 +172,7 @@ void Game::run()
 			ev.motion.x = x;
 			ev.motion.y = y;
 			Action action = Action(&ev, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
-			gameState->handle(&action);
+			_states.back()->handle(&action);
 		}
 
 		// Process events
@@ -191,9 +189,9 @@ void Game::run()
 					// An event other than SDL_APPMOUSEFOCUS change happened.
 					if (reinterpret_cast<SDL_ActiveEvent*>(&_event)->state & ~SDL_APPMOUSEFOCUS)
 					{
-						Uint8 appState = SDL_GetAppState();
+						Uint8 currentState = SDL_GetAppState();
 						// Game is minimized
-						if (!(appState & SDL_APPACTIVE))
+						if (!(currentState & SDL_APPACTIVE))
 						{
 							runningState = stateRun[Options::pauseMode];
 							if (Options::backgroundMute)
@@ -202,7 +200,7 @@ void Game::run()
 							}
 						}
 						// Game is not minimized but has no keyboard focus.
-						else if (!(appState & SDL_APPINPUTFOCUS))
+						else if (!(currentState & SDL_APPINPUTFOCUS))
 						{
 							runningState = kbFocusRun[Options::pauseMode];
 							if (Options::backgroundMute)
@@ -274,11 +272,11 @@ void Game::run()
 							else if (action.getDetails()->key.keysym.sym == SDLK_u && (SDL_GetModState() & KMOD_CTRL) != 0)
 							{
 								Options::debugUi = !Options::debugUi;
-								gameState->redrawText();
+								_states.back()->redrawText();
 							}
 						}
 					}
-					gameState->handle(&action);
+					_states.back()->handle(&action);
 					break;
 			}
 		}
@@ -287,7 +285,7 @@ void Game::run()
 		if (runningState != PAUSED)
 		{
 			// Process logic
-			gameState->think();
+			_states.back()->think();
 			_fpsCounter->think();
 			if (_init)
 			{
