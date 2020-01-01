@@ -279,6 +279,12 @@ void Game::run()
 					_states.back()->handle(&action);
 					break;
 			}
+			if (!_init)
+			{
+				// States stack was changed, break the loop so new state
+				// can be initialized before processing new events
+				break;
+			}
 		}
 
 		// Process rendering
