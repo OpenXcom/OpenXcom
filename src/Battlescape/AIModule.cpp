@@ -180,7 +180,7 @@ void AIModule::think(BattleAction *action)
 	if (action->weapon)
 	{
 		RuleItem *rule = action->weapon->getRules();
-		if (_save->isItemUsable(rule))
+		if (_save->isItemUsable(action->weapon))
 		{
 			if (rule->getBattleType() == BT_FIREARM)
 			{

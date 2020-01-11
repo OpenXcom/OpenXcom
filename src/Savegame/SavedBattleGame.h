@@ -292,7 +292,9 @@ public:
 	/// Check whether the battle has actually commenced or not.
 	bool isBeforeGame() const;
 	/// Checks if an item is usable on this map.
-	bool isItemUsable(RuleItem *item) const;
+	std::string getItemUsable(BattleItem *item) const;
+	/// Checks if an item is usable on this map.
+	bool isItemUsable(BattleItem *item) const;
 	/// Reset all the unit hit state flags.
 	void resetUnitHitStates();
 };

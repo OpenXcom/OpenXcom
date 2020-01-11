@@ -2049,16 +2049,32 @@ bool SavedBattleGame::isBeforeGame() const
 
 /**
  * Checks if an item can be used in the current battlescape conditions.
+ * @return Error string if it can't be used, "" otherwise.
+ */
+std::string SavedBattleGame::getItemUsable(BattleItem *item) const
+{
+	if (_depth == 0 &&
+		(item->getRules()->isWaterOnly() ||
+		(item->getAmmoItem() != 0 && item->getAmmoItem()->getRules()->isWaterOnly())))
+	{
+		return "STR_UNDERWATER_EQUIPMENT";
+	}
+	if (_depth != 0 &&
+		(item->getRules()->isLandOnly() ||
+		(item->getAmmoItem() != 0 && item->getAmmoItem()->getRules()->isLandOnly())))
+	{
+		return "STR_LAND_EQUIPMENT";
+	}
+	return "";
+}
+
+/**
+ * Checks if an item can be used in the current battlescape conditions.
  * @return True if it's usable, False otherwise.
  */
-bool SavedBattleGame::isItemUsable(RuleItem *item) const
+bool SavedBattleGame::isItemUsable(BattleItem *item) const
 {
-	if ((_depth == 0 && item->isWaterOnly()) ||
-		(_depth != 0 && item->isLandOnly()))
-	{
-		return false;
-	}
-	return true;
+	return getItemUsable(item).empty();
 }
 
 /**

@@ -195,6 +195,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 
 	int btnID = -1;
 	RuleItem *weapon = _action->weapon->getRules();
+	std::string weaponUsable = _game->getSavedGame()->getSavedBattle()->getItemUsable(_action->weapon);
 
 	// got to find out which button was pressed
 	for (size_t i = 0; i < sizeof(_actionMenu)/sizeof(_actionMenu[0]) && btnID == -1; ++i)
@@ -216,17 +217,9 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			_action->result = "STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED";
 			_game->popState();
 		}
-		else if (_action->type != BA_THROW &&
-			!_game->getSavedGame()->getSavedBattle()->isItemUsable(weapon))
+		else if (_action->type != BA_THROW && !weaponUsable.empty())
 		{
-			if (weapon->isWaterOnly())
-			{
-				_action->result = "STR_UNDERWATER_EQUIPMENT";
-			}
-			else if (weapon->isLandOnly())
-			{
-				_action->result = "STR_LAND_EQUIPMENT";
-			}
+			_action->result = weaponUsable;
 			_game->popState();
 		}
 		else if (_action->type == BA_PRIME)
