@@ -557,22 +557,20 @@ void SaveConverter::loadDatMissions()
 			AlienMission *m = new AlienMission(*_mod->getAlienMission(_rules->getMissions()[mission], true));
 			node["region"] = _rules->getRegions()[region];
 			node["race"] = _rules->getCrews()[race];
-			node["nextWave"] = wave * 30;
+			node["nextWave"] = wave;
 			node["nextUfoCounter"] = ufoCounter;
-			node["spawnCountdown"] = spawn;
+			node["spawnCountdown"] = spawn * 30;
 			node["uniqueID"] = _save->getId("ALIEN_MISSIONS");
 			if (m->getRules().getObjective() == OBJECTIVE_SITE)
 			{
-				if (_mod->getRegion(_rules->getRegions()[region], true)->getMissionZones().size() >= 3)
-				{
-					// pick a city for terror missions
-					node["missionSiteZone"] = RNG::generate(0, _mod->getRegion(_rules->getRegions()[region], true)->getMissionZones().at(3).areas.size() - 1);
-				}
-				else
+				int missionZone = 3; // pick a city for terror missions
+				RuleRegion *rule = _mod->getRegion(_rules->getRegions()[region], true);
+				if (rule->getMissionZones().size() <= 3)
 				{
 					// try to account for TFTD's artefacts and such
-					node["missionSiteZone"] = RNG::generate(0, _mod->getRegion(_rules->getRegions()[region], true)->getMissionZones().at(0).areas.size() - 1);
+					missionZone = 0;
 				}
+				node["missionSiteZone"] = RNG::generate(0, rule->getMissionZones().at(missionZone).areas.size() - 1);
 			}
 			m->load(node, *_save);
 			_save->getAlienMissions().push_back(m);
