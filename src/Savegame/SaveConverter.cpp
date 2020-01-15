@@ -603,6 +603,7 @@ void SaveConverter::loadDatLoc()
 		int timer = load<Sint16>(tdata + 0x06);
 		int id = load<Sint16>(tdata + 0x0A);
 		std::bitset<3> visibility(load<int>(tdata + 0x10));
+		bool detected = !visibility.test(0);
 
 		// can't declare variables in switches :(
 		Target *target = 0;
@@ -625,7 +626,7 @@ void SaveConverter::loadDatLoc()
 			ufo->setCrashId(id);
 			ufo->setLandId(id);
 			ufo->setSecondsRemaining(timer);
-			ufo->setDetected(!visibility.test(0));
+			ufo->setDetected(detected);
 			target = ufo;
 			break;
 		case TARGET_CRAFT:
@@ -640,7 +641,7 @@ void SaveConverter::loadDatLoc()
 			abase = new AlienBase(_mod->getDeployment("STR_ALIEN_BASE_ASSAULT", true));
 			abase->setId(id);
 			abase->setAlienRace(_rules->getCrews()[dat]);
-			abase->setDiscovered(!visibility.test(0));
+			abase->setDiscovered(detected);
 			_save->getAlienBases()->push_back(abase);
 			target = abase;
 			break;
@@ -654,16 +655,16 @@ void SaveConverter::loadDatLoc()
 			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR", true), _mod->getDeployment("STR_TERROR_MISSION", true));
 			break;
 		case TARGET_PORT:
-			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR", true), _mod->getDeployment("STR_PORT_TERROR", true));
+			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_SURFACE_ATTACK", true), _mod->getDeployment("STR_PORT_TERROR", true));
 			break;
 		case TARGET_ISLAND:
-			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR", true), _mod->getDeployment("STR_ISLAND_TERROR", true));
+			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_SURFACE_ATTACK", true), _mod->getDeployment("STR_ISLAND_TERROR", true));
 			break;
 		case TARGET_SHIP:
-			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR", true), _mod->getDeployment("STR_CARGO_SHIP_P1", true));
+			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_SHIP_ATTACK", true), _mod->getDeployment("STR_CARGO_SHIP_P1", true));
 			break;
 		case TARGET_ARTEFACT:
-			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_TERROR", true), _mod->getDeployment("STR_ARTIFACT_SITE_P1", true));
+			mission = new MissionSite(_mod->getAlienMission("STR_ALIEN_ARTIFACT", true), _mod->getDeployment("STR_ARTIFACT_SITE_P1", true));
 			break;
 		}
 		if (mission != 0)
@@ -671,6 +672,7 @@ void SaveConverter::loadDatLoc()
 			mission->setId(id);
 			mission->setAlienRace(_rules->getCrews()[dat]);
 			mission->setSecondsRemaining(timer * 3600);
+			mission->setDetected(detected);
 			_save->getMissionSites()->push_back(mission);
 			target = mission;
 		}
