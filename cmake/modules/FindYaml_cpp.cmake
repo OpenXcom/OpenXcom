@@ -23,12 +23,12 @@
 FIND_PACKAGE(PkgConfig)
 PKG_CHECK_MODULES(PC_YAMLCPP QUIET yaml-cpp)
 
-FIND_PATH(YAMLCPP_INCLUDE_DIR yaml.h
+FIND_PATH(YAMLCPP_INCLUDE_DIR yaml-cpp/yaml.h
   HINTS
   ${PC_YAMLCPP_INCLUDEDIR}
   ${PC_YAMLCPP_INCLUDE_DIRS}
   $ENV{YAMLCPPDIR}
-  PATH_SUFFIXES include/yaml-cpp include yaml-cpp
+  PATH_SUFFIXES include/yaml-cpp include
   PATHS
   ~/Library/Frameworks
   /Library/Frameworks
