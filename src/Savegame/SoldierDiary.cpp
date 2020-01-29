@@ -1024,7 +1024,7 @@ int SoldierDiary::getNightMissionTotal(std::vector<MissionStatistics*> *missionS
 		{
 			if ((*j) == (*i)->id)
 			{
-				if ((*i)->success && (*i)->daylight > 5 && !(*i)->isBaseDefense() && !(*i)->isAlienBase())
+				if ((*i)->success && (*i)->isDarkness() && !(*i)->isBaseDefense() && !(*i)->isAlienBase())
 				{
 					nightMissionTotal++;
 				}
@@ -1049,7 +1049,7 @@ int SoldierDiary::getNightTerrorMissionTotal(std::vector<MissionStatistics*> *mi
 		{
 			if ((*j) == (*i)->id)
 			{
-				if ((*i)->success && (*i)->daylight > 5 && !(*i)->isBaseDefense() && !(*i)->isUfoMission() && !(*i)->isAlienBase())
+				if ((*i)->success && (*i)->isDarkness() && !(*i)->isBaseDefense() && !(*i)->isUfoMission() && !(*i)->isAlienBase())
 				{
 					nightTerrorMissionTotal++;
 				}

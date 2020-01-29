@@ -141,7 +141,7 @@ void StatisticsState::listStats()
 		}
 		bestScore = std::max(bestScore, (*i)->score);
 		worstScore = std::min(worstScore, (*i)->score);
-		if ((*i)->daylight > 5)
+		if ((*i)->isDarkness())
 		{
 			nightMissions++;
 		}

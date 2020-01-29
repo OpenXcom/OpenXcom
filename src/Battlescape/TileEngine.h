@@ -41,7 +41,6 @@ private:
 	static const int MAX_VIEW_DISTANCE = 20;
 	static const int MAX_VIEW_DISTANCE_SQR = MAX_VIEW_DISTANCE * MAX_VIEW_DISTANCE;
 	static const int MAX_VOXEL_VIEW_DISTANCE = MAX_VIEW_DISTANCE * 16;
-	static const int MAX_DARKNESS_TO_SEE_UNITS = 9;
 	SavedBattleGame *_save;
 	std::vector<Uint16> *_voxelData;
 	static const int heightFromCenter[11];
@@ -52,6 +51,7 @@ private:
 	Tile *_cacheTileBelow;
 	Position _cacheTilePos;
 public:
+	static const int MAX_DARKNESS_TO_SEE_UNITS = 9;
 	/// Creates a new TileEngine class.
 	TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData);
 	/// Cleans up the TileEngine.

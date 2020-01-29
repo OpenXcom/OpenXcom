@@ -23,6 +23,7 @@
 #include <sstream>
 #include "GameTime.h"
 #include "../Engine/Language.h"
+#include "../Battlescape/TileEngine.h"
 
 namespace OpenXcom
 {
@@ -133,15 +134,20 @@ struct MissionStatistics
 		}
 	}
 
+	bool isDarkness() const
+	{
+		return daylight > TileEngine::MAX_DARKNESS_TO_SEE_UNITS;
+	}
+
 	std::string getDaylightString() const
 	{
-		if (daylight <= 5)
+		if (isDarkness())
 		{
-			return "STR_DAY";
+			return "STR_NIGHT";
 		}
 		else
 		{
-			return "STR_NIGHT";
+			return "STR_DAY";
 		}
 	}
 
