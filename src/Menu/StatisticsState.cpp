@@ -122,7 +122,7 @@ void StatisticsState::listStats()
 	ss << Unicode::TOK_NL_SMALL << time->getDayString(_game->getLanguage()) << " " << tr(time->getMonthString()) << " " << time->getYear();
 	_txtTitle->setText(ss.str());
 
-	int monthlyScore = sumVector(save->getResearchScores()) / save->getResearchScores().size();
+	int monthlyScore = sumVector(save->getResearchScores()) / (int)save->getResearchScores().size();
 	int64_t totalIncome = sumVector(save->getIncomes());
 	int64_t totalExpenses = sumVector(save->getExpenditures());
 
