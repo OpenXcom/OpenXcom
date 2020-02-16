@@ -175,10 +175,11 @@ CraftSoldiersState::CraftSoldiersState(Base *base, size_t craft)
 	bool showPsiSkill = false;
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
-		if (showPsiSkill) { break; }
 		if ((*i)->getCurrentStats()->psiSkill > 0)
 		{
+			showPsiStrength = true;
 			showPsiSkill = true;
+			break;
 		}
 	}
 	if (showPsiStrength)
