@@ -350,9 +350,13 @@ void FlcPlayer::decodeVideo(bool skipLastFrame)
 			{
 				delay = _delayOverride > 0 ? _delayOverride : _headerSpeed * (1000.0 / 70.0);
 			}
-			else
+			else if (_useInternalAudio && !_frameCallBack) // this means TFTD videos are playing
 			{
 				delay = _videoDelay;
+			}
+			else
+			{
+				delay = _headerSpeed;
 			}
 
 			waitForNextFrame(delay);
