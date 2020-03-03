@@ -1143,6 +1143,11 @@ std::vector<const ModInfo *> getActiveMods()
 	return activeMods;
 }
 
+ModInfo getModInfo(const std::string &id)
+{
+	return _modInfos.find(id)->second;
+}
+
 /**
  * Saves display settings temporarily to be able
  * to revert to old ones.

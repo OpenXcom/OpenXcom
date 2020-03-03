@@ -211,7 +211,7 @@ void OptionsModsState::lstModsRefresh(size_t scrollLoc)
 	// only show mods that work with the current master
 	for (std::vector< std::pair<std::string, bool> >::const_iterator i = Options::mods.begin(); i != Options::mods.end(); ++i)
 	{
-		ModInfo modInfo = Options::getModInfos().find(i->first)->second;
+		ModInfo modInfo = Options::getModInfo(i->first);
 		if (modInfo.isMaster() || !modInfo.canActivate(_curMasterId))
 		{
 			continue;

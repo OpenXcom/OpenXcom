@@ -111,6 +111,8 @@ namespace Options
 	void updateMods();
 	/// Gets the list of currently active mods.
 	std::vector<const ModInfo*> getActiveMods();
+	/// Gets a specified mod info.
+	ModInfo getModInfo(const std::string& id);
 }
 
 }

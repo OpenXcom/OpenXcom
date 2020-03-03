@@ -615,6 +615,17 @@ void Game::loadLanguages()
 	if (currentLang != defaultLang)
 		_lang->loadFile(CrossPlatform::searchDataFile("common" + ssCurrent.str()));
 
+	// if this is a master but it has a master of its own, allow it to
+	// chainload the "super" master, including its languages
+	ModInfo modInfo = Options::getModInfo(Options::getActiveMaster());
+	if (!modInfo.getMaster().empty())
+	{
+		ModInfo masterInfo = Options::getModInfo(modInfo.getMaster());
+		_lang->loadFile(masterInfo.getPath() + ssDefault.str());
+		if (currentLang != defaultLang)
+			_lang->loadFile(masterInfo.getPath() + ssCurrent.str());
+	}
+
 	std::vector<const ModInfo*> activeMods = Options::getActiveMods();
 	for (std::vector<const ModInfo*>::const_iterator i = activeMods.begin(); i != activeMods.end(); ++i)
 	{
