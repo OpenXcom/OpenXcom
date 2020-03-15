@@ -156,7 +156,15 @@ bool FlcPlayer::init(const char *filename, void(*frameCallBack)(), Game *game, b
 		Log(LOG_ERROR) << "Flx file failed header check.";
 		return false;
 	}
-
+	if (_screenWidth > _realScreen->getSurface()->getWidth() && Options::displayWidth >= _screenWidth)
+	{
+		// base resolution of video is higher than our surface width
+		// and our display resolution allows a hi-res video
+		// set base resolution to video resolution
+		Options::baseXResolution = _screenWidth;
+		Options::baseYResolution = _screenHeight;
+		_realScreen->resetDisplay();
+	}
 	// If the current surface used is at 8bpp use it
 	if (_realScreen->getSurface()->getSurface()->format->BitsPerPixel == 8)
 	{
