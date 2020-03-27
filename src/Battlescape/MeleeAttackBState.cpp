@@ -174,6 +174,8 @@ void MeleeAttackBState::think()
 //			_parent->getTileEngine()->checkReactionFire(_unit);
 //		}
 
+		_parent->getSave()->getBattleGame()->getCurrentAction()->type = BA_NONE; // do this to restore cursor
+
 		if (_parent->getSave()->getSide() == FACTION_PLAYER || _parent->getSave()->getDebugMode())
 		{
 			_parent->setupCursor();
