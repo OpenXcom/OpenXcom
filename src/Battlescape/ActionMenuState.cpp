@@ -308,6 +308,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			// check beforehand if we have enough time units
 			if (_action->TU > _action->actor->getTimeUnits())
 			{
+				_action->type = BA_NONE;
 				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
 			}
 			else if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
@@ -317,6 +318,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 				0, &_action->target))
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
+				_action->type = BA_NONE;
 			}
 			_game->popState();
 		}
