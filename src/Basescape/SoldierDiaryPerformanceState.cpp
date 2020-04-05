@@ -151,9 +151,9 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(Base *base, size_t so
 	_lstPerformance->setColumns(2, 273, 15);
 	_lstPerformance->setDot(true);
 
-	_lstKillTotals->setColumns(4, 74, 74, 74, 80);
+	_lstKillTotals->setColumns(4, 72, 72, 72, 86);
 
-	_lstMissionTotals->setColumns(4, 74, 74, 74, 80);
+	_lstMissionTotals->setColumns(4, 72, 72, 72, 86);
 
 	_txtMedalName->setText(tr("STR_MEDAL_NAME"));
 
