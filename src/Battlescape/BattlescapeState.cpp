@@ -1113,10 +1113,16 @@ void BattlescapeState::btnLeftHandItemClick(Action *)
 
 		_battleGame->cancelCurrentAction();
 
-		_save->getSelectedUnit()->setActiveHand("STR_LEFT_HAND");
+		BattleUnit *unit = _save->getSelectedUnit();
+		BattleItem *leftHandItem = getLeftHandItem(unit);
+
+		if (leftHandItem != getSpecialMeleeWeapon(unit))
+		{
+			unit->setActiveHand("STR_LEFT_HAND");
+		}
+
 		_map->cacheUnits();
 		_map->draw();
-		BattleItem *leftHandItem = _save->getSelectedUnit()->getItem("STR_LEFT_HAND");
 		handleItemClick(leftHandItem);
 	}
 }
@@ -1140,10 +1146,16 @@ void BattlescapeState::btnRightHandItemClick(Action *)
 
 		_battleGame->cancelCurrentAction();
 
-		_save->getSelectedUnit()->setActiveHand("STR_RIGHT_HAND");
+		BattleUnit *unit = _save->getSelectedUnit();
+		BattleItem *rightHandItem = getRightHandItem(unit);
+
+		if (rightHandItem != getSpecialMeleeWeapon(unit))
+		{
+			unit->setActiveHand("STR_RIGHT_HAND");
+		}
+
 		_map->cacheUnits();
 		_map->draw();
-		BattleItem *rightHandItem = _save->getSelectedUnit()->getItem("STR_RIGHT_HAND");
 		handleItemClick(rightHandItem);
 	}
 }
@@ -1325,7 +1337,7 @@ void BattlescapeState::updateSoldierInfo(bool checkFOV)
 
 	toggleKneelButton(battleUnit);
 
-	BattleItem *leftHandItem = battleUnit->getItem("STR_LEFT_HAND");
+	BattleItem *leftHandItem = getLeftHandItem(battleUnit);
 	_btnLeftHandItem->clear();
 	_numAmmoLeft->setVisible(false);
 	if (leftHandItem)
@@ -1340,7 +1352,7 @@ void BattlescapeState::updateSoldierInfo(bool checkFOV)
 				_numAmmoLeft->setValue(0);
 		}
 	}
-	BattleItem *rightHandItem = battleUnit->getItem("STR_RIGHT_HAND");
+	BattleItem *rightHandItem = getRightHandItem(battleUnit);
 	_btnRightHandItem->clear();
 	_numAmmoRight->setVisible(false);
 	if (rightHandItem)
@@ -1370,6 +1382,43 @@ void BattlescapeState::updateSoldierInfo(bool checkFOV)
 	}
 
 	showPsiButton(battleUnit->getSpecialWeapon(BT_PSIAMP) != 0);
+}
+
+/**
+ * Gets the item currently accessible through the left hand slot in the battlescape UI.
+ */
+BattleItem *BattlescapeState::getLeftHandItem(BattleUnit *battleUnit)
+{
+	BattleItem *melee = getSpecialMeleeWeapon(battleUnit);
+	BattleItem *leftHand = battleUnit->getItem("STR_LEFT_HAND");
+
+	// If the unit has a melee weapon, and the right hand is already occupied,
+	// allow access to the melee weapon through the left hand slot,
+	// provided that the left hand is empty.
+	return melee && battleUnit->getItem("STR_RIGHT_HAND") && !leftHand
+		? melee
+		: leftHand;
+}
+
+/**
+ * Gets the item currently accessible through the right hand slot in the battlescape UI.
+ */
+BattleItem *BattlescapeState::getRightHandItem(BattleUnit *battleUnit)
+{
+	BattleItem *melee = getSpecialMeleeWeapon(battleUnit);
+	BattleItem *rightHand = battleUnit->getItem("STR_RIGHT_HAND");
+
+	// If the unit has a built-in melee weapon, and the right hand is not occupied,
+	// allow access to the melee weapon through the right hand slot.
+	return melee && !rightHand ? melee : rightHand;
+}
+
+/**
+ * Gets the built-in melee weapon of a unit, if any.
+ */
+BattleItem *BattlescapeState::getSpecialMeleeWeapon(BattleUnit *battleUnit)
+{
+	return battleUnit->getSpecialWeapon(BT_MELEE);
 }
 
 /**
