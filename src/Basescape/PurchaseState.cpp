@@ -539,7 +539,7 @@ void PurchaseState::increaseByValue(int change)
 			break;
 		case TRANSFER_ITEM:
 			rule = (RuleItem*)getRow().rule;
-			if (_iQty + rule->getSize() > _base->getAvailableStores() - _base->getUsedStores())
+			if (_base->storesOverfull(_iQty + rule->getSize()))
 			{
 				errorMessage = tr("STR_NOT_ENOUGH_STORE_SPACE");
 			}

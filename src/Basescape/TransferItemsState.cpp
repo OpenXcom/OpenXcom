@@ -592,7 +592,7 @@ void TransferItemsState::increaseByValue(int change)
 		{
 			errorMessage = tr("STR_NOT_ENOUGH_STORE_SPACE");
 		}
-			else if (selItem->isAlien() && Options::storageLimitsEnforced * _aQty + 1 > _baseTo->getAvailableContainment() - Options::storageLimitsEnforced * _baseTo->getUsedContainment())
+		else if (selItem->isAlien() && Options::storageLimitsEnforced * _aQty + 1 > _baseTo->getAvailableContainment() - Options::storageLimitsEnforced * _baseTo->getUsedContainment())
 		{
 			errorMessage = tr("STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER");
 		}
