@@ -1,0 +1,43 @@
+# Based on XcomUtil by Scott Jones and BladeFireLight
+crafts:
+  - type: STR_BARRACUDA
+    soldiers: 6
+    vehicles: 1
+    battlescapeTerrainData:
+      name: BARRACUD
+      mapDataSets:
+        - BLANKS
+        - TRITON
+      mapBlocks:
+        - name: BARRACUD
+          width: 10
+          length: 10
+    deployment:
+      - [5, 6, 0, 4]
+      - [4, 6, 0, 4]
+      - [5, 5, 0, 4]
+      - [4, 5, 0, 4]
+      - [3, 6, 0, 4]
+      - [3, 5, 0, 4]
+  - type: STR_MANTA
+    soldiers: 9
+    vehicles: 1
+    battlescapeTerrainData:
+      name: MANTA
+      mapDataSets:
+        - BLANKS
+        - HAMMER
+      mapBlocks:
+        - name: MANTA
+          width: 10
+          length: 10
+    deployment:
+      - [5, 5, 0, 4]
+      - [4, 5, 0, 4]
+      - [5, 4, 0, 4]
+      - [4, 4, 0, 4]
+      - [5, 3, 0, 4]
+      - [4, 3, 0, 4]
+      - [3, 5, 0, 4]
+      - [3, 4, 0, 4]
+      - [3, 3, 0, 4]

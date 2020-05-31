@@ -1,0 +1,9 @@
+#
+# metadata.yaml for XcomUtil Fighter Transports
+
+name: "XcomUtil: Fighter Transports"
+version: 1.0
+description: "Allows fighter subs (Barracuda and Manta) to carry soldiers and SWS to ground missions."
+author: the OpenXcom team
+
+master: xcom2
