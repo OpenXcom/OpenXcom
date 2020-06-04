@@ -700,7 +700,7 @@ void DebriefingState::btnOkClick(Action *)
 			{
 				_game->pushState(new CannotReequipState(_missingItems));
 			}
-			else if (_manageContainment)
+			if (_manageContainment)
 			{
 				_game->pushState(new ManageAlienContainmentState(_base, OPT_BATTLESCAPE));
 				_game->pushState(new ErrorMessageState(tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()), _palette, _game->getMod()->getInterface("debriefing")->getElement("errorMessage")->color, "BACK01.SCR", _game->getMod()->getInterface("debriefing")->getElement("errorPalette")->color));
