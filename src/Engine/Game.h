@@ -51,6 +51,8 @@ private:
 	bool _quit, _init;
 	FpsCounter *_fpsCounter;
 	bool _mouseActive;
+	unsigned int _timeOfLastFrame;
+	int _timeUntilNextFrame;
 	static const double VOLUME_GRADIENT;
 
 public:
