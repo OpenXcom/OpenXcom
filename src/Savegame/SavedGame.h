@@ -56,7 +56,7 @@ struct BattleUnitKills;
 /**
  * Enumerator containing all the possible game difficulties.
  */
-enum GameDifficulty { DIFF_BEGINNER = 0, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
+enum GameDifficulty { DIFF_BEGINNER = 0, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN, DIFF_DEMIGOD };
 
 /**
  * Enumerator for the various save types.

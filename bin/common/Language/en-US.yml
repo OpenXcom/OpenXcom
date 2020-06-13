@@ -8,6 +8,7 @@ en-US:
   STR_3_VETERAN: "3> Veteran"
   STR_4_GENIUS: "4> Genius"
   STR_5_SUPERHUMAN: "5> Superhuman"
+  STR_6_DEMIGOD: "6> Demigod"
   STR_TIME: "Time"
   STR_DATE: "Date"
   STR_SELECT_GAME_TO_LOAD: "Select game to load"
