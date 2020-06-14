@@ -276,7 +276,7 @@ void StatisticsState::listStats()
 
 	int researchDone = save->getDiscoveredResearch().size();
 
-	std::string difficulty[] = { "STR_1_BEGINNER", "STR_2_EXPERIENCED", "STR_3_VETERAN", "STR_4_GENIUS", "STR_5_SUPERHUMAN" };
+	std::string difficulty[] = { "STR_1_BEGINNER", "STR_2_EXPERIENCED", "STR_3_VETERAN", "STR_4_GENIUS", "STR_5_SUPERHUMAN", "STR_6_DEMIGOD" };
 
 	_lstStats->addRow(2, tr("STR_DIFFICULTY").c_str(), tr(difficulty[save->getDifficulty()]).c_str());
 	_lstStats->addRow(2, tr("STR_AVERAGE_MONTHLY_RATING").c_str(), Unicode::formatNumber(monthlyScore).c_str());
