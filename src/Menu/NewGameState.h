@@ -35,7 +35,7 @@ class Text;
 class NewGameState : public State
 {
 private:
-	TextButton *_btnBeginner, *_btnExperienced, *_btnVeteran, *_btnGenius, *_btnSuperhuman, *_btnDemigod;
+	TextButton *_btnBeginner, *_btnExperienced, *_btnVeteran, *_btnGenius, *_btnSuperhuman;
 	TextButton *_difficulty;
 	ToggleTextButton *_btnIronman;
 	TextButton *_btnOk, *_btnCancel;

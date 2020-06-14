@@ -1217,14 +1217,14 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 	else
 	{
 		// DEMIGOD DIFFICULTY: screw the player: spawn as many aliens as possible.
-		if (_game->getSavedGame()->getDifficulty() >= DIFF_DEMIGOD && placeUnitNearFriend(unit))
+		if (_game->getMod()->isDemigod() && placeUnitNearFriend(unit))
 		{
 			unit->setAIModule(new AIModule(_game->getSavedGame()->getSavedBattle(), unit, 0));
 			unit->setRankInt(alienRank);
 			unit->setSpecialWeapon(_save, _game->getMod());
 			int dir = _save->getTileEngine()->faceWindow(unit->getPosition());
 			Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
-			if (_save->getTileEngine()->distance(unit->getPosition(), craft) <= 20 && RNG::percent(20 * difficulty))
+			if (_save->getTileEngine()->distance(unit->getPosition(), craft) <= 20 && RNG::percent(20 * 1))
 				dir = unit->directionTo(craft);
 			if (dir != -1)
 				unit->setDirection(dir);

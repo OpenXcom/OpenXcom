@@ -197,7 +197,7 @@ void Mod::resetGlobalStatics()
 /**
  * Creates an empty mod.
  */
-Mod::Mod() : _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _turnAIUseGrenade(3), _turnAIUseBlaster(3), _defeatScore(0), _defeatFunds(0), _startingTime(6, 1, 1, 1999, 12, 0, 0),
+Mod::Mod() : _costEngineer(0), _costScientist(0), _timePersonnel(0), _initialFunding(0), _turnAIUseGrenade(3), _turnAIUseBlaster(3), _defeatScore(0), _defeatFunds(0), _difficultyDemigod(false), _startingTime(6, 1, 1, 1999, 12, 0, 0),
 			 _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _invListOrder(0), _modCurrent(0), _statePalette(0)
 {
 	_muteMusic = new Music();
@@ -1335,6 +1335,7 @@ void Mod::loadFile(const std::string &filename)
 	_turnAIUseBlaster = doc["turnAIUseBlaster"].as<int>(_turnAIUseBlaster);
 	_defeatScore = doc["defeatScore"].as<int>(_defeatScore);
 	_defeatFunds = doc["defeatFunds"].as<int>(_defeatFunds);
+	_difficultyDemigod = doc["difficultyDemigod"].as<bool>(_difficultyDemigod);
 	if (doc["difficultyCoefficient"])
 	{
 		size_t num = 0;
@@ -3696,6 +3697,16 @@ int Mod::getDefeatScore() const
 int Mod::getDefeatFunds() const
 {
 	return _defeatFunds;
+}
+
+/**
+ * Enables non-vanilla difficulty features.
+ * Dehumanize yourself and face the Warboy.
+ * @return Is the player screwed?
+*/
+bool Mod::isDemigod() const
+{
+	return _difficultyDemigod;
 }
 
 }

@@ -39,18 +39,17 @@ namespace OpenXcom
 NewGameState::NewGameState()
 {
 	// Create objects
-	_window = new Window(this, 192, 200, 64, 0, POPUP_VERTICAL);
-	_btnBeginner = new TextButton(160, 18, 80, 22);
-	_btnExperienced = new TextButton(160, 18, 80, 42);
-	_btnVeteran = new TextButton(160, 18, 80, 62);
-	_btnGenius = new TextButton(160, 18, 80, 82);
-	_btnSuperhuman = new TextButton(160, 18, 80, 102);
-	_btnDemigod = new TextButton(160, 18, 80, 122);
-	_btnIronman = new ToggleTextButton(78, 18, 80, 148);
-	_btnOk = new TextButton(78, 16, 80, 174);
-	_btnCancel = new TextButton(78, 16, 162, 174);
-	_txtTitle = new Text(192, 9, 64, 10);
-	_txtIronman = new Text(90, 24, 162, 145);
+	_window = new Window(this, 192, 180, 64, 10, POPUP_VERTICAL);
+	_btnBeginner = new TextButton(160, 18, 80, 32);
+	_btnExperienced = new TextButton(160, 18, 80, 52);
+	_btnVeteran = new TextButton(160, 18, 80, 72);
+	_btnGenius = new TextButton(160, 18, 80, 92);
+	_btnSuperhuman = new TextButton(160, 18, 80, 112);
+	_btnIronman = new ToggleTextButton(78, 18, 80, 138);
+	_btnOk = new TextButton(78, 16, 80, 164);
+	_btnCancel = new TextButton(78, 16, 162, 164);
+	_txtTitle = new Text(192, 9, 64, 20);
+	_txtIronman = new Text(90, 24, 162, 135);
 
 	_difficulty = _btnBeginner;
 
@@ -63,7 +62,6 @@ NewGameState::NewGameState()
 	add(_btnVeteran, "button", "newGameMenu");
 	add(_btnGenius, "button", "newGameMenu");
 	add(_btnSuperhuman, "button", "newGameMenu");
-	add(_btnDemigod, "button", "newGameMenu");
 	add(_btnIronman, "ironman", "newGameMenu");
 	add(_btnOk, "button", "newGameMenu");
 	add(_btnCancel, "button", "newGameMenu");
@@ -89,9 +87,6 @@ NewGameState::NewGameState()
 
 	_btnSuperhuman->setText(tr("STR_5_SUPERHUMAN"));
 	_btnSuperhuman->setGroup(&_difficulty);
-
-	_btnDemigod->setText(tr("STR_6_DEMIGOD"));
-	_btnDemigod->setGroup(&_difficulty);
 
 	_btnIronman->setText(tr("STR_IRONMAN"));
 
@@ -145,10 +140,6 @@ void NewGameState::btnOkClick(Action *)
 	else if (_difficulty == _btnSuperhuman)
 	{
 		diff = DIFF_SUPERHUMAN;
-	}
-	else if (_difficulty == _btnDemigod)
-	{
-		diff = DIFF_DEMIGOD;
 	}
 	SavedGame *save = _game->getMod()->newSave();
 	save->setDifficulty(diff);
