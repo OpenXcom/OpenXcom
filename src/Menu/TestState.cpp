@@ -101,6 +101,7 @@ TestState::TestState()
 		difficulty.push_back(tr("STR_3_VETERAN"));
 		difficulty.push_back(tr("STR_4_GENIUS"));
 		difficulty.push_back(tr("STR_5_SUPERHUMAN"));
+		difficulty.push_back(tr("STR_6_DEMIGOD"));
 	}
 
 	_comboBox->setColor(Palette::blockOffset(15)+1);

@@ -195,6 +195,7 @@ NewBattleState::NewBattleState() : _craft(0)
 	difficulty.push_back(tr("STR_3_VETERAN"));
 	difficulty.push_back(tr("STR_4_GENIUS"));
 	difficulty.push_back(tr("STR_5_SUPERHUMAN"));
+	difficulty.push_back(tr("STR_6_DEMIGOD"));
 	_cbxDifficulty->setOptions(difficulty);
 
 	_alienRaces = _game->getMod()->getAlienRacesList();
