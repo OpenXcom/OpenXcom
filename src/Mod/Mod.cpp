@@ -3378,18 +3378,21 @@ void Mod::loadExtraResources()
 		}
 	}
 
-	for (std::vector< std::pair<std::string, ExtraSounds *> >::const_iterator i = _extraSounds.begin(); i != _extraSounds.end(); ++i)
+	if (!Options::mute)
 	{
-		std::string setName = i->first;
-		ExtraSounds *soundPack = i->second;
-		SoundSet *set = 0;
-
-		std::map<std::string, SoundSet*>::iterator j = _sounds.find(setName);
-		if (j != _sounds.end())
+		for (std::vector< std::pair<std::string, ExtraSounds *> >::const_iterator i = _extraSounds.begin(); i != _extraSounds.end(); ++i)
 		{
-			set = j->second;
+			std::string setName = i->first;
+			ExtraSounds *soundPack = i->second;
+			SoundSet *set = 0;
+
+			std::map<std::string, SoundSet*>::iterator j = _sounds.find(setName);
+			if (j != _sounds.end())
+			{
+				set = j->second;
+			}
+			_sounds[setName] = soundPack->loadSoundSet(set);
 		}
-		_sounds[setName] = soundPack->loadSoundSet(set);
 	}
 
 	TextButton::soundPress = getSound("GEO.CAT", Mod::BUTTON_PRESS);
