@@ -22,6 +22,7 @@
 #include <cmath>
 #include <iomanip>
 #include <climits>
+#include <cstdio>
 #include "../lodepng.h"
 #include "Exception.h"
 #include "Surface.h"
@@ -39,6 +40,8 @@ namespace OpenXcom
 
 const int Screen::ORIGINAL_WIDTH = 320;
 const int Screen::ORIGINAL_HEIGHT = 200;
+
+static char VIDEO_WINDOW_POS[40];
 
 /**
  * Sets up all the internal display flags depending on
@@ -68,20 +71,19 @@ void Screen::makeVideoFlags()
 	// Handle window positioning
 	if (!Options::fullscreen && Options::rootWindowedMode)
 	{
-		std::ostringstream ss;
-		ss << "SDL_VIDEO_WINDOW_POS=" << std::dec << Options::windowedModePositionX << "," << Options::windowedModePositionY;
-		SDL_putenv(const_cast<char*>(ss.str().c_str()));
-		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED="));
+		sprintf(VIDEO_WINDOW_POS, "SDL_VIDEO_WINDOW_POS=%d,%d", Options::windowedModePositionX, Options::windowedModePositionY);
+		SDL_putenv(VIDEO_WINDOW_POS);
+		SDL_putenv("SDL_VIDEO_CENTERED=");
 	}
 	else if (Options::borderless)
 	{
-		SDL_putenv(const_cast<char*>("SDL_VIDEO_WINDOW_POS="));
-		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED=center"));
+		SDL_putenv("SDL_VIDEO_WINDOW_POS=");
+		SDL_putenv("SDL_VIDEO_CENTERED=center");
 	}
 	else
 	{
-		SDL_putenv(const_cast<char*>("SDL_VIDEO_WINDOW_POS="));
-		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED="));
+		SDL_putenv("SDL_VIDEO_WINDOW_POS=");
+		SDL_putenv("SDL_VIDEO_CENTERED=");
 	}
 
 	// Handle display mode
