@@ -56,7 +56,7 @@ private:
 	bool _detected, _hyperDetected, _processedIntercept;
 	int _shootingAt, _hitFrame, _fireCountdown, _escapeCountdown;
 	/// Calculates a new speed vector to the destination.
-	void calculateSpeed();
+	void calculateSpeed() override;
 
 	using MovingTarget::load;
 	using MovingTarget::save;
@@ -70,19 +70,19 @@ public:
 	/// Saves the UFO to YAML.
 	YAML::Node save(bool newBattle) const;
 	/// Gets the UFO's type.
-	std::string getType() const;
+	std::string getType() const override;
 	/// Gets the UFO's ruleset.
 	const RuleUfo *getRules() const;
 	/// Sets the UFO's ruleset.
 	void changeRules(const RuleUfo *rules);
 	/// Gets the UFO's default name.
-	std::string getDefaultName(Language *lang) const;
+	std::string getDefaultName(Language *lang) const override;
 	/// Gets the UFO's marker name.
-	std::string getMarkerName() const;
+	std::string getMarkerName() const override;
 	/// Gets the UFO's marker ID.
 	int getMarkerId() const override;
 	/// Gets the UFO's marker sprite.
-	int getMarker() const;
+	int getMarker() const override;
 	/// Gets the UFO's amount of damage.
 	int getDamage() const;
 	/// Sets the UFO's amount of damage.
@@ -142,7 +142,7 @@ public:
 	/// Gets the UFO's mission object.
 	AlienMission *getMission() const { return _mission; }
 	/// Sets the UFO's destination.
-	void setDestination(Target *dest);
+	void setDestination(Target *dest) override;
 	/// Get which interceptor this ufo is engaging.
 	int getShootingAt() const;
 	/// Set which interceptor this ufo is engaging.
