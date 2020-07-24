@@ -89,6 +89,12 @@ private:
 	void blinkHealthBar();
 	/// Shows the unit kneel state.
 	void toggleKneelButton(BattleUnit* unit);
+	/// Gets the item currently accessible through the left hand slot in the battlescape UI.
+	BattleItem *getLeftHandItem(BattleUnit *unit);
+	/// Gets the item currently accessible through the right hand slot in the battlescape UI.
+	BattleItem *getRightHandItem(BattleUnit *unit);
+	/// Gets the built-in melee weapon of a unit, if any.
+	BattleItem *getSpecialMeleeWeapon(BattleUnit *unit);
 public:
 	/// Selects the next soldier.
 	void selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false, bool checkFOV = true);
