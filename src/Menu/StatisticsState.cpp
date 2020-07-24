@@ -39,6 +39,7 @@
 #include "../Savegame/SoldierDeath.h"
 #include "../Savegame/BattleUnitStatistics.h"
 #include "../Savegame/Country.h"
+#include "../Savegame/Region.h"
 #include "../Savegame/AlienBase.h"
 
 namespace OpenXcom
@@ -122,7 +123,13 @@ void StatisticsState::listStats()
 	ss << Unicode::TOK_NL_SMALL << time->getDayString(_game->getLanguage()) << " " << tr(time->getMonthString()) << " " << time->getYear();
 	_txtTitle->setText(ss.str());
 
-	int monthlyScore = sumVector(save->getResearchScores()) / (int)save->getResearchScores().size();
+	int totalScore = sumVector(save->getResearchScores());
+	for (std::vector<Region*>::iterator iter = save->getRegions()->begin(); iter != save->getRegions()->end(); ++iter)
+	{
+		totalScore += sumVector((*iter)->getActivityXcom()) - sumVector((*iter)->getActivityAlien());
+	}
+
+	int monthlyScore = totalScore / (int)save->getResearchScores().size();
 	int64_t totalIncome = sumVector(save->getIncomes());
 	int64_t totalExpenses = sumVector(save->getExpenditures());
 
