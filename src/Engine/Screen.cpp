@@ -41,7 +41,12 @@ namespace OpenXcom
 const int Screen::ORIGINAL_WIDTH = 320;
 const int Screen::ORIGINAL_HEIGHT = 200;
 
-static char VIDEO_WINDOW_POS[40];
+static const int VIDEO_WINDOW_POS_LEN = 40;
+static char VIDEO_WINDOW_POS[VIDEO_WINDOW_POS_LEN];
+
+static const char* SDL_VIDEO_CENTERED_UNSET = "SDL_VIDEO_CENTERED=";
+static const char* SDL_VIDEO_CENTERED_CENTER = "SDL_VIDEO_CENTERED=center";
+static const char* SDL_VIDEO_WINDOW_POS_UNSET = "SDL_VIDEO_WINDOW_POS=";
 
 /**
  * Sets up all the internal display flags depending on
@@ -71,19 +76,19 @@ void Screen::makeVideoFlags()
 	// Handle window positioning
 	if (!Options::fullscreen && Options::rootWindowedMode)
 	{
-		sprintf(VIDEO_WINDOW_POS, "SDL_VIDEO_WINDOW_POS=%d,%d", Options::windowedModePositionX, Options::windowedModePositionY);
+		snprintf(VIDEO_WINDOW_POS, VIDEO_WINDOW_POS_LEN, "SDL_VIDEO_WINDOW_POS=%d,%d", Options::windowedModePositionX, Options::windowedModePositionY);
 		SDL_putenv(VIDEO_WINDOW_POS);
-		SDL_putenv("SDL_VIDEO_CENTERED=");
+		SDL_putenv((char *)SDL_VIDEO_CENTERED_UNSET);
 	}
 	else if (Options::borderless)
 	{
-		SDL_putenv("SDL_VIDEO_WINDOW_POS=");
-		SDL_putenv("SDL_VIDEO_CENTERED=center");
+		SDL_putenv((char *)SDL_VIDEO_WINDOW_POS_UNSET);
+		SDL_putenv((char *)SDL_VIDEO_CENTERED_CENTER);
 	}
 	else
 	{
-		SDL_putenv("SDL_VIDEO_WINDOW_POS=");
-		SDL_putenv("SDL_VIDEO_CENTERED=");
+		SDL_putenv((char *)SDL_VIDEO_WINDOW_POS_UNSET);
+		SDL_putenv((char *)SDL_VIDEO_CENTERED_UNSET);
 	}
 
 	// Handle display mode
