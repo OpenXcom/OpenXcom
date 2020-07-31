@@ -555,14 +555,14 @@ armors: #done
     underArmor: 4
     damageModifier:
       - 1.0
-      - 1.0
-      - 1.0
-      - 1.0
-      - 1.0
-      - 1.0
-      - 1.0
-      - 1.6
-      - 1.5
-      - 1.0
+      - 0.9
+      - 0.9
+      - 0.9
+      - 0.8
+      - 0.9
+      - 0.9
+      - 1.1
+      - 0.0
+      - 0.9
     loftemps: 2
     drawingRoutine: 17
