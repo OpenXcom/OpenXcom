@@ -45,7 +45,7 @@ items: #done
     bulletSprite: 6
     hitSound: 31
     hitAnimation: 46
-    power: 120
+    power: 110
     damageType: 4
     vaporColor: 2
     vaporDensity: 10
@@ -77,7 +77,7 @@ items: #done
       - STR_HWP_SOLID_HARPOON_BOLTS
     accuracySnap: 60
     accuracyAimed: 90
-    tuSnap: 33
+    tuSnap: 30
     tuAimed: 80
     battleType: 1
     fixedWeapon: true
@@ -92,7 +92,7 @@ items: #done
     weight: 1
     hitSound: 21
     hitAnimation: 26
-    power: 50
+    power: 60
     damageType: 1
     clipSize: 30
     battleType: 2
@@ -125,7 +125,7 @@ items: #done
     costBuy: 3000
     costSell: 2250
     transferTime: 48
-    power: 90
+    power: 85
     damageType: 3
     clipSize: 8
     battleType: 2
@@ -161,10 +161,10 @@ items: #done
     bulletSprite: 8
     fireSound: 36
     hitSound: 31
-    power: 130
+    power: 110
     damageType: 5
     hitAnimation: 46
-    accuracySnap: 85
+    accuracySnap: 86
     accuracyAimed: 100
     tuSnap: 30
     tuAimed: 60
@@ -185,7 +185,7 @@ items: #done
     fireSound: 26
     compatibleAmmo:
       - STR_HWP_DISPLACER_PWT
-    accuracyAimed: 100
+    accuracyAimed: 60
     tuAimed: 66
     battleType: 1
     fixedWeapon: true
