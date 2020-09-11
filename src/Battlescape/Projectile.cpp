@@ -305,6 +305,7 @@ int Projectile::calculateThrow(double accuracy)
 			applyAccuracy(originVoxel, &targetVoxel, accuracy, true, false); //arcing shot deviation
 			deltas = Position(0,0,0);
 		}
+		_trajectory.push_back(originVoxel);
 		test = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, _action.actor, curvature, deltas);
 		if (forced) return O_OBJECT; //fake hit
 		Position endPoint = _trajectory.back() / Position (16, 16, 24);
@@ -445,6 +446,8 @@ Position Projectile::getPosition(int offset) const
 	int posOffset = (int)_position + offset;
 	if (posOffset >= 0 && posOffset < (int)_trajectory.size())
 		return _trajectory.at(posOffset);
+	else if (posOffset < 0)
+		return _trajectory.at(0);
 	else
 		return _trajectory.at(_position);
 }
