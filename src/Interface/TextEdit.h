@@ -54,15 +54,17 @@ public:
 	/// Cleans up the text edit.
 	~TextEdit();
 	/// Handle focus.
-	void handle(Action *action, State *state);
+	void handle(Action *action, State *state) override;
 	/// Sets focus on this text edit.
-	void setFocus(bool focus, bool modal = true);
+	void setFocus(bool focus, bool modal);
+	// Override the base class' method properly.
+	void setFocus(bool focus) override { setFocus(focus, true); };
 	/// Sets the text size to big.
 	void setBig();
 	/// Sets the text size to small.
 	void setSmall();
 	/// Initializes the text edit's resources.
-	void initText(Font *big, Font *small, Language *lang);
+	void initText(Font *big, Font *small, Language *lang) override;
 	/// Sets the text's string.
 	void setText(const std::string &text);
 	/// Gets the text edit's string.
@@ -72,7 +74,7 @@ public:
 	/// Sets the text edit's color invert setting.
 	void setInvert(bool invert);
 	/// Sets the text edit's high contrast color setting.
-	void setHighContrast(bool contrast);
+	void setHighContrast(bool contrast) override;
 	/// Sets the text edit's horizontal alignment.
 	void setAlign(TextHAlign align);
 	/// Sets the text edit's vertical alignment.
@@ -80,25 +82,25 @@ public:
 	/// Sets the text edit constraint.
 	void setConstraint(TextEditConstraint constraint);
 	/// Sets the text edit's color.
-	void setColor(Uint8 color);
+	void setColor(Uint8 color) override;
 	/// Gets the text edit's color.
 	Uint8 getColor() const;
 	/// Sets the text edit's secondary color.
-	void setSecondaryColor(Uint8 color);
+	void setSecondaryColor(Uint8 color) override;
 	/// Gets the text edit's secondary color.
 	Uint8 getSecondaryColor() const;
 	/// Sets the text edit's palette.
-	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
+	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256) override;
 	/// Handles the timers.
-	void think();
+	void think() override;
 	/// Plays the blinking animation.
 	void blink();
 	/// Draws the text edit.
-	void draw();
+	void draw() override;
 	/// Special handling for mouse presses.
-	void mousePress(Action *action, State *state);
+	void mousePress(Action *action, State *state) override;
 	/// Special handling for keyboard presses.
-	void keyboardPress(Action *action, State *state);
+	void keyboardPress(Action *action, State *state) override;
 	/// Hooks an action handler to when the slider changes.
 	void onChange(ActionHandler handler);
 };
