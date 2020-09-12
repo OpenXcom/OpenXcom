@@ -18,6 +18,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <algorithm>
+#include <random>
 #define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
@@ -55,7 +56,11 @@ namespace RNG
 	template <typename T>
 	void shuffle(T &list)
 	{
+#if __cplusplus >= 201103L
+		std::shuffle(list.begin(), list.end(), std::random_device());
+#else
 		std::random_shuffle(list.begin(), list.end(), generateEx);
+#endif
 	}
 }
 
