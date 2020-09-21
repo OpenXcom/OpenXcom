@@ -790,7 +790,6 @@ research:
     points: 50
     needItem: true
   - name: STR_CELATID
-    cost: 170
     points: 50
     needItem: true
   - name: STR_SILACOID

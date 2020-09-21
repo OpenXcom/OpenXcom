@@ -50,7 +50,7 @@ public:
 	/// Checks the number of missions run labelled as "varName".
 	int getMissionsRun(const std::string &varName);
 	/// Increments the number of missions run labelled as "varName".
-	void addMissionRun(const std::string &varName);
+	void addMissionRun(const std::string &varName, int increment = 1);
 	/// Adds a mission location to our storage array.
 	void addMissionLocation(const std::string &varName, const std::string &regionName, int zoneNumber, int maximum);
 	/// Checks that a given mission location (city or whatever) isn't stored in our list of previously attacked locations.

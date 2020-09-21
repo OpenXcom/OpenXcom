@@ -341,7 +341,6 @@ void SaveConverter::loadDatUIGlob()
 		ids[_rules->getMarkers()[i]] = load<Uint16>(data + i * sizeof(Uint16));
 	}
 	ids["STR_CRASH_SITE"] = ids["STR_LANDING_SITE"] = ids["STR_UFO"];
-	_save->setAllIds(ids);
 
 	_year = load<Uint16>(data + 0x16);
 
@@ -351,6 +350,35 @@ void SaveConverter::loadDatUIGlob()
 		int score = load<Sint16>(data + 0x18 + i * sizeof(Sint16));
 		_save->getResearchScores().push_back(score);
 	}
+
+	// Loads the SITE.DAT file (TFTD only).
+	std::string s = _savePath + CrossPlatform::PATH_SEPARATOR + "SITE.DAT";
+	if (CrossPlatform::fileExists(s))
+	{
+		std::vector<char> sitebuffer;
+		char* sitedata = binaryBuffer("SITE.DAT", sitebuffer);
+		int generatedArtifactSiteMissions = load<Uint16>(sitedata + 0x24);
+		if (generatedArtifactSiteMissions > 0)
+		{
+			_save->getAlienStrategy().addMissionRun("artifacts", generatedArtifactSiteMissions);
+
+			int spawnedArtifactSites = generatedArtifactSiteMissions;
+			char siteTypeToBeSpawned = load<char>(sitedata + 0x26);
+			if (siteTypeToBeSpawned == 'T')
+			{
+				// before the first hour of the month, the mission was generated already, but the site has not spawned yet
+				spawnedArtifactSites--;
+			}
+			else
+			{
+				// after the first hour of the month
+				// or not an artifact site type
+			}
+			ids["STR_ARTIFACT_SITE"] = spawnedArtifactSites + 1; // OXC stores the ID of the next site, thus +1
+		}
+	}
+
+	_save->setAllIds(ids);
 }
 
 /**

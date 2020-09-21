@@ -185,12 +185,13 @@ int AlienStrategy::getMissionsRun(const std::string &varName)
 /**
  * Increments the number of missions run labelled as "varName".
  * @param varName the variable name that we want to use to keep track of this.
+ * @param increment the value to increment by.
  */
-void AlienStrategy::addMissionRun(const std::string &varName)
+void AlienStrategy::addMissionRun(const std::string &varName, int increment)
 {
 	if (varName.empty())
 		return;
-	_missionRuns[varName]++;
+	_missionRuns[varName] += increment;
 }
 
 /**
