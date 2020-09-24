@@ -20,6 +20,7 @@
 #include <string>
 #include <map>
 #include <yaml-cpp/yaml.h>
+#include <stdint.h>
 
 namespace OpenXcom
 {
@@ -52,6 +53,8 @@ public:
 	int getManufactureTime() const;
 	/// Gets the cost of manufacturing one object.
 	int getManufactureCost() const;
+	/// Checks if there's enough funds to manufacture one object.
+	bool haveEnoughMoneyForOneMoreUnit(int64_t funds) const;
 	/// Gets the list of items required to manufacture one object.
 	const std::map<std::string, int> & getRequiredItems() const;
 	/// Gets the list of items produced by completing "one object" of this project.

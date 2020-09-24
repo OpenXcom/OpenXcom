@@ -115,6 +115,17 @@ int RuleManufacture::getManufactureCost() const
 }
 
 /**
+ * Checks if there's enough funds to manufacture one object.
+ * @param funds Current funds.
+ * @return True if manufacture is possible.
+ */
+bool RuleManufacture::haveEnoughMoneyForOneMoreUnit(int64_t funds) const
+{
+	// either we have enough money, or the production doesn't cost anything
+	return funds >= _cost || _cost <= 0;
+}
+
+/**
  * Gets the list of items required to manufacture one object.
  * @return The list of items required to manufacture one object.
  */
