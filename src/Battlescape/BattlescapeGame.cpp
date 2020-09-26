@@ -457,7 +457,7 @@ void BattlescapeGame::endTurn()
 		{
 			if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
 			{
-				if (!Options::allowPsionicCapture || (*j)->getFaction() != FACTION_PLAYER)
+				if (!Options::allowPsionicCapture || (*j)->getFaction() != FACTION_PLAYER || !(*j)->getCapturable())
 				{
 					liveAliens++;
 				}
@@ -2156,7 +2156,7 @@ void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers)
 		{
 			if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
 			{
-				if (!Options::allowPsionicCapture || (*j)->getFaction() != FACTION_PLAYER)
+				if (!Options::allowPsionicCapture || (*j)->getFaction() != FACTION_PLAYER || !(*j)->getCapturable())
 				{
 					liveAliens++;
 				}
