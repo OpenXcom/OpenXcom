@@ -748,7 +748,7 @@ std::pair<double, double> AlienMission::getWaypoint(const UfoTrajectory &traject
 
 	if (_missionSiteZone != -1 && _rule.getWave(waveNumber).objective && trajectory.getZone(nextWaypoint) == (size_t)(_rule.getSpawnZone()))
 	{
-		const MissionArea *area = &region.getMissionZones().at(_rule.getObjective()).areas.at(_missionSiteZone);
+		const MissionArea *area = &region.getMissionZones().at(_rule.getSpawnZone()).areas.at(_missionSiteZone);
 		return std::make_pair(area->lonMin, area->latMin);
 	}
 
