@@ -79,6 +79,16 @@ AIModule::~AIModule()
 }
 
 /**
+ * Resets the unsaved AI state.
+ */
+void AIModule::reset()
+{
+	// these variables are not saved in save() and also not initiated in think()
+	_escapeTUs = 0;
+	_ambushTUs = 0;
+}
+
+/**
  * Loads the AI state from a YAML file.
  * @param node YAML node.
  */
