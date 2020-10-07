@@ -884,6 +884,10 @@ void SavedBattleGame::endTurn()
 			{
 				(*i)->setTurnsSinceSpotted(0);
 			}
+			if ((*i)->getAIModule())
+			{
+				(*i)->getAIModule()->reset(); // clean up AI state
+			}
 		}
 	}
 	// hide all aliens (VOF calculations below will turn them visible again)
