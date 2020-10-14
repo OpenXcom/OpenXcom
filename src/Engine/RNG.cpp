@@ -152,17 +152,6 @@ bool percent(int value)
 	return (generate(0, 99) < value);
 }
 
-/**
- * Generates a random positive integer up to a number.
- * @param max Maximum number, exclusive.
- * @return Generated number.
- */
-int generateEx(int max)
-{
-	uint64_t num = next();
-	return (int)(num % max);
-}
-
 }
 
 }
