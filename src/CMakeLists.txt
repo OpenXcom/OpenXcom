@@ -342,6 +342,13 @@ set ( ufopedia_src
   Ufopaedia/UfopaediaStartState.cpp
 )
 
+# NOTE: to build with clang *and* libc++ on Linux, you need to call cmake like so:
+# cmake -D CMAKE_C_COMPILER=clang -D CMAKE_CXX_COMPILER=clang++ \
+#     -D CMAKE_CXX_FLAGS=-stdlib=libc++ -D CMAKE_EXE_LINKER_FLAGS=-stdlib=libc++
+#     -D CMAKE_BUILD_TYPE=Release ...
+# so both compiler and linker need the flag, otherwise linking breaks or uses libstdc++
+# This requires yaml-cpp to also be linked to libc++ instead of libstdc++
+
 set ( data_install_dir bin )
 if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" )
   add_definitions ( -D_DEBUG )
@@ -349,7 +356,7 @@ endif ()
 if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
   if ( "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" OR ENABLE_WARNING )
     # Enable more GCC warnings if requested or we are doing a Debug build.
-    add_definitions ( -Wall
+    add_compile_options ( -Wall
       -Winit-self
       -Wmissing-include-dirs
       -Wunknown-pragmas
@@ -367,49 +374,47 @@ if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES 
       )
     if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" )
       # add warning flags recognized by g++ but not by clang
-      add_definitions ( -Wclobbered -Wlogical-op )
+      add_compile_options (
+	  )
     elseif ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
       # add warning flags recognized by clang but not by g++
     endif ()
     if ( FATAL_WARNING )
-      add_definitions ( -Werror )
+      add_compile_options ( -Werror )
     endif ()
   endif ()
 
 # These warnings aren't worth polluting the code for
-  add_definitions (
+  add_compile_options (
     -Wno-unused-function              # cross-platform functions
     )
   if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" )
     # add warning flags recognized by g++ but not by clang
-    add_definitions (
-      -Wno-missing-field-initializers # xbrz
+    add_compile_options (
       )
   elseif ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     # add warning flags recognized by clang but not by g++
-    add_definitions (
-      -Wno-overloaded-virtual         # overloads with different parameters
+    add_compile_options (
       )
   endif ()
 endif ()
 
 if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
-  add_definitions ( -Qunused-arguments -pipe )
   if ( ENABLE_CLANG_ANALYSIS )
-    add_definitions ( --analyze )
+    add_compile_options ( --analyze )
   endif ()
 endif ()
 
 if ( MSVC )
   if ( ENABLE_WARNING )
-    add_definitions ( /W${MSVC_WARNING_LEVEL} )
+    add_compile_options ( /W${MSVC_WARNING_LEVEL} )
   else ()
     # Set warning levels for Debug and Release with debug info
     set ( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W${MSVC_WARNING_LEVEL}" )
     set ( CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /W${MSVC_WARNING_LEVEL}" )
   endif ()
   if ( FATAL_WARNING )
-    add_definitions ( /WX )
+    add_compile_options ( /WX )
   endif ( FATAL_WARNING )
   set ( CMAKE_EXE_LINKER_FLAGS "/manifest:no" )
   set ( CMAKE_MODULE_LINKER_FLAGS "/manifest:no" ) 
