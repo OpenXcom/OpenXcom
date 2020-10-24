@@ -1,10 +1,17 @@
 language: cpp
 
+# default is Xenial aka 16.04 and its yaml-cpp package is too old. Use Focal aka 20.04 instead.
+dist: focal
+
 cache: ccache
 
 compiler:
   - clang
   - gcc
+
+arch:
+  - amd64
+  - arm64
 
 os:
   - linux
@@ -19,26 +26,28 @@ addons:
       - libsdl-mixer1.2-dev
       - libsdl-image1.2-dev
       - libsdl-gfx1.2-dev
+      - libyaml-cpp-dev
   homebrew:
     update: true
-    brewfile: scripts/Brewfile.travis
+    packages:
+      - ccache
+      - sdl
+      - sdl_gfx
+      - sdl_image
+      - sdl_mixer
+      - yaml-cpp
 
 env:
-  - BUILD_TYPE=Release EXTRA_WARNING_FLAGS="-Wall -Wextra"
+  - CMAKE_BUILD_TYPE=Release
 
 before_install:
-  - if [ $TRAVIS_OS_NAME == linux ]; then mkdir $TRAVIS_BUILD_DIR/dependency-prefix; fi
-  - if [ $TRAVIS_OS_NAME == linux ]; then export PKG_CONFIG_PATH=$TRAVIS_BUILD_DIR/dependency-prefix/lib/pkgconfig; fi
   - if [ $TRAVIS_OS_NAME == osx ]; then export PATH="/usr/local/opt/ccache/libexec:$PATH"; fi
   - if [ $TRAVIS_OS_NAME == linux ] && [ $TRAVIS_COMPILER == clang ]; then export CCACHE_CPP2=yes; fi
 
-install:
-  - if [ $TRAVIS_OS_NAME == linux ]; then bash scripts/compile_YAML-CPP.travis; fi
-
-before_script:
-  - bash scripts/cmake_prepare_build.travis
-
-script: make -j2
+script:
+  - mkdir -p build
+  - cmake -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DENABLE_WARNING=1 -DCHECK_CCACHE=TRUE -B build .
+  - cmake --build build -v -j2
 
 after_script:
   - ccache -s
