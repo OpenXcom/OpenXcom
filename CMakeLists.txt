@@ -7,7 +7,8 @@ include(GNUInstallDirs)
 
 # For yaml-cpp
 set (CMAKE_CXX_STANDARD 11)
-
+# use std=c++11 rather than std=gnu++11
+set (CMAKE_CXX_EXTENSIONS OFF)
 
 option ( DEV_BUILD "Development Build. Disable this for release builds" ON )
 option ( BUILD_PACKAGE "Prepares build for creation of a package with CPack" ON )
