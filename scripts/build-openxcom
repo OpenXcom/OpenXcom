@@ -39,7 +39,6 @@ exeRelativePath="${exeRelativePath/%\/}"
 exePath="${exeRelativePath:+${exeRelativePath}/}${exe}"
 
 # Command-line arguments
-OPTIND=1
 while getopts "bdh?-" opt; do
     case "${opt}" in
         b)  buildOnly="true"
@@ -127,12 +126,9 @@ cd "${buildDir}" || exit 1
 # http://rawpedia.rawtherapee.com/Linux#Compile_RawTherapee
 
 cmake \
-    -DCMAKE_CXX_FLAGS="-std=c++11 -Wno-deprecated-declarations -Wno-unused-result" \
     -DCMAKE_INSTALL_BINDIR:STRING="${installDir}" \
     -DCMAKE_INSTALL_PREFIX:STRING="${installDir}" \
     -DCMAKE_BUILD_TYPE="$buildType"  \
-    -DCMAKE_C_FLAGS="-O2 -pipe" \
-    -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" \
     "$HOME/programs/code-${prog}" || exit 1
 
 make --jobs="$cpuCount" install || exit 1
