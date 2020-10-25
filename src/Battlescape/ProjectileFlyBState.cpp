@@ -507,7 +507,7 @@ void ProjectileFlyBState::think()
 			if (_action.type == BA_THROW)
 			{
 				_parent->getMap()->resetCameraSmoothing();
-				Position pos = _parent->getMap()->getProjectile()->getPosition(-1);
+				Position pos = _parent->getMap()->getProjectile()->getPosition(Projectile::ItemDropVoxelOffset);
 				pos.x /= 16;
 				pos.y /= 16;
 				pos.z /= 24;
@@ -525,7 +525,7 @@ void ProjectileFlyBState::think()
 				if (Options::battleInstantGrenade && item->getRules()->getBattleType() == BT_GRENADE && item->getFuseTimer() == 0)
 				{
 					// it's a hot grenade to explode immediately
-					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item, _action.actor));
+					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(Projectile::ItemDropVoxelOffset), item, _action.actor));
 				}
 				else
 				{

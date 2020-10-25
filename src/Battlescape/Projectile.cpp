@@ -305,10 +305,10 @@ int Projectile::calculateThrow(double accuracy)
 			applyAccuracy(originVoxel, &targetVoxel, accuracy, true, false); //arcing shot deviation
 			deltas = Position(0,0,0);
 		}
-		_trajectory.push_back(originVoxel);
+
 		test = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, _action.actor, curvature, deltas);
 		if (forced) return O_OBJECT; //fake hit
-		Position endPoint = _trajectory.back() / Position (16, 16, 24);
+		Position endPoint = _trajectory.at(_trajectory.size() + ItemDropVoxelOffset - 1) / Position (16, 16, 24);
 		Tile *endTile = _save->getTile(endPoint);
 		// check if the item would land on a tile with a blocking object
 		if (_action.type == BA_THROW

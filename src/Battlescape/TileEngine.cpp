@@ -24,6 +24,7 @@
 #include "AIModule.h"
 #include "Map.h"
 #include "Camera.h"
+#include "Projectile.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "ExplosionBState.h"
@@ -2411,9 +2412,14 @@ int TileEngine::calculateParabola(Position origin, Position target, bool storeTr
 	int z = origin.z;
 	int i = 8;
 	int result = V_EMPTY;
-	std::vector<Position> _trajectory;
 	Position lastPosition = Position(x,y,z);
 	Position nextPosition = lastPosition;
+
+	if (storeTrajectory && trajectory)
+	{
+		//initla value for small hack to glue `calculateLine` into one continuous arc
+		trajectory->push_back(lastPosition);
+	}
 	while (z > 0)
 	{
 		x = (int)((double)origin.x + (double)i * cos(te) * sin(fi));
@@ -2421,24 +2427,23 @@ int TileEngine::calculateParabola(Position origin, Position target, bool storeTr
 		z = (int)((double)origin.z + (double)i * cos(fi) - zK * ((double)i - ro / 2.0) * ((double)i - ro / 2.0) + zA);
 		//passes through this point?
 		nextPosition = Position(x,y,z);
-		_trajectory.clear();
-		result = calculateLine(lastPosition, nextPosition, false, 0, excludeUnit);
-		if (result != V_EMPTY)
-		{
-			result = calculateLine(lastPosition, nextPosition, true, &_trajectory, excludeUnit);
-			nextPosition = _trajectory.back(); //pick the INSIDE position of impact
-			break;
-		}
+
 		if (storeTrajectory && trajectory)
 		{
-			trajectory->push_back(nextPosition);
+			//remove end point of previus trajectory part, becasue next one will add this point again
+			trajectory->pop_back();
+		}
+		result = calculateLine(lastPosition, nextPosition, storeTrajectory, storeTrajectory ? trajectory : 0, excludeUnit);
+		if (result != V_EMPTY)
+		{
+			if (!storeTrajectory && trajectory)
+			{
+				result = calculateLine(lastPosition, nextPosition, false, trajectory, excludeUnit); //pick the INSIDE position of impact
+			}
+			break;
 		}
 		lastPosition = nextPosition;
 		++i;
-	}
-	if (trajectory != 0)
-	{ // store the position of impact
-		trajectory->push_back(nextPosition);
 	}
 	return result;
 }
@@ -2930,13 +2935,19 @@ bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Posit
 		return false;
 	}
 
+	std::vector<Position> trajectory;
+	// thows should be around 10 tiles far, make one allocation that fit 99% cases with some margin
+	trajectory.resize(16*20);
 	// we try 8 different curvatures to try and reach our goal.
 	int test = V_OUTOFBOUNDS;
 	while (!foundCurve && curvature < 5.0)
 	{
-		std::vector<Position> trajectory;
-		test = calculateParabola(originVoxel, targetVoxel, false, &trajectory, action.actor, curvature, Position(0,0,0));
-		Position tilePos = ((trajectory.at(0) + Position(0,0,1)) / Position(16, 16, 24));
+		trajectory.clear();
+		test = calculateParabola(originVoxel, targetVoxel, true, &trajectory, action.actor, curvature, Position(0,0,0));
+		//position that item hit
+		Position hitPos = (trajectory.back() + Position(0,0,1)) / Position(16, 16, 24);
+		//position where item will land
+		Position tilePos = ((trajectory.at(trajectory.size() + Projectile::ItemDropVoxelOffset - 1)) / Position(16, 16, 24));
 		if (forced || (test != V_OUTOFBOUNDS && tilePos == targetPos))
 		{
 			if (voxelType)
@@ -2950,7 +2961,7 @@ bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Posit
 			curvature += 0.5;
 			if (test != V_OUTOFBOUNDS && action.actor->getFaction() == FACTION_PLAYER) //obstacle indicator is only for player
 			{
-				Tile* hitTile = _save->getTile(tilePos);
+				Tile* hitTile = _save->getTile(hitPos);
 				if (hitTile)
 				{
 					hitTile->setObstacle(test);

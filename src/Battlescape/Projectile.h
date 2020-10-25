@@ -36,6 +36,10 @@ class Mod;
  */
 class Projectile
 {
+public:
+	/// Offset of voxel path where item should be drop
+	static const int ItemDropVoxelOffset = -2;
+
 private:
 	Mod *_mod;
 	SavedBattleGame *_save;
