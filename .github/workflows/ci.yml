@@ -21,20 +21,22 @@ jobs:
 
         include:
           - name: Linux
-            os: ubuntu-latest
+            os: ubuntu-20.04  # -latest is still stuck at 18.04
             packages: >-
               libsdl1.2-dev libsdl-mixer1.2-dev
               libsdl-image1.2-dev libsdl-gfx1.2-dev
+              libyaml-cpp-dev
             compiler: gcc
             cpp-compiler: g++
             cflags: "-Wall -Wextra"
             cxxflags: "-Wall -Wextra"
 
           - name: Linux
-            os: ubuntu-latest
+            os: ubuntu-20.04  # -latest is still stuck at 18.04
             packages: >-
               libsdl1.2-dev libsdl-mixer1.2-dev
               libsdl-image1.2-dev libsdl-gfx1.2-dev
+              libyaml-cpp-dev
             compiler: clang
             cpp-compiler: clang++
             cflags: "-Wall -Wextra"
@@ -71,10 +73,6 @@ jobs:
           sudo apt-get update
           sudo apt-get -yq --no-install-suggests --no-install-recommends install ccache ${{ matrix.packages }}
 
-          wget -q http://archive.ubuntu.com/ubuntu/pool/main/y/yaml-cpp/libyaml-cpp0.6_0.6.2-4fakesync1_amd64.deb
-          wget -q http://archive.ubuntu.com/ubuntu/pool/main/y/yaml-cpp/libyaml-cpp-dev_0.6.2-4fakesync1_amd64.deb
-          sudo dpkg -i libyaml-cpp0.6_0.6.2-4fakesync1_amd64.deb libyaml-cpp-dev_0.6.2-4fakesync1_amd64.deb
-
       - name: Install packages (Windows)
         if: runner.os == 'Windows' && matrix.packages
         run: |
@@ -83,18 +81,18 @@ jobs:
       - name: Install packages (macOS)
         if: runner.os == 'macOS'
         run: |
-          brew update
+          brew update || true  # brew update often fails, no biggie.
           brew install ccache ${{ matrix.packages }}
 
       - name: Setup Cache
         if: runner.os == 'Linux' || runner.os == 'macOS'
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ~/.ccache
           key: ccache-${{ runner.os }}-${{ matrix.compiler }}
 
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Download dependencies (Windows)
         if: runner.os == 'Windows'
@@ -118,7 +116,14 @@ jobs:
       - name: Compile source code
         run: |
           cd ${{ matrix.build-src-dir || '.' }}
-          cmake --build . --config ${{ matrix.build-config || 'Release' }}
+          cmake --build . -v -j2 --config ${{ matrix.build-config || 'Release' }}
+
+      - name: Archive artifacts
+        #if: runner.os == 'Windows'  # could use if failure()
+        uses: actions/upload-artifact@v2
+        with:
+            name: artifacts ${{ matrix.name }} (${{ matrix.compiler }})
+            path: ${{ github.workspace }}
 
       - name: ccache stats
         if: runner.os == 'Linux' || runner.os == 'macOS'
