@@ -4,57 +4,34 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: ${{ matrix.name }} (${{ matrix.compiler }})
+    name: ${{ matrix.os }} (${{ matrix.compiler }})
 
     strategy:
       fail-fast: false
       matrix:
-        name:
-          - Linux
-          - Windows
-          - macOS
-        compiler: [gcc, clang]
-
-        exclude:
-          - name: Windows
-            compiler: gcc
-
         include:
           - name: Linux
             os: ubuntu-20.04  # -latest is still stuck at 18.04
-            packages: >-
-              libsdl1.2-dev libsdl-mixer1.2-dev
-              libsdl-image1.2-dev libsdl-gfx1.2-dev
-              libyaml-cpp-dev
             compiler: gcc
             cpp-compiler: g++
 
           - name: Linux
             os: ubuntu-20.04  # -latest is still stuck at 18.04
-            packages: >-
-              libsdl1.2-dev libsdl-mixer1.2-dev
-              libsdl-image1.2-dev libsdl-gfx1.2-dev
-              libyaml-cpp-dev
             compiler: clang
             cpp-compiler: clang++
 
           - name: Windows
             os: windows-latest
-            compiler: clang
-            cpp-compiler: clang++
+            compiler: cl
+            cpp-compiler: cl
             cmake-args: -A Win32
 
           - name: macOS
             os: macOS-latest
             packages: yaml-cpp sdl sdl_gfx sdl_image sdl_mixer
-            compiler: gcc
-            cpp-compiler: g++
-
-          - name: macOS
-            os: macOS-latest
-            packages: yaml-cpp sdl sdl_gfx sdl_image sdl_mixer
             compiler: clang
             cpp-compiler: clang++
+            app-bundle: openxcom.app  # all other builds default to bin/
 
     runs-on: ${{ matrix.os }}
 
@@ -64,6 +41,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get -yq --no-install-suggests --no-install-recommends install ccache ${{ matrix.packages }}
+          sudo apt-get -yq --no-install-suggests --no-install-recommends install libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-gfx1.2-dev libyaml-cpp-dev
 
       - name: Install packages (Windows)
         if: runner.os == 'Windows' && matrix.packages
@@ -85,6 +63,13 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup environment
+        shell: bash
+        run: |
+          echo "describe=$(git describe)" >> $GITHUB_ENV
 
       - name: Download dependencies (Windows)
         if: runner.os == 'Windows'
@@ -106,11 +91,11 @@ jobs:
           cmake --build ${{ matrix.build-dir || 'build' }} -v -j2 --config ${{ matrix.build-config || 'Release' }}
 
       - name: Archive artifacts
-        #if: runner.os == 'Windows'  # could use if failure()
         uses: actions/upload-artifact@v2
         with:
-            name: artifacts ${{ matrix.name }} (${{ matrix.compiler }})
-            path: ${{ github.workspace }}
+            name: openxcom_${{ matrix.name }}_${{ matrix.compiler }}-${{ env.describe }}
+            path: |
+                ${{ matrix.build-dir || 'build' }}/${{ matrix.app-bundle || 'bin' }}/**/*
 
       - name: ccache stats
         if: runner.os == 'Linux' || runner.os == 'macOS'
