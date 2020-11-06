@@ -17,6 +17,11 @@ os:
   - linux
   - osx
 
+jobs:
+  exclude:
+    - os: osx
+      compiler: gcc  # `gcc` is a wrapper for clang on MacOS
+
 sudo: false
 
 addons:
@@ -42,7 +47,6 @@ env:
 
 before_install:
   - if [ $TRAVIS_OS_NAME == osx ]; then export PATH="/usr/local/opt/ccache/libexec:$PATH"; fi
-  - if [ $TRAVIS_OS_NAME == linux ] && [ $TRAVIS_COMPILER == clang ]; then export CCACHE_CPP2=yes; fi
 
 script:
   - mkdir -p build
