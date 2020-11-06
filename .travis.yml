@@ -1,3 +1,5 @@
+# NOTE: We're using both Travis CI and Github Actions, if you change this file,
+# also change .github/workflows/ci.yml accordingly.
 language: cpp
 
 # default is Xenial aka 16.04 and its yaml-cpp package is too old. Use Focal aka 20.04 instead.
@@ -15,14 +17,22 @@ arch:
 
 os:
   - linux
-  - osx
 
+# Our matrix is sparse, only linux has the full mesh, include the Mac/Win builds by hand.
 jobs:
-  exclude:
+  include:
     - os: osx
-      compiler: gcc  # `gcc` is a wrapper for clang on MacOS
+      compiler: clang  # `gcc` is a wrapper for clang on MacOS, skip it.
+      before_install:
+       - export PATH="/usr/local/opt/ccache/libexec:$PATH"
 
-sudo: false
+    - os: windows
+      compiler: cl  # cmake picks up MSVC and cl
+      install:
+        - export DEPS=https://openxcom.org/download/dev/openxcom-deps-win-vc2017.zip
+        - curl -O "$DEPS" && 7z x "${DEPS##*/}"
+      before_script:
+        - export BUILD_ARGS="/clp:NoSummary"  # summary too big for the 4MiB Travis limit
 
 addons:
   apt:
@@ -45,13 +55,10 @@ addons:
 env:
   - CMAKE_BUILD_TYPE=Release
 
-before_install:
-  - if [ $TRAVIS_OS_NAME == osx ]; then export PATH="/usr/local/opt/ccache/libexec:$PATH"; fi
-
 script:
   - mkdir -p build
   - cmake -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DENABLE_WARNING=1 -DCHECK_CCACHE=TRUE -B build .
-  - cmake --build build -v -j2
+  - cmake --build build -v -j2 --config ${CMAKE_BUILD_TYPE} -- ${BUILD_ARGS}
 
 after_script:
-  - ccache -s
+  - if [ $TRAVIS_OS_NAME != windows ]; then ccache -s; fi
