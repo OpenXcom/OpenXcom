@@ -921,17 +921,25 @@ void BattleUnit::setCache(Surface *cache, int part)
 }
 
 /**
- * Check if the unit is still cached in the Map cache.
+ * Returns the current cache surface.
  * When the unit changes it needs to be re-cached.
- * @param invalid Get if the cache is invalid.
  * @param part Unit part to check.
  * @return Pointer to cache surface used.
  */
-Surface *BattleUnit::getCache(bool *invalid, int part) const
+Surface *BattleUnit::getCache(int part) const
 {
 	if (part < 0) part = 0;
-	*invalid = _cacheInvalid;
 	return _cache[part];
+}
+
+/**
+ * Check if the unit is still cached in the Map cache.
+ * When the unit changes it needs to be re-cached.
+ * @return True if it needs to be re-cached.
+ */
+bool BattleUnit::isCacheInvalid() const
+{
+	return _cacheInvalid;
 }
 
 /**

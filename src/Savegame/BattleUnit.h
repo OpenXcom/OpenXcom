@@ -191,8 +191,10 @@ public:
 	UnitFaction getFaction() const;
 	/// Set the cached flag.
 	void setCache(Surface *cache, int part = 0);
+	/// Get the cached data.
+	Surface *getCache(int part = 0) const;
 	/// If this unit is cached on the battlescape.
-	Surface *getCache(bool *invalid, int part = 0) const;
+	bool isCacheInvalid() const;
 	/// Gets unit sprite recolors values.
 	const std::vector<std::pair<Uint8, Uint8> > &getRecolor() const;
 	/// Kneel down.

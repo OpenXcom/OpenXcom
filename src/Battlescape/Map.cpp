@@ -304,8 +304,7 @@ void Map::drawUnit(Surface *surface, Tile *unitTile, Tile *currTile, Position cu
 	unitOffset.x = unitTile->getPosition().x - bu->getPosition().x;
 	unitOffset.y = unitTile->getPosition().y - bu->getPosition().y;
 	int part = unitOffset.x + unitOffset.y*2;
-	bool ignored;
-	Surface *tmpSurface = bu->getCache(&ignored, part);
+	Surface *tmpSurface = bu->getCache(part);
 	if (!tmpSurface)
 	{
 		return;
@@ -1544,16 +1543,14 @@ void Map::cacheUnit(BattleUnit *unit)
 {
 	UnitSprite *unitSprite = new UnitSprite(_spriteWidth * 2, _spriteHeight, 0, 0, _save->getDepth() != 0);
 	unitSprite->setPalette(this->getPalette());
-	bool invalid, dummy;
 	int numOfParts = unit->getArmor()->getSize() * unit->getArmor()->getSize();
 
-	unit->getCache(&invalid);
-	if (invalid)
+	if (unit->isCacheInvalid())
 	{
 		// 1 or 4 iterations, depending on unit size
 		for (int i = 0; i < numOfParts; i++)
 		{
-			Surface *cache = unit->getCache(&dummy, i);
+			Surface *cache = unit->getCache(i);
 			if (!cache) // no cache created yet
 			{
 				cache = new Surface(_spriteWidth * 2, _spriteHeight);
