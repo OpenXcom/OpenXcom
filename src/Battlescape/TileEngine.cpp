@@ -2947,7 +2947,7 @@ bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Posit
 		//position that item hit
 		Position hitPos = (trajectory.back() + Position(0,0,1)) / Position(16, 16, 24);
 		//position where item will land
-		Position tilePos = ((trajectory.at(trajectory.size() + Projectile::ItemDropVoxelOffset - 1)) / Position(16, 16, 24));
+		Position tilePos = Projectile::getPositionFromEnd(trajectory, Projectile::ItemDropVoxelOffset) / Position(16, 16, 24);
 		if (forced || (test != V_OUTOFBOUNDS && tilePos == targetPos))
 		{
 			if (voxelType)

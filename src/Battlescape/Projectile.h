@@ -37,8 +37,13 @@ class Mod;
 class Projectile
 {
 public:
-	/// Offset of voxel path where item should be drop
+	/// Offset of voxel path where item should be drop.
 	static const int ItemDropVoxelOffset = -2;
+
+	/// Get Position at offset from start from trajectory vector.
+	static Position getPositionFromStart(const std::vector<Position>& trajectory, int pos);
+	/// Get Position at offset from end from trajectory vector.
+	static Position getPositionFromEnd(const std::vector<Position>& trajectory, int pos);
 
 private:
 	Mod *_mod;
