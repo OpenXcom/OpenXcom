@@ -1,86 +1,86 @@
-'\" t
-.\"     Title: openxcom
-.\"    Author: [see the "AUTHOR" section]
-.\" Generator: DocBook XSL Stylesheets v1.79.1 <http://docbook.sf.net/>
-.\"      Date: 2014.06.12
-.\"    Manual: User\*(Aqs Manual
-.\"    Source: 1.0
-.\"  Language: English
-.\"
-.TH "OPENXCOM" "6" "2014\&.06\&.12" "1\&.0" "User\*(Aqs Manual"
-.\" -----------------------------------------------------------------
-.\" * Define some portability stuff
-.\" -----------------------------------------------------------------
-.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.\" http://bugs.debian.org/507673
-.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
-.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.ie \n(.g .ds Aq \(aq
-.el       .ds Aq '
-.\" -----------------------------------------------------------------
-.\" * set default formatting
-.\" -----------------------------------------------------------------
-.\" disable hyphenation
-.nh
-.\" disable justification (adjust text to left margin only)
-.ad l
-.\" -----------------------------------------------------------------
-.\" * MAIN CONTENT STARTS HERE *
-.\" -----------------------------------------------------------------
-.SH "NAME"
-openxcom \- An open\-source clone of the original "UFO: Enemy Unknown"
-.SH "SYNOPSIS"
-.HP \w'\fBopenxcom\fR\ 'u
-\fBopenxcom\fR [\fIOPTIONS\fR]
-.SH "DESCRIPTION"
-.PP
-\fBopenxcom\fR
-is an open\-source clone of the popular UFO: Enemy Unknown (X\-Com: UFO Defense in USA) videogame by Microprose, licensed under the GPL and written in C++ / SDL\&.
-.SH "OPTIONS"
-.PP
-\fB\-data\fR \fIPATH\fR
-.RS 4
+.Dd 2014-06-12
+.Dt OPENXCOM 6
+.Os
+.Sh NAME
+.Nm openxcom
+.Nd An open-source reimplementation of the original
+.Dq UFO: Enemy Unknown
+game
+.Sh SYNOPSIS
+.Nm
+.Op Fl \? | help
+.Op Fl data Ar path
+.Op Fl user Ar path
+.Op Fl cfg Ar path
+.Op Fl master Ar mod
+.Op Fl KEY Ar VALUE
+.Sh DESCRIPTION
+.Nm openxcom
+is an open-source reimplementation of the popular
+.Dq UFO: Enemy Unknown
+game also known as
+.Dq X-COM: UFO Defense
+in North America, and its sequel
+.Dq X-COM: Terror from the Deep
+by publisher
+.An MicroProse .
+It is licensed under the GPL and written in C++ / SDL.
+.Pp
+The options are as follows:
+.Bl -tag -width Ds
+.It Fl ?, Fl help
+show command-line help
+.It Fl data Ar path
 use
-\fIPATH\fR
-as the default Data Folder instead of auto\-detecting
-.RE
-.PP
-\fB\-user\fR \fIPATH\fR
-.RS 4
+.Ar path
+as the default Data Folder instead of auto-detecting
+.It Fl user Ar path
 use
-\fIPATH\fR
-as the default User Folder instead of auto\-detecting
-.RE
-.PP
-\fB\-cfg\fR \fIPATH\fR
-.RS 4
+.Ar path
+as the default User Folder instead of auto-detecting
+.It Fl cfg Ar path
 use
-\fIPATH\fR
-as the default Config Folder instead of auto\-detecting
-.RE
-.PP
-\fB\-\fR\fB\fIKEY\fR\fR \fIVALUE\fR
-.RS 4
+.Ar path
+as the default Config Folder instead of auto-detecting
+.It Fl master Ar mod
+set
+.Ar mod
+the current master mod (eg.\&
+.Fl master
+.Ar xcom2 )
+.It Fl KEY Ar VALUE
 set option
-\fIKEY\fR
+.Ar KEY
 to
-\fIVALUE\fR
+.Ar VALUE
 instead of default/loaded value (eg\&.
-\-displayWidth 640)
-.RE
-.PP
-\fB\-help\fR, \fB\-?\fR
-.RS 4
-show command\-line help
-.RE
-.SH "AUTHOR"
-.PP
-OpenXcom Developers
-.SH "SEE ALSO"
-.PP
-\m[blue]\fB\%https://openxcom.org\fR\m[],
-\m[blue]\fB\%http://ufopaedia.org/index.php?title=OpenXcom\fR\m[]
-.SH "COPYRIGHT"
-.br
-Copyright \(co 2014 OpenXcom Developers
-.br
+.Fl displayWidth
+.Ar 640
+).
+See
+.Pa src/Engine/Options.cpp
+for a list of all potential options.
+.El
+.Sh INSTALLATION
+.Nm OpenXcom
+requires a vanilla copy of the X-COM resources -- from either or both of the original games.
+Please refer to the
+.Pa README.md
+for the default search paths and the exact directory layout, as well as information on the Mod support.
+.Sh SEE ALSO
+.Lk https://openxcom.org ,
+.Lk https://ufopaedia.org/index.php?title=OpenXcom
+.Sh HISTORY
+.An MicroProse
+releases
+.Dq UFO: Enemy Unknown
+in 1994, followed by
+.Dq X-COM: Terror from the Deep
+in 1995 with various sequels following.
+The
+.Nm OpenXcom
+project sees the light of day in 2010.
+.Sh COPYRIGHT
+Copyright \(co 2020 OpenXcom Developers
+.Sh AUTHORS
+.An OpenXcom Developers
