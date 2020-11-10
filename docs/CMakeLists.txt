@@ -35,3 +35,5 @@ if ( NOT ( DOXYGEN_EXECUTABLE MATCHES "NOTFOUND" ) )
 else ()
   message ( "No doxygen command found. Disable API documentation generation" )
 endif ()
+
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/openxcom.6 DESTINATION ${CMAKE_INSTALL_PREFIX}/man/man6)
