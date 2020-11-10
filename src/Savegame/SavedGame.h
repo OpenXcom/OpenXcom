@@ -312,8 +312,6 @@ public:
 	void setLastSelectedArmor(const std::string &value);
 	/// Gets the last selected armour
 	std::string getLastSelectedArmor() const;
-	/// Returns the craft corresponding to the specified unique id.
-	Craft *findCraftByUniqueId(const CraftId& craftId) const;
 	/// Gets the list of missions statistics
 	std::vector<MissionStatistics*> *getMissionStatistics();
 	/// Handles a soldier's death.

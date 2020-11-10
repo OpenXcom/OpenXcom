@@ -83,8 +83,6 @@ private:
 	void setZoom(size_t zoom);
 	/// Checks if a point is behind the globe.
 	bool pointBack(double lon, double lat) const;
-	/// Return latitude of last visible to player point on given longitude.
-	double lastVisibleLat(double lon) const;
 	/// Get polygon pointer
 	Polygon* getPolygonFromLonLat(double lon, double lat) const;
 	/// Checks if a target is near a point.

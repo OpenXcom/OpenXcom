@@ -52,7 +52,7 @@ BattleUnit::BattleUnit(Soldier *soldier, int depth) :
 	_verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false),
 	_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
 	_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0),
-	_motionPoints(0), _kills(0), _hitByFire(false), _hitByAnything(false), _moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
+	_motionPoints(0), _kills(0), _hitByFire(false), _hitByAnything(false), _moraleRestored(0), _charging(0), _turnsSinceSpotted(255),
 	_statistics(), _murdererId(0), _mindControllerID(0), _fatalShotSide(SIDE_FRONT), _fatalShotBodyPart(BODYPART_HEAD),
 	_geoscapeSoldier(soldier), _unitRules(0), _rankInt(0), _turretType(-1), _hidingForTurn(false), _respawn(false), _capturable(true)
 {
@@ -169,7 +169,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, St
 	_fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0),
 	_visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0),
 	_expThrowing(0), _expPsiSkill(0), _expPsiStrength(0), _expMelee(0), _motionPoints(0), _kills(0), _hitByFire(false), _hitByAnything(false),
-	_moraleRestored(0), _coverReserve(0), _charging(0), _turnsSinceSpotted(255),
+	_moraleRestored(0), _charging(0), _turnsSinceSpotted(255),
 	_statistics(), _murdererId(0), _mindControllerID(0), _fatalShotSide(SIDE_FRONT),
 	_fatalShotBodyPart(BODYPART_HEAD), _armor(armor),  _geoscapeSoldier(0), _unitRules(unit),
 	_rankInt(0), _turretType(-1), _hidingForTurn(false), _respawn(false)
@@ -2693,15 +2693,6 @@ int BattleUnit::getAggroSound() const
 }
 
 /**
- * Set a specific number of energy.
- * @param energy energy.
- */
-void BattleUnit::setEnergy(int energy)
-{
-	_energy = energy;
-}
-
-/**
  * Get the faction the unit was killed by.
  * @return faction
  */
@@ -2930,24 +2921,6 @@ bool BattleUnit::tookFireDamage() const
 void BattleUnit::toggleFireDamage()
 {
 	_hitByFire = !_hitByFire;
-}
-
-/**
- * Changes the amount of TUs reserved for cover.
- * @param reserve time units.
- */
-void BattleUnit::setCoverReserve(int reserve)
-{
-	_coverReserve = reserve;
-}
-
-/**
- * Returns the amount of TUs reserved for cover.
- * @return time units.
- */
-int BattleUnit::getCoverReserve() const
-{
-	return _coverReserve;
 }
 
 /**

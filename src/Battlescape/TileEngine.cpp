@@ -1117,7 +1117,7 @@ BattleUnit *TileEngine::hit(Position center, int power, ItemDamageType type, Bat
 	if (part >= V_FLOOR && part <= V_OBJECT)
 	{
 		// power 25% to 75%
-		const int rndPower = RNG::generate(power/4, (power*3)/4); //RNG::boxMuller(power, power/6)
+		const int rndPower = RNG::generate(power/4, (power*3)/4);
 		if (part == V_OBJECT && rndPower >= tile->getMapData(O_OBJECT)->getArmor() &&
 			_save->getMissionType() == "STR_BASE_DEFENSE" && tile->getMapData(O_OBJECT)->isBaseModule())
 		{

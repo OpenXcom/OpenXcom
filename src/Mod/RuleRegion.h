@@ -61,7 +61,6 @@ struct MissionZone
 };
 
 class City;
-class Target;
 
 /**
  * Represents a specific region of the world.
@@ -106,10 +105,6 @@ public:
 	const std::string &getMissionRegion() const { return _missionRegion; }
 	/// Gets a random point inside a mission zone.
 	std::pair<double, double> getRandomPoint(size_t zone) const;
-	/// Gets the mission area for the corresponding target.
-	MissionArea getMissionPoint(size_t zone, Target *target) const;
-	/// Gets a random mission area.
-	MissionArea getRandomMissionPoint(size_t zone) const;
 	/// Gets the maximum longitude.
 	const std::vector<double> &getLonMax() const { return _lonMax; }
 	/// Gets the minimum longitude.

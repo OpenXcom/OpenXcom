@@ -1181,25 +1181,6 @@ const std::vector<Production *> & Base::getProductions() const
 	return _productions;
 }
 
-
-/**
- * Returns whether or not this base
- * is equipped with hyper-wave
- * detection facilities.
- * @return True if the base has hyper-wave detection.
- */
-bool Base::getHyperDetection() const
-{
-	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
-	{
-		if ((*i)->getRules()->isHyperwave() && (*i)->getBuildTime() == 0)
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
 /**
  * Returns the total amount of Psi Lab Space
  * available in the base.

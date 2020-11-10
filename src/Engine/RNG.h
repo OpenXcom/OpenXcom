@@ -42,8 +42,6 @@ namespace RNG
 	double generate(double min, double max);
 	/// Generates a random integer number, inclusive (non-seed version).
 	int seedless(int min, int max);
-	/// Get normally distributed value.
-	double boxMuller(double m = 0, double s = 1);
 	/// Generates a percentage chance.
 	bool percent(int value);
 	/// Shuffles a list randomly.

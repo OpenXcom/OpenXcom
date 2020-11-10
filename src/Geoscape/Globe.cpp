@@ -384,19 +384,6 @@ bool Globe::pointBack(double lon, double lat) const
 	return c < 0.0;
 }
 
-
-/** Return latitude of last visible to player point on given longitude.
- * @param lon Longitude of the point.
- * @return Longitude of last visible point.
- */
-double Globe::lastVisibleLat(double lon) const
-{
-//	double c = cos(_cenLat) * cos(lat) * cos(lon - _cenLon) + sin(_cenLat) * sin(lat);
-//		tan(lat) = -cos(_cenLat) * cos(lon - _cenLon)/sin(_cenLat) ;
-	return atan(-cos(_cenLat) * cos(lon - _cenLon)/sin(_cenLat));
-}
-
-
 Polygon* Globe::getPolygonFromLonLat(double lon, double lat) const
 {
 	const double zDiscard=0.75f;

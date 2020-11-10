@@ -105,42 +105,6 @@ int seedless(int min, int max)
 	return (rand() % (max - min + 1) + min);
 }
 
-
-/**
- * Normal random variate generator
- * @param m mean
- * @param s standard deviation
- * @return normally distributed value.
- */
-double boxMuller(double m, double s)
-{
-	double y1;
-	static double y2;
-	static int use_last = 0;
-
-	if (use_last)				/* use value from previous call */
-	{
-		y1 = y2;
-		use_last = 0;
-	}
-	else
-	{
-		double x1, x2, w;
-		do {
-			x1 = 2.0 * generate(0.0, 1.0) - 1.0;
-			x2 = 2.0 * generate(0.0, 1.0) - 1.0;
-			w = x1 * x1 + x2 * x2;
-		} while ( w >= 1.0 );
-
-		w = sqrt( (-2.0 * log( w ) ) / w );
-		y1 = x1 * w;
-		y2 = x2 * w;
-		use_last = 1;
-	}
-
-	return( m + y1 * s );
-}
-
 /**
  * Generates a random percent chance of an event occurring,
  * and returns the result

@@ -31,7 +31,7 @@ const std::string Armor::NONE = "STR_NONE";
 Armor::Armor(const std::string &type) :
 	_type(type), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0),
 	_drawingRoutine(0), _drawBubbles(false), _movementType(MT_WALK), _size(1), _weight(0),
-	_deathFrames(3), _constantAnimation(false), _canHoldWeapon(false), _hasInventory(true),
+	_deathFrames(3), _constantAnimation(false), _hasInventory(true),
 	_forcedTorso(TORSO_USE_GENDER),
 	_faceColorGroup(0), _hairColorGroup(0), _utileColorGroup(0), _rankColorGroup(0)
 {
@@ -94,17 +94,6 @@ void Armor::load(const YAML::Node &node)
 	_deathFrames = node["deathFrames"].as<int>(_deathFrames);
 	_constantAnimation = node["constantAnimation"].as<bool>(_constantAnimation);
 	_forcedTorso = (ForcedTorso)node["forcedTorso"].as<int>(_forcedTorso);
-	_canHoldWeapon =
-		(_drawingRoutine == 0 ||
-		_drawingRoutine == 1 ||
-		_drawingRoutine == 4 ||
-		_drawingRoutine == 6 ||
-		_drawingRoutine == 10 ||
-		_drawingRoutine == 13 ||
-		_drawingRoutine == 14 ||
-		_drawingRoutine == 15 ||
-		_drawingRoutine == 17 ||
-		_drawingRoutine == 18);
 
 	_faceColorGroup = node["spriteFaceGroup"].as<int>(_faceColorGroup);
 	_hairColorGroup = node["spriteHairGroup"].as<int>(_hairColorGroup);
@@ -312,15 +301,6 @@ int Armor::getDeathFrames() const
 bool Armor::getConstantAnimation() const
 {
 	return _constantAnimation;
-}
-
-/*
- * Gets if armor can hold weapon.
- * @return if it can hold weapon
- */
-bool Armor::getCanHoldWeapon() const
-{
-	return _canHoldWeapon;
 }
 
 /**

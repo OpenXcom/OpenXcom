@@ -67,8 +67,6 @@ public:
 	void onTimer(StateHandler handler);
 	/// Hooks a surface action handler to the timer interval.
 	void onTimer(SurfaceHandler handler);
-	/// Turns frame skipping on or off
-	void setFrameSkipping(bool skip);
 };
 
 }

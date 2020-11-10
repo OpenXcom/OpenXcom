@@ -559,22 +559,6 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 }
 
 /**
- * Manage modular commendations (private)
- * @param nextCommendationLevel map<string, int>
- * @param modularCommendations map<string, int>
- * @param statTotal pair<string, int>
- * @param criteria int
- */
-void SoldierDiary::manageModularCommendations(std::map<std::string, int> &nextCommendationLevel, std::map<std::string, int> &modularCommendations, std::pair<std::string, int> statTotal, int criteria)
-{
-	// If criteria is 0, we don't have this noun OR if we meet the criteria, remember the noun for award purposes
-	if ((modularCommendations.count(statTotal.first) == 0 && statTotal.second >= criteria) || (modularCommendations.count(statTotal.first) != 0 && nextCommendationLevel.at(statTotal.first) >= criteria))
-	{
-		modularCommendations[statTotal.first]++;
-	}
-}
-
-/**
  * Award commendations to the soldier.
  * @param type string
  * @param noun string

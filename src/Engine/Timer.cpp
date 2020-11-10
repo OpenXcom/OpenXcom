@@ -164,13 +164,4 @@ void Timer::onTimer(SurfaceHandler handler)
 	_surface = handler;
 }
 
-/**
- * Sets frame skipping on or off
- * @param skip Enable frameskipping.
- */
-void Timer::setFrameSkipping(bool skip)
-{
-	_frameSkipping = skip;
-}
-
 }
