@@ -167,9 +167,8 @@ The source code includes files for the following build tools:
 
 - Microsoft Visual C++ 2010 or newer
 - Xcode
-- Makefile
+- Make (see Makefile.simple)
 - CMake
-- Autotools
 
 It's also been tested on a variety of other tools on Windows/Mac/Linux. More
 detailed compiling instructions are available at the
