@@ -374,8 +374,6 @@ if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES 
       )
     if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" )
       # add warning flags recognized by g++ but not by clang
-      add_compile_options (
-	  )
     elseif ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
       # add warning flags recognized by clang but not by g++
     endif ()
@@ -390,12 +388,8 @@ if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES 
     )
   if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" )
     # add warning flags recognized by g++ but not by clang
-    add_compile_options (
-      )
   elseif ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     # add warning flags recognized by clang but not by g++
-    add_compile_options (
-      )
   endif ()
 endif ()
 
