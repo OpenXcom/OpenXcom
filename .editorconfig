@@ -4,6 +4,7 @@ root = true
 ; Broken in Visual Studio
 ;charset = utf-8
 trim_trailing_whitespace = true
+vc_generate_documentation_comments = doxygen_slash_star
 
 [*.{yml,rul}]
 indent_style = space
