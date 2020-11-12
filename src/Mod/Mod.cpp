@@ -2881,7 +2881,7 @@ void Mod::loadVanillaResources()
 			if (Options::preferredSound == SOUND_14)
 				cats[0] = catsWin;
 			else if (Options::preferredSound == SOUND_10)
-				cats[1] = catsDos;
+				cats[0] = catsDos;
 
 			Options::currentSound = SOUND_AUTO;
 			for (size_t i = 0; i < ARRAYLEN(catsId); ++i)
@@ -2906,7 +2906,9 @@ void Mod::loadVanillaResources()
 				}
 				if (sound == 0)
 				{
-					throw Exception(catsWin[i] + " not found");
+					std::ostringstream ss;
+					ss << catsId[i] << " not found: " << catsWin[i] + " or " + catsDos[i] + " required";
+					throw Exception(ss.str());
 				}
 			}
 		}
