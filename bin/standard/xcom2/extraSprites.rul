@@ -21,26 +21,26 @@ extraSprites: #done
     files:
       0: Resources/BulletSprites/TFTD-UNDERWATER.png
   - type: InvCopy
-    width: 16
-    height: 16
+    width: 32
+    height: 22
     singleImage: true
     files:
       0: Resources/UI/invcopy_TFTD.png
   - type: InvCopyActive
-    width: 16
-    height: 16
+    width: 32
+    height: 22
     singleImage: true
     files:
       0: Resources/UI/invcopy_active_TFTD.png
   - type: InvPaste
-    width: 16
-    height: 16
+    width: 32
+    height: 22
     singleImage: true
     files:
       0: Resources/UI/invpaste_TFTD.png
   - type: InvPasteEmpty
-    width: 16
-    height: 16
+    width: 32
+    height: 22
     singleImage: true
     files:
       0: Resources/UI/invpaste_empty_TFTD.png
