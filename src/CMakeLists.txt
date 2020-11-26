@@ -349,6 +349,10 @@ set ( ufopedia_src
 # so both compiler and linker need the flag, otherwise linking breaks or uses libstdc++
 # This requires yaml-cpp to also be linked to libc++ instead of libstdc++
 
+# dump all commands used to compile to compile_commands.json so we can feed it
+# to clang-tidy or YouCompleteMe
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 set ( data_install_dir bin )
 if ( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND "${CMAKE_BUILD_TYPE}" STREQUAL "Debug" )
   add_definitions ( -D_DEBUG )
@@ -404,6 +408,17 @@ if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     add_compile_options ( --analyze )
   endif ()
 endif ()
+
+# A note on clang-tidy: setting CMAKE_CXX_CLANG_TIDY will switch CMake into
+# running only clang-tidy. See
+# https://clang.llvm.org/docs/HowToSetupToolingForLLVM.html for the proper
+# workflow setup to run most LLVM tools, especially the note about
+# compile_commands.json.
+#
+# To just run clang-tidy, potentially fixing everything (don't run in parallel!), do:
+# mkdir build-tidy; cmake -B build-tidy -DCMAKE_CXX_CLANG_TIDY="$(which clang-tidy);-checks=*,-fix" .
+# cmake --build build-tidy -j 1
+# git diff
 
 if ( MSVC )
   if ( ENABLE_WARNING )
