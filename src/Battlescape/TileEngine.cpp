@@ -18,6 +18,7 @@
  */
 #include <assert.h>
 #include <climits>
+#include <cmath>
 #include <set>
 #include "TileEngine.h"
 #include <SDL.h>
@@ -202,7 +203,7 @@ void TileEngine::addLight(Position center, int power, int layer)
 		{
 			for (int z = 0; z < _save->getMapSizeZ(); z++)
 			{
-				int distance = (int)Round(sqrt(float(x*x + y*y)));
+				int distance = (int)Round(std::sqrt(x*x + y*y));
 
 				if (_save->getTile(Position(center.x + x,center.y + y, z)))
 					_save->getTile(Position(center.x + x,center.y + y, z))->addLight(power - distance, layer);
@@ -481,9 +482,9 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
 
 	// vector manipulation to make scan work in view-space
 	Position relPos = targetVoxel - *originVoxel;
-	float normal = unitRadius/sqrt((float)(relPos.x*relPos.x + relPos.y*relPos.y));
-	int relX = floor(((float)relPos.y)*normal+0.5);
-	int relY = floor(((float)-relPos.x)*normal+0.5);
+	float normal = unitRadius/std::sqrt(relPos.x*relPos.x + relPos.y*relPos.y);
+	int relX = std::floor(relPos.y*normal+0.5);
+	int relY = std::floor(-relPos.x*normal+0.5);
 
 	int sliceTargets[] = {0,0, relX,relY, -relX,-relY};
 
@@ -567,9 +568,9 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 	}
 	// vector manipulation to make scan work in view-space
 	Position relPos = targetVoxel - *originVoxel;
-	float normal = unitRadius/sqrt((float)(relPos.x*relPos.x + relPos.y*relPos.y));
-	int relX = floor(((float)relPos.y)*normal+0.5);
-	int relY = floor(((float)-relPos.x)*normal+0.5);
+	float normal = unitRadius/std::sqrt(relPos.x*relPos.x + relPos.y*relPos.y);
+	int relX = std::floor(relPos.y*normal+0.5);
+	int relY = std::floor(-relPos.x*normal+0.5);
 
 	int sliceTargets[] = {0,0, relX,relY, -relX,-relY, relY,-relX, -relY,relX};
 
@@ -2649,7 +2650,7 @@ int TileEngine::distance(Position pos1, Position pos2) const
 {
 	int x = pos1.x - pos2.x;
 	int y = pos1.y - pos2.y;
-	return (int)std::ceil(sqrt(float(x*x + y*y)));
+	return (int)std::ceil(std::sqrt(x*x + y*y));
 }
 
 /**

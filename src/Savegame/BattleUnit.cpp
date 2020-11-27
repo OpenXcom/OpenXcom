@@ -18,6 +18,7 @@
  */
 #include "BattleUnit.h"
 #include "BattleItem.h"
+#include <cmath>
 #include <sstream>
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
@@ -1103,7 +1104,7 @@ int BattleUnit::damage(Position relative, int power, ItemDamageType type, bool i
 		return 0;
 	}
 
-	power = (int)floor(power * _armor->getDamageModifier(type));
+	power = (int)std::floor(power * _armor->getDamageModifier(type));
 
 	if (type == DT_SMOKE) type = DT_STUN; // smoke doesn't do real damage, but stun damage
 
@@ -1361,7 +1362,7 @@ int BattleUnit::getActionTUs(BattleActionType actionType, RuleItem *item)
 	// if it's a percentage, apply it to unit TUs
 	if (!item->getFlatRate() || actionType == BA_THROW || actionType == BA_PRIME)
 	{
-		cost = (int)floor(getBaseStats()->tu * cost / 100.0f);
+		cost = (int)std::floor(getBaseStats()->tu * cost / 100.0f);
 	}
 
 	return cost;

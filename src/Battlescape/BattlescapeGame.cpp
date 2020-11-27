@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <cmath>
 #include <sstream>
 #include "BattlescapeGame.h"
 #include "BattlescapeState.h"
@@ -1608,7 +1609,7 @@ void BattlescapeGame::psiButtonAction()
 	_currentAction.TU = _currentAction.weapon->getRules()->getTUUse();
 	if (!_currentAction.weapon->getRules()->getFlatRate())
 	{
-		_currentAction.TU = (int)floor(_save->getSelectedUnit()->getBaseStats()->tu * _currentAction.TU / 100.0f);
+		_currentAction.TU = (int)std::floor(_save->getSelectedUnit()->getBaseStats()->tu * _currentAction.TU / 100.0f);
 	}
 	setupCursor();
 }
