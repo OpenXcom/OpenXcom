@@ -1427,7 +1427,7 @@ bool BattlescapeGame::isBusy() const
  * Activates primary action (left click).
  * @param pos Position on the map.
  */
-void BattlescapeGame::primaryAction(Position pos)
+void BattlescapeGame::primaryAction(const Position& pos)
 {
 	bool bPreviewed = Options::battleNewPreviewPath != PATH_NONE;
 
@@ -1572,7 +1572,7 @@ void BattlescapeGame::primaryAction(Position pos)
  * Activates secondary action (right click).
  * @param pos Position on the map.
  */
-void BattlescapeGame::secondaryAction(Position pos)
+void BattlescapeGame::secondaryAction(const Position& pos)
 {
 	//  -= turn to or open door =-
 	_currentAction.target = pos;
@@ -1671,7 +1671,7 @@ void BattlescapeGame::setTUReserved(BattleActionType tur)
  * @param newItem Bool whether this is a new item.
  * @param removeItem Bool whether to remove the item from the owner.
  */
-void BattlescapeGame::dropItem(Position position, BattleItem *item, bool newItem, bool removeItem)
+void BattlescapeGame::dropItem(const Position& position, BattleItem *item, bool newItem, bool removeItem)
 {
 	const Position& p = position;
 

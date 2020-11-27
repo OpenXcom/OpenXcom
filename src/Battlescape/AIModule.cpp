@@ -1506,7 +1506,7 @@ bool AIModule::findFirePoint()
  * @param grenade Is the explosion coming from a grenade?
  * @return True if it is worthwhile creating an explosion in the target position.
  */
-bool AIModule::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff, bool grenade) const
+bool AIModule::explosiveEfficacy(const Position& targetPos, BattleUnit *attackingUnit, int radius, int diff, bool grenade) const
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
 	Mod *mod = _save->getBattleState()->getGame()->getMod();

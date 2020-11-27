@@ -127,7 +127,7 @@ public:
 	 * @param pos The position to convert.
 	 * @return A unique index.
 	 */
-	inline int getTileIndex(Position pos) const
+	inline int getTileIndex(const Position& pos) const
 	{
 		return pos.z * _mapsize_y * _mapsize_x + pos.y * _mapsize_x + pos.x;
 	}
@@ -142,7 +142,7 @@ public:
 	 * @param pos Map position.
 	 * @return Pointer to the tile at that position.
 	 */
-	inline Tile *getTile(Position pos) const
+	inline Tile *getTile(const Position& pos) const
 	{
 		if (pos.x < 0 || pos.y < 0 || pos.z < 0
 			|| pos.x >= _mapsize_x || pos.y >= _mapsize_y || pos.z >= _mapsize_z)
@@ -160,7 +160,7 @@ public:
 	/// Selects the next soldier.
 	BattleUnit *selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 	/// Selects the unit with position on map.
-	BattleUnit *selectUnit(Position pos);
+	BattleUnit *selectUnit(const Position& pos);
 	/// Gets the pathfinding object.
 	Pathfinding *getPathfinding() const;
 	/// Gets a pointer to the tileengine.
@@ -204,7 +204,7 @@ public:
 	/// Removes the body item that corresponds to the unit.
 	void removeUnconsciousBodyItem(BattleUnit *bu);
 	/// Sets or tries to set a unit of a certain size on a certain position of the map.
-	bool setUnitPosition(BattleUnit *bu, Position position, bool testOnly = false);
+	bool setUnitPosition(BattleUnit *bu, const Position& position, bool testOnly = false);
 	/// Adds this unit to the vector of falling units.
 	bool addFallingUnit(BattleUnit* unit);
 	/// Gets the vector of falling units.

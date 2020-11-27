@@ -43,7 +43,7 @@ private:
 	friend class PathfindingOpenSet;
 public:
 	/// Creates a new PathfindingNode class.
-	PathfindingNode(Position pos);
+	PathfindingNode(const Position& pos);
 	/// Cleans up the PathfindingNode.
 	~PathfindingNode();
 	/// Gets the node position.
@@ -70,7 +70,7 @@ public:
 	#endif
 
 	/// Connects to previous node along the path.
-	void connect(int tuCost, PathfindingNode* prevNode, int prevDir, Position target);
+	void connect(int tuCost, PathfindingNode* prevNode, int prevDir, const Position& target);
 	/// Connects to previous node along a visit.
 	void connect(int tuCost, PathfindingNode* prevNode, int prevDir);
 };

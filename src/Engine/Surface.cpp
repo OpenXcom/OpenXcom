@@ -991,7 +991,7 @@ void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half, int
  * @param shade shade offset
  * @param range area that limit draw surface
  */
-void Surface::blitNShade(Surface *surface, int x, int y, int shade, GraphSubset range)
+void Surface::blitNShade(Surface *surface, int x, int y, int shade, const GraphSubset& range)
 {
 	ShaderMove<Uint8> src(this, x, y);
 	ShaderMove<Uint8> dest(surface);

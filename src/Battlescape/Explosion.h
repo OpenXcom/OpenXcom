@@ -37,7 +37,7 @@ public:
 	static const int EXPLODE_FRAMES;
 	static const int BULLET_FRAMES;
 	/// Creates a new Explosion.
-	Explosion(Position _position, int startFrame, int frameDelay = 0, bool big = false, bool hit = false);
+	Explosion(const Position& _position, int startFrame, int frameDelay = 0, bool big = false, bool hit = false);
 	/// Cleans up the Explosion.
 	~Explosion();
 	/// Moves the Explosion on one frame.

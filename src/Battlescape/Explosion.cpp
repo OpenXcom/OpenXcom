@@ -31,7 +31,7 @@ const int Explosion::BULLET_FRAMES = 10;
  * @param big Flag to indicate it is a bullet hit (false), or a real explosion (true).
  * @param hit True for melee and psi attacks.
  */
-Explosion::Explosion(Position position, int startFrame, int frameDelay, bool big, bool hit) : _position(position), _currentFrame(startFrame), _startFrame(startFrame), _frameDelay(frameDelay), _big(big), _hit(hit)
+Explosion::Explosion(const Position& position, int startFrame, int frameDelay, bool big, bool hit) : _position(position), _currentFrame(startFrame), _startFrame(startFrame), _frameDelay(frameDelay), _big(big), _hit(hit)
 {
 
 }
