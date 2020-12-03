@@ -481,10 +481,6 @@ if ( WIN32 )
     set ( static_flags  -static )
     set ( SDLMIXER_LIBRARY "${SDLMIXER_LIBRARY} -lwinmm" )
   endif ()
-  if ( MSVC )
-    set_target_properties ( openxcom
-      PROPERTIES PREFIX ../ )
-  endif ()
   set ( system_libs ${basic_windows_libs} SDLmain ${static_flags} )
 endif ()
 
