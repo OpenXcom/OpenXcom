@@ -36,4 +36,7 @@ else ()
   message ( "No doxygen command found. Disable API documentation generation" )
 endif ()
 
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/openxcom.6 DESTINATION ${CMAKE_INSTALL_PREFIX}/man/man6)
+# Only useful for make install/package under *nix OSes, but not macOS.
+if ( UNIX AND NOT APPLE )
+    INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/openxcom.6 DESTINATION ${CMAKE_INSTALL_PREFIX}/man/man6)
+endif ()
