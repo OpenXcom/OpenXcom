@@ -1,0 +1,9 @@
+#
+# metadata.yaml for New Base In City
+
+name: "New Base In City"
+version: 1.0
+description: "Build the new base in the nearest city to the chosen point."
+author: the OpenXcom team
+
+master: xcom1

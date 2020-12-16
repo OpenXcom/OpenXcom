@@ -18,6 +18,7 @@
  */
 #include "Globe.h"
 #include <algorithm>
+#include <cassert>
 #include "../fmath.h"
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
@@ -1906,6 +1907,39 @@ void Globe::setCraftRange(double lon, double lat, double range)
 	_craftLon = lon;
 	_craftLat = lat;
 	_craftRange = range;
+}
+
+/**
+ * Set the longitude and latitude to the nearest city of the same region.
+ * @param lon Pointer to the input and output longitude
+ * @param lat Pointer to the input and output latitude
+ */
+void Globe::setToNearestCity(double *lon, double *lat)
+{
+	assert(lon);
+	assert(lat);
+
+	double bestLon = *lon;
+	double bestLat = *lat;
+	double eigenValue = -1;
+	std::vector<City *> *pCities = _game->getSavedGame()->locateRegion(*lon, *lat)->getRules()->getCities();
+
+	for (std::vector<City *>::const_iterator i = pCities->begin(); i != pCities->end(); ++i)
+	{
+		double cityLon = (*i)->getLongitude();
+		double cityLat = (*i)->getLatitude();
+		double value = sin(*lat) * sin(cityLat) + cos(*lat) * cos(cityLat) * cos((*lon) - cityLon);
+
+		if (value >= eigenValue)
+		{
+			bestLon = cityLon;
+			bestLat = cityLat;
+			eigenValue = value;
+		}
+	}
+
+	*lon = bestLon;
+	*lat = bestLat;
 }
 
 }

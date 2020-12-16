@@ -237,6 +237,7 @@ public:
 	static int FIRE_DAMAGE_RANGE[2];
 	static std::string DEBRIEF_MUSIC_GOOD;
 	static std::string DEBRIEF_MUSIC_BAD;
+	static bool NEW_BASE_IN_CITY;
 	static int DIFFICULTY_COEFFICIENT[5];
 	// reset all the statics in all classes to default values
 	static void resetGlobalStatics();

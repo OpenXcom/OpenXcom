@@ -205,6 +205,8 @@ public:
 	void setNewBaseHover(bool hover);
 	/// Sets craft range mode.
 	void setCraftRange(double lon, double lat, double range);
+	/// Sets the longitude and latitude to the nearest city.
+	void setToNearestCity(double *lon, double *lat);
 	/// set the _radarLines variable
 	void toggleRadarLines();
 	/// Update the resolution settings, we just resized the window.

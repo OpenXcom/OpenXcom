@@ -234,6 +234,10 @@ void BuildNewBaseState::globeClick(Action *action)
 	{
 		if (_globe->insideLand(lon, lat))
 		{
+			if (Mod::NEW_BASE_IN_CITY && Options::getActiveMaster() == "xcom1")
+			{
+				_globe->setToNearestCity(&lon, &lat);
+			}
 			_base->setLongitude(lon);
 			_base->setLatitude(lat);
 			for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)

@@ -126,6 +126,7 @@ int Mod::EXPLOSIVE_DAMAGE_RANGE;
 int Mod::FIRE_DAMAGE_RANGE[2];
 std::string Mod::DEBRIEF_MUSIC_GOOD;
 std::string Mod::DEBRIEF_MUSIC_BAD;
+bool Mod::NEW_BASE_IN_CITY;
 int Mod::DIFFICULTY_COEFFICIENT[5];
 
 /// Predefined name for first loaded mod that have all original data
@@ -172,6 +173,7 @@ void Mod::resetGlobalStatics()
 	FIRE_DAMAGE_RANGE[1] = 10;
 	DEBRIEF_MUSIC_GOOD = "GMMARS";
 	DEBRIEF_MUSIC_BAD = "GMMARS";
+	NEW_BASE_IN_CITY = false;
 
 	Globe::OCEAN_COLOR = Palette::blockOffset(12);
 	Globe::OCEAN_SHADING = true;
@@ -1134,6 +1136,7 @@ void Mod::loadConstants(const YAML::Node &node)
 	}
 	DEBRIEF_MUSIC_GOOD = node["goodDebriefingMusic"].as<std::string>(DEBRIEF_MUSIC_GOOD);
 	DEBRIEF_MUSIC_BAD = node["badDebriefingMusic"].as<std::string>(DEBRIEF_MUSIC_BAD);
+	NEW_BASE_IN_CITY = node["newBaseInCity"].as<bool>(NEW_BASE_IN_CITY);
 }
 
 /**
