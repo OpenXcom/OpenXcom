@@ -46,7 +46,9 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 	{
 		_names["en-US"] = "English (US)";
 		_names["en-GB"] = "English (UK)";
+		// _names["ar"] = "العربية"; needs fonts
 		_names["bg"] = "Български";
+		_names["ca-ES"] = "Català";
 		_names["cs"] = "Česky";
 		_names["cy"] = "Cymraeg";
 		_names["da"] = "Dansk";
@@ -58,9 +60,11 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 		_names["fr"] = "Français (FR)";
 		_names["fr-CA"] = "Français (CA)";
 		_names["fi"] = "Suomi";
+		_names["ga"] = "Gaeilge";
 		_names["hr"] = "Hrvatski";
 		_names["hu"] = "Magyar";
 		_names["it"] = "Italiano";
+		_names["is"] = "Íslenska";
 		_names["ja"] = "日本語";
 		_names["ko"] = "한국어";
 		_names["lb"] = "Lëtzebuergesch";
@@ -75,9 +79,10 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 		_names["sk"] = "Slovenčina";
 		_names["sl"] = "Slovenščina";
 		_names["sv"] = "Svenska";
-		_names["th"] = "ไทย";
+		// _names["th"] = "ไทย"; needs fonts
 		_names["tr"] = "Türkçe";
 		_names["uk"] = "Українська";
+		_names["vi"] = "Tiếng Việt";
 		_names["zh-CN"] = "中文";
 		_names["zh-TW"] = "文言";
 	}

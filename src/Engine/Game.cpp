@@ -571,7 +571,7 @@ void Game::loadLanguages()
 		std::string lang = locale.substr(0, locale.find_first_of('-'));
 		// Try to load full locale
 		Unicode::replace(path, defaultLang, locale);
-		if (CrossPlatform::fileExists(path))
+		if (Language::isSupported(locale) && CrossPlatform::fileExists(path))
 		{
 			currentLang = locale;
 		}
@@ -579,7 +579,7 @@ void Game::loadLanguages()
 		{
 			// Try to load language locale
 			Unicode::replace(path, locale, lang);
-			if (CrossPlatform::fileExists(path))
+			if (Language::isSupported(lang) && CrossPlatform::fileExists(path))
 			{
 				currentLang = lang;
 			}
