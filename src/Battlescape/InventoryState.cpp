@@ -336,10 +336,7 @@ void InventoryState::init()
 		if (s->getLook() == LOOK_AFRICAN)
 			look += "3";
 		look += ".SPK";
-		const std::set<std::string> &ufographContents = FileMap::getVFolderContents("UFOGRAPH");
-		std::string lcaseLook = look;
-		std::transform(lcaseLook.begin(), lcaseLook.end(), lcaseLook.begin(), tolower);
-		if (ufographContents.find("lcaseLook") == ufographContents.end() && !_game->getMod()->getSurface(look, false))
+		if (!_game->getMod()->getSurface(look, false))
 		{
 			look = s->getArmor()->getSpriteInventory() + ".SPK";
 		}
