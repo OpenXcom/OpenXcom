@@ -54,7 +54,6 @@ jobs:
       - name: Install packages (macOS)
         if: runner.os == 'macOS'
         run: |
-          brew update || true  # brew update often fails, no biggie.
           brew install ccache ${{ matrix.packages }}
 
       - name: Setup Cache
