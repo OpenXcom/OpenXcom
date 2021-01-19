@@ -35,7 +35,7 @@ SoldierDiary::SoldierDiary() : _daysWoundedTotal(0), _totalShotByFriendlyCounter
 	_timesWoundedTotal(0), _KIA(0), _allAliensKilledTotal(0), _allAliensStunnedTotal(0), _woundsHealedTotal(0), _allUFOs(0), _allMissionTypes(0),
 	_statGainTotal(0), _revivedUnitTotal(0), _wholeMedikitTotal(0), _braveryGainTotal(0), _bestOfRank(0),
 	_MIA(0), _martyrKillsTotal(0), _postMortemKills(0), _slaveKillsTotal(0), _bestSoldier(false),
-    _revivedSoldierTotal(0), _revivedHostileTotal(0), _revivedNeutralTotal(0), _globeTrotter(false)
+	_revivedSoldierTotal(0), _revivedHostileTotal(0), _revivedNeutralTotal(0), _globeTrotter(false)
 {
 }
 
@@ -215,7 +215,7 @@ void SoldierDiary::updateDiary(BattleUnitStatistics *unitStatistics, std::vector
 		_KIA++;
 	if (unitStatistics->MIA)
 		_MIA++;
-	_woundsHealedTotal = unitStatistics->woundsHealed++;
+	_woundsHealedTotal += unitStatistics->woundsHealed;
 	if (getUFOTotal(allMissionStatistics).size() >= rules->getUfosList().size())
 		_allUFOs = 1;
 	if ((getUFOTotal(allMissionStatistics).size() + getTypeTotal(allMissionStatistics).size()) == (rules->getUfosList().size() + rules->getDeploymentsList().size() - 2))
@@ -400,68 +400,67 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 					break;
 				std::vector<std::vector<std::pair<int, std::vector<std::string> > > > *_killCriteriaList = (*i).second->getKillCriteria();
 
-				bool andCriteriaMet = true;
+				int totalKillGroups = 0; // holds the total number of kill groups which satisfy one of the OR criteria blocks
+				bool enoughForNextCommendation = false;
 
 				// Loop over the OR vectors.
+				// if OR criteria are not disjunctive (e.g. "kill 1 enemy" or "kill 1 enemy"), each one will be counted and added to totals - avoid that if you want good statistics
 				for (std::vector<std::vector<std::pair<int, std::vector<std::string> > > >::const_iterator orCriteria = _killCriteriaList->begin(); orCriteria != _killCriteriaList->end(); ++orCriteria)
 				{
-					andCriteriaMet = true;
-					// Loop over the AND vectors.
+					// prepare counters
+					std::vector<int> referenceBlockCounters;
+					referenceBlockCounters.assign((*orCriteria).size(), 0);
+					int referenceTotalCounters = 0;
 					for (std::vector<std::pair<int, std::vector<std::string> > >::const_iterator andCriteria = orCriteria->begin(); andCriteria != orCriteria->end(); ++andCriteria)
 					{
-						int detailCount = 0; // How many kills have met the same DETAIL
-						int thisTime = -1; // Time being a turn or a mission.
-						int lastTime = -1;
-						bool goToNextTime = false;
-						int successionCount = 0; // How many blocks of kills were in the same turn or mission.
+						int index = andCriteria - orCriteria->begin();
+						referenceBlockCounters[index] = (*andCriteria).first;
+						referenceTotalCounters += (*andCriteria).first;
+					}
+					std::vector<int> currentBlockCounters;
+					if ((*j).first == "killsWithCriteriaCareer") {
+						currentBlockCounters = referenceBlockCounters;
+					}
+					int currentTotalCounters = referenceTotalCounters;
+					int lastTimeSpan = -1;
+					bool skipThisTimeSpan = false;
+					// Loop over the KILLS, seeking to fulfill all criteria from entire AND block within the specified time span (career/mission/turn)
+					for (std::vector<BattleUnitKills*>::const_iterator singleKill = _killList.begin(); singleKill != _killList.end(); ++singleKill)
+					{
+						int thisTimeSpan = -1;
+						if ((*j).first == "killsWithCriteriaMission")
+						{
+							thisTimeSpan = (*singleKill)->mission;
+						}
+						else if ((*j).first == "killsWithCriteriaTurn")
+						{
+							thisTimeSpan = (*singleKill)->turn;
+						}
+						if (thisTimeSpan != lastTimeSpan)
+						{
+							// next time span, reset counters
+							lastTimeSpan = thisTimeSpan;
+							skipThisTimeSpan = false;
+							currentBlockCounters = referenceBlockCounters;
+							currentTotalCounters = referenceTotalCounters;
+						}
+						// same time span, we're skipping the rest of it if we already fulfilled criteria
+						else if (skipThisTimeSpan)
+						{
+							continue;
+						}
 
-						if ((*j).first == "killsWithCriteriaTurn" || (*j).first == "killsWithCriteriaMission")
-							detailCount++; // Turns and missions start at 1 because of how thisTime and lastTime work.
+						bool andCriteriaMet = false;
 
-						// Loop over the KILLS.
-						for (std::vector<BattleUnitKills*>::const_iterator singleKill = _killList.begin(); singleKill != _killList.end(); ++singleKill)
+						// Loop over the AND vectors.
+						for (std::vector<std::pair<int, std::vector<std::string> > >::const_iterator andCriteria = orCriteria->begin(); andCriteria != orCriteria->end(); ++andCriteria)
 						{
 							bool foundMatch = true;
-
-							if ((*j).first == "killsWithCriteriaMission")
-							{
-								thisTime = (*singleKill)->mission;
-								if (singleKill != _killList.begin())
-								{
-									--singleKill;
-									lastTime = (*singleKill)->mission;
-									++singleKill;
-								}
-							}
-							else if ((*j).first == "killsWithCriteriaTurn")
-							{
-								thisTime = (*singleKill)->turn;
-								if (singleKill != _killList.begin())
-								{
-									--singleKill;
-									lastTime = (*singleKill)->turn;
-									++singleKill;
-								}
-							}
-							// Skip kill-groups that we already got an award for.
-							// Skip kills that are inbetween turns.
-							if ( thisTime == lastTime && goToNextTime && (*j).first != "killsWithCriteriaCareer")
-							{
-								continue;
-							}
-							else if (thisTime != lastTime && (*j).first != "killsWithCriteriaCareer")
-							{
-								detailCount = 1; // Reset.
-								goToNextTime = false;
-								continue;
-							}
 
 							// Loop over the DETAILs of one AND vector.
 							for (std::vector<std::string>::const_iterator detail = andCriteria->second.begin(); detail != andCriteria->second.end(); ++detail)
 							{
 								int battleType = 0;
-								int damageType = 0;
-
 								for (; battleType != BATTLE_TYPES; ++battleType)
 								{
 									if ((*detail) == battleTypeArray[battleType])
@@ -470,6 +469,7 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 									}
 								}
 
+								int damageType = 0;
 								for (; damageType != DAMAGE_TYPES; ++damageType)
 								{
 									if ((*detail) == damageTypeArray[damageType])
@@ -492,33 +492,59 @@ bool SoldierDiary::manageCommendations(Mod *mod, std::vector<MissionStatistics*>
 									break;
 								}
 							} /// End of DETAIL loop.
+
 							if (foundMatch)
 							{
-								detailCount++;
-
-								if ( detailCount == (*andCriteria).first)
+								int index = andCriteria - orCriteria->begin();
+								// some current block counters might go into negatives, this is used to tally career kills correctly
+								// currentTotalCounters will always ensure we're counting in proper batches
+								if (currentBlockCounters[index]-- > 0 && --currentTotalCounters <= 0)
 								{
-									goToNextTime = true; // Criteria met, move to next mission/turn.
-									successionCount++;
+									// we just counted all counters in a block to zero, this certainly means that the entire block criteria is fulfilled
+									andCriteriaMet = true;
+									break;
 								}
 							}
-						} /// End of KILLs loop.
-						if ((*andCriteria).first  != 1)
+						} /// End of AND loop.
+
+						if (andCriteriaMet)
 						{
-							detailCount = successionCount;
+							// early exit if we got enough, no reason to continue iterations
+							if (++totalKillGroups >= (*j).second.at(nextCommendationLevel["noNoun"]))
+							{
+								enoughForNextCommendation = true;
+								break;
+							}
+							
+							// "killsWithCriteriaTurn" and "killsWithCriteriaMission" are "peak achivements", they are counted once per their respective time span if criteria are fulfilled
+							// so if we got them, we're skipping the rest of this time span to avoid counting more than once
+							// e.g. 20 kills in a mission will not be counted as "10 kills in a mission" criteria twice
+							// "killsWithCriteriaCareer" are totals, so they are never skipped this way
+							if ((*j).first == "killsWithCriteriaTurn" || (*j).first == "killsWithCriteriaMission")
+							{
+								skipThisTimeSpan = true;
+							}
+							// for career kills we'll ADD reference counters to the current values and recalculate current total
+							// this is used to count instances of full criteria blocks, e.g. if rules state that a career commendation must be awarded for 2 kills of alien leaders
+							// and 1 kill of  alien commander, then we must ensure there's 2 leader kills + 1 commander kill for each instance of criteria fulfilled
+							else if ((*j).first == "killsWithCriteriaCareer")
+							{
+								currentTotalCounters = 0;
+								for (int i = 0; i < currentBlockCounters.size(); i++)
+								{
+									currentBlockCounters[i] += referenceBlockCounters[i];
+									currentTotalCounters += std::max(currentBlockCounters[i], 0);
+								}
+							}
 						}
-						// If _no_ kill met this DETAIL, then the whole AND block is failed. Move to the next OR block.
-						if (detailCount == 0 || detailCount < (*j).second.at(nextCommendationLevel["noNoun"]))
-						{
-							andCriteriaMet = false;
-							break;
-						}
-					} /// End of AND loop.
-				  if (andCriteriaMet)
-				    break; // Stop looking, because we _are_ getting one, regardless of what's in the next OR block.
+					} /// End of KILLs loop.
+
+					if (enoughForNextCommendation)
+						break; // stop iterating here too, we've got enough
+
 				} /// End of OR loop.
 
-				if (!andCriteriaMet)
+				if (!enoughForNextCommendation)
 					awardCommendationBool = false;
 
 			}
