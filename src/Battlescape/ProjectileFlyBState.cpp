@@ -124,7 +124,7 @@ void ProjectileFlyBState::init()
 	}
 
 	Tile *endTile = _parent->getSave()->getTile(_action.target);
-	int distance = _parent->getTileEngine()->distance(_action.actor->getPosition(), _action.target);
+	int distanceSq = _parent->getTileEngine()->distanceUnitToPositionSq(_action.actor, _action.target, false);
 	bool isPlayer = _parent->getSave()->getSide() == FACTION_PLAYER;
 	if (isPlayer) _parent->getMap()->resetObstacles();
 	switch (_action.type)
@@ -145,21 +145,17 @@ void ProjectileFlyBState::init()
 			_parent->popState();
 			return;
 		}
-		if (distance > weapon->getRules()->getMaxRange())
+		if (distanceSq > weapon->getRules()->getMaxRangeSq())
 		{
 			// special handling for short ranges and diagonals
-			if (_action.actor->directionTo(_action.target) % 2 == 1)
 			{
-				// special handling for maxRange 1: allow it to target diagonally adjacent tiles, even though they are technically 2 tiles away.
-				if (weapon->getRules()->getMaxRange() == 1
-					&& distance == 2)
+				// special handling for maxRange 1: allow it to target diagonally adjacent tiles (one diagonal move)
+				if (weapon->getRules()->getMaxRange() == 1 && distanceSq <= 3)
 				{
 					break;
 				}
-				// special handling for maxRange 2: allow it to target diagonally adjacent tiles on a level above/below, even though they are technically 3 tiles away.
-				else if (weapon->getRules()->getMaxRange() == 2
-					&& distance == 3
-					&& _action.target.z != _action.actor->getPosition().z)
+				// special handling for maxRange 2: allow it to target diagonally adjacent tiles (one diagonal move + one straight move)
+				else if (weapon->getRules()->getMaxRange() == 2 && distanceSq <= 6)
 				{
 					break;
 				}

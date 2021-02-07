@@ -192,6 +192,8 @@ public:
 	bool isPistol() const;
 	/// Get the max range of this weapon.
 	int getMaxRange() const;
+	/// Get the max range of this weapon squared.
+	int getMaxRangeSq() const;
 	/// Get the max range of aimed shots with this weapon.
 	int getAimRange() const;
 	/// Get the max range of snap shots with this weapon.

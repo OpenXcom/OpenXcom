@@ -675,6 +675,15 @@ int RuleItem::getMaxRange() const
 }
 
 /**
+ * Gets the maximum range of this weapon squared
+ * @return The maximum range squared.
+ */
+int RuleItem::getMaxRangeSq() const
+{
+	return _maxRange * _maxRange;
+}
+
+/**
  * Gets the maximum effective range of this weapon when using Aimed Shot.
  * @return The maximum range.
  */
