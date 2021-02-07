@@ -1075,7 +1075,15 @@ void SaveConverter::loadDatSoldier()
 			node["currentStats"] = current;
 
 			int armor = load<Uint8>(sdata + _rules->getOffset("SOLDIER.DAT_ARMOR"));
-			node["armor"] = _rules->getArmor()[armor];
+			const std::vector<std::string> &armors = _rules->getArmor();
+			if (armor >= 0 && armor < armors.size())
+			{
+				node["armor"] = armors[armor];
+			}
+			else
+			{
+				throw Exception("Invalid armor index. Modded saves are not supported.");
+			}
 			node["improvement"] = (int)load<Uint8>(sdata + _rules->getOffset("SOLDIER.DAT_PSI"));
 			node["psiTraining"] = (int)load<char>(sdata + _rules->getOffset("SOLDIER.DAT_PSILAB")) != 0;
 			node["gender"] = (int)load<Uint8>(sdata + _rules->getOffset("SOLDIER.DAT_GENDER"));
