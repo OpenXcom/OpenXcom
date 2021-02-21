@@ -247,6 +247,11 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 	{
 		for (YAML::const_iterator i = node[fromContainer[pass]].begin(); i != node[fromContainer[pass]].end(); ++i)
 		{
+			if ((*i)["owner"] && !(*i)["inventoryslot"])
+			{
+				// skip special items from OXCE saves
+				continue;
+			}
 			std::string type = (*i)["type"].as<std::string>();
 			if (mod->getItem(type))
 			{
@@ -306,6 +311,11 @@ void SavedBattleGame::load(const YAML::Node &node, Mod *mod, SavedGame* savedGam
 	std::vector<BattleItem*>::iterator weaponi = _items.begin();
 	for (YAML::const_iterator i = node["items"].begin(); i != node["items"].end(); ++i)
 	{
+		if ((*i)["owner"] && !(*i)["inventoryslot"])
+		{
+			// skip special items from OXCE saves
+			continue;
+		}
 		if (mod->getItem((*i)["type"].as<std::string>()))
 		{
 			int ammo = (*i)["ammoItem"].as<int>(-1);
