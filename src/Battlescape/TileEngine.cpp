@@ -1011,7 +1011,8 @@ int TileEngine::determineReactionType(BattleUnit *unit, BattleUnit *target)
 		// has a gun capable of snap shot with ammo
 		(weapon->getRules()->getBattleType() != BT_MELEE &&
 		weapon->getRules()->getTUSnap() &&
-		distance(unit->getPosition(), target->getPosition()) < weapon->getRules()->getMaxRange() &&
+		// Note: distance calculation isn't precise for 2x2 units here, but changing it would likely require also changing the targeting of 2x2 units
+		distanceSq(unit->getPosition(), target->getPosition(), false) < weapon->getRules()->getMaxRangeSq() &&
 		weapon->getAmmoItem() &&
 		unit->getActionTUs(BA_SNAPSHOT, weapon) > 0 &&
 		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon)) &&
@@ -2637,6 +2638,28 @@ void TileEngine::togglePersonalLighting()
 {
 	_personalLighting = !_personalLighting;
 	calculateUnitLighting();
+}
+
+/**
+ * Calculates the distance squared between a unit and a point position.
+ * @param unit The unit.
+ * @param pos The point position.
+ * @param considerZ Whether to consider the z coordinate.
+ * @return Distance squared.
+ */
+int TileEngine::distanceUnitToPositionSq(BattleUnit* unit, const Position& pos, bool considerZ) const
+{
+	int x = unit->getPosition().x - pos.x;
+	int y = unit->getPosition().y - pos.y;
+	int z = considerZ ? (unit->getPosition().z - pos.z) : 0;
+	if (unit->getArmor()->getSize() > 1)
+	{
+		if (unit->getPosition().x < pos.x)
+			x++;
+		if (unit->getPosition().y < pos.y)
+			y++;
+	}
+	return x*x + y*y + z*z;
 }
 
 /**

@@ -90,6 +90,8 @@ public:
 	bool visible(BattleUnit *currentUnit, Tile *tile);
 	/// Turn XCom soldier's personal lighting on or off.
 	void togglePersonalLighting();
+	/// Checks the distance squared between a unit and a position.
+	int distanceUnitToPositionSq(BattleUnit* unit, const Position& pos, bool considerZ) const;
 	/// Checks the distance between two positions.
 	int distance(Position pos1, Position pos2) const;
 	/// Checks the distance squared between two positions.
