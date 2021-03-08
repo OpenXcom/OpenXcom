@@ -1262,35 +1262,14 @@ void GeoscapeState::time30Minutes()
 		{
 			if ((*j)->getStatus() == "STR_REFUELLING")
 			{
-				std::string item = (*j)->getRules()->getRefuelItem();
-				if (item.empty())
+				std::string s = (*j)->refuel();
+				if (!s.empty())
 				{
-					(*j)->refuel();
-				}
-				else
-				{
-					if ((*i)->getStorageItems()->getItem(item) > 0)
-					{
-						(*i)->getStorageItems()->removeItem(item);
-						(*j)->refuel();
-						(*j)->setLowFuel(false);
-					}
-					else if (!(*j)->getLowFuel())
-					{
-						std::string msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
-										   .arg(tr(item))
-										   .arg((*j)->getName(_game->getLanguage()))
-										   .arg((*i)->getName());
-						popup(new CraftErrorState(this, msg));
-						if ((*j)->getFuel() > 0)
-						{
-							(*j)->setStatus("STR_READY");
-						}
-						else
-						{
-							(*j)->setLowFuel(true);
-						}
-					}
+					std::string msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
+										.arg(tr(s))
+										.arg((*j)->getName(_game->getLanguage()))
+										.arg((*i)->getName());
+					popup(new CraftErrorState(this, msg));
 				}
 			}
 		}

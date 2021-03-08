@@ -150,7 +150,7 @@ public:
 	/// Repairs the craft.
 	void repair();
 	/// Refuels the craft.
-	void refuel();
+	std::string refuel();
 	/// Rearms the craft.
 	std::string rearm(const Mod *mod);
 	/// Sets the craft's battlescape status.

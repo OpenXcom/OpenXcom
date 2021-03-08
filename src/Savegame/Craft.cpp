@@ -792,10 +792,40 @@ void Craft::repair()
 /**
  * Refuels the craft every 30 minutes
  * while it's docked in the base.
+ * @return The item ID missing for refuelling, or "" if none.
  */
-void Craft::refuel()
+std::string Craft::refuel()
 {
-	setFuel(_fuel + _rules->getRefuelRate());
+	std::string fuel;
+	if (_fuel < _rules->getMaxFuel())
+	{
+		std::string item = _rules->getRefuelItem();
+		if (item.empty())
+		{
+			setFuel(_fuel + _rules->getRefuelRate());
+		}
+		else
+		{
+			if (_base->getStorageItems()->getItem(item) > 0)
+			{
+				_base->getStorageItems()->removeItem(item);
+				setFuel(_fuel + _rules->getRefuelRate());
+				_lowFuel = false;
+			}
+			else if (!_lowFuel)
+			{
+				fuel = item;
+				if (_fuel > 0)
+				{
+					_status = "STR_READY";
+				}
+				else
+				{
+					_lowFuel = true;
+				}
+			}
+		}
+	}
 	if (_fuel >= _rules->getMaxFuel())
 	{
 		_status = "STR_READY";
@@ -808,6 +838,7 @@ void Craft::refuel()
 			}
 		}
 	}
+	return fuel;
 }
 
 /**
