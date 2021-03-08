@@ -285,7 +285,7 @@ bool caseCompare(const std::string &a, const std::string &b)
 	std::wstring wb = convMbToWc(b, CP_UTF8);
 	return (StrCmpIW(wa.c_str(), wb.c_str()) < 0);
 #else
-	return (std::use_facet< std::collate<char> >(utf8).compare(&a[0], &a[a.size()], &b[0], &b[b.size()]) < 0);
+	return (std::use_facet< std::collate<char> >(utf8).compare(&a[0], &a[0] + a.size(), &b[0], &b[0] + b.size()) < 0);
 #endif
 }
 
@@ -304,8 +304,8 @@ bool caseFind(const std::string &haystack, const std::string &needle)
 #else
 	std::wstring wa = convMbToWc(haystack, 0);
 	std::wstring wb = convMbToWc(needle, 0);
-	std::use_facet< std::ctype<wchar_t> >(utf8).toupper(&wa[0], &wb[wb.size()]);
-	std::use_facet< std::ctype<wchar_t> >(utf8).toupper(&wb[0], &wb[wb.size()]);
+	std::use_facet< std::ctype<wchar_t> >(utf8).toupper(&wa[0], &wa[0] + wa.size());
+	std::use_facet< std::ctype<wchar_t> >(utf8).toupper(&wb[0], &wb[0] + wb.size());
 	return (wa.find(wb) != std::wstring::npos);
 #endif
 }
@@ -325,7 +325,7 @@ void upperCase(std::string &s)
 	s = convWcToMb(ws, CP_UTF8);
 #else
 	std::wstring ws = convMbToWc(s, 0);
-	std::use_facet< std::ctype<wchar_t> >(utf8).toupper(&ws[0], &ws[ws.size()]);
+	std::use_facet< std::ctype<wchar_t> >(utf8).toupper(&ws[0], &ws[0] + ws.size());
 	s = convWcToMb(ws, 0);
 #endif
 }
@@ -345,7 +345,7 @@ void lowerCase(std::string &s)
 	s = convWcToMb(ws, CP_UTF8);
 #else
 	std::wstring ws = convMbToWc(s, 0);
-	std::use_facet< std::ctype<wchar_t> >(utf8).tolower(&ws[0], &ws[ws.size()]);
+	std::use_facet< std::ctype<wchar_t> >(utf8).tolower(&ws[0], &ws[0] + ws.size());
 	s = convWcToMb(ws, 0);
 #endif
 }
