@@ -823,7 +823,7 @@ std::string Craft::rearm(const Mod *mod)
 	{
 		if (i == _weapons.end())
 		{
-			_status = "STR_REFUELLING";
+			_status = (_fuel >= _rules->getMaxFuel()) ? "STR_READY" : "STR_REFUELLING";
 			break;
 		}
 		if (*i != 0 && (*i)->isRearming())
