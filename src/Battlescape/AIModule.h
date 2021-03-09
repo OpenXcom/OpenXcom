@@ -39,7 +39,7 @@ enum AIMode { AI_PATROL, AI_AMBUSH, AI_COMBAT, AI_ESCAPE };
  */
 class AIModule
 {
-private:
+protected:
 	SavedBattleGame *_save;
 	BattleUnit *_unit;
 	BattleUnit *_aggroTarget;

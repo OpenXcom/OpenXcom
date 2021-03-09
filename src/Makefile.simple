@@ -33,11 +33,12 @@ CXXFLAGS += -Wall -Wextra -rdynamic
 endif
 
 CXXFLAGS += $(addprefix -D,$(TARGET))
-CXXFLAGS += $(shell $(PKG-CONFIG) --cflags sdl yaml-cpp)
+CXXFLAGS += $(shell $(PKG-CONFIG) --cflags janet sdl yaml-cpp)
+CXXFLAGS += -I/usr/local/include -std=c++11
 ifeq ($(TARGET),OSX)
-LIBS = $(shell $(PKG-CONFIG) --libs sdl yaml-cpp) -lSDL_gfx -lSDL_mixer -lSDL_image -framework OpenGL
+LIBS = -L/usr/local/lib $(shell $(PKG-CONFIG) --libs janet sdl yaml-cpp) -lSDL_gfx -lSDL_mixer -lSDL_image -framework OpenGL
 else
-LIBS = $(shell $(PKG-CONFIG) --libs sdl yaml-cpp) -lSDL_gfx -lSDL_mixer -lSDL_image -lGL -ldl
+LIBS = $(shell $(PKG-CONFIG) --libs janet sdl yaml-cpp) -lSDL_gfx -lSDL_mixer -lSDL_image -lGL -ldl
 endif
 
 # Rules
