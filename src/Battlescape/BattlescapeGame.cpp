@@ -34,6 +34,7 @@
 #include "UnitDieBState.h"
 #include "UnitPanicBState.h"
 #include "AIModule.h"
+#include "JanetAIModule.h"
 #include "Pathfinding.h"
 #include "../Mod/AlienDeployment.h"
 #include "../Engine/Game.h"
@@ -77,6 +78,8 @@ BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parent
 
 	_debugPlay = false;
 
+	JanetAIModule::SetUp();
+
 	checkForCasualties(0, 0, true);
 	cancelCurrentAction();
 }
@@ -91,6 +94,8 @@ BattlescapeGame::~BattlescapeGame()
 	{
 		delete *i;
 	}
+
+	JanetAIModule::TearDown();
 	cleanupDeleted();
 }
 
