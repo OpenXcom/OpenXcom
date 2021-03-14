@@ -167,7 +167,6 @@ void AIModule::think(BattleAction *action)
 		else if (_unit->getFaction() == FACTION_PLAYER)
 		{
 			Log(LOG_INFO) << "X-Com unit has " << _visibleEnemies << "/" << _knownEnemies << " known enemies visible, " << _spottingEnemies << " of whom are spotting him. ";
-			Log(LOG_INFO) << "X-Com unit has intelligence of " << _intelligence;
 		}
 		else
 		{
@@ -2003,6 +2002,19 @@ void AIModule::meleeAttack()
  */
 bool AIModule::validTarget(BattleUnit *unit, bool assessDanger, bool includeCivs) const
 {
+	// log the crap out of stuff
+	if (_unit->getFaction() == FACTION_PLAYER) {
+		if (unit->isOut()) {
+			Log(LOG_INFO) << "Potential target " << unit->getType() << " is unconscious!";
+		} else if (_intelligence < unit->getTurnsSinceSpotted()) {
+			Log(LOG_INFO) << "We're too dumb to remember " << unit->getType() << "! (" << _intelligence << " < " << unit->getTurnsSinceSpotted() << "t)";
+		} else if (assessDanger && unit->getTile()->getDangerous()) {
+			Log(LOG_INFO) << unit->getType() << " is standing on a grenade and we're not an idiot!";
+		} else if (unit->getFaction() == _unit->getFaction()) {
+			Log(LOG_INFO) << "Potential target " << unit->getType() << " is on our side!";
+		}
+	}
+
 		// ignore units that are dead/unconscious
 	if (unit->isOut() ||
 		// they must be units that we "know" about
@@ -2020,6 +2032,9 @@ bool AIModule::validTarget(BattleUnit *unit, bool assessDanger, bool includeCivs
 		return true;
 	}
 
+	if (_unit->getFaction() == FACTION_PLAYER) {
+		Log(LOG_INFO) << "Potential target " << unit->getType() << " is faction " << unit->getFaction() << ", we are hunting faction " << _targetFaction;
+	}
 	return unit->getFaction() == _targetFaction;
 }
 

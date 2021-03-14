@@ -754,15 +754,14 @@ void ProjectileFlyBState::projectileHitUnit(Position pos)
 				_unit->getStatistics()->lowAccuracyHitCounter++;
 			}
 		}
-		if (victim->getFaction() == FACTION_HOSTILE)
+
+		AIModule *ai = victim->getAIModule();
+		if (ai != 0)
 		{
-			AIModule *ai = victim->getAIModule();
-			if (ai != 0)
-			{
-				ai->setWasHitBy(_unit);
-				_unit->setTurnsSinceSpotted(0);
-			}
+			ai->setWasHitBy(_unit);
+			_unit->setTurnsSinceSpotted(0);
 		}
+
 		// Record the last unit to hit our victim. If a victim dies without warning*, this unit gets the credit.
 		// *Because the unit died in a fire or bled out.
 		victim->setMurdererId(_unit->getId());

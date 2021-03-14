@@ -219,7 +219,14 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	{
 		// for some reason the unit had no AI routine assigned..
 		if (Options::traceAI) { Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType() << " had no AI installed!"; }
-		unit->setAIModule(new JanetAIModule(_save, unit, 0));
+		if (unit->getFaction() == FACTION_PLAYER)
+		{
+			unit->setAIModule(new JanetAIModule(_save, unit, 0));
+		}
+		else
+		{
+			unit->setAIModule(new AIModule(_save, unit, 0));
+		}
 		ai = unit->getAIModule();
 	}
 	_AIActionCounter++;
