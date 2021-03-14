@@ -162,7 +162,12 @@ void AIModule::think(BattleAction *action)
 	{
 		if (_unit->getFaction() == FACTION_HOSTILE)
 		{
-			Log(LOG_INFO) << "Unit has " << _visibleEnemies << "/" << _knownEnemies << " known enemies visible, " << _spottingEnemies << " of whom are spotting him. ";
+			Log(LOG_INFO) << "Alien unit has " << _visibleEnemies << "/" << _knownEnemies << " known enemies visible, " << _spottingEnemies << " of whom are spotting him. ";
+		}
+		else if (_unit->getFaction() == FACTION_PLAYER)
+		{
+			Log(LOG_INFO) << "X-Com unit has " << _visibleEnemies << "/" << _knownEnemies << " known enemies visible, " << _spottingEnemies << " of whom are spotting him. ";
+			Log(LOG_INFO) << "X-Com unit has intelligence of " << _intelligence;
 		}
 		else
 		{
@@ -979,10 +984,11 @@ int AIModule::countKnownTargets() const
 {
 	int knownEnemies = 0;
 
-	if (_unit->getFaction() == FACTION_HOSTILE)
+	if (_unit->getFaction() != FACTION_NEUTRAL)
 	{
 		for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 		{
+
 			if (validTarget(*i, true, true))
 			{
 				++knownEnemies;
@@ -2000,7 +2006,7 @@ bool AIModule::validTarget(BattleUnit *unit, bool assessDanger, bool includeCivs
 		// ignore units that are dead/unconscious
 	if (unit->isOut() ||
 		// they must be units that we "know" about
-		(_unit->getFaction() == FACTION_HOSTILE && _intelligence < unit->getTurnsSinceSpotted()) ||
+		_intelligence < unit->getTurnsSinceSpotted() ||
 		// they haven't been grenaded
 		(assessDanger && unit->getTile()->getDangerous()) ||
 		// and they mustn't be on our side
@@ -2009,7 +2015,7 @@ bool AIModule::validTarget(BattleUnit *unit, bool assessDanger, bool includeCivs
 		return false;
 	}
 
-	if (includeCivs)
+	if (_unit->getFaction() == FACTION_HOSTILE && includeCivs)
 	{
 		return true;
 	}
@@ -2120,7 +2126,7 @@ bool AIModule::getNodeOfBestEfficacy(BattleAction *action)
 					if (_save->getTileEngine()->canTargetTile(&targetOriginVoxel, _save->getTile((*i)->getPosition()), O_FLOOR, &targetVoxel, *j, false))
 					{
 						if ((_unit->getFaction() == FACTION_HOSTILE && (*j)->getFaction() != FACTION_HOSTILE) ||
-							(_unit->getFaction() == FACTION_NEUTRAL && (*j)->getFaction() == FACTION_HOSTILE))
+							(_unit->getFaction() != FACTION_HOSTILE && (*j)->getFaction() == FACTION_HOSTILE))
 						{
 							if ((*j)->getTurnsSinceSpotted() <= _intelligence)
 							{
