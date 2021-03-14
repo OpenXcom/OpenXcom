@@ -25,7 +25,7 @@ endif
 
 # Compiler settings
 ifeq ($(TARGET),OSX)
-CXXFLAGS ?= -O2
+CXXFLAGS ?= -O2 -g
 CXXFLAGS += -Wall -Wextra
 else
 CXXFLAGS ?= -O2
