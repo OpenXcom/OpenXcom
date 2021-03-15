@@ -12,6 +12,7 @@ Makefile.in
 depcomp
 compile
 .deps/
+.vscode
 *.tar.gz
 *.tar.xz
 openxcom
