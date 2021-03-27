@@ -372,6 +372,7 @@ armors:
     rearArmor: 16
     underArmor: 12
     drawingRoutine: 6
+    movementType: 2
     damageModifier:
       - 1.0
       - 1.0
@@ -393,6 +394,7 @@ armors:
     rearArmor: 22
     underArmor: 20
     drawingRoutine: 6
+    movementType: 2
     damageModifier:
       - 1.0
       - 1.0
@@ -414,6 +416,7 @@ armors:
     rearArmor: 22
     underArmor: 20
     drawingRoutine: 6
+    movementType: 2
     damageModifier:
       - 1.0
       - 1.0
@@ -611,6 +614,7 @@ armors:
     underArmor: 10
     drawingRoutine: 8
     constantAnimation: true
+    movementType: 2
     damageModifier:
       - 1.0
       - 1.0
