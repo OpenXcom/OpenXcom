@@ -28,8 +28,9 @@ namespace OpenXcom
  * @param lon Longitude of the city.
  * @param lat Latitude of the city.
  */
-City::City(const std::string &name, double lon, double lat): Target(), _name(name)
+City::City(const std::string &name, double lon, double lat) : Target()
 {
+	_name = name;
 	_lon = lon;
 	_lat = lat;
 }
