@@ -122,7 +122,9 @@ UnitDieBState::~UnitDieBState()
 
 void UnitDieBState::init()
 {
-	if (_unit->getTile() == 0)
+	// check for presence of battlestate to ensure that we're not pre-battle
+	// check for the unit's tile to make sure we're not trying to kill a dead guy
+	if (_parent->getSave()->getBattleState() && !_unit->getTile())
 	{
 		_parent->popState();
 	}
