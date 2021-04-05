@@ -545,6 +545,19 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 	}
 
 	_positiveScore = (total > 0);
+
+	std::vector<Soldier*> participants;
+	for (std::vector<BattleUnit*>::const_iterator i = _game->getSavedGame()->getSavedBattle()->getUnits()->begin();
+		i != _game->getSavedGame()->getSavedBattle()->getUnits()->end(); ++i)
+	{
+		if ((*i)->getGeoscapeSoldier())
+		{
+			participants.push_back((*i)->getGeoscapeSoldier());
+		}
+	}
+	_promotions = _game->getSavedGame()->handlePromotions(participants);
+
+	_game->getSavedGame()->setBattleGame(0);
 }
 
 /**
@@ -552,10 +565,6 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
  */
 DebriefingState::~DebriefingState()
 {
-	if (_game->isQuitting())
-	{
-		_game->getSavedGame()->setBattleGame(0);
-	}
 	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 	{
 		delete *i;
@@ -665,16 +674,6 @@ void DebriefingState::btnStatsClick(Action *)
  */
 void DebriefingState::btnOkClick(Action *)
 {
-	std::vector<Soldier*> participants;
-	for (std::vector<BattleUnit*>::const_iterator i = _game->getSavedGame()->getSavedBattle()->getUnits()->begin();
-		i != _game->getSavedGame()->getSavedBattle()->getUnits()->end(); ++i)
-	{
-		if ((*i)->getGeoscapeSoldier())
-		{
-			participants.push_back((*i)->getGeoscapeSoldier());
-		}
-	}
-	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
 	{
@@ -692,7 +691,7 @@ void DebriefingState::btnOkClick(Action *)
 		}
 		if (!_destroyBase)
 		{
-			if (_game->getSavedGame()->handlePromotions(participants))
+			if (_promotions)
 			{
 				_game->pushState(new PromotionsState);
 			}
