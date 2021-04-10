@@ -118,7 +118,7 @@ TransferItemsState::TransferItemsState(Base *baseFrom, Base *baseTo) : _baseFrom
 	_lstItems->onRightArrowPress((ActionHandler)&TransferItemsState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)&TransferItemsState::lstItemsRightArrowRelease);
 	_lstItems->onRightArrowClick((ActionHandler)&TransferItemsState::lstItemsRightArrowClick);
-	_lstItems->onMousePress((ActionHandler)&TransferItemsState::lstItemsMousePress);
+	_lstItems->onMouseWheel((ActionHandler)&TransferItemsState::lstItemsMousePress);
 
 	_distance = getDistance();
 
@@ -518,7 +518,7 @@ void TransferItemsState::lstItemsRightArrowClick(Action *action)
 void TransferItemsState::lstItemsMousePress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	if (action->getDetails()->wheel.y > 0)
 	{
 		_timerInc->stop();
 		_timerDec->stop();
@@ -528,7 +528,7 @@ void TransferItemsState::lstItemsMousePress(Action *action)
 			increaseByValue(Options::changeValueByMouseWheel);
 		}
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	else if (action->getDetails()->wheel.y < 0)
 	{
 		_timerInc->stop();
 		_timerDec->stop();

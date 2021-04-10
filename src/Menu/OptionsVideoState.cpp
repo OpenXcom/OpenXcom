@@ -78,28 +78,38 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_btnRootWindowedMode = new ToggleTextButton(104, 16, 206, 128);
 
 	// Get available fullscreen modes
-	_res = SDL_ListModes(NULL, SDL_FULLSCREEN);
-	if (_res != (SDL_Rect**)-1 && _res != (SDL_Rect**)0)
+	int resAmount = SDL_GetNumDisplayModes(0);
+	if (resAmount > 0)
 	{
-		int i;
-		_resCurrent = -1;
-		for (i = 0; _res[i]; ++i)
+		for (int i = 0; i < resAmount; ++i)
 		{
-			if (_resCurrent == -1 &&
-				((_res[i]->w == Options::displayWidth && _res[i]->h <= Options::displayHeight) || _res[i]->w < Options::displayWidth))
+			SDL_DisplayMode mode = { SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0 };
+			if (SDL_GetDisplayMode(0, i, &mode) == 0)
 			{
-				_resCurrent = i;
+				_res.push_back(mode);
+			}
+			else
+			{
+				Log(LOG_WARNING) << "Couldn't get display resolutions: " << SDL_GetError();
 			}
 		}
-		_resAmount = i;
+
+		_resCurrent = -1;
+		for (size_t i = 0; i < _res.size(); ++i)
+		{
+			if ((_res[i].w == Options::displayWidth && _res[i].h <= Options::displayHeight) || _res[i].w < Options::displayWidth)
+			{
+				_resCurrent = i;
+				break;
+			}
+		}
 	}
 	else
 	{
 		_resCurrent = -1;
-		_resAmount = 0;
 		_btnDisplayResolutionDown->setVisible(false);
 		_btnDisplayResolutionUp->setVisible(false);
-		Log(LOG_WARNING) << "Couldn't get display resolutions";
+		Log(LOG_WARNING) << "Couldn't get display resolutions: " << SDL_GetError();
 	}
 
 	add(_displaySurface);
@@ -174,7 +184,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_btnLetterbox->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
 
 	_btnLockMouse->setText(tr("STR_LOCK_MOUSE"));
-	_btnLockMouse->setPressed(Options::captureMouse == SDL_GRAB_ON);
+	_btnLockMouse->setPressed(Options::captureMouse);
 	_btnLockMouse->onMouseClick((ActionHandler)&OptionsVideoState::btnLockMouseClick);
 	_btnLockMouse->setTooltip("STR_LOCK_MOUSE_DESC");
 	_btnLockMouse->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
@@ -355,11 +365,11 @@ std::string OptionsVideoState::ucWords(std::string str)
  */
 void OptionsVideoState::btnDisplayResolutionUpClick(Action *)
 {
-	if (_resAmount == 0)
+	if (_res.size() == 0)
 		return;
 	if (_resCurrent <= 0)
 	{
-		_resCurrent = _resAmount-1;
+		_resCurrent = _res.size() - 1;
 	}
 	else
 	{
@@ -374,9 +384,9 @@ void OptionsVideoState::btnDisplayResolutionUpClick(Action *)
  */
 void OptionsVideoState::btnDisplayResolutionDownClick(Action *)
 {
-	if (_resAmount == 0)
+	if (_res.size() == 0)
 		return;
-	if (_resCurrent >= _resAmount-1)
+	if (_resCurrent >= _res.size() - 1)
 	{
 		_resCurrent = 0;
 	}
@@ -393,13 +403,13 @@ void OptionsVideoState::btnDisplayResolutionDownClick(Action *)
 void OptionsVideoState::updateDisplayResolution()
 {
 	std::ostringstream ssW, ssH;
-	ssW << (int)_res[_resCurrent]->w;
-	ssH << (int)_res[_resCurrent]->h;
+	ssW << _res[_resCurrent].w;
+	ssH << _res[_resCurrent].h;
 	_txtDisplayWidth->setText(ssW.str());
 	_txtDisplayHeight->setText(ssH.str());
 
-	Options::newDisplayWidth = _res[_resCurrent]->w;
-	Options::newDisplayHeight = _res[_resCurrent]->h;
+	Options::newDisplayWidth = _res[_resCurrent].w;
+	Options::newDisplayHeight = _res[_resCurrent].h;
 }
 
 /**
@@ -414,17 +424,13 @@ void OptionsVideoState::txtDisplayWidthChange(Action *)
 	ss >> std::dec >> width;
 	Options::newDisplayWidth = width;
 	// Update resolution mode
-	if (_res != (SDL_Rect**)-1 && _res != (SDL_Rect**)0)
+	_resCurrent = -1;
+	for (size_t i = 0; i < _res.size(); ++i)
 	{
-		int i;
-		_resCurrent = -1;
-		for (i = 0; _res[i]; ++i)
+		if ((_res[i].w == Options::newDisplayWidth && _res[i].h <= Options::newDisplayHeight) || _res[i].w < Options::newDisplayWidth)
 		{
-			if (_resCurrent == -1 &&
-				((_res[i]->w == Options::newDisplayWidth && _res[i]->h <= Options::newDisplayHeight) || _res[i]->w < Options::newDisplayWidth))
-			{
-				_resCurrent = i;
-			}
+			_resCurrent = i;
+			break;
 		}
 	}
 }
@@ -441,17 +447,13 @@ void OptionsVideoState::txtDisplayHeightChange(Action *)
 	ss >> std::dec >> height;
 	Options::newDisplayHeight = height;
 	// Update resolution mode
-	if (_res != (SDL_Rect**)-1 && _res != (SDL_Rect**)0)
+	_resCurrent = -1;
+	for (size_t i = 0; i < _res.size(); ++i)
 	{
-		int i;
-		_resCurrent = -1;
-		for (i = 0; _res[i]; ++i)
+		if ((_res[i].w == Options::newDisplayWidth && _res[i].h <= Options::newDisplayHeight) || _res[i].w < Options::newDisplayWidth)
 		{
-			if (_resCurrent == -1 &&
-				((_res[i]->w == Options::newDisplayWidth && _res[i]->h <= Options::newDisplayHeight) || _res[i]->w < Options::newDisplayWidth))
-			{
-				_resCurrent = i;
-			}
+			_resCurrent = i;
+			break;
 		}
 	}
 }
@@ -555,8 +557,8 @@ void OptionsVideoState::btnLetterboxClick(Action *)
  */
 void OptionsVideoState::btnLockMouseClick(Action *)
 {
-	Options::captureMouse = (SDL_GrabMode)_btnLockMouse->getPressed();
-	SDL_WM_GrabInput(Options::captureMouse);
+	Options::captureMouse = _btnLockMouse->getPressed();
+	SDL_SetRelativeMouseMode((SDL_bool)Options::captureMouse);
 }
 
 /**
@@ -618,7 +620,7 @@ void OptionsVideoState::handle(Action *action)
 	State::handle(action);
 	if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == SDLK_g && (SDL_GetModState() & KMOD_CTRL) != 0)
 	{
-		_btnLockMouse->setPressed(Options::captureMouse == SDL_GRAB_ON);
+		_btnLockMouse->setPressed(Options::captureMouse);
 	}
 }
 

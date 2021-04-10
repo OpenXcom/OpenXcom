@@ -139,14 +139,18 @@ inline void DeleteAligned(void* buffer)
 Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _tftdMode(false), _alignedBuffer(0)
 {
 	_alignedBuffer = NewAligned(bpp, width, height);
-	_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, GetPitch(bpp, width), 0, 0, 0, 0);
+	if (bpp == 8)
+		_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, GetPitch(bpp, width), 0, 0, 0, 0);
+	else
+		_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, GetPitch(bpp, width), 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
 
 	if (_surface == 0)
 	{
 		throw Exception(SDL_GetError());
 	}
 
-	SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
+	SDL_SetColorKey(_surface, SDL_TRUE, 0);
+	SDL_SetSurfaceBlendMode(_surface, SDL_BLENDMODE_NONE);
 
 	_crop.w = 0;
 	_crop.h = 0;
@@ -173,9 +177,9 @@ Surface::Surface(const Surface& other)
 		int pitch = GetPitch(bpp, width);
 		_alignedBuffer = NewAligned(bpp, width, height);
 		_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, pitch, 0, 0, 0, 0);
-		SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
+		SDL_SetColorKey(_surface, SDL_TRUE, 0);
 		//cant call `setPalette` because its virtual function and it dont work correctly in constructor
-		SDL_SetColors(_surface, other.getPalette(), 0, 255);
+		SDL_SetPaletteColors(_surface->format->palette, other.getPalette(), 0, 255);
 		memcpy(_alignedBuffer, other._alignedBuffer, height*pitch);
 	}
 	else
@@ -327,13 +331,13 @@ void Surface::loadImage(const std::string &filename)
 						for (int c = 0; c < _surface->format->palette->ncolors; ++c)
 						{
 							SDL_Color *palColor = _surface->format->palette->colors + c;
-							if (palColor->unused == 0)
+							if (palColor->a == 0)
 							{
 								transparent = c;
 								break;
 							}
 						}
-						SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, transparent);
+						SDL_SetColorKey(_surface, SDL_TRUE, transparent);
 					}
 				}
 			}
@@ -857,7 +861,7 @@ SDL_Rect *Surface::getCrop()
 void Surface::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	if (_surface->format->BitsPerPixel == 8)
-		SDL_SetColors(_surface, colors, firstcolor, ncolors);
+		SDL_SetPaletteColors(_surface->format->palette, colors, firstcolor, ncolors);
 }
 
 /**
@@ -1051,8 +1055,8 @@ void Surface::resize(int width, int height)
 	}
 
 	// Copy old contents
-	SDL_SetColorKey(surface, SDL_SRCCOLORKEY, 0);
-	SDL_SetColors(surface, getPalette(), 0, 256);
+	SDL_SetColorKey(surface, SDL_TRUE, 0);
+	SDL_SetPaletteColors(surface->format->palette, getPalette(), 0, 256);
 	SDL_BlitSurface(_surface, 0, surface, 0);
 
 	// Delete old surface

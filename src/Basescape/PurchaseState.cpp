@@ -127,7 +127,7 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 	_lstItems->onRightArrowPress((ActionHandler)&PurchaseState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)&PurchaseState::lstItemsRightArrowRelease);
 	_lstItems->onRightArrowClick((ActionHandler)&PurchaseState::lstItemsRightArrowClick);
-	_lstItems->onMousePress((ActionHandler)&PurchaseState::lstItemsMousePress);
+	_lstItems->onMouseWheel((ActionHandler)&PurchaseState::lstItemsMousePress);
 
 	_cats.push_back("STR_ALL_ITEMS");
 
@@ -473,7 +473,7 @@ void PurchaseState::lstItemsRightArrowClick(Action *action)
 void PurchaseState::lstItemsMousePress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	if (action->getDetails()->wheel.y > 0)
 	{
 		_timerInc->stop();
 		_timerDec->stop();
@@ -483,7 +483,7 @@ void PurchaseState::lstItemsMousePress(Action *action)
 			increaseByValue(Options::changeValueByMouseWheel);
 		}
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	else if (action->getDetails()->wheel.y < 0)
 	{
 		_timerInc->stop();
 		_timerDec->stop();

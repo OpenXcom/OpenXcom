@@ -599,18 +599,16 @@ void Text::setScrollable(bool scroll)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void Text::mousePress(Action* action, State* state)
+void Text::mouseWheel(Action* action, State* state)
 {
-	InteractiveSurface::mousePress(action, state);
-	if (_scroll &&
-		(action->getDetails()->button.button == SDL_BUTTON_WHEELUP ||
-		action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN))
+	InteractiveSurface::mouseWheel(action, state);
+	if (_scroll)
 	{
 		int scrollArea = getHeight() - getTextHeight();
 		if (scrollArea < 0)
 		{
 			int scrollAmount = _font->getHeight() + _font->getSpacing();
-			if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+			if (action->getDetails()->wheel.y > 0)
 				scrollAmount = -scrollAmount;
 
 			_scrollY = Clamp(_scrollY + scrollAmount, scrollArea, 0);

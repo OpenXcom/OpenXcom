@@ -58,6 +58,7 @@ namespace OpenXcom
 		// navigation callbacks
 		void think();
 		void btnSectionClick(Action *action);
+		void btnSectionWheel(Action* action);
 		void btnOkClick(Action *action);
 
 		// scrolling logic

@@ -1072,8 +1072,9 @@ void TextList::think()
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void TextList::mousePress(Action *action, State *state)
+void TextList::mouseWheel(Action *action, State *state)
 {
+	InteractiveSurface::mouseWheel(action, state);
 	bool allowScroll = true;
 	if (Options::changeValueByMouseWheel != 0)
 	{
@@ -1081,9 +1082,18 @@ void TextList::mousePress(Action *action, State *state)
 	}
 	if (allowScroll)
 	{
-		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) scrollUp(false, true);
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) scrollDown(false, true);
+		if (action->getDetails()->wheel.y > 0) scrollUp(false, true);
+		else if (action->getDetails()->wheel.y < 0) scrollDown(false, true);
 	}
+}
+
+/**
+ * Ignores any mouse clicks that aren't on a row.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+ */
+void TextList::mousePress(Action* action, State* state)
+{
 	if (_selectable)
 	{
 		if (_selRow < _rows.size())

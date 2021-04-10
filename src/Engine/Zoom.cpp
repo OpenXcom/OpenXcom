@@ -665,7 +665,7 @@ bool Zoom::haveSSE2()
  * @param rightBlackBand Size of right black band in pixels (letterboxing).
  * @param glOut OpenGL output.
  */
-void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand, OpenGL *glOut)
+void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, SDL_Window* window, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand, OpenGL *glOut)
 {
 	int dstWidth = dst->w - leftBlackBand - rightBlackBand;
 	int dstHeight = dst->h - topBlackBand - bottomBlackBand;
@@ -677,7 +677,7 @@ void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, int topBlackBand, in
 			SDL_BlitSurface(src, 0, glOut->buffer_surface->getSurface(), 0); // TODO; this is less than ideal...
 
 			glOut->refresh(glOut->linear, glOut->iwidth, glOut->iheight, dst->w, dst->h, topBlackBand, bottomBlackBand, leftBlackBand, rightBlackBand);
-			SDL_GL_SwapBuffers();
+			SDL_GL_SwapWindow(window);
 		}
 #endif
 	}
@@ -696,7 +696,7 @@ void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, int topBlackBand, in
 		_zoomSurfaceY(src, tmp, 0, 0);
 		if (src->format->palette != NULL)
 		{
-			SDL_SetPalette(tmp, SDL_LOGPAL|SDL_PHYSPAL, src->format->palette->colors, 0, src->format->palette->ncolors);
+			SDL_SetPaletteColors(tmp->format->palette, src->format->palette->colors, 0, src->format->palette->ncolors);
 		}
 		SDL_Rect dstrect = {(Sint16)leftBlackBand, (Sint16)topBlackBand, (Uint16)tmp->w, (Uint16)tmp->h};
 		SDL_BlitSurface(tmp, NULL, dst, &dstrect);
@@ -842,6 +842,9 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 		Log(LOG_INFO) << "Using software scaling routine. For best results, try an OpenGL filter.";
 		proclaimed = true;
 	}
+
+	SDL_BlitScaled(src, NULL, dst, NULL);
+	return 0;
 
 	/*
 	* Allocate memory for row increments

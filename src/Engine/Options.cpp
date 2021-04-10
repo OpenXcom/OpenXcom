@@ -20,7 +20,7 @@
 #include "Options.h"
 #include "../version.h"
 #include <SDL.h>
-#include <SDL_keysym.h>
+#include <SDL_keycode.h>
 #include <SDL_mixer.h>
 #include <stdio.h>
 #include <iostream>

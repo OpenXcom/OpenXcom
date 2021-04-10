@@ -144,7 +144,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Base *base, OptionsOrig
 	_lstAliens->onRightArrowPress((ActionHandler)&ManageAlienContainmentState::lstItemsRightArrowPress);
 	_lstAliens->onRightArrowRelease((ActionHandler)&ManageAlienContainmentState::lstItemsRightArrowRelease);
 	_lstAliens->onRightArrowClick((ActionHandler)&ManageAlienContainmentState::lstItemsRightArrowClick);
-	_lstAliens->onMousePress((ActionHandler)&ManageAlienContainmentState::lstItemsMousePress);
+	_lstAliens->onMouseWheel((ActionHandler)&ManageAlienContainmentState::lstItemsMousePress);
 
 	const std::vector<std::string> &items = _game->getMod()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
@@ -338,7 +338,7 @@ void ManageAlienContainmentState::lstItemsLeftArrowClick(Action *action)
 void ManageAlienContainmentState::lstItemsMousePress(Action *action)
 {
 	_sel = _lstAliens->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	if (action->getDetails()->wheel.y > 0)
 	{
 		_timerInc->stop();
 		_timerDec->stop();
@@ -348,7 +348,7 @@ void ManageAlienContainmentState::lstItemsMousePress(Action *action)
 			increaseByValue(Options::changeValueByMouseWheel);
 		}
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	else if (action->getDetails()->wheel.y < 0)
 	{
 		_timerInc->stop();
 		_timerDec->stop();

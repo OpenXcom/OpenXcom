@@ -38,12 +38,12 @@ class InteractiveSurface : public Surface
 {
 private:
 	static const int NUM_BUTTONS = 7;
-	static const SDLKey SDLK_ANY;
+	static const SDL_Keycode SDLK_ANY;
 	Uint8 _buttonsPressed;
 protected:
 	std::map<Uint8, ActionHandler> _click, _press, _release;
-	ActionHandler _in, _over, _out;
-	std::map<SDLKey, ActionHandler> _keyPress, _keyRelease;
+	ActionHandler _in, _over, _out, _wheel;
+	std::map<SDL_Keycode, ActionHandler> _keyPress, _keyRelease;
 	bool _isHovered, _isFocused, _listButton;
 
 	/// Is this mouse button pressed?
@@ -73,6 +73,8 @@ public:
 	void onMousePress(ActionHandler handler, Uint8 button = 0);
 	/// Hooks an action handler to a mouse release over the surface.
 	void onMouseRelease(ActionHandler handler, Uint8 button = 0);
+	/// Hooks an action handler to a mouse wheel over the surface.
+	void onMouseWheel(ActionHandler handler);
 	/// Hooks an action handler to moving the mouse into the surface.
 	void onMouseIn(ActionHandler handler);
 	/// Hooks an action handler to moving the mouse over the surface.
@@ -80,9 +82,9 @@ public:
 	/// Hooks an action handler to moving the mouse out of the surface.
 	void onMouseOut(ActionHandler handler);
 	/// Hooks an action handler to pressing a key when the surface is focused.
-	void onKeyboardPress(ActionHandler handler, SDLKey key = SDLK_ANY);
+	void onKeyboardPress(ActionHandler handler, SDL_Keycode key = SDLK_ANY);
 	/// Hooks an action handler to releasing a key when the surface is focused.
-	void onKeyboardRelease(ActionHandler handler, SDLKey key = SDLK_ANY);
+	void onKeyboardRelease(ActionHandler handler, SDL_Keycode key = SDLK_ANY);
 	/// Processes a mouse button press event.
 	virtual void mousePress(Action *action, State *state);
 	/// Processes a mouse button release event.
@@ -95,6 +97,8 @@ public:
 	virtual void mouseOver(Action *action, State *state);
 	/// Processes a mouse hover out event.
 	virtual void mouseOut(Action *action, State *state);
+	/// Processes a mouse wheel event.
+	virtual void mouseWheel(Action* action, State* state);
 	/// Processes a keyboard key press event.
 	virtual void keyboardPress(Action *action, State *state);
 	/// Processes a keyboard key release event.

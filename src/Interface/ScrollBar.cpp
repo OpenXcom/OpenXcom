@@ -185,7 +185,7 @@ void ScrollBar::blit(Surface *surface)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void ScrollBar::mousePress(Action *action, State *state)
+void ScrollBar::mousePress(Action* action, State* state)
 {
 	InteractiveSurface::mousePress(action, state);
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
@@ -201,11 +201,16 @@ void ScrollBar::mousePress(Action *action, State *state)
 		}
 		_pressed = true;
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+}
+
+void ScrollBar::mouseWheel(Action* action, State* state)
+{
+	InteractiveSurface::mouseWheel(action, state);
+	if (action->getDetails()->wheel.y > 0)
 	{
 		_list->scrollUp(false, true);
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	else if (action->getDetails()->wheel.y < 0)
 	{
 		_list->scrollDown(false, true);
 	}

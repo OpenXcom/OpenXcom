@@ -37,15 +37,13 @@ class OptionInfo
 private:
 	std::string _id, _desc, _cat;
 	OptionType _type;
-	union { bool *b; int *i; std::string *s; SDLKey *k; } _ref;
-	union { bool b; int i; const char *s; SDLKey k; } _def; // can't put strings in unions
+	union { bool *b; int *i; std::string *s; SDL_Keycode *k; } _ref;
+	union { bool b; int i; const char *s; SDL_Keycode k; } _def; // can't put strings in unions
 public:
 	/// Creates a bool option.
 	OptionInfo(const std::string &id, bool *option, bool def, const std::string &desc = "", const std::string &cat = "");
 	/// Creates a int option.
 	OptionInfo(const std::string &id, int *option, int def, const std::string &desc = "", const std::string &cat = "");
-	/// Creates a key option.
-	OptionInfo(const std::string &id, SDLKey *option, SDLKey def, const std::string &desc = "", const std::string &cat = "");
 	/// Creates a string option.
 	OptionInfo(const std::string &id, std::string *option, const char *def, const std::string &desc = "", const std::string &cat = "");
 	/// Gets a bool option pointer.
@@ -55,7 +53,7 @@ public:
 	/// Gets a string option pointer.
 	std::string *asString() const;
 	/// Gets a key option pointer.
-	SDLKey *asKey() const;
+	SDL_Keycode *asKey() const;
 	/// Loads the option from YAML.
 	void load(const YAML::Node &node) const;
 	/// Loads the option from a map.

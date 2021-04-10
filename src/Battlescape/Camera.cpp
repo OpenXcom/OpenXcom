@@ -66,20 +66,24 @@ void Camera::setScrollTimer(Timer *mouse, Timer *key)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void Camera::mousePress(Action *action, State *)
+void Camera::mousePress(Action* action, State *)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && Options::battleEdgeScroll == SCROLL_TRIGGER)
 	{
 		_scrollTrigger = true;
 		mouseOver(action, 0);
 	}
-	else if (Options::battleDragScrollButton != SDL_BUTTON_MIDDLE || (SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+}
+
+void Camera::mouseWheel(Action *action, State *)
+{
+	if (Options::battleDragScrollButton != SDL_BUTTON_MIDDLE || (SDL_GetMouseState(0,0)&SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 	{
-		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+		if (action->getDetails()->wheel.y > 0)
 		{
 			up();
 		}
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+		else if (action->getDetails()->wheel.y < 0)
 		{
 			down();
 		}

@@ -409,7 +409,7 @@ BattlescapeState::BattlescapeState() : _reserve(0), _firstInit(true), _isMouseSc
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnReloadClick, Options::keyBattleReload);
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnPersonalLightingClick, Options::keyBattlePersonalLighting);
 
-	SDLKey buttons[] = {Options::keyBattleCenterEnemy1,
+	SDL_Keycode buttons[] = {Options::keyBattleCenterEnemy1,
 						Options::keyBattleCenterEnemy2,
 						Options::keyBattleCenterEnemy3,
 						Options::keyBattleCenterEnemy4,
@@ -617,7 +617,7 @@ void BattlescapeState::mapOver(Action *action)
 		{
 			// Set the mouse cursor back
 			SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-			SDL_WarpMouse(_game->getScreen()->getWidth() / 2, _game->getScreen()->getHeight() / 2 - _map->getIconHeight() / 2);
+			SDL_WarpMouseInWindow(_game->getScreen()->getWindow(), _game->getScreen()->getWidth() / 2, _game->getScreen()->getHeight() / 2 - _map->getIconHeight() / 2);
 			SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
 		}
 
@@ -1182,7 +1182,7 @@ void BattlescapeState::btnVisibleUnitClick(Action *action)
 		_map->getCamera()->centerOnPosition(_visibleUnit[btnID]->getPosition());
 	}
 
-	action->getDetails()->type = SDL_NOEVENT; // consume the event
+	action->getDetails()->type = SDL_FIRSTEVENT; // consume the event
 }
 
 /**
@@ -1192,7 +1192,7 @@ void BattlescapeState::btnVisibleUnitClick(Action *action)
 void BattlescapeState::btnLaunchClick(Action *action)
 {
 	_battleGame->launchAction();
-	action->getDetails()->type = SDL_NOEVENT; // consume the event
+	action->getDetails()->type = SDL_FIRSTEVENT; // consume the event
 }
 
 /**
@@ -1202,7 +1202,7 @@ void BattlescapeState::btnLaunchClick(Action *action)
 void BattlescapeState::btnPsiClick(Action *action)
 {
 	_battleGame->psiButtonAction();
-	action->getDetails()->type = SDL_NOEVENT; // consume the event
+	action->getDetails()->type = SDL_FIRSTEVENT; // consume the event
 }
 
 /**
@@ -1685,7 +1685,7 @@ void BattlescapeState::saveAIMap()
 	int w = _save->getMapSizeX();
 	int h = _save->getMapSizeY();
 
-	SDL_Surface *img = SDL_AllocSurface(0, w * 8, h * 8, 24, 0xff, 0xff00, 0xff0000, 0);
+	SDL_Surface *img = SDL_CreateRGBSurface(0, w * 8, h * 8, 24, 0xff, 0xff00, 0xff0000, 0);
 	Log(LOG_INFO) << "unit = " << unit->getId();
 	memset(img->pixels, 0, img->pitch * img->h);
 
@@ -2314,7 +2314,7 @@ void BattlescapeState::stopScrolling(Action *action)
 {
 	if (Options::battleDragScrollInvert)
 	{
-		SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
+		SDL_WarpMouseInWindow(_game->getScreen()->getWindow(), _xBeforeMouseScrolling, _yBeforeMouseScrolling);
 		action->setMouseAction(_xBeforeMouseScrolling, _yBeforeMouseScrolling, _map->getX(), _map->getY());
 		_battleGame->setupCursor();
 		if (_battleGame->getCurrentAction()->actor == 0 && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()))
@@ -2324,7 +2324,7 @@ void BattlescapeState::stopScrolling(Action *action)
 	}
 	else
 	{
-		SDL_WarpMouse(_cursorPosition.x, _cursorPosition.y);
+		SDL_WarpMouseInWindow(_game->getScreen()->getWindow(), _cursorPosition.x, _cursorPosition.y);
 		action->setMouseAction(_cursorPosition.x, _cursorPosition.y, _map->getX(), _map->getY());
 		_map->setSelectorPosition(action->getAbsoluteXMouse(), action->getAbsoluteYMouse());
 	}

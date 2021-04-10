@@ -820,14 +820,14 @@ bool moveFile(const std::string &src, const std::string &dest)
 /**
  * Notifies the user that maybe he should have a look.
  */
-void flashWindow()
+void flashWindow(SDL_Window *window)
 {
 #ifdef _WIN32
 	SDL_SysWMinfo wminfo;
 	SDL_VERSION(&wminfo.version)
-	if (SDL_GetWMInfo(&wminfo))
+	if (SDL_GetWindowWMInfo(window, &wminfo))
 	{
-		HWND hwnd = wminfo.window;
+		HWND hwnd = wminfo.info.win.window;
 		FlashWindow(hwnd, true);
 	}
 #endif
@@ -887,27 +887,27 @@ std::string getDosPath()
  * @param unixPath Path to PNG icon for Unix.
  */
 #ifdef _WIN32
-void setWindowIcon(int winResource, const std::string &)
+void setWindowIcon(SDL_Window *window, int winResource, const std::string &)
 {
 	HINSTANCE handle = GetModuleHandle(NULL);
 	HICON icon = LoadIcon(handle, MAKEINTRESOURCE(winResource));
-
+		
 	SDL_SysWMinfo wminfo;
 	SDL_VERSION(&wminfo.version)
-	if (SDL_GetWMInfo(&wminfo))
+	if (SDL_GetWindowWMInfo(window, &wminfo))
 	{
-		HWND hwnd = wminfo.window;
+		HWND hwnd = wminfo.info.win.window;
 		SetClassLongPtr(hwnd, GCLP_HICON, (LONG_PTR)icon);
 	}
 }
 #else
-void setWindowIcon(int, const std::string &unixPath)
+void setWindowIcon(SDL_Window *window, int, const std::string &unixPath)
 {
 	std::string utf8 = Unicode::convPathToUtf8(unixPath);
 	SDL_Surface *icon = IMG_Load(utf8.c_str());
 	if (icon != 0)
 	{
-		SDL_WM_SetIcon(icon, NULL);
+		SDL_SetWindowIcon(window, icon);
 		SDL_FreeSurface(icon);
 	}
 }

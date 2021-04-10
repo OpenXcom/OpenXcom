@@ -185,6 +185,8 @@ public:
 	void mouseOver(Action *action, State *state);
 	/// Special handling for mouse hovering out.
 	void mouseOut(Action *action, State *state);
+	/// Special handling for mouse wheel.
+	void mouseWheel(Action* action, State* state);
 	/// get the scroll depth
 	size_t getScroll();
 	/// set the scroll depth

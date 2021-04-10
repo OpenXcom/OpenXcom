@@ -195,6 +195,8 @@ public:
 	void mouseRelease(Action *action, State *state);
 	/// Special handling for mouse clicks.
 	void mouseClick(Action *action, State *state);
+	/// Special handling for mouse wheel.
+	void mouseWheel(Action* action, State* state);
 	/// Special handling for key presses.
 	void keyboardPress(Action *action, State *state);
 	/// Get the polygons texture and shade at the given point.

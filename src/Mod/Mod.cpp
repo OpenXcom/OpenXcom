@@ -1070,7 +1070,7 @@ void Mod::loadResourceConfigFile(const std::string &filename)
 					color.r = (*j)[0].as<int>(0);
 					color.g = (*j)[1].as<int>(0);
 					color.b = (*j)[2].as<int>(0);
-					color.unused = (*j)[3].as<int>(2);
+					color.a = (*j)[3].as<int>(2);
 					// technically its breaking change as it always overwritte from offset `start + 0` but no two mods could work correctly before this change.
 					_transparencies[start + curr++] = color;
 				}
@@ -3686,7 +3686,7 @@ void Mod::createTransparencyLUT(Palette *pal)
 			// pseudo interpolation of palette color with tint
 			// for small values `op` its should behave same as original TFTD
 			// but for bigger values it make result closer to tint color
-			const int op = Clamp(opacity * tint->unused, 0, 64);
+			const int op = Clamp(opacity * tint->a, 0, 64);
 			const float co = 1.0f - Sqr(op / 64.0f); // 1.0 -> 0.0
 			const float to = op * 1.0f; // 0.0 -> 64.0
 

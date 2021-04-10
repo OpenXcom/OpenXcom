@@ -159,7 +159,7 @@ void ListLoadOriginalState::btnCancelClick(Action *action)
 {
 	_game->popState();
 	_game->popState();
-	action->getDetails()->type = SDL_NOEVENT;
+	action->getDetails()->type = SDL_FIRSTEVENT;
 }
 
 /**

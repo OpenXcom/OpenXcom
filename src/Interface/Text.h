@@ -105,7 +105,7 @@ public:
 	/// Sets the text's scrollable setting.
 	void setScrollable(bool scroll);
 	/// Special handling for mouse presses.
-	void mousePress(Action* action, State* state);
+	void mouseWheel(Action* action, State* state);
 };
 
 }

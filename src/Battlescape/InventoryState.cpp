@@ -752,10 +752,10 @@ void InventoryState::_refreshMouse()
 	// send a mouse motion event to refresh any hover actions
 	int x, y;
 	SDL_GetMouseState(&x, &y);
-	SDL_WarpMouse(x+1, y);
+	SDL_WarpMouseInWindow(_game->getScreen()->getWindow(), x+1, y);
 
 	// move the mouse back to avoid cursor creep
-	SDL_WarpMouse(x, y);
+	SDL_WarpMouseInWindow(_game->getScreen()->getWindow(), x, y);
 }
 
 void InventoryState::onClearInventory(Action *)

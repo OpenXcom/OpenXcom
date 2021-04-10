@@ -133,7 +133,7 @@ CraftEquipmentState::CraftEquipmentState(Base *base, size_t craft) : _sel(0), _c
 	_lstEquipment->onRightArrowPress((ActionHandler)&CraftEquipmentState::lstEquipmentRightArrowPress);
 	_lstEquipment->onRightArrowRelease((ActionHandler)&CraftEquipmentState::lstEquipmentRightArrowRelease);
 	_lstEquipment->onRightArrowClick((ActionHandler)&CraftEquipmentState::lstEquipmentRightArrowClick);
-	_lstEquipment->onMousePress((ActionHandler)&CraftEquipmentState::lstEquipmentMousePress);
+	_lstEquipment->onMouseWheel((ActionHandler)&CraftEquipmentState::lstEquipmentMousePress);
 
 	int row = 0;
 	const std::vector<std::string> &items = _game->getMod()->getItemsList();
@@ -325,7 +325,7 @@ void CraftEquipmentState::lstEquipmentRightArrowClick(Action *action)
 void CraftEquipmentState::lstEquipmentMousePress(Action *action)
 {
 	_sel = _lstEquipment->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	if (action->getDetails()->wheel.y > 0)
 	{
 		_timerRight->stop();
 		_timerLeft->stop();
@@ -335,7 +335,7 @@ void CraftEquipmentState::lstEquipmentMousePress(Action *action)
 			moveRightByValue(Options::changeValueByMouseWheel);
 		}
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	else if (action->getDetails()->wheel.y < 0)
 	{
 		_timerRight->stop();
 		_timerLeft->stop();

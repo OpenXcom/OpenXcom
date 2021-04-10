@@ -53,7 +53,7 @@ TextEdit::~TextEdit()
 	delete _caret;
 	delete _timer;
 	// In case it was left focused
-	SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
+	//SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
 	_state->setModal(0);
 }
 
@@ -88,7 +88,7 @@ void TextEdit::setFocus(bool focus, bool modal)
 		InteractiveSurface::setFocus(focus);
 		if (_isFocused)
 		{
-			SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+			//SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 			_caretPos = _value.length();
 			_blink = true;
 			_timer->start();
@@ -99,7 +99,7 @@ void TextEdit::setFocus(bool focus, bool modal)
 		{
 			_blink = false;
 			_timer->stop();
-			SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
+			//SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
 			if (_modal)
 				_state->setModal(0);
 		}
@@ -532,7 +532,7 @@ void TextEdit::keyboardPress(Action *action, State *state)
 			}
 			break;
 		default:
-			UCode c = action->getDetails()->key.keysym.unicode;
+			UCode c = 'a';//action->getDetails()->key.keysym.unicode;
 			if (isValidChar(c) && !exceedsMaxWidth(c))
 			{
 				_value.insert(_caretPos, 1, c);

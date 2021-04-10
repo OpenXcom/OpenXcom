@@ -191,7 +191,7 @@ void LoadGameState::think()
 		{
 			error(e.what(), s);
 		}
-		CrossPlatform::flashWindow();
+		CrossPlatform::flashWindow(_game->getScreen()->getWindow());
 	}
 }
 

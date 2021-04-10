@@ -73,9 +73,9 @@ void Palette::loadDat(const std::string &filename, int ncolors, int offset)
 		_colors[i].r = value[0] * 4;
 		_colors[i].g = value[1] * 4;
 		_colors[i].b = value[2] * 4;
-		_colors[i].unused = 255;
+		_colors[i].a = 255;
 	}
-	_colors[0].unused = 0;
+	_colors[0].a = 0;
 
 	palFile.close();
 }
@@ -149,7 +149,7 @@ void Palette::setColors(SDL_Color* pal, int ncolors)
 		_colors[i].r = pal[i].r;
 		_colors[i].g = pal[i].g;
 		_colors[i].b = pal[i].b;
-		_colors[i].unused = 255;
+		_colors[i].a = 255;
 		if (i > 15 && _colors[i].r == _colors[0].r &&
 			_colors[i].g == _colors[0].g &&
 			_colors[i].b == _colors[0].b)
@@ -163,7 +163,7 @@ void Palette::setColors(SDL_Color* pal, int ncolors)
 			_colors[i].b++;
 		}
 	}
-	_colors[0].unused = 0;
+	_colors[0].a = 0;
 }
 
 }

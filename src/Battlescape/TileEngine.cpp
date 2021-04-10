@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "../fmath.h"
 #include <assert.h>
 #include <climits>
 #include <set>
@@ -41,7 +42,6 @@
 #include "../Engine/Options.h"
 #include "ProjectileFlyBState.h"
 #include "MeleeAttackBState.h"
-#include "../fmath.h"
 
 namespace OpenXcom
 {

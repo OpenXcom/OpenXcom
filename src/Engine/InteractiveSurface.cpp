@@ -22,7 +22,7 @@
 namespace OpenXcom
 {
 
-const SDLKey InteractiveSurface::SDLK_ANY = (SDLKey)-1; // using an unused keycode to represent an "any key"
+const SDL_Keycode InteractiveSurface::SDLK_ANY = (SDL_Keycode)-1; // using an unused keycode to represent an "any key"
 
 /**
  * Sets up a blank interactive surface with the specified size and position.
@@ -31,7 +31,7 @@ const SDLKey InteractiveSurface::SDLK_ANY = (SDLKey)-1; // using an unused keyco
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _buttonsPressed(0), _in(0), _over(0), _out(0), _isHovered(false), _isFocused(true), _listButton(false)
+InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _buttonsPressed(0), _in(0), _over(0), _out(0), _wheel(0), _isHovered(false), _isFocused(true), _listButton(false)
 {
 }
 
@@ -110,6 +110,7 @@ void InteractiveSurface::handle(Action *action, State *state)
 
 	action->setSender(this);
 
+	int mouseX, mouseY;
 	if (action->getDetails()->type == SDL_MOUSEBUTTONUP || action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		action->setMouseAction(action->getDetails()->button.x, action->getDetails()->button.y, getX(), getY());
@@ -117,6 +118,11 @@ void InteractiveSurface::handle(Action *action, State *state)
 	else if (action->getDetails()->type == SDL_MOUSEMOTION)
 	{
 		action->setMouseAction(action->getDetails()->motion.x, action->getDetails()->motion.y, getX(), getY());
+	}
+	else if (action->getDetails()->type == SDL_MOUSEWHEEL)
+	{
+		SDL_GetMouseState(&mouseX, &mouseY);
+		action->setMouseAction(mouseX, mouseY, getX(), getY());
 	}
 
 	if (action->isMouseAction())
@@ -131,7 +137,7 @@ void InteractiveSurface::handle(Action *action, State *state)
 			}
 			if (_listButton && action->getDetails()->type == SDL_MOUSEMOTION)
 			{
-				_buttonsPressed = SDL_GetMouseState(0, 0);
+				_buttonsPressed = SDL_GetMouseState(&mouseX, &mouseY);
 				for (Uint8 i = 1; i <= NUM_BUTTONS; ++i)
 				{
 					if (isButtonPressed(i))
@@ -183,6 +189,13 @@ void InteractiveSurface::handle(Action *action, State *state)
 			{
 				mouseClick(action, state);
 			}
+		}
+	}
+	else if (action->getDetails()->type == SDL_MOUSEWHEEL)
+	{
+		if (_isHovered)
+		{
+			mouseWheel(action, state);
 		}
 	}
 
@@ -352,6 +365,21 @@ void InteractiveSurface::mouseOut(Action *action, State *state)
 }
 
 /**
+ * Called every time the mouse wheels over the surface.
+ * Allows the surface to have custom functionality for this action,
+ * and can be called externally to simulate the action.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+ */
+void InteractiveSurface::mouseWheel(Action* action, State* state)
+{
+	if (_wheel != 0)
+	{
+		(state->*_wheel)(action);
+	}
+}
+
+/**
  * Called every time there's a keyboard press when the surface is focused.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
@@ -360,8 +388,8 @@ void InteractiveSurface::mouseOut(Action *action, State *state)
  */
 void InteractiveSurface::keyboardPress(Action *action, State *state)
 {
-	std::map<SDLKey, ActionHandler>::iterator allHandler = _keyPress.find(SDLK_ANY);
-	std::map<SDLKey, ActionHandler>::iterator oneHandler = _keyPress.find(action->getDetails()->key.keysym.sym);
+	std::map<SDL_Keycode, ActionHandler>::iterator allHandler = _keyPress.find(SDLK_ANY);
+	std::map<SDL_Keycode, ActionHandler>::iterator oneHandler = _keyPress.find(action->getDetails()->key.keysym.sym);
 	if (allHandler != _keyPress.end())
 	{
 		ActionHandler handler = allHandler->second;
@@ -385,8 +413,8 @@ void InteractiveSurface::keyboardPress(Action *action, State *state)
  */
 void InteractiveSurface::keyboardRelease(Action *action, State *state)
 {
-	std::map<SDLKey, ActionHandler>::iterator allHandler = _keyRelease.find(SDLK_ANY);
-	std::map<SDLKey, ActionHandler>::iterator oneHandler = _keyRelease.find(action->getDetails()->key.keysym.sym);
+	std::map<SDL_Keycode, ActionHandler>::iterator allHandler = _keyRelease.find(SDLK_ANY);
+	std::map<SDL_Keycode, ActionHandler>::iterator oneHandler = _keyRelease.find(action->getDetails()->key.keysym.sym);
 	if (allHandler != _keyRelease.end())
 	{
 		ActionHandler handler = allHandler->second;
@@ -479,12 +507,23 @@ void InteractiveSurface::onMouseOut(ActionHandler handler)
 	_out = handler;
 }
 
+
+
+/**
+ * Sets a function to be called every time the mouse wheels over the surface.
+ * @param handler Action handler.
+ */
+void InteractiveSurface::onMouseWheel(ActionHandler handler)
+{
+	_wheel = handler;
+}
+
 /**
  * Sets a function to be called every time a key is pressed when the surface is focused.
  * @param handler Action handler.
  * @param key Keyboard button to check for (note: ignores key modifiers). Set to SDLK_ANY for any key.
  */
-void InteractiveSurface::onKeyboardPress(ActionHandler handler, SDLKey key)
+void InteractiveSurface::onKeyboardPress(ActionHandler handler, SDL_Keycode key)
 {
 	if (key == SDLK_UNKNOWN)
 	{
@@ -506,7 +545,7 @@ void InteractiveSurface::onKeyboardPress(ActionHandler handler, SDLKey key)
  * @param handler Action handler.
  * @param key Keyboard button to check for (note: ignores key modifiers). Set to SDLK_ANY for any key.
  */
-void InteractiveSurface::onKeyboardRelease(ActionHandler handler, SDLKey key)
+void InteractiveSurface::onKeyboardRelease(ActionHandler handler, SDL_Keycode key)
 {
 	if (key == SDLK_UNKNOWN)
 	{

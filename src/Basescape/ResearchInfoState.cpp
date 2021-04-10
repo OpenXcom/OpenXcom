@@ -81,7 +81,7 @@ void ResearchInfoState::buildUi()
 	_btnLess = new ArrowButton(ARROW_BIG_DOWN, 13, 14, 195, 120);
 
 	_surfaceScientists = new InteractiveSurface(230, 140, 45, 30);
-	_surfaceScientists->onMouseClick((ActionHandler)&ResearchInfoState::handleWheel, 0);
+	_surfaceScientists->onMouseWheel((ActionHandler)&ResearchInfoState::handleWheel);
 
 	// Set palette
 	setInterface("allocateResearch");
@@ -199,8 +199,8 @@ void ResearchInfoState::setAssignedScientist()
  */
 void ResearchInfoState::handleWheel(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) moreByValue(Options::changeValueByMouseWheel);
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) lessByValue(Options::changeValueByMouseWheel);
+	if (action->getDetails()->wheel.y > 0) moreByValue(Options::changeValueByMouseWheel);
+	else if (action->getDetails()->wheel.y < 0) lessByValue(Options::changeValueByMouseWheel);
 }
 
 /**

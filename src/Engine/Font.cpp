@@ -80,8 +80,7 @@ void Font::loadTerminal()
 	_monospace = true;
 
 	SDL_RWops *rw = SDL_RWFromConstMem(dosFont, DOSFONT_SIZE);
-	SDL_Surface *s = SDL_LoadBMP_RW(rw, 0);
-	SDL_FreeRW(rw);
+	SDL_Surface *s = SDL_LoadBMP_RW(rw, 1);
 	image.surface = new Surface(s->w, s->h);
 	SDL_Color terminal[2] = {{0, 0, 0, 0}, {185, 185, 185, 255}};
 	image.surface->setPalette(terminal, 0, 2);

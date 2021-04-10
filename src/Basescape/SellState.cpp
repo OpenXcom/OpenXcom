@@ -143,7 +143,7 @@ SellState::SellState(Base *base, OptionsOrigin origin) : _base(base), _sel(0), _
 	_lstItems->onRightArrowPress((ActionHandler)&SellState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)&SellState::lstItemsRightArrowRelease);
 	_lstItems->onRightArrowClick((ActionHandler)&SellState::lstItemsRightArrowClick);
-	_lstItems->onMousePress((ActionHandler)&SellState::lstItemsMousePress);
+	_lstItems->onMouseWheel((ActionHandler)&SellState::lstItemsMousePress);
 
 	_cats.push_back("STR_ALL_ITEMS");
 
@@ -541,7 +541,7 @@ void SellState::lstItemsRightArrowClick(Action *action)
 void SellState::lstItemsMousePress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	if (action->getDetails()->wheel.y > 0)
 	{
 		_timerInc->stop();
 		_timerDec->stop();
@@ -551,7 +551,7 @@ void SellState::lstItemsMousePress(Action *action)
 			changeByValue(Options::changeValueByMouseWheel, 1);
 		}
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	else if (action->getDetails()->wheel.y < 0)
 	{
 		_timerInc->stop();
 		_timerDec->stop();
