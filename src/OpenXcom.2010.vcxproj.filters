@@ -940,10 +940,19 @@
     <ClCompile Include="Engine\Unicode.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\ModPortal.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
     <ClCompile Include="Menu\ModListState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\ModPortalState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
     <ClCompile Include="Menu\ModConfirmExtendedState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\ModPortalLoginState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1926,10 +1935,19 @@
     <ClInclude Include="Engine\Unicode.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\ModPortal.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
     <ClInclude Include="Menu\ModListState.h">
       <Filter>Menu</Filter>
     </ClInclude>
+    <ClInclude Include="Menu\ModPortalState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
     <ClInclude Include="Menu\ModConfirmExtendedState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ModPortalLoginState.h">
       <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>

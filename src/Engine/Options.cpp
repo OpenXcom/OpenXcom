@@ -34,6 +34,7 @@
 #include "CrossPlatform.h"
 #include "FileMap.h"
 #include "Screen.h"
+#include "ModPortal.h"
 
 namespace OpenXcom
 {
@@ -594,6 +595,12 @@ void refreshMods()
 	modPath = _userFolder + "mods";
 	Log(LOG_INFO) << "Scanning user mods in '" << modPath << "'...";
 	_scanMods(modPath);
+	Log(LOG_INFO) << "Scanning portal mods...";
+	std::vector<std::string> portalMods = ModPortal::getInstalledMods();
+	for (std::vector<std::string>::const_iterator i = portalMods.begin(); i != portalMods.end(); ++i)
+	{
+		_scanMods(*i, true);
+	}
 
 	// remove mods from list that no longer exist
 	for (std::vector< std::pair<std::string, bool> >::iterator i = mods.begin(); i != mods.end(); )
@@ -704,6 +711,7 @@ void updateMods()
 	// pick up stuff in common before-hand
 	FileMap::load("common", CrossPlatform::searchDataFolder("common"), true);
 
+	ModPortal::init();
 	refreshMods();
 	mapResources();
 	userSplitMasters();

@@ -18,6 +18,8 @@
  */
 #include "ModListState.h"
 #include "ModConfirmExtendedState.h"
+#include "ModPortalState.h"
+#include "ModPortalLoginState.h"
 #include <climits>
 #include <algorithm>
 #include "../Engine/Game.h"
@@ -31,6 +33,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/Action.h"
 #include "StartState.h"
+#include "../Engine/ModPortal.h"
 
 namespace OpenXcom
 {
@@ -49,7 +52,8 @@ ModListState::ModListState() : _curMasterIdx(0)
 	_lstMods = new TextList(288, 104, 8, 40);
 
 	_btnOk = new TextButton(100, 16, 8, 176);
-	_btnCancel = new TextButton(100, 16, 212, 176);
+	_btnCancel = new TextButton(100, 16, 110, 176);
+	_btnPortal = new TextButton(100, 16, 212, 176);
 
 	_txtTooltip = new Text(305, 25, 8, 148);
 
@@ -62,6 +66,7 @@ ModListState::ModListState() : _curMasterIdx(0)
 	add(_lstMods, "optionLists", "modsMenu");
 	add(_btnOk, "button2", "modsMenu");
 	add(_btnCancel, "button2", "modsMenu");
+	add(_btnPortal, "button2", "modsMenu");
 	add(_txtTooltip, "tooltip", "modsMenu");
 
 	add(_cbxMasters, "button1", "modsMenu");
@@ -142,6 +147,13 @@ ModListState::ModListState() : _curMasterIdx(0)
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&ModListState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&ModListState::btnCancelClick, Options::keyCancel);
+
+	_btnPortal->setText("mod.io");
+	_btnPortal->onMouseClick((ActionHandler)&ModListState::btnPortalClick);
+	_btnPortal->onKeyboardPress((ActionHandler)&ModListState::btnPortalClick);
+#ifdef __NO_MODIO
+	_btnPortal->setVisible(false);
+#endif
 
 	_txtTooltip->setWordWrap(true);
 }
@@ -495,6 +507,22 @@ void ModListState::btnCancelClick(Action *)
 	Options::reload = false;
 	Options::load();
 	_game->popState();
+}
+
+/**
+ * Opens the mod.io popup.
+ * @param action Pointer to an action.
+ */
+void ModListState::btnPortalClick(Action *)
+{
+	if (ModPortal::getLoginStatus() == LOGIN_SUCCESS)
+	{
+		_game->pushState(new ModPortalState);
+	}
+	else
+	{
+		_game->pushState(new ModPortalLoginState);
+	}
 }
 
 /**

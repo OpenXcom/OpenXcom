@@ -82,6 +82,8 @@ public:
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Handler for clicking the mod.io button.
+	void btnPortalClick(Action *action);
 };
 
 }

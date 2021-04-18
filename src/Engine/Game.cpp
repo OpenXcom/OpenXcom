@@ -39,6 +39,7 @@
 #include "CrossPlatform.h"
 #include "FileMap.h"
 #include "Unicode.h"
+#include "ModPortal.h"
 #include "../Menu/TestState.h"
 
 namespace OpenXcom
@@ -113,6 +114,8 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _save(0
  */
 Game::~Game()
 {
+	ModPortal::shutdown();
+
 	Sound::stop();
 	Music::stop();
 
@@ -328,6 +331,8 @@ void Game::run()
 				_screen->flip();
 			}
 		}
+
+		ModPortal::process();
 
 		// Save on CPU
 		switch (runningState)

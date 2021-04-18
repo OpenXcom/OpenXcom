@@ -116,6 +116,7 @@ set ( engine_src
   Engine/LanguagePlurality.cpp
   Engine/LocalizedText.cpp
   Engine/ModInfo.cpp
+  Engine/ModPortal.cpp
   Engine/Music.cpp
   Engine/OpenGL.cpp
   Engine/OptionInfo.cpp
@@ -223,6 +224,8 @@ set ( menu_src
   Menu/OptionsGeoscapeState.cpp
   Menu/ModConfirmExtendedState.cpp
   Menu/ModListState.cpp
+  Menu/ModPortalState.cpp
+  Menu/ModPortalLoginState.cpp
   Menu/OptionsNoAudioState.cpp
   Menu/OptionsVideoState.cpp
   Menu/PauseState.cpp
