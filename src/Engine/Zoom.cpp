@@ -634,7 +634,13 @@ bool Zoom::haveSSE2()
 {
 #ifdef __GNUC__
 	unsigned int CPUInfo[4] = {0, 0, 0, 0};
-	__get_cpuid(1, CPUInfo, CPUInfo+1, CPUInfo+2, CPUInfo+3);
+	#if (__i386__ || __x86_64__)
+		__get_cpuid(1, CPUInfo, CPUInfo+1, CPUInfo+2, CPUInfo+3);
+	#elif (__e2k__)
+		#ifdef __SSE2__
+			CPUInfo[3] = 0x04000000;
+		#endif
+	#endif
 #elif _WIN32
 	int CPUInfo[4];
 	__cpuid(CPUInfo, 1);
