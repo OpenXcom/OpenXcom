@@ -101,7 +101,7 @@ public:
 	void mousePress(Action *action, State *state) override;
 	/// Special handling for keyboard presses.
 	void keyboardPress(Action *action, State *state) override;
-	/// Hooks an action handler to when the slider changes.
+	/// Hooks an action handler to when the text changes.
 	void onChange(ActionHandler handler);
 };
 

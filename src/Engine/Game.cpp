@@ -47,7 +47,7 @@ namespace OpenXcom
 const double Game::VOLUME_GRADIENT = 10.0;
 
 /**
- * Starts up SDL with all the subsystems and SDL_mixer for audio processing,
+ * Starts up all the SDL subsystems,
  * creates the display screen and sets up the cursor.
  * @param title Title of the game window.
  */
