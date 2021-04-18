@@ -445,7 +445,7 @@ bool showHelp(int argc, char *argv[])
 
 const std::map<std::string, ModInfo> &getModInfos() { return _modInfos; }
 
-static void _scanMods(const std::string &modsDir)
+static void _scanMods(const std::string &modsDir, bool metadataOnly = false)
 {
 	if (!CrossPlatform::folderExists(modsDir))
 	{
@@ -453,51 +453,70 @@ static void _scanMods(const std::string &modsDir)
 		return;
 	}
 
-	std::vector<std::string> contents = CrossPlatform::getFolderContents(modsDir);
-	for (std::vector<std::string>::iterator i = contents.begin(); i != contents.end(); ++i)
+	const std::string metadataFile = "/metadata.yml";
+	if (metadataOnly && CrossPlatform::fileExists(modsDir + metadataFile))
 	{
-		std::string modPath = modsDir + CrossPlatform::PATH_SEPARATOR + *i;
-		if (!CrossPlatform::folderExists(modPath))
-		{
-			// skip non-directories (e.g. README.txt)
-			continue;
-		}
-
-		Log(LOG_VERBOSE) << "- " << modPath;
-		ModInfo modInfo(modPath);
-
-		std::string metadataPath = modPath + "/metadata.yml";
-		if (!CrossPlatform::fileExists(metadataPath))
-		{
-			Log(LOG_VERBOSE) << metadataPath << " not found; using default values for mod: " << *i;
-		}
-		else
-		{
-			modInfo.load(metadataPath);
-		}
-
-		Log(LOG_VERBOSE) << "  id: " << modInfo.getId();
-		Log(LOG_VERBOSE) << "  name: " << modInfo.getName();
-		Log(LOG_VERBOSE) << "  version: " << modInfo.getVersion();
-		Log(LOG_VERBOSE) << "  description: " << modInfo.getDescription();
-		Log(LOG_VERBOSE) << "  author: " << modInfo.getAuthor();
-		Log(LOG_VERBOSE) << "  master: " << modInfo.getMaster();
-		Log(LOG_VERBOSE) << "  isMaster: " << modInfo.isMaster();
-		Log(LOG_VERBOSE) << "  loadResources:";
-		std::vector<std::string> externals = modInfo.getExternalResourceDirs();
-		for (std::vector<std::string>::iterator j = externals.begin(); j != externals.end(); ++j)
-		{
-			Log(LOG_VERBOSE) << "    " << *j;
-		}
-
-		if (("xcom1" == modInfo.getId() && !_ufoIsInstalled())
-		 || ("xcom2" == modInfo.getId() && !_tftdIsInstalled()))
-		{
-			Log(LOG_VERBOSE) << "skipping " << modInfo.getId() << " since related game data isn't installed";
-			continue;
-		}
-
+		ModInfo modInfo(modsDir);
+		modInfo.load(modsDir + metadataFile);
 		_modInfos.insert(std::pair<std::string, ModInfo>(modInfo.getId(), modInfo));
+	}
+	else
+	{
+		std::vector<std::string> contents = CrossPlatform::getFolderContents(modsDir);
+		for (std::vector<std::string>::iterator i = contents.begin(); i != contents.end(); ++i)
+		{
+			std::string modPath = modsDir + CrossPlatform::PATH_SEPARATOR + *i;
+			if (!CrossPlatform::folderExists(modPath))
+			{
+				// skip non-directories (e.g. README.txt)
+				continue;
+			}
+
+			Log(LOG_VERBOSE) << "- " << modPath;
+			ModInfo modInfo(modPath);
+
+			std::string metadataPath = modPath + metadataFile;
+			if (!CrossPlatform::fileExists(metadataPath))
+			{
+				Log(LOG_VERBOSE) << metadataPath << " not found;";
+				if (metadataOnly)
+				{
+					Log(LOG_VERBOSE) << "skipping invalid mod: " << *i;
+					continue;
+				}
+				else
+				{
+					Log(LOG_VERBOSE) << "using default values for mod: " << *i;
+				}
+			}
+			else
+			{
+				modInfo.load(metadataPath);
+			}
+
+			Log(LOG_VERBOSE) << "  id: " << modInfo.getId();
+			Log(LOG_VERBOSE) << "  name: " << modInfo.getName();
+			Log(LOG_VERBOSE) << "  version: " << modInfo.getVersion();
+			Log(LOG_VERBOSE) << "  description: " << modInfo.getDescription();
+			Log(LOG_VERBOSE) << "  author: " << modInfo.getAuthor();
+			Log(LOG_VERBOSE) << "  master: " << modInfo.getMaster();
+			Log(LOG_VERBOSE) << "  isMaster: " << modInfo.isMaster();
+			Log(LOG_VERBOSE) << "  loadResources:";
+			std::vector<std::string> externals = modInfo.getExternalResourceDirs();
+			for (std::vector<std::string>::iterator j = externals.begin(); j != externals.end(); ++j)
+			{
+				Log(LOG_VERBOSE) << "    " << *j;
+			}
+
+			if (("xcom1" == modInfo.getId() && !_ufoIsInstalled())
+				|| ("xcom2" == modInfo.getId() && !_tftdIsInstalled()))
+			{
+				Log(LOG_VERBOSE) << "skipping " << modInfo.getId() << " since related game data isn't installed";
+				continue;
+			}
+
+			_modInfos.insert(std::pair<std::string, ModInfo>(modInfo.getId(), modInfo));
+		}
 	}
 }
 
