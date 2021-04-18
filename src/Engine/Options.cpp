@@ -330,8 +330,9 @@ static void _setDefaultMods()
 
 /**
  * Resets the options back to their defaults.
+ * @param includeMods Reset mods to default as well.
  */
-void resetDefault()
+void resetDefault(bool includeMods)
 {
 	for (std::vector<OptionInfo>::iterator i = _info.begin(); i != _info.end(); ++i)
 	{
@@ -339,10 +340,13 @@ void resetDefault()
 	}
 	backupDisplay();
 
-	mods.clear();
-	if (!_dataList.empty())
+	if (includeMods)
 	{
-		_setDefaultMods();
+		mods.clear();
+		if (!_dataList.empty())
+		{
+			_setDefaultMods();
+		}
 	}
 }
 
@@ -532,7 +536,7 @@ bool init(int argc, char *argv[])
 	if (showHelp(argc, argv))
 		return false;
 	create();
-	resetDefault();
+	resetDefault(true);
 	loadArgs(argc, argv);
 	setFolders();
 	_setDefaultMods();

@@ -91,15 +91,8 @@ OptionsDefaultsState::~OptionsDefaultsState()
  */
 void OptionsDefaultsState::btnYesClick(Action *action)
 {
-	std::vector< std::pair<std::string, bool> > prevMods(Options::mods);
-	Options::resetDefault();
+	Options::resetDefault(false);
 	_game->loadLanguages();
-
-	if (_origin == OPT_MENU && prevMods != Options::mods)
-	{
-		Options::reload = true;
-	}
-
 	_game->popState();
 	_state->btnOkClick(action);
 }
