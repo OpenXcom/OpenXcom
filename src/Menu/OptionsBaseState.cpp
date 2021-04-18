@@ -39,7 +39,6 @@
 #include "OptionsGeoscapeState.h"
 #include "OptionsBattlescapeState.h"
 #include "OptionsAdvancedState.h"
-#include "OptionsModsState.h"
 #include "OptionsDefaultsState.h"
 #include "OptionsConfirmState.h"
 #include "StartState.h"

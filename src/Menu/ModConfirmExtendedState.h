@@ -18,11 +18,10 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "../Engine/State.h"
-#include "OptionsModsState.h"
 
 namespace OpenXcom
 {
-
+	class ModListState;
 	class TextButton;
 	class Window;
 	class Text;
@@ -31,19 +30,19 @@ namespace OpenXcom
 	 * Confirmation window when enabling
 	 * mods that require OXCE.
 	 */
-	class OptionsInformExtendedState : public State
+	class ModConfirmExtendedState : public State
 	{
 	private:
-		OptionsModsState *_state;
+		ModListState *_state;
 		bool _isMaster;
 		TextButton *_btnYes, *_btnNo;
 		Window *_window;
 		Text *_txtTitle;
 	public:
 		/// Creates the Confirm OXCE state.
-		OptionsInformExtendedState(OptionsModsState *state, bool isMaster);
+		ModConfirmExtendedState(ModListState *state, bool isMaster);
 		/// Cleans up the Confirm OXCE state.
-		~OptionsInformExtendedState();
+		~ModConfirmExtendedState();
 		/// Handler for clicking the Yes button.
 		void btnYesClick(Action *action);
 		/// Handler for clicking the No button.

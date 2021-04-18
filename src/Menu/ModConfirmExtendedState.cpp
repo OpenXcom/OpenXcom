@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "OptionsInformExtendedState.h"
+#include "ModConfirmExtendedState.h"
 #include "../Engine/Game.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
@@ -24,6 +24,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Mod/Mod.h"
+#include "ModListState.h"
 
 namespace OpenXcom
 {
@@ -33,7 +34,7 @@ namespace OpenXcom
 	 * @param state Pointer to the Options|Mod state.
 	 * @param isMaster Are we enabling a standard mod or a master mod?
 	 */
-	OptionsInformExtendedState::OptionsInformExtendedState(OptionsModsState *state, bool isMaster) : _state(state), _isMaster(isMaster)
+	ModConfirmExtendedState::ModConfirmExtendedState(ModListState *state, bool isMaster) : _state(state), _isMaster(isMaster)
 	{
 		_screen = false;
 
@@ -57,10 +58,10 @@ namespace OpenXcom
 		_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
 		_btnYes->setText(tr("STR_YES"));
-		_btnYes->onMouseClick((ActionHandler)&OptionsInformExtendedState::btnYesClick);
+		_btnYes->onMouseClick((ActionHandler)&ModConfirmExtendedState::btnYesClick);
 
 		_btnNo->setText(tr("STR_NO"));
-		_btnNo->onMouseClick((ActionHandler)&OptionsInformExtendedState::btnNoClick);
+		_btnNo->onMouseClick((ActionHandler)&ModConfirmExtendedState::btnNoClick);
 
 		_txtTitle->setAlign(ALIGN_CENTER);
 		_txtTitle->setBig();
@@ -71,7 +72,7 @@ namespace OpenXcom
 	/**
 	 *
 	 */
-	OptionsInformExtendedState::~OptionsInformExtendedState()
+	ModConfirmExtendedState::~ModConfirmExtendedState()
 	{
 
 	}
@@ -80,7 +81,7 @@ namespace OpenXcom
 	 * Closes the window. Enables the mod.
 	 * @param action Pointer to an action.
 	 */
-	void OptionsInformExtendedState::btnYesClick(Action *)
+	void ModConfirmExtendedState::btnYesClick(Action *)
 	{
 		_game->popState();
 
@@ -98,7 +99,7 @@ namespace OpenXcom
 	 * Closes the window. Does not enable the mod.
 	 * @param action Pointer to an action.
 	 */
-	void OptionsInformExtendedState::btnNoClick(Action *)
+	void ModConfirmExtendedState::btnNoClick(Action *)
 	{
 		_game->popState();
 

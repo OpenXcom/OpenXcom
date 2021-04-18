@@ -111,12 +111,34 @@ interfaces: #done
         border: 239
   - type: modsMenu
     elements:
+      - id: palette
+        color: 6
+      - id: window
+        color: 1
       - id: optionLists
         color: 1
         border: 239
       - id: text
         color: 239
-      - id: button
+      - id: tooltip
+        color: 239
+      - id: button1
+        color: 1
+      - id: button2
+        color: 1
+  - type: modsWindow
+    elements:
+      - id: palette
+        color: 6
+      - id: window
+        color: 239
+      - id: heading
+        color: 239
+      - id: text
+        color: 239
+      - id: button1
+        color: 1
+      - id: button2
         color: 1
   - type: saveMenus
     elements:

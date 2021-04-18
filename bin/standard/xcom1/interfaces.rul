@@ -111,13 +111,35 @@ interfaces:
         border: 133  # minty green
   - type: modsMenu
     elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 133   # minty green
       - id: optionLists
         color: 138   # yellow
         border: 133  # minty green
       - id: text
         color: 138   # yellow
-      - id: button
+      - id: tooltip
+        color: 133   # minty green
+      - id: button1
         color: 239   # bright green
+      - id: button2
+        color: 133   # minty green
+  - type: modsWindow
+    elements:
+      - id: palette
+        color: 0     # brown
+      - id: window
+        color: 239   # bright green
+      - id: heading
+        color: 239   # bright green
+      - id: text
+        color: 138   # yellow
+      - id: button1
+        color: 239   # bright green
+      - id: button2
+        color: 133   # minty green
   - type: saveMenus
     elements:
       - id: palette

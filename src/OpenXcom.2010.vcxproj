@@ -409,6 +409,7 @@
     <ClCompile Include="Menu\ListLoadState.cpp" />
     <ClCompile Include="Menu\ListSaveState.cpp" />
     <ClCompile Include="Menu\LoadGameState.cpp" />
+    <ClCompile Include="Menu\ModConfirmExtendedState.cpp" />
     <ClCompile Include="Menu\OptionsAdvancedState.cpp" />
     <ClCompile Include="Menu\DeleteGameState.cpp" />
     <ClCompile Include="Menu\ErrorMessageState.cpp" />
@@ -422,8 +423,7 @@
     <ClCompile Include="Menu\OptionsBaseState.cpp" />
     <ClCompile Include="Menu\OptionsBattlescapeState.cpp" />
     <ClCompile Include="Menu\OptionsControlsState.cpp" />
-    <ClCompile Include="Menu\OptionsInformExtendedState.cpp" />
-    <ClCompile Include="Menu\OptionsModsState.cpp" />
+    <ClCompile Include="Menu\ModListState.cpp" />
     <ClCompile Include="Menu\OptionsNoAudioState.cpp" />
     <ClCompile Include="Menu\OptionsVideoState.cpp" />
     <ClCompile Include="Menu\PauseState.cpp" />
@@ -736,6 +736,7 @@
     <ClInclude Include="Menu\ListLoadState.h" />
     <ClInclude Include="Menu\ListSaveState.h" />
     <ClInclude Include="Menu\LoadGameState.h" />
+    <ClInclude Include="Menu\ModConfirmExtendedState.h" />
     <ClInclude Include="Menu\OptionsAdvancedState.h" />
     <ClInclude Include="Menu\DeleteGameState.h" />
     <ClInclude Include="Menu\ErrorMessageState.h" />
@@ -749,8 +750,7 @@
     <ClInclude Include="Menu\OptionsBaseState.h" />
     <ClInclude Include="Menu\OptionsBattlescapeState.h" />
     <ClInclude Include="Menu\OptionsControlsState.h" />
-    <ClInclude Include="Menu\OptionsInformExtendedState.h" />
-    <ClInclude Include="Menu\OptionsModsState.h" />
+    <ClInclude Include="Menu\ModListState.h" />
     <ClInclude Include="Menu\OptionsNoAudioState.h" />
     <ClInclude Include="Menu\OptionsVideoState.h" />
     <ClInclude Include="Menu\PauseState.h" />

@@ -33,17 +33,16 @@ class TextButton;
 class ComboBox;
 
 /**
- * Options window that displays the
- * available mods.
+ * Mods window to manage the installed mods.
  */
-class OptionsModsState : public State
+class ModListState : public State
 {
 private:
 	Window *_window;
 	Text *_txtMaster;
 	ComboBox *_cbxMasters;
 	TextList *_lstMods;
-	TextButton *_btnOk, *_btnCancel;
+	TextButton *_btnOk, *_btnCancel, *_btnPortal;
 	Text *_txtTooltip;
 	std::string _currentTooltip;
 	std::vector<const ModInfo *> _masters;
@@ -52,9 +51,9 @@ private:
 	size_t _curMasterIdx;
 public:
 	/// Creates the Mods state.
-	OptionsModsState();
+	ModListState();
 	/// Cleans up the Mods state.
-	~OptionsModsState();
+	~ModListState();
 	std::string makeTooltip(const ModInfo &modInfo);
 	void cbxMasterHover(Action *action);
 	void cbxMasterChange(Action *action);
