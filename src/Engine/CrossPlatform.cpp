@@ -40,6 +40,7 @@
 #include <windows.h>
 #include <shlobj.h>
 #include <shlwapi.h>
+#include <shellapi.h>
 #ifndef __NO_DBGHELP
 #include <dbghelp.h>
 #endif
@@ -1176,6 +1177,23 @@ void crashDump(void *ex, const std::string &err)
 	msg << "More details here: " << Logger::logFile() << std::endl;
 	msg << "If this error was unexpected, please report it to the developers.";
 	showError(msg.str());
+}
+
+/**
+ * Opens a file or web path in the system default browser.
+ */
+bool openExplorer(const std::string &url)
+{
+#ifdef _WIN32
+	HINSTANCE ret = ShellExecuteA(NULL, "open", url.c_str(), NULL, NULL, SW_SHOWNORMAL);
+	// The return value is not a true HINSTANCE. If the function succeeds, it returns a value greater than 32.
+	return ((int)ret > 32);
+#elif __APPLE__
+	return false;
+#else
+	std::string cmd = "xdg-open \"" + url + "\"";
+	return (system(cmd.c_str()) == 0);
+#endif
 }
 
 }

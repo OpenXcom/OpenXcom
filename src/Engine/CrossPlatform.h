@@ -99,6 +99,8 @@ namespace CrossPlatform
 	std::string now();
 	/// Produces a crash dump.
 	void crashDump(void *ex, const std::string &err);
+	/// Opens a URL.
+	bool openExplorer(const std::string &url);
 }
 
 }
