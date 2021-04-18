@@ -92,7 +92,7 @@ ListLoadOriginalState::ListLoadOriginalState(OptionsOrigin origin) : _origin(ori
 	_btnNew->onMouseClick((ActionHandler)&ListLoadOriginalState::btnNewClick);
 	_btnNew->onKeyboardPress((ActionHandler)&ListLoadOriginalState::btnNewClick, Options::keyCancel);
 
-	_btnCancel->setText(tr("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&ListLoadOriginalState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&ListLoadOriginalState::btnCancelClick, Options::keyCancel);
 
