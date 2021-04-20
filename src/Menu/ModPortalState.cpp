@@ -43,7 +43,7 @@ ModPortalState::ModPortalState()
 
 	// Create objects
 	_window = new Window(this, 192, 140, 64, 30, POPUP_BOTH);
-	_txtTitle = new Text(192, 16, 64, 38);
+	_logo = new Surface(160, 50, 64, 38);
 	_txtLogin = new Text(100, 9, 80, 62);
 	_txtStatus = new Text(160, 9, 80, 82);
 	_txtInfo = new Text(160, 16, 80, 118);
@@ -58,7 +58,7 @@ ModPortalState::ModPortalState()
 	setInterface("modsWindow");
 
 	add(_window, "window", "modsWindow");
-	add(_txtTitle, "heading", "modsWindow");
+	add(_logo);
 	add(_txtLogin, "text", "modsWindow");
 	add(_txtStatus, "text", "modsWindow");
 	add(_txtInfo, "text", "modsWindow");
@@ -72,9 +72,7 @@ ModPortalState::ModPortalState()
 	// Set up objects
 	_window->setBackground(_game->getMod()->getSurface("BACK01.SCR"));
 
-	_txtTitle->setText("mod.io");
-	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
+	_game->getMod()->getSurface("modio")->blit(_logo);
 
 	_txtInfo->setText("Manage your subscriptions from the mod.io website.");
 	_txtInfo->setWordWrap(true);

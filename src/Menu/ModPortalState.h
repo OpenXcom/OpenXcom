@@ -34,7 +34,8 @@ class ModPortalState : public State
 {
 private:
 	Window *_window;
-	Text *_txtTitle, *_txtLogin, *_txtStatus, *_txtInfo;
+	Surface *_logo;
+	Text *_txtLogin, *_txtStatus, *_txtInfo;
 	TextButton *_btnLogout, *_btnUpdate;
 	TextButton *_btnOk, *_btnWebsite;
 public:

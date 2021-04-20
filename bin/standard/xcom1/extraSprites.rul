@@ -69,3 +69,9 @@ extraSprites:
     subY: 3
     files:
       0: Resources/UI/globe_ufo.png
+  - type: modio
+    width: 160
+    height: 50
+    singleImage: true
+    files:
+      0: Resources/UI/modio.png
