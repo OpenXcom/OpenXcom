@@ -93,7 +93,7 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 	if (_cjk.empty())
 	{
 		_cjk.push_back("ja");
-		//_cjk.push_back("ko");  has spacing between words
+		_cjk.push_back("ko");
 		_cjk.push_back("zh-CN");
 		_cjk.push_back("zh-TW");
 	}
@@ -110,13 +110,20 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 		{
 			_direction = DIRECTION_RTL;
 		}
-		if (std::find(_cjk.begin(), _cjk.end(), id) == _cjk.end())
+		if (Options::wordwrap == WRAP_AUTO)
 		{
-			_wrap = WRAP_WORDS;
+			if (std::find(_cjk.begin(), _cjk.end(), id) == _cjk.end())
+			{
+				_wrap = WRAP_WORDS;
+			}
+			else
+			{
+				_wrap = WRAP_LETTERS;
+			}
 		}
 		else
 		{
-			_wrap = WRAP_LETTERS;
+			_wrap = Options::wordwrap;
 		}
 	}
 }

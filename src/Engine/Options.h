@@ -22,6 +22,7 @@
 #include <vector>
 #include "OptionInfo.h"
 #include "ModInfo.h"
+#include "Language.h"
 
 namespace OpenXcom
 {

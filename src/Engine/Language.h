@@ -26,7 +26,7 @@
 namespace OpenXcom
 {
 enum TextDirection { DIRECTION_LTR, DIRECTION_RTL };
-enum TextWrapping { WRAP_WORDS, WRAP_LETTERS };
+enum TextWrapping { WRAP_AUTO, WRAP_WORDS, WRAP_LETTERS };
 
 class TextList;
 class ExtraStrings;
