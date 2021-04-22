@@ -1,0 +1,12 @@
+{
+    BasedOnStyle: LLVM,
+    Standard: c++03,
+    ColumnLimit: 0,
+    UseTab: Always,
+    IndentWidth: 4,	
+    TabWidth: 4,
+	BreakBeforeBraces: Allman,
+	FixNamespaceComments: false,
+	PointerAlignment: Right,
+#	EmptyLineAfterAccessModifier: Never,
+}
