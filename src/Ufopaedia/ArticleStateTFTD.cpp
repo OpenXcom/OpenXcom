@@ -70,6 +70,7 @@ namespace OpenXcom
 
 		_txtInfo->setColor(Palette::blockOffset(0)+2);
 		_txtInfo->setWordWrap(true);
+		_txtInfo->setScrollable(true);
 		_txtInfo->setText(tr(defs->text));
 
 		// all of the above are common to the TFTD articles.

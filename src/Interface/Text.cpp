@@ -17,13 +17,14 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Text.h"
-#include <cmath>
+#include "../fmath.h"
 #include "../Engine/Font.h"
 #include "../Engine/Options.h"
 #include "../Engine/Language.h"
 #include "../Engine/Unicode.h"
 #include "../Engine/ShaderDraw.h"
 #include "../Engine/ShaderMove.h"
+#include "../Engine/Action.h"
 
 namespace OpenXcom
 {
@@ -35,7 +36,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Text::Text(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _big(0), _small(0), _font(0), _lang(0), _wrap(false), _invert(false), _contrast(false), _indent(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0), _color2(0)
+Text::Text(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _big(0), _small(0), _font(0), _fontOrig(0), _lang(0), _wrap(false), _invert(false), _contrast(false), _indent(false), _scroll(false),_align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0), _color2(0), _scrollY(0)
 {
 }
 
@@ -53,6 +54,7 @@ Text::~Text()
 void Text::setBig()
 {
 	_font = _big;
+	_fontOrig = _big;
 	processText();
 }
 
@@ -62,6 +64,7 @@ void Text::setBig()
 void Text::setSmall()
 {
 	_font = _small;
+	_fontOrig = _small;
 	processText();
 }
 
@@ -88,8 +91,7 @@ void Text::initText(Font *big, Font *small, Language *lang)
 	_big = big;
 	_small = small;
 	_lang = lang;
-	_font = _small;
-	processText();
+	setSmall();
 }
 
 /**
@@ -99,11 +101,16 @@ void Text::initText(Font *big, Font *small, Language *lang)
 void Text::setText(const std::string &text)
 {
 	_text = text;
+	_font = _fontOrig;
 	processText();
 	// If big text won't fit the space, try small text
-	if (_font == _big && (getTextWidth() > getWidth() || getTextHeight() > getHeight()) && _text[_text.size()-1] != '.')
+	if (!_text.empty())
 	{
-		setSmall();
+		if (_font == _big && (getTextWidth() > getWidth() || getTextHeight() > getHeight()) && _text[_text.size() - 1] != '.')
+		{
+			_font = _small;
+			processText();
+		}
 	}
 }
 
@@ -307,6 +314,7 @@ void Text::processText()
 	_processedText = Unicode::convUtf8ToUtf32(_text);
 	_lineWidth.clear();
 	_lineHeight.clear();
+	_scrollY = 0;
 
 	int width = 0, word = 0;
 	size_t space = 0, textIndentation = 0;
@@ -502,22 +510,26 @@ void Text::draw()
 	int color = _color;
 	const UString &s = _processedText;
 
-	for (std::vector<int>::iterator i = _lineHeight.begin(); i != _lineHeight.end(); ++i)
-	{
-		height += *i;
-	}
+	height = getTextHeight();
 
-	switch (_valign)
+	if (_scroll)
 	{
-	case ALIGN_TOP:
-		y = 0;
-		break;
-	case ALIGN_MIDDLE:
-		y = (int)ceil((getHeight() - height) / 2.0);
-		break;
-	case ALIGN_BOTTOM:
-		y = getHeight() - height;
-		break;
+		y = _scrollY;
+	}
+	else
+	{
+		switch (_valign)
+		{
+		case ALIGN_TOP:
+			y = 0;
+			break;
+		case ALIGN_MIDDLE:
+			y = (int)ceil((getHeight() - height) / 2.0);
+			break;
+		case ALIGN_BOTTOM:
+			y = getHeight() - height;
+			break;
+		}
 	}
 
 	x = getLineX(line);
@@ -570,6 +582,39 @@ void Text::draw()
 			ShaderDraw<PaletteShift>(ShaderSurface(this, 0, 0), ShaderCrop(chr), ShaderScalar(color), ShaderScalar(mul), ShaderScalar(mid));
 			if (dir > 0)
 				x += dir * font->getCharSize(*c).w;
+		}
+	}
+}
+
+/**
+ * Allows the text to be scrollable via mouse wheel.
+ */
+void Text::setScrollable(bool scroll)
+{
+	_scroll = scroll;
+}
+
+/**
+ * Handles scrolling.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+ */
+void Text::mousePress(Action* action, State* state)
+{
+	InteractiveSurface::mousePress(action, state);
+	if (_scroll &&
+		(action->getDetails()->button.button == SDL_BUTTON_WHEELUP ||
+		action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN))
+	{
+		int scrollArea = getHeight() - getTextHeight();
+		if (scrollArea < 0)
+		{
+			int scrollAmount = _font->getHeight() + _font->getSpacing();
+			if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+				scrollAmount = -scrollAmount;
+
+			_scrollY = Clamp(_scrollY + scrollAmount, scrollArea, 0);
+			_redraw = true;
 		}
 	}
 }

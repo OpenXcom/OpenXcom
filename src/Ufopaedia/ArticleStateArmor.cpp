@@ -85,6 +85,7 @@ namespace OpenXcom
 
 		_txtInfo->setColor(Palette::blockOffset(14)+15);
 		_txtInfo->setWordWrap(true);
+		_txtInfo->setScrollable(true);
 		_txtInfo->setText(tr(defs->text));
 
 		// Add armor values

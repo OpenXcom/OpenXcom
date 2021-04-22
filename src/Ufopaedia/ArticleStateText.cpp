@@ -59,6 +59,7 @@ namespace OpenXcom
 
 		_txtInfo->setColor(Palette::blockOffset(15)-1);
 		_txtInfo->setWordWrap(true);
+		_txtInfo->setScrollable(true);
 		_txtInfo->setText(tr(defs->text));
 	}
 

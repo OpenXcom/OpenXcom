@@ -111,6 +111,7 @@ namespace OpenXcom
 
 		_txtInfo->setColor(Palette::blockOffset(13)+10);
 		_txtInfo->setWordWrap(true);
+		_txtInfo->setScrollable(true);
 		_txtInfo->setText(tr(defs->text));
 
 		_lstInfo = new TextList(200, 42, 10, 42);

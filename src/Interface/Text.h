@@ -40,15 +40,16 @@ enum TextVAlign { ALIGN_TOP, ALIGN_MIDDLE, ALIGN_BOTTOM };
 class Text : public InteractiveSurface
 {
 private:
-	Font *_big, *_small, *_font;
+	Font *_big, *_small, *_font, *_fontOrig;
 	Language *_lang;
 	std::string _text;
 	UString _processedText;
 	std::vector<int> _lineWidth, _lineHeight;
-	bool _wrap, _invert, _contrast, _indent;
+	bool _wrap, _invert, _contrast, _indent, _scroll;
 	TextHAlign _align;
 	TextVAlign _valign;
 	Uint8 _color, _color2;
+	int _scrollY;
 
 	/// Processes the contained text.
 	void processText();
@@ -101,6 +102,10 @@ public:
 	int getTextHeight(int line = -1) const;
 	/// Draws the text.
 	void draw();
+	/// Sets the text's scrollable setting.
+	void setScrollable(bool scroll);
+	/// Special handling for mouse presses.
+	void mousePress(Action* action, State* state);
 };
 
 }
