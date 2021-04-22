@@ -71,7 +71,7 @@ GeoscapeCraftState::GeoscapeCraftState(Craft *craft, Globe *globe, Waypoint *way
 	_txtW2Name = new Text(130, 9, 32, 100);
 	_txtW2Ammo = new Text(80, 9, 164, 100);
 	_txtRedirect = new Text(230, 17, 13, 108);
-	_txtSoldier = new Text(60, 9, 164, 68);
+	_txtSoldier = new Text(80, 9, 164, 68);
 	_txtHWP = new Text(80, 9, 164, 76);
 
 	// Set palette

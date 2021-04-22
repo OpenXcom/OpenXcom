@@ -117,7 +117,7 @@ PurchaseState::PurchaseState(Base *base) : _base(base), _sel(0), _total(0), _pQt
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 	_lstItems->setArrowColumn(227, ARROW_VERTICAL);
-	_lstItems->setColumns(4, 150, 55, 50, 28);
+	_lstItems->setColumns(4, 150, 55, 50, 32);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
