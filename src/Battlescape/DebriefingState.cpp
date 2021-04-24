@@ -253,6 +253,70 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 	_lstSoldierStats->setAlign(ALIGN_CENTER);
 	_lstSoldierStats->setAlign(ALIGN_LEFT, 0);
 	_lstSoldierStats->setDot(true);
+}
+
+/**
+ *
+ */
+DebriefingState::~DebriefingState()
+{
+	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
+	{
+		delete *i;
+	}
+	for (std::map<int, RecoveryItem*>::iterator i = _recoveryStats.begin(); i != _recoveryStats.end(); ++i)
+	{
+		delete i->second;
+	}
+	_recoveryStats.clear();
+	_rounds.clear();
+}
+
+std::string DebriefingState::makeSoldierString(int stat)
+{
+	if (stat == 0) return "";
+
+	std::ostringstream ss;
+	ss << Unicode::TOK_COLOR_FLIP << '+' << stat << Unicode::TOK_COLOR_FLIP;
+	return ss.str();
+}
+
+void DebriefingState::applyVisibility()
+{
+	// First page (scores)
+	_txtItem->setVisible(!_showSoldierStats);
+	_txtQuantity->setVisible(!_showSoldierStats);
+	_txtScore->setVisible(!_showSoldierStats);
+	_txtRecovery->setVisible(!_showSoldierStats);
+	_txtRating->setVisible(!_showSoldierStats);
+	_lstStats->setVisible(!_showSoldierStats);
+	_lstRecovery->setVisible(!_showSoldierStats);
+	_lstTotal->setVisible(!_showSoldierStats);
+
+	// Second page (soldier stats)
+	_txtSoldier->setVisible(_showSoldierStats);
+	_txtTU->setVisible(_showSoldierStats);
+	_txtStamina->setVisible(_showSoldierStats);
+	_txtHealth->setVisible(_showSoldierStats);
+	_txtBravery->setVisible(_showSoldierStats);
+	_txtReactions->setVisible(_showSoldierStats);
+	_txtFiring->setVisible(_showSoldierStats);
+	_txtThrowing->setVisible(_showSoldierStats);
+	_txtMelee->setVisible(_showSoldierStats);
+	_txtStrength->setVisible(_showSoldierStats);
+	_txtPsiStrength->setVisible(_showSoldierStats);
+	_txtPsiSkill->setVisible(_showSoldierStats);
+	_lstSoldierStats->setVisible(_showSoldierStats);
+	_txtTooltip->setVisible(_showSoldierStats);
+
+	// Set text on toggle button accordingly
+	_btnStats->setText(_showSoldierStats ? tr("STR_SCORE") : tr("STR_STATS"));
+
+}
+
+void DebriefingState::init()
+{
+	State::init();	
 
 	prepareDebriefing();
 
@@ -558,70 +622,7 @@ DebriefingState::DebriefingState() : _region(0), _country(0), _positiveScore(tru
 	_promotions = _game->getSavedGame()->handlePromotions(participants);
 
 	_game->getSavedGame()->setBattleGame(0);
-}
 
-/**
- *
- */
-DebriefingState::~DebriefingState()
-{
-	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
-	{
-		delete *i;
-	}
-	for (std::map<int, RecoveryItem*>::iterator i = _recoveryStats.begin(); i != _recoveryStats.end(); ++i)
-	{
-		delete i->second;
-	}
-	_recoveryStats.clear();
-	_rounds.clear();
-}
-
-std::string DebriefingState::makeSoldierString(int stat)
-{
-	if (stat == 0) return "";
-
-	std::ostringstream ss;
-	ss << Unicode::TOK_COLOR_FLIP << '+' << stat << Unicode::TOK_COLOR_FLIP;
-	return ss.str();
-}
-
-void DebriefingState::applyVisibility()
-{
-	// First page (scores)
-	_txtItem->setVisible(!_showSoldierStats);
-	_txtQuantity->setVisible(!_showSoldierStats);
-	_txtScore->setVisible(!_showSoldierStats);
-	_txtRecovery->setVisible(!_showSoldierStats);
-	_txtRating->setVisible(!_showSoldierStats);
-	_lstStats->setVisible(!_showSoldierStats);
-	_lstRecovery->setVisible(!_showSoldierStats);
-	_lstTotal->setVisible(!_showSoldierStats);
-
-	// Second page (soldier stats)
-	_txtSoldier->setVisible(_showSoldierStats);
-	_txtTU->setVisible(_showSoldierStats);
-	_txtStamina->setVisible(_showSoldierStats);
-	_txtHealth->setVisible(_showSoldierStats);
-	_txtBravery->setVisible(_showSoldierStats);
-	_txtReactions->setVisible(_showSoldierStats);
-	_txtFiring->setVisible(_showSoldierStats);
-	_txtThrowing->setVisible(_showSoldierStats);
-	_txtMelee->setVisible(_showSoldierStats);
-	_txtStrength->setVisible(_showSoldierStats);
-	_txtPsiStrength->setVisible(_showSoldierStats);
-	_txtPsiSkill->setVisible(_showSoldierStats);
-	_lstSoldierStats->setVisible(_showSoldierStats);
-	_txtTooltip->setVisible(_showSoldierStats);
-
-	// Set text on toggle button accordingly
-	_btnStats->setText(_showSoldierStats ? tr("STR_SCORE") : tr("STR_STATS"));
-
-}
-
-void DebriefingState::init()
-{
-	State::init();
 	if (_positiveScore)
 	{
 		_game->getMod()->playMusic(Mod::DEBRIEF_MUSIC_GOOD);

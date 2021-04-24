@@ -104,6 +104,7 @@ public:
 	~DebriefingState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	/// Prepare debriefing.
 	void init();
 	/// Handler for clicking the STATS button.
 	void btnStatsClick(Action *action);
