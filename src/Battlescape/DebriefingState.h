@@ -77,7 +77,7 @@ private:
 	std::vector<ReequipStat> _missingItems;
 	std::map<RuleItem*, int> _rounds;
 	std::map<int, RecoveryItem*> _recoveryStats;
-	bool _positiveScore, _noContainment, _manageContainment, _destroyBase, _promotions;
+	bool _positiveScore, _noContainment, _manageContainment, _destroyBase, _promotions, _initDone;
 	int _limitsEnforced;
 	MissionStatistics *_missionStatistics;
     std::vector<Soldier*> _soldiersCommended, _deadSoldiersCommended;
