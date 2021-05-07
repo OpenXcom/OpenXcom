@@ -2,7 +2,7 @@
 	BasedOnStyle: LLVM,
 	Standard: c++03,
 	ColumnLimit: 0,
-	UseTab: Always,
+	UseTab: ForContinuationAndIndentation,
 	IndentWidth: 4,	
 	TabWidth: 4,
 	BreakBeforeBraces: Allman,
