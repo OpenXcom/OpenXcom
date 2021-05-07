@@ -119,6 +119,8 @@ public:
 	void selectMeleeOrRanged();
 	/// Gets the current targetted unit.
 	BattleUnit* getTarget();
+	/// Frees up the destination node for another Unit to select
+	void freePatrolTarget();
 };
 
 }

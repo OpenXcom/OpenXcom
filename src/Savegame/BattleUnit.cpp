@@ -3302,4 +3302,11 @@ bool BattleUnit::getCapturable() const
 	return _capturable;
 }
 
+void BattleUnit::freePatrolTarget()
+{
+	if (_currentAIState)
+	{
+		_currentAIState->freePatrolTarget();
+	}
+}
 }

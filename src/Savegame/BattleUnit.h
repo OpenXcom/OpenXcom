@@ -503,6 +503,8 @@ public:
 	void resetHitState();
 	/// Gets whether this unit can be captured alive (applies to aliens).
 	bool getCapturable() const;
+	/// free up the patrol node target, to allow others to use it.
+	void freePatrolTarget();
 };
 
 }

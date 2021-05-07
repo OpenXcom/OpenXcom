@@ -425,7 +425,7 @@ void AIModule::setupPatrol()
 		// destination reached
 		// head off to next patrol node
 		_fromNode = _toNode;
-		_toNode->freeNode();
+		freePatrolTarget();
 		_toNode = 0;
 		// take a peek through window before walking to the next node
 		int dir = _save->getTileEngine()->faceWindow(_unit->getPosition());
@@ -2147,6 +2147,14 @@ bool AIModule::getNodeOfBestEfficacy(BattleAction *action)
 BattleUnit* AIModule::getTarget()
 {
 	return _aggroTarget;
+}
+
+void AIModule::freePatrolTarget()
+{
+	if (_toNode)
+	{
+		_toNode->freeNode();
+	}
 }
 
 }
