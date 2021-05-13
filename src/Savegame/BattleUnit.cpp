@@ -1412,7 +1412,7 @@ bool BattleUnit::spendEnergy(int tu)
  */
 void BattleUnit::setTimeUnits(int tu)
 {
-	_tu = tu;
+	_tu = std::max(0, tu);
 }
 
 /**
@@ -3146,9 +3146,7 @@ void BattleUnit::recoverTimeUnits()
 		}
 		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
 		ENRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10))/100;
-		_energy += ENRecovery;
-		if (_energy > getBaseStats()->stamina)
-			_energy = getBaseStats()->stamina;
+		_energy = std::max(0, std::min(getBaseStats()->stamina, _energy + ENRecovery));
 	}
 }
 
