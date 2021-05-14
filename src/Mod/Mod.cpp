@@ -723,7 +723,7 @@ void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Nod
 	if (offset < -1)
 	{
 		std::ostringstream err;
-		err << "Error for '" << parent << "': offset '" << offset << "' has incorrect value in set '" << set << "'";
+		err << "Error for '" << parent << "': offset '" << offset << "' has incorrect value in set '" << set << "' at line " << node.Mark().line;
 		throw Exception(err.str());
 	}
 	else if (offset == -1)
