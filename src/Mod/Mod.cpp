@@ -133,6 +133,9 @@ const std::string ModNameMaster = "master";
 /// Predefined name for current mod that is loading rulesets.
 const std::string ModNameCurrent = "current";
 
+/// Reduction of size allocated for transparcey LUTs.
+const size_t ModTransparceySizeReduction = 100;
+
 void Mod::resetGlobalStatics()
 {
 	DOOR_OPEN = 3;
@@ -673,8 +676,9 @@ int Mod::getModOffset() const
  * @param node Node with data
  * @param shared Max offset limit that is shared for every mod
  * @param multiplier Value used by `projectile` surface set to convert projectile offset to index offset in surface.
+ * @param sizeScale Value used by transparency colors, reduce total number of avaialbe space for offset.
  */
-void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Node &node, int shared, const std::string &set, size_t multiplier) const
+void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Node &node, int shared, const std::string &set, size_t multiplier, size_t sizeScale) const
 {
 	assert(_modCurrent);
 	const ModData* curr = _modCurrent;
@@ -734,14 +738,14 @@ void Mod::loadOffsetNode(const std::string &parent, int& offset, const YAML::Nod
 	{
 		int f = offset;
 		f *= multiplier;
-		if ((size_t)f > curr->size)
+		if ((size_t)f > curr->size / sizeScale)
 		{
 			std::ostringstream err;
-			err << "Error for '" << parent << "': offset '" << offset << "' exceeds mod size limit " << (curr->size / multiplier) << " in set '" << set << "'";
+			err << "Error for '" << parent << "': offset '" << offset << "' exceeds mod size limit " << (curr->size / multiplier / sizeScale) << " in set '" << set << "'";
 			throw Exception(err.str());
 		}
 		if (f >= shared)
-			f += curr->offset;
+			f += curr->offset / sizeScale;
 		offset = f;
 	}
 }
@@ -776,6 +780,20 @@ void Mod::loadSoundOffset(const std::string &parent, int& sound, const YAML::Nod
 	if (node)
 	{
 		loadOffsetNode(parent, sound, node, getSoundSet(set)->getMaxSharedSounds(), set, 1);
+	}
+}
+
+/**
+ * Gets the mod offset array for a certain transparency index.
+ * @param parent Name of parent node, used for better error message.
+ * @param index Member to load new transparency index.
+ * @param node Node with data.
+ */
+void Mod::loadTransparencyOffset(const std::string &parent, int& index, const YAML::Node &node) const
+{
+	if (node)
+	{
+		loadOffsetNode(parent, index, node, 0, "TransparencyLUTs", 1, ModTransparceySizeReduction);
 	}
 }
 
@@ -1029,16 +1047,38 @@ void Mod::loadResourceConfigFile(const std::string &filename)
 			rule->load(*i);
 		}
 	}
-	for (YAML::const_iterator i = doc["transparencyLUTs"].begin(); i != doc["transparencyLUTs"].end(); ++i)
+
+	if (const YAML::Node& luts = doc["transparencyLUTs"])
 	{
-		for (YAML::const_iterator j = (*i)["colors"].begin(); j != (*i)["colors"].end(); ++j)
+		const size_t start = _modCurrent->offset / ModTransparceySizeReduction;
+		const size_t limit =  _modCurrent->size / ModTransparceySizeReduction;
+		size_t curr = 0;
+
+		_transparencies.resize(start + limit);
+		for (YAML::const_iterator i = luts.begin(); i != luts.end(); ++i)
 		{
-			SDL_Color color;
-			color.r = (*j)[0].as<int>(0);
-			color.g = (*j)[1].as<int>(0);
-			color.b = (*j)[2].as<int>(0);
-			color.unused = (*j)[3].as<int>(2);;
-			_transparencies.push_back(color);
+			const YAML::Node& c = (*i)["colors"];
+			if (c.IsSequence())
+			{
+				for (YAML::const_iterator j = c.begin(); j != c.end(); ++j)
+				{
+					if (curr == limit)
+					{
+						throw Exception("transparencyLUTs mod limit reach");
+					}
+					SDL_Color color;
+					color.r = (*j)[0].as<int>(0);
+					color.g = (*j)[1].as<int>(0);
+					color.b = (*j)[2].as<int>(0);
+					color.unused = (*j)[3].as<int>(2);
+					// technically its breaking change as it always overwritte from offset `start + 0` but no two mods could work correctly before this change.
+					_transparencies[start + curr++] = color;
+				}
+			}
+			else
+			{
+				throw Exception("unknown transparencyLUTs node type");
+			}
 		}
 	}
 }
