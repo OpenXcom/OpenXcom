@@ -3634,38 +3634,49 @@ Music *Mod::loadMusic(MusicFormat fmt, const std::string &file, int track, float
  */
 void Mod::createTransparencyLUT(Palette *pal)
 {
-	SDL_Color desiredColor;
+	const int opacityMax = 4;
+	const SDL_Color* palColors = pal->getColors(0);
 	std::vector<Uint8> lookUpTable;
 	// start with the color sets
+	lookUpTable.reserve(_transparencies.size() * 256 * opacityMax);
 	for (std::vector<SDL_Color>::const_iterator tint = _transparencies.begin(); tint != _transparencies.end(); ++tint)
 	{
 		// then the opacity levels, using the alpha channel as the step
-		for (int opacity = 1; opacity < 1 + tint->unused * 4; opacity += tint->unused)
+		for (int opacity = 1; opacity <= opacityMax; ++opacity)
 		{
+			// pseudo interpolation of palette color with tint
+			// for small values `op` its should behave same as original TFTD
+			// but for bigger values it make result closer to tint color
+			const int op = Clamp(opacity * tint->unused, 0, 64);
+			const float co = 1.0f - Sqr(op / 64.0f); // 1.0 -> 0.0
+			const float to = op * 1.0f; // 0.0 -> 64.0
+
 			// then the palette itself
 			for (int currentColor = 0; currentColor < 256; ++currentColor)
 			{
-				// add the RGB values from the ruleset to those of the colors contained in the palette
-				// in order to determine the desired color
-				// yes all this casting and clamping is required, we're dealing with Uint8s here, and there's
-				// a lot of potential for values to wrap around, which would be very bad indeed.
-				desiredColor.r = std::min(255, (int)(pal->getColors(currentColor)->r) + (tint->r * opacity));
-				desiredColor.g = std::min(255, (int)(pal->getColors(currentColor)->g) + (tint->g * opacity));
-				desiredColor.b = std::min(255, (int)(pal->getColors(currentColor)->b) + (tint->b * opacity));
+				SDL_Color desiredColor;
 
-				Uint8 closest = 0;
+				desiredColor.r = std::min(255, (int)Round((palColors[currentColor].r * co) + (tint->r * to)));
+				desiredColor.g = std::min(255, (int)Round((palColors[currentColor].g * co) + (tint->g * to)));
+				desiredColor.b = std::min(255, (int)Round((palColors[currentColor].b * co) + (tint->b * to)));
+
+				Uint8 closest = currentColor;
 				int lowestDifference = INT_MAX;
-				// now compare each color in the palette to find the closest match to our desired one
-				for (int comparator = 1; comparator < 256; ++comparator)
+				// if opacity is zero then we stay with current color, transparet color will stay same too
+				if (op != 0 && currentColor != 0)
 				{
-					int currentDifference = Sqr(desiredColor.r - pal->getColors(comparator)->r) +
-						Sqr(desiredColor.g - pal->getColors(comparator)->g) +
-						Sqr(desiredColor.b - pal->getColors(comparator)->b);
-
-					if (currentDifference < lowestDifference)
+					// now compare each color in the palette to find the closest match to our desired one
+					for (int comparator = 1; comparator < 256; ++comparator)
 					{
-						closest = comparator;
-						lowestDifference = currentDifference;
+						int currentDifference = Sqr(desiredColor.r - palColors[comparator].r) +
+							Sqr(desiredColor.g - palColors[comparator].g) +
+							Sqr(desiredColor.b - palColors[comparator].b);
+
+						if (currentDifference < lowestDifference)
+						{
+							closest = comparator;
+							lowestDifference = currentDifference;
+						}
 					}
 				}
 				lookUpTable.push_back(closest);
