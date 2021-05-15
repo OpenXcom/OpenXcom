@@ -3656,7 +3656,7 @@ void Mod::createTransparencyLUT(Palette *pal)
 				Uint8 closest = 0;
 				int lowestDifference = INT_MAX;
 				// now compare each color in the palette to find the closest match to our desired one
-				for (int comparator = 0; comparator < 256; ++comparator)
+				for (int comparator = 1; comparator < 256; ++comparator)
 				{
 					int currentDifference = Sqr(desiredColor.r - pal->getColors(comparator)->r) +
 						Sqr(desiredColor.g - pal->getColors(comparator)->g) +
