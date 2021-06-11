@@ -556,9 +556,6 @@ void Game::loadLanguages()
 	const std::string defaultLang = "en-US";
 	std::string currentLang = defaultLang;
 
-	delete _lang;
-	_lang = new Language();
-
 	std::ostringstream ss;
 	ss << "common/Language/" << defaultLang << ".yml";
 	std::string defaultPath = CrossPlatform::searchDataFile(ss.str());
@@ -605,6 +602,9 @@ void Game::loadLanguages()
 		}
 	}
 	Options::language = currentLang;
+
+	delete _lang;
+	_lang = new Language();
 
 	// Load default and current language
 	std::ostringstream ssDefault, ssCurrent;

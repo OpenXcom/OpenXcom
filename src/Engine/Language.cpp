@@ -99,32 +99,29 @@ Language::Language() : _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
 	}
 
 	std::string id = Options::language;
-	if (!id.empty())
+	_handler = LanguagePlurality::create(id);
+	if (std::find(_rtl.begin(), _rtl.end(), id) == _rtl.end())
 	{
-		_handler = LanguagePlurality::create(id);
-		if (std::find(_rtl.begin(), _rtl.end(), id) == _rtl.end())
+		_direction = DIRECTION_LTR;
+	}
+	else
+	{
+		_direction = DIRECTION_RTL;
+	}
+	if (Options::wordwrap == WRAP_AUTO)
+	{
+		if (std::find(_cjk.begin(), _cjk.end(), id) == _cjk.end())
 		{
-			_direction = DIRECTION_LTR;
+			_wrap = WRAP_WORDS;
 		}
 		else
 		{
-			_direction = DIRECTION_RTL;
+			_wrap = WRAP_LETTERS;
 		}
-		if (Options::wordwrap == WRAP_AUTO)
-		{
-			if (std::find(_cjk.begin(), _cjk.end(), id) == _cjk.end())
-			{
-				_wrap = WRAP_WORDS;
-			}
-			else
-			{
-				_wrap = WRAP_LETTERS;
-			}
-		}
-		else
-		{
-			_wrap = Options::wordwrap;
-		}
+	}
+	else
+	{
+		_wrap = Options::wordwrap;
 	}
 }
 
