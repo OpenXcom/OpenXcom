@@ -194,7 +194,11 @@ void Country::newMonth(int xcomTotal, int alienTotal, int pactScore)
 			if (newFunding)
 			{
 				newFunding = -newFunding;
-				_satisfaction = 1;
+				// don't go below zero
+				if (funding + newFunding < 0)
+					newFunding = 0 - funding;
+				if (newFunding)
+					_satisfaction = 1;
 			}
 		}
 	}
