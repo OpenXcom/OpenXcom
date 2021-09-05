@@ -1735,7 +1735,7 @@ void DebriefingState::recoverAlien(BattleUnit *from, Base *base)
 		// reason: zombies don't create unconscious bodies... ever.
 		// the only way we can get into this situation is if psi-capture is enabled.
 		// we can use that knowledge to our advantage to save having to make it unconscious and spawn a body item for it.
-		BattleUnit *newUnit = _game->getSavedGame()->getSavedBattle()->getBattleGame()->convertUnit(from);
+		BattleUnit *newUnit = _game->getSavedGame()->getSavedBattle()->convertUnit(from, _game->getSavedGame(), _game->getMod());
 		newUnit->convertToFaction(FACTION_PLAYER);
 		// don't process the zombie itself, our new unit just got added to the end of the vector we're iterating, and will be handled later.
 		return;

@@ -2790,6 +2790,60 @@ Tile *TileEngine::applyGravity(Tile *t)
 }
 
 /**
+ * Drops an item to the floor and affects it with gravity.
+ * @param position Position to spawn the item.
+ * @param item Pointer to the item.
+ * @param newItem Bool whether this is a new item.
+ * @param removeItem Bool whether to remove the item from the owner.
+ */
+void TileEngine::itemDrop(Tile *t, BattleItem *item, const Mod* mod, bool newItem, bool removeItem)
+{
+	// don't spawn anything outside of bounds
+	if (t == 0)
+		return;
+
+	const Position& p = t->getPosition();
+
+
+	// don't ever drop fixed items
+	if (item->getRules()->isFixed())
+		return;
+
+	t->addItem(item, mod->getInventory("STR_GROUND", true));
+
+	if (item->getUnit())
+	{
+		item->getUnit()->setPosition(p);
+	}
+
+	if (newItem)
+	{
+		_save->getItems()->push_back(item);
+	}
+	else if (_save->getSide() != FACTION_PLAYER)
+	{
+		item->setTurnFlag(true);
+	}
+
+	if (removeItem)
+	{
+		item->moveToOwner(0);
+	}
+	else if (item->getRules()->getBattleType() != BT_GRENADE && item->getRules()->getBattleType() != BT_PROXIMITYGRENADE)
+	{
+		item->setOwner(0);
+	}
+
+	applyGravity(_save->getTile(p));
+
+	if (item->getRules()->getBattleType() == BT_FLARE)
+	{
+		calculateTerrainLighting();
+		calculateFOV(p);
+	}
+}
+
+/**
  * Validates the melee range between two units.
  * @param attacker The attacking unit.
  * @param target The unit we want to attack.

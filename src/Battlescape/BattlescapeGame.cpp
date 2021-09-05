@@ -1672,49 +1672,7 @@ void BattlescapeGame::setTUReserved(BattleActionType tur)
  */
 void BattlescapeGame::dropItem(Position position, BattleItem *item, bool newItem, bool removeItem)
 {
-	const Position& p = position;
-
-	// don't spawn anything outside of bounds
-	if (_save->getTile(p) == 0)
-		return;
-
-	// don't ever drop fixed items
-	if (item->getRules()->isFixed())
-		return;
-
-	_save->getTile(p)->addItem(item, getMod()->getInventory("STR_GROUND", true));
-
-	if (item->getUnit())
-	{
-		item->getUnit()->setPosition(p);
-	}
-
-	if (newItem)
-	{
-		_save->getItems()->push_back(item);
-	}
-	else if (_save->getSide() != FACTION_PLAYER)
-	{
-		item->setTurnFlag(true);
-	}
-
-	if (removeItem)
-	{
-		item->moveToOwner(0);
-	}
-	else if (item->getRules()->getBattleType() != BT_GRENADE && item->getRules()->getBattleType() != BT_PROXIMITYGRENADE)
-	{
-		item->setOwner(0);
-	}
-
-	getTileEngine()->applyGravity(_save->getTile(p));
-
-	if (item->getRules()->getBattleType() == BT_FLARE)
-	{
-		getTileEngine()->calculateTerrainLighting();
-		getTileEngine()->calculateFOV(position);
-	}
-
+	getTileEngine()->itemDrop(_save->getTile(position), item, getMod(), newItem, removeItem);
 }
 
 /**
@@ -1724,58 +1682,8 @@ void BattlescapeGame::dropItem(Position position, BattleItem *item, bool newItem
  */
 BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit)
 {
-	const std::string newType = unit->getSpawnUnit();
-	bool visible = unit->getVisible();
 	getSave()->getBattleState()->showPsiButton(false);
-	// in case the unit was unconscious
-	getSave()->removeUnconsciousBodyItem(unit);
-
-	unit->instaKill();
-
-	for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
-	{
-		dropItem(unit->getPosition(), (*i));
-		(*i)->setOwner(0);
-	}
-
-	unit->getInventory()->clear();
-
-	// remove unit-tile link
-	unit->setTile(0);
-
-	getSave()->getTile(unit->getPosition())->setUnit(0);
-	Unit *newRule = getMod()->getUnit(newType, true);
-	std::string newArmor = newRule->getArmor();
-	std::string terroristWeapon = newRule->getRace().substr(4);
-	terroristWeapon += "_WEAPON";
-	RuleItem *newItem = getMod()->getItem(terroristWeapon);
-
-	BattleUnit *newUnit = new BattleUnit(newRule,
-		FACTION_HOSTILE,
-		_save->getUnits()->back()->getId() + 1,
-		getMod()->getArmor(newArmor, true),
-		getMod()->getStatAdjustment(_parentState->getGame()->getSavedGame()->getDifficulty()),
-		getDepth());
-
-	getSave()->getTile(unit->getPosition())->setUnit(newUnit, _save->getTile(unit->getPosition() + Position(0,0,-1)));
-	newUnit->setPosition(unit->getPosition());
-	newUnit->setDirection(unit->getDirection());
-	newUnit->setCache(0);
-	newUnit->setTimeUnits(0);
-	newUnit->setSpecialWeapon(getSave(), getMod());
-	getSave()->getUnits()->push_back(newUnit);
-	newUnit->setAIModule(new AIModule(getSave(), newUnit, 0));
-	if (newItem)
-	{
-		BattleItem *bi = new BattleItem(newItem, getSave()->getCurrentItemId());
-		bi->moveToOwner(newUnit);
-		bi->setSlot(getMod()->getInventory("STR_RIGHT_HAND", true));
-		getSave()->getItems()->push_back(bi);
-	}
-	newUnit->setVisible(visible);
-	getTileEngine()->calculateFOV(newUnit->getPosition());
-	getTileEngine()->applyGravity(newUnit->getTile());
-	newUnit->dontReselect();
+	BattleUnit* newUnit = getSave()->convertUnit(unit, _parentState->getGame()->getSavedGame(), getMod());
 	getMap()->cacheUnit(newUnit);
 	return newUnit;
 

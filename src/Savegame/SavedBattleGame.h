@@ -181,6 +181,10 @@ public:
 	void resetUnitTiles();
 	/// Removes an item from the game.
 	void removeItem(BattleItem *item);
+
+	/// Converts a unit into a unit of another type.
+	BattleUnit *convertUnit(BattleUnit *unit, const SavedGame* saveGame, Mod* mod);
+
 	/// Sets whether the mission was aborted.
 	void setAborted(bool flag);
 	/// Checks if the mission was aborted.

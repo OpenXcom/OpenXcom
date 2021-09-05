@@ -102,6 +102,10 @@ public:
 	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type, bool skipObject = false);
 	/// Applies gravity to anything that occupy this tile.
 	Tile *applyGravity(Tile *t);
+
+	/// Drop item on ground.
+	void itemDrop(Tile *t, BattleItem *item, const Mod* mod, bool newItem = false, bool removeItem = false);
+
 	/// Returns melee validity between two units.
 	bool validMeleeRange(BattleUnit *attacker, BattleUnit *target, int dir);
 	/// Returns validity of a melee attack from a given position.

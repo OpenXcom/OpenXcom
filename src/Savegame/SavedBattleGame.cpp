@@ -1108,6 +1108,68 @@ void SavedBattleGame::removeItem(BattleItem *item)
 }
 
 /**
+ * Converts a unit into a unit of another type.
+ * @param unit The unit to convert.
+ * @return Pointer to the new unit.
+ */
+BattleUnit *SavedBattleGame::convertUnit(BattleUnit *unit, const SavedGame* saveGame, Mod* mod)
+{
+	const std::string newType = unit->getSpawnUnit();
+	bool visible = unit->getVisible();
+	// in case the unit was unconscious
+	removeUnconsciousBodyItem(unit);
+
+	unit->instaKill();
+
+	for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
+	{
+		getTileEngine()->itemDrop(getTile(unit->getPosition()), (*i), mod);
+		(*i)->setOwner(0);
+	}
+
+	unit->getInventory()->clear();
+
+	// remove unit-tile link
+	unit->setTile(0);
+
+	getTile(unit->getPosition())->setUnit(0);
+	Unit *newRule = mod->getUnit(newType, true);
+	std::string newArmor = newRule->getArmor();
+	std::string terroristWeapon = newRule->getRace().substr(4);
+	terroristWeapon += "_WEAPON";
+	RuleItem *newItem = mod->getItem(terroristWeapon);
+
+	BattleUnit *newUnit = new BattleUnit(newRule,
+		FACTION_HOSTILE,
+		getUnits()->back()->getId() + 1,
+		mod->getArmor(newArmor, true),
+		mod->getStatAdjustment(saveGame->getDifficulty()),
+		getDepth());
+
+	getTile(unit->getPosition())->setUnit(newUnit, getTile(unit->getPosition() + Position(0,0,-1)));
+	newUnit->setPosition(unit->getPosition());
+	newUnit->setDirection(unit->getDirection());
+	newUnit->setCache(0);
+	newUnit->setTimeUnits(0);
+	newUnit->setSpecialWeapon(this, mod);
+	getUnits()->push_back(newUnit);
+	newUnit->setAIModule(new AIModule(this, newUnit, 0));
+	if (newItem)
+	{
+		BattleItem *bi = new BattleItem(newItem, getCurrentItemId());
+		bi->moveToOwner(newUnit);
+		bi->setSlot(mod->getInventory("STR_RIGHT_HAND", true));
+		getItems()->push_back(bi);
+	}
+	newUnit->setVisible(visible);
+	getTileEngine()->calculateFOV(newUnit->getPosition());
+	getTileEngine()->applyGravity(newUnit->getTile());
+	newUnit->dontReselect();
+	return newUnit;
+}
+
+
+/**
  * Sets whether the mission was aborted or successful.
  * @param flag True, if the mission was aborted, or false, if the mission was successful.
  */
