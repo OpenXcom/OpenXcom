@@ -90,7 +90,10 @@ void Armor::load(const YAML::Node &node)
 	}
 	_loftempsSet = node["loftempsSet"].as< std::vector<int> >(_loftempsSet);
 	if (node["loftemps"])
+	{
+		_loftempsSet.clear();
 		_loftempsSet.push_back(node["loftemps"].as<int>());
+	}
 	_deathFrames = node["deathFrames"].as<int>(_deathFrames);
 	_constantAnimation = node["constantAnimation"].as<bool>(_constantAnimation);
 	_forcedTorso = (ForcedTorso)node["forcedTorso"].as<int>(_forcedTorso);
