@@ -754,26 +754,26 @@ void ProjectileFlyBState::projectileHitUnit(Position pos)
 				_unit->getStatistics()->longDistanceHitCounter++;
 			}
 			
-			int accuracy = _action.actor->getFiringAccuracy(_action.type, _action->weapon);
+			int accuracy = _action.actor->getFiringAccuracy(_action.type, _action.weapon);
 			if (Options::battleUFOExtenderAccuracy)
 			{
-				int upperLimit = weapon->getAimRange();
-				int lowerLimit = weapon->getMinRange();
+				int upperLimit =  _action.weapon->getAimRange();
+				int lowerLimit =  _action.weapon->getMinRange();
 				if (_action.type == BA_AUTOSHOT)
 				{
-					upperLimit = weapon->getAutoRange();
+					upperLimit =  _action.weapon->getAutoRange();
 				}
 				else if (_action.type == BA_SNAPSHOT)
 				{
-					upperLimit = weapon->getSnapRange();
+					upperLimit =  _action.weapon->getSnapRange();
 				}
 				if (distance > upperLimit)
 				{
-					accuracy -= (distance - upperLimit) * _action->weapon->getDropoff();
+					accuracy -= (distance - upperLimit) * _action.weapon->getDropoff();
 				}
 				else if (distance < lowerLimit)
 				{
-					accuracy -= (lowerLimit - distance) * _action->weapon->getDropoff();
+					accuracy -= (lowerLimit - distance) * _action.weapon->getDropoff();
 				}
 				if (accuracy < 0)
 				{
