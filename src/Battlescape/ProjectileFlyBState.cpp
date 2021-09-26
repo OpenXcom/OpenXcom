@@ -754,7 +754,7 @@ void ProjectileFlyBState::projectileHitUnit(Position pos)
 				_unit->getStatistics()->longDistanceHitCounter++;
 			}
 			
-			int accuracy = _action->actor->getFiringAccuracy(_action->type, _action->weapon);
+			int accuracy = _action.actor->getFiringAccuracy(_action.type, _action->weapon);
 			if (Options::battleUFOExtenderAccuracy)
 			{
 				int upperLimit = weapon->getAimRange();
