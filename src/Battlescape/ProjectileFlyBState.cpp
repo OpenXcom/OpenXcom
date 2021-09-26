@@ -753,27 +753,29 @@ void ProjectileFlyBState::projectileHitUnit(Position pos)
 			{
 				_unit->getStatistics()->longDistanceHitCounter++;
 			}
-			
+
 			int accuracy = _action.actor->getFiringAccuracy(_action.type, _action.weapon);
+			// code from Map::drawTerrain(), where the crosshair accuracy is calculated
+	                RuleItem *weapon = _action.weapon->getRules();
 			if (Options::battleUFOExtenderAccuracy)
 			{
-				int upperLimit =  _action.weapon->getAimRange();
-				int lowerLimit =  _action.weapon->getMinRange();
+				int upperLimit =  weapon->getAimRange();
+				int lowerLimit =  weapon->getMinRange();
 				if (_action.type == BA_AUTOSHOT)
 				{
-					upperLimit =  _action.weapon->getAutoRange();
+					upperLimit =  weapon->getAutoRange();
 				}
 				else if (_action.type == BA_SNAPSHOT)
 				{
-					upperLimit =  _action.weapon->getSnapRange();
+					upperLimit =  weapon->getSnapRange();
 				}
 				if (distance > upperLimit)
 				{
-					accuracy -= (distance - upperLimit) * _action.weapon->getDropoff();
+					accuracy -= (distance - upperLimit) * weapon->getDropoff();
 				}
 				else if (distance < lowerLimit)
 				{
-					accuracy -= (lowerLimit - distance) * _action.weapon->getDropoff();
+					accuracy -= (lowerLimit - distance) * weapon->getDropoff();
 				}
 				if (accuracy < 0)
 				{
