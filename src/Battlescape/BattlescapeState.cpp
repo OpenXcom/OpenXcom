@@ -1262,7 +1262,7 @@ void BattlescapeState::btnPersonalLightingClick(Action *)
 
 /**
  * Determines whether a playable unit is selected. Normally only player side units can be selected, but in debug mode one can play with aliens too :)
- * Is used to see if stats can be displayed and action buttons will work.
+ * Is used to see if action buttons will work.
  * @return Whether a playable unit is selected.
  */
 bool BattlescapeState::playableUnitSelected()
@@ -1284,7 +1284,7 @@ void BattlescapeState::updateSoldierInfo(bool checkFOV)
 		_visibleUnit[i] = 0;
 	}
 
-	bool playableUnit = playableUnitSelected();
+	bool playableUnit = _battleGame->playableUnitSelected();
 	_rank->setVisible(playableUnit);
 	_numTimeUnits->setVisible(playableUnit);
 	_barTimeUnits->setVisible(playableUnit);
