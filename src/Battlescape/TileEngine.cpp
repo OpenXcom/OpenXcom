@@ -1324,9 +1324,9 @@ void TileEngine::explode(Position center, int power, ItemDamageType type, int ma
 								// power 50 - 150%
 								if (bu)
 								{
-									if (distance(dest->getPosition(), Position(centerX, centerY, centerZ)) < 2)
+									if ((abs(dest->getPosition().x - centerX) < 2 && abs(dest->getPosition().y - centerY) < 2) || dest->getPosition().z > centerZ)
 									{
-										// ground zero effect is in effect
+										// ground zero effect is in effect, or unit is above explosion
 										bu->damage(Position(0, 0, 0), (RNG::generate(min, max)), type);
 									}
 									else
