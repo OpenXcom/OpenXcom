@@ -155,10 +155,10 @@ For more details please check the [wiki](https://ufopaedia.org/index.php/Options
 
 OpenXcom requires the following developer libraries:
 
-- [SDL](http://www.libsdl.org) (libsdl1.2)
-- [SDL\_mixer](http://www.libsdl.org/projects/SDL_mixer/) (libsdl-mixer1.2)
-- [SDL\_gfx](http://www.ferzkopp.net/joomla/content/view/19/14/) (libsdl-gfx1.2), version 2.0.22 or later
-- [SDL\_image](http://www.libsdl.org/projects/SDL_image/) (libsdl-image1.2)
+- [SDL](https://www.libsdl.org) (libsdl1.2)
+- [SDL\_mixer](https://www.libsdl.org/projects/SDL_mixer/) (libsdl-mixer1.2)
+- [SDL\_gfx](https://www.ferzkopp.net/wordpress/2016/01/02/sdl_gfx-sdl2_gfx/) (libsdl-gfx1.2), version 2.0.22 or later
+- [SDL\_image](https://www.libsdl.org/projects/SDL_image/) (libsdl-image1.2)
 - [yaml-cpp](https://github.com/jbeder/yaml-cpp), version 0.5.3 or later
 
 The source code includes files for the following build tools:
