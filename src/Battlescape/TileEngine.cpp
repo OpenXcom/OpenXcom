@@ -2223,10 +2223,10 @@ int TileEngine::closeUfoDoors()
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
  */
 
-// Skybuck: old implementation disabled, to make way for the new faster and possibly more accurate implementation
-// Skybuck: let there be no doubt, theoretically the new implementation is 100% accurate/spot on, I don't know about the old implementation
-// Skybuck: but I do know many bresenham line algorithms are inaccurate and basically flawed, don't cover all pixels traversed.
-// Skybuck: The new algorithm below is 100% accurate based on "fast voxel traversal" algorithm by "woo" =D
+// Skybuck: Old "bresenham" implementation disabled, to make way for the new faster and more accurate implementation
+// Skybuck: This old "bresenham" implementation is not as accurate as the new "fast voxel traversal" implementation.
+// Skybuck: Many bresenham line algorithms are inaccurate and basically flawed, don't cover all pixels traversed.
+// Skybuck: The new algorithm further down below is 100% accurate based on "fast voxel traversal" algorithm by "woo" =D
 /*
 int TileEngine::calculateLine(Position origin, Position target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut)
 {
