@@ -2401,7 +2401,8 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 #define FRAC1(x) (1 - x + floorf(x))
 
 /**
- * Calculates a line trajectory, using bresenham algorithm in 3D.
+ * Calculates a line trajectory, using Amanatides & Woo's "A Fast Voxel Traversal Algorithm" in 3D.
+ * Algorithm Paper: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.42.3443&rep=rep1&type=pdf
  * @param origin Origin (voxel??).
  * @param target Target (also voxel??).
  * @param storeTrajectory True will store the whole trajectory - otherwise it just stores the last position.
@@ -2423,7 +2424,7 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 
 	int cx, cy, cz;
 
-	float x1, y1, z1; // start point   
+	float x1, y1, z1; // start point
 	float x2, y2, z2; // end point
 
 	int swap_xy, swap_xz;
@@ -2507,7 +2508,7 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 			{
 				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
 //				result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
-			
+
 				if (result != V_EMPTY)
 				{
 					if (trajectory)
@@ -2585,7 +2586,7 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 			(
 				(cx >= 0) &&
 				(cy >= 0) &&
-				(cz >= 0)// && 
+				(cz >= 0)// &&
 //				(cx < _save->getMapSizeX()) &&
 //				(cy < _save->getMapSizeY()) &&
 //				(cz < _save->getMapSizeZ())
@@ -2601,7 +2602,7 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 				{
 					result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
 //					result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
-			
+
 					if (result != V_EMPTY)
 					{
 						if (trajectory)
