@@ -47,7 +47,7 @@ class RuleItem;
 class SavedBattleGame
 {
 private:
-	BattlescapeState *_battleState;
+
 	int _mapsize_x, _mapsize_y, _mapsize_z;
 	std::vector<MapDataSet*> _mapDataSets;
 	Tile **_tiles;
@@ -82,6 +82,8 @@ private:
 	/// Selects a soldier.
 	BattleUnit *selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 public:
+	BattlescapeState *_battleState;
+
 	/// Creates a new battle save, based on the current generic save.
 	SavedBattleGame();
 	/// Cleans up the saved game.
@@ -301,6 +303,8 @@ public:
 	bool isItemUsable(BattleItem *item) const;
 	/// Reset all the unit hit state flags.
 	void resetUnitHitStates();
+
+	void SkybuckPixel(int x, int y, Uint8 pixel);
 };
 
 }

@@ -49,7 +49,7 @@ class BattlescapeState : public State
 private:
 	Surface *_rank;
 	InteractiveSurface *_icons;
-	Map *_map;
+
 	BattlescapeButton *_btnUnitUp, *_btnUnitDown, *_btnMapUp, *_btnMapDown, *_btnShowMap, *_btnKneel;
 	BattlescapeButton *_btnInventory, *_btnCenter, *_btnNextSoldier, *_btnNextStop, *_btnShowLayers, *_btnHelp;
 	BattlescapeButton *_btnEndTurn, *_btnAbort, *_btnLaunch, *_btnPsi, *_reserve;
@@ -96,6 +96,8 @@ private:
 	/// Gets the built-in melee weapon of a unit, if any.
 	BattleItem *getSpecialMeleeWeapon(BattleUnit *unit);
 public:
+	Map *_map;
+
 	/// Selects the next soldier.
 	void selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false, bool checkFOV = true);
 	/// Selects the previous soldier.

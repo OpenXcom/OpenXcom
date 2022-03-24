@@ -2396,25 +2396,13 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 }
 */
 
-/**
- * Calculates a line trajectory, using Amanatides & Woo's "A Fast Voxel Traversal Algorithm" in 3D.
- * Algorithm Paper: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.42.3443&rep=rep1&type=pdf
- * @param origin Origin (voxel??).
- * @param target Target (also voxel??).
- * @param storeTrajectory True will store the whole trajectory - otherwise it just stores the last position.
- * @param trajectory A vector of positions in which the trajectory is stored.
- * @param excludeUnit Excludes this unit in the collision detection.
- * @param doVoxelCheck Check against voxel or tile blocking? (first one for units visibility and line of fire, second one for terrain visibility).
- * @param onlyVisible Skip invisible units? used in FPS view.
- * @param excludeAllBut [Optional] The only unit to be considered for ray hits.
- * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
- */
-
+// older skybuck implementation
 // macros for fast voxel traversal algoritm in code below
 #define SIGN(x) (x > 0 ? 1 : (x < 0 ? -1 : 0))
 #define FRAC0(x) (x - floorf(x))
 #define FRAC1(x) (1 - x + floorf(x))
 
+/*
 int TileEngine::calculateLine(Position origin, Position target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut)
 {
 	double tMaxX, tMaxY, tMaxZ, tDeltaX, tDeltaY, tDeltaZ;
@@ -2616,7 +2604,931 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 
 	return V_EMPTY;
 }
+*/
 
+void TileEngine::SkybuckPixel(int x, int y, Uint8 pixel)
+{
+	_save->_battleState->_map->setPixel( x, y, pixel );
+}
+
+// optimized old version
+int TileEngine::calculateLine(Position origin, Position target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut)
+{
+	double tMaxX, tMaxY, tMaxZ, t, tDeltaX, tDeltaY, tDeltaZ;
+
+	int voxelX;
+	int voxelY;
+	int voxelZ;
+
+	int cx, cy, cz;
+
+	double x1, y1, z1; // start point
+	double x2, y2, z2; // end point
+
+	Position lastPoint(origin);
+	int result;
+	int steps = 0;
+	bool excludeAllUnits = false;
+
+	if (_save->isBeforeGame())
+	{
+		excludeAllUnits = true; // don't start unit spotting before pre-game inventory stuff (large units on the craftInventory tile will cause a crash if they're "spotted")
+	}
+
+	//start and end points
+	x1 = origin.x/16.0;	 x2 = target.x/16.0;
+	y1 = origin.y/16.0;	 y2 = target.y/16.0;
+	z1 = origin.z/24.0;	 z2 = target.z/24.0;
+
+	int dx = SIGN(x2 - x1);
+	if (dx != 0) tDeltaX = fmin(dx / (x2 - x1), 10000000.0f); else tDeltaX = 10000000.0f;
+	if (dx > 0) tMaxX = tDeltaX * FRAC1(x1); else tMaxX = tDeltaX * FRAC0(x1);
+	voxelX = (int) x1;
+
+	int dy = SIGN(y2 - y1);
+	if (dy != 0) tDeltaY = fmin(dy / (y2 - y1), 10000000.0f); else tDeltaY = 10000000.0f;
+	if (dy > 0) tMaxY = tDeltaY * FRAC1(y1); else tMaxY = tDeltaY * FRAC0(y1);
+	voxelY = (int) y1;
+
+	int dz = SIGN(z2 - z1);
+	if (dz != 0) tDeltaZ = fmin(dz / (z2 - z1), 10000000.0f); else tDeltaZ = 10000000.0f;
+	if (dz > 0) tMaxZ = tDeltaZ * FRAC1(z1); else tMaxZ = tDeltaZ * FRAC0(z1);
+	voxelZ = (int) z1;
+
+	if (doVoxelCheck) voxelCheckFlush();
+
+	// calculate max voxel position 
+	int vMapVoxelBoundaryMaxX = (_save->getMapSizeX()*16)-1;
+	int vMapVoxelBoundaryMaxY = (_save->getMapSizeY()*16)-1;
+	int vMapVoxelBoundaryMaxZ = (_save->getMapSizeZ()*24)-1;
+
+	t = 0;
+	while (t <= 1.0)
+	{
+	    // process first and subsequent voxels here
+		cx = voxelX;
+		cy = voxelY;
+		cz = voxelZ;
+
+		// ToDo: This if condition would not be necessary if origin and target would be clipped against 0 to max voxel position first.
+		if
+		(
+			(cx >= 0) && (cx < vMapVoxelBoundaryMaxX) &&
+			(cy >= 0) && (cy < vMapVoxelBoundaryMaxY) &&
+			(cz >= 0) && (cz < vMapVoxelBoundaryMaxZ)
+		)	
+		{
+			/*
+			if ((cx>=0) && (cx < 320) && (cy>=0) && (cy<199))
+			{
+				_save->_battleState->_map->setPixel(cx,cy,100);
+			}
+			*/
+
+			// store trajectory even if outside of voxel boundary, other code must solve it, otherwise trajectory empty
+			if (storeTrajectory && trajectory)
+			{
+				trajectory->push_back(Position(cx, cy, cz));
+			}
+
+			//passes through this point?
+			if (doVoxelCheck)
+			{
+//				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
+				result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
+
+				if (result != V_EMPTY)
+				{
+					if (trajectory)
+					{ // store the position of impact
+						trajectory->push_back(Position(cx, cy, cz));
+					}
+					return result;
+				}
+			}
+			else
+			{
+				int temp_res = verticalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE);
+				result = horizontalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE, steps<2);
+				steps++;
+				if (result == -1)
+				{
+					if (temp_res > 127)
+					{
+						result = 0;
+					} else {
+						return result; // We hit a big wall
+					}
+				}
+				result += temp_res;
+				if (result > 127)
+				{
+					return result;
+				}
+
+				lastPoint = Position(cx, cy, cz);
+			}
+		}
+
+		if ((tMaxX < tMaxY) && (tMaxX < tMaxZ))
+		{
+			t = tMaxX;
+			voxelX += dx;
+			tMaxX += tDeltaX;
+
+		} else
+		{
+			if (tMaxY < tMaxZ)
+			{
+				t = tMaxY;
+				voxelY += dy;
+				tMaxY += tDeltaY;
+			} else
+			{
+				t = tMaxZ;
+				voxelZ += dz;
+				tMaxZ += tDeltaZ;
+			}
+		}
+	}
+
+	return V_EMPTY;
+}
+
+
+
+// newer version below troubles:
+
+/**
+ * Calculates a line trajectory, using Amanatides & Woo's "A Fast Voxel Traversal Algorithm" in 3D.
+ * Algorithm Paper: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.42.3443&rep=rep1&type=pdf
+ * @param origin Origin (voxel??). Skybuck: I think these are tile coordinates, or just real world coordinates ?!?
+ * @param target Target (also voxel??). Skybuck: I think these are tile coordinates, or just real world coordinates ?!?
+ * @param storeTrajectory True will store the whole trajectory - otherwise it just stores the last position.
+ * @param trajectory A vector of positions in which the trajectory is stored.
+ * @param excludeUnit Excludes this unit in the collision detection.
+ * @param doVoxelCheck Check against voxel or tile blocking? (first one for units visibility and line of fire, second one for terrain visibility).
+ * @param onlyVisible Skip invisible units? used in FPS view.
+ * @param excludeAllBut [Optional] The only unit to be considered for ray hits.
+ * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
+ */
+
+/*
+
+// macros for fast voxel traversal algoritm in code below
+#define SIGN(x) (x > 0 ? 1 : (x < 0 ? -1 : 0))
+#define FRAC0(x) (x - floorf(x))
+#define FRAC1(x) (1 - x + floorf(x))
+
+
+float MaxSingle(float A, float B)
+{
+	if (A > B) return A; else return B;
+}
+
+float MinSingle(float A, float B)
+{
+	if (A < B) return A; else return B;
+}
+
+bool PointInBoxSingle
+(
+	float X, float Y, float Z,
+	float BoxX1, float BoxY1, float BoxZ1,
+	float BoxX2, float BoxY2, float BoxZ2
+)
+{
+	float MinX, MinY, MinZ;
+	float MaxX, MaxY, MaxZ;
+
+	bool result = false;
+
+	if (BoxX1 < BoxX2)
+	{
+		MinX = BoxX1;
+		MaxX = BoxX2;
+	} else
+	{
+		MinX = BoxX2;
+		MaxX = BoxX1;
+	}
+
+	if (BoxY1 < BoxY2)
+	{
+		MinY = BoxY1;
+		MaxY = BoxY2;
+	} else
+	{
+		MinY = BoxY2;
+		MaxY = BoxY1;
+	}
+
+	if (BoxZ1 < BoxZ2)
+	{
+		MinZ = BoxZ1;
+		MaxZ = BoxZ2;
+	} else
+	{
+		MinZ = BoxZ2;
+		MaxZ = BoxZ1;
+	}
+
+	if
+	(
+		(X >= MinX) && (Y >= MinY) && (Z >= MinZ) &&
+		(X <= MaxX) && (Y <= MaxY) && (Z <= MaxZ)
+	)
+	{
+		result = true;
+	}
+	return result;
+}
+
+bool LineSegmentIntersectsBoxSingle
+(
+	float LineX1, float LineY1, float LineZ1,
+	float LineX2, float LineY2, float LineZ2,
+
+	float BoxX1, float BoxY1, float BoxZ1,
+	float BoxX2, float BoxY2, float BoxZ2,
+
+	// nearest to line origin, doesn't necessarily mean closes to box...
+	bool *MinIntersectionPoint,
+	float *MinIntersectionPointX, float *MinIntersectionPointY, float *MinIntersectionPointZ,
+
+	// farthest to line origin, doesn't necessarily mean farthest from box...
+	bool *MaxIntersectionPoint,
+	float *MaxIntersectionPointX, float *MaxIntersectionPointY, float *MaxIntersectionPointZ
+)
+{
+	float LineDeltaX;
+	float LineDeltaY;
+	float LineDeltaZ;
+
+	float LineDistanceToBoxX1;
+	float LineDistanceToBoxX2;
+
+	float LineDistanceToBoxY1;
+	float LineDistanceToBoxY2;
+
+	float LineDistanceToBoxZ1;
+	float LineDistanceToBoxZ2;
+
+	float LineMinDistanceToBoxX;
+	float LineMaxDistanceToBoxX;
+
+	float LineMinDistanceToBoxY;
+	float LineMaxDistanceToBoxY;
+
+	float LineMinDistanceToBoxZ;
+	float LineMaxDistanceToBoxZ;
+
+	float LineMaxMinDistanceToBox;
+	float LineMinMaxDistanceToBox;
+
+	float LineMinDistanceToBox;
+	float LineMaxDistanceToBox;
+
+	bool result = false;
+	*MinIntersectionPoint = false;
+	*MaxIntersectionPoint = false;
+
+	LineDeltaX = LineX2 - LineX1;
+	LineDeltaY = LineY2 - LineY1;
+	LineDeltaZ = LineZ2 - LineZ1;
+
+	// T (distance along line) calculations which will be used to figure out Tmins and Tmaxs:
+	// t = (LocationX - x0) / (DeltaX)
+	if (LineDeltaX != 0)
+	{
+		LineDistanceToBoxX1 = (BoxX1 - LineX1) / LineDeltaX;
+		LineDistanceToBoxX2 = (BoxX2 - LineX1) / LineDeltaX;
+	} else
+	{
+		LineDistanceToBoxX1 = (BoxX1 - LineX1);
+		LineDistanceToBoxX2 = (BoxX2 - LineX1);
+	}
+
+	// now we take the minimum's and maximum's
+	if (LineDistanceToBoxX1 < LineDistanceToBoxX2)
+	{
+		LineMinDistanceToBoxX = LineDistanceToBoxX1;
+		LineMaxDistanceToBoxX = LineDistanceToBoxX2;
+	} else
+	{
+		LineMinDistanceToBoxX = LineDistanceToBoxX2;
+		LineMaxDistanceToBoxX = LineDistanceToBoxX1;
+	}
+
+	if (LineDeltaY != 0)
+	{
+		LineDistanceToBoxY1 = (BoxY1 - LineY1) / LineDeltaY;
+		LineDistanceToBoxY2 = (BoxY2 - LineY1) / LineDeltaY;
+	} else
+	{
+		LineDistanceToBoxY1 = BoxY1 - LineY1;
+		LineDistanceToBoxY2 = BoxY2 - LineY1;
+	}
+
+	if (LineDistanceToBoxY1 < LineDistanceToBoxY2)
+	{
+		LineMinDistanceToBoxY = LineDistanceToBoxY1;
+		LineMaxDistanceToBoxY = LineDistanceToBoxY2;
+	} else
+	{
+		LineMinDistanceToBoxY = LineDistanceToBoxY2;
+		LineMaxDistanceToBoxY = LineDistanceToBoxY1;
+	}
+
+	if (LineDeltaZ != 0)
+	{
+		LineDistanceToBoxZ1 = (BoxZ1 - LineZ1) / LineDeltaZ;
+		LineDistanceToBoxZ2 = (BoxZ2 - LineZ1) / LineDeltaZ;
+	} else
+	{
+		LineDistanceToBoxZ1 = (BoxZ1 - LineZ1);
+		LineDistanceToBoxZ2 = (BoxZ2 - LineZ1);
+	}
+
+	if (LineDistanceToBoxZ1 < LineDistanceToBoxZ2)
+	{
+		LineMinDistanceToBoxZ = LineDistanceToBoxZ1;
+		LineMaxDistanceToBoxZ = LineDistanceToBoxZ2;
+	} else
+	{
+		LineMinDistanceToBoxZ = LineDistanceToBoxZ2;
+		LineMaxDistanceToBoxZ = LineDistanceToBoxZ1;
+	}
+
+	// these 6 distances all represent distances on a line.
+	// we want to clip this line to the box.
+	// so the } points of the line which are outside the box need to be clipped.
+	// so we clipping the line to the box.
+	// this means we are interested in the most minimum minimum
+	// and the most maximum, maximum.
+	// these min's and max's represent the outer intersections.
+	// if for whatever reason the minimum is larger than the maximum
+	// then the line misses the box ! ;)
+	// nooooooooooooooooooooooooooooooooo
+	// we want the maximum of the minimums
+	// and we want the minimum of the maximums
+	// that should give us the bounding intersections ! ;)
+
+
+	// find the maximum minimum
+	LineMaxMinDistanceToBox = LineMinDistanceToBoxX;
+
+	if (LineMinDistanceToBoxY > LineMaxMinDistanceToBox)
+	{
+		LineMaxMinDistanceToBox = LineMinDistanceToBoxY;
+	}
+
+	if (LineMinDistanceToBoxZ > LineMaxMinDistanceToBox)
+	{
+		LineMaxMinDistanceToBox = LineMinDistanceToBoxZ;
+	}
+
+	// find the minimum maximum
+	LineMinMaxDistanceToBox = LineMaxDistanceToBoxX;
+
+	if (LineMaxDistanceToBoxY < LineMinMaxDistanceToBox)
+	{
+		LineMinMaxDistanceToBox = LineMaxDistanceToBoxY;
+	}
+
+	if (LineMaxDistanceToBoxZ < LineMinMaxDistanceToBox)
+	{
+		LineMinMaxDistanceToBox = LineMaxDistanceToBoxZ;
+	}
+
+	// these two points are now the minimum and maximum distance to box
+	LineMinDistanceToBox = LineMaxMinDistanceToBox;
+	LineMaxDistanceToBox = LineMinMaxDistanceToBox;
+
+	// now check if the max distance is smaller than the minimum distance
+	// if so then the line segment does not intersect the box.
+	if (LineMaxDistanceToBox < LineMinDistanceToBox)
+	{
+		return result;
+	}
+
+	// if distances are within the line then there is an intersection
+	if ( (LineMinDistanceToBox > 0) && (LineMinDistanceToBox < 1) )
+	{
+		// else the min and max are the intersection points so calculate
+		// those using the parametric equation and return true.
+		// x = x0 + t(x1 - x0)
+		// y = y0 + t(y1 - y0)
+		// z = z0 + t(z1 - z0)
+
+		*MinIntersectionPoint = true;
+		*MinIntersectionPointX = LineX1 + LineMinDistanceToBox * LineDeltaX;
+		*MinIntersectionPointY = LineY1 + LineMinDistanceToBox * LineDeltaY;
+		*MinIntersectionPointZ = LineZ1 + LineMinDistanceToBox * LineDeltaZ;
+
+		result = true;
+	}
+
+	if ( (LineMaxDistanceToBox > 0) && (LineMaxDistanceToBox < 1) )
+	{
+		*MaxIntersectionPoint = true;
+		*MaxIntersectionPointX = LineX1 + LineMaxDistanceToBox * LineDeltaX;
+		*MaxIntersectionPointY = LineY1 + LineMaxDistanceToBox * LineDeltaY;
+		*MaxIntersectionPointZ = LineZ1 + LineMaxDistanceToBox * LineDeltaZ;
+
+		result = true;
+	}
+
+	return result;
+}
+
+int TileEngine::calculateLine(Position origin, Position target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut)
+{
+	float tMaxX, tMaxY, tMaxZ, t, tDeltaX, tDeltaY, tDeltaZ;
+
+	int voxelX;
+	int voxelY;
+	int voxelZ;
+
+	int cx, cy, cz;
+
+	float x1, y1, z1; // start point
+	float x2, y2, z2; // end point
+
+	int OutX, OutY, OutZ;
+
+	Position lastPoint(origin);
+	int result;
+	int steps = 0;
+	bool excludeAllUnits = false;
+
+	bool IntersectionPoint1;
+	bool IntersectionPoint2;
+
+	float IntersectionPointX1, IntersectionPointY1, IntersectionPointZ1;
+	float IntersectionPointX2, IntersectionPointY2, IntersectionPointZ2;
+
+	float TraverseX1, TraverseY1, TraverseZ1;
+	float TraverseX2, TraverseY2, TraverseZ2;
+
+	float Epsilon;
+
+	//	Epsilon := 0.001;
+	Epsilon = 0.1;
+
+	float TileWidth = 16.0;
+	float TileHeight = 16.0;
+	float TileDepth = 24.0;
+
+	// calculate max voxel position
+//	int vMapVoxelBoundaryMinX = 0;
+//	int vMapVoxelBoundaryMinY = 0;
+//	int vMapVoxelBoundaryMinZ = 0;
+
+//	int vMapVoxelBoundaryMaxX = (_save->getMapSizeX()*TileWidth)-1;
+//	int vMapVoxelBoundaryMaxY = (_save->getMapSizeY()*TileHeight)-1;
+//	int vMapVoxelBoundaryMaxZ = (_save->getMapSizeZ()*TileDepth)-1;
+
+	// better calculation
+
+	int vMapVoxelBoundaryMinX = 0;
+	int vMapVoxelBoundaryMinY = 0;
+	int vMapVoxelBoundaryMinZ = 0;
+
+	int vMapVoxelBoundaryMaxX = ((_save->getMapSizeX()*TileWidth)+TileWidth)-1;
+	int vMapVoxelBoundaryMaxY = ((_save->getMapSizeY()*TileHeight)+TileHeight)-1;
+	int vMapVoxelBoundaryMaxZ = ((_save->getMapSizeZ()*TileDepth)+TileDepth)-1;
+
+	if (_save->isBeforeGame())
+	{
+		excludeAllUnits = true; // don't start unit spotting before pre-game inventory stuff (large units on the craftInventory tile will cause a crash if they're "spotted")
+	}
+
+	//start and end points
+	x1 = origin.x*16.0;	 x2 = target.x*16.0;
+	y1 = origin.y*16.0;	 y2 = target.y*16.0;
+	z1 = origin.z*24.0;	 z2 = target.z*24.0;
+
+/*
+	// if single point then
+	if ( (x1=x2) && (y1=y2) && (z1=z2) )
+	{
+		// check if point in grid
+		if
+		(
+			PointInBoxSingle
+			(
+				x1, y1, z1,
+
+				vMapVoxelBoundaryMinX,
+				vMapVoxelBoundaryMinY,
+				vMapVoxelBoundaryMinZ,
+
+				vMapVoxelBoundaryMaxX-Epsilon,
+				vMapVoxelBoundaryMaxY-Epsilon,
+				vMapVoxelBoundaryMaxZ-Epsilon
+			) == true
+		)
+		{
+			// copy code later
+			cx = x1;// / TileWidth;
+			cy = y1;// / TileHeight;
+			cz = z1;// / TileDepth;
+
+			// process voxel
+//			ProcessVoxel
+//			(
+//				trunc(x1 / mCellWidth),
+//				trunc(y1 / mCellHeight),
+//				trunc(y1 / mCellDepth)
+//			);
+
+			
+
+			// process voxel
+			{
+				// store trajectory even if outside of voxel boundary, other code must solve it, otherwise trajectory empty
+				if (storeTrajectory && trajectory)
+				{
+					trajectory->push_back(Position(cx, cy, cz));
+				}
+
+				//passes through this point?
+				if (doVoxelCheck)
+				{
+	//				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
+					result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
+
+					if (result != V_EMPTY)
+					{
+						if (trajectory)
+						{ // store the position of impact
+							trajectory->push_back(Position(cx, cy, cz));
+						}
+						return result;
+					}
+				}
+				else
+				{
+					int temp_res = verticalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE);
+					result = horizontalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE, steps<2);
+					steps++;
+					if (result == -1)
+					{
+						if (temp_res > 127)
+						{
+							result = 0;
+						} else {
+							return result; // We hit a big wall
+						}
+					}
+					result += temp_res;
+					if (result > 127)
+					{
+						return result;
+					}
+
+					lastPoint = Position(cx, cy, cz);
+				}
+			}
+
+			return result;
+		}
+	}
+	else
+// test later here
+	{
+		// check if both points are in grid
+		if
+		(
+			PointInBoxSingle
+			(
+				x1, y1, z1,
+
+				vMapVoxelBoundaryMinX,
+				vMapVoxelBoundaryMinY,
+				vMapVoxelBoundaryMinZ,
+
+				vMapVoxelBoundaryMaxX-Epsilon,
+				vMapVoxelBoundaryMaxY-Epsilon,
+				vMapVoxelBoundaryMaxZ-Epsilon
+			)
+			&&
+			PointInBoxSingle
+			(
+				x2, y2, z2,
+
+				vMapVoxelBoundaryMinX,
+				vMapVoxelBoundaryMinY,
+				vMapVoxelBoundaryMinZ,
+
+				vMapVoxelBoundaryMaxX-Epsilon,
+				vMapVoxelBoundaryMaxY-Epsilon,
+				vMapVoxelBoundaryMaxZ-Epsilon
+			)
+		)
+		{
+			// just fall through to next code below
+		
+			// CudaTraverseOptimizedSingleFinal
+			// (
+			//	x1/mCellWidth, y1/mCellHeight, z1/mCellDepth,
+			//	x2/mCellWidth, y2/mCellHeight, z2/mCellDepth
+			// );
+			
+			x1 = x1; // / TileWidth;
+			y1 = y1; // / TileHeight;
+			z1 = z1; // / TileDepth;
+
+			x2 = x2; // / TileWidth;
+			y2 = y2; // / TileHeight;
+			z2 = z2; // / TileDepth;
+		}
+		else
+		// check if line intersects box
+		if
+		(
+			LineSegmentIntersectsBoxSingle
+			(
+				x1,y1, z1,
+				x2,y2, z2,
+
+				vMapVoxelBoundaryMinX,
+				vMapVoxelBoundaryMinY,
+				vMapVoxelBoundaryMinZ,
+
+				vMapVoxelBoundaryMaxX-Epsilon,
+				vMapVoxelBoundaryMaxY-Epsilon,
+				vMapVoxelBoundaryMaxZ-Epsilon,
+
+				&IntersectionPoint1,
+				&IntersectionPointX1,
+				&IntersectionPointY1,
+				&IntersectionPointZ1,
+
+				&IntersectionPoint2,
+				&IntersectionPointX2,
+				&IntersectionPointY2,
+				&IntersectionPointZ2
+			) == true
+		)
+		{
+			if (IntersectionPoint1 == true)
+			{
+				TraverseX1 = IntersectionPointX1;
+				TraverseY1 = IntersectionPointY1;
+				TraverseZ1 = IntersectionPointZ1;
+			}
+			else
+			{
+				TraverseX1 = x1;
+				TraverseY1 = y1;
+				TraverseZ1 = z1;
+			}
+
+			// compensate for any floating point errors (inaccuracies)
+			TraverseX1 = MaxSingle( TraverseX1, vMapVoxelBoundaryMinX );
+			TraverseY1 = MaxSingle( TraverseY1, vMapVoxelBoundaryMinY );
+			TraverseZ1 = MaxSingle( TraverseZ1, vMapVoxelBoundaryMinZ );
+
+			TraverseX1 = MinSingle( TraverseX1, vMapVoxelBoundaryMaxX-Epsilon );
+			TraverseY1 = MinSingle( TraverseY1, vMapVoxelBoundaryMaxY-Epsilon );
+			TraverseZ1 = MinSingle( TraverseZ1, vMapVoxelBoundaryMaxZ-Epsilon );
+
+			if (IntersectionPoint2 == true)
+			{
+				TraverseX2 = IntersectionPointX2;
+				TraverseY2 = IntersectionPointY2;
+				TraverseZ2 = IntersectionPointZ2;
+			}
+			else
+			{
+				TraverseX2 = x2;
+				TraverseY2 = y2;
+				TraverseZ2 = z2;
+			}
+
+			// compensate for any floating point errors (inaccuracies)
+			TraverseX2 = MaxSingle( TraverseX2, vMapVoxelBoundaryMinX );
+			TraverseY2 = MaxSingle( TraverseY2, vMapVoxelBoundaryMinY );
+			TraverseZ2 = MaxSingle( TraverseZ2, vMapVoxelBoundaryMinZ );
+
+			TraverseX2 = MinSingle( TraverseX2, vMapVoxelBoundaryMaxX-Epsilon );
+			TraverseY2 = MinSingle( TraverseY2, vMapVoxelBoundaryMaxY-Epsilon );
+			TraverseZ2 = MinSingle( TraverseZ2, vMapVoxelBoundaryMaxZ-Epsilon );
+
+
+			// it is possible that after intersection testing the line is just a dot
+			// on the intersection box so check for this and then process voxel
+			// seperately.
+
+			if
+			(
+				(TraverseX1==TraverseX2) &&
+				(TraverseY1==TraverseY2) &&
+				(TraverseZ1==TraverseZ2)
+			)
+			{
+				// copy code here ok bye bye
+				
+				// ProcessVoxel
+				// (
+				//	trunc(TraverseX1/TileWidth),
+				//	trunc(TraverseY1/TileHeight),
+				//	trunc(TraverseZ1/TileDepth),
+				// );
+				//
+
+				// process voxels here
+				cx = TraverseX1; // / TileWidth;
+				cy = TraverseY1; // / TileHeight;
+				cz = TraverseZ1; // / TileDepth;
+
+				// process voxel
+				{
+					// store trajectory even if outside of voxel boundary, other code must solve it, otherwise trajectory empty
+					if (storeTrajectory && trajectory)
+					{
+						trajectory->push_back(Position(cx, cy, cz));
+					}
+
+					//passes through this point?
+					if (doVoxelCheck)
+					{
+		//				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
+						result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
+
+						if (result != V_EMPTY)
+						{
+							if (trajectory)
+							{ // store the position of impact
+								trajectory->push_back(Position(cx, cy, cz));
+							}
+							return result;
+						}
+					}
+					else
+					{
+						int temp_res = verticalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE);
+						result = horizontalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE, steps<2);
+						steps++;
+						if (result == -1)
+						{
+							if (temp_res > 127)
+							{
+								result = 0;
+							} else {
+								return result; // We hit a big wall
+							}
+						}
+						result += temp_res;
+						if (result > 127)
+						{
+							return result;
+						}
+
+						lastPoint = Position(cx, cy, cz);
+					}
+				}
+
+				return result;
+
+			} else
+			{
+				// just fall through below
+				
+				// CudaTraverseOptimizedSingleFinal
+				// (
+				//	TraverseX1/mCellWidth, TraverseY1/mCellHeight, TraverseZ1/mCellDepth,
+				//	TraverseX2/mCellWidth, TraverseY2/mCellHeight, TraverseZ2/mCellDepth
+				// )
+				//
+
+				x1 = TraverseX1; // / TileWidth;
+				y1 = TraverseY1; // / TileHeight;
+				z1 = TraverseZ1; // / TileDepth;
+
+				x2 = TraverseX2; // / TileWidth;
+				y2 = TraverseY2; // / TileHeight;
+				z2 = TraverseZ2; // / TileDepth;
+			}
+		}
+	}
+
+
+	int dx = SIGN(x2 - x1);
+	if (dx != 0) tDeltaX = fmin(dx / (x2 - x1), 10000000.0f); else tDeltaX = 10000000.0f;
+	if (dx > 0) tMaxX = tDeltaX * FRAC1(x1); else tMaxX = tDeltaX * FRAC0(x1);
+	voxelX = (int) x1;
+
+	int dy = SIGN(y2 - y1);
+	if (dy != 0) tDeltaY = fmin(dy / (y2 - y1), 10000000.0f); else tDeltaY = 10000000.0f;
+	if (dy > 0) tMaxY = tDeltaY * FRAC1(y1); else tMaxY = tDeltaY * FRAC0(y1);
+	voxelY = (int) y1;
+
+	int dz = SIGN(z2 - z1);
+	if (dz != 0) tDeltaZ = fmin(dz / (z2 - z1), 10000000.0f); else tDeltaZ = 10000000.0f;
+	if (dz > 0) tMaxZ = tDeltaZ * FRAC1(z1); else tMaxZ = tDeltaZ * FRAC0(z1);
+	voxelZ = (int) z1;
+
+	if (doVoxelCheck) voxelCheckFlush();
+
+	if (dx > 0) OutX = vMapVoxelBoundaryMaxX+1; else OutX = -1;
+	if (dy > 0) OutY = vMapVoxelBoundaryMaxY+1; else OutY = -1;
+	if (dz > 0) OutZ = vMapVoxelBoundaryMaxZ+1; else OutZ = -1;
+
+	t = 0;
+	while (t <= 1.0)
+	{
+	    // process voxels here
+		cx = voxelX;
+		cy = voxelY;
+		cz = voxelZ;
+
+		if
+		(
+			(cx >= 0) && (cx <= vMapVoxelBoundaryMaxX) &&
+			(cy >= 0) && (cy <= vMapVoxelBoundaryMaxY)
+		)
+
+		// process voxel
+		{
+			// store trajectory even if outside of voxel boundary, other code must solve it, otherwise trajectory empty
+			if (storeTrajectory && trajectory)
+			{
+				trajectory->push_back(Position(cx, cy, cz));
+			}
+
+			//passes through this point?
+			if (doVoxelCheck)
+			{
+//				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
+				result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
+
+				if (result != V_EMPTY)
+				{
+					if (trajectory)
+					{ // store the position of impact
+						trajectory->push_back(Position(cx, cy, cz));
+					}
+					return result;
+				}
+			}
+			else
+			{
+				int temp_res = verticalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE);
+				result = horizontalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE, steps<2);
+				steps++;
+				if (result == -1)
+				{
+					if (temp_res > 127)
+					{
+						result = 0;
+					} else {
+						return result; // We hit a big wall
+					}
+				}
+				result += temp_res;
+				if (result > 127)
+				{
+					return result;
+				}
+
+				lastPoint = Position(cx, cy, cz);
+			}
+		}
+
+		// go to next voxel
+		if ( (tMaxX < tMaxY) && (tMaxX < tMaxZ) )
+		{
+			t = tMaxX;
+			voxelX += dx;
+			tMaxX += tDeltaX;
+
+			if (voxelX = OutX) break;
+		}
+		else
+		if (tMaxY < tMaxZ)
+		{
+			t = tMaxY;
+			voxelY += dy;
+			tMaxY += tDeltaY;
+
+			if (voxelY = OutY) break;
+		}
+		else
+		{
+			t = tMaxZ;
+			voxelZ += dz;
+			tMaxZ += tDeltaZ;
+
+			if (voxelZ = OutZ) break;
+		}
+	}
+
+	return V_EMPTY;
+}
+*/
 
 /**
  * Calculates a parabola trajectory, used for throwing items.
