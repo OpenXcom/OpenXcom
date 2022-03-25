@@ -2611,6 +2611,7 @@ void TileEngine::SkybuckPixel(int x, int y, Uint8 pixel)
 	_save->_battleState->_map->setPixel( x, y, pixel );
 }
 
+/*
 // optimized old version
 int TileEngine::calculateLine(Position origin, Position target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut)
 {
@@ -2630,15 +2631,23 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 	int steps = 0;
 	bool excludeAllUnits = false;
 
+	Position fpos;
+	Tile *fTile;
+
 	if (_save->isBeforeGame())
 	{
 		excludeAllUnits = true; // don't start unit spotting before pre-game inventory stuff (large units on the craftInventory tile will cause a crash if they're "spotted")
 	}
 
 	//start and end points
-	x1 = origin.x/16.0;	 x2 = target.x/16.0;
-	y1 = origin.y/16.0;	 y2 = target.y/16.0;
-	z1 = origin.z/24.0;	 z2 = target.z/24.0;
+	x1 = origin.x;	 x2 = target.x;
+	y1 = origin.y;	 y2 = target.y;
+	z1 = origin.z;	 z2 = target.z;
+
+//	x1 = origin.x/16.0;	 x2 = target.x/16.0;
+//	y1 = origin.y/16.0;	 y2 = target.y/16.0;
+//	z1 = origin.z/24.0;	 z2 = target.z/24.0;
+
 
 	int dx = SIGN(x2 - x1);
 	if (dx != 0) tDeltaX = fmin(dx / (x2 - x1), 10000000.0f); else tDeltaX = 10000000.0f;
@@ -2658,9 +2667,9 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 	if (doVoxelCheck) voxelCheckFlush();
 
 	// calculate max voxel position 
-	int vMapVoxelBoundaryMaxX = (_save->getMapSizeX()*16)-1;
-	int vMapVoxelBoundaryMaxY = (_save->getMapSizeY()*16)-1;
-	int vMapVoxelBoundaryMaxZ = (_save->getMapSizeZ()*24)-1;
+	int vMapVoxelBoundaryMaxX = ((_save->getMapSizeX()*16)+16)-1;
+	int vMapVoxelBoundaryMaxY = ((_save->getMapSizeY()*16)+16)-1;
+	int vMapVoxelBoundaryMaxZ = ((_save->getMapSizeZ()*24)+24)-1;
 
 	t = 0;
 	while (t <= 1.0)
@@ -2678,12 +2687,23 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 			(cz >= 0) && (cz < vMapVoxelBoundaryMaxZ)
 		)	
 		{
-			/*
-			if ((cx>=0) && (cx < 320) && (cy>=0) && (cy<199))
+			if (_save != 0)
 			{
-				_save->_battleState->_map->setPixel(cx,cy,100);
+				fpos = Position( cx, cy, cz );
+				fTile = _save->getTile(fpos);
+
+				if (fTile != 0)
+				{
+					fTile->setSmoke( 250 );
+				}
 			}
-			*/
+
+			//
+			// if ((cx>=0) && (cx < 320) && (cy>=0) && (cy<199))
+			// {
+			//	_save->_battleState->_map->setPixel(cx,cy,100);
+			// }
+			//
 
 			// store trajectory even if outside of voxel boundary, other code must solve it, otherwise trajectory empty
 			if (storeTrajectory && trajectory)
@@ -2755,6 +2775,221 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 	return V_EMPTY;
 }
 
+*/
+
+
+
+
+
+
+/**
+ * Calculates a line trajectory, using bresenham algorithm in 3D.
+ * @param origin Origin (voxel??).
+ * @param target Target (also voxel??).
+ * @param storeTrajectory True will store the whole trajectory - otherwise it just stores the last position.
+ * @param trajectory A vector of positions in which the trajectory is stored.
+ * @param excludeUnit Excludes this unit in the collision detection.
+ * @param doVoxelCheck Check against voxel or tile blocking? (first one for units visibility and line of fire, second one for terrain visibility).
+ * @param onlyVisible Skip invisible units? used in FPS view.
+ * @param excludeAllBut [Optional] The only unit to be considered for ray hits.
+ * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
+ */
+
+// Skybuck: Old "bresenham" implementation disabled, to make way for the new faster and more accurate implementation
+// Skybuck: This old "bresenham" implementation is not as accurate as the new "fast voxel traversal" implementation.
+// Skybuck: Many bresenham line algorithms are inaccurate and basically flawed, don't cover all pixels traversed.
+// Skybuck: The new algorithm further down below is 100% accurate based on "fast voxel traversal" algorithm by "woo" =D
+/*
+
+// smoke experiment
+int TileEngine::calculateLine(Position origin, Position target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut)
+{
+	int x, x0, x1, delta_x, step_x;
+	int y, y0, y1, delta_y, step_y;
+	int z, z0, z1, delta_z, step_z;
+	int swap_xy, swap_xz;
+	int drift_xy, drift_xz;
+	int cx, cy, cz;
+	Position lastPoint(origin);
+	int result;
+	int steps = 0;
+	bool excludeAllUnits = false;
+	if (_save->isBeforeGame())
+	{
+		excludeAllUnits = true; // don't start unit spotting before pre-game inventory stuff (large units on the craftInventory tile will cause a crash if they're "spotted")
+	}
+
+	//start and end points
+	x0 = origin.x;	 x1 = target.x;
+	y0 = origin.y;	 y1 = target.y;
+	z0 = origin.z;	 z1 = target.z;
+
+	//'steep' xy Line, make longest delta x plane
+	swap_xy = abs(y1 - y0) > abs(x1 - x0);
+	if (swap_xy)
+	{
+		std::swap(x0, y0);
+		std::swap(x1, y1);
+	}
+
+	//do same for xz
+	swap_xz = abs(z1 - z0) > abs(x1 - x0);
+	if (swap_xz)
+	{
+		std::swap(x0, z0);
+		std::swap(x1, z1);
+	}
+
+	//delta is Length in each plane
+	delta_x = abs(x1 - x0);
+	delta_y = abs(y1 - y0);
+	delta_z = abs(z1 - z0);
+
+	//drift controls when to step in 'shallow' planes
+	//starting value keeps Line centred
+	drift_xy  = (delta_x / 2);
+	drift_xz  = (delta_x / 2);
+
+	//direction of line
+	step_x = 1;  if (x0 > x1) {  step_x = -1; }
+	step_y = 1;  if (y0 > y1) {  step_y = -1; }
+	step_z = 1;  if (z0 > z1) {  step_z = -1; }
+
+	//starting point
+	y = y0;
+	z = z0;
+
+	int fi, fx, fy;
+	Position fpos;
+	Tile *fTile;
+
+
+	fx = 0;
+	fy = 0;
+	for (fi=0; fi<50; fi++)
+	{
+		fpos = Position( fx, fy, 0 );
+		fTile = _save->getTile(fpos);
+
+		// fTile->setFire( 250 );
+
+		fTile->setSmoke( 250 );
+
+		fx++;
+		fy++;
+	}
+
+	if (doVoxelCheck) voxelCheckFlush();
+
+	//step through longest delta (which we have swapped to x)
+	for (x = x0;; x += step_x)
+	{
+		//copy position
+		cx = x;	cy = y;	cz = z;
+
+		//unswap (in reverse)
+		if (swap_xz) std::swap(cx, cz);
+		if (swap_xy) std::swap(cx, cy);
+
+		if (storeTrajectory && trajectory)
+		{
+			trajectory->push_back(Position(cx, cy, cz));
+		}
+		//passes through this point?
+		if (doVoxelCheck)
+		{
+			result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
+			if (result != V_EMPTY)
+			{
+				if (trajectory)
+				{ // store the position of impact
+					trajectory->push_back(Position(cx, cy, cz));
+				}
+				return result;
+			}
+		}
+		else
+		{
+			int temp_res = verticalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE);
+			result = horizontalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE, steps<2);
+			steps++;
+			if (result == -1)
+			{
+				if (temp_res > 127)
+				{
+					result = 0;
+				} else {
+				return result; // We hit a big wall
+				}
+			}
+			result += temp_res;
+			if (result > 127)
+			{
+				return result;
+			}
+
+			lastPoint = Position(cx, cy, cz);
+		}
+
+		if (x == x1) break;
+
+		//update progress in other planes
+		drift_xy = drift_xy - delta_y;
+		drift_xz = drift_xz - delta_z;
+
+		//step in y plane
+		if (drift_xy < 0)
+		{
+			y = y + step_y;
+			drift_xy = drift_xy + delta_x;
+
+			//check for xy diagonal intermediate voxel step
+			if (doVoxelCheck)
+			{
+				cx = x;	cz = z; cy = y;
+				if (swap_xz) std::swap(cx, cz);
+				if (swap_xy) std::swap(cx, cy);
+				result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut);
+				if (result != V_EMPTY)
+				{
+					if (trajectory != 0)
+					{ // store the position of impact
+						trajectory->push_back(Position(cx, cy, cz));
+					}
+					return result;
+				}
+			}
+		}
+
+		//same in z
+		if (drift_xz < 0)
+		{
+			z = z + step_z;
+			drift_xz = drift_xz + delta_x;
+
+			//check for xz diagonal intermediate voxel step
+			if (doVoxelCheck)
+			{
+				cx = x;	cz = z; cy = y;
+				if (swap_xz) std::swap(cx, cz);
+				if (swap_xy) std::swap(cx, cy);
+				result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible,  excludeAllBut);
+				if (result != V_EMPTY)
+				{
+					if (trajectory != 0)
+					{ // store the position of impact
+						trajectory->push_back(Position(cx, cy, cz));
+					}
+					return result;
+				}
+			}
+		}
+	}
+
+	return V_EMPTY;
+}
+
+*/
 
 
 // newer version below troubles:
@@ -2772,8 +3007,6 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
  * @param excludeAllBut [Optional] The only unit to be considered for ray hits.
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
  */
-
-/*
 
 // macros for fast voxel traversal algoritm in code below
 #define SIGN(x) (x > 0 ? 1 : (x < 0 ? -1 : 0))
@@ -3073,6 +3306,9 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 
 	float Epsilon;
 
+	Position fpos;
+	Tile *fTile;
+
 	//	Epsilon := 0.001;
 	Epsilon = 0.1;
 
@@ -3105,13 +3341,12 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 	}
 
 	//start and end points
-	x1 = origin.x*16.0;	 x2 = target.x*16.0;
-	y1 = origin.y*16.0;	 y2 = target.y*16.0;
-	z1 = origin.z*24.0;	 z2 = target.z*24.0;
+	x1 = origin.x;	 x2 = target.x;
+	y1 = origin.y;	 y2 = target.y;
+	z1 = origin.z;	 z2 = target.z;
 
-/*
 	// if single point then
-	if ( (x1=x2) && (y1=y2) && (z1=z2) )
+	if ( (x1==x2) && (y1==y2) && (z1==z2) )
 	{
 		// check if point in grid
 		if
@@ -3143,7 +3378,16 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 //				trunc(y1 / mCellDepth)
 //			);
 
-			
+			if (_save != 0)
+			{
+				fpos = Position( cx, cy, cz );
+				fTile = _save->getTile(fpos);
+
+				if (fTile != 0)
+				{
+					fTile->setSmoke( 250 );
+				}
+			}			
 
 			// process voxel
 			{
@@ -3156,8 +3400,8 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 				//passes through this point?
 				if (doVoxelCheck)
 				{
-	//				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
-					result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
+					result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
+	//				result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
 
 					if (result != V_EMPTY)
 					{
@@ -3344,6 +3588,17 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 				cy = TraverseY1; // / TileHeight;
 				cz = TraverseZ1; // / TileDepth;
 
+				if (_save != 0)
+				{
+					fpos = Position( cx, cy, cz );
+					fTile = _save->getTile(fpos);
+
+					if (fTile != 0)
+					{
+						fTile->setSmoke( 250 );
+					}
+				}
+
 				// process voxel
 				{
 					// store trajectory even if outside of voxel boundary, other code must solve it, otherwise trajectory empty
@@ -3355,8 +3610,8 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 					//passes through this point?
 					if (doVoxelCheck)
 					{
-		//				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
-						result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
+						result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
+			//			result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
 
 						if (result != V_EMPTY)
 						{
@@ -3445,14 +3700,29 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 		cy = voxelY;
 		cz = voxelZ;
 
+		/*
 		if
 		(
 			(cx >= 0) && (cx <= vMapVoxelBoundaryMaxX) &&
-			(cy >= 0) && (cy <= vMapVoxelBoundaryMaxY)
+			(cy >= 0) && (cy <= vMapVoxelBoundaryMaxY) &&
+			(cz >= 0) && (cz <= vMapVoxelBoundaryMaxZ)
 		)
+		*/
 
 		// process voxel
 		{
+
+			if (_save != 0)
+			{
+				fpos = Position( cx, cy, cz );
+				fTile = _save->getTile(fpos);
+
+				if (fTile != 0)
+				{
+					fTile->setSmoke( 250 );
+				}
+			}
+
 			// store trajectory even if outside of voxel boundary, other code must solve it, otherwise trajectory empty
 			if (storeTrajectory && trajectory)
 			{
@@ -3462,8 +3732,8 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 			//passes through this point?
 			if (doVoxelCheck)
 			{
-//				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
-				result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
+				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
+//				result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
 
 				if (result != V_EMPTY)
 				{
@@ -3505,7 +3775,7 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 			voxelX += dx;
 			tMaxX += tDeltaX;
 
-			if (voxelX = OutX) break;
+			if (voxelX == OutX) break;
 		}
 		else
 		if (tMaxY < tMaxZ)
@@ -3514,7 +3784,7 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 			voxelY += dy;
 			tMaxY += tDeltaY;
 
-			if (voxelY = OutY) break;
+			if (voxelY == OutY) break;
 		}
 		else
 		{
@@ -3522,13 +3792,13 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 			voxelZ += dz;
 			tMaxZ += tDeltaZ;
 
-			if (voxelZ = OutZ) break;
+			if (voxelZ == OutZ) break;
 		}
 	}
 
 	return V_EMPTY;
 }
-*/
+
 
 /**
  * Calculates a parabola trajectory, used for throwing items.
