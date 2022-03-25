@@ -3275,6 +3275,34 @@ bool LineSegmentIntersectsBoxSingle
 	return result;
 }
 
+/*
+
+Debug mode
+
+Debug mode is a special feature that makes it easier for developers/contributors to test out game features without needing to play a new game from scratch. After setting "debug: true" in the Options File, you can enable it by pressing Ctrl-D in-game to access a variety of features:
+
+Geoscape: Unlocks all research and shows globe country and region borders. Clicking on the globe returns the point coordinates. This option can be toggled, and toggles between showing country borders, regional borders, and mission zones.
+
+Battlescape: Whole map is revealed and opening the inventory screen resets TUs. Clicking the map returns the point coordinates. With traceAI enabled in the config, AI behavior is revealed and logged. Please note, in debug mode QuickSave/QuickLoad feature in Battlescape are completely disabled.
+
+Ctrl-V will reset visibility on all tiles, useful for observing LOS behaviour.
+
+Ctrl-K will kill all live aliens in the mission (nothing will be recovered).
+
+Ctrl-J will stun all live aliens in the mission (useful for testing recovery).
+
+Ctrl-W will warp the selected unit to the mouse cursor's current position.
+
+F8 will cycle through various engine processing speeds, useful for debugging animation errors.
+
+You can also press Ctrl-U or set "debugUi: true" to reveal the borders of the interface text, to debug translation errors.
+
+If the Commendations Mod is being played, Ctrl-C will wipe all earned commendations while retaining statistics, useful for debugging how they're awarded. 
+
+
+*/
+
+
 int TileEngine::calculateLine(Position origin, Position target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut)
 {
 	float tMaxX, tMaxY, tMaxZ, t, tDeltaX, tDeltaY, tDeltaZ;
@@ -3366,28 +3394,29 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 		)
 		{
 			// copy code later
-			cx = x1;// / TileWidth;
-			cy = y1;// / TileHeight;
-			cz = z1;// / TileDepth;
+			cx = x1;
+			cy = y1;
+			cz = z1;
 
 			// process voxel
 //			ProcessVoxel
 //			(
-//				trunc(x1 / mCellWidth),
-//				trunc(y1 / mCellHeight),
-//				trunc(y1 / mCellDepth)
+//				trunc(x1),
+//				trunc(y1),
+//				trunc(y1)
 //			);
 
-			if (_save != 0)
-			{
-				fpos = Position( cx, cy, cz );
-				fTile = _save->getTile(fpos);
-
-				if (fTile != 0)
-				{
-					fTile->setSmoke( 250 );
-				}
-			}			
+			// Skybuck: debug code, uses green smoke, blinds everything on accident
+//			if (_save != 0)
+//			{
+//				fpos = Position( cx, cy, cz );
+//				fTile = _save->getTile(fpos);
+//
+//				if (fTile != 0)
+//				{
+//					fTile->setSmoke( 250 );
+//				}
+//			}			
 
 			// process voxel
 			{
@@ -3400,8 +3429,8 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 				//passes through this point?
 				if (doVoxelCheck)
 				{
-					result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
-	//				result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
+	//				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
+					result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
 
 					if (result != V_EMPTY)
 					{
@@ -3476,17 +3505,9 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 		
 			// CudaTraverseOptimizedSingleFinal
 			// (
-			//	x1/mCellWidth, y1/mCellHeight, z1/mCellDepth,
-			//	x2/mCellWidth, y2/mCellHeight, z2/mCellDepth
+			//	x1, y1, z1,
+			//	x2, y2, z2
 			// );
-			
-			x1 = x1; // / TileWidth;
-			y1 = y1; // / TileHeight;
-			z1 = z1; // / TileDepth;
-
-			x2 = x2; // / TileWidth;
-			y2 = y2; // / TileHeight;
-			z2 = z2; // / TileDepth;
 		}
 		else
 		// check if line intersects box
@@ -3577,27 +3598,28 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 				
 				// ProcessVoxel
 				// (
-				//	trunc(TraverseX1/TileWidth),
-				//	trunc(TraverseY1/TileHeight),
-				//	trunc(TraverseZ1/TileDepth),
+				//	trunc(TraverseX1),
+				//	trunc(TraverseY1),
+				//	trunc(TraverseZ1),
 				// );
 				//
 
 				// process voxels here
-				cx = TraverseX1; // / TileWidth;
-				cy = TraverseY1; // / TileHeight;
-				cz = TraverseZ1; // / TileDepth;
+				cx = TraverseX1; 
+				cy = TraverseY1; 
+				cz = TraverseZ1; 
 
-				if (_save != 0)
-				{
-					fpos = Position( cx, cy, cz );
-					fTile = _save->getTile(fpos);
-
-					if (fTile != 0)
-					{
-						fTile->setSmoke( 250 );
-					}
-				}
+				// Skybuck: debug code, uses green smoke, blinds everything on accident
+//				if (_save != 0)
+//				{
+//					fpos = Position( cx, cy, cz );
+//					fTile = _save->getTile(fpos);
+//
+//					if (fTile != 0)
+//					{
+//						fTile->setSmoke( 250 );
+//					}
+//				}
 
 				// process voxel
 				{
@@ -3610,8 +3632,8 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 					//passes through this point?
 					if (doVoxelCheck)
 					{
-						result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
-			//			result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
+			//			result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
+						result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
 
 						if (result != V_EMPTY)
 						{
@@ -3626,6 +3648,8 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 					{
 						int temp_res = verticalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE);
 						result = horizontalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE, steps<2);
+
+						// Skybuck: What does this code do ???
 						steps++;
 						if (result == -1)
 						{
@@ -3654,22 +3678,21 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 				
 				// CudaTraverseOptimizedSingleFinal
 				// (
-				//	TraverseX1/mCellWidth, TraverseY1/mCellHeight, TraverseZ1/mCellDepth,
-				//	TraverseX2/mCellWidth, TraverseY2/mCellHeight, TraverseZ2/mCellDepth
+				//	TraverseX1, TraverseY1, TraverseZ1,
+				//	TraverseX2, TraverseY2, TraverseZ2
 				// )
 				//
 
-				x1 = TraverseX1; // / TileWidth;
-				y1 = TraverseY1; // / TileHeight;
-				z1 = TraverseZ1; // / TileDepth;
+				x1 = TraverseX1; 
+				y1 = TraverseY1;
+				z1 = TraverseZ1; 
 
-				x2 = TraverseX2; // / TileWidth;
-				y2 = TraverseY2; // / TileHeight;
-				z2 = TraverseZ2; // / TileDepth;
+				x2 = TraverseX2; 
+				y2 = TraverseY2;
+				z2 = TraverseZ2; 
 			}
 		}
 	}
-
 
 	int dx = SIGN(x2 - x1);
 	if (dx != 0) tDeltaX = fmin(dx / (x2 - x1), 10000000.0f); else tDeltaX = 10000000.0f;
@@ -3700,6 +3723,7 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 		cy = voxelY;
 		cz = voxelZ;
 
+		// Skybuck: Safety code in case there is something wrong with the algorithm and/or clipping line box intersections and such.
 		/*
 		if
 		(
@@ -3711,17 +3735,17 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 
 		// process voxel
 		{
-
-			if (_save != 0)
-			{
-				fpos = Position( cx, cy, cz );
-				fTile = _save->getTile(fpos);
-
-				if (fTile != 0)
-				{
-					fTile->setSmoke( 250 );
-				}
-			}
+			// Skybuck: debug code, uses green smoke, blinds everything on accident
+//			if (_save != 0)
+//			{
+//				fpos = Position( cx, cy, cz );
+//				fTile = _save->getTile(fpos);
+//
+//				if (fTile != 0)
+//				{
+//					fTile->setSmoke( 250 );
+//				}
+//			}
 
 			// store trajectory even if outside of voxel boundary, other code must solve it, otherwise trajectory empty
 			if (storeTrajectory && trajectory)
@@ -3732,8 +3756,8 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 			//passes through this point?
 			if (doVoxelCheck)
 			{
-				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
-//				result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
+//				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
+				result = voxelCheck(Position(cx, cy, cz), excludeUnit, excludeAllUnits, onlyVisible, excludeAllBut); // skybuck: Not sure which call is better
 
 				if (result != V_EMPTY)
 				{
