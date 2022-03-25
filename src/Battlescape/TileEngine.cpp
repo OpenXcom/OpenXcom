@@ -3354,14 +3354,21 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
 //	int vMapVoxelBoundaryMaxZ = (_save->getMapSizeZ()*TileDepth)-1;
 
 	// better calculation
-
 	int vMapVoxelBoundaryMinX = 0;
 	int vMapVoxelBoundaryMinY = 0;
 	int vMapVoxelBoundaryMinZ = 0;
 
-	int vMapVoxelBoundaryMaxX = ((_save->getMapSizeX()*TileWidth)+TileWidth)-1;
-	int vMapVoxelBoundaryMaxY = ((_save->getMapSizeY()*TileHeight)+TileHeight)-1;
-	int vMapVoxelBoundaryMaxZ = ((_save->getMapSizeZ()*TileDepth)+TileDepth)-1;
+	int vLastMapTileX = (_save->getMapSizeX()-1);
+	int vLastMapTileY = (_save->getMapSizeY()-1);
+	int vLastMapTileZ = (_save->getMapSizeZ()-1);
+
+	int vLastTileVoxelX = TileWidth-1;
+	int vLastTileVoxelY = TileHeight-1;
+	int vLastTileVoxelZ = TileDepth-1;
+
+	int vMapVoxelBoundaryMaxX = (vLastMapTileX*TileWidth) + vLastTileVoxelX;
+	int vMapVoxelBoundaryMaxY = (vLastMapTileY*TileHeight) + vLastTileVoxelY;
+	int vMapVoxelBoundaryMaxZ = (vLastMapTileZ*TileDepth) + vLastTileVoxelZ;
 
 	if (_save->isBeforeGame())
 	{
