@@ -20,6 +20,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
+#include "../Engine/ModInfo.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -32,9 +33,9 @@ namespace OpenXcom
 	/**
 	 * Initializes all the elements in the Confirm OXCE screen.
 	 * @param state Pointer to the Options|Mod state.
-	 * @param isMaster Are we enabling a standard mod or a master mod?
+	 * @param modInfo What exactly mod caused this question?
 	 */
-	ModConfirmExtendedState::ModConfirmExtendedState(ModListState *state, bool isMaster) : _state(state), _isMaster(isMaster)
+	ModConfirmExtendedState::ModConfirmExtendedState(ModListState *state, const ModInfo *modInfo) : _state(state), _isMaster(modInfo->isMaster())
 	{
 		_screen = false;
 
@@ -66,7 +67,7 @@ namespace OpenXcom
 		_txtTitle->setAlign(ALIGN_CENTER);
 		_txtTitle->setBig();
 		_txtTitle->setWordWrap(true);
-		_txtTitle->setText(tr("STR_OXCE_REQUIRED_QUESTION"));
+		_txtTitle->setText(tr("STR_OXCE_REQUIRED_QUESTION").arg(modInfo->getRequiredExtendedEngine()));
 	}
 
 	/**

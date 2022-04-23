@@ -575,6 +575,7 @@ void SavedGame::save(const std::string &filename) const
 	YAML::Node brief;
 	brief["name"] = _name;
 	brief["version"] = OPENXCOM_VERSION_SHORT;
+	brief["engine"] = OPENXCOM_VERSION_ENGINE;
 	std::string git_sha = OPENXCOM_VERSION_GIT;
 	if (!git_sha.empty() && git_sha[0] ==  '.')
 	{

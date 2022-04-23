@@ -33,6 +33,8 @@ private:
 	std::string _name, _desc, _version, _author, _url, _id, _master;
 	bool _isMaster;
 	int _reservedSpace;
+	bool _engineOk;
+	std::string _requiredExtendedEngine;
 	std::string _requiredExtendedVersion;
 	std::string _resourceConfigFile;
 	std::vector<std::string> _externalResourceDirs;
@@ -62,6 +64,10 @@ public:
 	bool canActivate(const std::string &curMaster) const;
 	/// Gets size of mod, bigger mod reserve more values in common collections/surfacesets.
 	int getReservedSpace() const;
+	/// Is mod compatible with current OXCE engine aka "fork".
+	bool isEngineOk() const;
+	/// Gets the OXCE engine (like "FtA" or "Extended") required by this mod.
+	const std::string &getRequiredExtendedEngine() const;
 	/// Gets the OXCE version required by this mod.
 	const std::string &getRequiredExtendedVersion() const;
 	/// Gets ruleset file where are defined based resources like required original game data.

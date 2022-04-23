@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "../version.h"
 #include "ModInfo.h"
 #include "CrossPlatform.h"
 #include <yaml-cpp/yaml.h>
@@ -27,14 +28,48 @@ namespace OpenXcom
 ModInfo::ModInfo(const std::string &path) :
 	 _path(path), _name(CrossPlatform::baseFilename(path)),
 	_desc("No description."), _version("1.0"), _author("unknown author"),
-	_id(_name), _master("xcom1"), _isMaster(false), _reservedSpace(1)
+	_id(_name), _master("xcom1"), _isMaster(false), _reservedSpace(1),
+	_engineOk(false)
 {
 	// empty
 }
 
+namespace
+{
+
+struct EngineData
+{
+	std::string name;
+	int version[4];
+};
+
+/**
+ * List of engines that current version support.
+ */
+const EngineData supportedEngines[] = {
+	{ OPENXCOM_VERSION_ENGINE, { OPENXCOM_VERSION_NUMBER }},
+	{ "", { 0, 0, 0, 0 } }, // assume that every engine support mods from base game, remove if its not true.
+};
+
+template<int I>
+bool findCompatibleEngine(const EngineData (&l)[I], const std::string& v)
+{
+	for (int i = 0; i < I; ++i)
+	{
+		if (l[i].name == v)
+		{
+			(void)l[i].version; //TODO: add check for version
+			return true;
+		}
+	}
+	return false;
+}
+
+} //namespace
+
 void ModInfo::load(const std::string &filename)
 {
-	YAML::Node doc = YAML::LoadFile(filename);
+	const YAML::Node doc = YAML::LoadFile(filename);
 
 	_name     = doc["name"].as<std::string>(_name);
 	_desc     = doc["description"].as<std::string>(_desc);
@@ -43,7 +78,14 @@ void ModInfo::load(const std::string &filename)
 	_id       = doc["id"].as<std::string>(_id);
 	_isMaster = doc["isMaster"].as<bool>(_isMaster);
 	_reservedSpace = doc["reservedSpace"].as<int>(_reservedSpace);
-	_requiredExtendedVersion = doc["requiredExtendedVersion"].as<std::string>(_requiredExtendedVersion);
+	if (const YAML::Node& req = doc["requiredExtendedVersion"])
+	{
+		_requiredExtendedVersion = req.as<std::string>(_requiredExtendedVersion);
+		_requiredExtendedEngine = "Extended"; //for backward compatibility
+	}
+	_requiredExtendedEngine = doc["requiredExtendedEngine"].as<std::string>(_requiredExtendedEngine);
+
+	_engineOk = findCompatibleEngine(supportedEngines, _requiredExtendedEngine);
 
 	if (_reservedSpace < 1)
 	{
@@ -80,6 +122,8 @@ const std::string &ModInfo::getAuthor()                  const { return _author;
 const std::string &ModInfo::getId()                      const { return _id;                      }
 const std::string &ModInfo::getMaster()                  const { return _master;                  }
 bool               ModInfo::isMaster()                   const { return _isMaster;                }
+bool               ModInfo::isEngineOk()                 const { return _engineOk;                }
+const std::string &ModInfo::getRequiredExtendedEngine()  const { return _requiredExtendedEngine;  }
 const std::string &ModInfo::getRequiredExtendedVersion() const { return _requiredExtendedVersion; }
 const std::string &ModInfo::getResourceConfigFile()      const { return _resourceConfigFile;      }
 int                ModInfo::getReservedSpace()           const { return _reservedSpace;           }
