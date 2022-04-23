@@ -248,7 +248,7 @@ en-GB:
   STR_ALIEN_RACE: "Race"
   STR_ALIEN_TECH_LEVEL: "Tech Level"
   STR_RANDOMIZE: "Randomize"
-  STR_OXCE_REQUIRED_QUESTION: "This mod requires OpenXcom Extended to run correctly. Enable this mod?"
+  STR_OXCE_REQUIRED_QUESTION: "This mod requires OpenXcom {0} to run correctly. Enable this mod?"
   STR_RESTORE_DEFAULTS_QUESTION: "Are you sure you want to restore the default options?"
   STR_DISPLAY_OPTIONS_CONFIRM: "Do you want to keep the current display options?"
   STR_DISPLAY_OPTIONS_REVERT: "Reverting in 0:{0}"

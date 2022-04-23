@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#define OPENXCOM_VERSION_ENGINE ""
 #define OPENXCOM_VERSION_SHORT "1.0"
 #define OPENXCOM_VERSION_LONG "1.0.0.0"
 #define OPENXCOM_VERSION_NUMBER 1,0,0,0
