@@ -19,6 +19,7 @@
 #include "Palette.h"
 #include <fstream>
 #include "Exception.h"
+#include <cmath>
 
 namespace OpenXcom
 {
@@ -70,9 +71,32 @@ void Palette::loadDat(const std::string &filename, int ncolors, int offset)
 	for (int i = 0; i < _count && palFile.read((char*)value, 3); ++i)
 	{
 		// Correct X-Com colors to RGB colors
+
+		// imprecision conversion disabled
+		/*
 		_colors[i].r = value[0] * 4;
 		_colors[i].g = value[1] * 4;
 		_colors[i].b = value[2] * 4;
+		*/
+
+		// more precise version enabled
+		double vComputer;
+
+		vComputer = value[0];
+		vComputer = vComputer * 255.0;
+		vComputer = vComputer / 63.0;
+		_colors[i].r = round(vComputer);
+
+		vComputer = value[1];
+		vComputer = vComputer * 255.0;
+		vComputer = vComputer / 63.0;
+		_colors[i].g = round(vComputer);
+
+		vComputer = value[2];
+		vComputer = vComputer * 255.0;
+		vComputer = vComputer / 63.0;
+		_colors[i].b = round(vComputer);
+
 		_colors[i].unused = 255;
 	}
 	_colors[0].unused = 0;
