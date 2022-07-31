@@ -42,7 +42,7 @@ private:
 	Text *_txtMaster;
 	ComboBox *_cbxMasters;
 	TextList *_lstMods;
-	TextButton *_btnOk, *_btnCancel, *_btnPortal;
+	TextButton *_btnOk, *_btnCancel;
 	Text *_txtTooltip;
 	std::string _currentTooltip;
 	std::vector<const ModInfo *> _masters;
