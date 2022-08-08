@@ -34,6 +34,8 @@ namespace OpenXcom
 
 	ArticleStateTFTDVehicle::ArticleStateTFTDVehicle(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs)
 	{
+		_txtInfo->setHeight(72);
+
 		Unit *unit = _game->getMod()->getUnit(defs->id, true);
 		Armor *armor = _game->getMod()->getArmor(unit->getArmor(), true);
 		RuleItem *item = _game->getMod()->getItem(defs->id, true);

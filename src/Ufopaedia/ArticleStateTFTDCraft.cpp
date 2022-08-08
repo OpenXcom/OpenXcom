@@ -33,6 +33,8 @@ namespace OpenXcom
 
 	ArticleStateTFTDCraft::ArticleStateTFTDCraft(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs)
 	{
+		_txtInfo->setHeight(80);
+
 		RuleCraft *craft = _game->getMod()->getCraft(defs->id, true);
 		_txtStats = new Text(131, 56, 187, 116);
 		add(_txtStats);

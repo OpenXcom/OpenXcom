@@ -33,6 +33,8 @@ namespace OpenXcom
 
 	ArticleStateTFTDFacility::ArticleStateTFTDFacility(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs)
 	{
+		_txtInfo->setHeight(112);
+
 		RuleBaseFacility *facility = _game->getMod()->getBaseFacility(defs->id, true);
 
 		_lstInfo = new TextList(150, 50, 168, 150);

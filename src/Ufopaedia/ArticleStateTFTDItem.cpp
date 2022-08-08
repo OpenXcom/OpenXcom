@@ -177,6 +177,9 @@ namespace OpenXcom
 			default: break;
 		}
 
+		if (!_txtAmmoType[0]->getText().empty())
+			_txtInfo->setHeight(112);
+
 		centerAllSurfaces();
 	}
 

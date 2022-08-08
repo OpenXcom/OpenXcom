@@ -56,7 +56,7 @@ namespace OpenXcom
 		_game->getMod()->getSurface("BACK08.SCR")->blit(_bg);
 		_game->getMod()->getSurface(defs->image_id)->blit(_bg);
 
-		_txtInfo = new Text(defs->text_width, 150, 320 - defs->text_width, 34);
+		_txtInfo = new Text(defs->text_width, 136, 320 - defs->text_width, 34);
 		_txtTitle = new Text(284, 16, 36, 14);
 
 		add(_txtTitle);
