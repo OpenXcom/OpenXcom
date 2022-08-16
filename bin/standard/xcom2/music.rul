@@ -25,6 +25,9 @@ musics: #done
     catPos: 11
   - type: GMISPOSH #ufo / terror
     catPos: 12
+  - type: GMINTER0 #ufo / terror
+    name: GMISPOSH
+    catPos: 12
   - type: GMBIGMAR #tleth
     catPos: 13
   - type: GMDEFBAS #base defense

@@ -44,8 +44,20 @@ RuleMusic::~RuleMusic()
  */
 void RuleMusic::load(const YAML::Node& node)
 {
+	_name = node["name"].as<std::string>(_name);
 	_catPos = node["catPos"].as<int>(_catPos);
 	_normalization = node["normalization"].as<float>(_normalization);
+}
+
+/**
+ * Gets the track's filename in the SOUND folder.
+ * @return the track's filename (no extension).
+ */
+std::string RuleMusic::getName() const
+{
+	if (_name.empty())
+		return _type;
+	return _name;
 }
 
 /**
@@ -58,7 +70,7 @@ int RuleMusic::getCatPos() const
 }
 
 /**
- * Gets the track's normalization level.
+ * Gets the track's normalization level (Adlib only).
  * @return the track's normalization value.
  */
 float RuleMusic::getNormalization() const
