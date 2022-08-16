@@ -49,6 +49,7 @@ namespace OpenXcom
 		if (facility->getDefenseValue() > 0)
 		{
 			_lstInfo->setY(_lstInfo->getY() - 16);
+			_txtInfo->setHeight(_txtInfo->getHeight() - 16);
 			ss.str("");ss.clear();
 			ss << facility->getDefenseValue();
 			_lstInfo->addRow(2, tr("STR_DEFENSE_VALUE").c_str(), ss.str().c_str());
