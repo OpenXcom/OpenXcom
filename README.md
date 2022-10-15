@@ -104,6 +104,7 @@ User and Config folder:
 
 Data folders:
 - C:\Documents and Settings\\\<user\>\My Documents\OpenXcom\data (Windows 2000/XP)
+- DATADIR build flag
 - C:\Users\\\<user\>\Documents\OpenXcom\data (Windows Vista/7/8)
 - \<game directory\>
 - . (the current directory)
@@ -119,8 +120,9 @@ User and Config folder:
 Data folders:
 - $XDG\_DATA\_HOME/openxcom (if $XDG\_DATA\_HOME is defined)
 - $HOME/Library/Application Support/OpenXcom (if $XDG\_DATA\_HOME is not defined)
+- DATADIR build flag
 - $XDG\_DATA\_DIRS/openxcom (for each directory in $XDG\_DATA\_DIRS if $XDG\_DATA\_DIRS is defined)
-- /Users/Shared/OpenXcom
+- /Users/Shared/OpenXcom (if $XDG\_DATA\_DIRS is not defined or is empty)
 - . (the current directory)
 
 ### Linux
@@ -138,9 +140,11 @@ Config folder:
 Data folders:
 - $XDG\_DATA\_HOME/openxcom (if $XDG\_DATA\_HOME is defined)
 - $HOME/.local/share/openxcom (if $XDG\_DATA\_HOME is not defined)
+- DATADIR build flag
 - $XDG\_DATA\_DIRS/openxcom (for each directory in $XDG\_DATA\_DIRS if $XDG\_DATA\_DIRS is defined)
-- /usr/local/share/openxcom
-- /usr/share/openxcom
+- /usr/local/share/openxcom (if $XDG\_DATA\_DIRS is not defined or is empty)
+- /usr/share/openxcom (if $XDG\_DATA\_DIRS is not defined or is empty)
+- the directory data files were installed to
 - . (the current directory)
 
 ## Configuration
