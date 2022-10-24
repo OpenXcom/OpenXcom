@@ -1155,8 +1155,8 @@ void SaveConverter::loadDatUp()
 			bool discovered = load<Uint8>(rdata + 0x08) == 2;
 			if (discovered)
 			{
-				std::vector<std::string> requires = article->requires;
-				for (std::vector<std::string>::const_iterator r = requires.begin(); r != requires.end(); ++r)
+				std::vector<std::string> reqs = article->_requires;
+				for (std::vector<std::string>::const_iterator r = reqs.begin(); r != reqs.end(); ++r)
 				{
 					RuleResearch *research = _mod->getResearch(*r);
 					if (research && research->getCost() == 0)

@@ -54,7 +54,7 @@ namespace OpenXcom
 	 */
 	bool Ufopaedia::isArticleAvailable(SavedGame *save, ArticleDefinition *article)
 	{
-		return save->isResearched(article->requires);
+		return save->isResearched(article->_requires);
 	}
 
 	/**
@@ -86,7 +86,7 @@ namespace OpenXcom
 		}
 		for (size_t it = 0; it<articles.size(); ++it)
 		{
-			for (std::vector<std::string>::iterator j = articles[it]->requires.begin(); j != articles[it]->requires.end(); ++j)
+			for (std::vector<std::string>::iterator j = articles[it]->_requires.begin(); j != articles[it]->_requires.end(); ++j)
 			{
 				if (article_id == *j)
 				{

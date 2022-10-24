@@ -82,7 +82,7 @@ namespace OpenXcom
 	{
 		id = title = node["id"].as<std::string>(id);
 		section = node["section"].as<std::string>(section);
-		requires = node["requires"].as< std::vector<std::string> >(requires);
+		_requires = node["requires"].as< std::vector<std::string> >(_requires);
 		title = node["title"].as<std::string>(title);
 		//_type_id = (UfopaediaTypeId)node["type_id"].as<int>(_type_id);
 		_listOrder = node["listOrder"].as<int>(_listOrder);
