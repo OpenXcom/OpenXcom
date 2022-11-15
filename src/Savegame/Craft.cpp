@@ -39,6 +39,44 @@
 
 namespace OpenXcom
 {
+	void Craft::calculateStatus(bool startRearming)
+	{
+		int available = 0, full = 0;
+		for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
+		{
+			if ((*i) == 0)
+				continue;
+			available++;
+			if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
+			{
+				full++;
+			}
+			else if (startRearming)
+			{
+				(*i)->setRearming(true);
+			}
+		}
+		if (!Options::craftRearmFirst && _damage > 0)
+		{
+			_status = "STR_REPAIRS";
+		}
+		else if (available != full)
+		{
+			_status = "STR_REARMING";
+		}
+		else if (_fuel < _rules->getMaxFuel() && !_lowFuel) // FIXME out of fuel in base
+		{
+			_status = "STR_REFUELLING";
+		}
+		else if (_damage > 0)
+		{
+			_status = "STR_REPAIRS";
+		}
+		else
+		{
+			_status = "STR_READY";
+		}
+	}
 
 /**
  * Initializes a craft of the specified type and
@@ -705,34 +743,7 @@ void Craft::think()
  */
 void Craft::checkup()
 {
-	int available = 0, full = 0;
-	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
-	{
-		if ((*i) == 0)
-			continue;
-		available++;
-		if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
-		{
-			full++;
-		}
-		else
-		{
-			(*i)->setRearming(true);
-		}
-	}
-
-	if (_damage > 0)
-	{
-		_status = "STR_REPAIRS";
-	}
-	else if (available != full)
-	{
-		_status = "STR_REARMING";
-	}
-	else
-	{
-		_status = "STR_REFUELLING";
-	}
+	calculateStatus(true);
 }
 
 /**
@@ -783,10 +794,7 @@ void Craft::consumeFuel()
 void Craft::repair()
 {
 	setDamage(_damage - _rules->getRepairRate());
-	if (_damage <= 0)
-	{
-		_status = "STR_REARMING";
-	}
+	calculateStatus(false);
 }
 
 /**
@@ -796,7 +804,7 @@ void Craft::repair()
  */
 std::string Craft::refuel()
 {
-	std::string fuel;
+	std::string fuelType;
 	if (_fuel < _rules->getMaxFuel())
 	{
 		std::string item = _rules->getRefuelItem();
@@ -814,31 +822,16 @@ std::string Craft::refuel()
 			}
 			else if (!_lowFuel)
 			{
-				fuel = item;
-				if (_fuel > 0)
-				{
-					_status = "STR_READY";
-				}
-				else
+				fuelType = item;
+				if (_fuel <= 0)
 				{
 					_lowFuel = true;
 				}
 			}
 		}
 	}
-	if (_fuel >= _rules->getMaxFuel())
-	{
-		_status = "STR_READY";
-		for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
-		{
-			if (*i && (*i)->isRearming())
-			{
-				_status = "STR_REARMING";
-				break;
-			}
-		}
-	}
-	return fuel;
+	calculateStatus(false);
+	return fuelType;
 }
 
 /**
@@ -854,7 +847,7 @@ std::string Craft::rearm(const Mod *mod)
 	{
 		if (i == _weapons.end())
 		{
-			_status = "STR_REFUELLING";
+			calculateStatus(false);
 			break;
 		}
 		if (*i != 0 && (*i)->isRearming())
