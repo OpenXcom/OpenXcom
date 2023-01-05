@@ -235,6 +235,23 @@ std::vector<std::string> findDataFolders()
 #endif
 
 #endif
+
+#ifdef __linux
+	{
+		char buffer[PATH_MAX];
+		const ssize_t count = readlink("/proc/self/exe", buffer, PATH_MAX);
+		// Get absolute executable path
+		if (count != 0) {
+			const std::string exe_path = std::string(buffer, count);
+			// Get folder path
+			const size_t dir_pos = exe_path.find_last_of("/");
+			if (dir_pos != std::string::npos) {
+				std::string dir = exe_path.substr(0, dir_pos);
+				list.push_back( dir.append("/") );
+			}
+		}
+	}
+#endif
 	// Get working directory
 	list.push_back("./");
 #endif
