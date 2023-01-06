@@ -1230,6 +1230,8 @@ void TextList::scrollTo(size_t scroll)
 {
 	if (!_scrolling)
 		return;
+	if (_rows.size() <= _visibleRows)
+		return;
 	_scroll = Clamp(scroll, (size_t)(0), _rows.size() - _visibleRows);
 	draw(); // can't just set _redraw here because reasons
 	updateArrows();
