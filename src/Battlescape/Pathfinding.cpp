@@ -451,6 +451,22 @@ int Pathfinding::getTUCost(Position startPosition, int direction, Position *endP
 				cost += 2;
 			}
 
+			if (missile && destinationTile->getUnit())
+			{
+				BattleUnit *unitHere = destinationTile->getUnit();
+				if (unitHere != target && !unitHere->isOut())
+				{
+					if (unitHere->getFaction() == _unit->getFaction())
+					{
+						return 255; // consider any tile occupied by a friendly as being blocked
+					}
+					else if (unitHere->getTurnsSinceSpotted() <= unit->getUnitRules()->getIntelligence())
+					{
+						return 255; // consider any tile occupied by a known unit that isn't our target as being blocked
+					}
+				}
+			}
+
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
 			// Maybe if flying then it makes no difference?
 			if (Options::strafe && _strafeMove) {
@@ -626,9 +642,8 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 		if (tile->getUnit())
 		{
 			BattleUnit *unit = tile->getUnit();
-			if (unit == _unit || unit == missileTarget || unit->isOut()) return false;
-			if (missileTarget && unit != missileTarget && unit->getFaction() == FACTION_HOSTILE)
-				return true;			// AI pathfinding with missiles shouldn't path through their own units
+			if (unit == _unit || unit == missileTarget || unit->isOut())
+				return false;
 			if (_unit)
 			{
 				if (_unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
