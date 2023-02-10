@@ -1078,15 +1078,15 @@ void BattlescapeGenerator::deployAliens(AlienDeployment *deployment)
 		std::string alienName = race->getMember((*d).alienRank);
 
 		int quantity;
-
+		int deltaQuantity = _mod->isDemigod() ? (*d).dQty : RNG::generate(0, (*d).dQty); // maximium spawns for demigod
 		if (_game->getSavedGame()->getDifficulty() < DIFF_VETERAN)
-			quantity = (*d).lowQty + RNG::generate(0, (*d).dQty); // beginner/experienced
+			quantity = (*d).lowQty + deltaQuantity; // beginner/experienced
 		else if (_game->getSavedGame()->getDifficulty() < DIFF_SUPERHUMAN)
-			quantity = (*d).lowQty+(((*d).highQty-(*d).lowQty)/2) + RNG::generate(0, (*d).dQty); // veteran/genius
+			quantity = (*d).lowQty + (((*d).highQty - (*d).lowQty) / 2) + deltaQuantity; // veteran/genius
 		else
-			quantity = (*d).highQty + RNG::generate(0, (*d).dQty); // super (and beyond?)
+			quantity = (*d).highQty + deltaQuantity; // super (and beyond?)
 
-		quantity += RNG::generate(0, (*d).extraQty);
+		quantity += _mod->isDemigod() ? (*d).extraQty : RNG::generate(0, (*d).extraQty);
 
 		for (int i = 0; i < quantity; ++i)
 		{

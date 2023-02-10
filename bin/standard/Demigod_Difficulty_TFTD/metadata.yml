@@ -1,0 +1,9 @@
+#
+# metadata.yaml for Demigod Difficulty
+
+name: "Demigod Difficulty"
+version: 1.0
+description: "Force maximum alien spawns"
+author: the OpenXcom team
+
+master: xcom2

@@ -1,0 +1,1161 @@
+# enable the in-game flag to force spawns
+difficultyDemigod: true
+
+# slight change in spawn order for terror missions:
+# spawn large units first to give a more even distribution
+
+alienDeployments:
+  - type: STR_PORT_TERROR
+    data:
+      - alienRank: 6
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 7
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 5
+        lowQty: 4
+        highQty: 6
+        dQty: 1
+        percentageOutsideUfo: 70
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_SONIC_PULSER
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+      - alienRank: 4
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+            - STR_SONIC_PULSER
+          -
+            - STR_THERMAL_SHOK_LAUNCHER
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+            - STR_MC_READER
+      - alienRank: 3
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+            - STR_MC_READER
+          -
+            - STR_THERMAL_SHOK_LAUNCHER
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_SONIC_PULSER
+      - alienRank: 2
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_THERMIC_LANCE
+          -
+            - STR_HEAVY_THERMIC_LANCE
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+      - alienRank: 1
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+    width: 50
+    length: 50
+    height: 4
+    civilians: 16
+    terrains:
+      - PORT
+    script: PORT_TERROR
+    briefing:
+      palette: 4
+      music: GMISPOSH
+    alert: STR_ALIENS_LAUNCH_PORT_TERROR
+    alertBackground: BACK03.SCR
+    markerName: STR_TERROR_SITE
+    duration: [4, 10]
+    despawnPenalty: 1000
+  - type: STR_ISLAND_TERROR
+    data:
+      - alienRank: 6
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 7
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 5
+        lowQty: 4
+        highQty: 6
+        dQty: 1
+        percentageOutsideUfo: 70
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_SONIC_PULSER
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+      - alienRank: 4
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+            - STR_SONIC_PULSER
+          -
+            - STR_THERMAL_SHOK_LAUNCHER
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+            - STR_MC_READER
+      - alienRank: 3
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+            - STR_MC_READER
+          -
+            - STR_THERMAL_SHOK_LAUNCHER
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_SONIC_PULSER
+      - alienRank: 2
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_THERMIC_LANCE
+          -
+            - STR_HEAVY_THERMIC_LANCE
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+      - alienRank: 1
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+    width: 50
+    length: 50
+    height: 4
+    civilians: 16
+    terrains:
+      - ISLAND
+    script: ISLAND_TERROR
+    briefing:
+      palette: 4
+      music: GMISPOSH
+    alert: STR_ALIENS_LAUNCH_ISLAND_TERROR
+    alertBackground: BACK03.SCR
+    markerName: STR_TERROR_SITE
+    duration: [4, 10]
+    despawnPenalty: 1000
+  - type: STR_CARGO_SHIP_P1
+    data:
+      - alienRank: 6
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 7
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 5
+        lowQty: 4
+        highQty: 6
+        dQty: 1
+        percentageOutsideUfo: 70
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_SONIC_PULSER
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+      - alienRank: 4
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+            - STR_SONIC_PULSER
+          -
+            - STR_THERMAL_SHOK_LAUNCHER
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+            - STR_MC_READER
+      - alienRank: 3
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+            - STR_MC_READER
+          -
+            - STR_THERMAL_SHOK_LAUNCHER
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_SONIC_PULSER
+      - alienRank: 2
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_VIBRO_BLADE
+          -
+            - STR_THERMIC_LANCE
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+      - alienRank: 1
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+    width: 30
+    length: 70
+    height: 4
+    civilians: 16
+    script: SHIP_P1
+    terrains:
+      - CARGO
+    nextStage: STR_CARGO_SHIP_P2
+    briefing:
+      title: STR_SHIP_RESCUE_MISSION
+      desc: STR_SHIP_RESCUE_P1_BRIEFING
+      palette: 4
+      music: GMISPOSH
+    alert: STR_ALIENS_ATTACK_SHIPPING_ROUTE
+    alertBackground: BACK03.SCR
+    markerName: STR_TERROR_SITE
+    duration: [4, 10]
+    despawnPenalty: 1000
+  - type: STR_CARGO_SHIP_P2
+    data:
+      - alienRank: 6
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 7
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 5
+        lowQty: 4
+        highQty: 6
+        dQty: 1
+        percentageOutsideUfo: 70
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_SONIC_PULSER
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+      - alienRank: 4
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+            - STR_SONIC_PULSER
+          -
+            - STR_THERMAL_SHOK_LAUNCHER
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+            - STR_MC_READER
+      - alienRank: 3
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+            - STR_MC_READER
+          -
+            - STR_THERMAL_SHOK_LAUNCHER
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_SONIC_PULSER
+      - alienRank: 2
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_VIBRO_BLADE
+          -
+            - STR_THERMIC_LANCE
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+      - alienRank: 1
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+    width: 30
+    length: 70
+    height: 4
+    civilians: 16
+    script: SHIP_P2
+    terrains:
+      - CARGO
+    shade: 0
+    briefing:
+      title: STR_SHIP_RESCUE_MISSION
+      desc: STR_SHIP_RESCUE_P2_BRIEFING
+      palette: 4
+      music: GMISPOSH
+      background: BACK01.SCR
+    markerName: STR_TERROR_SITE
+  - type: STR_CRUISE_SHIP_P1
+    data:
+      - alienRank: 6
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 7
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 5
+        lowQty: 4
+        highQty: 6
+        dQty: 1
+        percentageOutsideUfo: 70
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_SONIC_PULSER
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+      - alienRank: 4
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+            - STR_SONIC_PULSER
+          -
+            - STR_THERMAL_SHOK_LAUNCHER
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+            - STR_MC_READER
+      - alienRank: 3
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+            - STR_MC_READER
+          -
+            - STR_THERMAL_SHOK_LAUNCHER
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_SONIC_PULSER
+      - alienRank: 2
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_THERMIC_LANCE
+          -
+            - STR_HEAVY_THERMIC_LANCE
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+      - alienRank: 1
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+    width: 30
+    length: 70
+    height: 4
+    civilians: 16
+    script: SHIP_P1
+    terrains:
+      - LINERT
+    nextStage: STR_CRUISE_SHIP_P2
+    briefing:
+      title: STR_SHIP_RESCUE_MISSION
+      desc: STR_SHIP_RESCUE_P1_BRIEFING
+      palette: 4
+      music: GMISPOSH
+    alert: STR_ALIENS_ATTACK_SHIPPING_ROUTE
+    alertBackground: BACK03.SCR
+    markerName: STR_TERROR_SITE
+    duration: [4, 10]
+    despawnPenalty: 1000
+  - type: STR_CRUISE_SHIP_P2
+    data:
+      - alienRank: 6
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 7
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 5
+        lowQty: 4
+        highQty: 6
+        dQty: 1
+        percentageOutsideUfo: 70
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_SONIC_PULSER
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+      - alienRank: 4
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+            - STR_SONIC_PULSER
+          -
+            - STR_THERMAL_SHOK_LAUNCHER
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+            - STR_MC_READER
+      - alienRank: 3
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+            - STR_MC_READER
+          -
+            - STR_THERMAL_SHOK_LAUNCHER
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_SONIC_PULSER
+      - alienRank: 2
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_VIBRO_BLADE
+          -
+            - STR_THERMIC_LANCE
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+      - alienRank: 1
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+    width: 30
+    length: 70
+    height: 4
+    civilians: 16
+    script: SHIP_P2
+    terrains:
+      - LINERB
+    shade: 0
+    briefing:
+      title: STR_SHIP_RESCUE_MISSION
+      desc: STR_SHIP_RESCUE_P2_BRIEFING
+      palette: 4
+      music: GMISPOSH
+      background: BACK01.SCR
+    markerName: STR_TERROR_SITE
+  - type: STR_ARTIFACT_SITE_P1
+    data:
+      - alienRank: 6
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        extraQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 7
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        extraQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 5
+        lowQty: 4
+        highQty: 6
+        dQty: 1
+        extraQty: 2
+        percentageOutsideUfo: 70
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_SONIC_PULSER
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+      - alienRank: 4
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        extraQty: 2
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+            - STR_SONIC_PULSER
+          -
+            - STR_THERMAL_SHOK_LAUNCHER
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+            - STR_MC_READER
+      - alienRank: 3
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        extraQty: 2
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+            - STR_MC_READER
+          -
+            - STR_THERMAL_SHOK_LAUNCHER
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_SONIC_PULSER
+      - alienRank: 2
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        extraQty: 2
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_THERMIC_LANCE
+          -
+            - STR_HEAVY_THERMIC_LANCE
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+      - alienRank: 1
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        extraQty: 2
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+    width: 50
+    length: 50
+    height: 4
+    terrains:
+      - ALART
+    script: ARTIFACT_P1
+    nextStage: STR_ARTIFACT_SITE_P2
+    briefing:
+      title: STR_ALIEN_CONTACT_SITE_MISSION
+      palette: 4
+      music: GMATTBAS
+    alert: STR_ALIEN_ACTIVITY_DETECTED
+    alertBackground: BACK03.SCR
+    markerName: STR_ARTIFACT_SITE
+    duration: [4, 10]
+    despawnPenalty: 2000
+    objectiveFailed: [STR_ALIEN_SYNOMIUM_DEVICE_FAILED, -750]
+  - type: STR_ARTIFACT_SITE_P2
+    data:
+      - alienRank: 6
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        extraQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 7
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        extraQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 5
+        lowQty: 4
+        highQty: 6
+        dQty: 1
+        extraQty: 2
+        percentageOutsideUfo: 70
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_SONIC_PULSER
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+      - alienRank: 4
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        extraQty: 2
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+            - STR_SONIC_PULSER
+          -
+            - STR_THERMAL_SHOK_LAUNCHER
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+            - STR_MC_READER
+      - alienRank: 3
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        extraQty: 2
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+          -
+            - STR_SONIC_CANNON
+            - STR_CANNON_POWER_CLIP
+            - STR_CANNON_POWER_CLIP
+            - STR_SONIC_PULSER
+            - STR_MC_READER
+          -
+            - STR_THERMAL_SHOK_LAUNCHER
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_THERMAL_SHOK_BOMB
+            - STR_SONIC_PULSER
+      - alienRank: 2
+        lowQty: 1
+        highQty: 2
+        dQty: 0
+        extraQty: 2
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_SONIC_PISTOL
+            - STR_PISTOL_POWER_CLIP
+            - STR_PISTOL_POWER_CLIP
+          -
+            - STR_SONIC_BLASTA_RIFLE
+            - STR_BLASTA_POWER_CLIP
+            - STR_BLASTA_POWER_CLIP
+            - STR_THERMIC_LANCE
+          -
+            - STR_HEAVY_THERMIC_LANCE
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+            - STR_SONIC_PULSER
+      - alienRank: 1
+        lowQty: 1
+        highQty: 1
+        dQty: 0
+        extraQty: 2
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+    width: 40
+    length: 40
+    height: 4
+    terrains:
+      - GRUNGE
+    shade: 15
+    depth: [3, 3]
+    script: ARTIFACT_P2
+    briefing:
+      title: STR_ALIEN_CONTACT_SITE_MISSION
+      palette: 4
+      music: GMATTBAS
+      background: BACK01.SCR
+    markerName: STR_ARTIFACT_SITE
+    objectiveType: 3
+    objectivesRequired: 1
+    objectiveComplete: [STR_ALIEN_SYNOMIUM_DEVICE_DESTROYED, 750]
+    objectiveFailed: [STR_ALIEN_SYNOMIUM_DEVICE_FAILED, -750]
+    objectivePopup: STR_CONTROL_CENTER_DESTROYED
