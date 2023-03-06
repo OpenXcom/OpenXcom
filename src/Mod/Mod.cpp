@@ -1617,6 +1617,7 @@ T *Mod::loadRule(const YAML::Node &node, std::map<std::string, T*> *map, std::ve
 		typename std::map<std::string, T*>::iterator i = map->find(type);
 		if (i != map->end())
 		{
+			delete i->second;
 			map->erase(i);
 		}
 		if (index != 0)
