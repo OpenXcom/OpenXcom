@@ -63,6 +63,10 @@ void RuleTerrain::load(const YAML::Node &node, Mod *mod)
 	}
 	if (const YAML::Node &map = node["mapBlocks"])
 	{
+		for (std::vector<MapBlock*>::iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
+		{
+			delete *i;
+		}
 		_mapBlocks.clear();
 		for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
 		{
