@@ -460,7 +460,7 @@ int Pathfinding::getTUCost(Position startPosition, int direction, Position *endP
 					{
 						return 255; // consider any tile occupied by a friendly as being blocked
 					}
-					else if (unitHere->getTurnsSinceSpotted() <= unit->getUnitRules()->getIntelligence())
+					else if (unit->getUnitRules() && unitHere->getTurnsSinceSpotted() <= unit->getUnitRules()->getIntelligence())
 					{
 						return 255; // consider any tile occupied by a known unit that isn't our target as being blocked
 					}
