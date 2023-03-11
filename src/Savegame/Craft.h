@@ -55,6 +55,8 @@ private:
 	bool _lowFuel, _mission, _inBattlescape, _inDogfight;
 	double _speedMaxRadian;
 
+	void calculateStatus(bool startRearming);
+
 	using MovingTarget::load;
 public:
 	/// Creates a craft of the specified type.

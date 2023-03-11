@@ -111,6 +111,8 @@ en-GB:
   STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC: "Craft currently in-flight can be transferred."
   STR_CRAFTLAUNCHALWAYS: "Force craft launch"
   STR_CRAFTLAUNCHALWAYS_DESC: "Craft can be launched even when they aren't ready, overriding the need for maintenance."
+  STR_CRAFTREARMFIRST: "Rearm craft first"
+  STR_CRAFTREARMFIRST_DESC: "Craft is rearmed and refuelled before repairing, making a forced launch more useful."
   STR_CUSTOMINITIALBASE: "Custom initial base"
   STR_CUSTOMINITIALBASE_DESC: "When starting a new game, you can manually place your starting facilities instead of using the default layout."
   STR_GLOBESEASONS: "Realistic globe lighting"
