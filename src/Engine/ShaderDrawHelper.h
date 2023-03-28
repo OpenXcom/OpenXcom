@@ -50,6 +50,20 @@ public:
 	}
 };
 
+/**
+ * 2d offset, return offset of given pixel to some predetermined position in 2d space.
+ */
+class Offset
+{
+public:
+	int x;
+	int y;
+
+	inline Offset(int xx, int yy) : x(xx), y(yy)
+	{
+
+	}
+};
 
 /**
  * This is surface argument to `ShaderDraw`.
@@ -503,6 +517,71 @@ struct controler<Scalar<T> >
 		return ref;
 	}
 };
+
+/// implementation for offset
+template<>
+struct controler<Offset>
+{
+	const Offset off;
+	int pos_x;
+	int pos_y;
+	int start_x;
+	int start_y;
+
+	inline controler(Offset s) : off(s),
+		pos_x(), pos_y(),
+		start_x(), start_y()
+	{
+
+	}
+
+	//cant use this function
+	//inline GraphSubset get_range()
+
+	inline void mod_range(GraphSubset&)
+	{
+		//nothing
+	}
+
+	inline void set_range(const GraphSubset& r)
+	{
+		start_x = r.beg_x - off.x;
+		start_y = r.beg_y - off.y;
+	}
+
+	inline void mod_y(int&, int&)
+	{
+		pos_y = start_y;
+	}
+	inline void set_y(const int& begin, const int&)
+	{
+		pos_y += begin;
+	}
+	inline void inc_y()
+	{
+		pos_y += 1;
+	}
+
+
+	inline void mod_x(int&, int&)
+	{
+		pos_x = start_x;
+	}
+	inline void set_x(const int& begin, const int&)
+	{
+		pos_x += begin;
+	}
+	inline void inc_x()
+	{
+		pos_x += 1;
+	}
+
+	inline Offset get_ref()
+	{
+		return Offset(pos_x, pos_y);
+	}
+};
+
 
 /// implementation for not used arg
 template<>
