@@ -244,6 +244,15 @@ struct CreateShadow
 	}
 };
 
+struct CreateShadowWithoutCache
+{
+	static inline void func(Uint8& dest, const helper::Offset& offset, const Cord& sun, const Sint16& noise, const int& radius)
+	{
+		Cord earth = static_data.circle_norm(0., 0., radius, offset.x, offset.y);
+		CreateShadow::func(dest, earth, sun, noise, 0);
+	}
+};
+
 }//namespace
 
 
@@ -976,14 +985,25 @@ Cord Globe::getSunDirection(double lon, double lat) const
 
 void Globe::drawShadow()
 {
-	ShaderMove<Cord> earth = ShaderMove<Cord>(_earthData[_zoom], getWidth(), getHeight());
-	ShaderRepeat<Sint16> noise = ShaderRepeat<Sint16>(_randomNoiseData, static_data.random_surf_size, static_data.random_surf_size);
+	if (Options::globeSurfaceCache)
+	{
+		ShaderMove<Cord> earth = ShaderMove<Cord>(_earthData[_zoom], getWidth(), getHeight());
+		ShaderRepeat<Sint16> noise = ShaderRepeat<Sint16>(_randomNoiseData, static_data.random_surf_size, static_data.random_surf_size);
 
-	earth.setMove(_cenX-getWidth()/2, _cenY-getHeight()/2);
+		earth.setMove(_cenX-getWidth()/2, _cenY-getHeight()/2);
 
-	lock();
-	ShaderDraw<CreateShadow>(ShaderSurface(this), earth, ShaderScalar(getSunDirection(_cenLon, _cenLat)), noise);
-	unlock();
+		lock();
+		ShaderDraw<CreateShadow>(ShaderSurface(this), earth, ShaderScalar(getSunDirection(_cenLon, _cenLat)), noise);
+		unlock();
+	}
+	else
+	{
+		ShaderRepeat<Sint16> noise = ShaderRepeat<Sint16>(_randomNoiseData, static_data.random_surf_size, static_data.random_surf_size);
+
+		lock();
+		ShaderDraw<CreateShadowWithoutCache>(ShaderSurface(this), helper::Offset(_cenX, _cenY), ShaderScalar(getSunDirection(_cenLon, _cenLat)), noise, ShaderScalar(_zoomRadius[_zoom]));
+		unlock();
+	}
 
 }
 
@@ -1876,17 +1896,24 @@ void Globe::setupRadii(int width, int height)
 	_radius = _zoomRadius[_zoom];
 	_radiusStep = (_zoomRadius[DOGFIGHT_ZOOM] - _zoomRadius[0]) / 10.0;
 
-	_earthData.resize(_zoomRadius.size());
-	//filling normal field for each radius
-
-	for (size_t r = 0; r<_zoomRadius.size(); ++r)
+	if (Options::globeSurfaceCache)
 	{
-		_earthData[r].resize(width * height);
-		for (int j=0; j<height; ++j)
-			for (int i=0; i<width; ++i)
-			{
-				_earthData[r][width*j + i] = static_data.circle_norm(width/2, height/2, _zoomRadius[r], i+.5, j+.5);
-			}
+		_earthData.resize(_zoomRadius.size());
+		//filling normal field for each radius
+
+		for (size_t r = 0; r<_zoomRadius.size(); ++r)
+		{
+			_earthData[r].resize(width * height);
+			for (int j=0; j<height; ++j)
+				for (int i=0; i<width; ++i)
+				{
+					_earthData[r][width*j + i] = static_data.circle_norm(width/2, height/2, _zoomRadius[r], i+.5, j+.5);
+				}
+		}
+	}
+	else
+	{
+		_earthData.clear();
 	}
 }
 
