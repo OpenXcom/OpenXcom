@@ -33,11 +33,6 @@ struct CordPolar
 		lon = plon;
 		lat = plat;
 	}
-	inline CordPolar(const CordPolar& pol)
-	{
-		lon = pol.lon;
-		lat = pol.lat;
-	}
 	inline CordPolar()
 	{
 		lon = 0;
@@ -55,12 +50,6 @@ struct Cord
 		x = px;
 		y = py;
 		z = pz;
-	}
-	inline Cord(const Cord& c)
-	{
-		x = c.x;
-		y = c.y;
-		z = c.z;
 	}
 	inline Cord()
 	{

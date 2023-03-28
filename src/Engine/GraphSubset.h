@@ -51,13 +51,6 @@ struct GraphSubset
 
 	}
 
-	GraphSubset(const GraphSubset& r):
-			beg_x(r.beg_x), end_x(r.end_x),
-			beg_y(r.beg_y), end_y(r.end_y)
-	{
-
-	}
-
 	inline GraphSubset offset(int x, int y) const
 	{
 		GraphSubset ret = *this;
