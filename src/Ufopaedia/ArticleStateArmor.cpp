@@ -70,6 +70,10 @@ namespace OpenXcom
 		{
 			look = armor->getSpriteInventory() + ".SPK";
 		}
+		if (!_game->getMod()->getSurface(look, false))
+		{
+			look = armor->getSpriteInventory();
+		}
 		_game->getMod()->getSurface(look)->blit(_image);
 
 

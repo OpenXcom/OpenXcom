@@ -340,11 +340,23 @@ void InventoryState::init()
 		{
 			look = s->getArmor()->getSpriteInventory() + ".SPK";
 		}
+		if (!_game->getMod()->getSurface(look, false))
+		{
+			look = s->getArmor()->getSpriteInventory();
+		}
 		_game->getMod()->getSurface(look)->blit(_soldier);
 	}
 	else
 	{
 		Surface *armorSurface = _game->getMod()->getSurface(unit->getArmor()->getSpriteInventory(), false);
+		if (!armorSurface)
+		{
+			armorSurface = _game->getMod()->getSurface(unit->getArmor()->getSpriteInventory() + ".SPK", false);
+		}
+		if (!armorSurface)
+		{
+			armorSurface = _game->getMod()->getSurface(unit->getArmor()->getSpriteInventory() + "M0.SPK", false);
+		}
 		if (armorSurface)
 		{
 			armorSurface->blit(_soldier);
