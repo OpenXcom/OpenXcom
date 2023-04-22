@@ -101,8 +101,6 @@ void ModInfo::load(const std::string &filename)
 		// default a master's master to none.  masters can still have
 		// masters, but they must be explicitly declared.
 		_master = "";
-		// only masters can load external resource dirs
-		_externalResourceDirs = doc["loadResources"].as< std::vector<std::string> >(_externalResourceDirs);
 	}
 	_resourceConfigFile = doc["resourceConfig"].as<std::string>(_resourceConfigFile);
 
@@ -110,6 +108,12 @@ void ModInfo::load(const std::string &filename)
 	if (_master == "*")
 	{
 		_master = "";
+	}
+
+	if (_isMaster && _master.empty())
+	{
+		// only top-level masters can load external resource dirs
+		_externalResourceDirs = doc["loadResources"].as< std::vector<std::string> >(_externalResourceDirs);
 	}
 }
 
