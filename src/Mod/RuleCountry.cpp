@@ -131,7 +131,10 @@ bool RuleCountry::insideCountry(double lon, double lat) const
 		else
 			inLon = ((lon >= _lonMin[i] && lon < M_PI*2.0) || (lon >= 0 && lon < _lonMax[i]));
 
-		inLat = (lat >= _latMin[i] && lat < _latMax[i]);
+		if (lat > 0) // make that both poles could be in some regions, this means `M_PI == _latMax[i]` or `-M_PI == _latMin[i]`
+			inLat = (lat > _latMin[i] && lat <= _latMax[i]);
+		else
+			inLat = (lat >= _latMin[i] && lat < _latMax[i]);
 
 		if (inLon && inLat)
 			return true;
