@@ -13,22 +13,38 @@
 
 if(CMAKE_GENERATOR)
 	# Being called as include(PostprocessBundle), so define a helper function.
-	set(POSTPROCESS_BUNDLE_MODULE_LOCATION "${CMAKE_CURRENT_LIST_FILE}")
+	set(_POSTPROCESS_BUNDLE_MODULE_LOCATION "${CMAKE_CURRENT_LIST_FILE}")
 	function(postprocess_bundle target path)
 		add_custom_command(TARGET ${target}
 			POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -D "BUNDLE_PATH=${path}"
-				-P "${POSTPROCESS_BUNDLE_MODULE_LOCATION}"
+				-P "${_POSTPROCESS_BUNDLE_MODULE_LOCATION}"
 				VERBATIM
 		)
 	endfunction()
 	return()
 endif()
 
+get_filename_component(BUNDLE_PATH "${BUNDLE_PATH}" ABSOLUTE)
+message(STATUS "Fixing up application bundle: ${BUNDLE_PATH}")
+
 # Make sure to fix up any additional shared libraries (like plugins) that are
 # needed.
-file(GLOB_RECURSE BUNDLE_LIBS "${BUNDLE_PATH}/Contents/MacOS/*.dylib")
+file(GLOB_RECURSE extra_libs "${BUNDLE_PATH}/Contents/MacOS/*.dylib")
+
+# BundleUtilities doesn't support DYLD_FALLBACK_LIBRARY_PATH behavior, which
+# makes it sometimes break on libraries that do weird things with @rpath. Specify
+# equivalent search directories until https://gitlab.kitware.com/cmake/cmake/issues/16625
+# is fixed and in our minimum CMake version.
+set(extra_dirs "/usr/local/lib" "/lib" "/usr/lib")
+
+# BundleUtilities is overly verbose, so disable most of its messages
+function(message)
+	if(NOT ARGV MATCHES "^STATUS;")
+		_message(${ARGV})
+	endif()
+endfunction()
 
 include(BundleUtilities)
 set(BU_CHMOD_BUNDLE_ITEMS ON)
-fixup_bundle("${BUNDLE_PATH}" "${BUNDLE_LIBS}" "")
+fixup_bundle("${BUNDLE_PATH}" "${extra_libs}" "${extra_dirs}")
