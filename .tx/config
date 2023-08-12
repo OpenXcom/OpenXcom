@@ -1,0 +1,59 @@
+[main]
+host         = https://www.transifex.com
+lang_map     = en_US: en-US, en_GB: en-GB, es_419: es-419, fr_CA: fr-CA, zh_CN: zh-CN, ca_ES: ca-ES, es_ES: es-ES, pt_BR: pt-BR, pt_PT: pt-PT, zh_TW: zh-TW
+minimum_perc = 10
+
+[o:openxcom:p:openxcom-extended:r:android]
+file_filter = translations/openxcom-extended/common/Language/Android/<lang>.yml
+source_file = bin/common/Language/Android/en_US.yml
+source_lang = en_US
+type        = YML
+
+[o:openxcom:p:openxcom-extended:r:common]
+file_filter = translations/openxcom-extended/common/Language/OXCE/<lang>.yml
+source_file = bin/common/Language/OXCE/en_US.yml
+source_lang = en_US
+type        = YML
+
+[o:openxcom:p:openxcom-extended:r:technical]
+file_filter = translations/openxcom-extended/common/Language/Technical/<lang>.yml
+source_file = bin/common/Language/Technical/en_US.yml
+source_lang = en_US
+type        = YML
+
+[o:openxcom:p:openxcom-extended:r:x-com-1]
+file_filter = translations/openxcom-extended/standard/xcom1/Language/OXCE/<lang>.yml
+source_file = bin/standard/xcom1/Language/OXCE/en_US.yml
+source_lang = en_US
+type        = YML
+
+[o:openxcom:p:openxcom-extended:r:x-com-2]
+file_filter = translations/openxcom-extended/standard/xcom2/Language/OXCE/<lang>.yml
+source_file = bin/standard/xcom2/Language/OXCE/en_US.yml
+source_lang = en_US
+type        = YML
+
+[o:openxcom:p:openxcom:r:installer]
+file_filter = translations/openxcom/install/win/Language/<lang>.yml
+source_file = bin/install/win/Language/en_US.yml
+source_lang = en_US
+type        = YML
+
+[o:openxcom:p:openxcom:r:openxcom]
+file_filter = translations/openxcom/common/Language/<lang>.yml
+source_file = bin/common/Language/en_US.yml
+source_lang = en_US
+type        = YML
+
+[o:openxcom:p:openxcom:r:x-com-1]
+file_filter = translations/openxcom/standard/xcom1/Language/<lang>.yml
+source_file = bin/standard/xcom1/Language/en_US.yml
+source_lang = en_US
+type        = YML
+
+[o:openxcom:p:openxcom:r:x-com-2]
+file_filter = translations/openxcom/standard/xcom2/Language/<lang>.yml
+source_file = bin/standard/xcom2/Language/en_US.yml
+source_lang = en_US
+type        = YML
+

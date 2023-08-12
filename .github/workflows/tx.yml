@@ -1,0 +1,21 @@
+name: "Transifex"
+on:
+  schedule:
+    - cron: '0 8 * * *'
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Pull
+        uses: transifex/cli-action@v2
+        with:
+          token: ${{ secrets.TX_TOKEN }}
+          args: pull --all --minimum-perc=10
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: tx-translations
+          path: translations/
+          retention-days: 7
