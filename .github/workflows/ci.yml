@@ -1,5 +1,3 @@
-# NOTE: We're using both Travis CI and Github Actions, if you change this file,
-# also change .travis.yml accordingly.
 name: ci
 
 on: [push, pull_request]
@@ -13,12 +11,12 @@ jobs:
       matrix:
         include:
           - name: Linux
-            os: ubuntu-20.04  # -latest is still stuck at 18.04
+            os: ubuntu-latest
             compiler: gcc
             cpp-compiler: g++
 
           - name: Linux
-            os: ubuntu-20.04  # -latest is still stuck at 18.04
+            os: ubuntu-latest
             compiler: clang
             cpp-compiler: clang++
 
