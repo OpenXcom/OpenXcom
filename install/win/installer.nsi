@@ -496,12 +496,12 @@ Function ScanSteam
 	Call ScanSteamLibrary
 
 	ClearErrors
-	FileOpen $0 "$R1\config\config.vdf" r
+	FileOpen $0 "$R1\config\libraryfolders.vdf" r
 	IfErrors steam_read_done
 	steam_read_loop:
 	FileRead $0 $1
 	IfErrors steam_read_done
-	${StrLoc} $2 $1 "BaseInstallFolder_" ">"
+	${StrLoc} $2 $1 "path" ">"
 	StrCmp $2 "" steam_read_next 0
 	${StrTok} $R1 $1 '"' "3" "1"
 	${StrRep} $R1 $R1 "\\" "\"
@@ -569,8 +569,8 @@ Function ValidateXcom
 	IfFileExists "$UFO_DIR\SOUND\*.*" 0 confirm_ufo
 	IfFileExists "$UFO_DIR\TERRAIN\*.*" 0 confirm_ufo
 	IfFileExists "$UFO_DIR\UFOGRAPH\*.*" 0 confirm_ufo
-	IfFileExists "$UFO_DIR\UFOINTRO\*.*" 0 confirm_ufo
 	IfFileExists "$UFO_DIR\UNITS\*.*" 0 confirm_ufo
+	IfFileExists "$UFO_DIR\GEOGRAPH\UP001.SPK" 0 confirm_ufo ; unique file
 	IfFileExists "$UFO_DIR\XcuSetup.bat" confirm_ufo_xcu
 	Goto validate_ufo_yes
 	confirm_ufo:
@@ -583,7 +583,6 @@ Function ValidateXcom
 
 	; TFTD
 	StrCmp $TFTD_DIR "" validate_tftd_yes
-	IfFileExists "$TFTD_DIR\FLOP_INT\*.*" 0 confirm_tftd
 	IfFileExists "$TFTD_DIR\GEODATA\*.*" 0 confirm_tftd
 	IfFileExists "$TFTD_DIR\GEOGRAPH\*.*" 0 confirm_tftd
 	IfFileExists "$TFTD_DIR\MAPS\*.*" 0 confirm_tftd
@@ -592,6 +591,7 @@ Function ValidateXcom
 	IfFileExists "$TFTD_DIR\TERRAIN\*.*" 0 confirm_tftd
 	IfFileExists "$TFTD_DIR\UFOGRAPH\*.*" 0 confirm_tftd
 	IfFileExists "$TFTD_DIR\UNITS\*.*" 0 confirm_tftd
+	IfFileExists "$TFTD_DIR\GEOGRAPH\UP001.BDY" 0 confirm_tftd ; unique file
 	IfFileExists "$TFTD_DIR\XcuSetup.bat" confirm_tftd_xcu
 	Goto validate_tftd_yes
 	confirm_tftd:
