@@ -30,6 +30,20 @@ jobs:
 
           echo 'FILENAME=openxcom_git_${{ env.DATEFILE }}' >> $GITHUB_ENV
 
+      - name: Install XP Toolset
+        shell: powershell
+        run: |
+          Set-Location "C:\Program Files (x86)\Microsoft Visual Studio\Installer\"
+          $InstallPath = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise"
+          $WorkLoads = '--add Microsoft.VisualStudio.Component.WinXP'
+          $Arguments = ('/c', "vs_installer.exe", 'modify', '--installPath', "`"$InstallPath`"", $WorkLoads, '--quiet', '--norestart', '--nocache')
+          $process = Start-Process -FilePath cmd.exe -ArgumentList $Arguments -Wait -PassThru -WindowStyle Hidden
+          if ($process.ExitCode -eq 0) {
+              Write-Host "components have been successfully added"
+          } else {
+              Write-Host "components were not installed"
+          }
+
       - name: Download dependencies
         run: |
           Invoke-WebRequest -Uri "https://openxcom.org/download/dev/openxcom-deps-win-vc2017.zip" -OutFile "openxcom-deps-win-vc2017-newest.zip"
@@ -42,8 +56,8 @@ jobs:
       - name: Compile source (x86 & x64)
         run: |
           cd src
-          msbuild OpenXcom.2010.sln /m /p:BuildInParallel=true /p:Configuration=Release /p:PreferredToolArchitecture=x64 /p:Platform=Win32 /v:minimal
-          msbuild OpenXcom.2010.sln /m /p:BuildInParallel=true /p:Configuration=Release /p:PreferredToolArchitecture=x64 /p:Platform=x64 /v:minimal
+          msbuild OpenXcom.2010.sln /m /p:BuildInParallel=true /p:PlatformToolset=v141_xp /p:Configuration=Release /p:PreferredToolArchitecture=x64 /p:Platform=Win32 /v:minimal
+          msbuild OpenXcom.2010.sln /m /p:BuildInParallel=true /p:PlatformToolset=v141_xp /p:Configuration=Release /p:PreferredToolArchitecture=x64 /p:Platform=x64 /v:minimal
           cd ..
 
       - name: Pull translations
