@@ -23,15 +23,11 @@ jobs:
       - name: Setup version info
         shell: bash
         run: |
-          cd install\win
-          sed -i "s/GAME_VERSION_GIT \"[^\"]*\"/GAME_VERSION_GIT \" git ${{ env.DATEVERSION }}\"/" version.nsh
-          sed -i "s/GAME_DATE_GIT \"[^\"]*\"/GAME_DATE_GIT \"${{ env.DATEFILE }}\"/" version.nsh
-          cd ..\..
-          
-          cd src          
-          sed -i "s/OPENXCOM_VERSION_GIT \"[^\"]*\"/OPENXCOM_VERSION_GIT \" git ${{ env.DATEVERSION }}\"/" version.h
-          cd ..
-          
+          sed -i "s/GAME_VERSION_GIT \"[^\"]*\"/GAME_VERSION_GIT \" git ${{ env.DATEVERSION }}\"/" install/win/version.nsh
+          sed -i "s/GAME_DATE_GIT \"[^\"]*\"/GAME_DATE_GIT \"${{ env.DATEFILE }}\"/" install/win/version.nsh
+
+          sed -i "s/OPENXCOM_VERSION_GIT \"[^\"]*\"/OPENXCOM_VERSION_GIT \" git ${{ env.DATEVERSION }}\"/" src/version.h
+
           echo 'FILENAME=openxcom_git_${{ env.DATEFILE }}' >> $GITHUB_ENV
 
       - name: Download dependencies
