@@ -16,7 +16,7 @@ jobs:
       - name: Setup environment
         shell: bash
         run: |
-          echo 'DESCRIBE=$(git describe)'' >> $GITHUB_ENV
+          echo 'DESCRIBE=$(git describe)' >> $GITHUB_ENV
           echo 'DATEFILE=$(git log -1 --date=format:"%Y_%m_%d_%H%M" --format="%ad")' >> $GITHUB_ENV
           echo 'DATEVERSION=$(git log -1 --date=format:"%Y-%m-%d %H:%M" --format="%ad")' >> $GITHUB_ENV
 
