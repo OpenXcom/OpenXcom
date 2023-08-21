@@ -1,0 +1,88 @@
+name: Nightly
+on:
+  push:
+    branches:
+      - master
+jobs:
+  windows:
+    name: Windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup environment
+        shell: bash
+        run: |
+          echo 'DESCRIBE=$(git describe)'' >> $GITHUB_ENV
+          echo 'DATEFILE=$(git log -1 --date=format:"%Y_%m_%d_%H%M" --format="%ad")' >> $GITHUB_ENV
+          echo 'DATEVERSION=$(git log -1 --date=format:"%Y-%m-%d %H:%M" --format="%ad")' >> $GITHUB_ENV
+
+      - name: Setup version info
+        shell: bash
+        run: |
+          cd install\win
+          sed -i "s/GAME_VERSION_GIT \"[^\"]*\"/GAME_VERSION_GIT \" git ${{ env.DATEVERSION }}\"/" version.nsh
+          sed -i "s/GAME_DATE_GIT \"[^\"]*\"/GAME_DATE_GIT \"${{ env.DATEFILE }}\"/" version.nsh
+          cd ..\..
+          
+          cd src          
+          sed -i "s/OPENXCOM_VERSION_GIT \"[^\"]*\"/OPENXCOM_VERSION_GIT \" git ${{ env.DATEVERSION }}\"/" version.h
+          cd ..
+          
+          echo 'FILENAME=openxcom_git_${{ env.DATEFILE }}' >> $GITHUB_ENV
+
+      - name: Download dependencies
+        run: |
+          Invoke-WebRequest -Uri "https://openxcom.org/download/dev/openxcom-deps-win-vc2017.zip" -OutFile "openxcom-deps-win-vc2017-newest.zip"
+          Expand-Archive -Path "openxcom-deps-win-vc2017-newest.zip"
+          Move-Item -Path "openxcom-deps-win-vc2017-newest\deps\*" -Destination "deps"
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1.3
+
+      - name: Compile source (x86 & x64)
+        run: |
+          cd src
+          msbuild OpenXcom.2010.sln /m /p:BuildInParallel=true /p:Configuration=Release /p:PreferredToolArchitecture=x64 /p:Platform=Win32 /v:minimal
+          msbuild OpenXcom.2010.sln /m /p:BuildInParallel=true /p:Configuration=Release /p:PreferredToolArchitecture=x64 /p:Platform=x64 /v:minimal
+          cd ..
+
+      - name: Pull translations
+        uses: transifex/cli-action@v2
+        with:
+          token: ${{ secrets.TX_TOKEN }}
+          args: pull --all --minimum-perc=10
+
+      - name: Pull data patch
+        uses: actions/checkout@v3
+        with:
+          repository: OpenXcom/XcomDataPatch
+          path: ./patch
+
+      - name: Copy data to bin
+        run: |
+          Move-Item -Path "translations\openxcom\common\*" -Destination "bin\common"
+          Move-Item -Path "translations\openxcom\standard\*" -Destination "bin\standard"
+          Move-Item -Path "patch\xcom1\*" -Destination "bin\standard\xcom1"
+          Move-Item -Path "patch\xcom2\*" -Destination "bin\standard\xcom2"
+
+      - name: Get SHA hashes
+        uses: nrwl/nx-set-shas@v3
+
+      - name: Generate build log
+        run: |
+          git log --pretty=format:"<strong>%an, %ad</strong>%n%B" -n 10 --date=iso-local ${{ env.NX_BASE }}..${{ env.NX_HEAD }} > ${{ env.FILENAME }}.log
+
+      - name: Archive log
+        uses: actions/upload-artifact@v3
+        with:
+          path: ${{ env.FILENAME }}.log
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.FILENAME }}_win
+          path: bin/**/*
