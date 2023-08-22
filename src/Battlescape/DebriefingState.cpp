@@ -18,6 +18,7 @@
  */
 #include "DebriefingState.h"
 #include <algorithm>
+#include <functional>
 #include "CannotReequipState.h"
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"

@@ -18,6 +18,7 @@
  */
 #include "Mod.h"
 #include <algorithm>
+#include <functional>
 #include <sstream>
 #include <climits>
 #include <cassert>
