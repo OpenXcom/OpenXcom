@@ -69,9 +69,12 @@ deps/
 docs/html/
 build/
 Dependencies/
+translations/
 *.*.user
+!install/win/plugins/**/*.dll
 #Ignore Vim swap files
 *.swp
 #Ignore NetBeans project directory
 nbproject/
 /makefile
+--------------
