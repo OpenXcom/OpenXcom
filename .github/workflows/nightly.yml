@@ -55,7 +55,7 @@ jobs:
 
       - name: Compile source (x86 & x64)
         env:
-          VC_FLAGS: /v:minimal /m /p:BuildInParallel=true /p:PreferredToolArchitecture=x64 /p:Configuration=Release /p:PlatformToolset=v141_xp /p:ConformanceMode=false
+          VC_FLAGS: /v:minimal /m /p:BuildInParallel=true /p:PreferredToolArchitecture=x64 /p:Configuration=Release_XP
         run: |
           cd src
           msbuild OpenXcom.2010.sln ${{ env.VC_FLAGS }} /p:Platform=Win32
