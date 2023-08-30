@@ -62,11 +62,12 @@ jobs:
           msbuild OpenXcom.2010.sln ${{ env.VC_FLAGS }} /p:Platform=x64
           cd ..
 
-#      - name: Pull translations
-#        uses: transifex/cli-action@v2
-#        with:
-#          token: ${{ secrets.TX_TOKEN }}
-#          args: pull --all --minimum-perc=10
+      - name: Pull translations
+        shell: powershell
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/transifex/cli/releases/latest/download/tx-windows-amd64.zip" -OutFile "tx.zip"
+          Expand-Archive -Path "tx.zip"
+          .\tx\tx.exe --token ${{ secrets.TX_TOKEN }} pull --all --minimum-perc=50
 
       - name: Pull data patch
         uses: actions/checkout@v3
@@ -76,10 +77,10 @@ jobs:
 
       - name: Copy data to bin
         run: |
-          Move-Item -Path "translations\openxcom\common\*" -Destination "bin\common"
-          Move-Item -Path "translations\openxcom\standard\*" -Destination "bin\standard"
-          Move-Item -Path "patch\xcom1\*" -Destination "bin\standard\xcom1"
-          Move-Item -Path "patch\xcom2\*" -Destination "bin\standard\xcom2"
+          Move-Item -Force -ErrorAction SilentlyContinue -Path "translations\openxcom\common\*" -Destination "bin\common"
+          Move-Item -Force -ErrorAction SilentlyContinue -Path "translations\openxcom\standard\*" -Destination "bin\standard"
+          Move-Item -Force -ErrorAction SilentlyContinue -Path "patch\xcom1\*" -Destination "bin\standard\xcom1"
+          Move-Item -Force -ErrorAction SilentlyContinue -Path "patch\xcom2\*" -Destination "bin\standard\xcom2"
 
       - name: Get SHA hashes
         uses: nrwl/nx-set-shas@v3
