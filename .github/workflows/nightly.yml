@@ -84,6 +84,8 @@ jobs:
 
       - name: Get SHA hashes
         uses: nrwl/nx-set-shas@v3
+        with:
+          main-branch-name: master
 
       - name: Generate build log
         run: |
