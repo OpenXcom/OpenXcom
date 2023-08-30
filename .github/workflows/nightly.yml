@@ -16,9 +16,9 @@ jobs:
       - name: Setup environment
         shell: bash
         run: |
-          echo 'DESCRIBE=$(git describe)' >> $GITHUB_ENV
-          echo 'DATEFILE=$(git log -1 --date=format:"%Y_%m_%d_%H%M" --format="%ad")' >> $GITHUB_ENV
-          echo 'DATEVERSION=$(git log -1 --date=format:"%Y-%m-%d %H:%M" --format="%ad")' >> $GITHUB_ENV
+          echo "DESCRIBE=`git describe`" >> $GITHUB_ENV
+          echo "DATEFILE=`git log -1 --date=format:\"%Y_%m_%d_%H%M\" --format=\"%ad\"`" >> $GITHUB_ENV
+          echo "DATEVERSION=`git log -1 --date=format:\"%Y-%m-%d %H:%M\" --format=\"%ad\"`" >> $GITHUB_ENV
 
       - name: Setup version info
         shell: bash
@@ -28,7 +28,7 @@ jobs:
 
           sed -i "s/OPENXCOM_VERSION_GIT \"[^\"]*\"/OPENXCOM_VERSION_GIT \" git ${{ env.DATEVERSION }}\"/" src/version.h
 
-          echo 'FILENAME=openxcom_git_${{ env.DATEFILE }}' >> $GITHUB_ENV
+          echo "FILENAME=openxcom_git_${{ env.DATEFILE }}" >> $GITHUB_ENV
 
       - name: Install XP Toolset
         shell: powershell
