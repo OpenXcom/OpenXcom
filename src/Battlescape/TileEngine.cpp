@@ -2618,7 +2618,7 @@ VoxelType TileEngine::voxelCheck(Position voxel, BattleUnit *excludeUnit, bool e
 				if (unit->getArmor()->getSize() > 1)
 				{
 					tilepos = tile->getPosition();
-					constexpr static int parts[] = {1,0,3,2}; // Change order 0,1,2,3 -> 1,0,3,2  (read commit description)
+					const static int parts[] = {1,0,3,2}; // Change order 0,1,2,3 -> 1,0,3,2  (read commit description)
 					part = parts[tilepos.x - unitpos.x + (tilepos.y - unitpos.y)*2];
 				}
 				int idx = (unit->getLoftemps(part) * 16) + y;
