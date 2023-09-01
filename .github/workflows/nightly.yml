@@ -16,7 +16,6 @@ jobs:
       - name: Setup environment
         shell: bash
         run: |
-          echo "DESCRIBE=`git describe`" >> $GITHUB_ENV
           echo "DATEFILE=`git log -1 --date=format:\"%Y_%m_%d_%H%M\" --format=\"%ad\"`" >> $GITHUB_ENV
           echo "DATEVERSION=`git log -1 --date=format:\"%Y-%m-%d %H:%M\" --format=\"%ad\"`" >> $GITHUB_ENV
 
@@ -45,6 +44,7 @@ jobs:
           }
 
       - name: Download dependencies
+        shell: powershell
         run: |
           Invoke-WebRequest -Uri "https://openxcom.org/download/dev/openxcom-deps-win-vc2017.zip" -OutFile "openxcom-deps-win-vc2017-newest.zip"
           Expand-Archive -Path "openxcom-deps-win-vc2017-newest.zip"
@@ -61,6 +61,8 @@ jobs:
           msbuild OpenXcom.2010.sln ${{ env.VC_FLAGS }} /p:Platform=Win32
           msbuild OpenXcom.2010.sln ${{ env.VC_FLAGS }} /p:Platform=x64
           cd ..
+          Rename-Item -Path "bin\Win32\Release_XP" -NewName "Release"
+          Rename-Item -Path "bin\x64\Release_XP" -NewName "Release"
 
       - name: Pull translations
         shell: powershell
@@ -76,11 +78,12 @@ jobs:
           path: ./patch
 
       - name: Copy data to bin
+        shell: powershell
         run: |
-          Move-Item -Force -ErrorAction SilentlyContinue -Path "translations\openxcom\common\*" -Destination "bin\common"
-          Move-Item -Force -ErrorAction SilentlyContinue -Path "translations\openxcom\standard\*" -Destination "bin\standard"
-          Move-Item -Force -ErrorAction SilentlyContinue -Path "patch\xcom1\*" -Destination "bin\standard\xcom1"
-          Move-Item -Force -ErrorAction SilentlyContinue -Path "patch\xcom2\*" -Destination "bin\standard\xcom2"
+          Move-Item -Force -Path "translations\openxcom\common\*" -Destination "bin\common"
+          Move-Item -Force -Path "translations\openxcom\standard\*" -Destination "bin\standard"
+          Move-Item -Force -Path "patch\xcom1\*" -Destination "bin\standard\xcom1"
+          Move-Item -Force -Path "patch\xcom2\*" -Destination "bin\standard\xcom2"
 
       - name: Get SHA hashes
         uses: nrwl/nx-set-shas@v3
@@ -89,26 +92,23 @@ jobs:
 
       - name: Generate build log
         run: |
-          git log --pretty=format:"<strong>%an, %ad</strong>%n%B" -n 10 --date=iso-local ${{ env.NX_BASE }}..${{ env.NX_HEAD }} > ${{ env.FILENAME }}.log
+          mkdir artifacts
+          git log --pretty=format:"<strong>%an, %ad</strong>%n%B" -n 10 --date=iso-local ${{ env.NX_BASE }}..${{ env.NX_HEAD }} > artifacts\${{ env.FILENAME }}.log
 
-      - name: Archive log
-        uses: actions/upload-artifact@v3
+      - name: Create nightly installer
+        uses: joncloud/makensis-action@v4
         with:
-          path: ${{ env.FILENAME }}.log
+          script-file: "install/win/installer.nsi"
+
+      - name: Create nightly ZIPs
+        shell: powershell
+        run: |
+          Compress-Archive -Path "bin\Win32\Release\OpenXcom.exe", "bin\Win32\*.dll", "bin\common", "bin\standard", "bin\TFTD", "bin\UFO", "CHANGELOG.txt", "LICENSE.txt", "README.md" -DestinationPath "artifacts\${{ env.FILENAME }}_win32.zip"
+          Compress-Archive -Path "bin\x64\Release\OpenXcom.exe", "bin\x64\*.dll", "bin\common", "bin\standard", "bin\TFTD", "bin\UFO", "CHANGELOG.txt", "LICENSE.txt", "README.md" -DestinationPath "artifacts\${{ env.FILENAME }}_win64.zip"
+          Move-Item -Force -Path "install\win\openxcom-v1.0-win.exe" -Destination "artifacts\${{ env.FILENAME }}_win.exe"
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.FILENAME }}_win
-          path: bin/**/*
-          
-      - name: Build installer
-        uses: joncloud/makensis-action@v4
-        with:
-          script-file: "install/win/installer.nsi"
-        
-      - name: Archive installer
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.FILENAME }}_win_install
-          path: install/win/*.exe
+          name: ${{ env.FILENAME }}_windows
+          path: artifacts/*
