@@ -36,7 +36,7 @@ file(GLOB_RECURSE extra_libs "${BUNDLE_PATH}/Contents/MacOS/*.dylib")
 # makes it sometimes break on libraries that do weird things with @rpath. Specify
 # equivalent search directories until https://gitlab.kitware.com/cmake/cmake/issues/16625
 # is fixed and in our minimum CMake version.
-set(extra_dirs "/usr/local/lib" "/lib" "/usr/lib")
+set(extra_dirs "/opt/homebrew/lib" "/usr/local/lib" "/lib" "/usr/lib")
 
 # BundleUtilities is overly verbose, so disable most of its messages
 function(message)
