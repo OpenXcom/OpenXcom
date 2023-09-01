@@ -80,10 +80,10 @@ jobs:
       - name: Copy data to bin
         shell: powershell
         run: |
-          Move-Item -Force -Path "translations\openxcom\common\*" -Destination "bin\common"
-          Move-Item -Force -Path "translations\openxcom\standard\*" -Destination "bin\standard"
-          Move-Item -Force -Path "patch\xcom1\*" -Destination "bin\standard\xcom1"
-          Move-Item -Force -Path "patch\xcom2\*" -Destination "bin\standard\xcom2"
+          Move-Item -Force -ErrorAction SilentlyContinue -Path "translations\openxcom\common\*" -Destination "bin\common"
+          Move-Item -Force -ErrorAction SilentlyContinue -Path "translations\openxcom\standard\*" -Destination "bin\standard"
+          Move-Item -Force -ErrorAction SilentlyContinue -Path "patch\xcom1\*" -Destination "bin\standard\xcom1"
+          Move-Item -Force -ErrorAction SilentlyContinue -Path "patch\xcom2\*" -Destination "bin\standard\xcom2"
 
       - name: Get SHA hashes
         uses: nrwl/nx-set-shas@v3
