@@ -109,6 +109,12 @@ interfaces:
         color: 138   # yellow
         color2: 239  # bright green
         border: 133  # minty green
+  - type: foldersMenu
+    elements:
+      - id: text1
+        color: 239   # bright green
+      - id: text2
+        color: 138   # yellow
   - type: modsMenu
     elements:
       - id: palette

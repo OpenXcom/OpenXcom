@@ -945,6 +945,9 @@
     <ClCompile Include="Menu\ModConfirmExtendedState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\OptionsFoldersState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1928,6 +1931,9 @@
       <Filter>Menu</Filter>
     </ClInclude>
     <ClInclude Include="Menu\ModConfirmExtendedState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsFoldersState.h">
       <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>

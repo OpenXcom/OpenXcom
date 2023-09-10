@@ -109,6 +109,12 @@ interfaces: #done
         color: 1
         color2: 239
         border: 239
+  - type: foldersMenu
+    elements:
+      - id: text1
+        color: 239
+      - id: text2
+        color: 1
   - type: modsMenu
     elements:
       - id: palette

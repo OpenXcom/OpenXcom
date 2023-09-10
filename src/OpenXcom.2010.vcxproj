@@ -519,6 +519,7 @@
     <ClCompile Include="Menu\OptionsAudioState.cpp" />
     <ClCompile Include="Menu\OptionsConfirmState.cpp" />
     <ClCompile Include="Menu\OptionsDefaultsState.cpp" />
+    <ClCompile Include="Menu\OptionsFoldersState.cpp" />
     <ClCompile Include="Menu\OptionsGeoscapeState.cpp" />
     <ClCompile Include="Menu\MainMenuState.cpp" />
     <ClCompile Include="Menu\NewBattleState.cpp" />
@@ -846,6 +847,7 @@
     <ClInclude Include="Menu\OptionsAudioState.h" />
     <ClInclude Include="Menu\OptionsConfirmState.h" />
     <ClInclude Include="Menu\OptionsDefaultsState.h" />
+    <ClInclude Include="Menu\OptionsFoldersState.h" />
     <ClInclude Include="Menu\OptionsGeoscapeState.h" />
     <ClInclude Include="Menu\MainMenuState.h" />
     <ClInclude Include="Menu\NewBattleState.h" />
