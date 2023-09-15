@@ -335,7 +335,8 @@ void Projectile::applyAccuracy(Position origin, Position *target, double accurac
 {
 	int xdiff = origin.x - target->x;
 	int ydiff = origin.y - target->y;
-	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
+	int zdiff = origin.z - target->z;
+	double realDistance = std::ceil( sqrt( (double)(xdiff*xdiff + ydiff*ydiff + zdiff*zdiff) ));
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
 	double maxRange = keepRange?realDistance:16*1000; // 1000 tiles
 	maxRange = _action.type == BA_HIT?46:maxRange; // up to 2 tiles diagonally (as in the case of reaper v reaper)
@@ -344,6 +345,7 @@ void Projectile::applyAccuracy(Position origin, Position *target, double accurac
 	if (_action.type != BA_THROW && _action.type != BA_HIT)
 	{
 		double modifier = 0.0;
+		double tilesDistance = std::ceil(realDistance / 16);
 		int upperLimit = weapon->getAimRange();
 		int lowerLimit = weapon->getMinRange();
 		if (Options::battleUFOExtenderAccuracy)
@@ -357,13 +359,13 @@ void Projectile::applyAccuracy(Position origin, Position *target, double accurac
 				upperLimit = weapon->getSnapRange();
 			}
 		}
-		if (realDistance / 16 < lowerLimit)
+		if (tilesDistance < lowerLimit)
 		{
-			modifier = (weapon->getDropoff() * (lowerLimit - realDistance / 16)) / 100;
+			modifier = (weapon->getDropoff() * (lowerLimit - tilesDistance)) / 100;
 		}
-		else if (upperLimit < realDistance / 16)
+		else if (upperLimit < tilesDistance)
 		{
-			modifier = (weapon->getDropoff() * (realDistance / 16 - upperLimit)) / 100;
+			modifier = (weapon->getDropoff() * (tilesDistance - upperLimit)) / 100;
 		}
 		accuracy = std::max(0.0, accuracy - modifier);
 	}
