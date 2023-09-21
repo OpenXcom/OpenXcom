@@ -109,42 +109,6 @@ void getErrorDialog()
 #endif
 }
 
-#ifdef _WIN32
-/**
- * Takes a Windows multibyte filesystem path and converts it to a UTF-8 string.
- * Also converts the path separator.
- * @param pathW Filesystem path.
- * @return UTF-8 string.
- */
-static std::string pathFromWindows(const wchar_t* pathW) {
-	int sizeW = lstrlenW(pathW);
-	int sizeU8 = WideCharToMultiByte(CP_UTF8, 0, pathW, sizeW, NULL, 0, NULL, NULL);
-	std::string pathU8(sizeU8, 0);
-	WideCharToMultiByte(CP_UTF8, 0, pathW, sizeW, &pathU8[0], sizeU8, NULL, NULL);
-	std::replace(pathU8.begin(), pathU8.end(), '\\', '/');
-	return pathU8;
-}
-
-/**
- * Takes a UTF-8 string and converts it to a Windows
- * multibyte filesystem path.
- * Also converts the path separator.
- * @param path UTF-8 string.
- * @param reslash Convert forward slashes to back ones.
- * @return Filesystem path.
- */
-static std::wstring pathToWindows(const std::string& path, bool reslash = true) {
-	std::string src = path;
-	if (reslash) {
-		std::replace(src.begin(), src.end(), '/', '\\');
-	}
-	int sizeW = MultiByteToWideChar(CP_UTF8, 0, &src[0], (int)src.size(), NULL, 0);
-	std::wstring pathW(sizeW, 0);
-	MultiByteToWideChar(CP_UTF8, 0, &src[0], (int)src.size(), &pathW[0], sizeW);
-	return pathW;
-}
-#endif
-
 /**
  * Displays a message box with an error message.
  * @param error Error message.
@@ -1262,7 +1226,7 @@ std::string getExeFolder()
 	if (GetModuleFileNameW(NULL, dest, MAX_PATH) != 0)
 	{
 		PathRemoveFileSpecW(dest);
-		auto ret = pathFromWindows(dest) + "/";
+		auto ret = Unicode::convWcToMb(dest) + "/";
 		return ret;
 	}
 #endif
