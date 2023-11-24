@@ -312,6 +312,7 @@ research: #done: double check scores and times.
   - name: STR_ALIEN_SUB_CONSTRUCTION
     cost: 450
     points: 30
+    needItem: true
     dependencies:
       - STR_TRANSMISSION_RESOLVER
       - STR_ZRBITE
