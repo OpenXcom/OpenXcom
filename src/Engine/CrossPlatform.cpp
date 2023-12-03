@@ -1215,6 +1215,24 @@ bool openExplorer(const std::string &url)
 #endif
 }
 
+/**
+ * Gets the path to the executable file.
+ * @return Path to the EXE file.
+ */
+std::string getExeFolder()
+{
+#ifdef _WIN32
+	wchar_t dest[MAX_PATH + 1];
+	if (GetModuleFileNameW(NULL, dest, MAX_PATH) != 0)
+	{
+		PathRemoveFileSpecW(dest);
+		auto ret = Unicode::convWcToMb(dest) + "/";
+		return ret;
+	}
+#endif
+	return std::string();
+}
+
 }
 
 }

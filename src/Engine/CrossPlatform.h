@@ -101,6 +101,8 @@ namespace CrossPlatform
 	void crashDump(void *ex, const std::string &err);
 	/// Opens a URL.
 	bool openExplorer(const std::string &url);
+	/// Gets the path to the executable file.
+	std::string getExeFolder();
 }
 
 }
