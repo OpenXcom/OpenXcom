@@ -56,7 +56,7 @@ namespace OpenXcom
 
 		int text_height = _txtTitle->getTextHeight();
 
-		_txtInfo = new Text(defs->text_width, 162, 5, 23 + text_height);
+		_txtInfo = new Text(defs->text_width, 176 - text_height, 5, 23 + text_height);
 		add(_txtInfo);
 
 		_txtInfo->setColor(Palette::blockOffset(15)-1);
