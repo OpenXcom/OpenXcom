@@ -365,6 +365,11 @@ void loadArgs(int argc, char *argv[])
 		std::string arg = argv[i];
 		if ((arg[0] == '-' || arg[0] == '/') && arg.length() > 1)
 		{
+			if (arg == "--")
+			{
+				break;
+			}
+
 			std::string argname;
 			if (arg[1] == '-' && arg.length() > 2)
 				argname = arg.substr(2, arg.length()-1);
@@ -413,7 +418,7 @@ void loadArgs(int argc, char *argv[])
 bool showHelp(int argc, char *argv[])
 {
 	std::ostringstream help;
-	help << "OpenXcom v" << OPENXCOM_VERSION_SHORT << std::endl;
+	help << "OpenXcom " << OPENXCOM_VERSION_SHORT << std::endl;
 	help << "Usage: openxcom [OPTION]..." << std::endl << std::endl;
 	help << "-data PATH" << std::endl;
 	help << "        use PATH as the default Data Folder instead of auto-detecting" << std::endl << std::endl;
@@ -433,6 +438,11 @@ bool showHelp(int argc, char *argv[])
 		std::string arg = argv[i];
 		if ((arg[0] == '-' || arg[0] == '/') && arg.length() > 1)
 		{
+			if (arg == "--")
+			{
+				break;
+			}
+
 			std::string argname;
 			if (arg[1] == '-' && arg.length() > 2)
 				argname = arg.substr(2, arg.length()-1);
@@ -444,6 +454,9 @@ bool showHelp(int argc, char *argv[])
 				std::cout << help.str();
 				return true;
 			}
+
+			// skip next option argument, only couple options do not have it.
+			++i;
 		}
 	}
 	return false;
