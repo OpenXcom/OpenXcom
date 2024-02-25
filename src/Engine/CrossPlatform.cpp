@@ -95,15 +95,15 @@ void getErrorDialog()
 #ifndef _WIN32
 	if (system(NULL))
 	{
-		if (getenv("KDE_SESSION_UID") && system("which kdialog 2>&1 > /dev/null") == 0)
+		if (getenv("KDE_SESSION_UID") && system("which kdialog > /dev/null 2>&1") == 0)
 			errorDlg = "kdialog --error ";
-		else if (system("which zenity 2>&1 > /dev/null") == 0)
+		else if (system("which zenity > /dev/null 2>&1") == 0)
 			errorDlg = "zenity --no-wrap --error --text=";
-		else if (system("which kdialog 2>&1 > /dev/null") == 0)
+		else if (system("which kdialog > /dev/null 2>&1") == 0)
 			errorDlg = "kdialog --error ";
-		else if (system("which gdialog 2>&1 > /dev/null") == 0)
+		else if (system("which gdialog > /dev/null 2>&1") == 0)
 			errorDlg = "gdialog --msgbox ";
-		else if (system("which xdialog 2>&1 > /dev/null") == 0)
+		else if (system("which xdialog > /dev/null 2>&1") == 0)
 			errorDlg = "xdialog --msgbox ";
 	}
 #endif
