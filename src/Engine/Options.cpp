@@ -465,6 +465,11 @@ bool showHelp(int argc, char *argv[])
 			// skip next option argument, only couple options do not have it.
 			++i;
 		}
+		else
+		{
+			std::cerr << "Unknown parameter '" << arg << "'" << std::endl;
+			return true;
+		}
 	}
 	return false;
 }
