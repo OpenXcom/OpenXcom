@@ -430,6 +430,8 @@ bool showHelp(int argc, char *argv[])
 	help << "        set MOD to the current master mod (eg. -master xcom2)" << std::endl << std::endl;
 	help << "-KEY VALUE" << std::endl;
 	help << "        override option KEY with VALUE (eg. -displayWidth 640)" << std::endl << std::endl;
+	help << "-version" << std::endl;
+	help << "        show version number" << std::endl << std::endl;
 	help << "-help" << std::endl;
 	help << "-?" << std::endl;
 	help << "        show command-line help" << std::endl;
@@ -452,6 +454,11 @@ bool showHelp(int argc, char *argv[])
 			if (argname == "help" || argname == "?")
 			{
 				std::cout << help.str();
+				return true;
+			}
+			if (argname == "version")
+			{
+				std::cout << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT << std::endl;
 				return true;
 			}
 
