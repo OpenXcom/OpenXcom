@@ -19,7 +19,7 @@ option ( ENABLE_CLANG_ANALYSIS "When building with clang, enable the static anal
 option ( CHECK_CCACHE "Check if ccache is installed and use it" OFF )
 set ( MSVC_WARNING_LEVEL 3 CACHE STRING "Visual Studio warning levels" )
 option ( FORCE_INSTALL_DATA_TO_BIN "Force installation of data to binary directory" OFF )
-set ( DATADIR "" CACHE STRING "Where to place datafiles" )
+set ( DATADIR "" CACHE STRING "Where to search for datafiles" )
 set ( OPENXCOM_VERSION_STRING "" CACHE STRING "Version string (after x.x)" )
 
 if ( CHECK_CCACHE )

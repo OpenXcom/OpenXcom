@@ -173,7 +173,10 @@ std::vector<std::string> findDataFolders()
 		PathAppendA(path, "OpenXcom\\");
 		list.push_back(path);
 	}
-
+#ifdef DATADIR
+	snprintf(path, MAX_PATH, "%s\\", DATADIR);
+	list.push_back(path);
+#endif
 	// Get binary directory
 	if (GetModuleFileNameA(NULL, path, MAX_PATH) != 0)
 	{
@@ -210,9 +213,12 @@ std::vector<std::string> findDataFolders()
 #endif
  	}
  	list.push_back(path);
-
+#ifdef DATADIR
+	snprintp(path, MAXPATHLEN, "%s/" DATADIR);
+	list.push_back(path);
+#endif
 	// Get global data folders
-	if (char const *const xdg_data_dirs = getenv("XDG_DATA_DIRS"))
+	if (char const *const xdg_data_dirs = getenv("XDG_DATA_DIRS") && *xdg_data_dirs)
 	{
 		char xdg_data_dirs_copy[strlen(xdg_data_dirs)+1];
 		strcpy(xdg_data_dirs_copy, xdg_data_dirs);
@@ -224,16 +230,17 @@ std::vector<std::string> findDataFolders()
 			dir = strtok(0, ":");
 		}
 	}
+	else
+	{
 #ifdef __APPLE__
 	list.push_back("/Users/Shared/OpenXcom/");
 #else
 	list.push_back("/usr/local/share/openxcom/");
 	list.push_back("/usr/share/openxcom/");
-#ifdef DATADIR
-	snprintf(path, MAXPATHLEN, "%s/", DATADIR);
-	list.push_back(path);
 #endif
-
+#ifdef INSTALLDIR
+	snprintf(path, MAXPATHLEN, "%s", INSTALLDIR);
+	list.push_back(path);
 #endif
 
 #ifdef __linux
