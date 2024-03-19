@@ -240,6 +240,11 @@ void OptionsAdvancedState::lstOptionsClick(Action *action)
 			min = 1;
 			max = 5;
 		}
+		else if (i == &Options::initialInterceptStance)
+		{
+			min = 0;
+			max = 3;
+		}
 
 		if (*i < min)
 		{
