@@ -51,7 +51,7 @@ jobs:
         run: |
           Invoke-WebRequest -Uri "https://openxcom.org/download/dev/openxcom-deps-win-vc2017.zip" -OutFile "openxcom-deps-win-vc2017-newest.zip"
           Expand-Archive -Path "openxcom-deps-win-vc2017-newest.zip"
-          Move-Item -Path "openxcom-deps-win-vc2017-newest\deps\*" -Destination "deps"
+          Copy-Item -Recurse -Path "openxcom-deps-win-vc2017-newest\deps\*" -Destination "deps"
 
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1.3
@@ -83,11 +83,11 @@ jobs:
       - name: Copy data to bin
         shell: powershell
         run: |
-          Copy-Item -Force -ErrorAction SilentlyContinue -Path "translations\openxcom\common\*" -Destination "bin\common"
-          Copy-Item -Force -ErrorAction SilentlyContinue -Path "translations\openxcom\standard\*" -Destination "bin\standard"
-          Copy-Item -Force -ErrorAction SilentlyContinue -Path "translations\openxcom\install\*" -Destination "install"
-          Copy-Item -Force -ErrorAction SilentlyContinue -Path "patch\xcom1\*" -Destination "bin\standard\xcom1"
-          Copy-Item -Force -ErrorAction SilentlyContinue -Path "patch\xcom2\*" -Destination "bin\standard\xcom2"
+          Copy-Item -Recurse -ErrorAction SilentlyContinue -Path "translations\openxcom\common\*" -Destination "bin\common"
+          Copy-Item -Recurse -ErrorAction SilentlyContinue -Path "translations\openxcom\standard\*" -Destination "bin\standard"
+          Copy-Item -Recurse -ErrorAction SilentlyContinue -Path "translations\openxcom\install\*" -Destination "install"
+          Copy-Item -Recurse -ErrorAction SilentlyContinue -Path "patch\xcom1\*" -Destination "bin\standard\xcom1"
+          Copy-Item -Recurse -ErrorAction SilentlyContinue -Path "patch\xcom2\*" -Destination "bin\standard\xcom2"
 
       - name: Translate installer
         run: |
@@ -105,7 +105,7 @@ jobs:
         run: |
           Compress-Archive -Path "bin\Win32\Release\OpenXcom.exe", "bin\Win32\*.dll", "bin\common", "bin\standard", "bin\TFTD", "bin\UFO", "CHANGELOG.txt", "LICENSE.txt", "README.md" -DestinationPath "artifacts\${{ env.FILENAME }}_win32.zip"
           Compress-Archive -Path "bin\x64\Release\OpenXcom.exe", "bin\x64\*.dll", "bin\common", "bin\standard", "bin\TFTD", "bin\UFO", "CHANGELOG.txt", "LICENSE.txt", "README.md" -DestinationPath "artifacts\${{ env.FILENAME }}_win64.zip"
-          Move-Item -Force -Path "install\win\openxcom-v1.0-win.exe" -Destination "artifacts\${{ env.FILENAME }}_win.exe"
+          Copy-Item -Path "install\win\openxcom-v1.0-win.exe" -Destination "artifacts\${{ env.FILENAME }}_win.exe"
 
       - name: Get SHA hashes
         uses: nrwl/nx-set-shas@v3
