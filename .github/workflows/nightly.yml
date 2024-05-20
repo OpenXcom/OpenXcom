@@ -103,8 +103,10 @@ jobs:
       - name: Create nightly ZIPs
         shell: powershell
         run: |
-          Compress-Archive -Path "bin\Win32\Release\OpenXcom.exe", "bin\Win32\*.dll", "bin\common", "bin\standard", "bin\TFTD", "bin\UFO", "CHANGELOG.txt", "LICENSE.txt", "README.md" -DestinationPath "artifacts\${{ env.FILENAME }}_win32.zip"
-          Compress-Archive -Path "bin\x64\Release\OpenXcom.exe", "bin\x64\*.dll", "bin\common", "bin\standard", "bin\TFTD", "bin\UFO", "CHANGELOG.txt", "LICENSE.txt", "README.md" -DestinationPath "artifacts\${{ env.FILENAME }}_win64.zip"
+          New-Item -ItemType "directory" -Path "artifacts"
+          Rename-Item -Path "README.md" -NewName "README.txt"
+          Compress-Archive -Path "bin\Win32\Release\OpenXcom.exe", "bin\Win32\*.dll", "bin\common", "bin\standard", "bin\TFTD", "bin\UFO", "CHANGELOG.txt", "LICENSE.txt", "README.txt" -DestinationPath "artifacts\${{ env.FILENAME }}_win32.zip"
+          Compress-Archive -Path "bin\x64\Release\OpenXcom.exe", "bin\x64\*.dll", "bin\common", "bin\standard", "bin\TFTD", "bin\UFO", "CHANGELOG.txt", "LICENSE.txt", "README.txt" -DestinationPath "artifacts\${{ env.FILENAME }}_win64.zip"
           Copy-Item -Path "install\win\openxcom-v1.0-win.exe" -Destination "artifacts\${{ env.FILENAME }}_win.exe"
 
       - name: Get SHA hashes
@@ -114,7 +116,6 @@ jobs:
 
       - name: Generate build log
         run: |
-          mkdir artifacts
           git log --pretty=format:"<strong>%an, %ad</strong>%n%B" -n 10 --date=iso-local ${{ env.NX_BASE }}..${{ env.NX_HEAD }} > artifacts\${{ env.FILENAME }}.log
 
       - name: Archive artifacts
