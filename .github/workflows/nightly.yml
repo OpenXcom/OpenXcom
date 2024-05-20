@@ -13,6 +13,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+
       - name: Setup environment
         shell: bash
         run: |
@@ -80,20 +83,17 @@ jobs:
       - name: Copy data to bin
         shell: powershell
         run: |
-          Move-Item -Force -ErrorAction SilentlyContinue -Path "translations\openxcom\common\*" -Destination "bin\common"
-          Move-Item -Force -ErrorAction SilentlyContinue -Path "translations\openxcom\standard\*" -Destination "bin\standard"
-          Move-Item -Force -ErrorAction SilentlyContinue -Path "patch\xcom1\*" -Destination "bin\standard\xcom1"
-          Move-Item -Force -ErrorAction SilentlyContinue -Path "patch\xcom2\*" -Destination "bin\standard\xcom2"
+          Copy-Item -Force -ErrorAction SilentlyContinue -Path "translations\openxcom\common\*" -Destination "bin\common"
+          Copy-Item -Force -ErrorAction SilentlyContinue -Path "translations\openxcom\standard\*" -Destination "bin\standard"
+          Copy-Item -Force -ErrorAction SilentlyContinue -Path "translations\openxcom\install\*" -Destination "install"
+          Copy-Item -Force -ErrorAction SilentlyContinue -Path "patch\xcom1\*" -Destination "bin\standard\xcom1"
+          Copy-Item -Force -ErrorAction SilentlyContinue -Path "patch\xcom2\*" -Destination "bin\standard\xcom2"
 
-      - name: Get SHA hashes
-        uses: nrwl/nx-set-shas@v3
-        with:
-          main-branch-name: master
-
-      - name: Generate build log
+      - name: Translate installer
         run: |
-          mkdir artifacts
-          git log --pretty=format:"<strong>%an, %ad</strong>%n%B" -n 10 --date=iso-local ${{ env.NX_BASE }}..${{ env.NX_HEAD }} > artifacts\${{ env.FILENAME }}.log
+          cd install\win
+          python convert_lang.py
+          cd ..\..
 
       - name: Create nightly installer
         uses: joncloud/makensis-action@v4
@@ -106,6 +106,16 @@ jobs:
           Compress-Archive -Path "bin\Win32\Release\OpenXcom.exe", "bin\Win32\*.dll", "bin\common", "bin\standard", "bin\TFTD", "bin\UFO", "CHANGELOG.txt", "LICENSE.txt", "README.md" -DestinationPath "artifacts\${{ env.FILENAME }}_win32.zip"
           Compress-Archive -Path "bin\x64\Release\OpenXcom.exe", "bin\x64\*.dll", "bin\common", "bin\standard", "bin\TFTD", "bin\UFO", "CHANGELOG.txt", "LICENSE.txt", "README.md" -DestinationPath "artifacts\${{ env.FILENAME }}_win64.zip"
           Move-Item -Force -Path "install\win\openxcom-v1.0-win.exe" -Destination "artifacts\${{ env.FILENAME }}_win.exe"
+
+      - name: Get SHA hashes
+        uses: nrwl/nx-set-shas@v3
+        with:
+          main-branch-name: master
+
+      - name: Generate build log
+        run: |
+          mkdir artifacts
+          git log --pretty=format:"<strong>%an, %ad</strong>%n%B" -n 10 --date=iso-local ${{ env.NX_BASE }}..${{ env.NX_HEAD }} > artifacts\${{ env.FILENAME }}.log
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v3

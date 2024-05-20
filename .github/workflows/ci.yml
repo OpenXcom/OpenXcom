@@ -82,14 +82,14 @@ jobs:
 
       - name: Generate project files
         run: |
-          cmake -B ${{ matrix.build-dir || 'build' }} ${{ matrix.build-src-dir || '.' }} -DCMAKE_BUILD_TYPE=Release -DENABLE_WARNING=1 -DCHECK_CCACHE=1 ${{ matrix.cmake-args }}
+          cmake -B ${{ matrix.build-dir || 'build' }} ${{ matrix.build-src-dir || '.' }} -DCMAKE_BUILD_TYPE=Debug -DENABLE_WARNING=1 -DCHECK_CCACHE=1 ${{ matrix.cmake-args }}
         env:
           CC: ${{ matrix.compiler }}
           CXX: ${{ matrix.cpp-compiler }}
 
       - name: Compile source code
         run: |
-          cmake --build ${{ matrix.build-dir || 'build' }} -v --config ${{ matrix.build-config || 'Release' }} -- ${{ matrix.build-args }}
+          cmake --build ${{ matrix.build-dir || 'build' }} -v --config ${{ matrix.build-config || 'Debug' }} -- ${{ matrix.build-args }}
 
         # Note, this is bogus on MacOS, as it installs shaders et al twice.
         # Windows installs under C:/Program Files (x86)/OpenXcom/bin (where the
@@ -98,7 +98,7 @@ jobs:
       - name: Make install
         shell: bash
         run: |
-          $MAYBE_SUDO cmake --build ${{ matrix.build-dir || 'build' }} -v --config ${{ matrix.build-config || 'Release' }} --target install
+          $MAYBE_SUDO cmake --build ${{ matrix.build-dir || 'build' }} -v --config ${{ matrix.build-config || 'Debug' }} --target install
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
