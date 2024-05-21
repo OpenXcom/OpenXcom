@@ -54,7 +54,7 @@ jobs:
           HOMEBREW_NO_INSTALL_FROM_API: 1
         run: |
           brew tap --force homebrew/core
-          mv -f ./scripts/Formula `brew --repo`/Library/Taps/homebrew/homebrew-core/          
+          mv -f ./scripts/Formula `brew --repo homebrew/core`
           brew update
           brew install ccache
           brew reinstall --build-from-source ${{ matrix.packages }}
