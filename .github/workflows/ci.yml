@@ -50,10 +50,13 @@ jobs:
 
       - name: Install packages (macOS)
         if: runner.os == 'macOS'
+        env:
+          HOMEBREW_NO_INSTALL_FROM_API: 1
         run: |
+          brew update
           brew install ccache
           mv -f ./scripts/Formula `brew --repo`/Library/Taps/homebrew/homebrew-core/
-          HOMEBREW_NO_INSTALL_FROM_API=1 brew reinstall --build-from-source ${{ matrix.packages }}
+          brew reinstall --build-from-source ${{ matrix.packages }}
 
       - name: Setup Cache
         if: runner.os == 'Linux' || runner.os == 'macOS'
