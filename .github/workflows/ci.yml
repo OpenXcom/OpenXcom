@@ -53,9 +53,10 @@ jobs:
         env:
           HOMEBREW_NO_INSTALL_FROM_API: 1
         run: |
+          brew tap --force homebrew/core
+          mv -f ./scripts/Formula `brew --repo`/Library/Taps/homebrew/homebrew-core/          
           brew update
           brew install ccache
-          mv -f ./scripts/Formula `brew --repo`/Library/Taps/homebrew/homebrew-core/
           brew reinstall --build-from-source ${{ matrix.packages }}
 
       - name: Setup Cache
