@@ -15,6 +15,7 @@ jobs:
 
           - name: Linux
             os: ubuntu-latest
+            packages: libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-gfx1.2-dev libyaml-cpp-dev
             compiler: clang
             cpp-compiler: clang++
 
@@ -40,7 +41,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get -yq --no-install-suggests --no-install-recommends install ccache ${{ matrix.packages }}
-          sudo apt-get -yq --no-install-suggests --no-install-recommends install libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-gfx1.2-dev libyaml-cpp-dev
 
       - name: Install packages (Windows)
         if: runner.os == 'Windows' && matrix.packages
@@ -50,17 +50,19 @@ jobs:
       - name: Install packages (macOS)
         if: runner.os == 'macOS'
         run: |
-          brew install ccache ${{ matrix.packages }}
+          brew install ccache
+          mv -f ./scripts/Formula `brew --repo`/Library/Taps/homebrew/homebrew-core/Formula
+          HOMEBREW_NO_INSTALL_FROM_API=1 brew reinstall --build-from-source ${{ matrix.packages }}
 
       - name: Setup Cache
         if: runner.os == 'Linux' || runner.os == 'macOS'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.ccache
           key: ccache-${{ runner.os }}-${{ matrix.compiler }}
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -101,7 +103,7 @@ jobs:
           $MAYBE_SUDO cmake --build ${{ matrix.build-dir || 'build' }} -v --config ${{ matrix.build-config || 'Debug' }} --target install
 
       - name: Archive artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
             name: openxcom_${{ matrix.name }}_${{ matrix.compiler }}-${{ env.describe }}
             path: |
