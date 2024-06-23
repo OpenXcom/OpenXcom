@@ -9,12 +9,14 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
 
       - name: Setup environment
         shell: bash
@@ -54,7 +56,7 @@ jobs:
           Copy-Item -Recurse -Path "openxcom-deps-win-vc2017-newest\deps\*" -Destination "deps"
 
       - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.1.3
+        uses: microsoft/setup-msbuild@v2
 
       - name: Compile source (x86 & x64)
         env:
@@ -75,7 +77,7 @@ jobs:
           .\tx\tx.exe --token ${{ secrets.TX_TOKEN }} pull --all --minimum-perc=50
 
       - name: Pull data patch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: OpenXcom/XcomDataPatch
           path: ./patch
@@ -110,7 +112,7 @@ jobs:
           Copy-Item -Path "install\win\openxcom-v1.0-win.exe" -Destination "artifacts\${{ env.FILENAME }}_win.exe"
 
       - name: Get SHA hashes
-        uses: nrwl/nx-set-shas@v3
+        uses: nrwl/nx-set-shas@v4
         with:
           main-branch-name: master
 
@@ -119,7 +121,83 @@ jobs:
           git log --pretty=format:"<strong>%an, %ad</strong>%n%B" -n 10 --date=iso-local ${{ env.NX_BASE }}..${{ env.NX_HEAD }} > artifacts\${{ env.FILENAME }}.log
 
       - name: Archive artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.FILENAME }}_windows
+          path: artifacts/*
+
+  linux:
+    name: Linux
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup environment
+        run: |
+          echo "DATEFILE=`git log -1 --date=format:\"%Y_%m_%d_%H%M\" --format=\"%ad\"`" >> $GITHUB_ENV
+          echo "DATEVERSION=`git log -1 --date=format:\"%Y-%m-%d %H:%M\" --format=\"%ad\"`" >> $GITHUB_ENV
+          echo "CMAKE_BUILD_PARALLEL_LEVEL=`getconf _NPROCESSORS_ONLN 2>/dev/null || getconf NPROCESSORS_ONLN 2>/dev/null || echo 2`" >> $GITHUB_ENV
+
+      - name: Setup version info
+        run: |
+          sed -i "s/OPENXCOM_VERSION_GIT \"[^\"]*\"/OPENXCOM_VERSION_GIT \" git ${{ env.DATEVERSION }}\"/" src/version.h
+          echo "FILENAME=openxcom_git_${{ env.DATEFILE }}" >> $GITHUB_ENV
+
+      - name: Install packages
+        run: |
+          sudo apt-get update
+          sudo apt-get -yq --no-install-suggests --no-install-recommends install appstream libfuse2 libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-gfx1.2-dev libyaml-cpp-dev
+
+      - name: Install LinuxDeploy
+        uses: miurahr/install-linuxdeploy-action@v1
+        with:
+          plugins: appimage
+
+      - name: Pull translations
+        uses: transifex/cli-action@v2
+        with:
+          token: ${{ secrets.TX_TOKEN }}
+          args: pull --all --minimum-perc=50
+
+      - name: Pull data patch
+        uses: actions/checkout@v4
+        with:
+          repository: OpenXcom/XcomDataPatch
+          path: ./patch
+
+      - name: Copy data to bin
+        run: |
+          cp -rf "translations/openxcom/common/*" "bin/common"
+          cp -rf "translations/openxcom/standard/*" "bin/standard"
+          cp -rf "patch/xcom1/*" "bin/standard/xcom1"
+          cp -rf "patch/xcom2/*" "bin/standard/xcom2"
+
+      - name: Compile source code
+        run: |
+          cmake --build "build" -v --config "Release" -DCMAKE_INSTALL_PREFIX=/usr
+          cd build
+          make -j$(nproc)
+          make install DESTDIR=AppDir
+
+      - name: Generate AppImage
+        run: |
+          linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
+          mv openxcom*.AppImage "artifacts"
+
+      - name: Get SHA hashes
+        uses: nrwl/nx-set-shas@v4
+        with:
+          main-branch-name: master
+
+      - name: Generate build log
+        run: |
+          git log --pretty=format:"<strong>%an, %ad</strong>%n%B" -n 10 --date=iso-local ${{ env.NX_BASE }}..${{ env.NX_HEAD }} > artifacts/${{ env.FILENAME }}.log
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.FILENAME }}_linux
           path: artifacts/*
