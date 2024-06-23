@@ -183,7 +183,7 @@ jobs:
 
       - name: Compile source code
         run: |
-          cmake --build "build" -v --config "Release" -DCMAKE_INSTALL_PREFIX=/usr
+          cmake --build "build" -v --config "Release" -- -DCMAKE_INSTALL_PREFIX=/usr
           cd build
           make -j$(nproc)
           make install DESTDIR=AppDir
