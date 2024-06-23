@@ -176,10 +176,10 @@ jobs:
 
       - name: Copy data to bin
         run: |
-          cp -rf "translations/openxcom/common/*" "bin/common" || :
-          cp -rf "translations/openxcom/standard/*" "bin/standard" || :
-          cp -rf "patch/xcom1/*" "bin/standard/xcom1" || :
-          cp -rf "patch/xcom2/*" "bin/standard/xcom2" || :
+          cp -rf translations/openxcom/common/. bin/common || :
+          cp -rf translations/openxcom/standard/. bin/standard || :
+          cp -rf patch/xcom1/. bin/standard/xcom1 || :
+          cp -rf patch/xcom2/. bin/standard/xcom2 || :
 
       - name: Compile source code
         run: |
@@ -190,7 +190,8 @@ jobs:
       - name: Generate AppImage
         run: |
           linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
-          mv openxcom*.AppImage "artifacts"
+          mkdir artifacts
+          mv OpenXcom-x86_64.AppImage artifacts/${{ env.FILENAME }}-x86_64.AppImage
 
       - name: Get SHA hashes
         uses: nrwl/nx-set-shas@v4
