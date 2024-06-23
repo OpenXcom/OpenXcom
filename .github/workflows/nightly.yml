@@ -70,6 +70,9 @@ jobs:
           Rename-Item -Path "bin\x64\Release_XP" -NewName "Release"
 
       - name: Pull translations
+        env:
+          TX_TOKEN: ${{ secrets.TX_TOKEN }}
+        if: ${{ env.TX_TOKEN }}
         shell: powershell
         run: |
           Invoke-WebRequest -Uri "https://github.com/transifex/cli/releases/latest/download/tx-windows-amd64.zip" -OutFile "tx.zip"
@@ -158,6 +161,9 @@ jobs:
 
       - name: Pull translations
         uses: transifex/cli-action@v2
+        env:
+          TX_TOKEN: ${{ secrets.TX_TOKEN }}
+        if: ${{ env.TX_TOKEN }}
         with:
           token: ${{ secrets.TX_TOKEN }}
           args: pull --all --minimum-perc=50
@@ -170,10 +176,10 @@ jobs:
 
       - name: Copy data to bin
         run: |
-          cp -rf "translations/openxcom/common/*" "bin/common"
-          cp -rf "translations/openxcom/standard/*" "bin/standard"
-          cp -rf "patch/xcom1/*" "bin/standard/xcom1"
-          cp -rf "patch/xcom2/*" "bin/standard/xcom2"
+          cp -rf "translations/openxcom/common/*" "bin/common" || :
+          cp -rf "translations/openxcom/standard/*" "bin/standard" || :
+          cp -rf "patch/xcom1/*" "bin/standard/xcom1" || :
+          cp -rf "patch/xcom2/*" "bin/standard/xcom2" || :
 
       - name: Compile source code
         run: |
