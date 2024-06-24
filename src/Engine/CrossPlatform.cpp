@@ -200,7 +200,8 @@ std::vector<std::string> findDataFolders()
 	char path[MAXPATHLEN];
 
 	// Get user-specific data folders
-	if (char const *const xdg_data_home = getenv("XDG_DATA_HOME"))
+	char const *const xdg_data_home = getenv("XDG_DATA_HOME")
+	if (xdg_data_home && *xdg_data_home)
  	{
 		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_data_home);
  	}
@@ -234,11 +235,12 @@ std::vector<std::string> findDataFolders()
 	else
 	{
 #ifdef __APPLE__
-	list.push_back("/Users/Shared/OpenXcom/");
+		list.push_back("/Users/Shared/OpenXcom/");
 #else
-	list.push_back("/usr/local/share/openxcom/");
-	list.push_back("/usr/share/openxcom/");
+		list.push_back("/usr/local/share/openxcom/");
+		list.push_back("/usr/share/openxcom/");
 #endif
+	}
 #ifdef INSTALLDIR
 	snprintf(path, MAXPATHLEN, "%s", INSTALLDIR);
 	list.push_back(path);

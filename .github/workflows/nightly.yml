@@ -189,6 +189,9 @@ jobs:
 
       - name: Generate AppImage
         run: |
+          cp -rf bin/common AppDir
+          cp -rf bin/standard AppDir
+          rm -rf AppDir/usr/share/openxcom
           linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
           mkdir artifacts
           mv OpenXcom-x86_64.AppImage artifacts/${{ env.FILENAME }}-x86_64.AppImage
