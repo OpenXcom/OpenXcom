@@ -37,6 +37,11 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Install packages (Ubuntu)
         if: runner.os == 'Linux'
         run: |
@@ -54,7 +59,7 @@ jobs:
           HOMEBREW_NO_INSTALL_FROM_API: 1
         run: |
           brew tap --force homebrew/core
-          mv -f ./scripts/Formula `brew --repo homebrew/core`
+          cp -rf scripts/Formula/* `brew --repo homebrew/core`
           brew update
           brew install ccache
           brew reinstall --build-from-source ${{ matrix.packages }}
@@ -65,11 +70,6 @@ jobs:
         with:
           path: ~/.ccache
           key: ccache-${{ runner.os }}-${{ matrix.compiler }}
-
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup environment
         shell: bash
