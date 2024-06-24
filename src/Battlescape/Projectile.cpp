@@ -46,7 +46,7 @@ namespace OpenXcom
  * @param targetVoxel Position the projectile is targeting.
  * @param ammo the ammo that produced this projectile, where applicable.
  */
-Projectile::Projectile(Mod *mod, SavedBattleGame *save, BattleAction action, Position origin, Position targetVoxel, BattleItem *ammo) : _mod(mod), _save(save), _action(action), _origin(origin), _targetVoxel(targetVoxel), _position(0), _bulletSprite(-1), _reversed(false), _vaporColor(-1), _vaporDensity(-1), _vaporProbability(5)
+Projectile::Projectile(Mod *mod, SavedBattleGame *save, BattleAction action, const Position& origin, const Position& targetVoxel, BattleItem *ammo) : _mod(mod), _save(save), _action(action), _origin(origin), _targetVoxel(targetVoxel), _position(0), _bulletSprite(-1), _reversed(false), _vaporColor(-1), _vaporDensity(-1), _vaporProbability(5)
 {
 	// this is the number of pixels the sprite will move between frames
 	_speed = Options::battleFireSpeed;
@@ -331,7 +331,7 @@ int Projectile::calculateThrow(double accuracy)
  * @param keepRange Whether range affects accuracy.
  * @param extendLine should this line get extended to maximum distance?
  */
-void Projectile::applyAccuracy(Position origin, Position *target, double accuracy, bool keepRange, bool extendLine)
+void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, bool extendLine)
 {
 	int xdiff = origin.x - target->x;
 	int ydiff = origin.y - target->y;
