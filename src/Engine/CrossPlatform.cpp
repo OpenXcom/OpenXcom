@@ -200,7 +200,7 @@ std::vector<std::string> findDataFolders()
 	char path[MAXPATHLEN];
 
 	// Get user-specific data folders
-	char const *const xdg_data_home = getenv("XDG_DATA_HOME")
+	char const *const xdg_data_home = getenv("XDG_DATA_HOME");
 	if (xdg_data_home && *xdg_data_home)
  	{
 		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_data_home);
