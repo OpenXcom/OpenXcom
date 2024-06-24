@@ -54,13 +54,15 @@ namespace CrossPlatform
 	/// Searches the data folders and returns the full path for a folder
 	/// when given a relative path, like "common".  returns the passed-in
 	/// dir name if the folder is not found
-	std::string searchDataFolder(const std::string &foldername);
+	std::string searchDataFolder(const std::string &foldername, int size = 0);
 	/// Creates a folder.
 	bool createFolder(const std::string &path);
 	/// Terminates a path.
 	std::string endPath(const std::string &path);
 	/// Returns the list of files in a folder.
 	std::vector<std::string> getFolderContents(const std::string &path, const std::string &ext = "");
+	/// Checks if the path has a minimum size (number of contents, not bytes).
+	bool folderMinSize(const std::string &path, int size);
 	/// Checks if the path is an existing folder.
 	bool folderExists(const std::string &path);
 	/// Checks if the path is an existing file.

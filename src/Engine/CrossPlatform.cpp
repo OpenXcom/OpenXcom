@@ -218,7 +218,8 @@ std::vector<std::string> findDataFolders()
 	list.push_back(path);
 #endif
 	// Get global data folders
-	if (char const *const xdg_data_dirs = getenv("XDG_DATA_DIRS") && *xdg_data_dirs)
+	char const *const xdg_data_dirs = getenv("XDG_DATA_DIRS");
+	if (xdg_data_dirs && *xdg_data_dirs)
 	{
 		char xdg_data_dirs_copy[strlen(xdg_data_dirs)+1];
 		strcpy(xdg_data_dirs_copy, xdg_data_dirs);
@@ -404,7 +405,7 @@ std::string searchDataFile(const std::string &filename)
 	return filename;
 }
 
-std::string searchDataFolder(const std::string &foldername)
+std::string searchDataFolder(const std::string &foldername, int size)
 {
 	// Correct folder separator
 	std::string name = foldername;
@@ -414,7 +415,7 @@ std::string searchDataFolder(const std::string &foldername)
 
 	// Check current data path
 	std::string path = Options::getDataFolder() + name;
-	if (folderExists(path))
+	if (folderMinSize(path, size))
 	{
 		return path;
 	}
@@ -423,7 +424,7 @@ std::string searchDataFolder(const std::string &foldername)
 	for (std::vector<std::string>::const_iterator i = Options::getDataList().begin(); i != Options::getDataList().end(); ++i)
 	{
 		path = *i + name;
-		if (folderExists(path))
+		if (folderMinSize(path, size))
 		{
 			Options::setDataFolder(*i);
 			return path;
@@ -513,6 +514,57 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 	closedir(dp);
 	std::sort(files.begin(), files.end());
 	return files;
+}
+
+/**
+ * Gets the contents of a folder and checks
+ * if they meet a required minimum size.
+ * @param path Full path to folder.
+ * @param size Size of the folder (number of contents).
+ * @return False if the folder doesn't exist or doesn't meet the size.
+ */
+bool folderMinSize(const std::string &path, int size)
+{
+	if (!folderExists(path))
+	{
+		return false;
+	}
+	if (size == 0)
+	{
+		return true;
+	}
+
+	DIR *dp = opendir(path.c_str());
+	if (dp == 0)
+	{
+	#ifdef __MORPHOS__
+		return files;
+	#else
+		std::string errorMessage("Failed to open directory: " + path);
+		throw Exception(errorMessage);
+	#endif
+	}
+
+	int num = 0;
+	struct dirent *dirp;
+	while ((dirp = readdir(dp)) != 0)
+	{
+		std::string file = dirp->d_name;
+
+		if (!file.empty() && file[0] == '.')
+		{
+			//skip ".", "..", ".git", ".svn", ".bashrc", ".ssh" etc.
+			continue;
+		}
+
+		num++;
+		if (num >= size)
+		{
+			break;
+		}
+	}
+	closedir(dp);
+	return (num >= size);
 }
 
 /**

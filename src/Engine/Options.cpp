@@ -300,10 +300,9 @@ void create()
 static bool _gameIsInstalled(const std::string &gameName)
 {
 	// look for game data in either the data or user directories
-	std::string dataGameFolder = CrossPlatform::searchDataFolder(gameName);
+	std::string dataGameFolder = CrossPlatform::searchDataFolder(gameName, 8);
 	std::string userGameFolder = _userFolder + gameName;
-	return (CrossPlatform::folderExists(dataGameFolder)	&& CrossPlatform::getFolderContents(dataGameFolder).size() >= 8)
-	    || (CrossPlatform::folderExists(userGameFolder)	&& CrossPlatform::getFolderContents(userGameFolder).size() >= 8);
+	return (CrossPlatform::folderMinSize(dataGameFolder, 8) || CrossPlatform::folderMinSize(userGameFolder, 8));
 }
 
 static bool _ufoIsInstalled()
