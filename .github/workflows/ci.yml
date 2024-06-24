@@ -59,10 +59,9 @@ jobs:
           HOMEBREW_NO_INSTALL_FROM_API: 1
         run: |
           brew tap --force homebrew/core
-          cp -rf scripts/Formula/* `brew --repo homebrew/core`
           brew update
-          brew install ccache
-          brew reinstall --build-from-source ${{ matrix.packages }}
+          cp -rf scripts/Formula/* `brew --repo homebrew/core`
+          brew install ccache ${{ matrix.packages }}
 
       - name: Setup Cache
         if: runner.os == 'Linux' || runner.os == 'macOS'
