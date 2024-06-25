@@ -258,6 +258,7 @@ std::vector<std::string> findDataFolders()
 			if (dir_pos != std::string::npos) {
 				std::string dir = exe_path.substr(0, dir_pos);
 				list.push_back( dir.append("/") );
+				list.push_back( dir.append("/../share/openxcom/") ); // Relative FHS
 			}
 		}
 	}
