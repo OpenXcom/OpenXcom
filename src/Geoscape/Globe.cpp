@@ -883,9 +883,9 @@ void Globe::draw()
 	Surface::draw();
 	drawOcean();
 	drawLand();
+	drawShadow();
 	drawRadars();
 	drawFlights();
-	drawShadow();
 	drawMarkers();
 	drawDetail();
 }
@@ -1056,11 +1056,27 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 		{
 			if (CreateShadow::isOcean(tcol))
 			{
-				tcol = CreateShadow::getOceanShadow(shade + 8);
+				auto ncol = shade + tcol + 8;
+				if (!CreateShadow::isOcean(ncol + 8))
+				{
+					// we check "overflow" with buffer of color past allowed range for ocean,
+					// then we roll back value back to beginning of range, 24 + 8 == 32
+					ncol -= 30;
+				}
+				tcol = ncol;
 			}
 			else
 			{
-				tcol = CreateShadow::getLandShadow(tcol, shade * 3);
+				if ((tcol & helper::ColorShade) > 8)
+				{
+					// for dark land shades we shift everything to match ocean shade
+					// as ocean have 30 value shift, we do similar for land too, value bit smaller than 1/3 of 30
+					tcol = CreateShadow::getLandShadow(tcol - 8, shade * 3);
+				}
+				else
+				{
+					tcol = CreateShadow::getLandShadow(tcol, shade * 3);
+				}
 			}
 			surface->setPixel((int)x0,(int)y0,tcol);
 		}
