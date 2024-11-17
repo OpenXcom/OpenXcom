@@ -215,7 +215,7 @@ std::vector<std::string> findDataFolders()
  	}
  	list.push_back(path);
 #ifdef DATADIR
-	snprintp(path, MAXPATHLEN, "%s/" DATADIR);
+	snprintf(path, MAXPATHLEN, "%s/" DATADIR);
 	list.push_back(path);
 #endif
 	// Get global data folders
