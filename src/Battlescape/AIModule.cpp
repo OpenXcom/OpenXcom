@@ -18,6 +18,7 @@
  */
 #include <climits>
 #include <algorithm>
+#include <cmath>
 #include "AIModule.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Node.h"
@@ -1505,7 +1506,7 @@ bool AIModule::findFirePoint()
  * @param grenade Is the explosion coming from a grenade?
  * @return True if it is worthwhile creating an explosion in the target position.
  */
-bool AIModule::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff, bool grenade) const
+bool AIModule::explosiveEfficacy(const Position& targetPos, BattleUnit *attackingUnit, int radius, int diff, bool grenade) const
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
 	Mod *mod = _save->getBattleState()->getGame()->getMod();
@@ -1878,7 +1879,7 @@ bool AIModule::psiAction()
 	int cost = psiWeaponRules->getTUUse();
 	if (!psiWeaponRules->getFlatRate())
 	{
-		cost = (int)floor(_unit->getBaseStats()->tu * cost / 100.0f);
+		cost = (int)std::floor(_unit->getBaseStats()->tu * cost / 100.0f);
 	}
 	bool LOSRequired = psiWeaponRules->isLOSRequired();
 
