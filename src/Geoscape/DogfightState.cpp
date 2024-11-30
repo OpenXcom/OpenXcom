@@ -558,6 +558,8 @@ DogfightState::DogfightState(GeoscapeState *state, Craft *craft, Ufo *ufo) : _st
 	// Used for weapon toggling.
 	_weapon1->onMouseClick((ActionHandler)&DogfightState::weapon1Click);
 	_weapon2->onMouseClick((ActionHandler)&DogfightState::weapon2Click);
+
+	setStance(Options::initialInterceptStance);
 }
 
 /**
@@ -1871,6 +1873,30 @@ void DogfightState::setWaitForAltitude(bool wait)
 bool DogfightState::getWaitForAltitude() const
 {
 	return _waitForAltitude;
+}
+
+void DogfightState::setStance(int stance)
+{
+	switch (stance)
+	{
+	case 1:
+		_btnCautious->depress(this);
+		_btnCautious->unpress(this);
+		break;
+	case 2:
+		_btnStandard->depress(this);
+		_btnStandard->unpress(this);
+		break;
+	case 3:
+		_btnAggressive->depress(this);
+		_btnAggressive->unpress(this);
+		break;
+	case 0:
+	default:
+		_btnStandoff->depress(this);
+		_btnStandoff->unpress(this);
+		break;
+	}
 }
 
 }
