@@ -1057,6 +1057,23 @@ void writeNode(const YAML::Node& node, YAML::Emitter& emitter)
 bool save(const std::string &filename)
 {
 	std::string s = _configFolder + filename + ".cfg";
+
+	// Keep existing values
+	YAML::Node old;
+	try
+	{
+		YAML::Node doc = YAML::LoadFile(s);
+		if (doc["options"])
+		{
+			old = doc["options"];
+		}
+	}
+	catch (YAML::Exception &e)
+	{
+		Log(LOG_WARNING) << e.what();
+	}
+
+	// Save new values
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
@@ -1065,14 +1082,12 @@ bool save(const std::string &filename)
 	}
 	try
 	{
-		YAML::Emitter out;
-
-		YAML::Node doc, node;
+		YAML::Node doc;
 		for (std::vector<OptionInfo>::iterator i = _info.begin(); i != _info.end(); ++i)
 		{
-			i->save(node);
+			i->save(old);
 		}
-		doc["options"] = node;
+		doc["options"] = old;
 
 		for (std::vector< std::pair<std::string, bool> >::iterator i = mods.begin(); i != mods.end(); ++i)
 		{
@@ -1082,8 +1097,8 @@ bool save(const std::string &filename)
 			doc["mods"].push_back(mod);
 		}
 
+		YAML::Emitter out;
 		writeNode(doc, out);
-
 		sav << out.c_str() << std::endl;
 	}
 	catch (YAML::Exception &e)
