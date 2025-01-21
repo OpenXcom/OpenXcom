@@ -307,7 +307,7 @@ void TextEdit::draw()
 			newValue += _char;
 		}
 	}
-	_text->setText(Unicode::convUtf32ToUtf8(_value));
+	_text->setText(Unicode::convUtf32ToUtf8(newValue));
 	clear();
 	_text->blit(this);
 	if (Options::keyboardMode == KEYBOARD_ON)
