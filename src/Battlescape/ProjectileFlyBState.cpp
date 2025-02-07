@@ -44,11 +44,11 @@ namespace OpenXcom
 /**
  * Sets up an ProjectileFlyBState.
  */
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, Position origin) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(origin), _originVoxel(-1,-1,-1), _projectileImpact(0), _initialized(false), _targetFloor(false)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, const Position& origin) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(origin), _originVoxel(-1,-1,-1), _projectileImpact(0), _initialized(false), _targetFloor(false)
 {
 }
 
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(action.actor->getPosition()), _originVoxel(-1,-1,-1), _projectileImpact(0), _initialized(false), _targetFloor(false)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, const BattleAction& action) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(action.actor->getPosition()), _originVoxel(-1,-1,-1), _projectileImpact(0), _initialized(false), _targetFloor(false)
 {
 }
 
@@ -657,7 +657,7 @@ void ProjectileFlyBState::cancel()
  * @param target Tile to throw to.
  * @return True when the range is valid.
  */
-bool ProjectileFlyBState::validThrowRange(BattleAction *action, Position origin, Tile *target)
+bool ProjectileFlyBState::validThrowRange(BattleAction *action, const Position& origin, Tile *target)
 {
 	// note that all coordinates and thus also distances below are in number of tiles (not in voxels).
 	if (action->type != BA_THROW)
@@ -730,7 +730,7 @@ void ProjectileFlyBState::targetFloor()
 	_targetFloor = true;
 }
 
-void ProjectileFlyBState::projectileHitUnit(Position pos)
+void ProjectileFlyBState::projectileHitUnit(const Position& pos)
 {
 	BattleUnit *victim = _parent->getSave()->getTile(pos / Position(16,16,24))->getUnit();
 	BattleUnit *targetVictim = _parent->getSave()->getTile(_action.target)->getUnit(); // Who we were aiming at (not necessarily who we hit)
