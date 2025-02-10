@@ -92,7 +92,7 @@ OptionsDefaultsState::~OptionsDefaultsState()
 void OptionsDefaultsState::btnYesClick(Action *action)
 {
 	Options::resetDefault(false);
-	_game->loadLanguages();
+	Options::save(true);
 	_game->popState();
 	_state->btnOkClick(action);
 }

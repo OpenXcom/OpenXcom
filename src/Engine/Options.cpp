@@ -1054,23 +1054,26 @@ void writeNode(const YAML::Node& node, YAML::Emitter& emitter)
  * @param filename YAML filename.
  * @return Was the saving successful?
  */
-bool save(const std::string &filename)
+bool save(bool reset, const std::string &filename)
 {
 	std::string s = _configFolder + filename + ".cfg";
 
 	// Keep existing values
 	YAML::Node old;
-	try
+	if (!reset)
 	{
-		YAML::Node doc = YAML::LoadFile(s);
-		if (doc["options"])
+		try
 		{
-			old = doc["options"];
+			YAML::Node doc = YAML::LoadFile(s);
+			if (doc["options"])
+			{
+				old = doc["options"];
+			}
 		}
-	}
-	catch (YAML::Exception &e)
-	{
-		Log(LOG_WARNING) << e.what();
+		catch (YAML::Exception &e)
+		{
+			Log(LOG_WARNING) << e.what();
+		}
 	}
 
 	// Save new values
