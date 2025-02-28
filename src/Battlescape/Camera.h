@@ -77,13 +77,13 @@ public:
 	/// Sets the view level.
 	void setViewLevel(int viewlevel);
 	/// Converts map coordinates to screen coordinates.
-	void convertMapToScreen(Position mapPos, Position *screenPos) const;
+	void convertMapToScreen(const Position& mapPos, Position *screenPos) const;
 	/// Converts voxel coordinates to screen coordinates.
-	void convertVoxelToScreen(Position voxelPos, Position *screenPos) const;
+	void convertVoxelToScreen(const Position& voxelPos, Position *screenPos) const;
 	/// Converts screen coordinates to map coordinates.
 	void convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) const;
 	/// Center map on a position.
-	void centerOnPosition(Position pos, bool redraw = true);
+	void centerOnPosition(const Position& pos, bool redraw = true);
 	/// Gets map's center position.
 	Position getCenterPosition();
 	/// Gets the map displayed level.
@@ -101,7 +101,7 @@ public:
 	/// Checks if the camera is showing all map layers.
 	bool getShowAllLayers() const;
 	/// Checks if map coordinates X,Y,Z are on screen.
-	bool isOnScreen(Position mapPos, const bool unitWalking, const int unitSize, const bool boundary) const;
+	bool isOnScreen(const Position& mapPos, const bool unitWalking, const int unitSize, const bool boundary) const;
 	/// Resize the viewable area.
 	void resize();
 	/// stop mouse scrolling.
