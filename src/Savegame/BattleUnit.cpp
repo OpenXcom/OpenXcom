@@ -2252,7 +2252,7 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape, UnitStats &statsDiff
 		v = caps.strength - stats->strength;
 		if (v > 0) stats->strength += RNG::generate(0, v/10 + 2);
 		v = caps.stamina - stats->stamina;
-		if (v > 0) stats->stamina += RNG::generate(0, v/10 + 2);
+		if (v > 0) stats->stamina += RNG::generate(0, v/15 + 2);
 	}
 
 	statsDiff += *stats; // add new stats
