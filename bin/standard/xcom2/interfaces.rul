@@ -376,7 +376,7 @@ interfaces: #done
       - id: button
         color: 1
   - type: baseDefense
-    palette: PAL_BASESCAPE
+#    palette: PAL_BASESCAPE
     elements:
       - id: palette
         color: 2     # red/orange
