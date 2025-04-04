@@ -1765,7 +1765,7 @@ void BattleUnit::allowReselect()
  */
 bool BattleUnit::reselectAllowed() const
 {
-	return !_dontReselect;
+	return !_dontReselect && (!Options::skipOutOfTime || _tu != 0);
 }
 
 /**
