@@ -881,15 +881,22 @@ void GeoscapeState::time5Seconds()
 						// Can we actually fight it
 						if (!(*j)->isInDogfight() && u->getSpeed() <= (*j)->getRules()->getMaxSpeed())
 						{
+							bool const tooDeep = (*j)->getRules()->isWaterOnly() && u->getAltitudeInt() > (*j)->getRules()->getMaxAltitude();
+							bool const tooAirborne = (*j)->getRules()->isWaterOnly() && !_globe->insideLand((*j)->getLongitude(), (*j)->getLatitude());
+							if (Options::autoChaseUSOs && (tooDeep || tooAirborne))
+							{
+								++j;
+								continue;
+							}
 							DogfightState *dogfight = new DogfightState(this, (*j), u);
 							_dogfightsToBeStarted.push_back(dogfight);
-							if ((*j)->getRules()->isWaterOnly() && u->getAltitudeInt() > (*j)->getRules()->getMaxAltitude())
+							if (tooDeep)
 							{
 								popup(new DogfightErrorState((*j), tr("STR_UNABLE_TO_ENGAGE_DEPTH")));
 								dogfight->setMinimized(true);
 								dogfight->setWaitForAltitude(true);
 							}
-							else if ((*j)->getRules()->isWaterOnly() && !_globe->insideLand((*j)->getLongitude(), (*j)->getLatitude()))
+							else if (tooAirborne)
 							{
 								popup(new DogfightErrorState((*j), tr("STR_UNABLE_TO_ENGAGE_AIRBORNE")));
 								dogfight->setMinimized(true);
