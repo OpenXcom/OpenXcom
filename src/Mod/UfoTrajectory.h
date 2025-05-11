@@ -76,11 +76,12 @@ public:
 	std::string getAltitude(size_t wp) const;
 
 	/**
-	 * Gets the speed percentage at a waypoint.
+	 * Applies the speed percentage at a waypoint to the base speed.
 	 * @param wp The waypoint.
-	 * @return The speed as a percentage.
+	 * @param baseSpeed The base speed.
+	 * @return The new speed after applying the percentage.
 	 */
-	float getSpeedPercentage(size_t wp) const { return _waypoints[wp].speed / 100.0f; }
+	int applySpeedPercentage(size_t wp, int baseSpeed) const { return baseSpeed * _waypoints[wp].speed / 100; }
 
 	/**
 	 * Gets the number of seconds UFOs should spend on the ground.

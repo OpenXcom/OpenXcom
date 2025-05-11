@@ -299,7 +299,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Mod &mod, const Globe &
 				pos = regionRules.getRandomPoint(trajectory.getZone(0));
 			}
 			ufo->setAltitude(assaultTrajectory.getAltitude(0));
-			ufo->setSpeed(assaultTrajectory.getSpeedPercentage(0) * battleshipRule.getMaxSpeed());
+			ufo->setSpeed(assaultTrajectory.applySpeedPercentage(0, battleshipRule.getMaxSpeed()));
 			ufo->setLongitude(pos.first);
 			ufo->setLatitude(pos.second);
 			Waypoint *wp = new Waypoint();
@@ -330,7 +330,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Mod &mod, const Globe &
 			pos = regionRules.getRandomPoint(trajectory.getZone(0));
 		}
 		ufo->setAltitude(trajectory.getAltitude(0));
-		ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule->getMaxSpeed());
+		ufo->setSpeed(trajectory.applySpeedPercentage(0, ufoRule->getMaxSpeed()));
 		ufo->setLongitude(pos.first);
 		ufo->setLatitude(pos.second);
 		Waypoint *wp = new Waypoint();
@@ -369,7 +369,7 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Mod &mod, const Globe &
 	{
 		ufo->setSecondsRemaining(trajectory.groundTimer()*5);
 	}
-	ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule->getMaxSpeed());
+	ufo->setSpeed(trajectory.applySpeedPercentage(0, ufoRule->getMaxSpeed()));
 	ufo->setLongitude(pos.first);
 	ufo->setLatitude(pos.second);
 	Waypoint *wp = new Waypoint();
@@ -455,7 +455,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			ufo.setLandId(0);
 		}
 		// Set next waypoint.
-		ufo.setSpeed((int)(ufo.getRules()->getMaxSpeed() * trajectory.getSpeedPercentage(nextWaypoint)));
+		ufo.setSpeed(trajectory.applySpeedPercentage(nextWaypoint, ufo.getRules()->getMaxSpeed()));
 	}
 	else
 	{
@@ -576,7 +576,7 @@ void AlienMission::ufoLifting(Ufo &ufo, SavedGame &game)
 				addScore(ufo.getLongitude(), ufo.getLatitude(), game);
 			}
 			ufo.setAltitude("STR_VERY_LOW");
-			ufo.setSpeed((int)(ufo.getRules()->getMaxSpeed() * ufo.getTrajectory().getSpeedPercentage(ufo.getTrajectoryPoint())));
+			ufo.setSpeed(ufo.getTrajectory().applySpeedPercentage(ufo.getTrajectoryPoint(), ufo.getRules()->getMaxSpeed()));
 		}
 		break;
 	case Ufo::CRASHED:
