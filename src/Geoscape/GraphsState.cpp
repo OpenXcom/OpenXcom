@@ -694,6 +694,8 @@ void GraphsState::drawCountryLines()
 		}
 		if (_countryToggles.back()->_pushed && total > upperLimit)
 			upperLimit = total;
+		if (_countryToggles.back()->_pushed && total < lowerLimit)
+			lowerLimit = total;
 	}
 
 	//adjust the scale to fit the upward maximum
@@ -792,11 +794,11 @@ void GraphsState::drawCountryLines()
 	{
 		int x = 312 - (iter*17);
 		int y = 175 - (-lowerLimit / units);
-		if (totals[iter] > 0)
-		{
-			int reduction = totals[iter] / units;
-			y -= reduction;
-		}
+		int reduction = totals[iter] / units;
+		y -= reduction;
+
+		if (y >=180) y = 180;
+		if (y <= 45) y = 45;
 		newLineVector.push_back(y);
 		if (newLineVector.size() > 1)
 		{
@@ -862,7 +864,9 @@ void GraphsState::drawRegionLines()
 			}
 		}
 		if (_regionToggles.back()->_pushed && total > upperLimit)
-				upperLimit = total;
+			upperLimit = total;
+		if (_regionToggles.back()->_pushed && total < lowerLimit)
+			lowerLimit = total;
 	}
 
 	//adjust the scale to fit the upward maximum
@@ -945,11 +949,11 @@ void GraphsState::drawRegionLines()
 	{
 		int x = 312 - (iter*17);
 		int y = 175 - (-lowerLimit / units);
-		if (totals[iter] > 0)
-		{
-			int reduction = totals[iter] / units;
-			y -= reduction;
-		}
+		int reduction = totals[iter] / units;
+		y -= reduction;
+
+		if (y >=180) y = 180;
+		if (y <= 45) y = 45;
 		newLineVector.push_back(y);
 		if (newLineVector.size() > 1)
 		{
