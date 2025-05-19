@@ -797,8 +797,6 @@ void GraphsState::drawCountryLines()
 		int reduction = totals[iter] / units;
 		y -= reduction;
 
-		if (y >=180) y = 180;
-		if (y <= 45) y = 45;
 		newLineVector.push_back(y);
 		if (newLineVector.size() > 1)
 		{
@@ -952,8 +950,6 @@ void GraphsState::drawRegionLines()
 		int reduction = totals[iter] / units;
 		y -= reduction;
 
-		if (y >=180) y = 180;
-		if (y <= 45) y = 45;
 		newLineVector.push_back(y);
 		if (newLineVector.size() > 1)
 		{
