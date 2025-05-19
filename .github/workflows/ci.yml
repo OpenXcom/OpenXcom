@@ -29,7 +29,7 @@ jobs:
 
           - name: macOS
             os: macOS-latest
-            packages: yaml-cpp sdl sdl_gfx ./scripts/Formula/sdl_image.rb ./scripts/Formula/sdl_mixer.rb
+            packages: yaml-cpp sdl sdl_gfx $(pwd)/scripts/Formula/sdl_image.rb $(pwd)/scripts/Formula/sdl_mixer.rb
             compiler: clang
             cpp-compiler: clang++
             app-bundle: openxcom.app  # all other builds default to bin/
