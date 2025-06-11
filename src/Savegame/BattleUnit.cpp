@@ -18,6 +18,7 @@
  */
 #include "BattleUnit.h"
 #include "BattleItem.h"
+#include <cmath>
 #include <sstream>
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
@@ -488,7 +489,7 @@ int BattleUnit::getId() const
  * @param pos position
  * @param updateLastPos refresh last stored position
  */
-void BattleUnit::setPosition(Position pos, bool updateLastPos)
+void BattleUnit::setPosition(const Position& pos, bool updateLastPos)
 {
 	if (updateLastPos) { _lastPos = _pos; }
 	_pos = pos;
@@ -605,7 +606,7 @@ UnitStatus BattleUnit::getStatus() const
  * @param tileBelowMe Which tile is currently below the unit.
  * @param cache Update cache?
  */
-void BattleUnit::startWalking(int direction, Position destination, Tile *tileBelowMe, bool cache)
+void BattleUnit::startWalking(int direction, const Position& destination, Tile *tileBelowMe, bool cache)
 {
 	if (direction >= Pathfinding::DIR_UP)
 	{
@@ -749,7 +750,7 @@ int BattleUnit::getDiagonalWalkingPhase() const
  * @param point Position to look at.
  * @param turret True to turn the turret, false to turn the unit.
  */
-void BattleUnit::lookAt(Position point, bool turret)
+void BattleUnit::lookAt(const Position& point, bool turret)
 {
 	int dir = directionTo (point);
 
@@ -1005,7 +1006,7 @@ void BattleUnit::aim(bool aiming)
  * @param point given position.
  * @return direction.
  */
-int BattleUnit::directionTo(Position point) const
+int BattleUnit::directionTo(const Position& point) const
 {
 	double ox = point.x - _pos.x;
 	double oy = point.y - _pos.y;
@@ -1093,7 +1094,7 @@ int BattleUnit::getMorale() const
  * @param ignoreArmor Should the damage ignore armor resistance?
  * @return damage done after adjustment
  */
-int BattleUnit::damage(Position relative, int power, ItemDamageType type, bool ignoreArmor)
+int BattleUnit::damage(const Position& relative, int power, ItemDamageType type, bool ignoreArmor)
 {
 	UnitSide side = SIDE_FRONT;
 	UnitBodyPart bodypart = BODYPART_TORSO;
@@ -1103,7 +1104,7 @@ int BattleUnit::damage(Position relative, int power, ItemDamageType type, bool i
 		return 0;
 	}
 
-	power = (int)floor(power * _armor->getDamageModifier(type));
+	power = (int)std::floor(power * _armor->getDamageModifier(type));
 
 	if (type == DT_SMOKE) type = DT_STUN; // smoke doesn't do real damage, but stun damage
 
@@ -1361,7 +1362,7 @@ int BattleUnit::getActionTUs(BattleActionType actionType, RuleItem *item)
 	// if it's a percentage, apply it to unit TUs
 	if (!item->getFlatRate() || actionType == BA_THROW || actionType == BA_PRIME)
 	{
-		cost = (int)floor(getBaseStats()->tu * cost / 100.0f);
+		cost = (int)std::floor(getBaseStats()->tu * cost / 100.0f);
 	}
 
 	return cost;
@@ -2842,7 +2843,7 @@ void BattleUnit::deriveRank()
  * @param pos the position to check against
  * @return what the maths decide
  */
-bool BattleUnit::checkViewSector (Position pos) const
+bool BattleUnit::checkViewSector (const Position& pos) const
 {
 	int deltaX = pos.x - _pos.x;
 	int deltaY = _pos.y - pos.y;
