@@ -487,7 +487,9 @@ void AIModule::setupPatrol()
 		else if (_unit->getArmor()->getSize() == 1 &&
 				_attackAction->weapon &&
 				_attackAction->weapon->getRules()->getAccuracySnap() &&
+				!_attackAction->weapon->getRules()->getArcingShot() &&
 				_attackAction->weapon->getAmmoItem() &&
+				!_attackAction->weapon->getAmmoItem()->getRules()->getArcingShot() &&
 				_attackAction->weapon->getAmmoItem()->getRules()->getDamageType() != DT_HE)
 		{
 			// can i shoot an object?
