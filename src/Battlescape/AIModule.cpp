@@ -1411,6 +1411,11 @@ void AIModule::evaluateAIMode()
 		{
 			return;
 		}
+		// base defense mission protocol: patrol action becomes an attack action when base modules are sighted
+		if (_patrolAction->type == BA_SNAPSHOT)
+		{
+			return;
+		}
 		_AIMode = AI_AMBUSH;
 	}
 
