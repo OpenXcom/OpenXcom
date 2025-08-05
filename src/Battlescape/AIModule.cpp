@@ -484,14 +484,14 @@ void AIModule::setupPatrol()
 		}
 
 		// in base defense missions, the smaller aliens walk towards target nodes - or if there, shoot objects around them
-		else if (_unit->getArmor()->getSize() == 1)
-		{
-			// can i shoot an object?
-			if (_fromNode->isTarget() &&
+		else if (_unit->getArmor()->getSize() == 1 &&
 				_attackAction->weapon &&
 				_attackAction->weapon->getRules()->getAccuracySnap() &&
 				_attackAction->weapon->getAmmoItem() &&
-				_attackAction->weapon->getAmmoItem()->getRules()->getDamageType() != DT_HE &&
+				_attackAction->weapon->getAmmoItem()->getRules()->getDamageType() != DT_HE)
+		{
+			// can i shoot an object?
+			if (_fromNode->isTarget()  &&
 				_save->getModuleMap()[_fromNode->getPosition().x / 10][_fromNode->getPosition().y / 10].second > 0)
 			{
 				// scan this room for objects to destroy
@@ -522,7 +522,13 @@ void AIModule::setupPatrol()
 					{
 						continue;
 					}
-					if ((*i)->isTarget() && !(*i)->isAllocated())
+
+					if (_save->getTile((*i)->getPosition())->getUnit() && _save->getTile((*i)->getPosition())->getUnit()->getFaction() == _unit->getFaction())
+					{
+						continue;
+					}
+
+					if ((*i)->isTarget() && !(*i)->isAllocated() && _save->getModuleMap()[(*i)->getPosition().x / 10][(*i)->getPosition().y / 10].second > 0)
 					{
 						node = *i;
 						int d = _save->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
