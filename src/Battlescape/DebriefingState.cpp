@@ -956,6 +956,7 @@ void DebriefingState::prepareDebriefing()
 				if (battle->getModuleMap()[(*k)->getX()][(*k)->getY()].second == 0)
 				{
 					base->destroyFacility(k);
+					k = base->getFacilities()->begin();
 				}
 				else
 				{
