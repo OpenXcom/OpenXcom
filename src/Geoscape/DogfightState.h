@@ -150,6 +150,8 @@ public:
 	void setWaitForAltitude(bool wait);
 	/// Waits until the UFO reaches the right altitude.
 	bool getWaitForAltitude() const;
+	/// Simulates the user clicking the specified stance/attack button.
+	void setStance(int stance);
 };
 
 }
