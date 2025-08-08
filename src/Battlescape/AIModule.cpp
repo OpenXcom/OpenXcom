@@ -490,7 +490,8 @@ void AIModule::setupPatrol()
 				!_attackAction->weapon->getRules()->getArcingShot() &&
 				_attackAction->weapon->getAmmoItem() &&
 				!_attackAction->weapon->getAmmoItem()->getRules()->getArcingShot() &&
-				_attackAction->weapon->getAmmoItem()->getRules()->getDamageType() != DT_HE)
+				_attackAction->weapon->getAmmoItem()->getRules()->getDamageType() != DT_HE &&
+				_attackAction->weapon->getAmmoItem()->getRules()->getDamageType() != DT_STUN)
 		{
 			// can i shoot an object?
 			if (_fromNode->isTarget()  &&
