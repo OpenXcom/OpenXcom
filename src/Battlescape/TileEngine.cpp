@@ -46,7 +46,7 @@
 namespace OpenXcom
 {
 
-const int TileEngine::heightFromCenter[11] = {0,-2,+2,-4,+4,-6,+6,-8,+8,-12,+12};
+const int TileEngine::heightFromCenter[13] = {0,-2,+2,-4,+4,-6,+6,-8,+8,-10,+10,-12,+12};
 
 /**
  * Sets up a TileEngine.
@@ -584,17 +584,28 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 
 	targetMaxHeight += heightRange;
 	targetCenterHeight=(targetMaxHeight+targetMinHeight)/2;
+	targetCenterHeight += (targetMaxHeight - targetCenterHeight) % 2; // Center should have even number of voxels above it
 	heightRange/=2;
-	if (heightRange>10) heightRange=10;
+	heightRange += heightRange % 2; // Horizontal slices are symmetrical relative to center, their count should be even number too
+
+	if (heightRange>12) heightRange=12;
 	if (heightRange<=0) heightRange=0;
 
 	// scan ray from top to bottom  plus different parts of target cylinder
 	for (int i = 0; i <= heightRange; ++i)
 	{
 		scanVoxel->z=targetCenterHeight+heightFromCenter[i];
+
+		// Z-position of the lowest voxel of the target is targetMinHeight+1
+		// Skip unnecessary checks
+		if (scanVoxel->z < targetMinHeight+1 || scanVoxel->z > targetMaxHeight) continue;
+
 		for (int j = 0; j < 5; ++j)
 		{
-			if (i < (heightRange-1) && j>2) break; //skip unnecessary checks
+			// Lowest possible scan hits either minHeight+1 or minHeight+2
+			// Skip unnecessary checks
+			if (j > 2 && scanVoxel->z > targetMinHeight+2 && scanVoxel->z < targetMaxHeight) break;
+
 			scanVoxel->x=targetVoxel.x + sliceTargets[j*2];
 			scanVoxel->y=targetVoxel.y + sliceTargets[j*2+1];
 			_trajectory.clear();
@@ -608,7 +619,7 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 						//voxel of hit must be inside of scanned box
 						if (_trajectory.at(0).x/16 == (scanVoxel->x/16) + x + xOffset &&
 							_trajectory.at(0).y/16 == (scanVoxel->y/16) + y + yOffset &&
-							_trajectory.at(0).z >= targetMinHeight &&
+							_trajectory.at(0).z >= targetMinHeight+1 &&
 							_trajectory.at(0).z <= targetMaxHeight)
 						{
 							return true;
