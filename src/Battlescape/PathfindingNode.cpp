@@ -26,7 +26,7 @@ namespace OpenXcom
  * Sets up a PathfindingNode.
  * @param pos Position.
  */
-PathfindingNode::PathfindingNode(Position pos) : _pos(pos), _checked(0), _tuCost(0), _prevNode(0), _prevDir(0), _tuGuess(0), _openentry(0)
+PathfindingNode::PathfindingNode(const Position& pos) : _pos(pos), _checked(0), _tuCost(0), _prevNode(0), _prevDir(0), _tuGuess(0), _openentry(0)
 {
 
 }
@@ -105,7 +105,7 @@ int PathfindingNode::getPrevDir() const
  * @param prevDir The direction FROM the previous node.
  * @param target The target position (used to update our guess cost).
  */
-void PathfindingNode::connect(int tuCost, PathfindingNode* prevNode, int prevDir, Position target)
+void PathfindingNode::connect(int tuCost, PathfindingNode* prevNode, int prevDir, const Position& target)
 {
 	_tuCost = tuCost;
 	_prevNode = prevNode;
