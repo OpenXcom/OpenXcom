@@ -387,17 +387,53 @@ int Pathfinding::getTUCost(Position startPosition, int direction, Position *endP
 					return 255;
 			}
 
+			int wallCounter = 0;
+			int wallTmp = 0;
 			int wallcost = 0; // walking through rubble walls, but don't charge for walking diagonally through doors (which is impossible),
 							// they're a special case unto themselves, if we can walk past them diagonally, it means we can go around,
 							// as there is no wall blocking us.
 			if (direction == 0 || direction == 7 || direction == 1)
-				wallcost += startTile->getTUCost(O_NORTHWALL, _movementType);
+			{
+				wallTmp += startTile->getTUCost(O_NORTHWALL, _movementType);
+				if (wallTmp > 0)
+				{
+					wallcost += wallTmp;
+					wallCounter += 1;
+				}
+			}
 			if (!fellDown && (direction == 2 || direction == 1 || direction == 3))
-				wallcost += destinationTile->getTUCost(O_WESTWALL, _movementType);
+			{
+				wallTmp += destinationTile->getTUCost(O_WESTWALL, _movementType);
+				if (wallTmp > 0)
+				{
+					wallcost += wallTmp;
+					wallCounter += 1;
+				}
+			}
 			if (!fellDown && (direction == 4 || direction == 3 || direction == 5))
-				wallcost += destinationTile->getTUCost(O_NORTHWALL, _movementType);
+			{
+				wallTmp += destinationTile->getTUCost(O_NORTHWALL, _movementType);
+				if (wallTmp > 0)
+				{
+					wallcost += wallTmp;
+					wallCounter += 1;
+				}
+			}
 			if (direction == 6 || direction == 5 || direction == 7)
-				wallcost += startTile->getTUCost(O_WESTWALL, _movementType);
+			{
+				wallTmp += startTile->getTUCost(O_WESTWALL, _movementType);
+				if (wallTmp > 0)
+				{
+					wallcost += wallTmp;
+					wallCounter += 1;
+				}
+			}
+			// "average" cost: https://openxcom.org/forum/index.php?topic=12589.0
+			if (wallCounter > 0)
+			{
+				wallcost /= wallCounter;
+			}
+
 			// don't let tanks phase through doors.
 			if (x && y)
 			{
@@ -436,7 +472,6 @@ int Pathfinding::getTUCost(Position startPosition, int direction, Position *endP
 			// diagonal walking (uneven directions) costs 50% more tu's
 			if (direction < DIR_UP && direction & 1)
 			{
-				wallcost /= 2;
 				cost = (int)((double)cost * 1.5);
 			}
 			cost += wallcost;
