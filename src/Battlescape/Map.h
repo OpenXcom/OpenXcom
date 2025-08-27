@@ -69,7 +69,7 @@ private:
 	Text *_txtAccuracy;
 	SurfaceSet *_projectileSet;
 
-	void drawUnit(Surface *surface, Tile *unitTile, Tile *currTile, Position tileScreenPosition, int shade, int obstacleShade, bool topLayer);
+	void drawUnit(Surface *surface, Tile *unitTile, Tile *currTile, const Position& tileScreenPosition, int shade, int obstacleShade, bool topLayer);
 	void drawTerrain(Surface *surface);
 	int getTerrainLevel(const Position& pos, int size) const;
 	int _iconHeight, _iconWidth, _messageColor;
