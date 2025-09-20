@@ -94,7 +94,7 @@ jobs:
           cd ..\..
 
       - name: Create nightly installer
-        uses: joncloud/makensis-action@v4
+        uses: joncloud/makensis-action@v5.0
         with:
           script-file: "install/win/installer.nsi"
 
