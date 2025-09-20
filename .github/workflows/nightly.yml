@@ -48,19 +48,6 @@ jobs:
               Write-Host "components were not installed"
           }
 
-      - name: Bypass Cloudflare for GitHub Action
-        uses: xiaotianxt/bypass-cloudflare-for-github-action@v1.1.1
-        with:
-          cf_zone_id: ${{ secrets.CF_ZONE_ID }}
-          cf_api_token: ${{ secrets.CF_API_TOKEN }}
-
-      - name: Download dependencies
-        shell: powershell
-        run: |
-          Invoke-WebRequest -Uri "https://openxcom.org/download/dev/openxcom-deps-win-vc2017.zip" -OutFile "openxcom-deps-win-vc2017-newest.zip"
-          Expand-Archive -Path "openxcom-deps-win-vc2017-newest.zip"
-          Copy-Item -Recurse -Path "openxcom-deps-win-vc2017-newest\deps\*" -Destination "deps"
-
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v2
 

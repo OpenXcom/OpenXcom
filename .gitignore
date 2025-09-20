@@ -65,7 +65,6 @@ _ReSharper.*/
 #OpenXcom stuff (no ending slashes for dirs so symlinks can be ignored as well as real dirs)
 bin/UFO
 bin/TFTD
-deps/
 docs/html/
 build/
 Dependencies/
