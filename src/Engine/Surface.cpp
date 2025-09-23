@@ -706,6 +706,8 @@ void Surface::copy(Surface *surface)
  */
 void Surface::drawRect(SDL_Rect *rect, Uint8 color)
 {
+	if (rect->w == 0 || rect->h == 0) return;
+
 	SDL_FillRect(_surface, rect, color);
 }
 
@@ -719,6 +721,8 @@ void Surface::drawRect(SDL_Rect *rect, Uint8 color)
  */
 void Surface::drawRect(Sint16 x, Sint16 y, Sint16 w, Sint16 h, Uint8 color)
 {
+	if (w == 0 || h == 0) return;
+
 	SDL_Rect rect;
 	rect.w = w;
 	rect.h = h;
