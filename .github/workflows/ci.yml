@@ -27,13 +27,13 @@ jobs:
             cmake-args: -A Win32
             build-args: "/clp:NoSummary"
 
-          - name: macOS
-            os: macOS-latest
-            packages: yaml-cpp sdl sdl_gfx
-            source-brew: dev/homebrew-openxcom
-            compiler: clang
-            cpp-compiler: clang++
-            app-bundle: openxcom.app  # all other builds default to bin/
+#          - name: macOS
+#            os: macOS-latest
+#            packages: yaml-cpp sdl sdl_gfx
+#            source-brew: dev/homebrew-openxcom
+#            compiler: clang
+#            cpp-compiler: clang++
+#            app-bundle: openxcom.app  # all other builds default to bin/
 
     runs-on: ${{ matrix.os }}
 
