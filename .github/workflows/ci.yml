@@ -29,7 +29,8 @@ jobs:
 
           - name: macOS
             os: macOS-latest
-            packages: yaml-cpp sdl sdl_gfx $(pwd)/scripts/Formula/sdl_image.rb $(pwd)/scripts/Formula/sdl_mixer.rb
+            packages: yaml-cpp sdl sdl_gfx
+            source-packages: dev/openxcom/sdl_image dev/openxcom/sdl_mixer
             compiler: clang
             cpp-compiler: clang++
             app-bundle: openxcom.app  # all other builds default to bin/
@@ -55,10 +56,14 @@ jobs:
 
       - name: Install packages (macOS)
         if: runner.os == 'macOS'
-        env:
-          HOMEBREW_NO_INSTALL_FROM_API: 1
         run: |
           brew install ccache ${{ matrix.packages }}
+          # Create dummy tap for deprecated packages
+          git config --global user.email "openxcom@gmail.com"
+          git config --global user.name "OpenXcom"
+          brew tap-new dev/openxcom
+          cp ./scripts/Formula/*.rb $(brew --repository)/Library/Taps/dev/openxcom/Formula/
+          brew install --build-from-source  ${{ matrix.source-packages }}
 
       - name: Setup Cache
         if: runner.os == 'Linux' || runner.os == 'macOS'
