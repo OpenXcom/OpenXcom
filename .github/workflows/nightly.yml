@@ -87,8 +87,9 @@ jobs:
           Copy-Item -Recurse -ErrorAction SilentlyContinue -Path "patch\xcom1\*" -Destination "bin\standard\xcom1"
           Copy-Item -Recurse -ErrorAction SilentlyContinue -Path "patch\xcom2\*" -Destination "bin\standard\xcom2"
 
-      - name: Translate installer
+      - name: Set up NSIS
         run: |
+          choco install nsis
           cd install\win
           python convert_lang.py
           cd ..\..
