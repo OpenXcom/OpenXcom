@@ -203,8 +203,8 @@ void OptionsBaseState::btnOkClick(Action *)
 		Options::mapResources();
 	}
 	_game->loadLanguages();
-	SDL_WM_GrabInput(Options::captureMouse);
 	_game->getScreen()->resetDisplay();
+	SDL_WM_GrabInput(Options::captureMouse);
 	_game->setVolume(Options::soundVolume, Options::musicVolume, Options::uiVolume);
 	if (Options::reload && _origin == OPT_MENU)
 	{
