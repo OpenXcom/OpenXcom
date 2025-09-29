@@ -267,11 +267,13 @@ BattlescapeState::BattlescapeState() : _reserve(0), _firstInit(true), _isMouseSc
 	_icons->onMouseOut((ActionHandler)&BattlescapeState::mouseOutIcons);
 
 	_btnUnitUp->onMouseClick((ActionHandler)&BattlescapeState::btnUnitUpClick);
+	_btnUnitUp->onKeyboardPress((ActionHandler)&BattlescapeState::btnUnitUpClick, Options::keyBattleUnitUp);
 	_btnUnitUp->setTooltip("STR_UNIT_LEVEL_ABOVE");
 	_btnUnitUp->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
 	_btnUnitUp->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
 
 	_btnUnitDown->onMouseClick((ActionHandler)&BattlescapeState::btnUnitDownClick);
+	_btnUnitDown->onKeyboardPress((ActionHandler)&BattlescapeState::btnUnitDownClick, Options::keyBattleUnitDown);
 	_btnUnitDown->setTooltip("STR_UNIT_LEVEL_BELOW");
 	_btnUnitDown->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
 	_btnUnitDown->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
