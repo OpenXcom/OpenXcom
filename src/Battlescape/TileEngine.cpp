@@ -18,6 +18,7 @@
  */
 #include <assert.h>
 #include <climits>
+#include <cmath>
 #include <set>
 #include "TileEngine.h"
 #include <SDL.h>
@@ -193,7 +194,7 @@ void TileEngine::calculateUnitLighting()
  * @param power Power.
  * @param layer Light is separated in 3 layers: Ambient, Static and Dynamic.
  */
-void TileEngine::addLight(Position center, int power, int layer)
+void TileEngine::addLight(const Position& center, int power, int layer)
 {
 	// only loop through the positive quadrant.
 	for (int x = 0; x <= power; ++x)
@@ -202,7 +203,7 @@ void TileEngine::addLight(Position center, int power, int layer)
 		{
 			for (int z = 0; z < _save->getMapSizeZ(); z++)
 			{
-				int distance = (int)Round(sqrt(float(x*x + y*y)));
+				int distance = (int)Round(std::sqrt(x*x + y*y));
 
 				if (_save->getTile(Position(center.x + x,center.y + y, z)))
 					_save->getTile(Position(center.x + x,center.y + y, z))->addLight(power - distance, layer);
@@ -481,9 +482,9 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
 
 	// vector manipulation to make scan work in view-space
 	Position relPos = targetVoxel - *originVoxel;
-	float normal = unitRadius/sqrt((float)(relPos.x*relPos.x + relPos.y*relPos.y));
-	int relX = floor(((float)relPos.y)*normal+0.5);
-	int relY = floor(((float)-relPos.x)*normal+0.5);
+	float normal = unitRadius/std::sqrt(relPos.x*relPos.x + relPos.y*relPos.y);
+	int relX = std::floor(relPos.y*normal+0.5);
+	int relY = std::floor(-relPos.x*normal+0.5);
 
 	int sliceTargets[] = {0,0, relX,relY, -relX,-relY};
 
@@ -567,9 +568,9 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 	}
 	// vector manipulation to make scan work in view-space
 	Position relPos = targetVoxel - *originVoxel;
-	float normal = unitRadius/sqrt((float)(relPos.x*relPos.x + relPos.y*relPos.y));
-	int relX = floor(((float)relPos.y)*normal+0.5);
-	int relY = floor(((float)-relPos.x)*normal+0.5);
+	float normal = unitRadius/std::sqrt(relPos.x*relPos.x + relPos.y*relPos.y);
+	int relX = std::floor(relPos.y*normal+0.5);
+	int relY = std::floor(-relPos.x*normal+0.5);
 
 	int sliceTargets[] = {0,0, relX,relY, -relX,-relY, relY,-relX, -relY,relX};
 
@@ -808,7 +809,7 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
  * (used when terrain has changed, which can reveal new parts of terrain or units).
  * @param position Position of the changed terrain.
  */
-void TileEngine::calculateFOV(Position position)
+void TileEngine::calculateFOV(const Position& position)
 {
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
@@ -1103,7 +1104,7 @@ bool TileEngine::tryReaction(BattleUnit *unit, BattleUnit *target, int attackTyp
  * @param unit The unit that caused the explosion.
  * @return The Unit that got hit.
  */
-BattleUnit *TileEngine::hit(Position center, int power, ItemDamageType type, BattleUnit *unit)
+BattleUnit *TileEngine::hit(const Position& center, int power, ItemDamageType type, BattleUnit *unit)
 {
 	Tile *tile = _save->getTile(Position(center.x/16, center.y/16, center.z/24));
 	if (!tile)
@@ -1208,7 +1209,7 @@ BattleUnit *TileEngine::hit(Position center, int power, ItemDamageType type, Bat
  * @param maxRadius The maximum radius of the explosion.
  * @param unit The unit that caused the explosion.
  */
-void TileEngine::explode(Position center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit)
+void TileEngine::explode(const Position& center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit)
 {
 	double centerZ = center.z / 24 + 0.5;
 	double centerX = center.x / 16 + 0.5;
@@ -2222,7 +2223,7 @@ int TileEngine::closeUfoDoors()
  * @param excludeAllBut [Optional] The only unit to be considered for ray hits.
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
  */
-int TileEngine::calculateLine(Position origin, Position target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut)
+int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut)
 {
 	int x, x0, x1, delta_x, step_x;
 	int y, y0, y1, delta_y, step_y;
@@ -2400,7 +2401,7 @@ int TileEngine::calculateLine(Position origin, Position target, bool storeTrajec
  * @param delta Is the deviation of the angles it should take into account, 0,0,0 is perfection.
  * @return The objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
  */
-int TileEngine::calculateParabola(Position origin, Position target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, const Position delta)
+int TileEngine::calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, const Position& delta)
 {
 	double ro = sqrt((double)((target.x - origin.x) * (target.x - origin.x) + (target.y - origin.y) * (target.y - origin.y) + (target.z - origin.z) * (target.z - origin.z)));
 
@@ -2461,7 +2462,7 @@ int TileEngine::calculateParabola(Position origin, Position target, bool storeTr
  * @param voxel The voxel to trace down.
  * @return z coord of "ground".
  */
-int TileEngine::castedShade(Position voxel)
+int TileEngine::castedShade(const Position& voxel)
 {
 	int zstart = voxel.z;
 	Position tmpCoord = voxel / Position(16,16,24);
@@ -2491,7 +2492,7 @@ int TileEngine::castedShade(Position voxel)
  * @return True if visible.
  */
 
-bool TileEngine::isVoxelVisible(Position voxel)
+bool TileEngine::isVoxelVisible(const Position& voxel)
 {
 	int zstart = voxel.z+3; // slight Z adjust
 	if ((zstart/24)!=(voxel.z/24))
@@ -2522,7 +2523,7 @@ bool TileEngine::isVoxelVisible(Position voxel)
  * @param excludeAllBut If set, the only unit to be considered for ray hits.
  * @return The objectnumber(0-3) or unit(4) or out of map (5) or -1 (hit nothing).
  */
-VoxelType TileEngine::voxelCheck(Position voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit *excludeAllBut)
+VoxelType TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit *excludeAllBut)
 {
 	if (voxel.x < 0 || voxel.y < 0 || voxel.z < 0) //preliminary out of map
 	{
@@ -2676,11 +2677,11 @@ int TileEngine::distanceUnitToPositionSq(BattleUnit* unit, const Position& pos, 
  * @param pos2 Position of second square.
  * @return Distance.
  */
-int TileEngine::distance(Position pos1, Position pos2) const
+int TileEngine::distance(const Position& pos1, const Position& pos2) const
 {
 	int x = pos1.x - pos2.x;
 	int y = pos1.y - pos2.y;
-	return (int)std::ceil(sqrt(float(x*x + y*y)));
+	return (int)std::ceil(std::sqrt(x*x + y*y));
 }
 
 /**
@@ -2690,7 +2691,7 @@ int TileEngine::distance(Position pos1, Position pos2) const
  * @param considerZ Whether to consider the z coordinate.
  * @return Distance.
  */
-int TileEngine::distanceSq(Position pos1, Position pos2, bool considerZ) const
+int TileEngine::distanceSq(const Position& pos1, const Position& pos2, bool considerZ) const
 {
 	int x = pos1.x - pos2.x;
 	int y = pos1.y - pos2.y;
@@ -2960,7 +2961,7 @@ bool TileEngine::validMeleeRange(const Position& pos, int direction, BattleUnit 
  * @param position Current position.
  * @return Direction or -1 when no window found.
  */
-int TileEngine::faceWindow(Position position)
+int TileEngine::faceWindow(const Position& position)
 {
 	static const Position oneTileEast = Position(1, 0, 0);
 	static const Position oneTileSouth = Position(0, 1, 0);
@@ -2986,7 +2987,7 @@ int TileEngine::faceWindow(Position position)
  * @param voxelType The type of voxel at which this parabola terminates.
  * @return Validity of action.
  */
-bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Position targetVoxel, double *curve, int *voxelType, bool forced)
+bool TileEngine::validateThrow(BattleAction &action, const Position& originVoxel, const Position& targetVoxel, double *curve, int *voxelType, bool forced)
 {
 	bool foundCurve = false;
 	double curvature = 0.5;
@@ -3086,7 +3087,7 @@ void TileEngine::recalculateFOV()
  * @param target The target point of the action.
  * @return direction.
  */
-int TileEngine::getDirectionTo(Position origin, Position target) const
+int TileEngine::getDirectionTo(const Position& origin, const Position& target) const
 {
 	double ox = target.x - origin.x;
 	double oy = target.y - origin.y;

@@ -44,8 +44,8 @@ private:
 	bool _initialized, _targetFloor;
 public:
 	/// Creates a new ProjectileFly class
-	ProjectileFlyBState(BattlescapeGame *parent, BattleAction action);
-	ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, Position origin);
+	ProjectileFlyBState(BattlescapeGame *parent, const BattleAction& action);
+	ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, const Position& origin);
 	/// Cleans up the ProjectileFly.
 	~ProjectileFlyBState();
 	/// Initializes the state.
@@ -55,14 +55,14 @@ public:
 	/// Runs state functionality every cycle.
 	void think();
 	/// Validates the throwing range.
-	static bool validThrowRange(BattleAction *action, Position origin, Tile *target);
+	static bool validThrowRange(BattleAction *action, const Position& origin, Tile *target);
 	/// Calculates the maximum throwing range.
 	static int getMaxThrowDistance(int weight, int strength, int level);
 	/// Set the origin voxel, used for the blaster launcher.
 	void setOriginVoxel(const Position& pos);
 	/// Set the boolean flag to angle a blaster bomb towards the floor.
 	void targetFloor();
-	void projectileHitUnit(Position pos);
+	void projectileHitUnit(const Position& pos);
 
 };
 

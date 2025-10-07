@@ -82,7 +82,7 @@ protected:
 	int _obstacle;
 public:
 	/// Creates a tile.
-	Tile(Position pos);
+	Tile(const Position& pos);
 	/// Cleans up a tile.
 	~Tile();
 	/// Load the tile from yaml

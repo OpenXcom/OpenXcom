@@ -403,7 +403,7 @@ void Camera::setViewLevel(int viewlevel)
  * @param mapPos Position to center on.
  * @param redraw Redraw map or not.
  */
-void Camera::centerOnPosition(Position mapPos, bool redraw)
+void Camera::centerOnPosition(const Position& mapPos, bool redraw)
 {
 	Position screenPos;
 	_center = mapPos;
@@ -458,7 +458,7 @@ void Camera::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) 
  * @param mapPos X,Y,Z coordinates on the map.
  * @param screenPos Screen position.
  */
-void Camera::convertMapToScreen(Position mapPos, Position *screenPos) const
+void Camera::convertMapToScreen(const Position& mapPos, Position *screenPos) const
 {
 	screenPos->z = 0; // not used
 	screenPos->x = mapPos.x * (_spriteWidth / 2) - mapPos.y * (_spriteWidth / 2);
@@ -470,7 +470,7 @@ void Camera::convertMapToScreen(Position mapPos, Position *screenPos) const
  * @param voxelPos X,Y,Z coordinates of the voxel.
  * @param screenPos Screen position.
  */
-void Camera::convertVoxelToScreen(Position voxelPos, Position *screenPos) const
+void Camera::convertVoxelToScreen(const Position& voxelPos, Position *screenPos) const
 {
 	Position mapPosition = Position(voxelPos.x / 16, voxelPos.y / 16, voxelPos.z / 24);
 	convertMapToScreen(mapPosition, screenPos);
@@ -555,7 +555,7 @@ bool Camera::getShowAllLayers() const
  * @param boundary True if it's for caching calculation
  * @return True if the map coordinates are on screen.
  */
-bool Camera::isOnScreen(Position mapPos, const bool unitWalking, const int unitSize, const bool boundary) const
+bool Camera::isOnScreen(const Position& mapPos, const bool unitWalking, const int unitSize, const bool boundary) const
 {
 	Position screenPos;
 	convertMapToScreen(mapPos, &screenPos);
