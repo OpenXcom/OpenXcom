@@ -30,7 +30,7 @@ jobs:
           - name: macOS
             os: macOS-latest
             app-bundle: openxcom.app
-            cmake-args: CMAKE_PREFIX_PATH=/opt/local
+            cmake-args: -DCMAKE_PREFIX_PATH=/opt/local
             compiler: clang
             cpp-compiler: clang++
 
