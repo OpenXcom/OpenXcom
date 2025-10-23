@@ -1,7 +1,8 @@
 # Building for MacOS
 
 ## Dependencies
-To successfully build an OpenXcom OSX bundle you will need to ensure all the relevant dependencies installed in /usr/local/.
+
+To successfully build an OpenXcom OSX bundle you will need relevant dependencies installed:
 
 The dependencies you require are following:
 - cmake, version 3.12.0 or later
@@ -11,11 +12,14 @@ The dependencies you require are following:
 - SDL_image (libsdl-image1.2)
 - yaml-cpp, version 0.5 or later
 
-We recommend using [Homebrew](https://brew.sh) to facilitate this.  With a working brew utility installed, run the following:
+CMake is used to configure the project. Download it [manually](https://cmake.org/download/) or install it with [Homebrew](https://brew.sh) (`brew install cmake`).
+
+The easiest way of getting library dependencies is [MacPorts](https://www.macports.org/):
+```sh
+port install libsdl  libsdl_gfx libsdl_image libsdl_mixer yaml-cpp
 ```
-$ brew install cmake yaml-cpp --with-static-lib sdl sdl_gfx sdl_image sdl_mixer --with-flac --with-libmikmod --with-libvorbis --with-static-lib
-```
-This should install all of these necessary dependencies to their appropriate place under /usr/local.
+
+Following instructions assume MacPorts is installed in default prefix `/opt/local`. If you installed ports into different location, replace it.
 
 ## Building
 This project has two ways to build: one with make and the other with Xcode.  The make way is typically used for CI builds and produces a similar artifact as the Linux build.  If you're just looking to get a quick build, this is a good way to do so.  The Xcode way is useful if you're developing features (or bug fixes) and require the need for a debugger or an IDE experience.
@@ -23,7 +27,7 @@ This project has two ways to build: one with make and the other with Xcode.  The
 ### Make
 1. In the root of the repository, generate the Makefile with cmake (Release is also a valid build type):
 ```
-cmake -DCMAKE_BUILD_TYPE=Debug -B build .
+cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/opt/local -B build .
 ```
 1. Copy the vanilla game assets (UFO/TFTD) into the build's `bin/` directory.
 1. Build the project (2 being the number of threads to run):
@@ -37,7 +41,7 @@ cmake --build build -j2
 ### Xcode
 1. In the root of the repository, generate the XCode project file with cmake (Release is also a valid build type):
 ```
-cmake -DCMAKE_BUILD_TYPE=Debug -G Xcode -B build .
+cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/opt/local -G Xcode -B build .
 ```
 1. Open the `OpenXcom.xcodeproj` in Xcode.
 1. Copy the vanilla game assets (UFO/TFTD) into the build's `bin/` directory.

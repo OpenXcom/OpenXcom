@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
 jobs:
   windows:
     name: Windows
@@ -202,4 +203,77 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.FILENAME }}_linux
+          path: artifacts/*
+
+  macos:
+    name: macOS
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup environment
+        run: |
+          echo "DATEFILE=`git log -1 --date=format:\"%Y_%m_%d_%H%M\" --format=\"%ad\"`" >> $GITHUB_ENV
+          echo "DATEVERSION=`git log -1 --date=format:\"%Y-%m-%d %H:%M\" --format=\"%ad\"`" >> $GITHUB_ENV
+          echo "CMAKE_BUILD_PARALLEL_LEVEL=`getconf _NPROCESSORS_ONLN 2>/dev/null || getconf NPROCESSORS_ONLN 2>/dev/null || echo 2`" >> $GITHUB_ENV
+
+      - name: Setup version info
+        run: |
+          sed -i '' "s|OPENXCOM_VERSION_GIT \"[^\"]*\"|OPENXCOM_VERSION_GIT \" git ${{ env.DATEVERSION }}\"|" src/version.h
+          echo "FILENAME=openxcom_git_${{ env.DATEFILE }}" >> $GITHUB_ENV
+
+      - name: Install libraries (macOS)
+        uses: melusina-org/setup-macports@v1
+        id: macports
+        with:
+          parameters: scripts/macports-config.yml
+
+      - name: Pull translations
+        uses: transifex/cli-action@v2
+        env:
+          TX_TOKEN: ${{ secrets.TX_TOKEN }}
+        if: ${{ env.TX_TOKEN }}
+        with:
+          token: ${{ secrets.TX_TOKEN }}
+          args: pull --all --minimum-perc=50
+
+      - name: Pull data patch
+        uses: actions/checkout@v4
+        with:
+          repository: OpenXcom/XcomDataPatch
+          path: ./patch
+
+      - name: Copy data to bin
+        run: |
+          cp -rf translations/openxcom/common/. bin/common || :
+          cp -rf translations/openxcom/standard/. bin/standard || :
+          cp -rf patch/xcom1/. bin/standard/xcom1 || :
+          cp -rf patch/xcom2/. bin/standard/xcom2 || :
+
+      - name: Compile source code
+        run: |
+          cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/local -G Ninja -B build
+          cmake --build build
+
+      - name: Create an archive with .app in it
+        run: |
+          mkdir artifacts
+          ditto -c -k --sequesterRsrc --keepParent build/openxcom.app artifacts/"$FILENAME".zip
+
+      - name: Get SHA hashes
+        uses: nrwl/nx-set-shas@v4
+        with:
+          main-branch-name: master
+
+      - name: Generate build log
+        run: |
+          git log --pretty=format:"<strong>%an, %ad</strong>%n%B" -n 10 --date=iso-local ${{ env.NX_BASE }}..${{ env.NX_HEAD }} > artifacts/${{ env.FILENAME }}.log
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.FILENAME }}_macos
           path: artifacts/*
