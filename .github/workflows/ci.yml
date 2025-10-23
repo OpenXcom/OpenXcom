@@ -60,6 +60,10 @@ jobs:
         id: macports
         with:
           parameters: scripts/macports-config.yml
+      
+      - name: Install ccache (macOS)
+        if: runner.os == 'macOS'
+        run: brew install ccache
 
       - name: Setup Cache
         if: runner.os == 'Linux' || runner.os == 'macOS'
