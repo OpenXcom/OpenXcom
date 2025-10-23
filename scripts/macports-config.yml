@@ -10,4 +10,4 @@ ports:
   - name: libsdl_gfx
   - name: libsdl_image
   - name: libsdl_mixer
-  - name: libyaml
+  - name: yaml-cpp
