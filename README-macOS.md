@@ -16,7 +16,7 @@ CMake is used to configure the project. Download it [manually](https://cmake.org
 
 The easiest way of getting library dependencies is [MacPorts](https://www.macports.org/):
 ```sh
-port install libsdl  libsdl_gfx libsdl_image libsdl_mixer yaml-cpp
+port -N install libsdl -compat +legacy libsdl_gfx libsdl_image libsdl_mixer yaml-cpp
 ```
 
 Following instructions assume MacPorts is installed in default prefix `/opt/local`. If you installed ports into different location, replace it.
