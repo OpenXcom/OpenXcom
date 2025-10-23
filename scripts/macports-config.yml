@@ -1,0 +1,13 @@
+version: '2.11.5'
+prefix: '/opt/local'
+variants:
+  select:
+    - aqua
+    - metal
+  deselect: x11
+ports:
+  - name: libsdl
+  - name: libsdl_gfx
+  - name: libsdl_image
+  - name: libsdl_mixer
+  # - name: libyaml

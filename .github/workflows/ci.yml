@@ -27,13 +27,10 @@ jobs:
             cmake-args: -A Win32
             build-args: "/clp:NoSummary"
 
-#          - name: macOS
-#            os: macOS-latest
-#            packages: yaml-cpp sdl sdl_gfx
-#            source-brew: dev/homebrew-openxcom
-#            compiler: clang
-#            cpp-compiler: clang++
-#            app-bundle: openxcom.app  # all other builds default to bin/
+          - name: macOS
+            os: macOS-latest
+            app-bundle: openxcom.app
+            cmake-args: CMAKE_PREFIX_PATH=/opt/local
 
     runs-on: ${{ matrix.os }}
 
@@ -53,17 +50,13 @@ jobs:
         if: runner.os == 'Windows' && matrix.packages
         run: |
           choco install ${{ matrix.packages }}
-
+      
       - name: Install packages (macOS)
         if: runner.os == 'macOS'
-        run: |
-          brew install ccache ${{ matrix.packages }}
-          # Create dummy tap for deprecated packages
-          git config --global user.email "openxcom@gmail.com"
-          git config --global user.name "OpenXcom"
-          brew tap-new ${{ matrix.source-brew }}
-          cp ./scripts/Formula/*.rb $(brew --repository)/Library/Taps/${{ matrix.source-brew }}/Formula/
-          brew install --build-from-source ${{ matrix.source-brew }}/sdl_mixer ${{ matrix.source-brew }}/sdl_image
+        uses: melusina-org/setup-macports@v1
+        id: macports
+        with:
+          parameters: scripts/macports-config.yml
 
       - name: Setup Cache
         if: runner.os == 'Linux' || runner.os == 'macOS'
