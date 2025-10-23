@@ -34,7 +34,6 @@ jobs:
             compiler: clang
             cpp-compiler: clang++
 
-
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -53,7 +52,7 @@ jobs:
         if: runner.os == 'Windows' && matrix.packages
         run: |
           choco install ${{ matrix.packages }}
-      
+
       - name: Install packages (macOS)
         if: runner.os == 'macOS'
         uses: melusina-org/setup-macports@v1
