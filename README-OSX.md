@@ -26,26 +26,26 @@ This project has two ways to build: one with make and the other with Xcode.  The
 
 ### Make
 1. In the root of the repository, generate the Makefile with cmake (Release is also a valid build type):
-```
-cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/opt/local -B build .
-```
+    ```
+    cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/opt/local -B build .
+    ```
 1. Copy the vanilla game assets (UFO/TFTD) into the build's `bin/` directory. If the game is next to the repo, cd into game and run:
-```sh
-cp  -r GEODATA GEOGRAPH MAPS ROUTES SOUND TERRAIN UFOGRAPH UFOINTRO* UNITS ../OpenXcom/bin/UFO/
-```
+    ```sh
+    cp  -r GEODATA GEOGRAPH MAPS ROUTES SOUND TERRAIN UFOGRAPH UFOINTRO* UNITS ../OpenXcom/bin/UFO/
+    ```
 1. Build the project (2 being the number of threads to run):
-```sh
-cmake --build build -j2
-```
+    ```sh
+    cmake --build build -j2
+    ```
 1. Make sure that you set up your [Data directory](https://github.com/OpenXcom/OpenXcom#directory-locations) properly.
 1. Your artifact will be named `openxcom.app` in the build target directory.
 
 
 ### Xcode
 1. In the root of the repository, generate the XCode project file with cmake (Release is also a valid build type):
-```
-cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/opt/local -G Xcode -B build .
-```
+    ```sh
+    cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/opt/local -G Xcode -B build .
+    ```
 1. Open the `OpenXcom.xcodeproj` in Xcode.
 1. Copy the vanilla game assets (UFO/TFTD) into the build's `bin/` directory.
 1. Build with cmd-B
