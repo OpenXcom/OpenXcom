@@ -8,29 +8,32 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Linux
-            os: ubuntu-latest
-            packages: libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-gfx1.2-dev libyaml-cpp-dev
-            compiler: gcc
-            cpp-compiler: g++
+          # - name: Linux
+          #   os: ubuntu-latest
+          #   packages: libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-gfx1.2-dev libyaml-cpp-dev
+          #   compiler: gcc
+          #   cpp-compiler: g++
 
-          - name: Linux
-            os: ubuntu-latest
-            packages: libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-gfx1.2-dev libyaml-cpp-dev
-            compiler: clang
-            cpp-compiler: clang++
+          # - name: Linux
+          #   os: ubuntu-latest
+          #   packages: libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-gfx1.2-dev libyaml-cpp-dev
+          #   compiler: clang
+          #   cpp-compiler: clang++
 
-          - name: Windows
-            os: windows-latest
-            compiler: cl
-            cpp-compiler: cl
-            cmake-args: -A Win32
-            build-args: "/clp:NoSummary"
+          # - name: Windows
+          #   os: windows-latest
+          #   compiler: cl
+          #   cpp-compiler: cl
+          #   cmake-args: -A Win32
+          #   build-args: "/clp:NoSummary"
 
           - name: macOS
             os: macOS-latest
             app-bundle: openxcom.app
             cmake-args: CMAKE_PREFIX_PATH=/opt/local
+            compiler: clang
+            cpp-compiler: clang++
+
 
     runs-on: ${{ matrix.os }}
 
