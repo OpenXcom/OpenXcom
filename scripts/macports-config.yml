@@ -1,12 +1,14 @@
 version: '2.11.5'
-prefix: '/opt/local'
+prefix: /opt/local
 variants:
   select:
-    - aqua
-    - metal
-  deselect: x11
+    - universal
 ports:
   - name: libsdl
+    select:
+      - legacy
+    deselect:
+      - compat
   - name: libsdl_gfx
   - name: libsdl_image
   - name: libsdl_mixer
