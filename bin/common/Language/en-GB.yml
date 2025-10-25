@@ -280,6 +280,8 @@ en-GB:
   STR_NOALIENPANICMESSAGES_DESC: "Don't show panic messages for aliens unless they are visible to the player."
   STR_ALIENBLEEDING: "Alien bleeding"
   STR_ALIENBLEEDING_DESC: "Allows fatal wounds to be inflicted on most aliens."
+  STR_SKIPOUTOFTIME: "Don't reselect units who are out of time"
+  STR_SKIPOUTOFTIME_DESC: "When the \"don't reselect unit\" button is pressed, skip units who have zero time units remaining."
   STR_FIELDPROMOTIONS: "Field promotions"
   STR_FIELDPROMOTIONS_DESC: "Only soldiers that were present at the mission site are eligible for promotion."
   STR_MEETINGPOINT: "Predict UFO trajectory"
