@@ -255,7 +255,13 @@ jobs:
 
       - name: Compile source code
         run: |
-          cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/local -G Ninja -B build
+          CMAKE_EXTRA_ARGS=(-DCMAKE_OSX_ARCHITECTURES="arm64;x86_64")
+          if [ -d /opt/local/share/doc/sdl12-compat ]
+          then
+            echo "SDL12-compat detected, linking SDL2 as well"
+            CMAKE_EXTRA_ARGS+=("-DEXTRA_XCOM_LIBS=/opt/local/lib/libSDL2.dylib")
+          fi
+          cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/local -G Ninja -B build "${CMAKE_EXTRA_ARGS[@]}"
           cmake --build build
 
       - name: Create an archive with .app in it
