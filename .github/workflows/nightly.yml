@@ -261,7 +261,7 @@ jobs:
       - name: Create an archive with .app in it
         run: |
           mkdir artifacts
-          ditto -c -k --sequesterRsrc --keepParent build/openxcom.app artifacts/"$FILENAME".zip
+          ditto -c -k --sequesterRsrc --keepParent build/openxcom.app artifacts/${{ env.FILENAME }}_mac.zip
 
       - name: Get SHA hashes
         uses: nrwl/nx-set-shas@v4
