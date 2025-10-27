@@ -6,8 +6,6 @@ variants:
 ports:
   - name: libsdl
     select:
-      - legacy
-    deselect:
       - compat
   - name: libsdl_gfx
   - name: libsdl_image
