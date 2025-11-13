@@ -4,6 +4,12 @@ on:
     branches:
       - master
   workflow_dispatch:
+env:
+  CCACHE_BASEDIR: ${{ github.workspace }}
+  CCACHE_DIR: ${{ github.workspace }}/.ccache
+  CCACHE_COMPRESS: true
+  CCACHE_COMPRESSLEVEL: 6
+  CCACHE_MAXSIZE: 1G
 jobs:
   windows:
     name: Windows
@@ -144,10 +150,27 @@ jobs:
           sed -i "s/OPENXCOM_VERSION_GIT \"[^\"]*\"/OPENXCOM_VERSION_GIT \" git ${{ env.DATEVERSION }}\"/" src/version.h
           echo "FILENAME=openxcom_git_${{ env.DATEFILE }}" >> $GITHUB_ENV
 
-      - name: Install packages
-        run: |
+      - name: Update apt
+        run: >
           sudo apt-get update
-          sudo apt-get -yq --no-install-suggests --no-install-recommends install appstream libfuse2 libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-gfx1.2-dev libyaml-cpp-dev
+
+      - name: Install packages
+        run: >
+          sudo apt-get -yq --no-install-suggests --no-install-recommends install
+          appstream
+          libfuse2
+          libsdl1.2-dev
+          libsdl-mixer1.2-dev
+          libsdl-image1.2-dev
+          libsdl-gfx1.2-dev
+          libyaml-cpp-dev
+          ccache
+
+      - name: Setup ccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ runner.os }}-${{ runner.arch }}
 
       - name: Install LinuxDeploy
         uses: miurahr/install-linuxdeploy-action@v1
@@ -205,6 +228,9 @@ jobs:
           name: ${{ env.FILENAME }}_linux
           path: artifacts/*
 
+      - name: ccache stats
+        run: ccache -s
+
   macos:
     name: macOS
     runs-on: macos-latest
@@ -230,6 +256,12 @@ jobs:
         id: macports
         with:
           parameters: scripts/macports-config.yml
+
+      - name: Setup ccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ runner.os }}-${{ runner.arch }}
 
       - name: Pull translations
         uses: transifex/cli-action@v2
@@ -283,3 +315,6 @@ jobs:
         with:
           name: ${{ env.FILENAME }}_macos
           path: artifacts/*
+
+      - name: ccache stats
+        run: ccache -s
