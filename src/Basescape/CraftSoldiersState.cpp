@@ -42,7 +42,7 @@ namespace OpenXcom
 
 typedef int (*getStatFn_t)(Game *, Soldier *);
 
-struct SortFunctor : public std::binary_function<Soldier *, Soldier *, bool>
+struct SortFunctor
 {
 	Game *_game;
 	getStatFn_t _getStatFn;

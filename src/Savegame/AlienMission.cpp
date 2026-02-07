@@ -58,7 +58,7 @@ AlienMission::~AlienMission()
 	// Empty by design.
 }
 
-class matchById: public std::unary_function<const AlienBase *, bool>
+class matchById
 {
 public:
 	/// Remember ID.
@@ -150,7 +150,7 @@ bool AlienMission::isOver() const
 /**
  * Find an XCOM base in this region that is marked for retaliation.
  */
-class FindMarkedXCOMBase: public std::unary_function<const Base *, bool>
+class FindMarkedXCOMBase
 {
 public:
 	FindMarkedXCOMBase(const RuleRegion &region) : _region(region) { /* Empty by design. */ }
@@ -399,7 +399,7 @@ void AlienMission::start(size_t initialCount)
 /** @brief Match a base from it's coordinates.
  * This function object uses coordinates to match a base.
  */
-class MatchBaseCoordinates: public std::unary_function<const Base *, bool>
+class MatchBaseCoordinates
 {
 public:
 	/// Remember the query coordinates.

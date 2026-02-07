@@ -222,8 +222,8 @@ std::vector<std::string> findDataFolders()
 	char const *const xdg_data_dirs = getenv("XDG_DATA_DIRS");
 	if (xdg_data_dirs && *xdg_data_dirs)
 	{
-		char xdg_data_dirs_copy[strlen(xdg_data_dirs)+1];
-		strcpy(xdg_data_dirs_copy, xdg_data_dirs);
+		char xdg_data_dirs_copy[MAXPATHLEN];
+		strncpy(xdg_data_dirs_copy, xdg_data_dirs, MAXPATHLEN);
 		char *dir = strtok(xdg_data_dirs_copy, ":");
 		while (dir != 0)
 		{
@@ -1169,23 +1169,23 @@ void stackTrace(void *ctx)
  */
 std::string now()
 {
-	const int MAX_LEN = 25, MAX_RESULT = 80;
+	const std::size_t DT_MAX_LEN = 25;
+	const std::size_t MAX_RESULT = 80;
 	char result[MAX_RESULT] = { 0 };
 #ifdef _WIN32
-	char date[MAX_LEN], time[MAX_LEN];
-	if (GetDateFormatA(LOCALE_INVARIANT, 0, 0, "dd'-'MM'-'yyyy", date, MAX_LEN) == 0)
+	char date[DT_MAX_LEN], time[DT_MAX_LEN];
+	if (GetDateFormatA(LOCALE_INVARIANT, 0, 0, "dd'-'MM'-'yyyy", date, DT_MAX_LEN) == 0)
 		return "00-00-0000";
-	if (GetTimeFormatA(LOCALE_INVARIANT, TIME_FORCE24HOURFORMAT, 0, "HH'-'mm'-'ss", time, MAX_LEN) == 0)
+	if (GetTimeFormatA(LOCALE_INVARIANT, TIME_FORCE24HOURFORMAT, 0, "HH'-'mm'-'ss", time, DT_MAX_LEN) == 0)
 		return "00-00-00";
-	sprintf(result, "%s_%s", date, time);
+	snprintf(result, MAX_RESULT,"%s_%s", date, time);
 #else
-	char buffer[MAX_LEN];
+	char buffer[DT_MAX_LEN];
 	time_t rawtime;
 	struct tm *timeinfo;
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
-	strftime(buffer, MAX_LEN, "%d-%m-%Y_%H-%M-%S", timeinfo);
-	sprintf(result, "%s", buffer);
+	strftime(result, MAX_RESULT, "%d-%m-%Y_%H-%M-%S", timeinfo);
 #endif
 	return result;
 }

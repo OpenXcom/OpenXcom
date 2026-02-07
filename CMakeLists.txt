@@ -7,7 +7,7 @@ include(BuildType)
 include(GNUInstallDirs)
 
 # For yaml-cpp
-set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_STANDARD 20)
 # use std=c++11 rather than std=gnu++11
 set (CMAKE_CXX_EXTENSIONS OFF)
 
