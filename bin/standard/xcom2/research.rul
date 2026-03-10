@@ -330,11 +330,6 @@ research: #done: double check scores and times.
     dependencies:
       - STR_NEW_FIGHTER_TRANSPORTER
       - STR_LOBSTERMAN_COMMANDER
-  - name: STR_ZOMBIE_CORPSE
-    cost: 180
-    points: 50
-    lookup: STR_ZOMBIE_AUTOPSY
-    needItem: true
   - name: STR_AQUATOID_CORPSE
     cost: 180
     points: 50
