@@ -216,11 +216,6 @@ research:
       - STR_SNAKEMAN_COMMANDER
       - STR_ETHEREAL_COMMANDER
       - STR_FLOATER_COMMANDER
-  - name: STR_ZOMBIE_CORPSE
-    cost: 180
-    points: 50
-    lookup: STR_ZOMBIE_AUTOPSY
-    needItem: true
   - name: STR_SECTOID_CORPSE
     cost: 180
     points: 50
