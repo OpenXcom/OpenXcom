@@ -51,6 +51,7 @@ std::string _configFolder;
 std::vector<std::string> _userList;
 std::map<std::string, std::string> _commandLine;
 std::vector<OptionInfo> _info;
+std::vector<OptionPair> _pairings;
 std::map<std::string, ModInfo> _modInfos;
 std::string _masterMod;
 
@@ -193,6 +194,8 @@ void create()
 	_info.push_back(OptionInfo("battleInstantGrenade", &battleInstantGrenade, false, "STR_BATTLEINSTANTGRENADE", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("includePrimeStateInSavedLayout", &includePrimeStateInSavedLayout, false, "STR_INCLUDE_PRIMESTATE_IN_SAVED_LAYOUT", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("battleExplosionHeight", &battleExplosionHeight, 0, "STR_BATTLEEXPLOSIONHEIGHT", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleSmokeOpacity", &battleSmokeOpacity, 100, "STR_SMOKE_OPACITY", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleSmokeOpacityMin", &battleSmokeOpacityMin, 100, "STR_SMOKE_OPACITY_MIN", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("battleAutoEnd", &battleAutoEnd, false, "STR_BATTLEAUTOEND", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("battleSmoothCamera", &battleSmoothCamera, false, "STR_BATTLESMOOTHCAMERA", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("disableAutoEquip", &disableAutoEquip, false, "STR_DISABLEAUTOEQUIP", "STR_BATTLESCAPE"));
@@ -205,6 +208,10 @@ void create()
 	_info.push_back(OptionInfo("skipNextTurnScreen", &skipNextTurnScreen, false, "STR_SKIPNEXTTURNSCREEN", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("noAlienPanicMessages", &noAlienPanicMessages, false, "STR_NOALIENPANICMESSAGES", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("alienBleeding", &alienBleeding, false, "STR_ALIENBLEEDING", "STR_BATTLESCAPE"));
+
+	// co-dependent pairings
+	OptionPair smokePair = { &battleSmokeOpacityMin, &battleSmokeOpacity };
+	_pairings.push_back(smokePair);
 
 	// controls
 	_info.push_back(OptionInfo("keyOk", &keyOk, SDLK_RETURN, "STR_OK", "STR_GENERAL"));
@@ -1185,6 +1192,16 @@ std::string getMasterUserFolder()
 const std::vector<OptionInfo> &getOptionInfo()
 {
 	return _info;
+}
+
+/**
+ * Returns the declared co-dependent option pairings. Used by the advanced
+ * options UI to keep paired values consistent when one is adjusted.
+ * @return List of OptionPair entries.
+ */
+const std::vector<OptionPair> &getOptionPairings()
+{
+	return _pairings;
 }
 
 /**

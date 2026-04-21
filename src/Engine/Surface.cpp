@@ -954,6 +954,37 @@ struct StandardShade
 
 };
 
+/**
+ * help class used for Surface::blitNShadeBlend
+ * applies shade to src then looks up the blended palette index from a 256x256 LUT indexed by (shadedSrc, dest).
+ */
+struct BlendShade
+{
+	/**
+	* Function used by ShaderDraw in Surface::blitNShadeBlend
+	* set shade and blend with destination via LUT
+	* @param dest destination pixel
+	* @param src source pixel
+	* @param shade value of shade of this surface
+	* @param blendLUT 256x256 LUT from Palette::getBlendLUT
+	* @param notused
+	*/
+	static inline void func(Uint8& dest, const Uint8& src, const int& shade, const Uint8* const& blendLUT, const int&)
+	{
+		if (src)
+		{
+			const int newShade = (src&15) + shade;
+			Uint8 shaded;
+			if (newShade > 15)
+				shaded = 15;
+			else
+				shaded = (src&(15<<4)) | newShade;
+			dest = blendLUT[(int)shaded * 256 + (int)dest];
+		}
+	}
+
+};
+
 
 
 /**
@@ -1003,6 +1034,21 @@ void Surface::blitNShade(Surface *surface, int x, int y, int shade, GraphSubset 
 	dest.setDomain(range);
 
 	ShaderDraw<StandardShade>(dest, src, ShaderScalar(shade));
+}
+
+/**
+ * Blended variant of blitNShade. The destination pixel is read, combined via the
+ * supplied 256x256 blend LUT with the shaded source index, and written back.
+ * @param surface destination blit to
+ * @param x
+ * @param y
+ * @param shade shade offset applied to source (same semantics as blitNShade)
+ * @param blendLUT 256x256 LUT, typically from Palette::getBlendLUT(opacity)
+ */
+void Surface::blitNShadeBlend(Surface *surface, int x, int y, int shade, const Uint8 *blendLUT)
+{
+	ShaderMove<Uint8> src(this, x, y);
+	ShaderDraw<BlendShade>(ShaderSurface(surface), src, ShaderScalar(shade), ShaderScalar(blendLUT));
 }
 
 /**
