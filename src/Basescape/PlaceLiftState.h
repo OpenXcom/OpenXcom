@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <SDL.h>
 #include "../Engine/State.h"
 
 namespace OpenXcom
@@ -48,6 +49,8 @@ public:
 	~PlaceLiftState();
 	/// Handler for clicking the base view.
 	void viewClick(Action *action);
+	// Handler for pressing escape.
+	void escapePress(Action *, SDLKey);
 };
 
 }
