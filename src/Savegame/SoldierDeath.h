@@ -36,7 +36,7 @@ private:
 public:
 	SoldierDeath() : _time(0, 0, 0, 0, 0, 0, 0), _cause(0) {}
 	/// Creates a death.
-	SoldierDeath(GameTime time, BattleUnitKills *cause);
+	SoldierDeath(const GameTime& time, BattleUnitKills *cause);
 	/// Cleans up the death.
 	~SoldierDeath();
 	/// Loads the death from YAML.

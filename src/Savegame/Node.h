@@ -52,7 +52,7 @@ public:
 	static const int nodeRank[8][7]; // maps alien ranks to node (.RMP) ranks
 	/// Creates a Node.
 	Node();
-	Node(int id, Position pos, int segment, int type, int rank, int flags, int reserved, int priority);
+	Node(int id, const Position& pos, int segment, int type, int rank, int flags, int reserved, int priority);
 	/// Cleans up the Node.
 	~Node();
 	/// Loads the node from YAML.

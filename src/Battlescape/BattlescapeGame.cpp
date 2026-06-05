@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <cmath>
 #include <sstream>
 #include "BattlescapeGame.h"
 #include "BattlescapeState.h"
@@ -1426,7 +1427,7 @@ bool BattlescapeGame::isBusy() const
  * Activates primary action (left click).
  * @param pos Position on the map.
  */
-void BattlescapeGame::primaryAction(Position pos)
+void BattlescapeGame::primaryAction(const Position& pos)
 {
 	bool bPreviewed = Options::battleNewPreviewPath != PATH_NONE;
 
@@ -1571,7 +1572,7 @@ void BattlescapeGame::primaryAction(Position pos)
  * Activates secondary action (right click).
  * @param pos Position on the map.
  */
-void BattlescapeGame::secondaryAction(Position pos)
+void BattlescapeGame::secondaryAction(const Position& pos)
 {
 	//  -= turn to or open door =-
 	_currentAction.target = pos;
@@ -1608,7 +1609,7 @@ void BattlescapeGame::psiButtonAction()
 	_currentAction.TU = _currentAction.weapon->getRules()->getTUUse();
 	if (!_currentAction.weapon->getRules()->getFlatRate())
 	{
-		_currentAction.TU = (int)floor(_save->getSelectedUnit()->getBaseStats()->tu * _currentAction.TU / 100.0f);
+		_currentAction.TU = (int)std::floor(_save->getSelectedUnit()->getBaseStats()->tu * _currentAction.TU / 100.0f);
 	}
 	setupCursor();
 }
@@ -1670,7 +1671,7 @@ void BattlescapeGame::setTUReserved(BattleActionType tur)
  * @param newItem Bool whether this is a new item.
  * @param removeItem Bool whether to remove the item from the owner.
  */
-void BattlescapeGame::dropItem(Position position, BattleItem *item, bool newItem, bool removeItem)
+void BattlescapeGame::dropItem(const Position& position, BattleItem *item, bool newItem, bool removeItem)
 {
 	getTileEngine()->itemDrop(_save->getTile(position), item, getMod(), newItem, removeItem);
 }

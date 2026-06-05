@@ -3188,15 +3188,15 @@ void Mod::loadBattlescapeResources()
 		idxName = idxName.substr(0, idxName.length() - 3);
 		if (idxName.substr(0, 3) == "MAN")
 		{
-			idxName = idxName + "SPK";
+			idxName += "SPK";
 		}
 		else if (idxName == "TAC01.")
 		{
-			idxName = idxName + "SCR";
+			idxName += "SCR";
 		}
 		else
 		{
-			idxName = idxName + "PCK";
+			idxName += "PCK";
 		}
 		_surfaces[idxName] = new Surface(320, 200);
 		_surfaces[idxName]->loadBdy(FileMap::getFilePath("UFOGRAPH/" + *i));
