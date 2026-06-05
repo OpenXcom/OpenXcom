@@ -1,5 +1,11 @@
 name: CI
 on: [push, pull_request]
+env:
+  CCACHE_BASEDIR: ${{ github.workspace }}
+  CCACHE_DIR: ${{ github.workspace }}/.ccache
+  CCACHE_COMPRESS: true
+  CCACHE_COMPRESSLEVEL: 6
+  CCACHE_MAXSIZE: 1G
 jobs:
   build:
     name: ${{ matrix.os }} (${{ matrix.compiler }})
@@ -22,6 +28,7 @@ jobs:
 
           - name: Windows
             os: windows-latest
+            packages:
             compiler: cl
             cpp-compiler: cl
             cmake-args: -A Win32
@@ -29,6 +36,7 @@ jobs:
 
           - name: macOS
             os: macOS-latest
+            packages:
             app-bundle: openxcom.app
             cmake-args: -DCMAKE_PREFIX_PATH=/opt/local
             compiler: clang
@@ -49,9 +57,9 @@ jobs:
           sudo apt-get -yq --no-install-suggests --no-install-recommends install ccache ${{ matrix.packages }}
 
       - name: Install packages (Windows)
-        if: runner.os == 'Windows' && matrix.packages
+        if: runner.os == 'Windows'
         run: |
-          choco install ${{ matrix.packages }}
+          choco install ccache ${{ matrix.packages }}
 
       - name: Install packages (macOS)
         if: runner.os == 'macOS'
@@ -59,17 +67,12 @@ jobs:
         id: macports
         with:
           parameters: scripts/macports-config.yml
-      
-      - name: Install ccache (macOS)
-        if: runner.os == 'macOS'
-        run: brew install ccache
 
-      - name: Setup Cache
-        if: runner.os == 'Linux' || runner.os == 'macOS'
+      - name: Setup ccache
         uses: actions/cache@v4
         with:
-          path: ~/.ccache
-          key: ccache-${{ runner.os }}-${{ matrix.compiler }}
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ runner.os }}-${{ runner.arch }}-${{ matrix.compiler }}
 
       - name: Setup environment
         shell: bash
@@ -108,5 +111,4 @@ jobs:
                 ${{ matrix.build-dir || 'build' }}/${{ matrix.app-bundle || 'bin' }}/**/*
 
       - name: ccache stats
-        if: runner.os == 'Linux' || runner.os == 'macOS'
-        run: ccache -s --max-size=390MB
+        run: ccache -s
