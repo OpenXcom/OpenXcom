@@ -43,7 +43,7 @@ private:
 	static const int MAX_VOXEL_VIEW_DISTANCE = MAX_VIEW_DISTANCE * 16;
 	SavedBattleGame *_save;
 	std::vector<Uint16> *_voxelData;
-	static const int heightFromCenter[11];
+	static const int heightFromCenter[13];
 	void addLight(Position center, int power, int layer);
 	int blockage(Tile *tile, const TilePart part, ItemDamageType type, int direction = -1, bool checkingFromOrigin = false);
 	bool _personalLighting;
