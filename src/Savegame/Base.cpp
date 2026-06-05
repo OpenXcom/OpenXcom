@@ -1311,7 +1311,7 @@ bool Base::getRetaliationTarget() const
 /**
  * Functor to check for mind shield capability.
  */
-struct isMindShield: public std::unary_function<BaseFacility*, bool>
+struct isMindShield
 {
 	/// Check isMindShield() for @a facility.
 	bool operator()(const BaseFacility *facility) const;
@@ -1335,7 +1335,7 @@ bool isMindShield::operator()(const BaseFacility *facility) const
 /**
  * Functor to check for completed facilities.
  */
-struct isCompleted: public std::unary_function<BaseFacility*, bool>
+struct isCompleted
 {
 	/// Check isCompleted() for @a facility.
 	bool operator()(const BaseFacility *facility) const;
