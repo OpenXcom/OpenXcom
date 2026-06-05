@@ -18,6 +18,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <string>
+#include <map>
 #include <SDL.h>
 
 namespace OpenXcom
@@ -33,6 +34,7 @@ class Palette
 private:
 	SDL_Color *_colors;
 	int _count;
+	std::map<int, Uint8*> _blendLUTs;
 public:
 	/// Creates a blank palette.
 	Palette();
@@ -45,6 +47,8 @@ public:
 
 	void savePal(const std::string &file) const;
 	void setColors(SDL_Color* pal, int ncolors);
+	/// Returns a 256x256 LUT where lut[src*256+dst] = nearest palette index to (opacity*srcRGB + (100-opacity)*dstRGB)/100. Caches one table per requested opacity.
+	const Uint8 *getBlendLUT(int opacity);
 	/// Converts a given color into a RGBA color value.
 	static Uint32 getRGBA(SDL_Color* pal, Uint8 color);
 	/// Gets the position of a given palette.

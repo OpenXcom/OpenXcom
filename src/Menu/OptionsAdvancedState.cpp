@@ -178,6 +178,34 @@ OptionInfo *OptionsAdvancedState::getSetting(size_t sel)
 }
 
 /**
+ * Rewrites the displayed value cell for the int option identified by the given
+ * pointer. Scans all three settings sections and updates the matching row;
+ * no-op if not found.
+ */
+void OptionsAdvancedState::refreshOptionRow(int *ptr)
+{
+	const size_t baseGeo = 1 + _settingsGeneral.size() + 2;
+	const size_t baseBat = baseGeo + _settingsGeo.size() + 2;
+	struct { size_t base; const std::vector<OptionInfo> *settings; } sections[] = {
+		{ 1, &_settingsGeneral },
+		{ baseGeo, &_settingsGeo },
+		{ baseBat, &_settingsBattle },
+	};
+	for (int k = 0; k < 3; ++k)
+	{
+		const std::vector<OptionInfo> &s = *sections[k].settings;
+		for (size_t j = 0; j < s.size(); ++j)
+		{
+			if (s[j].type() != OPTION_INT || s[j].asInt() != ptr) continue;
+			std::ostringstream ss;
+			ss << *ptr;
+			_lstOptions->setCellText(sections[k].base + j, 1, ss.str());
+			return;
+		}
+	}
+}
+
+/**
  * Changes the clicked setting.
  * @param action Pointer to an action.
  */
@@ -204,7 +232,8 @@ void OptionsAdvancedState::lstOptionsClick(Action *action)
 		int *i = setting->asInt();
 
 		int increment = (button == SDL_BUTTON_LEFT) ? 1 : -1; // left-click increases, right-click decreases
-		if (i == &Options::changeValueByMouseWheel || i == &Options::FPS || i == &Options::FPSInactive)
+		if (i == &Options::changeValueByMouseWheel || i == &Options::FPS || i == &Options::FPSInactive
+			|| i == &Options::battleSmokeOpacity || i == &Options::battleSmokeOpacityMin)
 		{
 			increment *= 10;
 		}
@@ -240,6 +269,11 @@ void OptionsAdvancedState::lstOptionsClick(Action *action)
 			min = 1;
 			max = 5;
 		}
+		else if (i == &Options::battleSmokeOpacity || i == &Options::battleSmokeOpacityMin)
+		{
+			min = 10;
+			max = 100;
+		}
 
 		if (*i < min)
 		{
@@ -248,6 +282,21 @@ void OptionsAdvancedState::lstOptionsClick(Action *action)
 		else if (*i > max)
 		{
 			*i = min;
+		}
+
+		// Enforce any declared co-dependent pairings (e.g. if one option must
+		// be less than or equal to another, and this change has made it no
+		// longer so, adjust the partner option accordingly).
+		const std::vector<OptionPair> &pairings = Options::getOptionPairings();
+		for (size_t p = 0; p < pairings.size(); ++p)
+		{
+			const OptionPair &pair = pairings[p];
+			if (i != pair.lesser && i != pair.greater) continue;
+			if (*pair.lesser <= *pair.greater) break;
+			int *partner = (i == pair.lesser) ? pair.greater : pair.lesser;
+			*partner = *i;
+			refreshOptionRow(partner);
+			break;
 		}
 
 		std::ostringstream ss;

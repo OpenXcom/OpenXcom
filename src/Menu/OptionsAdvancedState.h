@@ -39,6 +39,8 @@ private:
 
 	void addSettings(const std::vector<OptionInfo> &settings);
 	OptionInfo *getSetting(size_t sel);
+	/// Updates the list row whose int option has the given pointer, to reflect the current value.
+	void refreshOptionRow(int *ptr);
 public:
 	/// Creates the Advanced state.
 	OptionsAdvancedState(OptionsOrigin origin);
