@@ -67,6 +67,8 @@ public:
 	bool isFocused() const;
 	/// Unpresses the surface.
 	virtual void unpress(State *state);
+	/// Depresses the surface.
+	virtual void depress(State *state);
 	/// Hooks an action handler to a mouse click on the surface.
 	void onMouseClick(ActionHandler handler, Uint8 button = SDL_BUTTON_LEFT);
 	/// Hooks an action handler to a mouse press over the surface.

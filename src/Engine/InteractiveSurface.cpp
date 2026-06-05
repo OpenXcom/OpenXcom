@@ -238,6 +238,19 @@ void InteractiveSurface::unpress(State *state)
 }
 
 /**
+ * Simulates a "mouse button depress".
+ * @param state Pointer to running state.
+ */
+void InteractiveSurface::depress(State *state)
+{
+	SDL_Event ev;
+	ev.type = SDL_MOUSEBUTTONDOWN;
+	ev.button.button = SDL_BUTTON_LEFT;
+	Action a = Action(&ev, 0.0, 0.0, 0, 0);
+	mousePress(&a, state);
+}
+
+/**
  * Called every time there's a mouse press over the surface.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
