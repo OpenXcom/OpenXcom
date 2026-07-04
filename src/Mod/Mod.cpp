@@ -1679,6 +1679,10 @@ SavedGame *Mod::newSave() const
 	{
 		save->getId((*i)->getRules()->getType());
 	}
+	for (std::vector<Soldier*>::const_iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end(); ++i)
+	{
+		save->getId("STR_SOLDIER");
+	}
 
 	// Determine starting transport craft
 	Craft *transportCraft = 0;
