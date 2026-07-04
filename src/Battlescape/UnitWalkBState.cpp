@@ -575,20 +575,36 @@ void UnitWalkBState::playMovementSound()
 		{
 			Tile *tile = _unit->getTile();
 			Tile *tileBelow = _parent->getSave()->getTile(tile->getPosition() + Position(0,0,-1));
+			int footstepSound = tile->getFootstepSound(tileBelow);
+			// a large unit only tracks a single tile of its footprint; if that tile
+			// doesn't have a footstep sound of its own, check the other tiles it
+			// occupies before giving up on playing a sound at all
+			for (int x = 0; x <= size && footstepSound == -1; ++x)
+			{
+				for (int y = 0; y <= size && footstepSound == -1; ++y)
+				{
+					Tile *unitTile = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, 0));
+					if (unitTile)
+					{
+						Tile *unitTileBelow = _parent->getSave()->getTile(unitTile->getPosition() + Position(0,0,-1));
+						footstepSound = unitTile->getFootstepSound(unitTileBelow);
+					}
+				}
+			}
 			// play footstep sound 1
 			if (_unit->getWalkingPhase() == 3)
 			{
-				if (tile->getFootstepSound(tileBelow) > -1)
+				if (footstepSound > -1)
 				{
-					_parent->getMod()->getSoundByDepth(_parent->getDepth(), Mod::WALK_OFFSET + (tile->getFootstepSound(tileBelow)*2))->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
+					_parent->getMod()->getSoundByDepth(_parent->getDepth(), Mod::WALK_OFFSET + (footstepSound*2))->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 				}
 			}
 			// play footstep sound 2
 			if (_unit->getWalkingPhase() == 7)
 			{
-				if (tile->getFootstepSound(tileBelow) > -1)
+				if (footstepSound > -1)
 				{
-					_parent->getMod()->getSoundByDepth(_parent->getDepth(), 1 + Mod::WALK_OFFSET + (tile->getFootstepSound(tileBelow)*2))->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
+					_parent->getMod()->getSoundByDepth(_parent->getDepth(), 1 + Mod::WALK_OFFSET + (footstepSound*2))->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 				}
 			}
 		}
