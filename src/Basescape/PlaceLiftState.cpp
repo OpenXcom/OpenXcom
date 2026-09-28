@@ -28,6 +28,7 @@
 #include "BasescapeState.h"
 #include "SelectStartFacilityState.h"
 #include "../Savegame/SavedGame.h"
+#include "../Menu/AbandonGameState.h"
 
 namespace OpenXcom
 {
@@ -66,6 +67,7 @@ PlaceLiftState::PlaceLiftState(Base *base, Globe *globe, bool first) : _base(bas
 	}
 	_view->setSelectable(_lift->getSize());
 	_view->onMouseClick((ActionHandler)&PlaceLiftState::viewClick);
+	_view->onKeyboardPress((ActionHandler)&PlaceLiftState::escapePress, SDLK_ESCAPE);
 
 	_txtTitle->setText(tr("STR_SELECT_POSITION_FOR_ACCESS_LIFT"));
 }
@@ -95,6 +97,20 @@ void PlaceLiftState::viewClick(Action *)
 	if (_first)
 	{
 		_game->pushState(new SelectStartFacilityState(_base, bState, _globe));
+	}
+}
+
+/**
+ * Handles pressing escape.
+ * If this is the first base, the player gets an abandon game dialog.
+ * @param action Pointer to an action.
+ * @param key SDLKey variable, should be equal to SDLK_ESCAPE
+ */
+void PlaceLiftState::escapePress(Action *, SDLKey)
+{
+	if (_first)
+	{
+		_game->pushState(new AbandonGameState(OPT_GEOSCAPE));
 	}
 }
 
