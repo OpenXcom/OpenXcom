@@ -36,18 +36,9 @@ jobs:
           echo "FILENAME=openxcom_git_${{ env.DATEFILE }}" >> $GITHUB_ENV
 
       - name: Install XP Toolset
-        shell: powershell
-        run: |
-          Set-Location "C:\Program Files (x86)\Microsoft Visual Studio\Installer\"
-          $InstallPath = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise"
-          $WorkLoads = '--add Microsoft.VisualStudio.Component.WinXP'
-          $Arguments = ('/c', "vs_installer.exe", 'modify', '--installPath', "`"$InstallPath`"", $WorkLoads, '--quiet', '--norestart', '--nocache')
-          $process = Start-Process -FilePath cmd.exe -ArgumentList $Arguments -Wait -PassThru -WindowStyle Hidden
-          if ($process.ExitCode -eq 0) {
-              Write-Host "components have been successfully added"
-          } else {
-              Write-Host "components were not installed"
-          }
+        uses: thepwrtank18/install-vs-components@v1
+        with:
+          components: Microsoft.VisualStudio.Component.WinXP
 
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v2
