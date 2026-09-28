@@ -164,6 +164,7 @@ OpenXcom requires the following developer libraries:
 - [SDL\_gfx](https://www.ferzkopp.net/wordpress/2016/01/02/sdl_gfx-sdl2_gfx/) (libsdl-gfx1.2), version 2.0.22 or later
 - [SDL\_image](https://www.libsdl.org/projects/SDL_image/) (libsdl-image1.2)
 - [yaml-cpp](https://github.com/jbeder/yaml-cpp), version 0.5.3 or later
+- [GLU](https://archive.mesa3d.org/glu/) (libglu1-mesa-dev)
 
 The source code includes files for the following build tools:
 
