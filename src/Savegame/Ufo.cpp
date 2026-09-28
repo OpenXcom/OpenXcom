@@ -80,7 +80,7 @@ Ufo::~Ufo()
 /**
  * Match AlienMission based on the unique ID.
  */
-class matchMissionID: public std::unary_function<const AlienMission *, bool>
+class matchMissionID
 {
 public:
 	/// Store ID for later comparisons.
