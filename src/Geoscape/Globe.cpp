@@ -208,7 +208,7 @@ struct CreateShadow
 	static inline Uint8 getLandShadow(const Uint8& dest, const Uint8& shadow)
 	{
 		if (shadow == 0) return dest;
-		const int s = shadow / 3;
+		const int s = shadow / 4 + 1;
 		const int e = dest + s;
 		const int d = dest & helper::ColorGroup;
 		if (e > d + helper::ColorShade)
@@ -1060,7 +1060,7 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 			}
 			else
 			{
-				tcol = CreateShadow::getLandShadow(tcol, shade * 3);
+				tcol = CreateShadow::getLandShadow(tcol, (shade - 1) * 4);
 			}
 			surface->setPixel((int)x0,(int)y0,tcol);
 		}
