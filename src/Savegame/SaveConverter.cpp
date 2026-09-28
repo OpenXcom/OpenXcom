@@ -27,6 +27,7 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Mod/Mod.h"
 #include "../Mod/RuleItem.h"
 #include "SavedGame.h"
@@ -801,8 +802,15 @@ void SaveConverter::loadDatAStore()
 			liveAlien += _rules->getAlienRanks()[rank];
 			if (base != 0xFF)
 			{
-				Base *b = dynamic_cast<Base*>(_targets[base]);
-				b->getStorageItems()->addItem(liveAlien);
+				Base *b = (size_t)base < _targets.size() ? dynamic_cast<Base*>(_targets[base]) : 0;
+				if (b != 0)
+				{
+					b->getStorageItems()->addItem(liveAlien);
+				}
+				else
+				{
+					Log(LOG_WARNING) << "Corrupt save: invalid base index " << base << " in ASTORE.DAT, ignoring entry";
+				}
 			}
 		}
 		_aliens.push_back(liveAlien);
