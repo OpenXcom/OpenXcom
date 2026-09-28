@@ -39,7 +39,7 @@ jobs:
         shell: powershell
         run: |
           Set-Location "C:\Program Files (x86)\Microsoft Visual Studio\Installer\"
-          $InstallPath = vswhere.exe -property installationPath | Out-String -NoNewline
+          $InstallPath = .\vswhere.exe -property installationPath
           $WorkLoads = '--add Microsoft.VisualStudio.Component.WinXP'
           $Arguments = ('/c', "vs_installer.exe", 'modify', '--installPath', "`"$InstallPath`"", $WorkLoads, '--quiet', '--norestart', '--nocache')
           $process = Start-Process -FilePath cmd.exe -ArgumentList $Arguments -Wait -PassThru -WindowStyle Hidden
