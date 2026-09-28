@@ -250,7 +250,7 @@ void Map::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 /**
  * Check two positions if have same XY cords
  */
-static bool positionHaveSameXY(Position a, Position b)
+static bool positionHaveSameXY(const Position& a, const Position& b)
 {
 	return a.x == b.x && a.y == b.y;
 }
@@ -265,7 +265,7 @@ static bool positionHaveSameXY(Position a, Position b)
  * @param obstacleShade unitShade override for no LOF obstacle indicator
  * @param topLayer
  */
-void Map::drawUnit(Surface *surface, Tile *unitTile, Tile *currTile, Position currTileScreenPosition, int shade, int obstacleShade, bool topLayer)
+void Map::drawUnit(Surface *surface, Tile *unitTile, Tile *currTile, const Position& currTileScreenPosition, int shade, int obstacleShade, bool topLayer)
 {
 	const int tileFoorWidth = 32;
 	const int tileFoorHeight = 16;

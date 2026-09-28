@@ -146,7 +146,7 @@ public:
 	/// Gets the BattleUnit's ID.
 	int getId() const;
 	/// Sets the unit's position
-	void setPosition(Position pos, bool updateLastPos = true);
+	void setPosition(const Position& pos, bool updateLastPos = true);
 	/// Gets the unit's position.
 	Position getPosition() const;
 	/// Gets the unit's position.
@@ -168,7 +168,7 @@ public:
 	/// Gets the unit's status.
 	UnitStatus getStatus() const;
 	/// Start the walkingPhase
-	void startWalking(int direction, Position destination, Tile *tileBelowMe, bool cache);
+	void startWalking(int direction, const Position& destination, Tile *tileBelowMe, bool cache);
 	/// Increase the walkingPhase
 	void keepWalking(Tile *tileBelowMe, bool cache);
 	/// Gets the walking phase for animation and sound
@@ -178,7 +178,7 @@ public:
 	/// Gets the unit's destination when walking
 	Position getDestination() const;
 	/// Look at a certain point.
-	void lookAt(Position point, bool turret = false);
+	void lookAt(const Position& point, bool turret = false);
 	/// Look at a certain direction.
 	void lookAt(int direction, bool force = false);
 	/// Turn to the destination direction.
@@ -206,7 +206,7 @@ public:
 	/// Aim.
 	void aim(bool aiming);
 	/// Get direction to a certain point
-	int directionTo(Position point) const;
+	int directionTo(const Position& point) const;
 	/// Gets the unit's time units.
 	int getTimeUnits() const;
 	/// Gets the unit's stamina.
@@ -216,7 +216,7 @@ public:
 	/// Gets the unit's bravery.
 	int getMorale() const;
 	/// Do damage to the unit.
-	int damage(Position relative, int power, ItemDamageType type, bool ignoreArmor = false);
+	int damage(const Position& relative, int power, ItemDamageType type, bool ignoreArmor = false);
 	/// Heal stun level of the unit.
 	void healStun(int power);
 	/// Gets the unit's stun level.
@@ -434,7 +434,7 @@ public:
 	/// derive a rank integer based on rank string (for xcom soldiers ONLY)
 	void deriveRank();
 	/// this function checks if a tile is visible, using maths.
-	bool checkViewSector(Position pos) const;
+	bool checkViewSector(const Position& pos) const;
 	/// adjust this unit's stats according to difficulty.
 	void adjustStats(const StatAdjustment &adjustment);
 	/// did this unit already take fire damage this turn? (used to avoid damaging large units multiple times.)

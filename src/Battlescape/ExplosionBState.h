@@ -45,7 +45,7 @@ private:
 	void explode();
 public:
 	/// Creates a new ExplosionBState class.
-	ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile = 0, bool lowerWeapon = false, bool cosmetic = false);
+	ExplosionBState(BattlescapeGame *parent, const Position& center, BattleItem *item, BattleUnit *unit, Tile *tile = 0, bool lowerWeapon = false, bool cosmetic = false);
 	/// Cleans up the ExplosionBState.
 	~ExplosionBState();
 	/// Initializes the state.

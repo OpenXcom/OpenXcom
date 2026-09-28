@@ -38,7 +38,7 @@ Node::Node() : _id(0), _segment(0), _type(0), _rank(0), _flags(0), _reserved(0),
  * @param reserved
  * @param priority
  */
-Node::Node(int id, Position pos, int segment, int type, int rank, int flags, int reserved, int priority) : _id(id), _pos(pos), _segment(segment), _type(type), _rank(rank), _flags(flags), _reserved(reserved), _priority(priority), _allocated(false), _dummy(false)
+Node::Node(int id, const Position& pos, int segment, int type, int rank, int flags, int reserved, int priority) : _id(id), _pos(pos), _segment(segment), _type(type), _rank(rank), _flags(flags), _reserved(reserved), _priority(priority), _allocated(false), _dummy(false)
 {
 }
 

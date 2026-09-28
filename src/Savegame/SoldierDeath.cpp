@@ -25,7 +25,7 @@ namespace OpenXcom
 /**
  * Initializes a death event.
  */
-SoldierDeath::SoldierDeath(GameTime time, BattleUnitKills *cause) : _time(time), _cause(cause)
+SoldierDeath::SoldierDeath(const GameTime& time, BattleUnitKills *cause) : _time(time), _cause(cause)
 {
 }
 

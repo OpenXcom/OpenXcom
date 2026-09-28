@@ -57,10 +57,10 @@ private:
 	int _bulletSprite;
 	bool _reversed;
 	int _vaporColor, _vaporDensity, _vaporProbability;
-	void applyAccuracy(Position origin, Position *target, double accuracy, bool keepRange, bool extendLine);
+	void applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, bool extendLine);
 public:
 	/// Creates a new Projectile.
-	Projectile(Mod *mod, SavedBattleGame *save, BattleAction action, Position origin, Position target, BattleItem *ammo);
+	Projectile(Mod *mod, SavedBattleGame *save, BattleAction action, const Position& origin, const Position& target, BattleItem *ammo);
 	/// Cleans up the Projectile.
 	~Projectile();
 	/// Calculates the trajectory for a straight path.
