@@ -504,23 +504,27 @@ void UnitInfoState::init()
 	_barReactions->setMax(_unit->getBaseStats()->reactions);
 	_barReactions->setValue(_unit->getBaseStats()->reactions);
 
+	// Note: getAccuracyModifier will not count wounds in arms, because
+	// the actual wound modifier is dependent on the weapon being used.
+	// This is just the purely soldier-dependent modifier, closer to
+	// the correct behavior than the original game is.
 	ss.str("");
-	ss << ((_unit->getBaseStats()->firing * _unit->getHealth()) / _unit->getBaseStats()->health);
+	ss << (_unit->getBaseStats()->firing * _unit->getAccuracyModifier() / 100);
 	_numFiring->setText(ss.str());
 	_barFiring->setMax(_unit->getBaseStats()->firing);
-	_barFiring->setValue((_unit->getBaseStats()->firing * _unit->getHealth()) / _unit->getBaseStats()->health);
+	_barFiring->setValue(_unit->getBaseStats()->firing * _unit->getAccuracyModifier() / 100);
 
 	ss.str("");
-	ss << ((_unit->getBaseStats()->throwing * _unit->getHealth()) / _unit->getBaseStats()->health);
+	ss << ((_unit->getBaseStats()->throwing * _unit->getAccuracyModifier()) / 100);
 	_numThrowing->setText(ss.str());
 	_barThrowing->setMax(_unit->getBaseStats()->throwing);
-	_barThrowing->setValue((_unit->getBaseStats()->throwing * _unit->getHealth()) / _unit->getBaseStats()->health);
+	_barThrowing->setValue((_unit->getBaseStats()->throwing * _unit->getAccuracyModifier()) / 100);
 
 	ss.str("");
-	ss << ((_unit->getBaseStats()->melee * _unit->getHealth()) / _unit->getBaseStats()->health);
+	ss << ((_unit->getBaseStats()->melee * _unit->getAccuracyModifier()) / 100);
 	_numMelee->setText(ss.str());
 	_barMelee->setMax(_unit->getBaseStats()->melee);
-	_barMelee->setValue((_unit->getBaseStats()->melee * _unit->getHealth()) / _unit->getBaseStats()->health);
+	_barMelee->setValue((_unit->getBaseStats()->melee * _unit->getAccuracyModifier()) / 100);
 
 	ss.str("");
 	ss << _unit->getBaseStats()->strength;
