@@ -39,6 +39,17 @@ enum MusicFormat { MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSI
 enum SoundFormat { SOUND_AUTO, SOUND_14, SOUND_10 };
 /// Video format preferences.
 enum VideoFormat { VIDEO_FMV, VIDEO_SLIDE };
+
+/**
+ * Co-dependent pair of integer options, where *lesser
+ * must always be less than or equal to *greater.
+ */
+struct OptionPair
+{
+	int *lesser;  // this option must be less than or equal to...
+	int *greater; // ... this one
+};
+
 /// Path preview modes (can be OR'd together).
 enum PathPreview {
 	PATH_NONE    = 0x00, // 0000 (must always be zero)
@@ -90,6 +101,8 @@ namespace Options
 	std::string getMasterUserFolder();
 	/// Gets the game's options.
 	const std::vector<OptionInfo> &getOptionInfo();
+	/// Gets the game's declared co-dependent option pairings.
+	const std::vector<OptionPair> &getOptionPairings();
 	/// Sets the game's data, user and config folders.
 	void setFolders();
 	/// Sets the game's user master folders.

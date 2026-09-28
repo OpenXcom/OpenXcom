@@ -20,6 +20,35 @@
 #include <fstream>
 #include "Exception.h"
 
+namespace
+{
+
+static inline int sqrDist(const SDL_Color &a, const SDL_Color &b)
+{
+    int dr = (int)a.r - (int)b.r;
+    int dg = (int)a.g - (int)b.g;
+    int db = (int)a.b - (int)b.b;
+    return dr * dr + dg * dg + db * db;
+}
+
+static Uint8 nearestIndex(const SDL_Color *colors, const SDL_Color &target)
+{
+    int best = 0;
+    int bestDist = sqrDist(colors[0], target);
+    for (int i = 1; i < 256; ++i)
+    {
+        int d = sqrDist(colors[i], target);
+        if (d < bestDist)
+        {
+            bestDist = d;
+            best = i;
+        }
+    }
+    return (Uint8)best;
+}
+
+}
+
 namespace OpenXcom
 {
 
@@ -36,6 +65,10 @@ Palette::Palette() : _colors(0), _count(0)
 Palette::~Palette()
 {
 	delete[] _colors;
+	for (std::map<int, Uint8*>::iterator it = _blendLUTs.begin(); it != _blendLUTs.end(); ++it)
+	{
+		delete[] it->second;
+	}
 }
 
 /**
@@ -133,6 +166,28 @@ void Palette::savePal(const std::string &file) const
 		color++;
 	}
 	out.close();
+}
+
+const Uint8 *Palette::getBlendLUT(int opacity)
+{
+    std::map<int, Uint8*>::const_iterator it = _blendLUTs.find(opacity);
+    if (it != _blendLUTs.end())
+        return it->second;
+
+    Uint8 *lut = new Uint8[256 * 256];
+    for (int src = 0; src < 256; ++src)
+    {
+        for (int dst = 0; dst < 256; ++dst)
+        {
+            SDL_Color blended;
+            blended.r = (Uint8)((_colors[src].r * opacity + _colors[dst].r * (100 - opacity)) / 100);
+            blended.g = (Uint8)((_colors[src].g * opacity + _colors[dst].g * (100 - opacity)) / 100);
+            blended.b = (Uint8)((_colors[src].b * opacity + _colors[dst].b * (100 - opacity)) / 100);
+            lut[src * 256 + dst] = nearestIndex(_colors, blended);
+        }
+    }
+    _blendLUTs[opacity] = lut;
+    return lut;
 }
 
 void Palette::setColors(SDL_Color* pal, int ncolors)

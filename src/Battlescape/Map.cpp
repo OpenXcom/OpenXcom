@@ -31,6 +31,7 @@
 #include "../Engine/Timer.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -47,6 +48,7 @@
 #include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
 #include "../fmath.h"
+#include <sstream>
 
 
 /*
@@ -499,6 +501,30 @@ void Map::drawTerrain(Surface *surface)
 	int tileShade, wallShade, tileColor, obstacleShade;
 	static const int arrowBob[8] = {0,1,2,1,0,1,2,1};
 
+	// Precompute the 5 density-tier LUTs for smoke. Palette is constant for this draw pass;
+	// each tier t ∈ [0..4] gets an opacity lerp'd between the user's min and max, rounded to the
+	// nearest 10%. Skip entirely only when BOTH max and min are 100 (fully opaque, fast path).
+	const Uint8 *smokeTierLUTs[5] = { 0, 0, 0, 0, 0 };
+	if (Options::battleSmokeOpacity < 100 || Options::battleSmokeOpacityMin < 100)
+	{
+		std::string palName = "PAL_BATTLESCAPE";
+		if (_save->getDepth() > 0)
+		{
+			std::ostringstream ss;
+			ss << "PAL_BATTLESCAPE_" << _save->getDepth();
+			palName = ss.str();
+		}
+		Palette *pal = _game->getMod()->getPalette(palName);
+		const int opMax = Options::battleSmokeOpacity;
+		const int opMin = std::min(Options::battleSmokeOpacityMin, opMax);
+		for (int tier = 0; tier < 5; ++tier)
+		{
+			int raw = opMin + (opMax - opMin) * tier / 4;
+			int rounded = ((raw + 5) / 10) * 10;
+			smokeTierLUTs[tier] = pal->getBlendLUT(rounded);
+		}
+	}
+
 	NumberText *_numWaypid = 0;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
@@ -908,7 +934,18 @@ void Map::drawTerrain(Surface *surface)
 							frameNumber += (_animFrame / 2) + tile->getAnimationOffset();
 						}
 						tmpSurface = _game->getMod()->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
-						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, shade);
+						if (smokeTierLUTs[0])
+						{
+							// density 1-15 → tier 0-4 (3 densities per tier).
+							int tier = (tile->getSmoke() - 1) / 3;
+							if (tier < 0) tier = 0;
+							else if (tier > 4) tier = 4;
+							tmpSurface->blitNShadeBlend(surface, screenPosition.x, screenPosition.y, shade, smokeTierLUTs[tier]);
+						}
+						else
+						{
+							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, shade);
+						}
 					}
 
 					//draw particle clouds
